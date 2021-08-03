@@ -1,6 +1,5 @@
 package io.github.ryuu.adventurecraft.gui;
 
-import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 
