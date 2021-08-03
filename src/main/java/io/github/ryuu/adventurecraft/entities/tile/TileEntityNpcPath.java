@@ -2,16 +2,17 @@ package io.github.ryuu.adventurecraft.entities.tile;
 
 import io.github.ryuu.adventurecraft.entities.EntityNPC;
 import io.github.ryuu.adventurecraft.util.TriggerArea;
+import net.minecraft.util.io.CompoundTag;
 
 public class TileEntityNpcPath extends TileEntityMinMax {
     private int entityID;
 
-    public void a(nu nbttagcompound) {
+    public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
         this.entityID = nbttagcompound.e("entityID");
     }
 
-    public void b(nu nbttagcompound) {
+    public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
         nbttagcompound.a("entityID", this.entityID);
     }

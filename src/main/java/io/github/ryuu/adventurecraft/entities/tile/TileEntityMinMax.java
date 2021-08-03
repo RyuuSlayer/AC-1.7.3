@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
 import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.util.io.CompoundTag;
 
 public class TileEntityMinMax extends TileEntity {
     public int minX;
@@ -25,7 +26,7 @@ public class TileEntityMinMax extends TileEntity {
         this.maxZ = nbttagcompound.e("maxZ");
     }
 
-    public void b(nu nbttagcompound) {
+    public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
         nbttagcompound.a("minX", this.minX);
         nbttagcompound.a("minY", this.minY);

@@ -20,7 +20,7 @@ public class ds extends gv {
     protected boolean a(gs entityplayer, int i, float f) {
         iz itemstack = entityplayer.c.d(3 - i);
         if (itemstack != null) {
-            gm item = itemstack.a();
+            ItemType item = itemstack.a();
             if (item instanceof wa) {
                 wa itemarmor = (wa) item;
                 a("/armor/" + ds.i[itemarmor.bm] + "_" + ((i != 2) ? 1 : 2) + ".png");
@@ -167,7 +167,7 @@ public class ds extends gv {
             this.a.d.c(0.0625F);
             GL11.glTranslatef(-0.0625F, 0.4375F, 0.0625F);
             if (entityplayer.D != null)
-                itemstack1 = new iz(gm.B);
+                itemstack1 = new iz(ItemType.B);
             if (itemstack1.c < 256 && cv.a(Tile.m[itemstack1.c].b())) {
                 float f3 = 0.5F;
                 GL11.glTranslatef(0.0F, 0.1875F, -0.3125F);
@@ -175,9 +175,9 @@ public class ds extends gv {
                 GL11.glRotatef(20.0F, 1.0F, 0.0F, 0.0F);
                 GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
                 GL11.glScalef(f3, -f3, f3);
-            } else if (gm.c[itemstack1.c].b()) {
+            } else if (ItemType.c[itemstack1.c].b()) {
                 float f4 = 0.625F;
-                if (gm.c[itemstack1.c].c()) {
+                if (ItemType.c[itemstack1.c].c()) {
                     GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
                     GL11.glTranslatef(0.0F, -0.125F, 0.0F);
                 }

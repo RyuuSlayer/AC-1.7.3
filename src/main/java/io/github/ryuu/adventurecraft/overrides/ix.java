@@ -100,7 +100,7 @@ public class ix implements lw {
             return j;
         if (this.a[k] == null) {
             this.a[k] = new iz(i, 0, itemstack.i());
-            gm.c[i].onAddToSlot(this.d, k, itemstack.i());
+            ItemType.c[i].onAddToSlot(this.d, k, itemstack.i());
         }
         int l = j;
         if (l > this.a[k].c() - (this.a[k]).a)
@@ -123,10 +123,10 @@ public class ix implements lw {
                 if (itemStack.timeLeft > 0)
                     itemStack.timeLeft--;
                 if ((i == this.c || i == this.offhandItem) && itemStack.timeLeft == 0 && itemStack.isReloading) {
-                    IItemReload item = (IItemReload) gm.c[itemStack.c];
+                    IItemReload item = (IItemReload) ItemType.c[itemStack.c];
                     item.reload(itemStack, this.d.aI, this.d);
                 }
-                if (itemStack.i() > 0 && (gm.c[itemStack.c]).decrementDamage)
+                if (itemStack.i() > 0 && (ItemType.c[itemStack.c]).decrementDamage)
                     itemStack.b(itemStack.i() - 1);
             }
         }
@@ -139,7 +139,7 @@ public class ix implements lw {
         if (--(this.a[j]).a == 0) {
             int d = this.a[j].i();
             this.a[j] = null;
-            gm.c[i].onRemovedFromSlot(this.d, j, d);
+            ItemType.c[i].onRemovedFromSlot(this.d, j, d);
         }
         return true;
     }
@@ -176,7 +176,7 @@ public class ix implements lw {
             this.a[i] = itemstack.k();
             (this.a[i]).b = 5;
             itemstack.a = 0;
-            gm.c[itemstack.c].onAddToSlot(this.d, i, itemstack.i());
+            ItemType.c[itemstack.c].onAddToSlot(this.d, i, itemstack.i());
             return true;
         }
         return false;
@@ -193,13 +193,13 @@ public class ix implements lw {
             if ((aitemstack[i]).a <= j) {
                 iz itemstack = aitemstack[i];
                 aitemstack[i] = null;
-                gm.c[itemstack.c].onRemovedFromSlot(this.d, slotID, itemstack.i());
+                ItemType.c[itemstack.c].onRemovedFromSlot(this.d, slotID, itemstack.i());
                 return itemstack;
             }
             iz itemstack1 = aitemstack[i].a(j);
             if ((aitemstack[i]).a == 0) {
                 aitemstack[i] = null;
-                gm.c[itemstack1.c].onRemovedFromSlot(this.d, slotID, itemstack1.i());
+                ItemType.c[itemstack1.c].onRemovedFromSlot(this.d, slotID, itemstack1.i());
             }
             return itemstack1;
         }
@@ -216,9 +216,9 @@ public class ix implements lw {
         iz prevItem = aitemstack[i];
         aitemstack[i] = itemstack;
         if (prevItem != null)
-            gm.c[prevItem.c].onRemovedFromSlot(this.d, slotNumber, prevItem.i());
+            ItemType.c[prevItem.c].onRemovedFromSlot(this.d, slotNumber, prevItem.i());
         if (itemstack != null)
-            gm.c[itemstack.c].onAddToSlot(this.d, slotNumber, itemstack.i());
+            ItemType.c[itemstack.c].onAddToSlot(this.d, slotNumber, itemstack.i());
     }
 
     public float a(Tile block) {
@@ -333,7 +333,7 @@ public class ix implements lw {
                     int prevDamage = this.b[j].i();
                     this.b[j].a(this.d);
                     this.b[j] = null;
-                    gm.c[prevItemID].onRemovedFromSlot(this.d, j + this.a.length, prevDamage);
+                    ItemType.c[prevItemID].onRemovedFromSlot(this.d, j + this.a.length, prevDamage);
                 }
             }
         }
@@ -345,7 +345,7 @@ public class ix implements lw {
                 iz prevItem = this.a[i];
                 this.d.a(this.a[i], true);
                 this.a[i] = null;
-                gm.c[prevItem.c].onRemovedFromSlot(this.d, i, prevItem.i());
+                ItemType.c[prevItem.c].onRemovedFromSlot(this.d, i, prevItem.i());
             }
         }
         for (int j = 0; j < this.b.length; j++) {
@@ -353,7 +353,7 @@ public class ix implements lw {
                 iz prevItem = this.b[j];
                 this.d.a(this.b[j], true);
                 this.b[j] = null;
-                gm.c[prevItem.c].onRemovedFromSlot(this.d, j + this.a.length, prevItem.i());
+                ItemType.c[prevItem.c].onRemovedFromSlot(this.d, j + this.a.length, prevItem.i());
             }
         }
     }
@@ -411,7 +411,7 @@ public class ix implements lw {
                 amount -= (this.a[slot]).a;
                 (this.a[slot]).a = 0;
                 this.a[slot] = null;
-                gm.c[itemID].onRemovedFromSlot(this.d, slot, damage);
+                ItemType.c[itemID].onRemovedFromSlot(this.d, slot, damage);
             }
         }
         return true;

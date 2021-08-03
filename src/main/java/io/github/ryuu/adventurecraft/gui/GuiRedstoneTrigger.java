@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.gui;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityRedstoneTrigger;
 import net.minecraft.client.Minecraft;
+import net.minecraft.level.Level;
 
 public class GuiRedstoneTrigger extends da {
     private final TileEntityRedstoneTrigger trigger;
@@ -13,9 +14,9 @@ public class GuiRedstoneTrigger extends da {
 
     private final int blockZ;
 
-    private final fd world;
+    private final Level world;
 
-    public GuiRedstoneTrigger(fd w, int x, int y, int z, TileEntityRedstoneTrigger triggerClicked) {
+    public GuiRedstoneTrigger(Level w, int x, int y, int z, TileEntityRedstoneTrigger triggerClicked) {
         this.world = w;
         this.blockX = x;
         this.blockY = y;
@@ -57,7 +58,7 @@ public class GuiRedstoneTrigger extends da {
         super.a(i, j, f);
     }
 
-    public static void showUI(fd w, int x, int y, int z, TileEntityRedstoneTrigger triggerClicked) {
+    public static void showUI(Level w, int x, int y, int z, TileEntityRedstoneTrigger triggerClicked) {
         Minecraft.minecraftInstance.a(new GuiRedstoneTrigger(w, x, y, z, triggerClicked));
     }
 

@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.gui;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityWeather;
 import net.minecraft.client.Minecraft;
+import net.minecraft.level.Level;
 
 public class GuiWeather extends da {
     private final TileEntityWeather weather;
@@ -12,7 +13,7 @@ public class GuiWeather extends da {
 
     private GuiSlider2 timeRate;
 
-    public GuiWeather(fd worldArg, TileEntityWeather w) {
+    public GuiWeather(Level worldArg, TileEntityWeather w) {
         this.weather = w;
     }
 
@@ -129,7 +130,7 @@ public class GuiWeather extends da {
         super.a(i, j, f);
     }
 
-    public static void showUI(fd worldArg, TileEntityWeather w) {
+    public static void showUI(Level worldArg, TileEntityWeather w) {
         Minecraft.minecraftInstance.a(new GuiWeather(worldArg, w));
     }
 

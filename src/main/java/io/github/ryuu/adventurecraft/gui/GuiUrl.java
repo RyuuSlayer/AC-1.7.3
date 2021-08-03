@@ -3,14 +3,15 @@ package io.github.ryuu.adventurecraft.gui;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityUrl;
 import io.github.ryuu.adventurecraft.util.ClipboardHandler;
 import net.minecraft.client.Minecraft;
+import net.minecraft.level.Level;
 import org.lwjgl.input.Keyboard;
 
 public class GuiUrl extends da {
     private final TileEntityUrl msg;
 
-    private final fd world;
+    private final Level world;
 
-    public GuiUrl(fd w, TileEntityUrl u) {
+    public GuiUrl(Level w, TileEntityUrl u) {
         this.world = w;
         this.msg = u;
     }

@@ -291,7 +291,7 @@ public class GuiEffect extends da {
     }
 
     public static void showUI(TileEntityEffect m) {
-        Minecraft.minecraftInstance.a(new AC_GuiEffect(m));
+        Minecraft.minecraftInstance.a(new GuiEffect(m));
     }
 
     public boolean c() {

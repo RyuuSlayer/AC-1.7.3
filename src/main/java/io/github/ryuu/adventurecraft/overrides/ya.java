@@ -15,7 +15,7 @@ public class ya extends uz {
         this.aB = 0.5F;
         this.c = 5;
         this.bC = true;
-        this.heldItem = new iz(gm.E, 1);
+        this.heldItem = new iz(ItemType.E, 1);
     }
 
     public void w_() {
@@ -83,6 +83,6 @@ public class ya extends uz {
     }
 
     protected int j() {
-        return gm.ap.bf;
+        return ItemType.ap.bf;
     }
 }

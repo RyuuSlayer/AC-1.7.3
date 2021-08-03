@@ -4,6 +4,7 @@ import io.github.ryuu.adventurecraft.util.CutsceneCamera;
 import io.github.ryuu.adventurecraft.util.CutsceneCameraPoint;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.util.io.CompoundTag;
 
 public class TileEntityCamera extends TileEntity {
     public String message;
@@ -27,7 +28,7 @@ public class TileEntityCamera extends TileEntity {
             tgt.addCameraPoint(p.time, p.posX, p.posY, p.posZ, p.rotYaw, p.rotPitch, p.cameraBlendType);
     }
 
-    public void a(nu nbttagcompound) {
+    public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
         int numPoints = nbttagcompound.e("numPoints");
         for (int i = 0; i < numPoints; i++) {
@@ -39,7 +40,7 @@ public class TileEntityCamera extends TileEntity {
             this.pauseGame = nbttagcompound.m("pauseGame");
     }
 
-    public void b(nu nbttagcompound) {
+    public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
         int numPoints = 0;
         for (CutsceneCameraPoint p : this.camera.cameraPoints) {
@@ -51,8 +52,8 @@ public class TileEntityCamera extends TileEntity {
         nbttagcompound.a("pauseGame", this.pauseGame);
     }
 
-    private nu getPointTag(CutsceneCameraPoint point) {
-        nu nbttagcompound = new nu();
+    private CompoundTag getPointTag(CutsceneCameraPoint point) {
+        CompoundTag nbttagcompound = new CompoundTag();
         nbttagcompound.a("time", point.time);
         nbttagcompound.a("posX", point.posX);
         nbttagcompound.a("posY", point.posY);
@@ -63,7 +64,7 @@ public class TileEntityCamera extends TileEntity {
         return nbttagcompound;
     }
 
-    private void readPointTag(nu nbttagcompound) {
+    private void readPointTag(CompoundTag nbttagcompound) {
         float time = nbttagcompound.g("time");
         float posX = nbttagcompound.g("posX");
         float posY = nbttagcompound.g("posY");

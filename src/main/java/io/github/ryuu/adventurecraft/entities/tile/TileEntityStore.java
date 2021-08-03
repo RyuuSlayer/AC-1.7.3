@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.entities.tile;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.TriggerArea;
 import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.util.io.CompoundTag;
 
 public class TileEntityStore extends TileEntity {
     public int buyItemID = Items.bomb.bf;
@@ -40,7 +41,7 @@ public class TileEntityStore extends TileEntity {
         }
     }
 
-    public void b(nu nbttagcompound) {
+    public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
         nbttagcompound.a("buyItemID", this.buyItemID);
         nbttagcompound.a("buyItemAmount", this.buyItemAmount);

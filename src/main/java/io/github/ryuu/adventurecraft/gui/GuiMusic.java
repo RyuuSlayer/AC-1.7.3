@@ -16,7 +16,7 @@ public class GuiMusic extends Screen {
 
     private int page;
 
-    public GuiMusic(fd w, TileEntityMusic m) {
+    public GuiMusic(Level w, TileEntityMusic m) {
         this.world = w;
         this.music = m;
     }

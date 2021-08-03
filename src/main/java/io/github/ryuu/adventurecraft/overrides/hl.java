@@ -26,7 +26,7 @@ public class hl extends sn {
         this.aP = (float) (Math.random() * 0.20000000298023224D - 0.10000000149011612D);
         this.aQ = 0.20000000298023224D;
         this.aR = (float) (Math.random() * 0.20000000298023224D - 0.10000000149011612D);
-        if (gm.c[this.a.c] == null)
+        if (ItemType.c[this.a.c] == null)
             K();
     }
 
@@ -116,7 +116,7 @@ public class hl extends sn {
         if (this.c == 0 && entityplayer.c.a(this.a)) {
             if (this.a.c == Tile.K.bn)
                 entityplayer.a((vr) ep.g);
-            if (this.a.c == gm.aD.bf)
+            if (this.a.c == ItemType.aD.bf)
                 entityplayer.a((vr) ep.t);
             this.aI.a(this, "random.pop", 0.2F, ((this.bs.nextFloat() - this.bs.nextFloat()) * 0.7F + 1.0F) * 2.0F);
             entityplayer.b(this, i);

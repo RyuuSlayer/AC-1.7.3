@@ -98,7 +98,7 @@ public class GuiScript extends da {
     }
 
     public static void showUI(TileEntityScript s) {
-        Minecraft.minecraftInstance.a(new AC_GuiScript(s));
+        Minecraft.minecraftInstance.a(new GuiScript(s));
     }
 
     public boolean c() {

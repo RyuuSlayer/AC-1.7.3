@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.gui;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityTriggerMemory;
 import net.minecraft.client.Minecraft;
+import net.minecraft.level.Level;
 
 public class GuiTriggerMemory extends da {
     private final TileEntityTriggerMemory trigger;
@@ -13,9 +14,9 @@ public class GuiTriggerMemory extends da {
 
     private final int blockZ;
 
-    private final fd world;
+    private final Level world;
 
-    public GuiTriggerMemory(fd w, int x, int y, int z, TileEntityTriggerMemory triggerClicked) {
+    public GuiTriggerMemory(Level w, int x, int y, int z, TileEntityTriggerMemory triggerClicked) {
         this.world = w;
         this.blockX = x;
         this.blockY = y;
@@ -73,7 +74,7 @@ public class GuiTriggerMemory extends da {
         super.a(i, j, f);
     }
 
-    public static void showUI(fd w, int x, int y, int z, TileEntityTriggerMemory triggerClicked) {
+    public static void showUI(Level w, int x, int y, int z, TileEntityTriggerMemory triggerClicked) {
         Minecraft.minecraftInstance.a(new GuiTriggerMemory(w, x, y, z, triggerClicked));
     }
 

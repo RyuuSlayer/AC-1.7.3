@@ -3,9 +3,11 @@ package io.github.ryuu.adventurecraft.overrides;
 import java.util.Random;
 
 import io.github.ryuu.adventurecraft.items.IItemReload;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.entity.EntityRenderer;
 import org.lwjgl.opengl.GL11;
 
-public class ItemRenderer extends bw {
+public class ItemRenderer extends EntityRenderer {
     private final TileRenderer e = new TileRenderer();
 
     private final Random f = new Random();
@@ -63,7 +65,7 @@ public class ItemRenderer extends bw {
             } else {
                 a("/gui/items.png");
             }
-            nw tessellator = nw.a;
+            Tessellator tessellator = Tessellator.a;
             float f6 = (i % 16 * 16 + 0) / 256.0F;
             float f8 = (i % 16 * 16 + 16) / 256.0F;
             float f10 = (i / 16 * 16 + 0) / 256.0F;
@@ -72,7 +74,7 @@ public class ItemRenderer extends bw {
             float f13 = 0.5F;
             float f14 = 0.25F;
             if (this.a) {
-                int k = gm.c[itemstack.c].f(itemstack.i());
+                int k = ItemType.c[itemstack.c].f(itemstack.i());
                 float f15 = (k >> 16 & 0xFF) / 255.0F;
                 float f17 = (k >> 8 & 0xFF) / 255.0F;
                 float f19 = (k & 0xFF) / 255.0F;
@@ -118,7 +120,7 @@ public class ItemRenderer extends bw {
             GL11.glScalef(1.0F, 1.0F, -1.0F);
             GL11.glRotatef(210.0F, 1.0F, 0.0F, 0.0F);
             GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
-            int l1 = gm.c[i].f(j);
+            int l1 = ItemType.c[i].f(j);
             float f2 = (l1 >> 16 & 0xFF) / 255.0F;
             float f4 = (l1 >> 8 & 0xFF) / 255.0F;
             float f5 = (l1 & 0xFF) / 255.0F;
@@ -141,7 +143,7 @@ public class ItemRenderer extends bw {
             } else {
                 renderengine.b(renderengine.b("/gui/items.png"));
             }
-            int k1 = gm.c[i].f(j);
+            int k1 = ItemType.c[i].f(j);
             float f = (k1 >> 16 & 0xFF) / 255.0F;
             float f1 = (k1 >> 8 & 0xFF) / 255.0F;
             float f3 = (k1 & 0xFF) / 255.0F;
@@ -154,13 +156,13 @@ public class ItemRenderer extends bw {
     }
 
     public void a(sj fontrenderer, ji renderengine, iz itemstack, int i, int j) {
-        if (itemstack == null || gm.c[itemstack.c] == null)
+        if (itemstack == null || ItemType.c[itemstack.c] == null)
             return;
         a(fontrenderer, renderengine, itemstack.c, itemstack.i(), itemstack.b(), i, j);
     }
 
     public void b(sj fontrenderer, ji renderengine, iz itemstack, int i, int j) {
-        if (itemstack == null || gm.c[itemstack.c] == null)
+        if (itemstack == null || ItemType.c[itemstack.c] == null)
             return;
         if (itemstack.a > 1) {
             String s = "" + itemstack.a;
@@ -177,13 +179,13 @@ public class ItemRenderer extends bw {
             GL11.glEnable(2896);
             GL11.glEnable(2929);
         }
-        if (itemstack.g() || gm.c[itemstack.c] instanceof IItemReload) {
+        if (itemstack.g() || ItemType.c[itemstack.c] instanceof IItemReload) {
             int k = (int) Math.round(13.0D - itemstack.h() * 13.0D / itemstack.j());
             int l = (int) Math.round(255.0D - itemstack.h() * 255.0D / itemstack.j());
             GL11.glDisable(2896);
             GL11.glDisable(2929);
             GL11.glDisable(3553);
-            nw tessellator = nw.a;
+            Tessellator tessellator = Tessellator.a;
             int i1 = 255 - l << 16 | l << 8;
             int j1 = (255 - l) / 4 << 16 | 0x3F00;
             a(tessellator, i + 2, j + 13, 13, 2, 0);
@@ -196,7 +198,7 @@ public class ItemRenderer extends bw {
         }
     }
 
-    private void a(nw tessellator, int i, int j, int k, int l, int i1) {
+    private void a(Tessellator tessellator, int i, int j, int k, int l, int i1) {
         tessellator.b();
         tessellator.b(i1);
         tessellator.a((i + 0), (j + 0), 0.0D);
@@ -210,7 +212,7 @@ public class ItemRenderer extends bw {
         float f = 0.0F;
         float f1 = 0.00390625F;
         float f2 = 0.00390625F;
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         tessellator.b();
         tessellator.a((i + 0), (j + j1), f, ((k + 0) * f1), ((l + j1) * f2));
         tessellator.a((i + i1), (j + j1), f, ((k + i1) * f1), ((l + j1) * f2));

@@ -1,9 +1,9 @@
 package io.github.ryuu.adventurecraft.items;
 
-import io.github.ryuu.adventurecraft.overrides.PlaceableTileItem;
+import io.github.ryuu.adventurecraft.overrides.ck;
 import net.minecraft.tile.Tile;
 
-public class ItemSubtypes extends PlaceableTileItem {
+public class ItemSubtypes extends ck {
     public ItemSubtypes(int i) {
         super(i);
         e(0);

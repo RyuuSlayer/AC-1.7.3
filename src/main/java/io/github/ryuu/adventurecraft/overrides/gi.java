@@ -133,10 +133,10 @@ public class gi extends bg {
                 gs entityplayer = (gs) entity;
                 iz itemstack = entityplayer.c.b();
                 if (itemstack != null)
-                    if (!D() && itemstack.c == gm.aV.bf) {
+                    if (!D() && itemstack.c == ItemType.aV.bf) {
                         this.a = true;
-                    } else if (D() && gm.c[itemstack.c] instanceof yw) {
-                        this.a = ((yw) gm.c[itemstack.c]).m();
+                    } else if (D() && ItemType.c[itemstack.c] instanceof yw) {
+                        this.a = ((yw) ItemType.c[itemstack.c]).m();
                     }
             }
         }
@@ -306,7 +306,7 @@ public class gi extends bg {
     public boolean a(gs entityplayer) {
         iz itemstack = entityplayer.c.b();
         if (!D()) {
-            if (itemstack != null && itemstack.c == gm.aV.bf && !C()) {
+            if (itemstack != null && itemstack.c == ItemType.aV.bf && !C()) {
                 itemstack.a--;
                 if (itemstack.a <= 0)
                     entityplayer.c.a(entityplayer.c.c, null);
@@ -326,13 +326,13 @@ public class gi extends bg {
                 return true;
             }
         } else {
-            if (itemstack != null && gm.c[itemstack.c] instanceof yw) {
-                yw itemfood = (yw) gm.c[itemstack.c];
+            if (itemstack != null && ItemType.c[itemstack.c] instanceof yw) {
+                yw itemfood = (yw) ItemType.c[itemstack.c];
                 if (itemfood.m() && this.bD.b(18) < 20) {
                     itemstack.a--;
                     if (itemstack.a <= 0)
                         entityplayer.c.a(entityplayer.c.c, null);
-                    c(((yw) gm.ao).l());
+                    c(((yw) ItemType.ao).l());
                     return true;
                 }
             }

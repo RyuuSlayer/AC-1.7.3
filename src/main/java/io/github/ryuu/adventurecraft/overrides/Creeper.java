@@ -71,7 +71,7 @@ public class Creeper extends gz {
     public void b(sn entity) {
         super.b(entity);
         if (entity instanceof fr)
-            b(gm.bd.bf + this.bs.nextInt(2), 1);
+            b(ItemType.bd.bf + this.bs.nextInt(2), 1);
     }
 
     protected void a(sn entity, float f) {
@@ -109,7 +109,7 @@ public class Creeper extends gz {
     }
 
     protected int j() {
-        return gm.K.bf;
+        return ItemType.K.bf;
     }
 
     private int v() {

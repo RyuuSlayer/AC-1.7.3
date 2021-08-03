@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.entities;
 import io.github.ryuu.adventurecraft.Minecraft;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
+import net.minecraft.util.io.CompoundTag;
 
 public class EntityNPC extends EntityLivingScript {
     public String npcName;
@@ -106,7 +107,7 @@ public class EntityNPC extends EntityLivingScript {
         return (this.entityToTrack != null);
     }
 
-    public void b(nu nbttagcompound) {
+    public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
         nbttagcompound.a("npcName", this.npcName);
         nbttagcompound.a("chatMsg", this.chatMsg);
@@ -119,7 +120,7 @@ public class EntityNPC extends EntityLivingScript {
         nbttagcompound.a("isAttackable", this.isAttackable);
     }
 
-    public void a(nu nbttagcompound) {
+    public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
         this.npcName = nbttagcompound.i("npcName");
         this.chatMsg = nbttagcompound.i("chatMsg");

@@ -1,6 +1,9 @@
 package io.github.ryuu.adventurecraft.overrides;
 
-public class bp extends wq implements ff {
+import net.minecraft.entity.FlyingEntity;
+import net.minecraft.entity.MonsterEntityType;
+
+public class Ghast extends FlyingEntity implements MonsterEntityType {
     public int a;
 
     public double b;
@@ -17,7 +20,7 @@ public class bp extends wq implements ff {
 
     public int f;
 
-    public bp(Level world) {
+    public Ghast(Level world) {
         super(world);
         this.a = 0;
         this.g = null;
@@ -136,7 +139,7 @@ public class bp extends wq implements ff {
     }
 
     protected int j() {
-        return gm.K.bf;
+        return ItemType.K.bf;
     }
 
     protected float k() {

@@ -5,6 +5,7 @@ import java.util.List;
 
 import io.github.ryuu.adventurecraft.util.MapInfo;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.Tessellator;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
@@ -134,7 +135,7 @@ public class GuiMapSelect extends da {
             this.field_6460_h = l;
         GL11.glDisable(2896);
         GL11.glDisable(2912);
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         GL11.glBindTexture(3553, this.b.p.b("/gui/background.png"));
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         float f1 = 32.0F;
@@ -211,7 +212,7 @@ public class GuiMapSelect extends da {
         GL11.glShadeModel(7424);
         GL11.glEnable(3008);
         GL11.glDisable(3042);
-        nh stringtranslate = nh.a();
+        Tessellator stringtranslate = Tessellator.a();
         a(this.g, stringtranslate.a("mapList.title"), this.c / 2, 16, 16777215);
         super.a(i, j, f);
     }
@@ -222,7 +223,7 @@ public class GuiMapSelect extends da {
     }
 
     public void drawBackground(int top, int bottom, int topAlpha, int bottomAlpha) {
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         GL11.glBindTexture(3553, this.b.p.b("/gui/background.png"));
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         float f = 32.0F;

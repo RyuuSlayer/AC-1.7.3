@@ -2,17 +2,18 @@ package io.github.ryuu.adventurecraft.gui;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityMessage;
 import net.minecraft.client.Minecraft;
+import net.minecraft.level.Level;
 
 public class GuiMessage extends da {
     private final TileEntityMessage msg;
 
     private TileEntityMessage soundFile;
 
-    private final fd world;
+    private final Level world;
 
     private int page;
 
-    public GuiMessage(fd w, TileEntityMessage tileEntityMsg) {
+    public GuiMessage(Level w, TileEntityMessage tileEntityMsg) {
         this.world = w;
         this.msg = tileEntityMsg;
     }
@@ -66,7 +67,7 @@ public class GuiMessage extends da {
         super.a(i, j, f);
     }
 
-    public static void showUI(fd w, TileEntityMessage tileEntityMsg) {
-        Minecraft.minecraftInstance.a(new AC_GuiMessage(w, tileEntityMsg));
+    public static void showUI(Level w, TileEntityMessage tileEntityMsg) {
+        Minecraft.minecraftInstance.a(new GuiMessage(w, tileEntityMsg));
     }
 }
