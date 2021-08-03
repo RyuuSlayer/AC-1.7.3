@@ -1,9 +1,10 @@
 package io.github.ryuu.adventurecraft.gui;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.widgets.Button;
 import org.lwjgl.opengl.GL11;
 
-public class GuiSlider2 extends ke {
+public class GuiSlider2 extends Button {
     public float sliderValue;
 
     public boolean dragging;
@@ -14,28 +15,28 @@ public class GuiSlider2 extends ke {
         this.sliderValue = f;
     }
 
-    protected int a(boolean flag) {
+    protected int getYImage(boolean flag) {
         return 0;
     }
 
-    protected void b(Minecraft minecraft, int i, int j) {
-        if (!this.h)
+    protected void postRender(Minecraft minecraft, int i, int j) {
+        if (!this.visible)
             return;
         if (this.dragging) {
-            this.sliderValue = (i - this.c + 4) / (this.a - 8);
+            this.sliderValue = (i - this.x + 4) / (this.width - 8);
             if (this.sliderValue < 0.0F)
                 this.sliderValue = 0.0F;
             if (this.sliderValue > 1.0F)
                 this.sliderValue = 1.0F;
         }
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        b(this.c + (int) (this.sliderValue * (this.a - 8)), this.d, 0, 66, 4, 20);
-        b(this.c + (int) (this.sliderValue * (this.a - 8)) + 4, this.d, 196, 66, 4, 20);
+        blit(this.x + (int) (this.sliderValue * (this.width - 8)), this.y, 0, 66, 4, 20);
+        blit(this.x + (int) (this.sliderValue * (this.width - 8)) + 4, this.y, 196, 66, 4, 20);
     }
 
-    public boolean c(Minecraft minecraft, int i, int j) {
-        if (super.c(minecraft, i, j)) {
-            this.sliderValue = (i - this.c + 4) / (this.a - 8);
+    public boolean isMouseOver(Minecraft minecraft, int i, int j) {
+        if (super.isMouseOver(minecraft, i, j)) {
+            this.sliderValue = (i - this.x + 4) / (this.width - 8);
             if (this.sliderValue < 0.0F)
                 this.sliderValue = 0.0F;
             if (this.sliderValue > 1.0F)
@@ -46,7 +47,7 @@ public class GuiSlider2 extends ke {
         return false;
     }
 
-    public void a(int i, int j) {
+    public void mouseReleased(int i, int j) {
         this.dragging = false;
     }
 }

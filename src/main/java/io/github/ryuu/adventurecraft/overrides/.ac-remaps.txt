@@ -13,5 +13,6 @@ fr = Skeleton
 gb = Creeper
 if = FlowingLavaTextureBinder2
 kd = Biome
+ke = Button
 uu = Tile
 uz = Zombie
