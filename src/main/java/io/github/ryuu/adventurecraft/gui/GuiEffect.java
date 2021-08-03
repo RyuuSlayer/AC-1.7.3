@@ -56,7 +56,7 @@ public class GuiEffect extends Screen {
         this.effect = m;
     }
 
-    public void b() {
+    public void init() {
         int buttonWidth = (this.width - 16) / 4;
         this.buttons.add(new Button(-1, 4, 0, buttonWidth, 18, "Particles"));
         this.buttons.add(new Button(-2, 4 + 4 + buttonWidth, 0, buttonWidth, 18, "Fog"));
@@ -296,7 +296,7 @@ public class GuiEffect extends Screen {
         Minecraft.minecraftInstance.a(new AC_GuiEffect(m));
     }
 
-    public boolean c() {
+    public boolean isPauseScreen() {
         return false;
     }
 
