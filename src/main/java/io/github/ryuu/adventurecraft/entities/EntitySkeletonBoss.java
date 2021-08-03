@@ -1,7 +1,9 @@
 package io.github.ryuu.adventurecraft.entities;
 
+import net.minecraft.level.Level;
+
 public class EntitySkeletonBoss extends fr {
-    public EntitySkeletonBoss(fd world) {
+    public EntitySkeletonBoss(Level world) {
         super(world);
         b(this.bg * 2.5F, this.bh * 2.5F);
         this.aB = 0.25F;

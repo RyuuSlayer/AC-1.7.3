@@ -1,11 +1,14 @@
 package io.github.ryuu.adventurecraft.util;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.level.Level;
+
 class MusicPlayer {
-    static void playNoteFromEntity(fd world, sn ent, String instrument, char note, boolean sharp, float octave, float volume) {
+    static void playNoteFromEntity(Level world, Entity ent, String instrument, char note, boolean sharp, float octave, float volume) {
         playNote(world, ent.aM, ent.aN, ent.aO, instrument, note, sharp, octave, volume);
     }
 
-    static void playNote(fd world, double x, double y, double z, String instrument, char note, boolean sharp, float octave, float volume) {
+    static void playNote(Level world, double x, double y, double z, String instrument, char note, boolean sharp, float octave, float volume) {
         float pitch = 1.189207F;
         switch (note) {
             case 'A':
@@ -36,7 +39,7 @@ class MusicPlayer {
         world.a(x, y, z, instrument, volume, pitch * octave);
     }
 
-    static void playNoteFromSong(fd world, double x, double y, double z, String instrument, String song, int noteNum, float volume) {
+    static void playNoteFromSong(Level world, double x, double y, double z, String instrument, String song, int noteNum, float volume) {
         int stringIndex = 0;
         int onNote = 0;
         boolean flat = false;

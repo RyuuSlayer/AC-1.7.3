@@ -2,11 +2,12 @@ package io.github.ryuu.adventurecraft.entities;
 
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.UtilBullet;
+import net.minecraft.level.Level;
 
 public class EntitySkeletonRifle extends fr {
     int ammo;
 
-    public EntitySkeletonRifle(fd world) {
+    public EntitySkeletonRifle(Level world) {
         super(world);
         this.c = 6;
         this.ammo = 30;

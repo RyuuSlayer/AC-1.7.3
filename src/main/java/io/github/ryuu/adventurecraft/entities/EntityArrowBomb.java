@@ -1,19 +1,22 @@
 package io.github.ryuu.adventurecraft.entities;
 
+import net.minecraft.entity.player.Player;
+import net.minecraft.level.Level;
+
 public class EntityArrowBomb extends sl {
     private int fuse;
 
-    public EntityArrowBomb(fd world) {
+    public EntityArrowBomb(Level world) {
         super(world);
         this.fuse = 45;
     }
 
-    public EntityArrowBomb(fd world, double d, double d1, double d2) {
+    public EntityArrowBomb(Level world, double d, double d1, double d2) {
         super(world, d, d1, d2);
         this.fuse = 45;
     }
 
-    public EntityArrowBomb(fd world, ls entityliving) {
+    public EntityArrowBomb(Level world, ls entityliving) {
         super(world, entityliving);
         this.fuse = 45;
     }
@@ -48,7 +51,7 @@ public class EntityArrowBomb extends sl {
         this.fuse = nbttagcompound.c("fuse") & 0xFF;
     }
 
-    public void b(gs entityplayer) {}
+    public void b(Player entityplayer) {}
 
     public boolean a(sn entity, int i) {
         if (!this.be) {

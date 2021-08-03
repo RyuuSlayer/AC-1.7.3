@@ -2,6 +2,8 @@ package io.github.ryuu.adventurecraft.entities;
 
 import io.github.ryuu.adventurecraft.Minecraft;
 import io.github.ryuu.adventurecraft.gui.GuiCamera;
+import net.minecraft.entity.player.Player;
+import net.minecraft.level.Level;
 
 public class EntityCamera extends ls {
     float time;
@@ -10,7 +12,7 @@ public class EntityCamera extends ls {
 
     int cameraID;
 
-    EntityCamera(fd world, float t, int ty, int id) {
+    EntityCamera(Level world, float t, int ty, int id) {
         super(world);
         this.time = t;
         this.cameraID = id;
@@ -42,7 +44,7 @@ public class EntityCamera extends ls {
         return false;
     }
 
-    public boolean a(gs entityplayer) {
+    public boolean a(Player entityplayer) {
         GuiCamera.showUI(this);
         return true;
     }

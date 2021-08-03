@@ -1,15 +1,17 @@
 package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.util.DebugMode;
+import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
+import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 public class BlockLockedDoor extends Tile {
     int doorKeyToUse;
 
     protected BlockLockedDoor(int i, int j, int keyToUse) {
-        super(i, ln.f);
+        super(i, Material.METAL);
         this.bm = j;
         this.doorKeyToUse = keyToUse;
     }
@@ -91,7 +93,7 @@ public class BlockLockedDoor extends Tile {
         return textureToReturn;
     }
 
-    public void b(Level world, int i, int j, int k, gs entityplayer) {
+    public void b(Level world, int i, int j, int k, Player entityplayer) {
         if (entityplayer.c.c(this.doorKeyToUse)) {
             world.a(i + 0.5D, j + 0.5D, k + 0.5D, "random.door_open", 1.0F, world.r.nextFloat() * 0.1F + 0.9F);
             int offsetY = 0;

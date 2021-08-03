@@ -8,13 +8,14 @@ import io.github.ryuu.adventurecraft.util.TriggerArea;
 import net.minecraft.level.Level;
 import net.minecraft.tile.TileWithEntity;
 import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 import java.util.Random;
 
 public class BlockTriggerInverter extends TileWithEntity {
     protected BlockTriggerInverter(int i, int j) {
-        super(i, j, ln.a);
+        super(i, j, Material.AIR);
     }
 
     protected TileEntity a_() {

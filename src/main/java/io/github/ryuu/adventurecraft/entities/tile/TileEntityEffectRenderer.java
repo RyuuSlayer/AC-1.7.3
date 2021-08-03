@@ -1,9 +1,10 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
 import io.github.ryuu.adventurecraft.util.DebugMode;
+import net.minecraft.client.render.entity.tile.TileEntityRenderer;
 import org.lwjgl.opengl.GL11;
 
-public class TileEntityEffectRenderer extends je {
+public class TileEntityEffectRenderer extends TileEntityRenderer {
     public void render(TileEntityEffect effect, double d, double d1, double d2, float f) {
         if (DebugMode.active) {
             GL11.glPushMatrix();

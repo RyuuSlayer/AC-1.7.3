@@ -2,14 +2,16 @@ package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityTree;
 import io.github.ryuu.adventurecraft.util.DebugMode;
+import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.tile.TileWithEntity;
 import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 public class BlockTree extends TileWithEntity implements IBlockColor {
     protected BlockTree(int i, int j) {
-        super(i, j, ln.j);
+        super(i, j, Material.PLANT);
         float f = 0.2F;
     }
 
@@ -41,7 +43,7 @@ public class BlockTree extends TileWithEntity implements IBlockColor {
         return 36;
     }
 
-    public boolean a(Level world, int i, int j, int k, gs entityplayer) {
+    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
         if (DebugMode.active) {
             TileEntityTree obj = (TileEntityTree)world.b(i, j, k);
             GuiTree.showUI(world, i, j, k, obj);

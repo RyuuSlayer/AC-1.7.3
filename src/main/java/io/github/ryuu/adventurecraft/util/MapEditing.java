@@ -5,6 +5,12 @@ import java.nio.IntBuffer;
 
 import io.github.ryuu.adventurecraft.items.ItemCursor;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.TileRenderer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.level.Level;
+import net.minecraft.tile.Tile;
+import net.minecraft.util.hit.HitResult;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -14,28 +20,28 @@ import org.lwjgl.util.glu.GLU;
 class MapEditing {
     Minecraft mc;
 
-    fd world;
+    Level world;
 
-    vf cursor;
+    HitResult cursor;
 
-    private cv renderBlocks;
+    private TileRenderer renderBlocks;
 
     int selectedBlockID;
 
     int selectedMetadata;
 
-    MapEditing(Minecraft mcInstance, fd w) {
+    MapEditing(Minecraft mcInstance, Level w) {
         this.mc = mcInstance;
         this.world = w;
-        this.renderBlocks = new cv(w);
+        this.renderBlocks = new TileRenderer(w);
     }
 
-    public void updateWorld(fd w) {
+    public void updateWorld(Level w) {
         this.world = w;
         this.renderBlocks.c = w;
     }
 
-    public void updateCursor(ls camera, float fov, float time) {
+    public void updateCursor(LivingEntity camera, float fov, float time) {
         if (this.mc.N) {
             this.cursor = null;
             return;
@@ -96,7 +102,7 @@ class MapEditing {
     }
 
     public void render(float time) {
-        ls camera = Minecraft.minecraftInstance.i;
+        LivingEntity camera = Minecraft.minecraftInstance.i;
         if (!this.mc.N) {
             drawCursor(camera, time);
             if (this.cursor != null) {
@@ -120,7 +126,7 @@ class MapEditing {
 
     public void renderSelection(float time) {
         if (ItemCursor.bothSet) {
-            ls camera = Minecraft.minecraftInstance.i;
+            LivingEntity camera = Minecraft.minecraftInstance.i;
             float x = (float)(camera.bl + (camera.aM - camera.bl) * time);
             float y = (float)(camera.bm + (camera.aN - camera.bm) * time);
             float z = (float)(camera.bn + (camera.aO - camera.bn) * time);
@@ -144,7 +150,7 @@ class MapEditing {
                     for (int j = ItemCursor.minY; j <= ItemCursor.maxY; j++) {
                         for (int k = ItemCursor.minZ; k <= ItemCursor.maxZ; k++) {
                             int blockID = this.mc.f.a(i, j, k);
-                            if (uu.m[blockID] != null && uu.m[blockID].getTextureNum() == texNum) {
+                            if (Tile.m[blockID] != null && Tile.m[blockID].getTextureNum() == texNum) {
                                 int metadata = this.mc.f.e(i, j, k);
                                 drawBlock(i + xOffset, j + yOffset, k + zOffset, blockID, metadata);
                             }
@@ -159,7 +165,7 @@ class MapEditing {
     }
 
     private void drawBlock(int x, int y, int z, int blockID, int metadata) {
-        uu block = uu.m[blockID];
+        Tile block = Tile.m[blockID];
         if (block != null) {
             int prevBlockID = this.world.a(x, y, z);
             int prevMetadata = this.world.e(x, y, z);
@@ -170,7 +176,7 @@ class MapEditing {
     }
 
     private void drawBox(eq axisalignedbb) {
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         tessellator.a(3);
         tessellator.a(axisalignedbb.a, axisalignedbb.b, axisalignedbb.c);
         tessellator.a(axisalignedbb.d, axisalignedbb.b, axisalignedbb.c);
@@ -197,7 +203,7 @@ class MapEditing {
         tessellator.a();
     }
 
-    private void drawCursor(ls camera, float time) {
+    private void drawCursor(LivingEntity camera, float time) {
         if (this.cursor != null && this.cursor.a == jg.a) {
             GL11.glEnable(3042);
             GL11.glBlendFunc(770, 771);
@@ -208,15 +214,15 @@ class MapEditing {
             float f1 = 0.002F;
             int j = this.world.a(this.cursor.b, this.cursor.c, this.cursor.d);
             if (j > 0) {
-                uu.m[j].a(this.world, this.cursor.b, this.cursor.c, this.cursor.d);
+                Tile.m[j].a(this.world, this.cursor.b, this.cursor.c, this.cursor.d);
                 double d = camera.bl + (camera.aM - camera.bl) * time;
                 double d1 = camera.bm + (camera.aN - camera.bm) * time;
                 double d2 = camera.bn + (camera.aO - camera.bn) * time;
-                eq box = uu.m[j].f(this.world, this.cursor.b, this.cursor.c, this.cursor.d).b(f1, f1, f1).c(-d, -d1, -d2);
+                eq box = Tile.m[j].f(this.world, this.cursor.b, this.cursor.c, this.cursor.d).b(f1, f1, f1).c(-d, -d1, -d2);
                 drawBox(box);
                 GL11.glColor4f(1.0F, 0.0F, 0.0F, 0.4F);
                 GL11.glLineWidth(4.0F);
-                nw tessellator = nw.a;
+                Tessellator tessellator = Tessellator.a;
                 tessellator.a(3);
                 if (this.cursor.e == 0) {
                     tessellator.a(box.a, box.b, box.c);

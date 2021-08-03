@@ -4,14 +4,16 @@ import io.github.ryuu.adventurecraft.Minecraft;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityCamera;
 import io.github.ryuu.adventurecraft.gui.GuiCameraBlock;
 import io.github.ryuu.adventurecraft.util.DebugMode;
+import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.tile.TileWithEntity;
 import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 public class BlockCamera extends TileWithEntity {
     protected BlockCamera(int i, int j) {
-        super(i, j, ln.a);
+        super(i, j, Material.AIR);
     }
 
     protected TileEntity a_() {
@@ -44,7 +46,7 @@ public class BlockCamera extends TileWithEntity {
 
     public void onTriggerDeactivated(Level world, int i, int j, int k) {}
 
-    public boolean a(Level world, int i, int j, int k, gs entityplayer) {
+    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
         if (DebugMode.active) {
             Minecraft.minecraftInstance.v.a("Set Active Editing Camera");
             TileEntityCamera obj = (TileEntityCamera)world.b(i, j, k);

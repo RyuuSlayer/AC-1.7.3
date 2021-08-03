@@ -1,25 +1,20 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import bt;
 import java.util.ArrayList;
 import java.util.List;
 
 import io.github.ryuu.adventurecraft.entities.EntityLivingScript;
 import io.github.ryuu.adventurecraft.entities.EntityNPC;
-import io.github.ryuu.adventurecraft.util.UtilBullet;
-import jc;
-import jg;
-import ln;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.FlyingEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.WalkingEntity;
+import io.github.ryuu.adventurecraft.util.UtilBullet; jc;
+import net.minecraft.entity.*;
 import net.minecraft.entity.animal.Wolf;
 import net.minecraft.entity.monster.Monster;
 import net.minecraft.entity.monster.Slime;
 import net.minecraft.entity.player.Player;
 import net.minecraft.entity.projectile.Arrow;
+import net.minecraft.tile.material.Material;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.hit.HitType;
 import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.Vec3f;
 
@@ -164,11 +159,11 @@ public class ScriptEntity {
     }
 
     public boolean isInsideOfWater() {
-        return this.entity.a(ln.g);
+        return this.entity.a(Material.WATER);
     }
 
     public boolean isInsideOfLava() {
-        return this.entity.a(ln.h);
+        return this.entity.a(Material.LAVA);
     }
 
     public boolean getImmuneToFire() {
@@ -226,7 +221,7 @@ public class ScriptEntity {
     public String getClassType() {
         if (this.entity instanceof Player)
             return "Player";
-        return jc.getEntityStringClimbing(this.entity);
+        return EntityRegistry.getEntityStringClimbing(this.entity);
     }
 
     public boolean getCollidesWithClipBlocks() {
@@ -273,10 +268,10 @@ public class ScriptEntity {
 
     public Object[] rayTrace(double startX, double startY, double startZ, double endX, double endY, double endZ) {
         Object[] results = new Object[3]
-        HitResult hit = UtilBullet.rayTrace(this.entity.aI, this.entity, bt.b(startX, startY, startZ), Vec3f.b(endX, endY, endZ));
+        HitResult hit = UtilBullet.rayTrace(this.entity.aI, this.entity, Vec3f.b(startX, startY, startZ), Vec3f.b(endX, endY, endZ));
         if (hit != null) {
             results[0] = new ScriptVec3(hit.f.a, hit.f.b, hit.f.c);
-            if (hit.a == jg.a) {
+            if (hit.a == HitType.a) {
                 results[1] = new ScriptVec3(hit.b, hit.c, hit.d);
             } else {
                 results[2] = getEntityClass(hit.g);

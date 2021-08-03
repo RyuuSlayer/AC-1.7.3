@@ -1,6 +1,8 @@
 package io.github.ryuu.adventurecraft.util;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.level.Level;
+import net.minecraft.tile.Tile;
 
 public class PlayerTorch {
     static boolean torchActive;
@@ -27,14 +29,14 @@ public class PlayerTorch {
         return torchActive;
     }
 
-    public static void setTorchState(fd world, boolean active) {
+    public static void setTorchState(Level world, boolean active) {
         if (torchActive != active) {
             torchActive = active;
             markBlocksDirty(world);
         }
     }
 
-    public static void setTorchPos(fd world, float x, float y, float z) {
+    public static void setTorchPos(Level world, float x, float y, float z) {
         long avgTime = Minecraft.minecraftInstance.getAvgFrameTime();
         int updateRate = 1;
         if (avgTime > 33333333L) {
@@ -53,7 +55,7 @@ public class PlayerTorch {
         }
     }
 
-    public static float getTorchLight(fd world, int x, int y, int z) {
+    public static float getTorchLight(Level world, int x, int y, int z) {
         if (torchActive) {
             int diffX = x - iX + torchBrightness;
             int diffY = y - iY + torchBrightness;
@@ -64,7 +66,7 @@ public class PlayerTorch {
         return 0.0F;
     }
 
-    private static void markBlocksDirty(fd world) {
+    private static void markBlocksDirty(Level world) {
         float xDiff = posX - iX;
         float yDiff = posY - iY;
         float zDiff = posZ - iZ;
@@ -76,7 +78,7 @@ public class PlayerTorch {
                 for (int k = -torchBrightness; k <= torchBrightness; k++) {
                     int blockZ = k + iZ;
                     int blockId = world.a(blockX, blockY, blockZ);
-                    if (blockId != 0 && uu.m[blockId].c() && blockId != uu.al.bn && blockId != uu.aB.bn) {
+                    if (blockId != 0 && Tile.m[blockId].c() && blockId != Tile.al.bn && blockId != Tile.aB.bn) {
                         cache[index++] = 0.0F;
                     } else {
                         float distance = (float)(Math.abs(i + 0.5D - xDiff) + Math.abs(j + 0.5D - yDiff) + Math.abs(k + 0.5D - zDiff));

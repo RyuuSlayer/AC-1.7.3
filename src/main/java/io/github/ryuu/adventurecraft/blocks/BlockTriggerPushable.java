@@ -6,13 +6,15 @@ import io.github.ryuu.adventurecraft.items.ItemCursor;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.TriggerArea;
+import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.tile.material.Material;
 
 public class BlockTriggerPushable extends BlockContainerColor {
     protected BlockTriggerPushable(int i, int j) {
-        super(i, j, ln.e);
+        super(i, j, Material.STONE);
     }
 
     protected TileEntity a_() {
@@ -57,7 +59,7 @@ public class BlockTriggerPushable extends BlockContainerColor {
         obj.maxZ = ItemCursor.maxZ;
     }
 
-    public boolean a(Level world, int i, int j, int k, gs entityplayer) {
+    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
         if (DebugMode.active && entityplayer.G() != null && (entityplayer.G()).c == Items.cursor.bf) {
             TileEntityTriggerPushable obj = (TileEntityTriggerPushable)world.b(i, j, k);
             GuiTriggerPushable.showUI(obj);

@@ -5,16 +5,18 @@ import io.github.ryuu.adventurecraft.items.ItemCursor;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.TriggerArea;
+import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.tile.TileWithEntity;
 import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 import java.util.Random;
 
 public class BlockTriggerMemory extends TileWithEntity {
     protected BlockTriggerMemory(int i, int j) {
-        super(i, j, ln.a);
+        super(i, j, Material.AIR);
     }
 
     protected TileEntity a_() {
@@ -92,7 +94,7 @@ public class BlockTriggerMemory extends TileWithEntity {
         obj.set(ItemCursor.minX, ItemCursor.minY, ItemCursor.minZ, ItemCursor.maxX, ItemCursor.maxY, ItemCursor.maxZ);
     }
 
-    public boolean a(Level world, int i, int j, int k, gs entityplayer) {
+    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
         if (DebugMode.active && entityplayer.G() != null && (entityplayer.G()).c == Items.cursor.bf) {
             TileEntityTriggerMemory obj = (TileEntityTriggerMemory)world.b(i, j, k);
             GuiTriggerMemory.showUI(world, i, j, k, obj);

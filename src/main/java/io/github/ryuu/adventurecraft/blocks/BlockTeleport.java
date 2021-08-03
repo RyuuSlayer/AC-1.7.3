@@ -5,14 +5,16 @@ import io.github.ryuu.adventurecraft.items.ItemCursor;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.tile.TileWithEntity;
 import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 public class BlockTeleport extends TileWithEntity {
     protected BlockTeleport(int i, int j) {
-        super(i, j, ln.a);
+        super(i, j, Material.AIR);
     }
 
     protected TileEntity a_() {
@@ -39,11 +41,11 @@ public class BlockTeleport extends TileWithEntity {
         TileEntityTeleport tileEnt = (TileEntityTeleport)world.b(i, j, k);
         int y;
         for (y = tileEnt.y; y < 128; y++) {
-            if (world.f(tileEnt.x, y, tileEnt.z) == ln.a)
+            if (world.f(tileEnt.x, y, tileEnt.z) == Material.AIR)
                 break;
         }
         for (Object obj : world.d) {
-            gs p = (gs)obj;
+            Player p = (Player)obj;
             p.e(tileEnt.x + 0.5D, y, tileEnt.z + 0.5D);
         }
     }
@@ -54,7 +56,7 @@ public class BlockTeleport extends TileWithEntity {
         return DebugMode.active;
     }
 
-    public boolean a(Level world, int i, int j, int k, gs entityplayer) {
+    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
         if (DebugMode.active && entityplayer.G() != null && (entityplayer.G()).c == Items.cursor.bf) {
             TileEntityTeleport obj = (TileEntityTeleport)world.b(i, j, k);
             obj.x = ItemCursor.minX;

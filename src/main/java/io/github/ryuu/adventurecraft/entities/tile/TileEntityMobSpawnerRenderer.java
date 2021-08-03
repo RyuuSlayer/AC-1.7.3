@@ -3,9 +3,11 @@ package io.github.ryuu.adventurecraft.entities.tile;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityMobSpawner;
 import io.github.ryuu.adventurecraft.util.Coord;
 import io.github.ryuu.adventurecraft.util.DebugMode;
+import net.minecraft.client.render.entity.tile.TileEntityRenderer;
+import net.minecraft.tile.Tile;
 import org.lwjgl.opengl.GL11;
 
-public class TileEntityMobSpawnerRenderer extends je {
+public class TileEntityMobSpawnerRenderer extends TileEntityRenderer {
     public void render(TileEntityMobSpawner mobSpawner, double d, double d1, double d2, float f) {
         if (DebugMode.active) {
             GL11.glPushMatrix();
@@ -23,7 +25,7 @@ public class TileEntityMobSpawnerRenderer extends je {
                 for (int i = min.x; i <= max.x; i++) {
                     for (int j = min.y; j <= max.y; j++) {
                         for (int k = min.z; k <= max.z; k++) {
-                            uu b = uu.m[mobSpawner.d.a(i, j, k)];
+                            Tile b = Tile.m[mobSpawner.d.a(i, j, k)];
                             if (b != null && b.canBeTriggered()) {
                                 GL11.glColor3f(0.0F, 0.0F, 0.0F);
                                 GL11.glVertex3f(0.0F, 0.0F, 0.0F);

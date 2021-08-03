@@ -1,5 +1,9 @@
 package io.github.ryuu.adventurecraft.util;
 
+import net.minecraft.level.Level;
+import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.util.io.CompoundTag;
+
 class EditAction {
     EditAction nextAction;
 
@@ -13,15 +17,15 @@ class EditAction {
 
     int prevMetadata;
 
-    nu prevNBT;
+    CompoundTag prevNBT;
 
     int newBlockID;
 
     int newMetadata;
 
-    nu newNBT;
+    CompoundTag newNBT;
 
-    AC_EditAction(int i, int j, int k, int pID, int pMeta, nu pNBT, int nID, int nMeta, nu nNBT) {
+    EditAction(int i, int j, int k, int pID, int pMeta, CompoundTag pNBT, int nID, int nMeta, CompoundTag nNBT) {
         this.x = i;
         this.y = j;
         this.z = k;
@@ -34,20 +38,20 @@ class EditAction {
         this.nextAction = null;
     }
 
-    void undo(fd world) {
+    void undo(Level world) {
         world.b(this.x, this.y, this.z, this.prevBlockID, this.prevMetadata);
         if (this.prevNBT != null) {
-            ow te = ow.c(this.prevNBT);
+            TileEntity te = TileEntity.c(this.prevNBT);
             world.a(te.e, te.f, te.g, te);
         }
         if (this.nextAction != null)
             this.nextAction.undo(world);
     }
 
-    void redo(fd world) {
+    void redo(Level world) {
         world.b(this.x, this.y, this.z, this.newBlockID, this.newMetadata);
         if (this.newNBT != null) {
-            ow te = ow.c(this.newNBT);
+            TileEntity te = TileEntity.c(this.newNBT);
             world.a(te.e, te.f, te.g, te);
         }
         if (this.nextAction != null)

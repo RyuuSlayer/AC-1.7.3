@@ -7,16 +7,17 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import net.minecraft.client.Minecraft;
+import net.minecraft.level.Level;
 import org.mozilla.javascript.Scriptable;
 
 public class JScriptHandler {
-    fd world;
+    Level world;
 
     File scriptDir;
 
     public HashMap<String, JScriptInfo> scripts;
 
-    JScriptHandler(fd w, File mapDir) {
+    JScriptHandler(Level w, File mapDir) {
         this.world = w;
         this.scriptDir = new File(mapDir, "scripts");
         this.scripts = new HashMap<>();

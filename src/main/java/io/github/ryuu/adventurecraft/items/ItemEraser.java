@@ -1,13 +1,15 @@
 package io.github.ryuu.adventurecraft.items;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.Player;
+import net.minecraft.level.Level;
 
 public class ItemEraser extends gm {
     protected ItemEraser(int i) {
         super(i);
     }
 
-    public boolean a(iz itemstack, gs entityplayer, fd world, int i, int j, int k, int l) {
+    public boolean a(iz itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
         if (ItemCursor.bothSet) {
             Minecraft.minecraftInstance.v.a("Erasing Area");
             int minX = Math.min(ItemCursor.oneX, ItemCursor.twoX);

@@ -2,8 +2,10 @@ package io.github.ryuu.adventurecraft.entities;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.level.Level;
+import net.minecraft.tile.Tile;
 
 public class EntityBoomerang extends sn {
     double bounceFactor;
@@ -28,7 +30,7 @@ public class EntityBoomerang extends sn {
 
     int chunkZ;
 
-    public EntityBoomerang(fd world) {
+    public EntityBoomerang(Level world) {
         super(world);
         b(0.5F, 0.0625F);
         this.bf = 0.03125F;
@@ -40,7 +42,7 @@ public class EntityBoomerang extends sn {
         this.collidesWithClipBlocks = false;
     }
 
-    public EntityBoomerang(fd world, sn entity, iz b) {
+    public EntityBoomerang(Level world, sn entity, iz b) {
         this(world);
         this.item = b;
         c(entity.aS, entity.aT);
@@ -139,7 +141,7 @@ public class EntityBoomerang extends sn {
             int blockID = this.aI.a(this.chunkX, this.chunkY, this.chunkZ);
             if (blockID == uu.aK.bn)
                 if (this.returnsTo instanceof gs)
-                    uu.aK.a(this.aI, this.chunkX, this.chunkY, this.chunkZ, (gs)this.returnsTo);
+                    Tile.aK.a(this.aI, this.chunkX, this.chunkY, this.chunkZ, (gs)this.returnsTo);
         }
     }
 
@@ -161,7 +163,7 @@ public class EntityBoomerang extends sn {
         K();
     }
 
-    public void b(gs entityplayer) {}
+    public void b(Player entityplayer) {}
 
     public boolean a(sn entity, int i) {
         return false;

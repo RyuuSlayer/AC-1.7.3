@@ -5,6 +5,7 @@ import java.util.List;
 
 import io.github.ryuu.adventurecraft.entities.EntityCamera;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.Tessellator;
 import net.minecraft.entity.Entity;
 import net.minecraft.src.Vec3D;
 import org.lwjgl.opengl.GL11;
@@ -36,12 +37,12 @@ public class CutsceneCamera {
     public void loadCameraEntities() {
         for (Entity obj : Minecraft.minecraftInstance.f.b) {
             if (obj instanceof EntityCamera)
-                ((sn)obj).K();
+                ((Entity)obj).K();
         }
         for (CutsceneCameraPoint p : this.cameraPoints) {
             EntityCamera e = new EntityCamera(Minecraft.minecraftInstance.f, p.time, p.cameraBlendType, p.cameraID);
             e.b(p.posX, p.posY, p.posZ, p.rotYaw, p.rotPitch);
-            Minecraft.minecraftInstance.f.b((sn)e);
+            Minecraft.minecraftInstance.f.b((Entity)e);
         }
         CutsceneCamera c = new CutsceneCamera();
         for (CutsceneCameraPoint p : this.cameraPoints)
@@ -73,7 +74,7 @@ public class CutsceneCamera {
         GL11.glColor4f(1.0F, 0.2F, 0.0F, 1.0F);
         GL11.glLineWidth(5.0F);
         GL11.glDisable(3553);
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         tessellator.a(3);
         for (bt v : this.lineVecs)
             tessellator.a(v.a - offX, v.b - offY, v.c - offZ);
@@ -166,7 +167,7 @@ public class CutsceneCamera {
             if (this.cameraPoints.isEmpty())
                 return this.curPoint;
             if (this.startType != 0) {
-                sn player = Minecraft.minecraftInstance.h;
+                Entity player = Minecraft.minecraftInstance.h;
                 this.prevPoint = new CutsceneCameraPoint(0.0F, (float)player.aM, (float)player.aN, (float)player.aO, player.aS, player.aT, this.startType);
                 fixYawPitch(player.aS, player.aT);
             } else {

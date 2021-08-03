@@ -1,6 +1,8 @@
 package io.github.ryuu.adventurecraft.items;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.Player;
+import net.minecraft.level.Level;
 
 public class ItemCursor extends gm {
     static boolean bothSet;
@@ -9,11 +11,11 @@ public class ItemCursor extends gm {
         super(i);
     }
 
-    public boolean onItemUseLeftClick(iz itemstack, gs entityplayer, fd world, int i, int j, int k, int l) {
+    public boolean onItemUseLeftClick(iz itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
         return a(itemstack, entityplayer, world, i, j, k, l);
     }
 
-    public boolean a(iz itemstack, gs entityplayer, fd world, int i, int j, int k, int l) {
+    public boolean a(iz itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
         if (firstPosition) {
             Minecraft.minecraftInstance.v.a(String.format("Setting Cursor Position 1 (%d, %d, %d)", new Object[] { Integer.valueOf(i), Integer.valueOf(j), Integer.valueOf(k) }));
             oneX = i;

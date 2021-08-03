@@ -1,9 +1,11 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
 import io.github.ryuu.adventurecraft.util.DebugMode;
+import net.minecraft.client.render.entity.tile.TileEntityRenderer;
+import net.minecraft.tile.Tile;
 import org.lwjgl.opengl.GL11;
 
-public class TileEntityStoreRenderer extends je {
+public class TileEntityStoreRenderer extends TileEntityRenderer {
     public TileEntityStoreRenderer() {
         renderItem.a(th.a);
     }
@@ -30,7 +32,7 @@ public class TileEntityStoreRenderer extends je {
             for (int i = store.tradeTrigger.minX; i <= store.tradeTrigger.maxX; i++) {
                 for (int j = store.tradeTrigger.minY; j <= store.tradeTrigger.maxY; j++) {
                     for (int k = store.tradeTrigger.minZ; k <= store.tradeTrigger.maxZ; k++) {
-                        uu block = uu.m[store.d.a(i, j, k)];
+                        Tile block = Tile.m[store.d.a(i, j, k)];
                         if (block != null && block.canBeTriggered()) {
                             GL11.glColor3f(0.0F, 0.0F, 0.0F);
                             GL11.glVertex3f(0.0F, 0.0F, 0.0F);

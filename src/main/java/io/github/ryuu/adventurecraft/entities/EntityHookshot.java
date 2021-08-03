@@ -2,6 +2,9 @@ package io.github.ryuu.adventurecraft.entities;
 
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.items.Items;
+import net.minecraft.entity.player.Player;
+import net.minecraft.level.Level;
+import net.minecraft.tile.Tile;
 
 import java.util.List;
 
@@ -20,7 +23,7 @@ public class EntityHookshot extends sn {
 
     iz item;
 
-    public EntityHookshot(fd world) {
+    public EntityHookshot(Level world) {
         super(world);
         b(0.5F, 0.5F);
         this.turningAround = true;
@@ -28,7 +31,7 @@ public class EntityHookshot extends sn {
         this.collidesWithClipBlocks = false;
     }
 
-    public EntityHookshot(fd world, ls entity, boolean main, iz i) {
+    public EntityHookshot(Level world, ls entity, boolean main, iz i) {
         this(world);
         this.mainHand = main;
         c(entity.aS, entity.aT);
@@ -63,7 +66,7 @@ public class EntityHookshot extends sn {
 
     public void w_() {
         if (this.item != null && this.returnsTo instanceof gs) {
-            gs player = (gs)this.returnsTo;
+            Player player = (Player)this.returnsTo;
             if (this.mainHand && this.item != player.c.b())
                 Items.hookshot.releaseHookshot(this);
             if (!this.mainHand && this.item != player.c.getOffhandItem())
@@ -85,12 +88,12 @@ public class EntityHookshot extends sn {
                 vf hit = this.aI.a(pos1, pos2);
                 if (hit != null && hit.a == jg.a) {
                     int blockID = this.aI.a(hit.b, hit.c, hit.d);
-                    if (blockID == uu.K.bn || blockID == uu.y.bn || blockID == Blocks.woodBlocks.bn || blockID == Blocks.halfSteps3.bn) {
+                    if (blockID == Tile.K.bn || blockID == Tile.y.bn || blockID == Blocks.woodBlocks.bn || blockID == Blocks.halfSteps3.bn) {
                         this.attachedToSurface = true;
                         e(hit.f.a, hit.f.b, hit.f.c);
                         this.aI.a(this, "random.drr", 1.0F, 1.2F / (this.bs.nextFloat() * 0.2F + 0.9F));
                     } else if (blockID != 0) {
-                        this.aI.a(this, (uu.m[blockID]).by.d(), 1.0F, 1.2F / (this.bs.nextFloat() * 0.2F + 0.9F));
+                        this.aI.a(this, (Tile.m[blockID]).by.d(), 1.0F, 1.2F / (this.bs.nextFloat() * 0.2F + 0.9F));
                     }
                 }
                 this.turningAround = true;
@@ -154,7 +157,7 @@ public class EntityHookshot extends sn {
         K();
     }
 
-    public void b(gs entityplayer) {}
+    public void b(Player entityplayer) {}
 
     public boolean a(sn entity, int i) {
         return false;

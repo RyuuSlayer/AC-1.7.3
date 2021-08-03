@@ -1,25 +1,29 @@
 package io.github.ryuu.adventurecraft.util;
 
+import net.minecraft.level.Level;
+import net.minecraft.tile.Tile;
+import net.minecraft.util.noise.PerlinOctaveNoise;
+
 import java.util.Random;
 
 public class ChunkProviderHeightMapGenerate implements cl {
     private Random rand;
 
-    private uf field_912_k;
+    private PerlinOctaveNoise field_912_k;
 
-    private uf field_911_l;
+    private PerlinOctaveNoise field_911_l;
 
-    private uf field_910_m;
+    private PerlinOctaveNoise field_910_m;
 
-    private uf field_908_o;
+    private PerlinOctaveNoise field_908_o;
 
-    public uf field_922_a;
+    public PerlinOctaveNoise field_922_a;
 
-    public uf field_921_b;
+    public PerlinOctaveNoise field_921_b;
 
-    public uf mobSpawnerNoise;
+    public PerlinOctaveNoise mobSpawnerNoise;
 
-    private fd worldObj;
+    private Level worldObj;
 
     private double[] stoneNoise;
 
@@ -39,18 +43,18 @@ public class ChunkProviderHeightMapGenerate implements cl {
 
     private double[] generatedTemperatures;
 
-    public ChunkProviderHeightMapGenerate(fd world, long l) {
+    public ChunkProviderHeightMapGenerate(Level world, long l) {
         this.stoneNoise = new double[256];
         this.unusedIntArray32x32 = new int[32][32];
         this.worldObj = world;
         this.rand = new Random(l);
-        this.field_912_k = new uf(this.rand, 16);
-        this.field_911_l = new uf(this.rand, 16);
-        this.field_910_m = new uf(this.rand, 8);
-        this.field_908_o = new uf(this.rand, 4);
-        this.field_922_a = new uf(this.rand, 10);
-        this.field_921_b = new uf(this.rand, 16);
-        this.mobSpawnerNoise = new uf(this.rand, 8);
+        this.field_912_k = new PerlinOctaveNoise(this.rand, 16);
+        this.field_911_l = new PerlinOctaveNoise(this.rand, 16);
+        this.field_910_m = new PerlinOctaveNoise(this.rand, 8);
+        this.field_908_o = new PerlinOctaveNoise(this.rand, 4);
+        this.field_922_a = new PerlinOctaveNoise(this.rand, 10);
+        this.field_921_b = new PerlinOctaveNoise(this.rand, 16);
+        this.mobSpawnerNoise = new PerlinOctaveNoise(this.rand, 8);
     }
 
     public void generateTerrain(int i, int j, byte[] abyte0, kd[] amobspawnerbase, double[] ad) {
@@ -70,13 +74,13 @@ public class ChunkProviderHeightMapGenerate implements cl {
                                 int waterHeight = TerrainImage.getWaterHeight(x, y);
                                 if (k1 * 8 + l1 < waterHeight)
                                     if (d17 < 0.5D && k1 * 8 + l1 >= waterHeight - 1) {
-                                        l2 = uu.aU.bn;
+                                        l2 = Tile.aU.bn;
                                     } else {
-                                        l2 = uu.B.bn;
+                                        l2 = Tile.B.bn;
                                     }
                                 int height = TerrainImage.getTerrainHeight(x, y);
                                 if (k1 * 8 + l1 <= height)
-                                    l2 = uu.u.bn;
+                                    l2 = Tile.u.bn;
                                 abyte0[j2] = (byte)l2;
                                 j2 += c;
                             }
@@ -105,18 +109,18 @@ public class ChunkProviderHeightMapGenerate implements cl {
                     byte byte3 = abyte0[l1];
                     if (byte3 == 0) {
                         j1 = -1;
-                    } else if (byte3 == uu.u.bn) {
+                    } else if (byte3 == Tile.u.bn) {
                         if (j1 == -1) {
                             if (k1 >= waterHeight - 4 && k1 <= waterHeight + 1) {
                                 byte1 = mobspawnerbase.p;
                                 byte2 = mobspawnerbase.q;
                                 if (TerrainImage.hasSandNearWaterEdge(x, z)) {
-                                    byte1 = (byte)uu.F.bn;
-                                    byte2 = (byte)uu.F.bn;
+                                    byte1 = (byte)Tile.F.bn;
+                                    byte2 = (byte)Tile.F.bn;
                                 }
                             }
                             if (k1 < waterHeight && byte1 == 0)
-                                byte1 = (byte)uu.B.bn;
+                                byte1 = (byte)Tile.B.bn;
                             j1 = i1;
                             if (k1 >= waterHeight - 1) {
                                 abyte0[l1] = byte1;
@@ -274,25 +278,25 @@ public class ChunkProviderHeightMapGenerate implements cl {
             int l15 = k + this.rand.nextInt(16) + 8;
             int k18 = this.rand.nextInt(128);
             int i21 = l + this.rand.nextInt(16) + 8;
-            (new be(uu.ae.bn)).a(this.worldObj, this.rand, l15, k18, i21);
+            (new be(Tile.ae.bn)).a(this.worldObj, this.rand, l15, k18, i21);
         }
         if (this.rand.nextInt(2) == 0) {
             int k11 = k + this.rand.nextInt(16) + 8;
             int i16 = this.rand.nextInt(128);
             int l18 = l + this.rand.nextInt(16) + 8;
-            (new be(uu.af.bn)).a(this.worldObj, this.rand, k11, i16, l18);
+            (new be(Tile.af.bn)).a(this.worldObj, this.rand, k11, i16, l18);
         }
         if (this.rand.nextInt(4) == 0) {
             int l11 = k + this.rand.nextInt(16) + 8;
             int j16 = this.rand.nextInt(128);
             int i19 = l + this.rand.nextInt(16) + 8;
-            (new be(uu.ag.bn)).a(this.worldObj, this.rand, l11, j16, i19);
+            (new be(Tile.ag.bn)).a(this.worldObj, this.rand, l11, j16, i19);
         }
         if (this.rand.nextInt(8) == 0) {
             int i12 = k + this.rand.nextInt(16) + 8;
             int k16 = this.rand.nextInt(128);
             int j19 = l + this.rand.nextInt(16) + 8;
-            (new be(uu.ah.bn)).a(this.worldObj, this.rand, i12, k16, j19);
+            (new be(Tile.ah.bn)).a(this.worldObj, this.rand, i12, k16, j19);
         }
         int l12 = 0;
         if (mobspawnerbase == kd.h)
@@ -312,7 +316,7 @@ public class ChunkProviderHeightMapGenerate implements cl {
                 double d1 = this.generatedTemperatures[j22 * 16 + j23];
                 this.worldObj.setTemperatureValue(i18, l20, d1);
                 if (d1 < 0.5D && k23 > 0 && k23 < 128 && this.worldObj.d(i18, k23, l20) && this.worldObj.f(i18, k23 - 1, l20).c() && this.worldObj.f(i18, k23 - 1, l20) != ln.s)
-                    this.worldObj.f(i18, k23, l20, uu.aT.bn);
+                    this.worldObj.f(i18, k23, l20, Tile.aT.bn);
             }
         }
         gk.a = false;

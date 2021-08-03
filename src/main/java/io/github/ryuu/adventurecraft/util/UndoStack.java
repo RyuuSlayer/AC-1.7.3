@@ -64,12 +64,12 @@ public class UndoStack {
 
     public void undo(Level w) {
         if (!this.undoStack.isEmpty()) {
-            EditAction action = (EditAction)this.undoStack.removeLast();
+            EditAction action = this.undoStack.removeLast();
             action.undo(w);
             this.redoStack.addLast(action);
             if (this.redoStack.size() > 128)
                 this.redoStack.removeFirst();
-            UndoSelection sel = (UndoSelection)this.undoSelectionStack.removeLast();
+            UndoSelection sel = this.undoSelectionStack.removeLast();
             sel.before.load();
             this.redoSelectionStack.addLast(sel);
             if (this.redoSelectionStack.size() > 128)
@@ -80,12 +80,12 @@ public class UndoStack {
 
     public void redo(Level w) {
         if (!this.redoStack.isEmpty()) {
-            EditAction action = (EditAction)this.redoStack.removeLast();
+            EditAction action = this.redoStack.removeLast();
             action.redo(w);
             this.undoStack.addLast(action);
             if (this.undoStack.size() > 128)
                 this.undoStack.removeFirst();
-            UndoSelection sel = (UndoSelection)this.redoSelectionStack.removeLast();
+            UndoSelection sel = this.redoSelectionStack.removeLast();
             sel.after.load();
             this.undoSelectionStack.addLast(sel);
             if (this.undoSelectionStack.size() > 128)

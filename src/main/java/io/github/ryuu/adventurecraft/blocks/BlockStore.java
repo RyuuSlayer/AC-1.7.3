@@ -3,13 +3,15 @@ package io.github.ryuu.adventurecraft.blocks;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityStore;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.tile.TileWithEntity;
 import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.tile.material.Material;
 
 public class BlockStore extends TileWithEntity {
     protected BlockStore(int i, int j) {
-        super(i, j, ln.p);
+        super(i, j, Material.GLASS);
     }
 
     protected TileEntity a_() {
@@ -24,7 +26,7 @@ public class BlockStore extends TileWithEntity {
         return 1;
     }
 
-    public boolean a(Level world, int i, int j, int k, gs entityplayer) {
+    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
         TileEntityStore store = (TileEntityStore)world.b(i, j, k);
         if (DebugMode.active) {
             GuiStoreDebug.showUI(store);

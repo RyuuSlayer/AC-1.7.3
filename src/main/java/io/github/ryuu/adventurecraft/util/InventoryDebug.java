@@ -1,6 +1,8 @@
 package io.github.ryuu.adventurecraft.util;
 
 import io.github.ryuu.adventurecraft.blocks.Blocks;
+import net.minecraft.entity.player.Player;
+import net.minecraft.tile.Tile;
 
 public class InventoryDebug implements lw {
     private String inventoryTitle;
@@ -24,27 +26,27 @@ public class InventoryDebug implements lw {
     private int getID(int i) {
         int j;
         for (j = 0; j < 4; j++) {
-            if (i > uu.v.bn)
+            if (i > Tile.v.bn)
                 i--;
         }
         for (j = 0; j < 3; j++) {
-            if (i > uu.F.bn)
+            if (i > Tile.F.bn)
                 i--;
         }
-        if (i > uu.K.bn)
+        if (i > Tile.K.bn)
             i--;
-        if (i > uu.K.bn)
+        if (i > Tile.K.bn)
             i--;
         for (j = 0; j < 2; j++) {
-            if (i > uu.Y.bn)
+            if (i > Tile.Y.bn)
                 i--;
         }
         for (j = 0; j < 15; j++) {
-            if (i > uu.ac.bn)
+            if (i > Tile.ac.bn)
                 i--;
         }
         for (j = 0; j < 3; j++) {
-            if (i > uu.al.bn)
+            if (i > Tile.al.bn)
                 i--;
         }
         for (j = 0; j < 15; j++) {
@@ -198,54 +200,54 @@ public class InventoryDebug implements lw {
         int subtype = 0;
         int j;
         for (j = 0; j < 4; j++) {
-            if (i > uu.v.bn) {
+            if (i > Tile.v.bn) {
                 i--;
                 subtype++;
             }
         }
-        if (i > uu.v.bn)
+        if (i > Tile.v.bn)
             subtype = 0;
         for (j = 0; j < 3; j++) {
-            if (i > uu.F.bn) {
+            if (i > Tile.F.bn) {
                 i--;
                 subtype++;
             }
         }
-        if (i > uu.F.bn)
+        if (i > Tile.F.bn)
             subtype = 0;
-        if (i > uu.K.bn) {
+        if (i > Tile.K.bn) {
             i--;
             subtype++;
         }
-        if (i > uu.K.bn) {
+        if (i > Tile.K.bn) {
             i--;
             subtype++;
         }
-        if (i > uu.K.bn)
+        if (i > Tile.K.bn)
             subtype = 0;
         for (j = 0; j < 2; j++) {
-            if (i > uu.Y.bn) {
+            if (i > Tile.Y.bn) {
                 i--;
                 subtype++;
             }
         }
-        if (i > uu.Y.bn)
+        if (i > Tile.Y.bn)
             subtype = 0;
         for (j = 0; j < 15; j++) {
-            if (i > uu.ac.bn) {
+            if (i > Tile.ac.bn) {
                 i--;
                 subtype++;
             }
         }
-        if (i > uu.ac.bn)
+        if (i > Tile.ac.bn)
             subtype = 0;
         for (j = 0; j < 3; j++) {
-            if (i > uu.al.bn) {
+            if (i > Tile.al.bn) {
                 i--;
                 subtype++;
             }
         }
-        if (i > uu.al.bn)
+        if (i > Tile.al.bn)
             subtype = 0;
         for (j = 0; j < 15; j++) {
             if (i > Blocks.pillarStone.bn) {
@@ -620,7 +622,7 @@ public class InventoryDebug implements lw {
 
     public void y_() {}
 
-    public boolean a_(gs entityplayer) {
+    public boolean a_(Player entityplayer) {
         return true;
     }
 }

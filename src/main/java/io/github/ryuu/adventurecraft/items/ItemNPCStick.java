@@ -2,6 +2,8 @@ package io.github.ryuu.adventurecraft.items;
 
 import io.github.ryuu.adventurecraft.entities.EntityNPC;
 import io.github.ryuu.adventurecraft.gui.GuiNPC;
+import net.minecraft.entity.player.Player;
+import net.minecraft.level.Level;
 
 class ItemNPCStick extends gm {
     public ItemNPCStick(int itemIndex) {
@@ -10,7 +12,7 @@ class ItemNPCStick extends gm {
         h();
     }
 
-    public boolean a(iz itemstack, gs entityplayer, fd world, int i, int j, int k, int l) {
+    public boolean a(iz itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
         EntityNPC npc = new EntityNPC(world);
         npc.b(i + 0.5D, (j + 1), k + 0.5D, entityplayer.aS + 180.0F, 0.0F);
         npc.H = npc.aS;

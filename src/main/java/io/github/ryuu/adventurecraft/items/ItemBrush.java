@@ -2,14 +2,17 @@ package io.github.ryuu.adventurecraft.items;
 
 import io.github.ryuu.adventurecraft.blocks.IBlockColor;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.Player;
+import net.minecraft.level.Level;
+import net.minecraft.tile.Tile;
 
 public class ItemBrush extends gm {
     protected ItemBrush(int i) {
         super(i);
     }
 
-    public boolean a(iz itemstack, gs entityplayer, fd world, int i, int j, int k, int l) {
-        uu b = uu.m[world.a(i, j, k)];
+    public boolean a(iz itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
+        Tile b = Tile.m[world.a(i, j, k)];
         if (b != null && b instanceof IBlockColor) {
             ((IBlockColor)b).incrementColor(world, i, j, k);
             world.j(i, j, k);

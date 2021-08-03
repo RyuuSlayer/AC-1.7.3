@@ -1,18 +1,18 @@
 package io.github.ryuu.adventurecraft.scripting;
 
 import net.minecraft.client.Minecraft;
-import qq;
+import net.minecraft.client.util.ScreenScaler;
 
 public class ScriptUI {
     Minecraft mc = Minecraft.minecraftInstance;
 
     public int getWidth() {
-        qq scaledresolution = new qq(this.mc.z, this.mc.d, this.mc.e);
+        ScreenScaler scaledresolution = new ScreenScaler(this.mc.z, this.mc.d, this.mc.e);
         return scaledresolution.a();
     }
 
     public int getHeight() {
-        qq scaledresolution = new qq(this.mc.z, this.mc.d, this.mc.e);
+        ScreenScaler scaledresolution = new ScreenScaler(this.mc.z, this.mc.d, this.mc.e);
         return scaledresolution.b();
     }
 

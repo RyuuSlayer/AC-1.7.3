@@ -2,11 +2,12 @@ package io.github.ryuu.adventurecraft.blocks;
 
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
+import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 public class BlockPlant extends Tile implements IBlockColor {
     protected BlockPlant(int i, int j) {
-        super(i, j, ln.j);
+        super(i, j, Material.PLANT);
         float f = 0.2F;
         a(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, f * 3.0F, 0.5F + f);
     }

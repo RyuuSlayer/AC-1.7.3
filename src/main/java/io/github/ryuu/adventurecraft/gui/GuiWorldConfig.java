@@ -1,11 +1,14 @@
 package io.github.ryuu.adventurecraft.gui;
 
+import net.minecraft.client.gui.Screen;
+import net.minecraft.level.Level;
+
 import java.io.File;
 
-public class GuiWorldConfig extends da {
+public class GuiWorldConfig extends Screen {
     private int page;
 
-    private fd world;
+    private Level world;
 
     private ro playerName;
 
@@ -21,7 +24,7 @@ public class GuiWorldConfig extends da {
 
     private boolean lightChanged;
 
-    public GuiWorldConfig(fd w) {
+    public GuiWorldConfig(Level w) {
         this.page = 0;
         this.selectedID = 0;
         this.lightChanged = false;

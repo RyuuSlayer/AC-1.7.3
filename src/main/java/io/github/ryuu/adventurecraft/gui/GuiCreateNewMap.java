@@ -1,10 +1,12 @@
 package io.github.ryuu.adventurecraft.gui;
 
 import java.util.Random;
+
+import net.minecraft.client.gui.Screen;
 import org.lwjgl.input.Keyboard;
 
-public class GuiCreateNewMap extends da {
-    private da parent;
+public class GuiCreateNewMap extends Screen {
+    private Screen parent;
 
     private ro textboxMapName;
 
@@ -54,7 +56,7 @@ public class GuiCreateNewMap extends da {
 
     GuiSlider2 sliderVolatilityWeight2;
 
-    public GuiCreateNewMap(da guiscreen) {
+    public GuiCreateNewMap(Screen guiscreen) {
         this.mapSize = 250.0D;
         this.waterLevel = 64;
         this.fractureHorizontal = 1.0D;

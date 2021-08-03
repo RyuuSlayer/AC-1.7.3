@@ -2,9 +2,11 @@ package io.github.ryuu.adventurecraft.gui;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityMusic;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
+import net.minecraft.level.Level;
 
-public class GuiMusic extends da {
-    private fd world;
+public class GuiMusic extends Screen {
+    private Level world;
 
     private TileEntityMusic music;
 
@@ -69,7 +71,7 @@ public class GuiMusic extends da {
         this.world.b(this.music.e, this.music.g).g();
     }
 
-    public static void showUI(fd w, TileEntityMusic m) {
+    public static void showUI(Level w, TileEntityMusic m) {
         Minecraft.minecraftInstance.a(new GuiMusic(w, m));
     }
 

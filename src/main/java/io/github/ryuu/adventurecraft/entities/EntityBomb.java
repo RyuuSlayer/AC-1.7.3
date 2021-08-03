@@ -4,8 +4,10 @@ import io.github.ryuu.adventurecraft.blocks.BlockBombable;
 import io.github.ryuu.adventurecraft.items.Items;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
+import net.minecraft.tile.Tile;
 
 import java.util.List;
 import java.util.Random;
@@ -84,7 +86,7 @@ public class EntityBomb extends ItemEntity {
                     Double distSq = Double.valueOf(x * x + (y * y) + (z * z));
                     if (distSq.doubleValue() <= 9.0D) {
                         int blockID = worldObj.a(coordX + x, coordY + y, coordZ + z);
-                        if (uu.m[blockID] instanceof BlockBombable)
+                        if (Tile.m[blockID] instanceof BlockBombable)
                             worldObj.f(coordX + x, coordY + y, coordZ + z, 0);
                     }
                 }
@@ -130,5 +132,5 @@ public class EntityBomb extends ItemEntity {
         this.fuse = nbttagcompound.c("Fuse");
     }
 
-    public void b(gs entityplayer) {}
+    public void b(Player entityplayer) {}
 }

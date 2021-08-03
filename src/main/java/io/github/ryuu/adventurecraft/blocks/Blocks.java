@@ -169,7 +169,7 @@ public class Blocks {
         npcPath = (new BlockNpcPath(177, 247)).setTextureNum(3).c(5.0F).a(Tile.i).a("NPC Path Block");
         darkness = (new BlockDarkness(200, 10)).setTextureNum(2).c(5.0F).a(Tile.i).a("darkness");
         triggerPushable = (new BlockTriggerPushable(201, 213)).c(2.0F).b(10.0F).a(Tile.h).a("triggerPushable").setTextureNum(3);
-        storage = (new BlockStorage(202, 11)).setTextureNum(2).c(5.0F).a(Tilei).a("storage");
+        storage = (new BlockStorage(202, 11)).setTextureNum(2).c(5.0F).a(Tile.i).a("storage");
         healDamage = (new BlockHealDamage(203, 12)).setTextureNum(2).c(5.0F).a(Tile.i).a("healDamage");
         teleport = (new BlockTeleport(204, 13)).setTextureNum(2).c(5.0F).a(Tile.i).a("teleport");
         pillarStone = (new BlockPillar(205, 32)).setTextureNum(2).c(5.0F).a(Tile.h).a("pillarStone").setSubTypes(16);

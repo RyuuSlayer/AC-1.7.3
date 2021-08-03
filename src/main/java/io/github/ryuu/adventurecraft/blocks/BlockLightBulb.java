@@ -2,13 +2,15 @@ package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
+import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 public class BlockLightBulb extends Tile {
     protected BlockLightBulb(int i, int j) {
-        super(i, j, ln.a);
+        super(i, j, Material.AIR);
     }
 
     public boolean c() {
@@ -61,7 +63,7 @@ public class BlockLightBulb extends Tile {
         return 1;
     }
 
-    public boolean a(Level world, int i, int j, int k, gs entityplayer) {
+    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
         if (DebugMode.active)
             GuiLightBulb.showUI(world, i, j, k);
         return true;

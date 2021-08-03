@@ -3,14 +3,16 @@ package io.github.ryuu.adventurecraft.blocks;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityHealDamage;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.DebugMode;
+import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.tile.TileWithEntity;
 import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 public class BlockHealDamage extends TileWithEntity {
     protected BlockHealDamage(int i, int j) {
-        super(i, j, ln.a);
+        super(i, j, Material.AIR);
     }
 
     protected TileEntity a_() {
@@ -36,7 +38,7 @@ public class BlockHealDamage extends TileWithEntity {
     public void onTriggerActivated(Level world, int i, int j, int k) {
         TileEntityHealDamage tileEnt = (TileEntityHealDamage)world.b(i, j, k);
         for (Object obj : world.d) {
-            gs p = (gs)obj;
+            Player p = (Player)obj;
             if (tileEnt.healDamage > 0) {
                 p.c(tileEnt.healDamage);
                 continue;
@@ -51,7 +53,7 @@ public class BlockHealDamage extends TileWithEntity {
         return DebugMode.active;
     }
 
-    public boolean a(Level world, int i, int j, int k, gs entityplayer) {
+    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
         if (DebugMode.active && entityplayer.G() != null && (entityplayer.G()).c == Items.cursor.bf) {
             TileEntityHealDamage obj = (TileEntityHealDamage)world.b(i, j, k);
             GuiHealDamage.showUI(world, obj);

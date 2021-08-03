@@ -4,10 +4,11 @@ import java.util.ArrayList;
 
 import io.github.ryuu.adventurecraft.util.MusicPlayer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-public class GuiMusicSheet extends da {
+public class GuiMusicSheet extends Screen {
     private String instrument;
 
     private ArrayList<Integer> notesPlayed;

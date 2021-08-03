@@ -3,11 +3,12 @@ package io.github.ryuu.adventurecraft.blocks;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
+import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 public class BlockOverlay extends Tile implements IBlockColor {
     protected BlockOverlay(int i, int j) {
-        super(i, j, ln.j);
+        super(i, j, Material.PLANT);
         a(0.0F, 0.0F, 0.0F, 1.0F, 0.1F, 1.0F);
     }
 

@@ -4,11 +4,12 @@ import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
+import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 public class BlockTriggeredDoor extends Tile {
     protected BlockTriggeredDoor(int i) {
-        super(i, ln.d);
+        super(i, Material.WOOD);
         this.bm = 208;
     }
 

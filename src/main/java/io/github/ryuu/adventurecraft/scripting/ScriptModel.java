@@ -1,11 +1,11 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import fd;
 import java.nio.FloatBuffer;
 import java.util.HashMap;
 import java.util.LinkedList;
 import ji;
 import net.minecraft.client.Minecraft;
+import net.minecraft.level.Level;
 import net.minecraft.src.ModelRenderer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
@@ -149,7 +149,7 @@ public class ScriptModel {
     }
 
     private void render(float f) {
-        fd w = Minecraft.minecraftInstance.f;
+        Level w = Minecraft.minecraftInstance.f;
         ji renderEngine = Minecraft.minecraftInstance.p;
         if (this.texture != null && !this.texture.equals(""))
             renderEngine.b(renderEngine.b(this.texture));

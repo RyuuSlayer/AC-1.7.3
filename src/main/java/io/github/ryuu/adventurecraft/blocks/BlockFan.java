@@ -6,15 +6,17 @@ import java.util.Random;
 import io.github.ryuu.adventurecraft.entities.EntityAirFX;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
+import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 public class BlockFan extends Tile {
     private boolean fanOn;
 
     public BlockFan(int i, int j, boolean f) {
-        super(i, j, ln.e);
+        super(i, j, Material.STONE);
         this.fanOn = f;
     }
 
@@ -103,7 +105,7 @@ public class BlockFan extends Tile {
                 if (!(e instanceof ju)) {
                     double dist = e.h(i + 0.5D, j + 0.5D, k + 0.5D) * Math.abs(xOffset + yOffset + zOffset) / 4.0D;
                     e.d(0.07D * xOffset / dist, 0.07D * yOffset / dist, 0.07D * zOffset / dist);
-                    if (e instanceof gs && ((gs)e).usingUmbrella())
+                    if (e instanceof Player && ((Player)e).usingUmbrella())
                         e.d(0.07D * xOffset / dist, 0.07D * yOffset / dist, 0.07D * zOffset / dist);
                 }
             }
@@ -124,7 +126,7 @@ public class BlockFan extends Tile {
             world.c(i, j, k, this.bn, e());
     }
 
-    public boolean a(Level world, int i, int j, int k, gs entityplayer) {
+    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
         if (DebugMode.active) {
             world.d(i, j, k, (world.e(i, j, k) + 1) % 6);
             world.k(i, j, k);

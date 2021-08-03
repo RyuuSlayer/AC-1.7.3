@@ -2,14 +2,16 @@ package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityUrl;
 import io.github.ryuu.adventurecraft.util.DebugMode;
+import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.tile.TileWithEntity;
 import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 public class BlockUrl extends TileWithEntity {
     protected BlockUrl(int i, int j) {
-        super(i, j, ln.a);
+        super(i, j, Material.AIR);
     }
 
     protected TileEntity a_() {
@@ -38,7 +40,7 @@ public class BlockUrl extends TileWithEntity {
             GuiUrlRequest.showUI(obj.url);
     }
 
-    public boolean a(Level world, int i, int j, int k, gs entityplayer) {
+    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
         if (DebugMode.active) {
             TileEntityUrl obj = (TileEntityUrl)world.b(i, j, k);
             GuiUrl.showUI(world, obj);

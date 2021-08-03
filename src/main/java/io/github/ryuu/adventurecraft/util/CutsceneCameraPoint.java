@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.util;
 
-class CutsceneCameraPoint {
+public class CutsceneCameraPoint {
     float time;
 
     float posX;

@@ -8,6 +8,7 @@ import io.github.ryuu.adventurecraft.scripting.ScriptEntityDescription;
 import io.github.ryuu.adventurecraft.util.CoordBlock;
 import io.github.ryuu.adventurecraft.util.IEntityPather;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.util.io.CompoundTag;
 import org.mozilla.javascript.Context;
@@ -135,7 +136,7 @@ public class EntityLivingScript extends Level implements IEntityPather {
         runDeathScript();
     }
 
-    public boolean a(gs entityplayer) {
+    public boolean a(Player entityplayer) {
         return runOnInteractionScript();
     }
 

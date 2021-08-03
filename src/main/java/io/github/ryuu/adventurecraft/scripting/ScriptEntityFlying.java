@@ -1,13 +1,12 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import ls;
-import wq;
+import net.minecraft.entity.FlyingEntity;
 
 public class ScriptEntityFlying extends ScriptEntityLiving {
-    wq entityFlying;
+    FlyingEntity entityFlying;
 
-    ScriptEntityFlying(wq e) {
-        super((ls)e);
+    ScriptEntityFlying(FlyingEntity e) {
+        super(e);
         this.entityFlying = e;
     }
 

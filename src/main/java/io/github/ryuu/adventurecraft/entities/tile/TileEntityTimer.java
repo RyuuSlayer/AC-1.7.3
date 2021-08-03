@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
 import io.github.ryuu.adventurecraft.util.TriggerArea;
+import net.minecraft.tile.Tile;
 
 public class TileEntityTimer extends TileEntityMinMax {
     public boolean resetOnTrigger;
@@ -32,7 +33,7 @@ public class TileEntityTimer extends TileEntityMinMax {
                 if (!this.resetOnTrigger) {
                     this.d.triggerManager.addArea(this.e, this.f, this.g, new TriggerArea(this.minX, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ));
                 } else {
-                    uu.resetArea(this.d, this.minX, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ);
+                    Tile.resetArea(this.d, this.minX, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ);
                 }
             } else {
                 return;

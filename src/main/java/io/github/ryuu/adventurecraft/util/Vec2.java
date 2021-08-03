@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.util;
 
-class Vec2 {
+public class Vec2 {
     int x;
     int y;
 

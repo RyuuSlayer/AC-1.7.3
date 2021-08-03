@@ -2,11 +2,12 @@ package io.github.ryuu.adventurecraft.blocks;
 
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
+import net.minecraft.tile.material.Material;
 
 import java.util.Random;
 
 public class BlockPushable extends BlockColor {
-    public BlockPushable(int i, int j, ln material) {
+    public BlockPushable(int i, int j, Material material) {
         super(i, j, material);
     }
 
@@ -40,9 +41,9 @@ public class BlockPushable extends BlockColor {
             return true;
         if (l == Tile.as.bn)
             return true;
-        ln material = (Tile.m[l]).bA;
-        if (material == ln.g)
+        Material material = (Tile.m[l]).bA;
+        if (material == Material.g)
             return true;
-        return (material == ln.h);
+        return (material == Material.h);
     }
 }

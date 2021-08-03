@@ -4,10 +4,11 @@ import java.util.Random;
 import net.minecraft.client.Minecraft;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
+import net.minecraft.tile.material.Material;
 
 public class BlockRedstonePower extends Tile {
     protected BlockRedstonePower(int i, int j) {
-        super(i, j, ln.e);
+        super(i, j, Material.STONE);
         a(0.0F, 0.0F, 0.0F, 1.0F, 0.25F, 1.0F);
         a(0.07F);
     }

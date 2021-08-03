@@ -2,9 +2,10 @@ package io.github.ryuu.adventurecraft.gui;
 
 import io.github.ryuu.adventurecraft.entities.EntityCamera;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
 import net.minecraft.entity.Entity;
 
-public class GuiCamera extends da {
+public class GuiCamera extends Screen {
     private EntityCamera cam;
 
     private ro timerText;

@@ -2,8 +2,9 @@ package io.github.ryuu.adventurecraft.gui;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityCamera;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
 
-public class GuiCameraBlock extends da {
+public class GuiCameraBlock extends Screen {
     private TileEntityCamera cam;
 
     public GuiCameraBlock(TileEntityCamera c) {

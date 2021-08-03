@@ -1,18 +1,18 @@
 package io.github.ryuu.adventurecraft.scripting;
 
 import bt;
-import fd;
 import io.github.ryuu.adventurecraft.util.TriggerArea;
 import io.github.ryuu.adventurecraft.util.UtilBullet;
 import jc;
 import jg;
+import net.minecraft.level.Level;
 import net.minecraft.util.hit.HitResult;
 import sn;
 
 public class ScriptWorld {
-    fd worldObj;
+    Level worldObj;
 
-    ScriptWorld(fd w) {
+    ScriptWorld(Level w) {
         this.worldObj = w;
     }
 

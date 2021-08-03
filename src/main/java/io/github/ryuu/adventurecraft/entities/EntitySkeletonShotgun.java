@@ -2,11 +2,12 @@ package io.github.ryuu.adventurecraft.entities;
 
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.UtilBullet;
+import net.minecraft.level.Level;
 
 import java.util.Random;
 
 public class EntitySkeletonShotgun extends fr {
-    public EntitySkeletonShotgun(fd world) {
+    public EntitySkeletonShotgun(Level world) {
         super(world);
         this.c = 2;
         this.heldItem = new iz(Items.shotgun, 1);

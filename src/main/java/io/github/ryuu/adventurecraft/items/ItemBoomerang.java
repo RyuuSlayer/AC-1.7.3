@@ -1,6 +1,8 @@
 package io.github.ryuu.adventurecraft.items;
 
 import io.github.ryuu.adventurecraft.entities.EntityBoomerang;
+import net.minecraft.entity.player.Player;
+import net.minecraft.level.Level;
 
 class ItemBoomerang extends gm {
     public ItemBoomerang(int itemIndex) {
@@ -17,7 +19,7 @@ class ItemBoomerang extends gm {
         return 165;
     }
 
-    public iz a(iz itemstack, fd world, gs entityplayer) {
+    public iz a(iz itemstack, Level world, Player entityplayer) {
         if (itemstack.i() == 0) {
             world.b(new EntityBoomerang(world, entityplayer, itemstack));
             itemstack.b(1);

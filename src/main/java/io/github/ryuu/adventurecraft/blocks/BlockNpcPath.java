@@ -4,14 +4,16 @@ import io.github.ryuu.adventurecraft.entities.tile.TileEntityNpcPath;
 import io.github.ryuu.adventurecraft.gui.GuiNpcPath;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.DebugMode;
+import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.tile.TileWithEntity;
 import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 public class BlockNpcPath extends TileWithEntity {
     public BlockNpcPath(int i, int j) {
-        super(i, j, ln.e);
+        super(i, j, Material.STONE);
     }
 
     protected TileEntity a_() {
@@ -44,7 +46,7 @@ public class BlockNpcPath extends TileWithEntity {
             obj.pathEntity();
     }
 
-    public boolean a(Level world, int i, int j, int k, gs entityplayer) {
+    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
         if (DebugMode.active && entityplayer.G() != null && (entityplayer.G()).c == Items.cursor.bf) {
             TileEntityNpcPath obj = (TileEntityNpcPath)world.b(i, j, k);
             if (obj != null)

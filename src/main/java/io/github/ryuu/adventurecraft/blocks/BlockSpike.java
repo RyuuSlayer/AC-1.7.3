@@ -2,11 +2,12 @@ package io.github.ryuu.adventurecraft.blocks;
 
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
+import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 public class BlockSpike extends Tile {
     protected BlockSpike(int i) {
-        super(i, 246, ln.f);
+        super(i, 246, Material.METAL);
     }
 
     public Box e(Level world, int i, int j, int k) {

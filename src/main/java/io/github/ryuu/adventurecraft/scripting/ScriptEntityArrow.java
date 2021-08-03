@@ -11,13 +11,13 @@ public class ScriptEntityArrow extends ScriptEntity {
     }
 
     public int getInBlockID() {
-        return this.entityArrow.g;
+        return this.entityArrow.inTile;
     }
 
     public ScriptVec3 getInBlockCoords() {
-        if (this.entityArrow.g == 0)
+        if (this.entityArrow.inTile == 0)
             return null;
-        return new ScriptVec3(this.entityArrow.d, this.entityArrow.e, this.entityArrow.f);
+        return new ScriptVec3(this.entityArrow.xTile, this.entityArrow.yTile, this.entityArrow.zTile);
     }
 
     public boolean getIsPlayersArrow() {

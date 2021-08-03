@@ -1,5 +1,8 @@
 package io.github.ryuu.adventurecraft.entities;
 
+
+import net.minecraft.level.Level;
+
 public class EntityBat extends wq implements ff {
     public int courseChangeCooldown;
 
@@ -19,7 +22,7 @@ public class EntityBat extends wq implements ff {
 
     Random bs;
 
-    public EntityBat(fd world) {
+    public EntityBat(Level world) {
         super(world);
         this.courseChangeCooldown = 0;
         this.targetedEntity = null;

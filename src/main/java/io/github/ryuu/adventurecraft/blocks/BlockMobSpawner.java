@@ -2,17 +2,19 @@ package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityMobSpawner;
 import io.github.ryuu.adventurecraft.util.DebugMode;
+import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.TileWithEntity;
 import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 import java.util.Random;
 
 public class BlockMobSpawner extends TileWithEntity {
     protected BlockMobSpawner(int i, int j) {
-        super(i, j, ln.a);
+        super(i, j, Material.AIR);
     }
 
     protected TileEntity a_() {
@@ -35,7 +37,7 @@ public class BlockMobSpawner extends TileWithEntity {
         return null;
     }
 
-    public boolean a(Level world, int i, int j, int k, gs entityplayer) {
+    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
         if (DebugMode.active) {
             TileEntityMobSpawner obj = (TileEntityMobSpawner)world.b(i, j, k);
             GuiMobSpawner.showUI(obj);

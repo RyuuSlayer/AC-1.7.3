@@ -5,14 +5,16 @@ import io.github.ryuu.adventurecraft.gui.GuiMusic;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.tile.TileWithEntity;
 import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 public class BlockMusic extends TileWithEntity {
     protected BlockMusic(int i, int j) {
-        super(i, j, ln.a);
+        super(i, j, Material.AIR);
     }
 
     protected TileEntity a_() {
@@ -44,9 +46,9 @@ public class BlockMusic extends TileWithEntity {
         }
     }
 
-    public void onTriggerDeactivated(fd world, int i, int j, int k) {}
+    public void onTriggerDeactivated(Level world, int i, int j, int k) {}
 
-    public boolean a(Level world, int i, int j, int k, gs entityplayer) {
+    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
         if (DebugMode.active && entityplayer.G() != null && (entityplayer.G()).c == Items.cursor.bf) {
             TileEntityMusic obj = (TileEntityMusic)world.b(i, j, k);
             GuiMusic.showUI(world, obj);

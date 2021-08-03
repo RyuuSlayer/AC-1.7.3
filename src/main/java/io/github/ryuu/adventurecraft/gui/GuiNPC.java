@@ -5,8 +5,9 @@ import java.io.File;
 import io.github.ryuu.adventurecraft.entities.EntityNPC;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityNpcPath;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
 
-public class GuiNPC extends da {
+public class GuiNPC extends Screen {
     private EntityNPC npc;
 
     private ro npcName;
@@ -29,7 +30,7 @@ public class GuiNPC extends da {
 
     private int page;
 
-    public AC_GuiNPC(EntityNPC n) {
+    public GuiNPC(EntityNPC n) {
         this.selectedID = 0;
         this.page = 0;
         this.npc = n;

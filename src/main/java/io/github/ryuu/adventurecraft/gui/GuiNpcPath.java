@@ -4,8 +4,9 @@ import io.github.ryuu.adventurecraft.entities.EntityNPC;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityNpcPath;
 import io.github.ryuu.adventurecraft.items.ItemCursor;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
 
-public class GuiNpcPath extends da {
+public class GuiNpcPath extends Screen {
     private TileEntityNpcPath path;
 
     public GuiNpcPath(TileEntityNpcPath npcPath) {

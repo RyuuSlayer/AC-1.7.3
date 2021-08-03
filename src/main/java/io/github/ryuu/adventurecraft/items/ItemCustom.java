@@ -9,6 +9,8 @@ import java.util.Properties;
 
 import io.github.ryuu.adventurecraft.scripting.ScriptItem;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.Player;
+import net.minecraft.level.Level;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ScriptableObject;
 
@@ -77,7 +79,7 @@ public class ItemCustom extends gm {
         }
     }
 
-    public iz a(iz itemstack, fd world, gs entityplayer) {
+    public iz a(iz itemstack, Level world, Player entityplayer) {
         if (!this.onItemUsedScript.equals("")) {
             ScriptItem item = new ScriptItem(itemstack);
             Object wrappedOut = Context.javaToJS(item, world.scope);

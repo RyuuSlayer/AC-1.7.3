@@ -1,13 +1,13 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import ls;
-import uw;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.monster.Slime;
 
 public class ScriptEntitySlime extends ScriptEntityLiving {
-    uw entitySlime;
+    Slime entitySlime;
 
-    ScriptEntitySlime(uw e) {
-        super((ls)e);
+    ScriptEntitySlime(Slime e) {
+        super(e);
         this.entitySlime = e;
     }
 

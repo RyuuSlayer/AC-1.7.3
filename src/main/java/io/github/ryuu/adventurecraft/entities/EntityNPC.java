@@ -1,6 +1,8 @@
 package io.github.ryuu.adventurecraft.entities;
 
 import io.github.ryuu.adventurecraft.Minecraft;
+import net.minecraft.entity.player.Player;
+import net.minecraft.level.Level;
 
 public class EntityNPC extends EntityLivingScript {
     public String npcName;
@@ -29,7 +31,7 @@ public class EntityNPC extends EntityLivingScript {
 
     private boolean ranOnCreate;
 
-    public EntityNPC(fd world) {
+    public EntityNPC(Level world) {
         super(world);
         this.initialSpot = false;
         this.pathToHome = true;
@@ -85,7 +87,7 @@ public class EntityNPC extends EntityLivingScript {
     }
 
     protected sn findPlayerToTrack() {
-        gs entityplayer = this.aI.a((sn)this, 16.0D);
+        Player entityplayer = this.aI.a((sn)this, 16.0D);
         if (entityplayer != null && e(entityplayer))
             return entityplayer;
         return null;
@@ -134,7 +136,7 @@ public class EntityNPC extends EntityLivingScript {
             this.isAttackable = nbttagcompound.m("isAttackable");
     }
 
-    public boolean a(gs entityplayer) {
+    public boolean a(Player entityplayer) {
         if (super.a(entityplayer)) {
             if (this.chatMsg != null && !this.chatMsg.equals(""))
                 Minecraft.minecraftInstance.v.a(String.format("<%s> %s", new Object[] { this.npcName, this.chatMsg }));

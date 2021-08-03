@@ -1,0 +1,17 @@
+aa = PlayerContainer
+av = CompassTextureBinder
+aw = TextureBinder
+az = Dispenser
+bb = ItemRenderer
+ck = PlaceableTileItem
+cv = TileRenderer
+cz = ResourceDownloadThread
+da = Screen
+dc = ClientPlayer
+fd = Level
+fr = Skeleton
+gb = Creeper
+if = FlowingLavaTextureBinder2
+kd = Biome
+uu = Tile
+uz = Zombie

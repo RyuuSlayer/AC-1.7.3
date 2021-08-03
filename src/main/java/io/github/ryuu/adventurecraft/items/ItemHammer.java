@@ -1,13 +1,16 @@
 package io.github.ryuu.adventurecraft.items;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.Player;
+import net.minecraft.level.Level;
+import net.minecraft.tile.Tile;
 
 public class ItemHammer extends gm {
     protected ItemHammer(int i) {
         super(i);
     }
 
-    public boolean a(iz itemstack, gs entityplayer, fd world, int i, int j, int k, int l) {
+    public boolean a(iz itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
         if (ItemCursor.bothSet) {
             int blockToSwapTo = world.a(i, j, k);
             int metadata = world.e(i, j, k);
@@ -28,11 +31,11 @@ public class ItemHammer extends gm {
         return false;
     }
 
-    public float a(iz itemstack, uu block) {
+    public float a(iz itemstack, Tile block) {
         return 32.0F;
     }
 
-    public boolean a(uu block) {
+    public boolean a(Tile block) {
         return true;
     }
 

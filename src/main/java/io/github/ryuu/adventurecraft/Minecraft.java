@@ -5,8 +5,6 @@ import io.github.ryuu.adventurecraft.scripting.ScriptEntity;
 import io.github.ryuu.adventurecraft.scripting.ScriptItem;
 import io.github.ryuu.adventurecraft.scripting.ScriptVec3;
 import io.github.ryuu.adventurecraft.util.*;
-import av;
-import aw;
 import br;
 import bt;
 import cg;
@@ -15,32 +13,20 @@ import cl;
 import cv;
 import cx;
 import cz;
-import da;
 import dc;
 import dk;
-import dn;
 import ep;
 import eq;
-import fd;
-import fh;
-import fu;
 import gc;
 import ge;
 import gh;
 import gm;
-import gr;
-import gs;
 import gt;
-import hi;
 import hj;
-import hs;
 import ht;
-import hw;
 import ia;
-import if;
 import ik;
 import in;
-import iz;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
@@ -59,27 +45,41 @@ import java.io.IOException;
 import jg;
 import jh;
 import ji;
-import jl;
 import kh;
 import kj;
 import kn;
 import kp;
 import kq;
-import ku;
 import kv;
 import kx;
 import lr;
 import ls;
-import mk;
 import n;
 import nb;
-import net.minecraft.client.GameStartupError;
-import net.minecraft.client.MinecraftApplet;
-import net.minecraft.client.Timer;
-import nl;
-import nw;
-import ob;
-import oh;
+import net.minecraft.client.*;
+import net.minecraft.client.colour.WaterColour;
+import net.minecraft.client.gui.Screen;
+import net.minecraft.client.gui.screen.DeathScreen;
+import net.minecraft.client.gui.screen.LevelSaveConflictScreen;
+import net.minecraft.client.gui.screen.TitleScreen;
+import net.minecraft.client.particle.ParticleManager;
+import net.minecraft.client.render.*;
+import net.minecraft.client.render.entity.EntityRenderDispatcher;
+import net.minecraft.client.render.entity.model.BipedModel;
+import net.minecraft.client.util.ScreenScaler;
+import net.minecraft.client.util.Session;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.level.Level;
+import net.minecraft.level.dimension.DimensionData;
+import net.minecraft.level.storage.LevelStorage;
+import net.minecraft.level.storage.McRegionLevelStorage;
+import net.minecraft.level.storage.SessionLockException;
+import net.minecraft.network.Connection;
+import net.minecraft.tile.Tile;
+import net.minecraft.util.ProgressListenerError;
+import net.minecraft.util.ProgressListenerImpl;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Controllers;
 import org.lwjgl.input.Keyboard;
@@ -92,32 +92,21 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
 import org.mozilla.javascript.ScriptableObject;
 import oz;
-import pd;
 import px;
-import qh;
-import qq;
-import ra;
-import sd;
 import sj;
-import sn;
-import th;
 import tk;
 import ue;
 import uo;
 import uq;
 import ur;
-import us;
-import uu;
 import vf;
 import vs;
 import vu;
 import vx;
 import vy;
-import wt;
 import x;
 import xa;
 import xi;
-import xx;
 import yb;
 import yo;
 
@@ -132,12 +121,12 @@ public abstract class Minecraft implements Runnable {
         this.n = true;
         this.o = false;
         this.r = null;
-        this.s = new mk(this);
+        this.s = new ProgressListenerImpl(this);
         this.V = 0;
         this.W = 0;
         this.u = new vu(this);
         this.w = false;
-        this.x = new fh(0.0F);
+        this.x = new BipedModel(0.0F);
         this.y = null;
         this.B = new yo();
         this.ad = new vs();
@@ -151,7 +140,7 @@ public abstract class Minecraft implements Runnable {
         this.O = false;
         this.P = System.currentTimeMillis();
         this.ah = 0;
-        jl.a();
+        Connection.LOCK;
         this.Y = j;
         this.Q = flag;
         this.A = minecraftapplet;
@@ -212,17 +201,17 @@ public abstract class Minecraft implements Runnable {
             Display.create();
         }
         this.Z = b();
-        this.aa = (nl)new hi(new File(this.Z, "saves"));
+        this.aa = new McRegionLevelStorage(new File(this.Z, "saves"));
         this.z = new kv(this, this.Z);
         this.D = new ik(this, this.Z);
         this.mapList = new MapList(this.Z);
         this.p = new ji(this.D, this.z);
         this.q = new sj(this.z, "/font/default.png", this.p);
-        hw.a(this.p.a("/misc/watercolor.png"));
+        WaterColour.a(this.p.a("/misc/watercolor.png"));
         ia.a(this.p.a("/misc/grasscolor.png"));
         jh.a(this.p.a("/misc/foliagecolor.png"));
         this.t = new px(this);
-        th.a.f = new ra(this);
+        EntityRenderDispatcher.a.f = new HandItemRenderer(this);
         this.I = new xi(this.k, this.Z);
         ep.f.a((gt)new kh(this));
         x();
@@ -249,19 +238,19 @@ public abstract class Minecraft implements Runnable {
         c("Startup");
         this.S = new cx();
         this.B.a(this.z);
-        this.p.a((aw)this.ae);
-        this.p.a((aw)this.ad);
-        this.p.a((aw)new hs());
-        this.p.a((aw)new av(this));
-        this.p.a((aw)new ku(this));
-        this.p.a((aw)new oh());
-        this.p.a((aw)new if());
-        this.p.a((aw)new sd(0));
-        this.p.a((aw)new sd(1));
-        this.p.a((aw)new TextureFanFX());
+        this.p.a((TextureBinder)this.ae);
+        this.p.a((TextureBinder)this.ad);
+        this.p.a((TextureBinder)new PortalTextureBinder());
+        this.p.a((TextureBinder)new CompassTextureBinder(this));
+        this.p.a((TextureBinder)new ClockTextureBinder(this));
+        this.p.a((TextureBinder)new FlowingWaterTextureBinder());
+        this.p.a((TextureBinder)new FlowingLavaTextureBinder2());
+        this.p.a((TextureBinder)new FireTextureBinder(0));
+        this.p.a((TextureBinder)new FireTextureBinder(1));
+        this.p.a((TextureBinder)new TextureFanFX());
         this.g = new n(this, this.p);
         GL11.glViewport(0, 0, this.d, this.e);
-        this.j = new dn(this.f, this.p);
+        this.j = new ParticleManager(this.f, this.p);
         try {
             this.U = new cz(this.Z, this);
             this.U.start();
@@ -270,14 +259,14 @@ public abstract class Minecraft implements Runnable {
         c("Post startup");
         this.v = new uq(this);
         if (this.ab != null) {
-            a((da)new vx(this, this.ab, this.ac));
+            a((Screen)new vx(this, this.ab, this.ac));
         } else {
-            a((da)new fu());
+            a(new TitleScreen());
         }
     }
 
     private void x() throws LWJGLException {
-        qq scaledresolution = new qq(this.z, this.d, this.e);
+        ScreenScaler scaledresolution = new ScreenScaler(this.z, this.d, this.e);
         GL11.glClear(16640);
         GL11.glMatrixMode(5889);
         GL11.glLoadIdentity();
@@ -287,7 +276,7 @@ public abstract class Minecraft implements Runnable {
         GL11.glTranslatef(0.0F, 0.0F, -2000.0F);
         GL11.glViewport(0, 0, this.d, this.e);
         GL11.glClearColor(0.0F, 0.0F, 0.0F, 0.0F);
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         GL11.glDisable(2896);
         GL11.glEnable(3553);
         GL11.glDisable(2912);
@@ -314,7 +303,7 @@ public abstract class Minecraft implements Runnable {
     public void a(int i, int j, int k, int l, int i1, int j1) {
         float f = 0.00390625F;
         float f1 = 0.00390625F;
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         tessellator.b();
         tessellator.a((i + 0), (j + j1), 0.0D, ((k + 0) * f), ((l + j1) * f1));
         tessellator.a((i + i1), (j + j1), 0.0D, ((k + i1) * f), ((l + j1) * f1));
@@ -357,48 +346,48 @@ public abstract class Minecraft implements Runnable {
         return file;
     }
 
-    private static pd y() {
+    private static OperatingSystem y() {
         String s = System.getProperty("os.name").toLowerCase();
         if (s.contains("win"))
-            return pd.c;
+            return OperatingSystem.c;
         if (s.contains("mac"))
-            return pd.d;
+            return OperatingSystem.d;
         if (s.contains("solaris"))
-            return pd.b;
+            return OperatingSystem.b;
         if (s.contains("sunos"))
-            return pd.b;
+            return OperatingSystem.b;
         if (s.contains("linux"))
-            return pd.a;
+            return OperatingSystem.a;
         if (s.contains("unix"))
-            return pd.a;
-        return pd.e;
+            return OperatingSystem.a;
+        return OperatingSystem.e;
     }
 
-    public nl c() {
+    public LevelStorage c() {
         return this.aa;
     }
 
-    public void a(da guiscreen) {
-        fu fu;
+    public void a(Screen guiscreen) {
+        TitleScreen TitleScreen;
         ch ch;
         if (this.r instanceof ce)
             return;
         if (this.r != null)
             this.r.h();
-        if (guiscreen instanceof fu)
+        if (guiscreen instanceof TitleScreen)
             this.I.b();
         this.I.c();
         if (guiscreen == null && this.f == null) {
-            fu = new fu();
-        } else if (fu == null && this.h.Y <= 0) {
+            TitleScreen = new TitleScreen();
+        } else if (TitleScreen == null && this.h.Y <= 0) {
             ch = new ch();
         }
-        if (ch instanceof fu)
+        if (ch instanceof TitleScreen)
             this.v.b();
-        this.r = (da)ch;
+        this.r = (Screen)ch;
         if (ch != null) {
             h();
-            qq scaledresolution = new qq(this.z, this.d, this.e);
+            ScreenScaler scaledresolution = new ScreenScaler(this.z, this.d, this.e);
             int i = scaledresolution.a();
             int j = scaledresolution.b();
             ch.a(this, i, j);
@@ -430,7 +419,7 @@ public abstract class Minecraft implements Runnable {
             } catch (Exception exception) {}
             System.out.println("Stopping!");
             try {
-                a((fd)null);
+                a((Level)null);
             } catch (Throwable throwable) {}
             try {
                 ge.a();
@@ -488,10 +477,10 @@ public abstract class Minecraft implements Runnable {
                         this.V++;
                         try {
                             k();
-                        } catch (us minecraftexception1) {
+                        } catch (SessionLockException minecraftexception1) {
                             this.f = null;
-                            a((fd)null);
-                            a((da)new qh());
+                            a((Level)null);
+                            a(new LevelSaveConflictScreen());
                         }
                     }
                     long l2 = System.nanoTime() - l1;
@@ -549,18 +538,18 @@ public abstract class Minecraft implements Runnable {
                     this.prevFrameTimeForAvg = System.nanoTime();
                     this.tFrameTimes[this.nextFrameTime] = this.prevFrameTimeForAvg;
                     this.nextFrameTime = (this.nextFrameTime + 1) % 60;
-                } catch (us minecraftexception) {
+                } catch (SessionLockException minecraftexception) {
                     this.f = null;
-                    a((fd)null);
-                    a((da)new qh());
+                    a((Level)null);
+                    a(new LevelSaveConflictScreen());
                 } catch (OutOfMemoryError outofmemoryerror) {
                     outofmemoryerror.printStackTrace();
                     e();
-                    a((da)new x());
+                    a((Screen)new x());
                     System.gc();
                 }
             }
-        } catch (xx minecrafterror) {
+        } catch (ProgressListenerError minecrafterror) {
 
         } catch (Throwable throwable) {
             e();
@@ -585,7 +574,7 @@ public abstract class Minecraft implements Runnable {
         } catch (Throwable throwable1) {}
         try {
             System.gc();
-            a((fd)null);
+            a((Level)null);
         } catch (Throwable throwable2) {}
         System.gc();
     }
@@ -619,7 +608,7 @@ public abstract class Minecraft implements Runnable {
         GL11.glTranslatef(0.0F, 0.0F, -2000.0F);
         GL11.glLineWidth(1.0F);
         GL11.glDisable(3553);
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         tessellator.a(7);
         int i = (int)(l1 / 200000L);
         tessellator.b(536870912);
@@ -683,7 +672,7 @@ public abstract class Minecraft implements Runnable {
             return;
         this.N = true;
         this.C.a();
-        a((da)null);
+        a((Screen)null);
         this.ag = this.V + 10000;
     }
 
@@ -699,7 +688,7 @@ public abstract class Minecraft implements Runnable {
     public void i() {
         if (this.r != null)
             return;
-        a((da)new oz());
+        a((Screen)new oz());
     }
 
     private void a(int i, boolean flag) {
@@ -724,8 +713,8 @@ public abstract class Minecraft implements Runnable {
         if (DebugMode.active)
             this.f.undoStack.startRecording();
         boolean swapItemBack = false;
-        iz itemUsing = this.h.c.b();
-        ra itemRenderer = this.t.c;
+        ItemInstance itemUsing = this.h.c.b();
+        HandItemRenderer itemRenderer = this.t.c;
         if (!DebugMode.active) {
             if (i == 0) {
                 itemUsing = this.h.c.getOffhandItem();
@@ -759,16 +748,16 @@ public abstract class Minecraft implements Runnable {
                 this.W = 10;
         } else if (this.y.a == jg.b) {
             if (i == 0)
-                this.c.b((gs)this.h, this.y.g);
+                this.c.b((Player)this.h, this.y.g);
             if (i == 1)
-                this.c.a((gs)this.h, this.y.g);
+                this.c.a((Player)this.h, this.y.g);
         } else if (this.y.a == jg.a) {
             int j = this.y.b;
             int k = this.y.c;
             int l = this.y.d;
             int i1 = this.y.e;
-            uu block = uu.m[this.f.a(j, k, l)];
-            if (!DebugMode.active && (block.bn == uu.av.bn || block.bn == Blocks.store.bn))
+            Tile block = Tile.m[this.f.a(j, k, l)];
+            if (!DebugMode.active && (block.bn == Tile.av.bn || block.bn == Blocks.store.bn))
                 i = 1;
             if (block != null) {
                 if (!DebugMode.active) {
@@ -779,10 +768,10 @@ public abstract class Minecraft implements Runnable {
                 if (i == 0) {
                     this.c.a(j, k, l, this.y.e);
                     if (itemUsing != null)
-                        itemUsing.useItemLeftClick((gs)this.h, this.f, j, k, l, i1);
+                        itemUsing.useItemLeftClick((Player)this.h, this.f, j, k, l, i1);
                 } else {
                     int j1 = (itemUsing == null) ? 0 : itemUsing.a;
-                    if (this.c.a((gs)this.h, this.f, itemUsing, j, k, l, i1)) {
+                    if (this.c.a((Player)this.h, this.f, itemUsing, j, k, l, i1)) {
                         flag = false;
                         this.h.J();
                     }
@@ -805,9 +794,9 @@ public abstract class Minecraft implements Runnable {
         }
         if (flag && i == 0)
             if (itemUsing != null && gm.c[itemUsing.c] != null)
-                gm.c[itemUsing.c].onItemLeftClick(itemUsing, this.f, (gs)this.h);
+                gm.c[itemUsing.c].onItemLeftClick(itemUsing, this.f, (Player)this.h);
         if (flag && i == 1)
-            if (itemUsing != null && this.c.a((gs)this.h, this.f, itemUsing))
+            if (itemUsing != null && this.c.a((Player)this.h, this.f, itemUsing))
                 this.t.c.c();
         if (itemUsing != null) {
             if (this.lastItemUsed != itemUsing) {
@@ -914,7 +903,7 @@ public abstract class Minecraft implements Runnable {
             j = 1;
         this.d = i;
         this.e = j;
-        qq scaledresolution = new qq(this.z, i, j);
+        ScreenScaler scaledresolution = new ScreenScaler(this.z, i, j);
         int k = scaledresolution.a();
         int l = scaledresolution.b();
         if (this.r != null)
@@ -925,12 +914,12 @@ public abstract class Minecraft implements Runnable {
     private void A() {
         if (this.y != null) {
             int i = this.f.a(this.y.b, this.y.c, this.y.d);
-            if (i == uu.v.bn)
-                i = uu.w.bn;
-            if (i == uu.ak.bn)
-                i = uu.al.bn;
-            if (i == uu.A.bn)
-                i = uu.u.bn;
+            if (i == Tile.v.bn)
+                i = Tile.w.bn;
+            if (i == Tile.ak.bn)
+                i = Tile.al.bn;
+            if (i == Tile.A.bn)
+                i = Tile.u.bn;
             this.h.c.a(i, this.c instanceof pj);
         }
     }
@@ -960,12 +949,12 @@ public abstract class Minecraft implements Runnable {
             this.p.a();
         if (this.r == null && this.h != null) {
             if (this.h.Y <= 0) {
-                a((da)null);
+                a((Screen)null);
             } else if (this.h.N() && this.f != null && this.f.B) {
-                a((da)new gh());
+                a((Screen)new gh());
             }
         } else if (this.r != null && this.r instanceof gh && !this.h.N()) {
-            a((da)null);
+            a((Screen)null);
         }
         if (this.r != null && !this.r.disableInputGrabbing)
             this.ag = this.V + 10000;
@@ -1063,11 +1052,11 @@ public abstract class Minecraft implements Runnable {
                             if (Keyboard.getEventKey() == 65)
                                 this.h.displayGUIPalette();
                             if (Keyboard.getEventKey() == this.z.r.b)
-                                a((da)new ue((gs)this.h));
+                                a((Screen)new ue((Player)this.h));
                             if (Keyboard.getEventKey() == this.z.s.b)
                                 this.h.D();
                             if ((l() || DebugMode.active) && Keyboard.getEventKey() == this.z.t.b)
-                                a((da)new gc());
+                                a((Screen)new gc());
                             if (DebugMode.active && (Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157)))
                                 if (Keyboard.getEventKey() == 44) {
                                     this.f.undo();
@@ -1107,7 +1096,7 @@ public abstract class Minecraft implements Runnable {
                 this.ah++;
                 if (this.ah == 30) {
                     this.ah = 0;
-                    this.f.g((sn)this.h);
+                    this.f.g((Entity)this.h);
                 }
             }
             this.f.q = this.z.y;
@@ -1187,44 +1176,44 @@ public abstract class Minecraft implements Runnable {
     public void a(String s, String s1, long l) {
         String mapName = getMapUsed(s);
         if (in.a(mapName)) {
-            a((da)new GuiMapSelect(null, s));
+            a((Screen)new GuiMapSelect(null, s));
         } else {
             startWorld(s, s1, l, mapName);
         }
     }
 
     public void startWorld(String s, String s1, long l, String mapName) {
-        a((fd)null);
+        a((Level)null);
         System.gc();
         if (s != null && this.aa.a(s)) {
             b(s, s1);
         } else {
             DebugMode.active = false;
             DebugMode.levelEditing = false;
-            wt isavehandler = null;
+            DimensionData isavehandler = null;
             if (s != null)
                 isavehandler = this.aa.a(s, false);
             if (s1 == null)
                 s1 = "Map Editing";
-            fd world = new fd(mapName, isavehandler, s1, l);
+            Level world = new Level(mapName, isavehandler, s1, l);
             if (world.s) {
-                this.I.a(jl.g, 1);
-                this.I.a(jl.f, 1);
+                this.I.a(Connection.lock, 1);
+                this.I.a(Connection.f, 1);
                 a(world, "Generating level");
             } else {
-                this.I.a(jl.h, 1);
-                this.I.a(jl.f, 1);
+                this.I.a(Connection.socket, 1);
+                this.I.a(Connection.f, 1);
                 a(world, "Loading level");
             }
         }
-        a((da)null);
+        a((Screen)null);
     }
 
-    public fd getWorld(String saveName, long l, String mapName) {
-        a((fd)null);
+    public Level getWorld(String saveName, long l, String mapName) {
+        a((Level)null);
         System.gc();
-        wt isavehandler = this.aa.a(saveName, false);
-        fd world = new fd(mapName, isavehandler, saveName, l);
+        DimensionData isavehandler = this.aa.a(saveName, false);
+        Level world = new Level(mapName, isavehandler, saveName, l);
         return world;
     }
 
@@ -1235,7 +1224,7 @@ public abstract class Minecraft implements Runnable {
         } else {
             this.h.m = -1;
         }
-        this.f.e((sn)this.h);
+        this.f.e((Entity)this.h);
         this.h.be = false;
         double d = this.h.aM;
         double d1 = this.h.aO;
@@ -1245,37 +1234,37 @@ public abstract class Minecraft implements Runnable {
             d1 /= d2;
             this.h.c(d, this.h.aN, d1, this.h.aS, this.h.aT);
             if (this.h.W())
-                this.f.a((sn)this.h, false);
-            fd world = null;
-            world = new fd(this.f, xa.a(-1));
-            a(world, "Entering the Nether", (gs)this.h);
+                this.f.a((Entity)this.h, false);
+            Level world = null;
+            world = new Level(this.f, xa.a(-1));
+            a(world, "Entering the Nether", (Player)this.h);
         } else {
             d *= d2;
             d1 *= d2;
             this.h.c(d, this.h.aN, d1, this.h.aS, this.h.aT);
             if (this.h.W())
-                this.f.a((sn)this.h, false);
-            fd world1 = null;
-            world1 = new fd(this.f, xa.a(0));
-            a(world1, "Leaving the Nether", (gs)this.h);
+                this.f.a((Entity)this.h, false);
+            Level world1 = null;
+            world1 = new Level(this.f, xa.a(0));
+            a(world1, "Leaving the Nether", (Player)this.h);
         }
         this.h.aI = this.f;
         if (this.h.W()) {
             this.h.c(d, this.h.aN, d1, this.h.aS, this.h.aT);
-            this.f.a((sn)this.h, false);
-            (new ur()).a(this.f, (sn)this.h);
+            this.f.a((Entity)this.h, false);
+            (new ur()).a(this.f, (Entity)this.h);
         }
     }
 
-    public void a(fd world) {
+    public void a(Level world) {
         a(world, "");
     }
 
-    public void a(fd world, String s) {
-        a(world, s, (gs)null);
+    public void a(Level world, String s) {
+        a(world, s, null);
     }
 
-    public void a(fd world, String s, gs entityplayer) {
+    public void a(Level world, String s, Player entityplayer) {
         this.I.b();
         this.I.c();
         this.i = null;
@@ -1294,14 +1283,14 @@ public abstract class Minecraft implements Runnable {
             } else if (this.h != null) {
                 this.h.t_();
                 if (world != null)
-                    world.b((sn)this.h);
+                    world.b((Entity)this.h);
             }
             if (!world.B)
                 d(s);
             if (this.h == null) {
                 this.h = (dc)this.c.b(world);
                 this.h.t_();
-                this.c.a((gs)this.h);
+                this.c.a((Player)this.h);
                 this.cutsceneCameraEntity = (ls)this.c.b(world);
                 this.f.script.initPlayer();
             }
@@ -1310,7 +1299,7 @@ public abstract class Minecraft implements Runnable {
                 this.g.a(world);
             if (this.j != null)
                 this.j.a(world);
-            this.c.b((gs)this.h);
+            this.c.b((Player)this.h);
             if (entityplayer != null)
                 world.e();
             cl ichunkprovider = world.w();
@@ -1320,7 +1309,7 @@ public abstract class Minecraft implements Runnable {
                 int j = in.d((int)this.h.aO) >> 4;
                 chunkproviderloadorgenerate.d(i, j);
             }
-            world.a((gs)this.h);
+            world.a((Player)this.h);
             if (world.s)
                 world.a((yb)this.s);
             this.i = (ls)this.h;
@@ -1417,7 +1406,7 @@ public abstract class Minecraft implements Runnable {
         int entID = 0;
         if (this.h != null) {
             entID = this.h.aD;
-            this.f.e((sn)this.h);
+            this.f.e((Entity)this.h);
         } else {
             this.h = (dc)this.c.b(this.f);
             this.f.script.initPlayer();
@@ -1428,16 +1417,16 @@ public abstract class Minecraft implements Runnable {
         this.h.c(spawnCoords.a + 0.5D, spawnCoords.b, spawnCoords.c + 0.5D, 0.0F, 0.0F);
         this.i = (ls)this.h;
         this.h.t_();
-        this.c.a((gs)this.h);
-        this.f.a((gs)this.h);
+        this.c.a((Player)this.h);
+        this.f.a((Player)this.h);
         this.h.a = (uo)new lr(this.z);
         this.h.aD = entID;
         this.h.v();
         this.h.c(this.f.getSpawnYaw(), 0.0F);
-        this.c.b((gs)this.h);
+        this.c.b((Player)this.h);
         d("Respawning");
-        if (this.r instanceof ch)
-            a((da)null);
+        if (this.r instanceof DeathScreen)
+            a((Screen)null);
     }
 
     public static void a(String s, String s1) {
@@ -1459,9 +1448,9 @@ public abstract class Minecraft implements Runnable {
         thread.setPriority(10);
         minecraftimpl.l = "www.minecraft.net";
         if (s3 != null && s1 != null) {
-            minecraftimpl.k = new gr(s3, s1);
+            minecraftimpl.k = new Session(s3, s1);
         } else {
-            minecraftimpl.k = new gr("ACPlayer", "");
+            minecraftimpl.k = new Session("ACPlayer", "");
         }
         if (s2 != null) {
             String[] as = s2.split(":");
@@ -1513,7 +1502,7 @@ public abstract class Minecraft implements Runnable {
 
     private static Minecraft a;
 
-    public ob c;
+    public ClientInteractionManager c;
 
     private boolean Q;
 
@@ -1527,7 +1516,7 @@ public abstract class Minecraft implements Runnable {
 
     private Timer T;
 
-    public fd f;
+    public Level f;
 
     public n g;
 
@@ -1535,9 +1524,9 @@ public abstract class Minecraft implements Runnable {
 
     public ls i;
 
-    public dn j;
+    public ParticleManager j;
 
-    public gr k;
+    public Session k;
 
     public String l;
 
@@ -1551,9 +1540,9 @@ public abstract class Minecraft implements Runnable {
 
     public sj q;
 
-    public da r;
+    public Screen r;
 
-    public mk s;
+    public ProgressListenerImpl s;
 
     public px t;
 
@@ -1573,7 +1562,7 @@ public abstract class Minecraft implements Runnable {
 
     public boolean w;
 
-    public fh x;
+    public BipedModel x;
 
     public vf y;
 
@@ -1589,7 +1578,7 @@ public abstract class Minecraft implements Runnable {
 
     private File Z;
 
-    private nl aa;
+    private LevelStorage aa;
 
     public static long[] E = new long[512];
 
@@ -1657,16 +1646,16 @@ public abstract class Minecraft implements Runnable {
 
     public GuiStore storeGUI;
 
-    iz lastItemUsed;
+    ItemInstance lastItemUsed;
 
-    sn lastEntityHit;
+    Entity lastEntityHit;
 
     ScriptVec3 lastBlockHit;
 
     int gcTime;
 
     public void updateStoreGUI() {
-        qq scaledresolution = new qq(this.z, this.d, this.e);
+        ScreenScaler scaledresolution = new ScreenScaler(this.z, this.d, this.e);
         int i = scaledresolution.a();
         int j = scaledresolution.b();
         this.storeGUI.a(this, i, j);
