@@ -2,20 +2,20 @@
 Decompiled AdventureCraft rewrite for 1.7.3.
 
 ## Setup
-Run the following command, replacing "eclipse" with the command your specific ide if you are not using eclipse:
+Run the following command, replacing "idea" with the command your specific ide if you are not using intelliJ:
 
 ```
-./gradlew eclipse
+./gradlew idea
 ```
 
 NOTE: if you want sources (recommended), instead run
 
 ```
-./gradlew rebuildLVT genSources eclipse
+./gradlew rebuildLVT genSources idea
 ```
 
 Once your mod is complete and ready for use it can be compiled and reobfuscated with:
 
 ```
-./gradlew build
+./gradlew idea
 ```
