@@ -10,11 +10,13 @@ import java.util.Properties;
 import io.github.ryuu.adventurecraft.scripting.ScriptItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ScriptableObject;
 
-public class ItemCustom extends gm {
+public class ItemCustom extends ItemType {
     String fileName;
 
     String onItemUsedScript;
@@ -25,11 +27,11 @@ public class ItemCustom extends gm {
             p.load(new FileInputStream(descFile));
             int itemID = Integer.parseInt(p.getProperty("itemID", "-1"));
             if (itemID == -1) {
-                Minecraft.minecraftInstance.v.a(String.format("ItemID for %s is unspecified", new Object[] { descFile.getName() }));
+                Minecraft.minecraftInstance.v.a(String.format("ItemID for %s is unspecified", new Object[]{descFile.getName()}));
             } else if (itemID <= 0) {
-                Minecraft.minecraftInstance.v.a(String.format("ItemID for %s specifies a negative itemID", new Object[] { descFile.getName() }));
-            } else if (gm.c[itemID] != null) {
-                Minecraft.minecraftInstance.v.a(String.format("ItemID (%d) for %s is already in use by %s", new Object[] { Integer.valueOf(itemID), descFile.getName() }));
+                Minecraft.minecraftInstance.v.a(String.format("ItemID for %s specifies a negative itemID", new Object[]{descFile.getName()}));
+            } else if (ItemType.c[itemID] != null) {
+                Minecraft.minecraftInstance.v.a(String.format("ItemID (%d) for %s is already in use by %s", new Object[]{Integer.valueOf(itemID), descFile.getName()}));
             } else {
                 return new ItemCustom(itemID, descFile.getName(), p);
             }
@@ -38,7 +40,7 @@ public class ItemCustom extends gm {
         } catch (IOException e) {
             e.printStackTrace();
         } catch (NumberFormatException e) {
-            Minecraft.minecraftInstance.v.a(String.format("ItemID for %s is specified invalidly '%s'", new Object[] { descFile.getName(), p.getProperty("itemID") }));
+            Minecraft.minecraftInstance.v.a(String.format("ItemID for %s is specified invalidly '%s'", new Object[]{descFile.getName(), p.getProperty("itemID")}));
         }
         return null;
     }
@@ -74,12 +76,12 @@ public class ItemCustom extends gm {
             Integer i = Integer.valueOf(Integer.parseInt(intString));
             return i;
         } catch (NumberFormatException e) {
-            Minecraft.minecraftInstance.v.a(String.format("Item File '%s' Property '%s' is specified invalidly '%s'", new Object[] { this.fileName, pName, intString }));
+            Minecraft.minecraftInstance.v.a(String.format("Item File '%s' Property '%s' is specified invalidly '%s'", new Object[]{this.fileName, pName, intString}));
             return null;
         }
     }
 
-    public iz a(iz itemstack, Level world, Player entityplayer) {
+    public ItemInstance a(ItemInstance itemstack, Level world, Player entityplayer) {
         if (!this.onItemUsedScript.equals("")) {
             ScriptItem item = new ScriptItem(itemstack);
             Object wrappedOut = Context.javaToJS(item, world.scope);
@@ -93,7 +95,7 @@ public class ItemCustom extends gm {
 
     static void loadItems(File itemFolder) {
         for (Integer i : loadedItemIDs)
-            gm.c[i.intValue()] = null;
+            ItemType.c[i.intValue()] = null;
         loadedItemIDs.clear();
         if (!itemFolder.exists())
             return;

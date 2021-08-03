@@ -8,7 +8,7 @@ import java.io.File;
 public class GuiWorldConfig extends Screen {
     private int page;
 
-    private Level world;
+    private final Level world;
 
     private ro playerName;
 
@@ -20,7 +20,7 @@ public class GuiWorldConfig extends Screen {
 
     private ke setOnUpdate;
 
-    private ro[] lightLevels;
+    private final ro[] lightLevels;
 
     private boolean lightChanged;
 
@@ -79,7 +79,7 @@ public class GuiWorldConfig extends Screen {
             }
         } else if (this.page == 2) {
             for (int i = 0; i < 16; i++) {
-                this.lightLevels[i] = new ro(this, this.g, 80, 22 + 14 * i, 80, 11, String.format("%.7f", new Object[] { Float.valueOf(this.b.f.x.brightness[i]) }));
+                this.lightLevels[i] = new ro(this, this.g, 80, 22 + 14 * i, 80, 11, String.format("%.7f", new Object[]{Float.valueOf(this.b.f.x.brightness[i])}));
             }
         } else if (this.page == 3) {
 
@@ -125,7 +125,7 @@ public class GuiWorldConfig extends Screen {
             }
             resetScriptNames();
         } else if (this.page != 2) {
-            if (this.page == 3);
+            if (this.page == 3) ;
         }
     }
 
@@ -187,7 +187,7 @@ public class GuiWorldConfig extends Screen {
         } else if (this.page != 1) {
             if (this.page == 2) {
                 for (int k = 0; k < 16; k++) {
-                    b(this.g, String.format("Light Level %d", new Object[] { Integer.valueOf(k) }), 4, 24 + 14 * k, 10526880);
+                    b(this.g, String.format("Light Level %d", new Object[]{Integer.valueOf(k)}), 4, 24 + 14 * k, 10526880);
                     this.lightLevels[k].c();
                     try {
                         Float value = Float.valueOf(this.lightLevels[k].a());
@@ -196,7 +196,8 @@ public class GuiWorldConfig extends Screen {
                                 this.b.f.x.brightness[k] = value.floatValue();
                                 this.lightChanged = true;
                             }
-                    } catch (NumberFormatException e) {}
+                    } catch (NumberFormatException e) {
+                    }
                 }
                 this.b.f.loadBrightness();
             } else if (this.page == 3) {

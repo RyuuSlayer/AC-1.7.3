@@ -29,7 +29,7 @@ public class gk extends Tile implements IBlockColor {
             byte byte0 = 32;
             if (a || !world.a(i - byte0, j - byte0, k - byte0, i + byte0, j + byte0, k + byte0)) {
                 world.f(i, j, k, 0);
-                for (; c_(world, i, j - 1, k) && j > 0; j--);
+                for (; c_(world, i, j - 1, k) && j > 0; j--) ;
                 if (j > 0)
                     world.f(i, j, k, this.bn);
             } else {

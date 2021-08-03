@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.overrides;
 
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
+
 import net.minecraft.client.Minecraft;
 
 public class ia {
@@ -11,8 +12,8 @@ public class ia {
 
     public static int a(double d, double d1) {
         d1 *= d;
-        int i = (int)((1.0D - d) * 255.0D);
-        int j = (int)((1.0D - d1) * 255.0D);
+        int i = (int) ((1.0D - d) * 255.0D);
+        int j = (int) ((1.0D - d1) * 255.0D);
         return a[j << 8 | i];
     }
 

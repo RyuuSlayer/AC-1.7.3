@@ -21,7 +21,7 @@ public class TileEntityNpcPath extends TileEntityMinMax {
             if (this.d != null) {
                 sn e = this.d.getEntityByID(this.entityID);
                 if (e instanceof EntityNPC) {
-                    this.npc = (EntityNPC)e;
+                    this.npc = (EntityNPC) e;
                     return this.npc;
                 }
             }

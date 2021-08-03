@@ -27,9 +27,9 @@ class GuiMapDownload extends da {
 
     public ScriptUIContainer ui = new ScriptUIContainer(0.0F, 26.0F, null);
 
-    private ArrayList<GuiMapElement> maps = new ArrayList<GuiMapElement>();
+    private final ArrayList<GuiMapElement> maps = new ArrayList<GuiMapElement>();
 
-    private File mapDownloadFolder = new File("./mapDownloads/");
+    private final File mapDownloadFolder = new File("./mapDownloads/");
 
     GuiMapDownload(da guiscreen) {
         if (!this.mapDownloadFolder.exists())
@@ -67,7 +67,7 @@ class GuiMapDownload extends da {
                     GuiMapElement map = getMapAtCoord(i, j);
                     if (map != null)
                         if (j - map.curY - this.ui.curY > 85.0F) {
-                            map.ratingClicked((int)(i - map.curX - this.ui.curX), (int)(j - map.curY - this.ui.curY));
+                            map.ratingClicked((int) (i - map.curX - this.ui.curX), (int) (j - map.curY - this.ui.curY));
                         } else {
                             this.mapUrl = map.mapURL;
                             this.mapName = map.mapName;
@@ -85,7 +85,7 @@ class GuiMapDownload extends da {
                 }
                 if (this.maxOffset < 26 && i >= this.scrollBarX && i <= this.scrollBarX + 8 && j > 26) {
                     float yOffset = Math.max(Math.min((j - 8 - 26) / (this.d - 26.0F - 16.0F - 32.0F), 1.0F), 0.0F);
-                    this.ui.curY = (26 - (int)(yOffset * (26 - this.maxOffset)));
+                    this.ui.curY = (26 - (int) (yOffset * (26 - this.maxOffset)));
                     this.scrolling = true;
                 }
             } else if (k == 1) {
@@ -107,7 +107,7 @@ class GuiMapDownload extends da {
                 }
             } else if (this.scrolling) {
                 float yOffset = Math.max(Math.min((j - 8 - 26) / (this.d - 26.0F - 16.0F - 32.0F), 1.0F), 0.0F);
-                this.ui.curY = (26 - (int)(yOffset * (26 - this.maxOffset)));
+                this.ui.curY = (26 - (int) (yOffset * (26 - this.maxOffset)));
             }
             this.ui.onUpdate();
             if (k == 0) {
@@ -116,7 +116,7 @@ class GuiMapDownload extends da {
                 this.rightClickDown = false;
             }
             for (GuiMapElement m : this.maps)
-                m.mouseMoved((int)(i - m.curX - this.ui.curX), (int)(j - m.curY - this.ui.curY));
+                m.mouseMoved((int) (i - m.curX - this.ui.curX), (int) (j - m.curY - this.ui.curY));
         }
         super.b(i, j, k);
     }
@@ -148,7 +148,7 @@ class GuiMapDownload extends da {
             if (this.maxOffset < 26) {
                 a(this.scrollBarX, 26, this.scrollBarX + 8, this.d - 32, -2147483648);
                 float yOffset = 1.0F - (this.ui.curY - this.maxOffset) / (26.0F - this.maxOffset);
-                int y = (int)((this.d - 26 - 16 - 32) * yOffset);
+                int y = (int) ((this.d - 26 - 16 - 32) * yOffset);
                 a(this.scrollBarX, 26 + y, this.scrollBarX + 8, 26 + y + 16, -1325400065);
             }
             drawBackground(0, 24, 255, 255);
@@ -176,7 +176,7 @@ class GuiMapDownload extends da {
             if (this.downloadSize != 0) {
                 float downloadedAmountMegs = this.downloadedAmount / 1024.0F / 1024.0F;
                 float downloadSizeMegs = this.downloadSize / 1024.0F / 1024.0F;
-                String downloaded = String.format("Downloaded %.2f/%.2f MBs", new Object[] { Float.valueOf(downloadedAmountMegs), Float.valueOf(downloadSizeMegs) });
+                String downloaded = String.format("Downloaded %.2f/%.2f MBs", Float.valueOf(downloadedAmountMegs), Float.valueOf(downloadSizeMegs));
                 int w = this.g.a(downloaded);
                 this.g.b(downloaded, this.c / 2 - w / 2, this.d / 2 + 15, 16777215);
             }
@@ -188,7 +188,7 @@ class GuiMapDownload extends da {
         this.g.b(s, this.c / 2 - w / 2, this.d / 2 - 4, 16777215);
         a(this.c / 2 - 50, this.d / 2 + 5, this.c / 2 + 50, this.d / 2 + 13, -2147483648);
         if (total > 0) {
-            int xOffset = (int)(100.0D * cur / total - 50.0D);
+            int xOffset = (int) (100.0D * cur / total - 50.0D);
             a(this.c / 2 - 50, this.d / 2 + 5, this.c / 2 + xOffset, this.d / 2 + 13, -15675632);
         }
     }
@@ -212,8 +212,8 @@ class GuiMapDownload extends da {
 
     private GuiMapElement getMapAtCoord(int x, int y) {
         for (GuiMapElement m : this.maps) {
-            int dX = (int)(x - m.curX + this.ui.curX);
-            int dY = (int)(y - m.curY + this.ui.curY);
+            int dX = (int) (x - m.curX + this.ui.curX);
+            int dY = (int) (y - m.curY + this.ui.curY);
             if (dX >= 0 && dX < 100 && dY >= 0 && dY < 100)
                 return m;
         }
@@ -264,7 +264,8 @@ class GuiMapDownload extends da {
                 }
             } catch (FileNotFoundException e) {
 
-            } catch (IOException e) {}
+            } catch (IOException e) {
+            }
         this.downloading = false;
     }
 
@@ -277,7 +278,7 @@ class GuiMapDownload extends da {
     }
 
     private void downloadMap() {
-        String[] dropboxIDs = { "51083669", "51083634", "51083701", "51083780" };
+        String[] dropboxIDs = {"51083669", "51083634", "51083701", "51083780"};
         downloadFile(this.mapUrl.replace("51083780", dropboxIDs[this.rand.nextInt(4)]), "./mapDownloads/map.zip");
         File mapZip = new File(this.mapDownloadFolder, "map.zip");
         File mapDir = new File("./maps/" + this.mapName);
@@ -331,7 +332,7 @@ class GuiMapDownload extends da {
         File saveDir = new File(mcDir, "saves");
         int i = 1;
         while (true) {
-            saveName = String.format("%s - Save %d", new Object[] { this.mapName, Integer.valueOf(i) });
+            saveName = String.format("%s - Save %d", this.mapName, Integer.valueOf(i));
             File worldDir = new File(saveDir, saveName);
             i++;
             if (!worldDir.exists()) {
@@ -425,5 +426,5 @@ class GuiMapDownload extends da {
 
     private int scrollBarX;
 
-    private Random rand;
+    private final Random rand;
 }

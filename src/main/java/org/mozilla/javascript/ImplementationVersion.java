@@ -25,7 +25,7 @@ public class ImplementationVersion {
         Enumeration<URL> urls;
         try {
             urls = ImplementationVersion.class.getClassLoader()
-                .getResources("META-INF/MANIFEST.MF");
+                    .getResources("META-INF/MANIFEST.MF");
         } catch (IOException ioe) {
             return;
         }
@@ -38,8 +38,8 @@ public class ImplementationVersion {
                 Attributes attrs = mf.getMainAttributes();
                 if ("Mozilla Rhino".equals(attrs.getValue("Implementation-Title"))) {
                     versionString =
-                        "Rhino " + attrs.getValue("Implementation-Version") + " " +
-                            attrs.getValue("Built-Date").replaceAll("-", " ");
+                            "Rhino " + attrs.getValue("Implementation-Version") + " " +
+                                    attrs.getValue("Built-Date").replaceAll("-", " ");
                     return;
                 }
             } catch (IOException e) {

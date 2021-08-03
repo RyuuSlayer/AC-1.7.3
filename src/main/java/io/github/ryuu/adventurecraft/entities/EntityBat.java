@@ -1,9 +1,10 @@
 package io.github.ryuu.adventurecraft.entities;
 
 
+import net.minecraft.entity.FlyingEntity;
 import net.minecraft.level.Level;
 
-public class EntityBat extends wq implements ff {
+public class EntityBat extends FlyingEntity implements ff {
     public int courseChangeCooldown;
 
     public double waypointX;
@@ -70,7 +71,7 @@ public class EntityBat extends wq implements ff {
                 this.aP += d / d3 * 0.08D;
                 this.aQ += d1 / d3 * 0.08D;
                 this.aR += d2 / d3 * 0.08D;
-                this.aS = -((float)Math.atan2(this.aP, this.aR)) * 180.0F / 3.141593F;
+                this.aS = -((float) Math.atan2(this.aP, this.aR)) * 180.0F / 3.141593F;
             } else {
                 this.waypointX = this.aM;
                 this.waypointY = this.aN;
@@ -80,7 +81,7 @@ public class EntityBat extends wq implements ff {
         if (this.targetedEntity != null) {
             double d5 = this.targetedEntity.aM - this.aM;
             double d7 = this.targetedEntity.aO - this.aO;
-            this.H = -((float)Math.atan2(d5, d7)) * 180.0F / 3.141593F;
+            this.H = -((float) Math.atan2(d5, d7)) * 180.0F / 3.141593F;
             if (this.movingToTarget && this.targetedEntity.g(this) < 2.25D) {
                 this.aP = 0.0D;
                 this.aQ = 0.0D;

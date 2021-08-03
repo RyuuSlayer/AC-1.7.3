@@ -43,16 +43,15 @@ import org.mozilla.javascript.tools.ToolErrorReporter;
 
 /**
  * The shell program.
- *
+ * <p>
  * Can execute scripts interactively or in batch mode at the command line.
  * An example of controlling the JavaScript engine.
  *
  * @author Norris Boyd
  */
-public class Main
-{
+public class Main {
     public static ShellContextFactory
-        shellContextFactory = new ShellContextFactory();
+            shellContextFactory = new ShellContextFactory();
 
     public static Global global = new Global();
     static protected ToolErrorReporter errorReporter;
@@ -76,24 +75,21 @@ public class Main
     /**
      * Proxy class to avoid proliferation of anonymous classes.
      */
-    private static class IProxy implements ContextAction<Object>, QuitAction
-    {
+    private static class IProxy implements ContextAction<Object>, QuitAction {
         private static final int PROCESS_FILES = 1;
         private static final int EVAL_INLINE_SCRIPT = 2;
         private static final int SYSTEM_EXIT = 3;
 
-        private int type;
+        private final int type;
         String[] args;
         String scriptText;
 
-        IProxy(int type)
-        {
+        IProxy(int type) {
             this.type = type;
         }
 
         @Override
-        public Object run(Context cx)
-        {
+        public Object run(Context cx) {
             if (useRequire) {
                 require = global.installRequire(cx, modulePath, sandboxed);
             }
@@ -108,8 +104,7 @@ public class Main
         }
 
         @Override
-        public void quit(Context cx, int exitCode)
-        {
+        public void quit(Context cx, int exitCode) {
             if (type == SYSTEM_EXIT) {
                 System.exit(exitCode);
                 return;
@@ -120,13 +115,13 @@ public class Main
 
     /**
      * Main entry point.
-     *
+     * <p>
      * Process arguments as would a normal Java program. Also
      * create a new Context and associate it with the current thread.
      * Then set up the execution environment and begin to
      * execute scripts.
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         try {
             if (Boolean.getBoolean("rhino.use_java_policy_security")) {
                 initJavaPolicySecuritySupport();
@@ -142,10 +137,9 @@ public class Main
     }
 
     /**
-     *  Execute the given arguments, but don't System.exit at the end.
+     * Execute the given arguments, but don't System.exit at the end.
      */
-    public static int exec(String origArgs[])
-    {
+    public static int exec(String[] origArgs) {
         errorReporter = new ToolErrorReporter(false, global.getErr());
         shellContextFactory.setErrorReporter(errorReporter);
         String[] args = processOptions(origArgs);
@@ -165,8 +159,7 @@ public class Main
         return exitCode;
     }
 
-    static void processFiles(Context cx, String[] args)
-    {
+    static void processFiles(Context cx, String[] args) {
         // define "arguments" array in the top-level object:
         // need to allocate new array since newArray requires instances
         // of exactly Object[], not ObjectSubclass[]
@@ -174,9 +167,9 @@ public class Main
         System.arraycopy(args, 0, array, 0, args.length);
         Scriptable argsObj = cx.newArray(global, array);
         global.defineProperty("arguments", argsObj,
-                              ScriptableObject.DONTENUM);
+                ScriptableObject.DONTENUM);
 
-        for (String file: fileList) {
+        for (String file : fileList) {
             try {
                 processSource(cx, file);
             } catch (IOException ioex) {
@@ -185,13 +178,13 @@ public class Main
                 exitCode = EXITCODE_FILE_NOT_FOUND;
             } catch (RhinoException rex) {
                 ToolErrorReporter.reportException(
-                    cx.getErrorReporter(), rex);
+                        cx.getErrorReporter(), rex);
                 exitCode = EXITCODE_RUNTIME_ERROR;
             } catch (VirtualMachineError ex) {
                 // Treat StackOverflow and OutOfMemory as runtime errors
                 ex.printStackTrace();
                 String msg = ToolErrorReporter.getMessage(
-                    "msg.uncaughtJSException", ex.toString());
+                        "msg.uncaughtJSException", ex.toString());
                 Context.reportError(msg);
                 exitCode = EXITCODE_RUNTIME_ERROR;
             }
@@ -218,8 +211,7 @@ public class Main
         }
     }
 
-    public static Global getGlobal()
-    {
+    public static Global getGlobal() {
         return global;
     }
 
@@ -256,10 +248,10 @@ public class Main
     /**
      * Parse arguments.
      */
-    public static String[] processOptions(String args[])
-    {
+    public static String[] processOptions(String[] args) {
         String usageError;
-        goodUsage: for (int i = 0; ; ++i) {
+        goodUsage:
+        for (int i = 0; ; ++i) {
             if (i == args.length) {
                 return new String[0];
             }
@@ -269,7 +261,7 @@ public class Main
                 fileList.add(arg);
                 mainModule = arg;
                 String[] result = new String[args.length - i - 1];
-                System.arraycopy(args, i+1, result, 0, args.length - i - 1);
+                System.arraycopy(args, i + 1, result, 0, args.length - i - 1);
                 return result;
             }
             if (arg.equals("-version")) {
@@ -394,10 +386,10 @@ public class Main
                 continue;
             }
             if (arg.equals("-?") ||
-                arg.equals("-help")) {
+                    arg.equals("-help")) {
                 // print usage message
                 global.getOut().println(
-                    ToolErrorReporter.getMessage("msg.shell.usage", Main.class.getName()));
+                        ToolErrorReporter.getMessage("msg.shell.usage", Main.class.getName()));
                 exitCode = 1;
                 return null;
             }
@@ -406,19 +398,18 @@ public class Main
         }
         // print error and usage message
         global.getOut().println(
-            ToolErrorReporter.getMessage("msg.shell.invalid", usageError));
+                ToolErrorReporter.getMessage("msg.shell.invalid", usageError));
         global.getOut().println(
-            ToolErrorReporter.getMessage("msg.shell.usage", Main.class.getName()));
+                ToolErrorReporter.getMessage("msg.shell.usage", Main.class.getName()));
         exitCode = 1;
         return null;
     }
 
-    private static void initJavaPolicySecuritySupport()
-    {
+    private static void initJavaPolicySecuritySupport() {
         Throwable exObj;
         try {
             Class<?> cl = Class.forName("org.mozilla.javascript.tools.shell.JavaPolicySecurity");
-            securityImpl = (SecurityProxy)cl.newInstance();
+            securityImpl = (SecurityProxy) cl.newInstance();
             SecurityController.initGlobal(securityImpl);
             return;
         } catch (ClassNotFoundException ex) {
@@ -436,15 +427,14 @@ public class Main
     /**
      * Evaluate JavaScript source.
      *
-     * @param cx the current context
+     * @param cx       the current context
      * @param filename the name of the file to compile, or null
      *                 for interactive mode.
-     * @throws IOException if the source could not be read
+     * @throws IOException    if the source could not be read
      * @throws RhinoException thrown during evaluation of source
      */
     public static void processSource(Context cx, String filename)
-            throws IOException
-    {
+            throws IOException {
         if (filename == null || filename.equals("-")) {
             Scriptable scope = getShellScope();
             Charset cs;
@@ -475,8 +465,7 @@ public class Main
                     String newline;
                     try {
                         newline = console.readLine(prompt);
-                    }
-                    catch (IOException ioe) {
+                    } catch (IOException ioe) {
                         console.println(ioe.toString());
                         break;
                     }
@@ -498,8 +487,7 @@ public class Main
                         // Avoid printing out undefined or function definitions.
                         if (result != Context.getUndefinedValue() &&
                                 !(result instanceof Function &&
-                                        finalSource.trim().startsWith("function")))
-                        {
+                                        finalSource.trim().startsWith("function"))) {
                             try {
                                 console.println(Context.toString(result));
                             } catch (RhinoException rex) {
@@ -508,17 +496,17 @@ public class Main
                             }
                         }
                         NativeArray h = global.history;
-                        h.put((int)h.getLength(), h, source);
+                        h.put((int) h.getLength(), h, source);
                     }
                 } catch (RhinoException rex) {
                     ToolErrorReporter.reportException(
-                        cx.getErrorReporter(), rex);
+                            cx.getErrorReporter(), rex);
                     exitCode = EXITCODE_RUNTIME_ERROR;
                 } catch (VirtualMachineError ex) {
                     // Treat StackOverflow and OutOfMemory as runtime errors
                     ex.printStackTrace();
                     String msg = ToolErrorReporter.getMessage(
-                        "msg.uncaughtJSException", ex.toString());
+                            "msg.uncaughtJSException", ex.toString());
                     Context.reportError(msg);
                     exitCode = EXITCODE_RUNTIME_ERROR;
                 }
@@ -554,8 +542,7 @@ public class Main
     }
 
     public static void processFile(Context cx, Scriptable scope, String filename)
-            throws IOException
-    {
+            throws IOException {
         if (securityImpl == null) {
             processFileSecure(cx, scope, filename, null);
         } else {
@@ -577,7 +564,7 @@ public class Main
 
         if (script == null) {
             if (isClass) {
-                script = loadCompiledScript(cx, path, (byte[])source, securityDomain);
+                script = loadCompiledScript(cx, path, (byte[]) source, securityDomain);
             } else {
                 String strSrc = (String) source;
                 // Support the executable script #! syntax:  If
@@ -607,9 +594,9 @@ public class Main
 
         if (source != null) {
             if (source instanceof String) {
-                bytes = ((String)source).getBytes(StandardCharsets.UTF_8);
+                bytes = ((String) source).getBytes(StandardCharsets.UTF_8);
             } else {
-                bytes = (byte[])source;
+                bytes = (byte[]) source;
             }
             try {
                 MessageDigest md = MessageDigest.getInstance("MD5");
@@ -625,8 +612,7 @@ public class Main
 
     private static Script loadCompiledScript(Context cx, String path,
                                              byte[] data, Object securityDomain)
-            throws FileNotFoundException
-    {
+            throws FileNotFoundException {
         if (data == null) {
             throw new FileNotFoundException(path);
         }
@@ -688,12 +674,12 @@ public class Main
 
     /**
      * Read file or url specified by <code>path</code>.
+     *
      * @return file or url content as <code>byte[]</code> or as <code>String</code> if
      * <code>convertToString</code> is true.
      */
     private static Object readFileOrUrl(String path, boolean convertToString)
-            throws IOException
-    {
+            throws IOException {
         return SourceReader.readFileOrUrl(path, convertToString,
                 shellContextFactory.getCharacterEncoding());
     }
@@ -728,7 +714,7 @@ public class Main
 
         ScriptReference get(String path, byte[] digest) {
             ScriptReference ref;
-            while((ref = (ScriptReference) queue.poll()) != null) {
+            while ((ref = (ScriptReference) queue.poll()) != null) {
                 remove(ref.path);
             }
             ref = get(path);

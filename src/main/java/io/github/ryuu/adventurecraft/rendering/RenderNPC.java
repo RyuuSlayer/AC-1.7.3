@@ -9,9 +9,9 @@ public class RenderNPC extends RenderBipedScaledScripted {
     }
 
     protected void a(ls entityliving, double d, double d1, double d2) {
-        EntityNPC npc = (EntityNPC)entityliving;
+        EntityNPC npc = (EntityNPC) entityliving;
         if (Minecraft.w()) {
-            a(entityliving, String.format("%s - %d", new Object[] { npc.npcName, Integer.valueOf(npc.aD) }), d, d1, d2, 64);
+            a(entityliving, String.format("%s - %d", new Object[]{npc.npcName, Integer.valueOf(npc.aD)}), d, d1, d2, 64);
         } else if (npc.seesThePlayer()) {
             a(entityliving, npc.npcName, d, d1, d2, 64);
         }

@@ -8,7 +8,8 @@ public class wq extends ls {
         this.attackStrength = 1;
     }
 
-    protected void b(float f) {}
+    protected void b(float f) {
+    }
 
     public void a_(float f, float f1) {
         if (ag()) {

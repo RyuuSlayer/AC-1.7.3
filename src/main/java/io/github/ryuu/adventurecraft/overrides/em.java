@@ -3,15 +3,15 @@ package io.github.ryuu.adventurecraft.overrides;
 import org.lwjgl.opengl.GL11;
 
 public class em extends xw {
-    private sn a;
+    private final sn a;
 
-    private sn o;
+    private final sn o;
 
     private int p;
 
     private int q;
 
-    private float r;
+    private final float r;
 
     public em(Level world, sn entity, sn entity1, float f) {
         super(world, entity.aM, entity.aN, entity.aO, entity.aP, entity.aQ, entity.aR);
@@ -43,7 +43,7 @@ public class em extends xw {
         d7 -= m;
         d8 -= n;
         GL11.glColor4f(f7, f7, f7, 1.0F);
-        th.a.a(this.a, (float)d6, (float)d7, (float)d8, this.a.aS, f);
+        th.a.a(this.a, (float) d6, (float) d7, (float) d8, this.a.aS, f);
     }
 
     public void w_() {

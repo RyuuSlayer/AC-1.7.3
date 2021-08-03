@@ -31,7 +31,7 @@ public class Main {
     /**
      * The debugger frame.
      */
-    private SwingGui debugGui;
+    private final SwingGui debugGui;
 
     /**
      * Creates a new Main.
@@ -219,7 +219,7 @@ public class Main {
         global.setErr(main.getErr());
 
         main.attachTo(
-            org.mozilla.javascript.tools.shell.Main.shellContextFactory);
+                org.mozilla.javascript.tools.shell.Main.shellContextFactory);
 
         main.setScope(global);
 
@@ -280,11 +280,11 @@ public class Main {
 
         main.attachTo(factory);
         if (scopeProvider instanceof ScopeProvider) {
-            main.setScopeProvider((ScopeProvider)scopeProvider);
+            main.setScopeProvider((ScopeProvider) scopeProvider);
         } else {
-            Scriptable scope = (Scriptable)scopeProvider;
+            Scriptable scope = (Scriptable) scopeProvider;
             if (scope instanceof Global) {
-                Global global = (Global)scope;
+                Global global = (Global) scope;
                 global.setIn(main.getIn());
                 global.setOut(main.getOut());
                 global.setErr(main.getErr());
@@ -309,16 +309,14 @@ public class Main {
     }
 
     /**
-     * @deprecated
-     * The method does nothing and is only present for compatibility.
+     * @deprecated The method does nothing and is only present for compatibility.
      */
     @Deprecated
     public void setOptimizationLevel(int level) {
     }
 
     /**
-     * @deprecated
-     * The method is only present for compatibility and should not be called.
+     * @deprecated The method is only present for compatibility and should not be called.
      */
     @Deprecated
     public void contextEntered(Context cx) {
@@ -326,8 +324,7 @@ public class Main {
     }
 
     /**
-     * @deprecated
-     * The method is only present for compatibility and should not be called.
+     * @deprecated The method is only present for compatibility and should not be called.
      */
     @Deprecated
     public void contextExited(Context cx) {
@@ -335,8 +332,7 @@ public class Main {
     }
 
     /**
-     * @deprecated
-     * The method is only present for compatibility and should not be called.
+     * @deprecated The method is only present for compatibility and should not be called.
      */
     @Deprecated
     public void contextCreated(Context cx) {
@@ -344,12 +340,10 @@ public class Main {
     }
 
     /**
-     * @deprecated
-     * The method is only present for compatibility and should not be called.
+     * @deprecated The method is only present for compatibility and should not be called.
      */
     @Deprecated
-    public void contextReleased(Context cx)
-    {
+    public void contextReleased(Context cx) {
         throw new IllegalStateException();
     }
 

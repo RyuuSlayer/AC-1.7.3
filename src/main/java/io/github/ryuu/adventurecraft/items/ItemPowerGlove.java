@@ -2,16 +2,18 @@ package io.github.ryuu.adventurecraft.items;
 
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 import org.lwjgl.input.Keyboard;
 
-public class ItemPowerGlove extends gm {
+public class ItemPowerGlove extends ItemType {
     protected ItemPowerGlove(int i) {
         super(i);
     }
 
-    public boolean a(iz itemstack, Player entityplayer, Level world, int i, int j, int k, int side) {
+    public boolean a(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int side) {
         int xOffset = 0;
         int zOffset = 0;
         if (side == 2) {

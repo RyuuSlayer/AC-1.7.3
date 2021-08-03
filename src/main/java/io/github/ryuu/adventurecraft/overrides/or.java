@@ -8,7 +8,8 @@ public class or extends Tile {
         b(true);
     }
 
-    public void a(fd world, int i, int j, int k, Random random) {}
+    public void a(fd world, int i, int j, int k, Random random) {
+    }
 
     public eq e(fd world, int i, int j, int k) {
         float f = 0.0625F;
@@ -67,6 +68,6 @@ public class or extends Tile {
     }
 
     public void a(fd world, int i, int j, int k, sn entity) {
-        entity.a((sn)null, 1);
+        entity.a((sn) null, 1);
     }
 }

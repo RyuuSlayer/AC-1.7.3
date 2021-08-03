@@ -38,8 +38,8 @@ public class TileEntityStorage extends TileEntityMinMax {
                 for (int y = this.minY; y <= this.maxY; y++) {
                     int blockID = this.d.a(x, y, z);
                     int metadata = this.d.e(x, y, z);
-                    this.blockIDs[offset] = (byte)lm.translate128(blockID);
-                    this.metadatas[offset] = (byte)metadata;
+                    this.blockIDs[offset] = (byte) lm.translate128(blockID);
+                    this.metadatas[offset] = (byte) metadata;
                     ow te = this.d.b(x, y, z);
                     if (te != null) {
                         nu tag = new nu();
@@ -86,7 +86,7 @@ public class TileEntityStorage extends TileEntityMinMax {
             this.tileEntities.clear();
             int numTiles = nbttagcompound.e("numTiles");
             for (int i = 0; i < numTiles; i++) {
-                this.tileEntities.add(nbttagcompound.k(String.format("tile%d", new Object[] { Integer.valueOf(i) })));
+                this.tileEntities.add(nbttagcompound.k(String.format("tile%d", new Object[]{Integer.valueOf(i)})));
             }
         }
         if (!nbttagcompound.b("acVersion"))
@@ -103,7 +103,7 @@ public class TileEntityStorage extends TileEntityMinMax {
         if (!this.tileEntities.isEmpty()) {
             int i = 0;
             for (nu tag : this.tileEntities) {
-                nbttagcompound.a(String.format("tile%d", new Object[] { Integer.valueOf(i) }), tag);
+                nbttagcompound.a(String.format("tile%d", new Object[]{Integer.valueOf(i)}), tag);
                 i++;
             }
             nbttagcompound.a("numTiles", i);

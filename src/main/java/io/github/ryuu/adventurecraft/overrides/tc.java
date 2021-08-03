@@ -3,7 +3,7 @@ package io.github.ryuu.adventurecraft.overrides;
 import java.util.Random;
 
 public class tc extends rw {
-    private Random a;
+    private final Random a;
 
     private final boolean b;
 
@@ -92,7 +92,7 @@ public class tc extends rw {
     public boolean a(fd world, int i, int j, int k, gs entityplayer) {
         if (world.B)
             return true;
-        sk tileentityfurnace = (sk)world.b(i, j, k);
+        sk tileentityfurnace = (sk) world.b(i, j, k);
         entityplayer.a(tileentityfurnace);
         return true;
     }
@@ -114,7 +114,7 @@ public class tc extends rw {
     }
 
     protected ow a_() {
-        return (ow)new sk();
+        return (ow) new sk();
     }
 
     public void a(fd world, int i, int j, int k, ls entityliving) {
@@ -131,7 +131,7 @@ public class tc extends rw {
 
     public void b(fd world, int i, int j, int k) {
         if (!c) {
-            sk tileentityfurnace = (sk)world.b(i, j, k);
+            sk tileentityfurnace = (sk) world.b(i, j, k);
             for (int l = 0; l < tileentityfurnace.a(); l++) {
                 iz itemstack = tileentityfurnace.f_(l);
                 if (itemstack != null) {
@@ -145,10 +145,10 @@ public class tc extends rw {
                         itemstack.a -= i1;
                         hl entityitem = new hl(world, (i + f), (j + f1), (k + f2), new iz(itemstack.c, i1, itemstack.i()));
                         float f3 = 0.05F;
-                        entityitem.aP = ((float)this.a.nextGaussian() * f3);
-                        entityitem.aQ = ((float)this.a.nextGaussian() * f3 + 0.2F);
-                        entityitem.aR = ((float)this.a.nextGaussian() * f3);
-                        world.b((sn)entityitem);
+                        entityitem.aP = ((float) this.a.nextGaussian() * f3);
+                        entityitem.aQ = ((float) this.a.nextGaussian() * f3 + 0.2F);
+                        entityitem.aR = ((float) this.a.nextGaussian() * f3);
+                        world.b((sn) entityitem);
                     }
                 }
             }

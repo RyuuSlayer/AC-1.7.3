@@ -46,21 +46,21 @@ public class hs extends TextureBinder {
                         if (f4 >= 1.0F)
                             f4 -= 2.0F;
                         float f5 = f3 * f3 + f4 * f4;
-                        float f6 = (float)Math.atan2(f4, f3) + (i / 32.0F * 3.141593F * 2.0F - f5 * 10.0F + (l * 2)) * (l * 2 - 1);
+                        float f6 = (float) Math.atan2(f4, f3) + (i / 32.0F * 3.141593F * 2.0F - f5 * 10.0F + (l * 2)) * (l * 2 - 1);
                         f6 = (in.a(f6) + 1.0F) / 2.0F;
                         f6 /= f5 + 1.0F;
                         f += f6 * 0.5F;
                     }
                     f += random.nextFloat() * 0.1F;
-                    int i1 = (int)(f * 100.0F + 155.0F);
-                    int j1 = (int)(f * f * 200.0F + 55.0F);
-                    int k1 = (int)(f * f * f * f * 255.0F);
-                    int l1 = (int)(f * 100.0F + 155.0F);
+                    int i1 = (int) (f * 100.0F + 155.0F);
+                    int j1 = (int) (f * f * 200.0F + 55.0F);
+                    int k1 = (int) (f * f * f * f * 255.0F);
+                    int l1 = (int) (f * 100.0F + 155.0F);
                     int i2 = k * w + j;
-                    this.h[i][i2 * 4 + 0] = (byte)j1;
-                    this.h[i][i2 * 4 + 1] = (byte)k1;
-                    this.h[i][i2 * 4 + 2] = (byte)i1;
-                    this.h[i][i2 * 4 + 3] = (byte)l1;
+                    this.h[i][i2 * 4 + 0] = (byte) j1;
+                    this.h[i][i2 * 4 + 1] = (byte) k1;
+                    this.h[i][i2 * 4 + 2] = (byte) i1;
+                    this.h[i][i2 * 4 + 3] = (byte) l1;
                 }
             }
         }
@@ -85,10 +85,10 @@ public class hs extends TextureBinder {
                         for (int x = 0; x < ratio; x++) {
                             for (int y = 0; y < ratio; y++) {
                                 k = m * ratio + x + (j * ratio + y) * w;
-                                this.a[k * 4 + 0] = (byte)(curPixel >> 16 & 0xFF);
-                                this.a[k * 4 + 1] = (byte)(curPixel >> 8 & 0xFF);
-                                this.a[k * 4 + 2] = (byte)(curPixel & 0xFF);
-                                this.a[k * 4 + 3] = (byte)(curPixel >> 24 & 0xFF);
+                                this.a[k * 4 + 0] = (byte) (curPixel >> 16 & 0xFF);
+                                this.a[k * 4 + 1] = (byte) (curPixel >> 8 & 0xFF);
+                                this.a[k * 4 + 2] = (byte) (curPixel & 0xFF);
+                                this.a[k * 4 + 3] = (byte) (curPixel >> 24 & 0xFF);
                             }
                         }
                     }
@@ -106,10 +106,10 @@ public class hs extends TextureBinder {
                                 a += curPixel >> 24 & 0xFF;
                             }
                         }
-                        this.a[k * 4 + 0] = (byte)(r / ratio / ratio);
-                        this.a[k * 4 + 1] = (byte)(g / ratio / ratio);
-                        this.a[k * 4 + 2] = (byte)(b / ratio / ratio);
-                        this.a[k * 4 + 3] = (byte)(a / ratio / ratio);
+                        this.a[k * 4 + 0] = (byte) (r / ratio / ratio);
+                        this.a[k * 4 + 1] = (byte) (g / ratio / ratio);
+                        this.a[k * 4 + 2] = (byte) (b / ratio / ratio);
+                        this.a[k * 4 + 3] = (byte) (a / ratio / ratio);
                         k++;
                     }
                 }
@@ -135,10 +135,10 @@ public class hs extends TextureBinder {
                 k = k1;
                 l = l1;
             }
-            this.a[i * 4 + 0] = (byte)j;
-            this.a[i * 4 + 1] = (byte)k;
-            this.a[i * 4 + 2] = (byte)l;
-            this.a[i * 4 + 3] = (byte)i1;
+            this.a[i * 4 + 0] = (byte) j;
+            this.a[i * 4 + 1] = (byte) k;
+            this.a[i * 4 + 2] = (byte) l;
+            this.a[i * 4 + 3] = (byte) i1;
         }
     }
 

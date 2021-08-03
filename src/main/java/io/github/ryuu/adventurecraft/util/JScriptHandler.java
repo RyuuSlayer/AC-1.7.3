@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.level.Level;
 import org.mozilla.javascript.Scriptable;
@@ -30,7 +31,7 @@ public class JScriptHandler {
             for (File f : this.scriptDir.listFiles()) {
                 String fileName = f.getName().toLowerCase();
                 if (fileName.endsWith(".js")) {
-                    System.out.printf("Compiling %s\n", new Object[] { fileName });
+                    System.out.printf("Compiling %s\n", fileName);
                     String script = readFile(f);
                     this.scripts.put(fileName, new JScriptInfo(f.getName(), this.world.script.compileString(script, f.getName())));
                 }
@@ -53,7 +54,7 @@ public class JScriptHandler {
             }
         }
         if (verbose)
-            Minecraft.minecraftInstance.v.a(String.format("Missing '%s'", new Object[] { fileName }));
+            Minecraft.minecraftInstance.v.a(String.format("Missing '%s'", new Object[]{fileName}));
         return null;
     }
 

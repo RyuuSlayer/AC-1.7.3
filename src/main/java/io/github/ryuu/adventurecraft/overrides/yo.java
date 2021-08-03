@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.overrides;
 
 import java.io.File;
 import java.util.Random;
+
 import net.minecraft.client.Minecraft;
 import paulscode.sound.SoundSystem;
 import paulscode.sound.SoundSystemConfig;
@@ -10,17 +11,17 @@ import paulscode.sound.codecs.CodecWav;
 import paulscode.sound.libraries.LibraryLWJGLOpenAL;
 
 public class yo {
-    private hr b = new hr();
+    private final hr b = new hr();
 
-    private hr c = new hr();
+    private final hr c = new hr();
 
-    private hr d = new hr();
+    private final hr d = new hr();
 
     private int e = 0;
 
-    private Random h = new Random();
+    private final Random h = new Random();
 
-    private int i = this.h.nextInt(12000);
+    private final int i = this.h.nextInt(12000);
 
     public void a(kv gamesettings) {
         this.c.b = false;
@@ -79,7 +80,8 @@ public class yo {
         this.d.a(s, file);
     }
 
-    public void c() {}
+    public void c() {
+    }
 
     public void a(ls entityliving, float f) {
         if (!g || this.f.b == 0.0F)
@@ -98,9 +100,9 @@ public class yo {
         float f7 = 0.0F;
         float f8 = 1.0F;
         float f9 = 0.0F;
-        a.setListenerPosition((float)d, (float)d1, (float)d2);
+        a.setListenerPosition((float) d, (float) d1, (float) d2);
         a.setListenerOrientation(f4, f5, f6, f7, f8, f9);
-        a.setPosition("BgMusic", (float)d, (float)d1, (float)d2);
+        a.setPosition("BgMusic", (float) d, (float) d1, (float) d2);
     }
 
     public void a(String s, float f, float f1, float f2, float f3, float f4) {

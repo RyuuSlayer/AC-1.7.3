@@ -86,7 +86,7 @@ public class TileRenderer {
         if (l == 7)
             return p(block, i, j, k);
         if (l == 9)
-            return a((pc)block, i, j, k);
+            return a((pc) block, i, j, k);
         if (l == 10)
             return o(block, i, j, k);
         if (l == 11)
@@ -184,7 +184,7 @@ public class TileRenderer {
         d = (j1 & 0xF0);
         double d1 = (k1 / 256.0F);
         double d3 = ((k1 + 16) - 0.01D) / 256.0D;
-        double d5 = ((float)d / 256.0F);
+        double d5 = ((float) d / 256.0F);
         double d7 = (d + 16.0D - 0.01D) / 256.0D;
         double d9 = d1;
         double d11 = d3;
@@ -1229,9 +1229,9 @@ public class TileRenderer {
         if (block == Tile.Y) {
             long l1 = (i * 3129871) ^ k * 116129781L ^ j;
             l1 = l1 * l1 * 42317861L + l1 * 11L;
-            d += (((float)(l1 >> 16L & 0xFL) / 15.0F) - 0.5D) * 0.5D;
-            d1 += (((float)(l1 >> 20L & 0xFL) / 15.0F) - 1.0D) * 0.2D;
-            d2 += (((float)(l1 >> 24L & 0xFL) / 15.0F) - 0.5D) * 0.5D;
+            d += (((float) (l1 >> 16L & 0xFL) / 15.0F) - 0.5D) * 0.5D;
+            d1 += (((float) (l1 >> 20L & 0xFL) / 15.0F) - 1.0D) * 0.2D;
+            d2 += (((float) (l1 >> 24L & 0xFL) / 15.0F) - 0.5D) * 0.5D;
         }
         a(block, this.c.e(i, j, k), d, d1, d2);
         return true;
@@ -1626,7 +1626,7 @@ public class TileRenderer {
         if (this.f || flag) {
             flag2 = true;
             int j1 = block.a(1, i1);
-            float f12 = (float)rp.a(this.c, i, j, k, material);
+            float f12 = (float) rp.a(this.c, i, j, k, material);
             if (f12 > -999.0F)
                 j1 = block.a(2, i1);
             int i2 = (j1 & 0xF) << 4;
@@ -1865,10 +1865,10 @@ public class TileRenderer {
             this.P = this.Q = this.R = this.S = (flag1 ? f : 1.0F) * 0.5F;
             this.T = this.U = this.V = this.W = (flag1 ? f1 : 1.0F) * 0.5F;
             this.X = this.Y = this.Z = this.aa = (flag1 ? f2 : 1.0F) * 0.5F;
-            float lerpLeft = 1.0F - (float)Math.max(block.bs, 0.0D);
-            float lerpRight = 1.0F - (float)Math.min(block.bv, 1.0D);
-            float lerpTop = (float)Math.min(block.bx, 1.0D);
-            float lerpBottom = (float)Math.max(block.bu, 0.0D);
+            float lerpLeft = 1.0F - (float) Math.max(block.bs, 0.0D);
+            float lerpRight = 1.0F - (float) Math.min(block.bv, 1.0D);
+            float lerpTop = (float) Math.min(block.bx, 1.0D);
+            float lerpBottom = (float) Math.max(block.bu, 0.0D);
             float topLeft = lerpTop * (lerpLeft * f4 + (1.0F - lerpLeft) * f25) + (1.0F - lerpTop) * (lerpLeft * f11 + (1.0F - lerpLeft) * f18);
             float bottomLeft = lerpBottom * (lerpLeft * f4 + (1.0F - lerpLeft) * f25) + (1.0F - lerpBottom) * (lerpLeft * f11 + (1.0F - lerpLeft) * f18);
             float topRight = lerpTop * (lerpRight * f4 + (1.0F - lerpRight) * f25) + (1.0F - lerpTop) * (lerpRight * f11 + (1.0F - lerpRight) * f18);
@@ -1930,10 +1930,10 @@ public class TileRenderer {
             this.P = this.Q = this.R = this.S = flag2 ? f : 1.0F;
             this.T = this.U = this.V = this.W = flag2 ? f1 : 1.0F;
             this.X = this.Y = this.Z = this.aa = flag2 ? f2 : 1.0F;
-            float lerpLeft = 1.0F - (float)Math.max(block.bs, 0.0D);
-            float lerpRight = 1.0F - (float)Math.min(block.bv, 1.0D);
-            float lerpTop = (float)Math.max(block.bu, 0.0D);
-            float lerpBottom = (float)Math.min(block.bx, 1.0D);
+            float lerpLeft = 1.0F - (float) Math.max(block.bs, 0.0D);
+            float lerpRight = 1.0F - (float) Math.min(block.bv, 1.0D);
+            float lerpTop = (float) Math.max(block.bu, 0.0D);
+            float lerpBottom = (float) Math.min(block.bx, 1.0D);
             float topLeft = lerpTop * (lerpLeft * f26 + (1.0F - lerpLeft) * f5) + (1.0F - lerpTop) * (lerpLeft * f19 + (1.0F - lerpLeft) * f12);
             float topRight = lerpTop * (lerpRight * f26 + (1.0F - lerpRight) * f5) + (1.0F - lerpTop) * (lerpRight * f19 + (1.0F - lerpRight) * f12);
             float bottomLeft = lerpBottom * (lerpLeft * f26 + (1.0F - lerpLeft) * f5) + (1.0F - lerpBottom) * (lerpLeft * f19 + (1.0F - lerpLeft) * f12);
@@ -1995,10 +1995,10 @@ public class TileRenderer {
             this.P = this.Q = this.R = this.S = (flag3 ? f : 1.0F) * 0.8F;
             this.T = this.U = this.V = this.W = (flag3 ? f1 : 1.0F) * 0.8F;
             this.X = this.Y = this.Z = this.aa = (flag3 ? f2 : 1.0F) * 0.8F;
-            float lerpLeft = (float)Math.min(block.bv, 1.0D);
-            float lerpRight = (float)Math.max(block.bs, 0.0D);
-            float lerpTop = (float)Math.min(block.bw, 1.0D);
-            float lerpBottom = (float)Math.max(block.bt, 0.0D);
+            float lerpLeft = (float) Math.min(block.bv, 1.0D);
+            float lerpRight = (float) Math.max(block.bs, 0.0D);
+            float lerpTop = (float) Math.min(block.bw, 1.0D);
+            float lerpBottom = (float) Math.max(block.bt, 0.0D);
             float topLeft = lerpTop * (lerpLeft * f13 + (1.0F - lerpLeft) * f6) + (1.0F - lerpTop) * (lerpLeft * f20 + (1.0F - lerpLeft) * f27);
             float bottomLeft = lerpBottom * (lerpLeft * f13 + (1.0F - lerpLeft) * f6) + (1.0F - lerpBottom) * (lerpLeft * f20 + (1.0F - lerpLeft) * f27);
             float topRight = lerpTop * (lerpRight * f13 + (1.0F - lerpRight) * f6) + (1.0F - lerpTop) * (lerpRight * f20 + (1.0F - lerpRight) * f27);
@@ -2076,10 +2076,10 @@ public class TileRenderer {
             this.P = this.Q = this.R = this.S = (flag4 ? f : 1.0F) * 0.8F;
             this.T = this.U = this.V = this.W = (flag4 ? f1 : 1.0F) * 0.8F;
             this.X = this.Y = this.Z = this.aa = (flag4 ? f2 : 1.0F) * 0.8F;
-            float lerpLeft = (float)Math.min(1.0D - block.bs, 1.0D);
-            float lerpRight = (float)Math.max(1.0D - block.bv, 0.0D);
-            float lerpTop = (float)Math.min(block.bw, 1.0D);
-            float lerpBottom = (float)Math.max(block.bt, 0.0D);
+            float lerpLeft = (float) Math.min(1.0D - block.bs, 1.0D);
+            float lerpRight = (float) Math.max(1.0D - block.bv, 0.0D);
+            float lerpTop = (float) Math.min(block.bw, 1.0D);
+            float lerpBottom = (float) Math.max(block.bt, 0.0D);
             float topLeft = lerpTop * (lerpLeft * f7 + (1.0F - lerpLeft) * f28) + (1.0F - lerpTop) * (lerpLeft * f14 + (1.0F - lerpLeft) * f21);
             float bottomLeft = lerpBottom * (lerpLeft * f7 + (1.0F - lerpLeft) * f28) + (1.0F - lerpBottom) * (lerpLeft * f14 + (1.0F - lerpLeft) * f21);
             float topRight = lerpTop * (lerpRight * f7 + (1.0F - lerpRight) * f28) + (1.0F - lerpTop) * (lerpRight * f14 + (1.0F - lerpRight) * f21);
@@ -2157,10 +2157,10 @@ public class TileRenderer {
             this.P = this.Q = this.R = this.S = (flag5 ? f : 1.0F) * 0.6F;
             this.T = this.U = this.V = this.W = (flag5 ? f1 : 1.0F) * 0.6F;
             this.X = this.Y = this.Z = this.aa = (flag5 ? f2 : 1.0F) * 0.6F;
-            float lerpLeft = (float)Math.min(1.0D - block.bu, 1.0D);
-            float lerpRight = (float)Math.max(1.0D - block.bx, 0.0D);
-            float lerpTop = (float)Math.min(block.bw, 1.0D);
-            float lerpBottom = (float)Math.max(block.bt, 0.0D);
+            float lerpLeft = (float) Math.min(1.0D - block.bu, 1.0D);
+            float lerpRight = (float) Math.max(1.0D - block.bx, 0.0D);
+            float lerpTop = (float) Math.min(block.bw, 1.0D);
+            float lerpBottom = (float) Math.max(block.bt, 0.0D);
             float topLeft = lerpTop * (lerpLeft * f15 + (1.0F - lerpLeft) * f8) + (1.0F - lerpTop) * (lerpLeft * f22 + (1.0F - lerpLeft) * f29);
             float bottomLeft = lerpBottom * (lerpLeft * f15 + (1.0F - lerpLeft) * f8) + (1.0F - lerpBottom) * (lerpLeft * f22 + (1.0F - lerpLeft) * f29);
             float topRight = lerpTop * (lerpRight * f15 + (1.0F - lerpRight) * f8) + (1.0F - lerpTop) * (lerpRight * f22 + (1.0F - lerpRight) * f29);
@@ -2238,10 +2238,10 @@ public class TileRenderer {
             this.P = this.Q = this.R = this.S = (flag6 ? f : 1.0F) * 0.6F;
             this.T = this.U = this.V = this.W = (flag6 ? f1 : 1.0F) * 0.6F;
             this.X = this.Y = this.Z = this.aa = (flag6 ? f2 : 1.0F) * 0.6F;
-            float lerpLeft = (float)Math.min(1.0D - block.bu, 1.0D);
-            float lerpRight = (float)Math.max(1.0D - block.bx, 0.0D);
-            float lerpTop = (float)Math.min(block.bw, 1.0D);
-            float lerpBottom = (float)Math.max(block.bt, 0.0D);
+            float lerpLeft = (float) Math.min(1.0D - block.bu, 1.0D);
+            float lerpRight = (float) Math.max(1.0D - block.bx, 0.0D);
+            float lerpTop = (float) Math.min(block.bw, 1.0D);
+            float lerpBottom = (float) Math.max(block.bt, 0.0D);
             float topLeft = lerpTop * (lerpLeft * f23 + (1.0F - lerpLeft) * f30) + (1.0F - lerpTop) * (lerpLeft * f16 + (1.0F - lerpLeft) * f9);
             float bottomLeft = lerpBottom * (lerpLeft * f23 + (1.0F - lerpLeft) * f30) + (1.0F - lerpBottom) * (lerpLeft * f16 + (1.0F - lerpLeft) * f9);
             float topRight = lerpTop * (lerpRight * f23 + (1.0F - lerpRight) * f30) + (1.0F - lerpTop) * (lerpRight * f16 + (1.0F - lerpRight) * f9);
@@ -3230,7 +3230,7 @@ public class TileRenderer {
 
     public boolean p(Tile block, int i, int j, int k) {
         nw tessellator = nw.a;
-        le blockdoor = (le)block;
+        le blockdoor = (le) block;
         boolean flag = false;
         float f = 0.5F;
         float f1 = 1.0F;
@@ -4152,7 +4152,7 @@ public class TileRenderer {
         Object o = this.c.b(i, j, k);
         TileEntityTree obj = null;
         if (o instanceof TileEntityTree)
-            obj = (TileEntityTree)o;
+            obj = (TileEntityTree) o;
         double d = i;
         double d1 = j;
         double d2 = k;
@@ -4207,7 +4207,7 @@ public class TileRenderer {
         tessellator.a(f, f, f);
         int m = this.c.e(i, j, k);
         int t = block.a(0, m);
-        ((AC_BlockOverlay)block).updateBounds(this.c, i, j, k);
+        ((AC_BlockOverlay) block).updateBounds(this.c, i, j, k);
         if (this.c.g(i, j - 1, k)) {
             b(block, i, j, k, t);
         } else if (this.c.g(i, j + 1, k)) {
@@ -4298,7 +4298,7 @@ public class TileRenderer {
 
     private float N;
 
-    private int O;
+    private final int O;
 
     private float P;
 
@@ -4348,7 +4348,7 @@ public class TileRenderer {
 
     private boolean am;
 
-    private Random rand;
+    private final Random rand;
 
-    private int curTextureNum;
+    private final int curTextureNum;
 }

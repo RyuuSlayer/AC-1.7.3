@@ -44,7 +44,7 @@ public abstract class sn {
         this.bF = false;
         this.aI = world;
         e(0.0D, 0.0D, 0.0D);
-        this.bD.a(0, Byte.valueOf((byte)0));
+        this.bD.a(0, Byte.valueOf((byte) 0));
         b();
         this.isFlying = false;
     }
@@ -57,7 +57,7 @@ public abstract class sn {
 
     public boolean equals(Object obj) {
         if (obj instanceof sn)
-            return (((sn)obj).aD == this.aD);
+            return (((sn) obj).aD == this.aD);
         return false;
     }
 
@@ -104,8 +104,8 @@ public abstract class sn {
     public void d(float f, float f1) {
         float f2 = this.aT;
         float f3 = this.aS;
-        this.aS = (float)(this.aS + f * 0.15D);
-        this.aT = (float)(this.aT - f1 * 0.15D);
+        this.aS = (float) (this.aS + f * 0.15D);
+        this.aT = (float) (this.aT - f1 * 0.15D);
         if (this.aT < -90.0F)
             this.aT = -90.0F;
         if (this.aT > 90.0F)
@@ -161,7 +161,7 @@ public abstract class sn {
                     this.bv = 0;
             } else {
                 if (this.bv % 20 == 0)
-                    a((sn)null, 1);
+                    a((sn) null, 1);
                 this.bv--;
             }
         }
@@ -178,7 +178,7 @@ public abstract class sn {
 
     protected void ae() {
         if (!this.bC) {
-            a((sn)null, 4);
+            a((sn) null, 4);
             this.bv = 600;
         }
     }
@@ -243,18 +243,18 @@ public abstract class sn {
         }
         List<eq> list = this.aI.a(this, this.aW.a(d, d1, d2));
         for (int i = 0; i < list.size(); i++)
-            d1 = ((eq)list.get(i)).b(this.aW, d1);
+            d1 = ((eq) list.get(i)).b(this.aW, d1);
         this.aW.d(0.0D, d1, 0.0D);
         if (!this.bd && d6 != d1)
             d = d1 = d2 = 0.0D;
         boolean flag1 = (this.aX || (d6 != d1 && d6 < 0.0D));
         for (int j = 0; j < list.size(); j++)
-            d = ((eq)list.get(j)).a(this.aW, d);
+            d = ((eq) list.get(j)).a(this.aW, d);
         this.aW.d(d, 0.0D, 0.0D);
         if (!this.bd && d5 != d)
             d = d1 = d2 = 0.0D;
         for (int k = 0; k < list.size(); k++)
-            d2 = ((eq)list.get(k)).c(this.aW, d2);
+            d2 = ((eq) list.get(k)).c(this.aW, d2);
         this.aW.d(0.0D, 0.0D, d2);
         if (!this.bd && d7 != d2)
             d = d1 = d2 = 0.0D;
@@ -269,24 +269,24 @@ public abstract class sn {
             this.aW.b(axisalignedbb);
             List<eq> list1 = this.aI.a(this, this.aW.a(d, d1, d2));
             for (int j2 = 0; j2 < list1.size(); j2++)
-                d1 = ((eq)list1.get(j2)).b(this.aW, d1);
+                d1 = ((eq) list1.get(j2)).b(this.aW, d1);
             this.aW.d(0.0D, d1, 0.0D);
             if (!this.bd && d6 != d1)
                 d = d1 = d2 = 0.0D;
             for (int k2 = 0; k2 < list1.size(); k2++)
-                d = ((eq)list1.get(k2)).a(this.aW, d);
+                d = ((eq) list1.get(k2)).a(this.aW, d);
             this.aW.d(d, 0.0D, 0.0D);
             if (!this.bd && d5 != d)
                 d = d1 = d2 = 0.0D;
             for (int l2 = 0; l2 < list1.size(); l2++)
-                d2 = ((eq)list1.get(l2)).c(this.aW, d2);
+                d2 = ((eq) list1.get(l2)).c(this.aW, d2);
             this.aW.d(0.0D, 0.0D, d2);
             if (!this.bd && d7 != d2)
                 d = d1 = d2 = 0.0D;
             d = d1 = d2 = 0.0D;
             d1 = -this.bp;
             for (int i3 = 0; i3 < list1.size(); i3++)
-                d1 = ((eq)list1.get(i3)).b(this.aW, d1);
+                d1 = ((eq) list1.get(i3)).b(this.aW, d1);
             this.aW.d(0.0D, d1, 0.0D);
             if (d9 * d9 + d13 * d13 >= d * d + d2 * d2) {
                 d = d9;
@@ -294,9 +294,9 @@ public abstract class sn {
                 d2 = d13;
                 this.aW.b(axisalignedbb1);
             } else {
-                double d14 = this.aW.b - (int)this.aW.b;
+                double d14 = this.aW.b - (int) this.aW.b;
                 if (d14 > 0.0D)
-                    this.bo = (float)(this.bo + d14 + 0.01D);
+                    this.bo = (float) (this.bo + d14 + 0.01D);
             }
         }
         this.aM = (this.aW.a + this.aW.d) / 2.0D;
@@ -312,7 +312,7 @@ public abstract class sn {
         if (this.collisionX != 0) {
             boolean nonClipFound = false;
             for (int m = 0; m < this.bh + this.aN - this.bf - Math.floor(this.aN - this.bf); m++) {
-                int blockID = this.aI.a((int)Math.floor(this.aM) + this.collisionX, (int)Math.floor(this.aN + m - this.bf), (int)Math.floor(this.aO));
+                int blockID = this.aI.a((int) Math.floor(this.aM) + this.collisionX, (int) Math.floor(this.aN + m - this.bf), (int) Math.floor(this.aO));
                 if (blockID != 0 && blockID != Blocks.clipBlock.bn)
                     nonClipFound = true;
             }
@@ -329,7 +329,7 @@ public abstract class sn {
         if (this.collisionZ != 0) {
             boolean nonClipFound = false;
             for (int m = 0; m < this.bh + this.aN - this.bf - Math.floor(this.aN - this.bf); m++) {
-                int blockID = this.aI.a((int)Math.floor(this.aM), (int)Math.floor(this.aN + m - this.bf), (int)Math.floor(this.aO) + this.collisionZ);
+                int blockID = this.aI.a((int) Math.floor(this.aM), (int) Math.floor(this.aN + m - this.bf), (int) Math.floor(this.aO) + this.collisionZ);
                 if (blockID != 0 && blockID != Blocks.clipBlock.bn)
                     nonClipFound = true;
             }
@@ -350,7 +350,7 @@ public abstract class sn {
         double d10 = this.aM - d3;
         double d12 = this.aO - d4;
         if (n() && !flag && this.aH == null) {
-            this.bj = (float)(this.bj + in.a(d10 * d10 + d12 * d12) * 0.6D);
+            this.bj = (float) (this.bj + in.a(d10 * d10 + d12 * d12) * 0.6D);
             int l = in.b(this.aM);
             int j1 = in.b(this.aN - 0.20000000298023224D - this.bf);
             int l1 = in.b(this.aO);
@@ -358,7 +358,7 @@ public abstract class sn {
             if (this.aI.a(l, j1 - 1, l1) == Tile.ba.bn)
                 j3 = this.aI.a(l, j1 - 1, l1);
             if (this.bj > this.b && j3 > 0) {
-                this.b = (int)(this.b + Math.ceil((this.bj - this.b)));
+                this.b = (int) (this.b + Math.ceil((this.bj - this.b)));
                 ct stepsound = (Tile.m[j3]).by;
                 if (this.aI.a(l, j1 + 1, l1) == Tile.aT.bn) {
                     stepsound = Tile.aT.by;
@@ -409,9 +409,9 @@ public abstract class sn {
     protected void a(double d, boolean flag) {
         if (flag) {
             if (this.aQ < 0.0D)
-                b(-((float)this.aQ));
+                b(-((float) this.aQ));
         } else if (d < 0.0D) {
-            this.bk = (float)(this.bk - d);
+            this.bk = (float) (this.bk - d);
         }
     }
 
@@ -421,7 +421,7 @@ public abstract class sn {
 
     protected void a(int i) {
         if (!this.bC)
-            a((sn)null, i);
+            a((sn) null, i);
     }
 
     protected void b(float f) {
@@ -523,9 +523,9 @@ public abstract class sn {
     }
 
     public float f(sn entity) {
-        float f = (float)(this.aM - entity.aM);
-        float f1 = (float)(this.aN - entity.aN);
-        float f2 = (float)(this.aO - entity.aO);
+        float f = (float) (this.aM - entity.aM);
+        float f1 = (float) (this.aN - entity.aN);
+        float f2 = (float) (this.aO - entity.aO);
         return in.c(f * f + f1 * f1 + f2 * f2);
     }
 
@@ -550,7 +550,8 @@ public abstract class sn {
         return d * d + d1 * d1 + d2 * d2;
     }
 
-    public void b(gs entityplayer) {}
+    public void b(gs entityplayer) {
+    }
 
     public void h(sn entity) {
         if (entity.aG == this || entity.aH == this)
@@ -607,7 +608,8 @@ public abstract class sn {
         return false;
     }
 
-    public void c(sn entity, int i) {}
+    public void c(sn entity, int i) {
+    }
 
     public boolean a(bt vec3d) {
         double d = this.aM - vec3d.a;
@@ -637,12 +639,12 @@ public abstract class sn {
     }
 
     public void d(nu nbttagcompound) {
-        nbttagcompound.a("Pos", (ij)a(new double[] { this.aM, this.aN + this.bo, this.aO }));
-        nbttagcompound.a("Motion", (ij)a(new double[] { this.aP, this.aQ, this.aR }));
-        nbttagcompound.a("Rotation", (ij)a(new float[] { this.aS, this.aT }));
+        nbttagcompound.a("Pos", (ij) a(new double[]{this.aM, this.aN + this.bo, this.aO}));
+        nbttagcompound.a("Motion", (ij) a(new double[]{this.aP, this.aQ, this.aR}));
+        nbttagcompound.a("Rotation", (ij) a(new float[]{this.aS, this.aT}));
         nbttagcompound.a("FallDistance", this.bk);
-        nbttagcompound.a("Fire", (short)this.bv);
-        nbttagcompound.a("Air", (short)this.bz);
+        nbttagcompound.a("Fire", (short) this.bv);
+        nbttagcompound.a("Air", (short) this.bz);
         nbttagcompound.a("OnGround", this.aX);
         b(nbttagcompound);
     }
@@ -651,20 +653,20 @@ public abstract class sn {
         sp nbttaglist = nbttagcompound.l("Pos");
         sp nbttaglist1 = nbttagcompound.l("Motion");
         sp nbttaglist2 = nbttagcompound.l("Rotation");
-        this.aP = ((sz)nbttaglist1.a(0)).a;
-        this.aQ = ((sz)nbttaglist1.a(1)).a;
-        this.aR = ((sz)nbttaglist1.a(2)).a;
+        this.aP = ((sz) nbttaglist1.a(0)).a;
+        this.aQ = ((sz) nbttaglist1.a(1)).a;
+        this.aR = ((sz) nbttaglist1.a(2)).a;
         if (Math.abs(this.aP) > 10.0D)
             this.aP = 0.0D;
         if (Math.abs(this.aQ) > 10.0D)
             this.aQ = 0.0D;
         if (Math.abs(this.aR) > 10.0D)
             this.aR = 0.0D;
-        this.aJ = this.bl = this.aM = ((sz)nbttaglist.a(0)).a;
-        this.aK = this.bm = this.aN = ((sz)nbttaglist.a(1)).a;
-        this.aL = this.bn = this.aO = ((sz)nbttaglist.a(2)).a;
-        this.aU = this.aS = ((p)nbttaglist2.a(0)).a;
-        this.aV = this.aT = ((p)nbttaglist2.a(1)).a;
+        this.aJ = this.bl = this.aM = ((sz) nbttaglist.a(0)).a;
+        this.aK = this.bm = this.aN = ((sz) nbttaglist.a(1)).a;
+        this.aL = this.bn = this.aO = ((sz) nbttaglist.a(2)).a;
+        this.aU = this.aS = ((p) nbttaglist2.a(0)).a;
+        this.aV = this.aT = ((p) nbttaglist2.a(1)).a;
         this.bk = nbttagcompound.g("FallDistance");
         this.bv = nbttagcompound.d("Fire");
         this.bz = nbttagcompound.d("Air");
@@ -688,7 +690,7 @@ public abstract class sn {
         int i = ad1.length;
         for (int j = 0; j < i; j++) {
             double d = ad1[j];
-            nbttaglist.a((ij)new sz(d));
+            nbttaglist.a((ij) new sz(d));
         }
         return nbttaglist;
     }
@@ -699,7 +701,7 @@ public abstract class sn {
         int i = af1.length;
         for (int j = 0; j < i; j++) {
             float f = af1[j];
-            nbttaglist.a((ij)new p(f));
+            nbttaglist.a((ij) new p(f));
         }
         return nbttaglist;
     }
@@ -719,7 +721,7 @@ public abstract class sn {
     public hl a(iz itemstack, float f) {
         hl entityitem = new hl(this.aI, this.aM, this.aN + f, this.aO, itemstack);
         entityitem.c = 10;
-        this.aI.b((sn)entityitem);
+        this.aI.b((sn) entityitem);
         return entityitem;
     }
 
@@ -763,10 +765,10 @@ public abstract class sn {
         this.aH.l_();
         this.e += (this.aH.aS - this.aH.aU);
         this.d += (this.aH.aT - this.aH.aV);
-        for (; this.e >= 180.0D; this.e -= 360.0D);
-        for (; this.e < -180.0D; this.e += 360.0D);
-        for (; this.d >= 180.0D; this.d -= 360.0D);
-        for (; this.d < -180.0D; this.d += 360.0D);
+        for (; this.e >= 180.0D; this.e -= 360.0D) ;
+        for (; this.e < -180.0D; this.e += 360.0D) ;
+        for (; this.d >= 180.0D; this.d -= 360.0D) ;
+        for (; this.d < -180.0D; this.d += 360.0D) ;
         double d = this.e * 0.5D;
         double d1 = this.d * 0.5D;
         float f = 10.0F;
@@ -780,8 +782,8 @@ public abstract class sn {
             d1 = -f;
         this.e -= d;
         this.d -= d1;
-        this.aS = (float)(this.aS + d);
-        this.aT = (float)(this.aT + d1);
+        this.aS = (float) (this.aS + d);
+        this.aT = (float) (this.aT + d1);
     }
 
     public void l_() {
@@ -845,7 +847,8 @@ public abstract class sn {
         return null;
     }
 
-    public void S() {}
+    public void S() {
+    }
 
     public void a(double d, double d1, double d2) {
         this.aP = d;
@@ -853,13 +856,17 @@ public abstract class sn {
         this.aR = d2;
     }
 
-    public void a(byte byte0) {}
+    public void a(byte byte0) {
+    }
 
-    public void h() {}
+    public void h() {
+    }
 
-    public void u_() {}
+    public void u_() {
+    }
 
-    public void c(int i, int j, int k) {}
+    public void c(int i, int j, int k) {
+    }
 
     public boolean ak() {
         return (this.bv > 0 || d(0));
@@ -880,9 +887,9 @@ public abstract class sn {
     protected void b(int i, boolean flag) {
         byte byte0 = this.bD.a(0);
         if (flag) {
-            this.bD.b(0, Byte.valueOf((byte)(byte0 | 1 << i)));
+            this.bD.b(0, Byte.valueOf((byte) (byte0 | 1 << i)));
         } else {
-            this.bD.b(0, Byte.valueOf((byte)(byte0 & (1 << i ^ 0xFFFFFFFF))));
+            this.bD.b(0, Byte.valueOf((byte) (byte0 & (1 << i ^ 0xFFFFFFFF))));
         }
     }
 
@@ -893,7 +900,8 @@ public abstract class sn {
             this.bv = 300;
     }
 
-    public void a(ls entityliving) {}
+    public void a(ls entityliving) {
+    }
 
     protected boolean c(double d, double d1, double d2) {
         int i = in.b(d);

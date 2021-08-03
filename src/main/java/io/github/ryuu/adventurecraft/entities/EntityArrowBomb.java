@@ -1,9 +1,10 @@
 package io.github.ryuu.adventurecraft.entities;
 
 import net.minecraft.entity.player.Player;
+import net.minecraft.entity.projectile.Arrow;
 import net.minecraft.level.Level;
 
-public class EntityArrowBomb extends sl {
+public class EntityArrowBomb extends Arrow {
     private int fuse;
 
     public EntityArrowBomb(Level world) {
@@ -43,7 +44,7 @@ public class EntityArrowBomb extends sl {
 
     public void b(nu nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.a("fuse", (byte)this.fuse);
+        nbttagcompound.a("fuse", (byte) this.fuse);
     }
 
     public void a(nu nbttagcompound) {
@@ -51,7 +52,8 @@ public class EntityArrowBomb extends sl {
         this.fuse = nbttagcompound.c("fuse") & 0xFF;
     }
 
-    public void b(Player entityplayer) {}
+    public void b(Player entityplayer) {
+    }
 
     public boolean a(sn entity, int i) {
         if (!this.be) {

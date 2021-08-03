@@ -15,11 +15,11 @@ public class ClientPlayer extends gs {
 
     protected Minecraft b;
 
-    private cu bN;
+    private final cu bN;
 
-    private cu bO;
+    private final cu bO;
 
-    private cu bP;
+    private final cu bP;
 
     public ClientPlayer(Minecraft minecraft, Level world, gr session, int i) {
         super(world);
@@ -57,7 +57,7 @@ public class ClientPlayer extends gs {
             this.B += 0.0125F;
             if (this.B >= 1.0F) {
                 this.B = 1.0F;
-                if (!this.aI.B);
+                if (!this.aI.B) ;
             }
             this.A = false;
         } else {
@@ -99,29 +99,29 @@ public class ClientPlayer extends gs {
     }
 
     public void a(yk tileentitysign) {
-        this.b.a((Screen)new yc(tileentitysign));
+        this.b.a((Screen) new yc(tileentitysign));
     }
 
     public void a(lw iinventory) {
-        this.b.a((Screen)new hp(this.c, iinventory));
+        this.b.a((Screen) new hp(this.c, iinventory));
     }
 
     public void displayGUIPalette() {
         InventoryDebug palette = new InventoryDebug("Palette", 54);
         palette.fillInventory(1);
-        this.b.a((Screen)new GuiPalette(this.c, palette));
+        this.b.a((Screen) new GuiPalette(this.c, palette));
     }
 
     public void a(int i, int j, int k) {
-        this.b.a((Screen)new oo(this.c, this.aI, i, j, k));
+        this.b.a((Screen) new oo(this.c, this.aI, i, j, k));
     }
 
     public void a(sk tileentityfurnace) {
-        this.b.a((Screen)new ov(this.c, tileentityfurnace));
+        this.b.a((Screen) new ov(this.c, tileentityfurnace));
     }
 
     public void a(Dispenser tileentitydispenser) {
-        this.b.a((Screen)new gq(this.c, tileentitydispenser));
+        this.b.a((Screen) new gq(this.c, tileentitydispenser));
     }
 
     public void b(sn entity, int i) {
@@ -141,7 +141,7 @@ public class ClientPlayer extends gs {
             this.aI.setTimeOfDay(12000L);
         } else if (s.equals("/fly")) {
             this.isFlying = !this.isFlying;
-            this.b.v.a(String.format("Flying: %b", new Object[] { Boolean.valueOf(this.isFlying) }));
+            this.b.v.a(String.format("Flying: %b", new Object[]{Boolean.valueOf(this.isFlying)}));
         } else if (s.equals("/health")) {
             this.Y = 12;
             this.maxHealth = 12;
@@ -150,7 +150,7 @@ public class ClientPlayer extends gs {
             DebugMode.levelEditing = !DebugMode.levelEditing;
         } else if (s.equals("/removemobs")) {
             for (Entity obj : this.aI.b) {
-                sn e = (sn)obj;
+                sn e = (sn) obj;
                 if (e instanceof ls && !(e instanceof gs))
                     e.be = true;
             }
@@ -158,10 +158,10 @@ public class ClientPlayer extends gs {
             this.bq = !this.bq;
             if (this.bq)
                 this.isFlying = true;
-            this.b.v.a(String.format("NoClip: %b", new Object[] { Boolean.valueOf(this.bq) }));
+            this.b.v.a(String.format("NoClip: %b", new Object[]{Boolean.valueOf(this.bq)}));
         } else if (s.equals("/togglemelting")) {
             this.aI.x.iceMelts = !this.aI.x.iceMelts;
-            this.b.v.a(String.format("Ice Melts: %b", new Object[] { Boolean.valueOf(this.aI.x.iceMelts) }));
+            this.b.v.a(String.format("Ice Melts: %b", new Object[]{Boolean.valueOf(this.aI.x.iceMelts)}));
         } else if (s.startsWith("/cameraadd")) {
             if (this.b.activeCutsceneCamera != null) {
                 float t;
@@ -174,7 +174,7 @@ public class ClientPlayer extends gs {
                     this.b.v.a("'" + s.substring(11) + "' is not a valid number");
                     return;
                 }
-                this.b.activeCutsceneCamera.addCameraPoint(t, (float)this.aM, (float)(this.aN - this.bf + 1.6200000047683716D), (float)this.aO, this.aS, this.aT, 2);
+                this.b.activeCutsceneCamera.addCameraPoint(t, (float) this.aM, (float) (this.aN - this.bf + 1.6200000047683716D), (float) this.aO, this.aS, this.aT, 2);
                 this.b.activeCutsceneCamera.loadCameraEntities();
                 this.b.v.a("Point Added");
             } else {
@@ -190,17 +190,17 @@ public class ClientPlayer extends gs {
             }
         } else if (s.equals("/mobsburn")) {
             this.aI.x.mobsBurn = !this.aI.x.mobsBurn;
-            this.b.v.a(String.format("Mobs Burn in Daylight: %b", new Object[] { Boolean.valueOf(this.aI.x.mobsBurn) }));
+            this.b.v.a(String.format("Mobs Burn in Daylight: %b", new Object[]{Boolean.valueOf(this.aI.x.mobsBurn)}));
         } else if (s.equals("/config")) {
-            this.b.a((Screen)new GuiWorldConfig(this.aI));
+            this.b.a((Screen) new GuiWorldConfig(this.aI));
         } else if (s.equals("/test")) {
-            this.b.a((Screen)new GuiMapEditHUD(this.aI));
+            this.b.a((Screen) new GuiMapEditHUD(this.aI));
         } else if (s.equals("/renderpaths")) {
             DebugMode.renderPaths = !DebugMode.renderPaths;
-            this.b.v.a(String.format("Render Paths: %b", new Object[] { Boolean.valueOf(DebugMode.renderPaths) }));
+            this.b.v.a(String.format("Render Paths: %b", new Object[]{Boolean.valueOf(DebugMode.renderPaths)}));
         } else if (s.equals("/renderfov")) {
             DebugMode.renderFov = !DebugMode.renderFov;
-            this.b.v.a(String.format("Render FOV: %b", new Object[] { Boolean.valueOf(DebugMode.renderFov) }));
+            this.b.v.a(String.format("Render FOV: %b", new Object[]{Boolean.valueOf(DebugMode.renderFov)}));
         } else if (s.equals("/fullbright")) {
             for (int i = 0; i < 16; i++)
                 this.aI.t.f[i] = 1.0F;
@@ -261,7 +261,8 @@ public class ClientPlayer extends gs {
         this.b.a(false, 0);
     }
 
-    public void v() {}
+    public void v() {
+    }
 
     public void b(String s) {
         this.b.v.c(s);
@@ -271,7 +272,7 @@ public class ClientPlayer extends gs {
         if (statbase == null)
             return;
         if (statbase.d()) {
-            ny achievement = (ny)statbase;
+            ny achievement = (ny) statbase;
             if (achievement.c == null || this.b.I.a(achievement.c)) {
                 if (!this.b.I.a(achievement))
                     this.b.u.a(achievement);

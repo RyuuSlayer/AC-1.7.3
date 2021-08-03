@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.scripting;
 
 import java.util.LinkedList;
 import java.util.List;
+
 import ji;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.opengl.GL11;
@@ -10,7 +11,7 @@ import sj;
 public class ScriptUIContainer extends UIElement {
     public String text;
 
-    private List<UIElement> uiElements;
+    private final List<UIElement> uiElements;
 
     public ScriptUIContainer(float xPos, float yPos) {
         this(xPos, yPos, Minecraft.minecraftInstance.v.scriptUI);

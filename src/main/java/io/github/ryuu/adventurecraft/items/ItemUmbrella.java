@@ -5,9 +5,10 @@ import java.util.List;
 import io.github.ryuu.adventurecraft.entities.EntityAirFX;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
 
-class ItemUmbrella extends gm {
+class ItemUmbrella extends ItemType {
     public ItemUmbrella(int itemIndex) {
         super(itemIndex);
         this.bg = 1;
@@ -20,7 +21,7 @@ class ItemUmbrella extends gm {
         return this.bh;
     }
 
-    public iz a(iz itemstack, Level world, Player entityplayer) {
+    public ItemInstance a(ItemInstance itemstack, Level world, Player entityplayer) {
         if (!entityplayer.aX || itemstack.i() > 0)
             return itemstack;
         bt lookVec = entityplayer.ac();
@@ -28,7 +29,7 @@ class ItemUmbrella extends gm {
         eq aabb = eq.b(entityplayer.aM, entityplayer.aN, entityplayer.aO, entityplayer.aM, entityplayer.aN, entityplayer.aO).b(6.0D, 6.0D, 6.0D);
         List entities = world.b(entityplayer, aabb);
         for (Object obj : entities) {
-            sn e = (sn)obj;
+            sn e = (sn) obj;
             double dist = e.g(entityplayer);
             if (dist < 36.0D && !(e instanceof ju)) {
                 double dX = e.aM - entityplayer.aM;
@@ -47,7 +48,7 @@ class ItemUmbrella extends gm {
         }
         entities = Minecraft.minecraftInstance.j.getEffectsWithinAABB(aabb);
         for (Object obj : entities) {
-            sn e = (sn)obj;
+            sn e = (sn) obj;
             double dist = e.g(entityplayer);
             if (dist < 36.0D) {
                 double dX = e.aM - entityplayer.aM;
@@ -67,7 +68,7 @@ class ItemUmbrella extends gm {
             fx.aP = lookVec.a * (1.0D + 0.05D * world.r.nextGaussian()) + 0.2D * world.r.nextGaussian();
             fx.aQ = lookVec.b * (1.0D + 0.05D * world.r.nextGaussian()) + 0.2D * world.r.nextGaussian();
             fx.aR = lookVec.c * (1.0D + 0.05D * world.r.nextGaussian()) + 0.2D * world.r.nextGaussian();
-            Minecraft.minecraftInstance.j.a((xw)fx);
+            Minecraft.minecraftInstance.j.a((xw) fx);
         }
         entityplayer.J();
         itemstack.b(10);

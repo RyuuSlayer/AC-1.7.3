@@ -4,13 +4,13 @@ import io.github.ryuu.adventurecraft.util.LightCache;
 import io.github.ryuu.adventurecraft.util.PlayerTorch;
 
 public class ew implements xp {
-    private int a;
+    private final int a;
 
-    private int b;
+    private final int b;
 
-    private lm[][] c;
+    private final lm[][] c;
 
-    private Level d;
+    private final Level d;
 
     public ew(Level world, int i, int j, int k, int l, int i1, int j1) {
         this.d = world;
@@ -55,10 +55,10 @@ public class ew implements xp {
             lightValue = l;
         float torchLight = PlayerTorch.getTorchLight(this.d, i, j, k);
         if (lightValue < torchLight) {
-            int floorValue = (int)Math.floor(torchLight);
+            int floorValue = (int) Math.floor(torchLight);
             if (floorValue == 15)
                 return this.d.t.f[15];
-            int ceilValue = (int)Math.ceil(torchLight);
+            int ceilValue = (int) Math.ceil(torchLight);
             float lerpValue = torchLight - floorValue;
             return (1.0F - lerpValue) * this.d.t.f[floorValue] + lerpValue * this.d.t.f[ceilValue];
         }
@@ -74,10 +74,10 @@ public class ew implements xp {
         int lightValue = d(i, j, k);
         float torchLight = PlayerTorch.getTorchLight(this.d, i, j, k);
         if (lightValue < torchLight) {
-            int floorValue = (int)Math.floor(torchLight);
+            int floorValue = (int) Math.floor(torchLight);
             if (floorValue == 15)
                 return this.d.t.f[15];
-            int ceilValue = (int)Math.ceil(torchLight);
+            int ceilValue = (int) Math.ceil(torchLight);
             float lerpValue = torchLight - floorValue;
             return (1.0F - lerpValue) * this.d.t.f[floorValue] + lerpValue * this.d.t.f[ceilValue];
         }

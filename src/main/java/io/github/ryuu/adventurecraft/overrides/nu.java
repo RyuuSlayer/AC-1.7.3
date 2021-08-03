@@ -8,10 +8,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+
 import net.minecraft.src.NBTBase;
 
 public class nu extends ij {
-    private Map<String, NBTBase> a = new HashMap<String, NBTBase>();
+    private final Map<String, NBTBase> a = new HashMap<String, NBTBase>();
 
     void a(DataOutput dataoutput) throws IOException {
         for (Iterator<ij> iterator = this.a.values().iterator(); iterator.hasNext(); ij.a(nbtbase, dataoutput))
@@ -22,7 +23,7 @@ public class nu extends ij {
     void a(DataInput datainput) throws IOException {
         this.a.clear();
         ij nbtbase;
-        for (; (nbtbase = ij.b(datainput)).a() != 0; this.a.put(nbtbase.b(), nbtbase));
+        for (; (nbtbase = ij.b(datainput)).a() != 0; this.a.put(nbtbase.b(), nbtbase)) ;
     }
 
     public Collection c() {
@@ -42,24 +43,24 @@ public class nu extends ij {
     }
 
     public void a(String s, short word0) {
-        if ((byte)word0 == word0) {
-            a(s, (byte)word0);
+        if ((byte) word0 == word0) {
+            a(s, (byte) word0);
         } else {
             this.a.put(s, (new ul(word0)).a(s));
         }
     }
 
     public void a(String s, int i) {
-        if ((short)i == i) {
-            a(s, (short)i);
+        if ((short) i == i) {
+            a(s, (short) i);
         } else {
             this.a.put(s, (new pp(i)).a(s));
         }
     }
 
     public void a(String s, long l) {
-        if ((int)l == l) {
-            a(s, (int)l);
+        if ((int) l == l) {
+            a(s, (int) l);
         } else {
             this.a.put(s, (new mi(l)).a(s));
         }
@@ -86,7 +87,7 @@ public class nu extends ij {
     }
 
     public void a(String s, boolean flag) {
-        a(s, (byte)(flag ? 1 : 0));
+        a(s, (byte) (flag ? 1 : 0));
     }
 
     public boolean b(String s) {
@@ -96,16 +97,16 @@ public class nu extends ij {
     public byte c(String s) {
         if (!this.a.containsKey(s))
             return 0;
-        return ((qp)this.a.get(s)).a;
+        return ((qp) this.a.get(s)).a;
     }
 
     public short d(String s) {
         if (!this.a.containsKey(s))
             return 0;
         try {
-            return ((ul)this.a.get(s)).a;
+            return ((ul) this.a.get(s)).a;
         } catch (ClassCastException e) {
-            return (short)c(s);
+            return c(s);
         }
     }
 
@@ -113,7 +114,7 @@ public class nu extends ij {
         if (!this.a.containsKey(s))
             return 0;
         try {
-            return ((pp)this.a.get(s)).a;
+            return ((pp) this.a.get(s)).a;
         } catch (ClassCastException e) {
             return d(s);
         }
@@ -123,7 +124,7 @@ public class nu extends ij {
         if (!this.a.containsKey(s))
             return 0L;
         try {
-            return ((mi)this.a.get(s)).a;
+            return ((mi) this.a.get(s)).a;
         } catch (ClassCastException e) {
             return e(s);
         }
@@ -132,37 +133,37 @@ public class nu extends ij {
     public float g(String s) {
         if (!this.a.containsKey(s))
             return 0.0F;
-        return ((p)this.a.get(s)).a;
+        return ((p) this.a.get(s)).a;
     }
 
     public double h(String s) {
         if (!this.a.containsKey(s))
             return 0.0D;
-        return ((sz)this.a.get(s)).a;
+        return ((sz) this.a.get(s)).a;
     }
 
     public String i(String s) {
         if (!this.a.containsKey(s))
             return "";
-        return ((xb)this.a.get(s)).a;
+        return ((xb) this.a.get(s)).a;
     }
 
     public byte[] j(String s) {
         if (!this.a.containsKey(s))
             return new byte[0];
-        return ((hn)this.a.get(s)).a;
+        return ((hn) this.a.get(s)).a;
     }
 
     public nu k(String s) {
         if (!this.a.containsKey(s))
             return new nu();
-        return (nu)this.a.get(s);
+        return (nu) this.a.get(s);
     }
 
     public sp l(String s) {
         if (!this.a.containsKey(s))
             return new sp();
-        return (sp)this.a.get(s);
+        return (sp) this.a.get(s);
     }
 
     public boolean m(String s) {

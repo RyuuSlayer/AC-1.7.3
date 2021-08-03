@@ -19,22 +19,28 @@ public class EntityCamera extends ls {
         this.type = ty;
     }
 
-    protected void b() {}
+    protected void b() {
+    }
 
     public void deleteCameraPoint() {
         Minecraft.minecraftInstance.activeCutsceneCamera.deletePoint(this.cameraID);
         Minecraft.minecraftInstance.activeCutsceneCamera.loadCameraEntities();
     }
 
-    public void a(nu nbttagcompound) {}
+    public void a(nu nbttagcompound) {
+    }
 
-    public void b(nu nbttagcompound) {}
+    public void b(nu nbttagcompound) {
+    }
 
-    public void U() {}
+    public void U() {
+    }
 
-    public void o() {}
+    public void o() {
+    }
 
-    public void w_() {}
+    public void w_() {
+    }
 
     public boolean h_() {
         return true;

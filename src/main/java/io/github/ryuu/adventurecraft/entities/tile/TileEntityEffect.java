@@ -146,5 +146,5 @@ public class TileEntityEffect extends TileEntity {
 
     public String textureReplacement = "";
 
-    private static Random rand = new Random();
+    private static final Random rand = new Random();
 }

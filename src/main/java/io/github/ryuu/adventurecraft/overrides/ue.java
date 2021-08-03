@@ -10,14 +10,15 @@ public class ue extends id {
     public ue(gs entityplayer) {
         super(entityplayer.d);
         this.f = true;
-        entityplayer.a((vr)ep.f, 1);
+        entityplayer.a((vr) ep.f, 1);
     }
 
     public void b() {
         this.e.clear();
     }
 
-    protected void k() {}
+    protected void k() {
+    }
 
     public void a(int i, int j, float f) {
         super.a(i, j, f);
@@ -50,14 +51,14 @@ public class ue extends id {
         GL11.glRotatef(135.0F, 0.0F, 1.0F, 0.0F);
         u.b();
         GL11.glRotatef(-135.0F, 0.0F, 1.0F, 0.0F);
-        GL11.glRotatef(-((float)Math.atan((f6 / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
-        this.b.h.H = (float)Math.atan((f5 / 40.0F)) * 20.0F;
-        this.b.h.aS = (float)Math.atan((f5 / 40.0F)) * 40.0F;
-        this.b.h.aT = -((float)Math.atan((f6 / 40.0F))) * 20.0F;
+        GL11.glRotatef(-((float) Math.atan((f6 / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
+        this.b.h.H = (float) Math.atan((f5 / 40.0F)) * 20.0F;
+        this.b.h.aS = (float) Math.atan((f5 / 40.0F)) * 40.0F;
+        this.b.h.aT = -((float) Math.atan((f6 / 40.0F))) * 20.0F;
         this.b.h.bE = 1.0F;
         GL11.glTranslatef(0.0F, this.b.h.bf, 0.0F);
         th.a.i = 180.0F;
-        th.a.a((sn)this.b.h, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
+        th.a.a((sn) this.b.h, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
         this.b.h.bE = 0.0F;
         this.b.h.H = f2;
         this.b.h.aS = f3;
@@ -69,8 +70,8 @@ public class ue extends id {
 
     protected void a(ke guibutton) {
         if (guibutton.f == 0)
-            this.b.a((da)new xm(this.b.I));
+            this.b.a((da) new xm(this.b.I));
         if (guibutton.f == 1)
-            this.b.a((da)new dv((da)this, this.b.I));
+            this.b.a((da) new dv((da) this, this.b.I));
     }
 }

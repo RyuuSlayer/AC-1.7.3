@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.scripting;
 import java.nio.FloatBuffer;
 import java.util.HashMap;
 import java.util.LinkedList;
+
 import ji;
 import net.minecraft.client.Minecraft;
 import net.minecraft.level.Level;
@@ -46,9 +47,9 @@ public class ScriptModel {
 
     public float roll;
 
-    private int textureWidth;
+    private final int textureWidth;
 
-    private int textureHeight;
+    private final int textureHeight;
 
     public ScriptModel() {
         this(64, 32);
@@ -133,8 +134,8 @@ public class ScriptModel {
             ScriptVec3 pos = this.attachedTo.getPosition(f);
             ScriptVecRot rot = this.attachedTo.getRotation(f);
             GL11.glTranslated(pos.x, pos.y, pos.z);
-            GL11.glRotatef((float)-rot.yaw, 0.0F, 1.0F, 0.0F);
-            GL11.glRotatef((float)rot.pitch, 1.0F, 0.0F, 0.0F);
+            GL11.glRotatef((float) -rot.yaw, 0.0F, 1.0F, 0.0F);
+            GL11.glRotatef((float) rot.pitch, 1.0F, 0.0F, 0.0F);
         } else if (this.modelAttachment != null) {
             this.modelAttachment.transform(f);
         }
@@ -179,13 +180,13 @@ public class ScriptModel {
         activeModels.add(this);
     }
 
-    private static FloatBuffer modelview = BufferUtils.createFloatBuffer(16);
+    private static final FloatBuffer modelview = BufferUtils.createFloatBuffer(16);
 
-    private static Matrix4f transform = new Matrix4f();
+    private static final Matrix4f transform = new Matrix4f();
 
-    private static Vector4f v = new Vector4f();
+    private static final Vector4f v = new Vector4f();
 
-    private static Vector4f vr = new Vector4f();
+    private static final Vector4f vr = new Vector4f();
 
     static LinkedList<ScriptModel> activeModels = new LinkedList<ScriptModel>();
 

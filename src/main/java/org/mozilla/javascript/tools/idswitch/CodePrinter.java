@@ -7,7 +7,7 @@ package org.mozilla.javascript.tools.idswitch;
 
 class CodePrinter {
 
-// length of u-type escape like \u12AB
+    // length of u-type escape like \u12AB
     private static final int LITERAL_CHAR_MAX_SIZE = 6;
 
     private String lineTerminator = System.lineSeparator();
@@ -18,14 +18,29 @@ class CodePrinter {
     private char[] buffer = new char[1 << 12]; // 4K
     private int offset;
 
-    public String getLineTerminator() { return lineTerminator; }
-    public void setLineTerminator(String value) { lineTerminator = value; }
+    public String getLineTerminator() {
+        return lineTerminator;
+    }
 
-    public int getIndentStep() { return indentStep; }
-    public void setIndentStep(int char_count) { indentStep = char_count; }
+    public void setLineTerminator(String value) {
+        lineTerminator = value;
+    }
 
-    public int getIndentTabSize() {    return indentTabSize; }
-    public void setIndentTabSize(int tab_size) { indentTabSize = tab_size; }
+    public int getIndentStep() {
+        return indentStep;
+    }
+
+    public void setIndentStep(int char_count) {
+        indentStep = char_count;
+    }
+
+    public int getIndentTabSize() {
+        return indentTabSize;
+    }
+
+    public void setIndentTabSize(int tab_size) {
+        indentTabSize = tab_size;
+    }
 
     public void clear() {
         offset = 0;
@@ -36,7 +51,9 @@ class CodePrinter {
         int end = begin + area_size;
         if (end > buffer.length) {
             int new_capacity = buffer.length * 2;
-            if (end > new_capacity) { new_capacity = end; }
+            if (end > new_capacity) {
+                new_capacity = end;
+            }
             char[] tmp = new char[new_capacity];
             System.arraycopy(buffer, 0, tmp, 0, begin);
             buffer = tmp;
@@ -106,26 +123,39 @@ class CodePrinter {
     private int put_string_literal_char(int pos, int c, boolean in_string) {
         boolean backslash_symbol = true;
         switch (c) {
-            case '\b': c = 'b'; break;
-            case '\t': c = 't'; break;
-            case '\n': c = 'n'; break;
-            case '\f': c = 'f'; break;
-            case '\r': c = 'r'; break;
-            case '\'': backslash_symbol = !in_string; break;
-            case '"': backslash_symbol = in_string; break;
-            default: backslash_symbol = false;
+            case '\b':
+                c = 'b';
+                break;
+            case '\t':
+                c = 't';
+                break;
+            case '\n':
+                c = 'n';
+                break;
+            case '\f':
+                c = 'f';
+                break;
+            case '\r':
+                c = 'r';
+                break;
+            case '\'':
+                backslash_symbol = !in_string;
+                break;
+            case '"':
+                backslash_symbol = in_string;
+                break;
+            default:
+                backslash_symbol = false;
         }
 
         if (backslash_symbol) {
             buffer[pos] = '\\';
-            buffer[pos + 1] = (char)c;
+            buffer[pos + 1] = (char) c;
             pos += 2;
-        }
-        else if (' ' <= c && c <= 126) {
-            buffer[pos] = (char)c;
+        } else if (' ' <= c && c <= 126) {
+            buffer[pos] = (char) c;
             ++pos;
-        }
-        else {
+        } else {
             buffer[pos] = '\\';
             buffer[pos + 1] = 'u';
             buffer[pos + 2] = digit_to_hex_letter(0xF & (c >> 12));
@@ -138,24 +168,28 @@ class CodePrinter {
     }
 
     private static char digit_to_hex_letter(int d) {
-        return (char)((d < 10) ? '0' + d : 'A' - 10 + d);
+        return (char) ((d < 10) ? '0' + d : 'A' - 10 + d);
     }
 
     public void indent(int level) {
         int visible_size = indentStep * level;
         int indent_size, tab_count;
         if (indentTabSize <= 0) {
-            tab_count = 0; indent_size = visible_size;
-        }
-        else {
+            tab_count = 0;
+            indent_size = visible_size;
+        } else {
             tab_count = visible_size / indentTabSize;
             indent_size = tab_count + visible_size % indentTabSize;
         }
         int pos = add_area(indent_size);
         int tab_end = pos + tab_count;
         int indent_end = pos + indent_size;
-        for (; pos != tab_end; ++pos) {    buffer[pos] = '\t'; }
-        for (; pos != indent_end; ++pos) {    buffer[pos] = ' '; }
+        for (; pos != tab_end; ++pos) {
+            buffer[pos] = '\t';
+        }
+        for (; pos != indent_end; ++pos) {
+            buffer[pos] = ' ';
+        }
     }
 
     public void nl() {
@@ -163,7 +197,9 @@ class CodePrinter {
     }
 
     public void line(int indent_level, String s) {
-        indent(indent_level); p(s); nl();
+        indent(indent_level);
+        p(s);
+        nl();
     }
 
     public void erase(int begin, int end) {

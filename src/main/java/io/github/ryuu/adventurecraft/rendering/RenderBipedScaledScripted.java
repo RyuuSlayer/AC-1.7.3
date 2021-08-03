@@ -9,7 +9,7 @@ public class RenderBipedScaledScripted extends v {
     }
 
     protected void a(ls entityliving, float f) {
-        EntityLivingScript e = (EntityLivingScript)entityliving;
+        EntityLivingScript e = (EntityLivingScript) entityliving;
         float width = (1.0F - f) * e.prevWidth + f * e.bg;
         float height = (1.0F - f) * e.prevHeight + f * e.bh;
         width /= 0.6F;

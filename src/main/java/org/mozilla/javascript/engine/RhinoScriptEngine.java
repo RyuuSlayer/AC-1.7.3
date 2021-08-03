@@ -18,6 +18,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
 import javax.script.ScriptException;
 import javax.script.SimpleBindings;
+
 import org.mozilla.javascript.Callable;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
@@ -58,308 +59,308 @@ import org.mozilla.javascript.ScriptableObject;
  * </ul>
  */
 public class RhinoScriptEngine
-    extends AbstractScriptEngine
-    implements Compilable, Invocable {
+        extends AbstractScriptEngine
+        implements Compilable, Invocable {
 
-  /**
-   * Reserved key for the Rhino optimization level. Default is "9," for optimized and compiled code.
-   * Set this to "-1" to run Rhino in interpreted mode -- this is much much slower but the only
-   * option on platforms like Android that don't support class files.
-   */
-  public static final String OPTIMIZATION_LEVEL = "org.mozilla.javascript.optimization_level";
+    /**
+     * Reserved key for the Rhino optimization level. Default is "9," for optimized and compiled code.
+     * Set this to "-1" to run Rhino in interpreted mode -- this is much much slower but the only
+     * option on platforms like Android that don't support class files.
+     */
+    public static final String OPTIMIZATION_LEVEL = "org.mozilla.javascript.optimization_level";
 
-  static final int DEFAULT_LANGUAGE_VERSION = Context.VERSION_ES6;
-  private static final int DEFAULT_OPT = 9;
-  private static final boolean DEFAULT_DEBUG = true;
-  private static final String DEFAULT_FILENAME = "eval";
+    static final int DEFAULT_LANGUAGE_VERSION = Context.VERSION_ES6;
+    private static final int DEFAULT_OPT = 9;
+    private static final boolean DEFAULT_DEBUG = true;
+    private static final String DEFAULT_FILENAME = "eval";
 
-  private static final CtxFactory ctxFactory = new CtxFactory();
+    private static final CtxFactory ctxFactory = new CtxFactory();
 
-  private final RhinoScriptEngineFactory factory;
-  private final Builtins builtins;
-  private ScriptableObject topLevelScope = null;
+    private final RhinoScriptEngineFactory factory;
+    private final Builtins builtins;
+    private ScriptableObject topLevelScope = null;
 
-  RhinoScriptEngine(RhinoScriptEngineFactory factory) {
-    this.factory = factory;
-    this.builtins = new Builtins();
-  }
-
-  private Scriptable initScope(Context cx, ScriptContext sc) throws ScriptException {
-    configureContext(cx);
-
-    if (topLevelScope == null) {
-      topLevelScope = cx.initStandardObjects();
-      // We need to stash this away so that the built in functions can find
-      // this engine's specific stuff that they need to work.
-      topLevelScope.associateValue(Builtins.BUILTIN_KEY, builtins);
-      builtins.register(cx, topLevelScope, sc);
+    RhinoScriptEngine(RhinoScriptEngineFactory factory) {
+        this.factory = factory;
+        this.builtins = new Builtins();
     }
 
-    Scriptable engineScope = new BindingsObject(
-        sc.getBindings(ScriptContext.ENGINE_SCOPE));
-    engineScope.setParentScope(null);
-    engineScope.setPrototype(topLevelScope);
+    private Scriptable initScope(Context cx, ScriptContext sc) throws ScriptException {
+        configureContext(cx);
 
-    if (sc.getBindings(ScriptContext.GLOBAL_SCOPE) != null) {
-      Scriptable globalScope = new BindingsObject(
-          sc.getBindings(ScriptContext.GLOBAL_SCOPE));
-      globalScope.setParentScope(null);
-      globalScope.setPrototype(topLevelScope);
-      engineScope.setPrototype(globalScope);
-    }
-
-    return engineScope;
-  }
-
-  @Override
-  public Object eval(String script, ScriptContext context) throws ScriptException {
-    Context cx = ctxFactory.enterContext();
-    try {
-      Scriptable scope = initScope(cx, context);
-      Object ret = cx.evaluateString(scope, script, getFilename(), 0, null);
-      return Context.jsToJava(ret, Object.class);
-    } catch (RhinoException re) {
-      throw new ScriptException(re.getMessage(), re.sourceName(), re.lineNumber(),
-          re.columnNumber());
-    } finally {
-      Context.exit();
-    }
-  }
-
-  @Override
-  public Object eval(Reader reader, ScriptContext context) throws ScriptException {
-    Context cx = ctxFactory.enterContext();
-    try {
-      Scriptable scope = initScope(cx, context);
-      Object ret = cx.evaluateReader(scope, reader, getFilename(), 0, null);
-      return Context.jsToJava(ret, Object.class);
-    } catch (RhinoException re) {
-      throw new ScriptException(re.getMessage(), re.sourceName(), re.lineNumber(),
-          re.columnNumber());
-    } catch (IOException ioe) {
-      throw new ScriptException(ioe);
-    } finally {
-      Context.exit();
-    }
-  }
-
-  @Override
-  public CompiledScript compile(String script) throws ScriptException {
-    Context cx = ctxFactory.enterContext();
-    try {
-      configureContext(cx);
-      Script s =
-          cx.compileString(script, getFilename(), 1, null);
-      return new RhinoCompiledScript(this, s);
-    } catch (RhinoException re) {
-      throw new ScriptException(re.getMessage(), re.sourceName(), re.lineNumber(),
-          re.columnNumber());
-    } finally {
-      Context.exit();
-    }
-  }
-
-  @Override
-  public CompiledScript compile(Reader script) throws ScriptException {
-    Context cx = ctxFactory.enterContext();
-    try {
-      configureContext(cx);
-      Script s =
-          cx.compileReader(script, getFilename(), 1, null);
-      return new RhinoCompiledScript(this, s);
-    } catch (RhinoException re) {
-      throw new ScriptException(re.getMessage(), re.sourceName(), re.lineNumber(),
-          re.columnNumber());
-    } catch (IOException ioe) {
-      throw new ScriptException(ioe);
-    } finally {
-      Context.exit();
-    }
-  }
-
-  Object eval(Script script, ScriptContext sc) throws ScriptException {
-    Context cx = ctxFactory.enterContext();
-    try {
-      Scriptable scope = initScope(cx, sc);
-      Object ret = script.exec(cx, scope);
-      return Context.jsToJava(ret, Object.class);
-    } catch (RhinoException re) {
-      throw new ScriptException(re.getMessage(), re.sourceName(), re.lineNumber(),
-          re.columnNumber());
-    } finally {
-      Context.exit();
-    }
-  }
-
-  @Override
-  public Object invokeFunction(String name, Object... args)
-      throws ScriptException, NoSuchMethodException {
-    return invokeMethod(null, name, args);
-  }
-
-  @Override
-  public Object invokeMethod(Object thiz, String name, Object... args)
-      throws ScriptException, NoSuchMethodException {
-    return invokeMethodRaw(thiz, name, Object.class, args);
-  }
-
-  Object invokeMethodRaw(Object thiz, String name, Class<?> returnType, Object... args)
-      throws ScriptException, NoSuchMethodException {
-    Context cx = ctxFactory.enterContext();
-    try {
-      Scriptable scope = initScope(cx, context);
-
-      Scriptable localThis;
-      if (thiz == null) {
-        localThis = scope;
-      } else {
-        localThis = Context.toObject(thiz, scope);
-      }
-
-      Object f = ScriptableObject.getProperty(localThis, name);
-      if (f == Scriptable.NOT_FOUND) {
-        throw new NoSuchMethodException(name);
-      }
-      if (!(f instanceof Callable)) {
-        throw new ScriptException("\"" + name + "\" is not a function");
-      }
-      Callable func = (Callable) f;
-
-      if (args != null) {
-        for (int i = 0; i < args.length; i++) {
-          args[i] = Context.javaToJS(args[i], scope);
+        if (topLevelScope == null) {
+            topLevelScope = cx.initStandardObjects();
+            // We need to stash this away so that the built in functions can find
+            // this engine's specific stuff that they need to work.
+            topLevelScope.associateValue(Builtins.BUILTIN_KEY, builtins);
+            builtins.register(cx, topLevelScope, sc);
         }
-      }
 
-      Object ret = func.call(cx, scope, localThis, args);
-      if (returnType == Void.TYPE) {
-        return null;
-      }
-      return Context.jsToJava(ret, returnType);
+        Scriptable engineScope = new BindingsObject(
+                sc.getBindings(ScriptContext.ENGINE_SCOPE));
+        engineScope.setParentScope(null);
+        engineScope.setPrototype(topLevelScope);
 
-    } catch (RhinoException re) {
-      throw new ScriptException(re.getMessage(), re.sourceName(), re.lineNumber(),
-          re.columnNumber());
-    } finally {
-      Context.exit();
-    }
-  }
+        if (sc.getBindings(ScriptContext.GLOBAL_SCOPE) != null) {
+            Scriptable globalScope = new BindingsObject(
+                    sc.getBindings(ScriptContext.GLOBAL_SCOPE));
+            globalScope.setParentScope(null);
+            globalScope.setPrototype(topLevelScope);
+            engineScope.setPrototype(globalScope);
+        }
 
-  @SuppressWarnings("unchecked")
-  @Override
-  public <T> T getInterface(Class<T> clasz) {
-    if ((clasz == null) || !clasz.isInterface()) {
-      throw new IllegalArgumentException("Not an interface");
-    }
-    Context cx = ctxFactory.enterContext();
-    try {
-      Scriptable scope = initScope(cx, context);
-      if (methodsMissing(scope, clasz)) {
-        return null;
-      }
-    } catch (ScriptException se) {
-      return null;
-    } finally {
-      Context.exit();
-    }
-    return (T) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
-        new Class<?>[]{clasz}, new RhinoInvocationHandler(this, null));
-  }
-
-  @SuppressWarnings("unchecked")
-  @Override
-  public <T> T getInterface(Object thiz, Class<T> clasz) {
-    if ((clasz == null) || !clasz.isInterface()) {
-      throw new IllegalArgumentException("Not an interface");
-    }
-    Context cx = ctxFactory.enterContext();
-    try {
-      Scriptable scope = initScope(cx, context);
-      Scriptable thisObj = Context.toObject(thiz, scope);
-      if (methodsMissing(thisObj, clasz)) {
-        return null;
-      }
-    } catch (ScriptException se) {
-      return null;
-    } finally {
-      Context.exit();
-    }
-    return (T) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
-        new Class<?>[]{clasz}, new RhinoInvocationHandler(this, thiz));
-  }
-
-  @Override
-  public Bindings createBindings() {
-    return new SimpleBindings();
-  }
-
-  @Override
-  public ScriptEngineFactory getFactory() {
-    return factory;
-  }
-
-  private void configureContext(Context cx) throws ScriptException {
-    Object lv = get(ScriptEngine.LANGUAGE_VERSION);
-    if (lv != null) {
-      cx.setLanguageVersion(parseInteger(lv));
-    }
-    Object ol = get(OPTIMIZATION_LEVEL);
-    if (ol != null) {
-      cx.setOptimizationLevel(parseInteger(ol));
-    }
-  }
-
-  private static int parseInteger(Object v) throws ScriptException {
-    if (v instanceof String) {
-      try {
-        return Integer.parseInt((String) v);
-      } catch (NumberFormatException nfe) {
-        throw new ScriptException("Invalid number " + v);
-      }
-    } else if (v instanceof Integer) {
-      return ((Integer) v).intValue();
-    } else {
-      throw new ScriptException("Value must be a string or number");
-    }
-  }
-
-  private String getFilename() {
-    Object fn = get(ScriptEngine.FILENAME);
-    if (fn instanceof String) {
-      return (String) fn;
-    }
-    return DEFAULT_FILENAME;
-  }
-
-  private static boolean methodsMissing(Scriptable scope, Class<?> clasz) {
-    for (Method m : clasz.getMethods()) {
-      if (m.getDeclaringClass() == Object.class) {
-        continue;
-      }
-      Object methodObj = ScriptableObject.getProperty(scope, m.getName());
-      if (!(methodObj instanceof Callable)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  private static final class CtxFactory
-      extends ContextFactory {
-
-    @Override
-    protected boolean hasFeature(Context cx, int featureIndex) {
-      if (featureIndex == Context.FEATURE_INTEGER_WITHOUT_DECIMAL_PLACE) {
-        return true;
-      }
-      return super.hasFeature(cx, featureIndex);
+        return engineScope;
     }
 
     @Override
-    protected void onContextCreated(Context cx) {
-      cx.setLanguageVersion(Context.VERSION_ES6);
-      cx.setOptimizationLevel(DEFAULT_OPT);
-      cx.setGeneratingDebug(DEFAULT_DEBUG);
+    public Object eval(String script, ScriptContext context) throws ScriptException {
+        Context cx = ctxFactory.enterContext();
+        try {
+            Scriptable scope = initScope(cx, context);
+            Object ret = cx.evaluateString(scope, script, getFilename(), 0, null);
+            return Context.jsToJava(ret, Object.class);
+        } catch (RhinoException re) {
+            throw new ScriptException(re.getMessage(), re.sourceName(), re.lineNumber(),
+                    re.columnNumber());
+        } finally {
+            Context.exit();
+        }
     }
-  }
+
+    @Override
+    public Object eval(Reader reader, ScriptContext context) throws ScriptException {
+        Context cx = ctxFactory.enterContext();
+        try {
+            Scriptable scope = initScope(cx, context);
+            Object ret = cx.evaluateReader(scope, reader, getFilename(), 0, null);
+            return Context.jsToJava(ret, Object.class);
+        } catch (RhinoException re) {
+            throw new ScriptException(re.getMessage(), re.sourceName(), re.lineNumber(),
+                    re.columnNumber());
+        } catch (IOException ioe) {
+            throw new ScriptException(ioe);
+        } finally {
+            Context.exit();
+        }
+    }
+
+    @Override
+    public CompiledScript compile(String script) throws ScriptException {
+        Context cx = ctxFactory.enterContext();
+        try {
+            configureContext(cx);
+            Script s =
+                    cx.compileString(script, getFilename(), 1, null);
+            return new RhinoCompiledScript(this, s);
+        } catch (RhinoException re) {
+            throw new ScriptException(re.getMessage(), re.sourceName(), re.lineNumber(),
+                    re.columnNumber());
+        } finally {
+            Context.exit();
+        }
+    }
+
+    @Override
+    public CompiledScript compile(Reader script) throws ScriptException {
+        Context cx = ctxFactory.enterContext();
+        try {
+            configureContext(cx);
+            Script s =
+                    cx.compileReader(script, getFilename(), 1, null);
+            return new RhinoCompiledScript(this, s);
+        } catch (RhinoException re) {
+            throw new ScriptException(re.getMessage(), re.sourceName(), re.lineNumber(),
+                    re.columnNumber());
+        } catch (IOException ioe) {
+            throw new ScriptException(ioe);
+        } finally {
+            Context.exit();
+        }
+    }
+
+    Object eval(Script script, ScriptContext sc) throws ScriptException {
+        Context cx = ctxFactory.enterContext();
+        try {
+            Scriptable scope = initScope(cx, sc);
+            Object ret = script.exec(cx, scope);
+            return Context.jsToJava(ret, Object.class);
+        } catch (RhinoException re) {
+            throw new ScriptException(re.getMessage(), re.sourceName(), re.lineNumber(),
+                    re.columnNumber());
+        } finally {
+            Context.exit();
+        }
+    }
+
+    @Override
+    public Object invokeFunction(String name, Object... args)
+            throws ScriptException, NoSuchMethodException {
+        return invokeMethod(null, name, args);
+    }
+
+    @Override
+    public Object invokeMethod(Object thiz, String name, Object... args)
+            throws ScriptException, NoSuchMethodException {
+        return invokeMethodRaw(thiz, name, Object.class, args);
+    }
+
+    Object invokeMethodRaw(Object thiz, String name, Class<?> returnType, Object... args)
+            throws ScriptException, NoSuchMethodException {
+        Context cx = ctxFactory.enterContext();
+        try {
+            Scriptable scope = initScope(cx, context);
+
+            Scriptable localThis;
+            if (thiz == null) {
+                localThis = scope;
+            } else {
+                localThis = Context.toObject(thiz, scope);
+            }
+
+            Object f = ScriptableObject.getProperty(localThis, name);
+            if (f == Scriptable.NOT_FOUND) {
+                throw new NoSuchMethodException(name);
+            }
+            if (!(f instanceof Callable)) {
+                throw new ScriptException("\"" + name + "\" is not a function");
+            }
+            Callable func = (Callable) f;
+
+            if (args != null) {
+                for (int i = 0; i < args.length; i++) {
+                    args[i] = Context.javaToJS(args[i], scope);
+                }
+            }
+
+            Object ret = func.call(cx, scope, localThis, args);
+            if (returnType == Void.TYPE) {
+                return null;
+            }
+            return Context.jsToJava(ret, returnType);
+
+        } catch (RhinoException re) {
+            throw new ScriptException(re.getMessage(), re.sourceName(), re.lineNumber(),
+                    re.columnNumber());
+        } finally {
+            Context.exit();
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T getInterface(Class<T> clasz) {
+        if ((clasz == null) || !clasz.isInterface()) {
+            throw new IllegalArgumentException("Not an interface");
+        }
+        Context cx = ctxFactory.enterContext();
+        try {
+            Scriptable scope = initScope(cx, context);
+            if (methodsMissing(scope, clasz)) {
+                return null;
+            }
+        } catch (ScriptException se) {
+            return null;
+        } finally {
+            Context.exit();
+        }
+        return (T) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
+                new Class<?>[]{clasz}, new RhinoInvocationHandler(this, null));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T getInterface(Object thiz, Class<T> clasz) {
+        if ((clasz == null) || !clasz.isInterface()) {
+            throw new IllegalArgumentException("Not an interface");
+        }
+        Context cx = ctxFactory.enterContext();
+        try {
+            Scriptable scope = initScope(cx, context);
+            Scriptable thisObj = Context.toObject(thiz, scope);
+            if (methodsMissing(thisObj, clasz)) {
+                return null;
+            }
+        } catch (ScriptException se) {
+            return null;
+        } finally {
+            Context.exit();
+        }
+        return (T) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
+                new Class<?>[]{clasz}, new RhinoInvocationHandler(this, thiz));
+    }
+
+    @Override
+    public Bindings createBindings() {
+        return new SimpleBindings();
+    }
+
+    @Override
+    public ScriptEngineFactory getFactory() {
+        return factory;
+    }
+
+    private void configureContext(Context cx) throws ScriptException {
+        Object lv = get(ScriptEngine.LANGUAGE_VERSION);
+        if (lv != null) {
+            cx.setLanguageVersion(parseInteger(lv));
+        }
+        Object ol = get(OPTIMIZATION_LEVEL);
+        if (ol != null) {
+            cx.setOptimizationLevel(parseInteger(ol));
+        }
+    }
+
+    private static int parseInteger(Object v) throws ScriptException {
+        if (v instanceof String) {
+            try {
+                return Integer.parseInt((String) v);
+            } catch (NumberFormatException nfe) {
+                throw new ScriptException("Invalid number " + v);
+            }
+        } else if (v instanceof Integer) {
+            return ((Integer) v).intValue();
+        } else {
+            throw new ScriptException("Value must be a string or number");
+        }
+    }
+
+    private String getFilename() {
+        Object fn = get(ScriptEngine.FILENAME);
+        if (fn instanceof String) {
+            return (String) fn;
+        }
+        return DEFAULT_FILENAME;
+    }
+
+    private static boolean methodsMissing(Scriptable scope, Class<?> clasz) {
+        for (Method m : clasz.getMethods()) {
+            if (m.getDeclaringClass() == Object.class) {
+                continue;
+            }
+            Object methodObj = ScriptableObject.getProperty(scope, m.getName());
+            if (!(methodObj instanceof Callable)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static final class CtxFactory
+            extends ContextFactory {
+
+        @Override
+        protected boolean hasFeature(Context cx, int featureIndex) {
+            if (featureIndex == Context.FEATURE_INTEGER_WITHOUT_DECIMAL_PLACE) {
+                return true;
+            }
+            return super.hasFeature(cx, featureIndex);
+        }
+
+        @Override
+        protected void onContextCreated(Context cx) {
+            cx.setLanguageVersion(Context.VERSION_ES6);
+            cx.setOptimizationLevel(DEFAULT_OPT);
+            cx.setGeneratingDebug(DEFAULT_DEBUG);
+        }
+    }
 }

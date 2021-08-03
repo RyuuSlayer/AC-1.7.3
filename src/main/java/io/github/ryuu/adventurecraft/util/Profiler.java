@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.util;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
+
 import net.minecraft.src.ProfileContext;
 
 public class Profiler {
@@ -22,7 +23,7 @@ public class Profiler {
             ProfileContext c = profileStack.pop();
             long t = c.getTime();
             if (times.containsKey(c.contextName)) {
-                times.put(c.contextName, Long.valueOf(((Long)times.get(c.contextName)).longValue() + t));
+                times.put(c.contextName, Long.valueOf(times.get(c.contextName).longValue() + t));
             } else {
                 times.put(c.contextName, Long.valueOf(t));
             }
@@ -40,7 +41,7 @@ public class Profiler {
             long time = System.nanoTime() - startTime;
             if (time > 100000000L)
                 for (Map.Entry<String, Long> e : times.entrySet()) {
-                    System.out.printf("%s\t\t%d\n", new Object[] { e.getKey(), e.getValue() });
+                    System.out.printf("%s\t\t%d\n", e.getKey(), e.getValue());
                 }
             profileStack = null;
             times = null;

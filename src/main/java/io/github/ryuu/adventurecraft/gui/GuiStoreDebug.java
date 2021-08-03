@@ -6,7 +6,7 @@ import io.github.ryuu.adventurecraft.util.TriggerArea;
 import net.minecraft.client.Minecraft;
 
 public class GuiStoreDebug extends da {
-    private TileEntityStore store;
+    private final TileEntityStore store;
 
     private GuiSlider2 supply;
 
@@ -17,7 +17,7 @@ public class GuiStoreDebug extends da {
     public void b() {
         ab b = new ab(0, 4, 0, "Set Items");
         this.e.add(b);
-        this.supply = new GuiSlider2(6, 4, 26, 10, String.format("Supply: %d", new Object[] { Integer.valueOf(this.store.buySupply) }), this.store.buySupply / 9.0F);
+        this.supply = new GuiSlider2(6, 4, 26, 10, String.format("Supply: %d", Integer.valueOf(this.store.buySupply)), this.store.buySupply / 9.0F);
         if (this.store.buySupply == -1) {
             this.supply.e = "Supply: Infinite";
             this.supply.sliderValue = 0.0F;
@@ -60,9 +60,9 @@ public class GuiStoreDebug extends da {
 
     public void a(int i, int j, float f) {
         a(0, 0, this.c, this.d, -2147483648);
-        this.store.buySupply = (int)(this.supply.sliderValue * 9.0F);
+        this.store.buySupply = (int) (this.supply.sliderValue * 9.0F);
         if (this.store.buySupply != 0) {
-            this.supply.e = String.format("Supply: %d", new Object[] { Integer.valueOf(this.store.buySupply) });
+            this.supply.e = String.format("Supply: %d", new Object[]{Integer.valueOf(this.store.buySupply)});
         } else {
             this.supply.e = "Supply: Infinite";
             this.store.buySupply = -1;

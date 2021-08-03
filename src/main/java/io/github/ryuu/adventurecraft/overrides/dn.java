@@ -3,16 +3,17 @@ package io.github.ryuu.adventurecraft.overrides;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
 import org.lwjgl.opengl.GL11;
 
 public class dn {
     protected Level a;
 
-    private List[] b = new List[6];
+    private final List[] b = new List[6];
 
-    private ji c;
+    private final ji c;
 
-    private Random d = new Random();
+    private final Random d = new Random();
 
     public dn(Level world, ji renderengine) {
         if (world != null)
@@ -44,7 +45,7 @@ public class dn {
         ArrayList<sn> arraylist = new ArrayList();
         for (int i = 0; i < 6; i++) {
             for (Object obj : this.b[i]) {
-                sn p = (sn)obj;
+                sn p = (sn) obj;
                 if (axisalignedbb.a <= p.aM && axisalignedbb.d >= p.aM && axisalignedbb.b <= p.aN && axisalignedbb.e >= p.aN && axisalignedbb.c <= p.aO && axisalignedbb.f >= p.aO)
                     arraylist.add(p);
             }

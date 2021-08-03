@@ -34,7 +34,8 @@ public class by extends sn {
         this.collidesWithClipBlocks = false;
     }
 
-    protected void b() {}
+    protected void b() {
+    }
 
     public boolean a(double d) {
         double d1 = this.aW.c() * 4.0D;
@@ -96,8 +97,8 @@ public class by extends sn {
         this.aQ = d1;
         this.aR = d2;
         float f3 = in.a(d * d + d2 * d2);
-        this.aU = this.aS = (float)(Math.atan2(d, d2) * 180.0D / 3.1415927410125732D);
-        this.aV = this.aT = (float)(Math.atan2(d1, f3) * 180.0D / 3.1415927410125732D);
+        this.aU = this.aS = (float) (Math.atan2(d, d2) * 180.0D / 3.1415927410125732D);
+        this.aV = this.aT = (float) (Math.atan2(d1, f3) * 180.0D / 3.1415927410125732D);
         this.h = 0;
     }
 
@@ -107,8 +108,8 @@ public class by extends sn {
         this.aR = d2;
         if (this.aV == 0.0F && this.aU == 0.0F) {
             float f = in.a(d * d + d2 * d2);
-            this.aU = this.aS = (float)(Math.atan2(d, d2) * 180.0D / 3.1415927410125732D);
-            this.aV = this.aT = (float)(Math.atan2(d1, f) * 180.0D / 3.1415927410125732D);
+            this.aU = this.aS = (float) (Math.atan2(d, d2) * 180.0D / 3.1415927410125732D);
+            this.aV = this.aT = (float) (Math.atan2(d1, f) * 180.0D / 3.1415927410125732D);
         }
     }
 
@@ -168,7 +169,7 @@ public class by extends sn {
         }
         if (movingobjectposition != null) {
             if (movingobjectposition.g != null)
-                if (!movingobjectposition.g.a(this.g, 0));
+                if (!movingobjectposition.g.a(this.g, 0)) ;
             for (int j = 0; j < 8; j++)
                 this.aI.a("snowballpoof", this.aM, this.aN, this.aO, 0.0D, 0.0D, 0.0D);
             K();
@@ -177,11 +178,12 @@ public class by extends sn {
         this.aN += this.aQ;
         this.aO += this.aR;
         float f = in.a(this.aP * this.aP + this.aR * this.aR);
-        this.aS = (float)(Math.atan2(this.aP, this.aR) * 180.0D / 3.1415927410125732D);
-        for (this.aT = (float)(Math.atan2(this.aQ, f) * 180.0D / 3.1415927410125732D); this.aT - this.aV < -180.0F; this.aV -= 360.0F);
-        for (; this.aT - this.aV >= 180.0F; this.aV += 360.0F);
-        for (; this.aS - this.aU < -180.0F; this.aU -= 360.0F);
-        for (; this.aS - this.aU >= 180.0F; this.aU += 360.0F);
+        this.aS = (float) (Math.atan2(this.aP, this.aR) * 180.0D / 3.1415927410125732D);
+        for (this.aT = (float) (Math.atan2(this.aQ, f) * 180.0D / 3.1415927410125732D); this.aT - this.aV < -180.0F; this.aV -= 360.0F)
+            ;
+        for (; this.aT - this.aV >= 180.0F; this.aV += 360.0F) ;
+        for (; this.aS - this.aU < -180.0F; this.aU -= 360.0F) ;
+        for (; this.aS - this.aU >= 180.0F; this.aU += 360.0F) ;
         this.aT = this.aV + (this.aT - this.aV) * 0.2F;
         this.aS = this.aU + (this.aS - this.aU) * 0.2F;
         float f1 = 0.99F;
@@ -201,12 +203,12 @@ public class by extends sn {
     }
 
     public void b(nu nbttagcompound) {
-        nbttagcompound.a("xTile", (short)this.b);
-        nbttagcompound.a("yTile", (short)this.c);
-        nbttagcompound.a("zTile", (short)this.d);
-        nbttagcompound.a("inTile", (byte)this.e);
-        nbttagcompound.a("shake", (byte)this.a);
-        nbttagcompound.a("inGround", (byte)(this.f ? 1 : 0));
+        nbttagcompound.a("xTile", (short) this.b);
+        nbttagcompound.a("yTile", (short) this.c);
+        nbttagcompound.a("zTile", (short) this.d);
+        nbttagcompound.a("inTile", (byte) this.e);
+        nbttagcompound.a("shake", (byte) this.a);
+        nbttagcompound.a("inGround", (byte) (this.f ? 1 : 0));
     }
 
     public void a(nu nbttagcompound) {

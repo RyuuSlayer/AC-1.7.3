@@ -1,10 +1,12 @@
 package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityMessage;
+import io.github.ryuu.adventurecraft.gui.GuiMessage;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
 import net.minecraft.tile.TileWithEntity;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
@@ -27,7 +29,7 @@ public class BlockMessage extends TileWithEntity {
         return null;
     }
 
-    public boolean shouldRender(xp blockAccess, int i, int j, int k) {
+    public boolean shouldRender(TileView blockAccess, int i, int j, int k) {
         return DebugMode.active;
     }
 
@@ -36,7 +38,7 @@ public class BlockMessage extends TileWithEntity {
     }
 
     public void onTriggerActivated(Level world, int i, int j, int k) {
-        TileEntityMessage obj = (TileEntityMessage)world.b(i, j, k);
+        TileEntityMessage obj = (TileEntityMessage) world.b(i, j, k);
         if (!obj.message.equals(""))
             Minecraft.minecraftInstance.v.a(obj.message);
         if (!obj.sound.equals(""))
@@ -45,7 +47,7 @@ public class BlockMessage extends TileWithEntity {
 
     public boolean a(Level world, int i, int j, int k, Player entityplayer) {
         if (DebugMode.active) {
-            TileEntityMessage obj = (TileEntityMessage)world.b(i, j, k);
+            TileEntityMessage obj = (TileEntityMessage) world.b(i, j, k);
             GuiMessage.showUI(world, obj);
             return true;
         }

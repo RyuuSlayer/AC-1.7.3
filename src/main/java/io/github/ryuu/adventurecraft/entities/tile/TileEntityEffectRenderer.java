@@ -12,7 +12,7 @@ public class TileEntityEffectRenderer extends TileEntityRenderer {
             GL11.glBlendFunc(770, 771);
             GL11.glDisable(3553);
             GL11.glDisable(2896);
-            GL11.glTranslatef((float)d + 0.5F, (float)d1 + 0.5F, (float)d2 + 0.5F);
+            GL11.glTranslatef((float) d + 0.5F, (float) d1 + 0.5F, (float) d2 + 0.5F);
             GL11.glLineWidth(6.0F);
             GL11.glShadeModel(7425);
             GL11.glTranslatef(effect.offsetX, effect.offsetY, effect.offsetZ);
@@ -52,6 +52,6 @@ public class TileEntityEffectRenderer extends TileEntityRenderer {
     }
 
     public void a(ow tileentity, double d, double d1, double d2, float f) {
-        render((TileEntityEffect)tileentity, d, d1, d2, f);
+        render((TileEntityEffect) tileentity, d, d1, d2, f);
     }
 }

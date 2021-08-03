@@ -8,7 +8,7 @@ import io.github.ryuu.adventurecraft.blocks.BlockEffect;
 import net.minecraft.client.Minecraft;
 
 public class ei {
-    private long a;
+    private final long a;
 
     private int b;
 
@@ -192,7 +192,7 @@ public class ei {
         if (nbttagcompound.b("timeOfDay")) {
             this.timeOfDay = nbttagcompound.g("timeOfDay");
         } else {
-            this.timeOfDay = (float)this.e;
+            this.timeOfDay = (float) this.e;
         }
         this.playingMusic = nbttagcompound.i("playingMusic");
         if (nbttagcompound.b("mobsBurn"))
@@ -208,7 +208,7 @@ public class ei {
             this.playerName = nbttagcompound.i("playerName");
         float f = 0.05F;
         for (int i = 0; i < 16; i++) {
-            String key = String.format("brightness%d", new Object[] { Integer.valueOf(i) });
+            String key = String.format("brightness%d", Integer.valueOf(i));
             if (nbttagcompound.b(key)) {
                 this.brightness[i] = nbttagcompound.g(key);
             } else {
@@ -365,7 +365,7 @@ public class ei {
         nbttagcompound.a("nextEntityID", sn.a);
         nbttagcompound.a("useImages", this.useImages);
         nbttagcompound.a("mapSize", this.mapSize);
-        nbttagcompound.a("waterLevel", (short)this.waterLevel);
+        nbttagcompound.a("waterLevel", (short) this.waterLevel);
         nbttagcompound.a("fractureHorizontal", this.fractureHorizontal);
         nbttagcompound.a("fractureVertical", this.fractureVertical);
         nbttagcompound.a("maxAvgDepth", this.maxAvgDepth);
@@ -394,7 +394,7 @@ public class ei {
         if (!this.playerName.equals(""))
             nbttagcompound.a("playerName", this.playerName);
         for (int i = 0; i < 16; i++) {
-            String key = String.format("brightness%d", new Object[] { Integer.valueOf(i) });
+            String key = String.format("brightness%d", Integer.valueOf(i));
             nbttagcompound.a(key, this.brightness[i]);
         }
         if (this.globalScope != null)
@@ -428,7 +428,7 @@ public class ei {
     }
 
     public long getTimeOfDay() {
-        return (long)this.timeOfDay;
+        return (long) this.timeOfDay;
     }
 
     public void addToTimeOfDay(float t) {

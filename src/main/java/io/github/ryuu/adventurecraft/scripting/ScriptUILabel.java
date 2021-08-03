@@ -42,12 +42,12 @@ public class ScriptUILabel extends UIElement {
     }
 
     public void render(sj fontRenderer, ji renderEngine, float partialTickTime) {
-        int color = Math.max(Math.min((int)(this.alpha * 255.0F), 255), 0);
+        int color = Math.max(Math.min((int) (this.alpha * 255.0F), 255), 0);
         if (color == 0)
             return;
-        color = (color << 8) + Math.max(Math.min((int)(this.red * 255.0F), 255), 0);
-        color = (color << 8) + Math.max(Math.min((int)(this.green * 255.0F), 255), 0);
-        color = (color << 8) + Math.max(Math.min((int)(this.blue * 255.0F), 255), 0);
+        color = (color << 8) + Math.max(Math.min((int) (this.red * 255.0F), 255), 0);
+        color = (color << 8) + Math.max(Math.min((int) (this.green * 255.0F), 255), 0);
+        color = (color << 8) + Math.max(Math.min((int) (this.blue * 255.0F), 255), 0);
         float xPos = getXAtTime(partialTickTime);
         float yPos = getYAtTime(partialTickTime);
         for (String line : this.textLines) {

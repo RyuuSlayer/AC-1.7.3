@@ -59,8 +59,8 @@ public enum ht {
     }
 
     static {
-        q = new ht[] {
+        q = new ht[]{
                 a, b, c, d, e, f, g, h, i, j,
-                k, l, m };
+                k, l, m};
     }
 }

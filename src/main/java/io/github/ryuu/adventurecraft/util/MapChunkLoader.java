@@ -33,9 +33,12 @@ public class MapChunkLoader implements ChunkIO {
         }
     }
 
-    public void b(Level world, Chunk chunk) {}
+    public void b(Level world, Chunk chunk) {
+    }
 
-    public void a() {}
+    public void a() {
+    }
 
-    public void b() {}
+    public void b() {
+    }
 }

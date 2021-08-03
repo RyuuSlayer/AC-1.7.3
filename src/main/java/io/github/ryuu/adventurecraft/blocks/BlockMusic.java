@@ -7,6 +7,7 @@ import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
 import net.minecraft.tile.TileWithEntity;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
@@ -29,7 +30,7 @@ public class BlockMusic extends TileWithEntity {
         return null;
     }
 
-    public boolean shouldRender(xp blockAccess, int i, int j, int k) {
+    public boolean shouldRender(TileView blockAccess, int i, int j, int k) {
         return DebugMode.active;
     }
 
@@ -38,7 +39,7 @@ public class BlockMusic extends TileWithEntity {
     }
 
     public void onTriggerActivated(Level world, int i, int j, int k) {
-        TileEntityMusic obj = (TileEntityMusic)world.b(i, j, k);
+        TileEntityMusic obj = (TileEntityMusic) world.b(i, j, k);
         if (!obj.musicName.equals("")) {
             Minecraft.minecraftInstance.B.playMusicFromStreaming(obj.musicName, obj.fadeOut, obj.fadeIn);
         } else {
@@ -46,11 +47,12 @@ public class BlockMusic extends TileWithEntity {
         }
     }
 
-    public void onTriggerDeactivated(Level world, int i, int j, int k) {}
+    public void onTriggerDeactivated(Level world, int i, int j, int k) {
+    }
 
     public boolean a(Level world, int i, int j, int k, Player entityplayer) {
         if (DebugMode.active && entityplayer.G() != null && (entityplayer.G()).c == Items.cursor.bf) {
-            TileEntityMusic obj = (TileEntityMusic)world.b(i, j, k);
+            TileEntityMusic obj = (TileEntityMusic) world.b(i, j, k);
             GuiMusic.showUI(world, obj);
             return true;
         }

@@ -53,10 +53,10 @@ public class oh extends TextureBinder {
                         for (int x = 0; x < ratio; x++) {
                             for (int y = 0; y < ratio; y++) {
                                 k = n * ratio + x + (m * ratio + y) * w;
-                                this.a[k * 4 + 0] = (byte)(curPixel >> 16 & 0xFF);
-                                this.a[k * 4 + 1] = (byte)(curPixel >> 8 & 0xFF);
-                                this.a[k * 4 + 2] = (byte)(curPixel & 0xFF);
-                                this.a[k * 4 + 3] = (byte)(curPixel >> 24 & 0xFF);
+                                this.a[k * 4 + 0] = (byte) (curPixel >> 16 & 0xFF);
+                                this.a[k * 4 + 1] = (byte) (curPixel >> 8 & 0xFF);
+                                this.a[k * 4 + 2] = (byte) (curPixel & 0xFF);
+                                this.a[k * 4 + 3] = (byte) (curPixel >> 24 & 0xFF);
                             }
                         }
                     }
@@ -74,10 +74,10 @@ public class oh extends TextureBinder {
                                 a += curPixel >> 24 & 0xFF;
                             }
                         }
-                        this.a[k * 4 + 0] = (byte)(r / ratio / ratio);
-                        this.a[k * 4 + 1] = (byte)(g / ratio / ratio);
-                        this.a[k * 4 + 2] = (byte)(b / ratio / ratio);
-                        this.a[k * 4 + 3] = (byte)(a / ratio / ratio);
+                        this.a[k * 4 + 0] = (byte) (r / ratio / ratio);
+                        this.a[k * 4 + 1] = (byte) (g / ratio / ratio);
+                        this.a[k * 4 + 2] = (byte) (b / ratio / ratio);
+                        this.a[k * 4 + 3] = (byte) (a / ratio / ratio);
                         k++;
                     }
                 }
@@ -92,7 +92,7 @@ public class oh extends TextureBinder {
             this.i = new float[s];
             this.j = new float[s];
         }
-        int vh = (int)Math.sqrt((h / 16));
+        int vh = (int) Math.sqrt((h / 16));
         this.k += vh;
         float weight = (vh * 2 + 1) * 1.0667F;
         for (int i = 0; i < w; i++) {
@@ -128,15 +128,15 @@ public class oh extends TextureBinder {
                 f1 = 0.0F;
             float f2 = f1 * f1;
             if (TerrainImage.isWaterLoaded) {
-                l1 = (int)(127.0F + f2 * 128.0F);
-                j2 = (int)(127.0F + f2 * 128.0F);
-                k2 = (int)(127.0F + f2 * 128.0F);
+                l1 = (int) (127.0F + f2 * 128.0F);
+                j2 = (int) (127.0F + f2 * 128.0F);
+                k2 = (int) (127.0F + f2 * 128.0F);
             } else {
-                l1 = (int)(32.0F + f2 * 32.0F);
-                j2 = (int)(50.0F + f2 * 64.0F);
+                l1 = (int) (32.0F + f2 * 32.0F);
+                j2 = (int) (50.0F + f2 * 64.0F);
                 k2 = 255;
             }
-            int l2 = (int)(146.0F + f2 * 50.0F);
+            int l2 = (int) (146.0F + f2 * 50.0F);
             if (this.c) {
                 int i3 = (l1 * 30 + j2 * 59 + k2 * 11) / 100;
                 int j3 = (l1 * 30 + j2 * 70) / 100;
@@ -145,10 +145,10 @@ public class oh extends TextureBinder {
                 j2 = j3;
                 k2 = k3;
             }
-            this.a[i1 * 4 + 0] = (byte)l1;
-            this.a[i1 * 4 + 1] = (byte)j2;
-            this.a[i1 * 4 + 2] = (byte)k2;
-            this.a[i1 * 4 + 3] = (byte)l2;
+            this.a[i1 * 4 + 0] = (byte) l1;
+            this.a[i1 * 4 + 1] = (byte) j2;
+            this.a[i1 * 4 + 2] = (byte) k2;
+            this.a[i1 * 4 + 3] = (byte) l2;
         }
     }
 

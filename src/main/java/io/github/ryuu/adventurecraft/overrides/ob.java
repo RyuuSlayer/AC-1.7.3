@@ -18,10 +18,11 @@ public class ob {
         this.a = minecraft;
     }
 
-    public void a(fd world) {}
+    public void a(fd world) {
+    }
 
     public void a(int i, int j, int k, int l) {
-        this.a.f.a((gs)this.a.h, i, j, k, l);
+        this.a.f.a((gs) this.a.h, i, j, k, l);
         b(i, j, k, l);
     }
 
@@ -36,11 +37,14 @@ public class ob {
         return flag;
     }
 
-    public void c(int i, int j, int k, int l) {}
+    public void c(int i, int j, int k, int l) {
+    }
 
-    public void a() {}
+    public void a() {
+    }
 
-    public void a(float f) {}
+    public void a(float f) {
+    }
 
     public float b() {
         return 5.0F;
@@ -58,15 +62,18 @@ public class ob {
         return false;
     }
 
-    public void a(gs entityplayer) {}
+    public void a(gs entityplayer) {
+    }
 
-    public void c() {}
+    public void c() {
+    }
 
     public boolean d() {
         return true;
     }
 
-    public void b(gs entityplayer) {}
+    public void b(gs entityplayer) {
+    }
 
     public boolean a(gs entityplayer, fd world, iz itemstack, int i, int j, int k, int l) {
         int i1 = world.a(i, j, k);
@@ -78,7 +85,7 @@ public class ob {
     }
 
     public gs b(fd world) {
-        return (gs)new dc(this.a, world, this.a.k, world.t.g);
+        return (gs) new dc(this.a, world, this.a.k, world.t.g);
     }
 
     public void a(gs entityplayer, sn entity) {

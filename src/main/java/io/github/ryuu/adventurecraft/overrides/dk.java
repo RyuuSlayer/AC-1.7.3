@@ -14,7 +14,7 @@ public class dk {
 
     private int C;
 
-    private static nw D;
+    private static final nw D;
 
     public dk(Level world, List list, int i, int j, int k, int l, int i1) {
         this.C = -1;
@@ -109,7 +109,7 @@ public class dk {
                                             if (texNum == 0) {
                                                 GL11.glBindTexture(3553, Minecraft.minecraftInstance.p.b("/terrain.png"));
                                             } else {
-                                                GL11.glBindTexture(3553, Minecraft.minecraftInstance.p.b(String.format("/terrain%d.png", new Object[] { Integer.valueOf(texNum) })));
+                                                GL11.glBindTexture(3553, Minecraft.minecraftInstance.p.b(String.format("/terrain%d.png", new Object[]{Integer.valueOf(texNum)})));
                                             }
                                             D.b();
                                             D.b(-this.c, -this.d, -this.e);
@@ -162,9 +162,9 @@ public class dk {
     }
 
     public float a(sn entity) {
-        float f = (float)(entity.aM - this.q);
-        float f1 = (float)(entity.aN - this.r);
-        float f2 = (float)(entity.aO - this.s);
+        float f = (float) (entity.aM - this.q);
+        float f1 = (float) (entity.aN - this.r);
+        float f2 = (float) (entity.aO - this.s);
         return f * f + f1 * f1 + f2 * f2;
     }
 
@@ -262,7 +262,7 @@ public class dk {
 
     public List B;
 
-    private List F;
+    private final List F;
 
     static {
         D = nw.a;

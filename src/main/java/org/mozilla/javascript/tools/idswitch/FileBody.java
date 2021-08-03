@@ -36,14 +36,18 @@ public class FileBody {
     ReplaceItem lastReplace;
 
 
-    public char[] getBuffer() { return buffer; }
+    public char[] getBuffer() {
+        return buffer;
+    }
 
     public void readData(Reader r) throws IOException {
         int capacity = buffer.length;
         int offset = 0;
-        for (;;) {
+        for (; ; ) {
             int n_read = r.read(buffer, offset, capacity - offset);
-            if (n_read < 0) { break; }
+            if (n_read < 0) {
+                break;
+            }
             offset += n_read;
             if (capacity == offset) {
                 capacity *= 2;
@@ -75,20 +79,22 @@ public class FileBody {
         }
     }
 
-    public boolean wasModified() { return firstReplace != null; }
+    public boolean wasModified() {
+        return firstReplace != null;
+    }
 
     public boolean setReplacement(int begin, int end, String text) {
-        if (equals(text, buffer, begin, end)) { return false; }
+        if (equals(text, buffer, begin, end)) {
+            return false;
+        }
 
         ReplaceItem item = new ReplaceItem(begin, end, text);
         if (firstReplace == null) {
             firstReplace = lastReplace = item;
-        }
-        else if (begin < firstReplace.begin) {
+        } else if (begin < firstReplace.begin) {
             item.next = firstReplace;
             firstReplace = item;
-        }
-        else {
+        } else {
             ReplaceItem cursor = firstReplace;
             ReplaceItem next = cursor.next;
             while (next != null) {
@@ -108,11 +114,17 @@ public class FileBody {
         return true;
     }
 
-    public int getLineNumber() { return lineNumber; }
+    public int getLineNumber() {
+        return lineNumber;
+    }
 
-    public int getLineBegin() { return lineBegin; }
+    public int getLineBegin() {
+        return lineBegin;
+    }
 
-    public int getLineEnd() { return lineEnd; }
+    public int getLineEnd() {
+        return lineEnd;
+    }
 
     public void startLineLoop() {
         lineNumber = 0;
@@ -121,33 +133,36 @@ public class FileBody {
 
     public boolean nextLine() {
         if (nextLineStart == bufferEnd) {
-            lineNumber = 0; return false;
+            lineNumber = 0;
+            return false;
         }
-        int i; int c = 0;
+        int i;
+        int c = 0;
         for (i = nextLineStart; i != bufferEnd; ++i) {
             c = buffer[i];
-            if (c == '\n' || c == '\r') { break; }
+            if (c == '\n' || c == '\r') {
+                break;
+            }
         }
         lineBegin = nextLineStart;
         lineEnd = i;
         if (i == bufferEnd) {
             nextLineStart = i;
-        }
-        else if (c == '\r' && i + 1 != bufferEnd && buffer[i + 1] == '\n') {
+        } else if (c == '\r' && i + 1 != bufferEnd && buffer[i + 1] == '\n') {
             nextLineStart = i + 2;
-        }
-        else {
+        } else {
             nextLineStart = i + 1;
         }
         ++lineNumber;
         return true;
     }
 
-    private static boolean equals(String str, char[] array, int begin, int end)
-    {
+    private static boolean equals(String str, char[] array, int begin, int end) {
         if (str.length() == end - begin) {
             for (int i = begin, j = 0; i != end; ++i, ++j) {
-                if (array[i] != str.charAt(j)) { return false; }
+                if (array[i] != str.charAt(j)) {
+                    return false;
+                }
             }
             return true;
         }

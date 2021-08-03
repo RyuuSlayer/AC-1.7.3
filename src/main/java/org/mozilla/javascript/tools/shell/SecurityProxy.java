@@ -10,8 +10,7 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.SecurityController;
 
-public abstract class SecurityProxy extends SecurityController
-{
+public abstract class SecurityProxy extends SecurityController {
     protected abstract void callProcessFileSecure(Context cx, Scriptable scope,
                                                   String filename);
 

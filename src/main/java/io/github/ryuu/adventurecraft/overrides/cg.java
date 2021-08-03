@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.overrides;
 
 import java.awt.image.BufferedImage;
+
 import net.minecraft.client.Minecraft;
 
 public class cg extends TextureBinder {
@@ -47,10 +48,10 @@ public class cg extends TextureBinder {
                         for (int x = 0; x < ratio; x++) {
                             for (int y = 0; y < ratio; y++) {
                                 j = n * ratio + x + (m * ratio + y) * w;
-                                this.a[j * 4 + 0] = (byte)(curPixel >> 16 & 0xFF);
-                                this.a[j * 4 + 1] = (byte)(curPixel >> 8 & 0xFF);
-                                this.a[j * 4 + 2] = (byte)(curPixel & 0xFF);
-                                this.a[j * 4 + 3] = (byte)(curPixel >> 24 & 0xFF);
+                                this.a[j * 4 + 0] = (byte) (curPixel >> 16 & 0xFF);
+                                this.a[j * 4 + 1] = (byte) (curPixel >> 8 & 0xFF);
+                                this.a[j * 4 + 2] = (byte) (curPixel & 0xFF);
+                                this.a[j * 4 + 3] = (byte) (curPixel >> 24 & 0xFF);
                             }
                         }
                     }
@@ -68,10 +69,10 @@ public class cg extends TextureBinder {
                                 a += curPixel >> 24 & 0xFF;
                             }
                         }
-                        this.a[j * 4 + 0] = (byte)(r / ratio / ratio);
-                        this.a[j * 4 + 1] = (byte)(g / ratio / ratio);
-                        this.a[j * 4 + 2] = (byte)(b / ratio / ratio);
-                        this.a[j * 4 + 3] = (byte)(a / ratio / ratio);
+                        this.a[j * 4 + 0] = (byte) (r / ratio / ratio);
+                        this.a[j * 4 + 1] = (byte) (g / ratio / ratio);
+                        this.a[j * 4 + 2] = (byte) (b / ratio / ratio);
+                        this.a[j * 4 + 3] = (byte) (a / ratio / ratio);
                         j++;
                     }
                 }
@@ -86,14 +87,14 @@ public class cg extends TextureBinder {
             this.i = new float[s];
             this.j = new float[s];
         }
-        int vw = (int)Math.sqrt((w / 16));
-        int vh = (int)Math.sqrt((h / 16));
+        int vw = (int) Math.sqrt((w / 16));
+        int vh = (int) Math.sqrt((h / 16));
         float totalWeight = ((vw * 2 + 1) * (vh * 2 + 1)) * 1.1F;
         for (int i = 0; i < w; i++) {
             for (int j = 0; j < h; j++) {
                 float f = 0.0F;
-                int l = (int)(in.a(j * 3.141593F * 2.0F / w) * 1.2F);
-                int i1 = (int)(in.a(i * 3.141593F * 2.0F / h) * 1.2F);
+                int l = (int) (in.a(j * 3.141593F * 2.0F / w) * 1.2F);
+                int i1 = (int) (in.a(i * 3.141593F * 2.0F / h) * 1.2F);
                 for (int k1 = i - vw; k1 <= i + vw; k1++) {
                     for (int i2 = j - vh; i2 <= j + vh; i2++) {
                         int k2 = k1 + l & w - 1;
@@ -120,9 +121,9 @@ public class cg extends TextureBinder {
             if (f1 < 0.0F)
                 f1 = 0.0F;
             float f2 = f1;
-            int j1 = (int)(f2 * 100.0F + 155.0F);
-            int l1 = (int)(f2 * f2 * 255.0F);
-            int j2 = (int)(f2 * f2 * f2 * f2 * 128.0F);
+            int j1 = (int) (f2 * 100.0F + 155.0F);
+            int l1 = (int) (f2 * f2 * 255.0F);
+            int j2 = (int) (f2 * f2 * f2 * f2 * 128.0F);
             if (this.c) {
                 int l2 = (j1 * 30 + l1 * 59 + j2 * 11) / 100;
                 int j3 = (j1 * 30 + l1 * 70) / 100;
@@ -131,9 +132,9 @@ public class cg extends TextureBinder {
                 l1 = j3;
                 j2 = k3;
             }
-            this.a[k * 4 + 0] = (byte)j1;
-            this.a[k * 4 + 1] = (byte)l1;
-            this.a[k * 4 + 2] = (byte)j2;
+            this.a[k * 4 + 0] = (byte) j1;
+            this.a[k * 4 + 1] = (byte) l1;
+            this.a[k * 4 + 2] = (byte) j2;
             this.a[k * 4 + 3] = -1;
         }
     }

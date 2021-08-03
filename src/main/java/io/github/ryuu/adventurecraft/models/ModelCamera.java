@@ -1,10 +1,13 @@
 package io.github.ryuu.adventurecraft.models;
 
-public class ModelCamera extends ko {
-    public ps head;
+import net.minecraft.client.model.ModelPart;
+import net.minecraft.client.render.entity.model.EntityModel;
+
+public class ModelCamera extends EntityModel {
+    public ModelPart head;
 
     public ModelCamera() {
-        this.head = new ps(0, 0);
+        this.head = new ModelPart(0, 0);
         this.head.a(-4.0F, -4.0F, -4.0F, 8, 8, 8, 0.0F);
         this.head.a(0.0F, 24.0F, 0.0F);
     }

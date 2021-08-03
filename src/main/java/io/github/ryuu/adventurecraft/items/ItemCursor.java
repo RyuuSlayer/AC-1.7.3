@@ -2,27 +2,29 @@ package io.github.ryuu.adventurecraft.items;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 
-public class ItemCursor extends gm {
+public class ItemCursor extends ItemType {
     static boolean bothSet;
 
     protected ItemCursor(int i) {
         super(i);
     }
 
-    public boolean onItemUseLeftClick(iz itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
+    public boolean onItemUseLeftClick(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
         return a(itemstack, entityplayer, world, i, j, k, l);
     }
 
-    public boolean a(iz itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
+    public boolean a(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
         if (firstPosition) {
-            Minecraft.minecraftInstance.v.a(String.format("Setting Cursor Position 1 (%d, %d, %d)", new Object[] { Integer.valueOf(i), Integer.valueOf(j), Integer.valueOf(k) }));
+            Minecraft.minecraftInstance.v.a(String.format("Setting Cursor Position 1 (%d, %d, %d)", new Object[]{Integer.valueOf(i), Integer.valueOf(j), Integer.valueOf(k)}));
             oneX = i;
             oneY = j;
             oneZ = k;
         } else {
-            Minecraft.minecraftInstance.v.a(String.format("Setting Cursor Position 2 (%d, %d, %d)", new Object[] { Integer.valueOf(i), Integer.valueOf(j), Integer.valueOf(k) }));
+            Minecraft.minecraftInstance.v.a(String.format("Setting Cursor Position 2 (%d, %d, %d)", new Object[]{Integer.valueOf(i), Integer.valueOf(j), Integer.valueOf(k)}));
             twoX = i;
             twoY = j;
             twoZ = k;

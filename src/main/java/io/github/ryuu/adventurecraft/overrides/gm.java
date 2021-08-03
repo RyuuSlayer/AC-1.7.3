@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.overrides;
 
 import java.util.Random;
+
 import net.minecraft.client.Minecraft;
 import org.mozilla.javascript.Scriptable;
 
@@ -56,7 +57,8 @@ public class gm {
         return 1.0F;
     }
 
-    public void onItemLeftClick(iz itemstack, fd world, gs entityplayer) {}
+    public void onItemLeftClick(iz itemstack, fd world, gs entityplayer) {
+    }
 
     public iz a(iz itemstack, fd world, gs entityplayer) {
         return itemstack;
@@ -108,7 +110,8 @@ public class gm {
         return false;
     }
 
-    public void a(iz itemstack, ls entityliving) {}
+    public void a(iz itemstack, ls entityliving) {
+    }
 
     public gm h() {
         this.bi = true;
@@ -159,9 +162,11 @@ public class gm {
         return 16777215;
     }
 
-    public void a(iz itemstack, fd world, sn entity, int i, boolean flag) {}
+    public void a(iz itemstack, fd world, sn entity, int i, boolean flag) {
+    }
 
-    public void b(iz itemstack, fd world, gs entityplayer) {}
+    public void b(iz itemstack, fd world, gs entityplayer) {
+    }
 
     public boolean mainActionLeftClick() {
         return false;
@@ -179,9 +184,9 @@ public class gm {
         Scriptable scope = Minecraft.minecraftInstance.f.scope;
         scope.put("slotID", scope, new Integer(slot));
         if (e()) {
-            Minecraft.minecraftInstance.f.scriptHandler.runScript(String.format("item_onAddToSlot_%d_%d.js", new Object[] { Integer.valueOf(this.bf), Integer.valueOf(damage) }), scope, false);
+            Minecraft.minecraftInstance.f.scriptHandler.runScript(String.format("item_onAddToSlot_%d_%d.js", new Object[]{Integer.valueOf(this.bf), Integer.valueOf(damage)}), scope, false);
         } else {
-            Minecraft.minecraftInstance.f.scriptHandler.runScript(String.format("item_onAddToSlot_%d.js", new Object[] { Integer.valueOf(this.bf) }), scope, false);
+            Minecraft.minecraftInstance.f.scriptHandler.runScript(String.format("item_onAddToSlot_%d.js", new Object[]{Integer.valueOf(this.bf)}), scope, false);
         }
     }
 
@@ -189,9 +194,9 @@ public class gm {
         Scriptable scope = Minecraft.minecraftInstance.f.scope;
         scope.put("slotID", scope, new Integer(slot));
         if (e()) {
-            Minecraft.minecraftInstance.f.scriptHandler.runScript(String.format("item_onRemovedFromSlot_%d_%d.js", new Object[] { Integer.valueOf(this.bf), Integer.valueOf(damage) }), scope, false);
+            Minecraft.minecraftInstance.f.scriptHandler.runScript(String.format("item_onRemovedFromSlot_%d_%d.js", new Object[]{Integer.valueOf(this.bf), Integer.valueOf(damage)}), scope, false);
         } else {
-            Minecraft.minecraftInstance.f.scriptHandler.runScript(String.format("item_onRemovedFromSlot_%d.js", new Object[] { Integer.valueOf(this.bf) }), scope, false);
+            Minecraft.minecraftInstance.f.scriptHandler.runScript(String.format("item_onRemovedFromSlot_%d.js", new Object[]{Integer.valueOf(this.bf)}), scope, false);
         }
     }
 
@@ -403,9 +408,9 @@ public class gm {
 
     public static gm ba = (new qk(101, 1, false, 8)).a(12, 5).a("cookie");
 
-    public static wr bb = (wr)(new wr(102)).a(12, 3).a("map");
+    public static wr bb = (wr) (new wr(102)).a(12, 3).a("map");
 
-    public static bl bc = (bl)(new bl(103)).a(13, 5).a("shears");
+    public static bl bc = (bl) (new bl(103)).a(13, 5).a("shears");
 
     public static gm bd = (new tr(2000, "13")).a(0, 15).a("record");
 

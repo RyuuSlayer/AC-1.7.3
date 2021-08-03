@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class ss extends BlockColor {
-    private Tile a;
+    private final Tile a;
 
     protected ss(int i, Tile block) {
         super(i, block.bm, block.bA);

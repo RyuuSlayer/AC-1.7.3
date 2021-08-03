@@ -31,7 +31,8 @@ public class BlockLadderSubtypes extends dp implements IBlockColor {
         world.d(i, j, k, meta);
     }
 
-    public void b(Level world, int i, int j, int k, int l) {}
+    public void b(Level world, int i, int j, int k, int l) {
+    }
 
     public void incrementColor(Level world, int i, int j, int k) {
         int metadata = world.e(i, j, k);

@@ -60,7 +60,7 @@ class XMLList extends XMLObjectImpl implements Function {
             XmlNode.InternalList newAnnoList = new XmlNode.InternalList();
             newAnnoList.add(_annos, 0, index);
             newAnnoList.add(xml);
-            newAnnoList.add(_annos, index+1, length());
+            newAnnoList.add(_annos, index + 1, length());
             _annos = newAnnoList;
         }
     }
@@ -127,20 +127,19 @@ class XMLList extends XMLObjectImpl implements Function {
 
         if (length() > 1) {
             throw ScriptRuntime.typeError(
-               "Assignment to lists with more than one item is not supported");
+                    "Assignment to lists with more than one item is not supported");
         } else if (length() == 0) {
             // Secret sauce for super-expandos.
             // We set an element here, and then add ourselves to our target.
             if (targetObject != null && targetProperty != null &&
-                targetProperty.getLocalName() != null &&
-                targetProperty.getLocalName().length() > 0)
-            {
+                    targetProperty.getLocalName() != null &&
+                    targetProperty.getLocalName().length() > 0) {
                 // Add an empty element with our targetProperty name and
                 // then set it.
                 XML xmlValue = newTextElementXML(null, targetProperty, null);
                 addToList(xmlValue);
 
-                if(xmlName.isAttributeName()) {
+                if (xmlName.isAttributeName()) {
                     setAttribute(xmlName, value);
                 } else {
                     XML xml = item(0);
@@ -158,9 +157,9 @@ class XMLList extends XMLObjectImpl implements Function {
                 replace(0, targetObject.getXML().getLastXmlChild());
             } else {
                 throw ScriptRuntime.typeError(
-                  "Assignment to empty XMLList without targets not supported");
+                        "Assignment to empty XMLList without targets not supported");
             }
-        } else if(xmlName.isAttributeName()) {
+        } else if (xmlName.isAttributeName()) {
             setAttribute(xmlName, value);
         } else {
             XML xml = item(0);
@@ -207,21 +206,21 @@ class XMLList extends XMLObjectImpl implements Function {
                 if (xmlValue == null) {
                     XML x = item(0);
                     xmlValue = x == null
-                        ? newTextElementXML(null,targetProperty,null)
-                        : x.copy();
+                            ? newTextElementXML(null, targetProperty, null)
+                            : x.copy();
                 }
-                ((XML)xmlValue).setChildren(value);
+                ((XML) xmlValue).setChildren(value);
             }
         }
 
         // Find the parent
         if (index < length()) {
-          parent = item(index).parent();
+            parent = item(index).parent();
         } else if (length() == 0) {
-          parent = targetObject != null ? targetObject.getXML() : parent();
+            parent = targetObject != null ? targetObject.getXML() : parent();
         } else {
-          // Appending
-          parent = parent();
+            // Appending
+            parent = parent();
         }
 
         if (parent instanceof XML) {
@@ -315,7 +314,7 @@ class XMLList extends XMLObjectImpl implements Function {
 
     @Override
     public Object[] getIds() {
-        Object enumObjs[];
+        Object[] enumObjs;
 
         if (isPrototype()) {
             enumObjs = new Object[0];
@@ -349,7 +348,7 @@ class XMLList extends XMLObjectImpl implements Function {
 
     XML item(int index) {
         return _annos != null
-            ? getXmlFromAnnotation(index) : createEmptyXML();
+                ? getXmlFromAnnotation(index) : createEmptyXML();
     }
 
     private void setAttribute(XMLName xmlName, Object value) {
@@ -393,7 +392,7 @@ class XMLList extends XMLObjectImpl implements Function {
 
     @Override
     void addMatches(XMLList rv, XMLName name) {
-        for (int i=0; i<length(); i++) {
+        for (int i = 0; i < length(); i++) {
             getXmlFromAnnotation(i).addMatches(rv, name);
         }
     }
@@ -440,7 +439,7 @@ class XMLList extends XMLObjectImpl implements Function {
     @Override
     XMLList elements(XMLName name) {
         XMLList rv = newXMLList();
-        for (int i=0; i<length(); i++) {
+        for (int i = 0; i < length(); i++) {
             XML xml = getXmlFromAnnotation(i);
             rv.addToList(xml.elements(name));
         }
@@ -516,7 +515,7 @@ class XMLList extends XMLObjectImpl implements Function {
         } else if (length() == 1) {
             return getXmlFromAnnotation(0).hasSimpleContent();
         } else {
-            for (int i=0; i<length(); i++) {
+            for (int i = 0; i < length(); i++) {
                 XML nextElement = getXmlFromAnnotation(i);
                 if (nextElement.isElement()) {
                     return false;
@@ -557,7 +556,7 @@ class XMLList extends XMLObjectImpl implements Function {
         for (int i = 0; i < length(); i++) {
             Object currParent = getXmlFromAnnotation(i).parent();
             if (!(currParent instanceof XML)) return Undefined.instance;
-            XML xml = (XML)currParent;
+            XML xml = (XML) currParent;
             if (i == 0) {
                 // Set the first for the rest to compare to.
                 candidateParent = xml;
@@ -589,10 +588,10 @@ class XMLList extends XMLObjectImpl implements Function {
     boolean propertyIsEnumerable(Object name) {
         long index;
         if (name instanceof Integer) {
-            index = ((Integer)name).intValue();
+            index = ((Integer) name).intValue();
         } else if (name instanceof Number) {
-            double x = ((Number)name).doubleValue();
-            index = (long)x;
+            double x = ((Number) name).doubleValue();
+            index = (long) x;
             if (index != x) {
                 return false;
             }
@@ -624,12 +623,12 @@ class XMLList extends XMLObjectImpl implements Function {
         if (hasSimpleContent()) {
             StringBuilder sb = new StringBuilder();
 
-            for(int i = 0; i < length(); i++) {
+            for (int i = 0; i < length(); i++) {
                 XML next = getXmlFromAnnotation(i);
                 if (next.isComment() || next.isProcessingInstruction()) {
                     //    do nothing
                 } else {
-                    sb.append(next.toString());
+                    sb.append(next);
                 }
             }
 
@@ -649,7 +648,7 @@ class XMLList extends XMLObjectImpl implements Function {
         //    See ECMA 10.2.1
         StringBuilder sb = new StringBuilder();
 
-        for (int i=0; i<length(); i++) {
+        for (int i = 0; i < length(); i++) {
             if (getProcessor().isPrettyPrinting() && i != 0) {
                 sb.append('\n');
             }
@@ -708,28 +707,27 @@ class XMLList extends XMLObjectImpl implements Function {
 
         for (int i = 0; i < length(); i++) {
             propertyList.addToList(
-                getXmlFromAnnotation(i).getPropertyList(name));
+                    getXmlFromAnnotation(i).getPropertyList(name));
         }
 
         return propertyList;
     }
 
     private Object applyOrCall(boolean isApply,
-        Context cx, Scriptable scope,
-        Scriptable thisObj, Object[] args) {
+                               Context cx, Scriptable scope,
+                               Scriptable thisObj, Object[] args) {
         String methodName = isApply ? "apply" : "call";
-        if(!(thisObj instanceof XMLList) ||
-            ((XMLList)thisObj).targetProperty == null)
+        if (!(thisObj instanceof XMLList) ||
+                ((XMLList) thisObj).targetProperty == null)
             throw ScriptRuntime.typeError1("msg.isnt.function",
-                methodName);
+                    methodName);
 
         return ScriptRuntime.applyOrCall(isApply, cx, scope, thisObj, args);
     }
 
     @Override
     protected Object jsConstructor(Context cx, boolean inNewExpr,
-                                   Object[] args)
-    {
+                                   Object[] args) {
         if (args.length == 0) {
             return newXMLList();
         } else {
@@ -754,16 +752,16 @@ class XMLList extends XMLObjectImpl implements Function {
     }
 
     public Object call(Context cx, Scriptable scope, Scriptable thisObj,
-        Object[] args) {
+                       Object[] args) {
         // This XMLList is being called as a Function.
         // Let's find the real Function object.
-        if(targetProperty == null)
+        if (targetProperty == null)
             throw ScriptRuntime.notFunctionError(this);
 
         String methodName = targetProperty.getLocalName();
 
         boolean isApply = methodName.equals("apply");
-        if(isApply || methodName.equals("call"))
+        if (isApply || methodName.equals("call"))
             return applyOrCall(isApply, cx, scope, thisObj, args);
 
         if (!(thisObj instanceof XMLObject)) {
@@ -790,7 +788,7 @@ class XMLList extends XMLObjectImpl implements Function {
         if (!(func instanceof Callable)) {
             throw ScriptRuntime.notFunctionError(thisObj, func, methodName);
         }
-        return ((Callable)func).call(cx, scope, thisObj, args);
+        return ((Callable) func).call(cx, scope, thisObj, args);
     }
 
     public Scriptable construct(Context cx, Scriptable scope, Object[] args) {

@@ -5,7 +5,7 @@ public class tz {
 
     public int b;
 
-    private boolean c;
+    private final boolean c;
 
     public tz(ib[] apositiontexturevertex) {
         this.b = 0;
@@ -45,13 +45,13 @@ public class tz {
         bt vec3d2 = vec3d1.b(vec3d).c();
         tessellator.b();
         if (this.c) {
-            tessellator.b(-((float)vec3d2.a), -((float)vec3d2.b), -((float)vec3d2.c));
+            tessellator.b(-((float) vec3d2.a), -((float) vec3d2.b), -((float) vec3d2.c));
         } else {
-            tessellator.b((float)vec3d2.a, (float)vec3d2.b, (float)vec3d2.c);
+            tessellator.b((float) vec3d2.a, (float) vec3d2.b, (float) vec3d2.c);
         }
         for (int i = 0; i < 4; i++) {
             ib positiontexturevertex = this.a[i];
-            tessellator.a(((float)positiontexturevertex.a.a * f), ((float)positiontexturevertex.a.b * f), ((float)positiontexturevertex.a.c * f), positiontexturevertex.b, positiontexturevertex.c);
+            tessellator.a(((float) positiontexturevertex.a.a * f), ((float) positiontexturevertex.a.b * f), ((float) positiontexturevertex.a.c * f), positiontexturevertex.b, positiontexturevertex.c);
         }
         tessellator.a();
     }

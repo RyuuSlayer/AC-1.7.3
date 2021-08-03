@@ -6,18 +6,20 @@ import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Keyboard;
 
 public class GuiUrl extends da {
-    private TileEntityUrl msg;
+    private final TileEntityUrl msg;
 
-    private fd world;
+    private final fd world;
 
     public GuiUrl(fd w, TileEntityUrl u) {
         this.world = w;
         this.msg = u;
     }
 
-    public void b() {}
+    public void b() {
+    }
 
-    protected void a(ke guibutton) {}
+    protected void a(ke guibutton) {
+    }
 
     protected void a(char c, int i) {
         super.a(c, i);
@@ -35,7 +37,7 @@ public class GuiUrl extends da {
 
     public void a(int i, int j, float f) {
         i();
-        b(this.g, String.format("Url: '%s'", new Object[] { this.msg.url }), 4, 4, 14737632);
+        b(this.g, String.format("Url: '%s'", new Object[]{this.msg.url}), 4, 4, 14737632);
         super.a(i, j, f);
     }
 

@@ -7,11 +7,11 @@ import net.minecraft.level.Level;
 import org.lwjgl.input.Keyboard;
 
 public class GuiMapEditHUD extends da {
-    private Level world;
+    private final Level world;
 
     private long clickedTime;
 
-    private GuiEditPalette palette;
+    private final GuiEditPalette palette;
 
     public GuiMapEditHUD(Level w) {
         this.world = w;
@@ -24,9 +24,11 @@ public class GuiMapEditHUD extends da {
         this.palette = new GuiEditPalette();
     }
 
-    public void b() {}
+    public void b() {
+    }
 
-    protected void a(ke guibutton) {}
+    protected void a(ke guibutton) {
+    }
 
     public void g() {
         if (Keyboard.getEventKeyState()) {

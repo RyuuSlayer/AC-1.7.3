@@ -25,7 +25,7 @@ public class yk extends ow {
         }
     }
 
-    public String[] a = new String[] { "", "", "", "" };
+    public String[] a = new String[]{"", "", "", ""};
 
     public boolean playSong;
 

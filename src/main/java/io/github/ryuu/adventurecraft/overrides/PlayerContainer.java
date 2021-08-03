@@ -15,19 +15,19 @@ public class PlayerContainer extends dw {
 
     public PlayerContainer(ix inventoryplayer, boolean flag) {
         this.a = new mq(this, 2, 2);
-        this.b = (lw)new wl();
+        this.b = (lw) new wl();
         this.c = false;
         this.c = flag;
         if (Minecraft.minecraftInstance.f.x.allowsInventoryCrafting) {
-            a((gp)new yv(inventoryplayer.d, (lw)this.a, this.b, 0, 144, 52));
+            a((gp) new yv(inventoryplayer.d, (lw) this.a, this.b, 0, 144, 52));
             for (int i = 0; i < 2; i++) {
                 for (int i1 = 0; i1 < 2; i1++)
-                    a(new gp((lw)this.a, i1 + i * 2, 88 + i1 * 18, 26 + i * 18 + 16));
+                    a(new gp((lw) this.a, i1 + i * 2, 88 + i1 * 18, 26 + i * 18 + 16));
             }
         }
         for (int j = 0; j < 4; j++) {
             int j1 = j;
-            a((gp)new pv(this, inventoryplayer, inventoryplayer.a() - 1 - j, 8, 8 + j * 18, j1));
+            a((gp) new pv(this, inventoryplayer, inventoryplayer.a() - 1 - j, 8, 8 + j * 18, j1));
         }
         for (int k = 0; k < 3; k++) {
             for (int k1 = 0; k1 < 9; k1++)
@@ -35,7 +35,7 @@ public class PlayerContainer extends dw {
         }
         for (int l = 0; l < 9; l++)
             a(new gp(inventoryplayer, l, 8 + l * 18, 142));
-        a((lw)this.a);
+        a((lw) this.a);
     }
 
     public void a(lw iinventory) {

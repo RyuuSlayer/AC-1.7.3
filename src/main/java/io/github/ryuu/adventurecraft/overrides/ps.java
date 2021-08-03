@@ -7,9 +7,9 @@ public class ps {
 
     private tz[] k;
 
-    private int l;
+    private final int l;
 
-    private int m;
+    private final int m;
 
     public float a;
 
@@ -33,9 +33,9 @@ public class ps {
 
     public boolean i;
 
-    private int tWidth;
+    private final int tWidth;
 
-    private int tHeight;
+    private final int tHeight;
 
     public ps(int i, int j) {
         this(i, j, 64, 32);
@@ -90,12 +90,12 @@ public class ps {
         this.j[5] = positiontexturevertex5;
         this.j[6] = positiontexturevertex6;
         this.j[7] = positiontexturevertex7;
-        this.k[0] = new tz(new ib[] { positiontexturevertex5, positiontexturevertex1, positiontexturevertex2, positiontexturevertex6 }, this.l + k + i, this.m + k, this.l + k + i + k, this.m + k + j, this.tWidth, this.tHeight);
-        this.k[1] = new tz(new ib[] { positiontexturevertex, positiontexturevertex4, positiontexturevertex7, positiontexturevertex3 }, this.l + 0, this.m + k, this.l + k, this.m + k + j, this.tWidth, this.tHeight);
-        this.k[2] = new tz(new ib[] { positiontexturevertex5, positiontexturevertex4, positiontexturevertex, positiontexturevertex1 }, this.l + k, this.m + 0, this.l + k + i, this.m + k, this.tWidth, this.tHeight);
-        this.k[3] = new tz(new ib[] { positiontexturevertex2, positiontexturevertex3, positiontexturevertex7, positiontexturevertex6 }, this.l + k + i, this.m + 0, this.l + k + i + i, this.m + k, this.tWidth, this.tHeight);
-        this.k[4] = new tz(new ib[] { positiontexturevertex1, positiontexturevertex, positiontexturevertex3, positiontexturevertex2 }, this.l + k, this.m + k, this.l + k + i, this.m + k + j, this.tWidth, this.tHeight);
-        this.k[5] = new tz(new ib[] { positiontexturevertex4, positiontexturevertex5, positiontexturevertex6, positiontexturevertex7 }, this.l + k + i + k, this.m + k, this.l + k + i + k + i, this.m + k + j, this.tWidth, this.tHeight);
+        this.k[0] = new tz(new ib[]{positiontexturevertex5, positiontexturevertex1, positiontexturevertex2, positiontexturevertex6}, this.l + k + i, this.m + k, this.l + k + i + k, this.m + k + j, this.tWidth, this.tHeight);
+        this.k[1] = new tz(new ib[]{positiontexturevertex, positiontexturevertex4, positiontexturevertex7, positiontexturevertex3}, this.l + 0, this.m + k, this.l + k, this.m + k + j, this.tWidth, this.tHeight);
+        this.k[2] = new tz(new ib[]{positiontexturevertex5, positiontexturevertex4, positiontexturevertex, positiontexturevertex1}, this.l + k, this.m + 0, this.l + k + i, this.m + k, this.tWidth, this.tHeight);
+        this.k[3] = new tz(new ib[]{positiontexturevertex2, positiontexturevertex3, positiontexturevertex7, positiontexturevertex6}, this.l + k + i, this.m + 0, this.l + k + i + i, this.m + k, this.tWidth, this.tHeight);
+        this.k[4] = new tz(new ib[]{positiontexturevertex1, positiontexturevertex, positiontexturevertex3, positiontexturevertex2}, this.l + k, this.m + k, this.l + k + i, this.m + k + j, this.tWidth, this.tHeight);
+        this.k[5] = new tz(new ib[]{positiontexturevertex4, positiontexturevertex5, positiontexturevertex6, positiontexturevertex7}, this.l + k + i + k, this.m + k, this.l + k + i + k + i, this.m + k + j, this.tWidth, this.tHeight);
         if (this.g)
             for (int l = 0; l < this.k.length; l++)
                 this.k[l].a();
@@ -134,12 +134,12 @@ public class ps {
         this.j[5] = positiontexturevertex5;
         this.j[6] = positiontexturevertex6;
         this.j[7] = positiontexturevertex7;
-        this.k[0] = new tz(new ib[] { positiontexturevertex5, positiontexturevertex1, positiontexturevertex2, positiontexturevertex6 }, this.l + k + i + k, this.m + k + j, this.l + k + i + 0, this.m + k, this.tWidth, this.tHeight);
-        this.k[1] = new tz(new ib[] { positiontexturevertex, positiontexturevertex4, positiontexturevertex7, positiontexturevertex3 }, this.l + k, this.m + k + j, this.l + 0, this.m + k, this.tWidth, this.tHeight);
-        this.k[2] = new tz(new ib[] { positiontexturevertex5, positiontexturevertex4, positiontexturevertex, positiontexturevertex1 }, this.l + k + i + i, this.m + 0, this.l + k + i, this.m + k, this.tWidth, this.tHeight);
-        this.k[3] = new tz(new ib[] { positiontexturevertex2, positiontexturevertex3, positiontexturevertex7, positiontexturevertex6 }, this.l + k + i, this.m + 0, this.l + k, this.m + k, this.tWidth, this.tHeight);
-        this.k[4] = new tz(new ib[] { positiontexturevertex1, positiontexturevertex, positiontexturevertex3, positiontexturevertex2 }, this.l + k + i + k + i, this.m + k + j, this.l + k + i + k, this.m + k, this.tWidth, this.tHeight);
-        this.k[5] = new tz(new ib[] { positiontexturevertex4, positiontexturevertex5, positiontexturevertex6, positiontexturevertex7 }, this.l + k + i, this.m + k + j, this.l + k, this.m + k, this.tWidth, this.tHeight);
+        this.k[0] = new tz(new ib[]{positiontexturevertex5, positiontexturevertex1, positiontexturevertex2, positiontexturevertex6}, this.l + k + i + k, this.m + k + j, this.l + k + i + 0, this.m + k, this.tWidth, this.tHeight);
+        this.k[1] = new tz(new ib[]{positiontexturevertex, positiontexturevertex4, positiontexturevertex7, positiontexturevertex3}, this.l + k, this.m + k + j, this.l + 0, this.m + k, this.tWidth, this.tHeight);
+        this.k[2] = new tz(new ib[]{positiontexturevertex5, positiontexturevertex4, positiontexturevertex, positiontexturevertex1}, this.l + k + i + i, this.m + 0, this.l + k + i, this.m + k, this.tWidth, this.tHeight);
+        this.k[3] = new tz(new ib[]{positiontexturevertex2, positiontexturevertex3, positiontexturevertex7, positiontexturevertex6}, this.l + k + i, this.m + 0, this.l + k, this.m + k, this.tWidth, this.tHeight);
+        this.k[4] = new tz(new ib[]{positiontexturevertex1, positiontexturevertex, positiontexturevertex3, positiontexturevertex2}, this.l + k + i + k + i, this.m + k + j, this.l + k + i + k, this.m + k, this.tWidth, this.tHeight);
+        this.k[5] = new tz(new ib[]{positiontexturevertex4, positiontexturevertex5, positiontexturevertex6, positiontexturevertex7}, this.l + k + i, this.m + k + j, this.l + k, this.m + k, this.tWidth, this.tHeight);
         if (this.g)
             for (int l = 0; l < this.k.length; l++)
                 this.k[l].a();

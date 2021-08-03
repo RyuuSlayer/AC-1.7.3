@@ -13,7 +13,7 @@ import javax.imageio.ImageIO;
 public class MapList {
     private List<MapInfo> availableMaps;
 
-    private File mapDir;
+    private final File mapDir;
 
     public MapList(File file) {
         this.availableMaps = new ArrayList<>();
@@ -42,14 +42,16 @@ public class MapList {
                         description2 = input.readLine();
                     } catch (FileNotFoundException e) {
 
-                    } catch (IOException e) {}
+                    } catch (IOException e) {
+                    }
                     File thumbnailFile = new File(file, "thumbnail.png");
                     BufferedImage thumbnail = null;
                     try {
                         thumbnail = ImageIO.read(thumbnailFile);
                     } catch (FileNotFoundException e) {
 
-                    } catch (IOException e) {}
+                    } catch (IOException e) {
+                    }
                     arraylist.add(new MapInfo(mapName, description1, description2, thumbnail));
                 }
             }

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class qv extends sn {
-    private int f;
+    private final int f;
 
     public int a;
 
@@ -63,7 +63,8 @@ public class qv extends sn {
         b(l);
     }
 
-    protected void b() {}
+    protected void b() {
+    }
 
     public void b(int i) {
         this.a = i;
@@ -111,7 +112,8 @@ public class qv extends sn {
         return (i != 64) ? 0.0F : 0.5F;
     }
 
-    public void w_() {}
+    public void w_() {
+    }
 
     public boolean k() {
         if (this.aI.a(this, this.aW).size() > 0)
@@ -158,13 +160,13 @@ public class qv extends sn {
         if (!this.be && !this.aI.B) {
             K();
             ai();
-            this.aI.b((sn)new hl(this.aI, this.aM, this.aN, this.aO, new iz(gm.aq)));
+            this.aI.b((sn) new hl(this.aI, this.aM, this.aN, this.aO, new iz(gm.aq)));
         }
         return true;
     }
 
     public void b(nu nbttagcompound) {
-        nbttagcompound.a("Dir", (byte)this.a);
+        nbttagcompound.a("Dir", (byte) this.a);
         nbttagcompound.a("Motive", this.e.A);
         nbttagcompound.a("TileX", this.b);
         nbttagcompound.a("TileY", this.c);
@@ -192,14 +194,14 @@ public class qv extends sn {
     public void b(double d, double d1, double d2) {
         if (!this.aI.B && d * d + d1 * d1 + d2 * d2 > 0.0D) {
             K();
-            this.aI.b((sn)new hl(this.aI, this.aM, this.aN, this.aO, new iz(gm.aq)));
+            this.aI.b((sn) new hl(this.aI, this.aM, this.aN, this.aO, new iz(gm.aq)));
         }
     }
 
     public void d(double d, double d1, double d2) {
         if (!this.aI.B && d * d + d1 * d1 + d2 * d2 > 0.0D) {
             K();
-            this.aI.b((sn)new hl(this.aI, this.aM, this.aN, this.aO, new iz(gm.aq)));
+            this.aI.b((sn) new hl(this.aI, this.aM, this.aN, this.aO, new iz(gm.aq)));
         }
     }
 }

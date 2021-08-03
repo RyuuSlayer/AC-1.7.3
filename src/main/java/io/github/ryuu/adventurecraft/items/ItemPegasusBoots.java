@@ -1,8 +1,9 @@
 package io.github.ryuu.adventurecraft.items;
 
 import net.minecraft.entity.player.Player;
+import net.minecraft.item.armour.ArmourItem;
 
-class ItemPegasusBoots extends wa {
+class ItemPegasusBoots extends ArmourItem {
     public ItemPegasusBoots(int itemIndex) {
         super(itemIndex, 0, 0, 3);
         c(183);

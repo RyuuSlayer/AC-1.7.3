@@ -22,11 +22,11 @@ public class uw extends ls implements ff {
 
     protected void b() {
         super.b();
-        this.bD.a(16, new Byte((byte)1));
+        this.bD.a(16, new Byte((byte) 1));
     }
 
     public void e(int i) {
-        this.bD.b(16, new Byte((byte)i));
+        this.bD.b(16, new Byte((byte) i));
         b(0.6F * i, 0.6F * i);
         this.Y = i * i;
         e(this.aM, this.aN, this.aO);
@@ -60,7 +60,7 @@ public class uw extends ls implements ff {
                 this.aI.a("slime", this.aM + f2, this.aW.b, this.aO + f3, 0.0D, 0.0D, 0.0D);
             }
             if (i > 2)
-                this.aI.a((sn)this, "mob.slime", k(), ((this.bs.nextFloat() - this.bs.nextFloat()) * 0.2F + 1.0F) / 0.8F);
+                this.aI.a((sn) this, "mob.slime", k(), ((this.bs.nextFloat() - this.bs.nextFloat()) * 0.2F + 1.0F) / 0.8F);
             this.a = -0.5F;
         }
         this.a *= 0.6F;
@@ -68,20 +68,20 @@ public class uw extends ls implements ff {
 
     protected void f_() {
         X();
-        gs entityplayer = this.aI.a((sn)this, 16.0D);
+        gs entityplayer = this.aI.a((sn) this, 16.0D);
         if (entityplayer != null)
-            a((sn)entityplayer, 10.0F, 20.0F);
+            a(entityplayer, 10.0F, 20.0F);
         if (this.aX && this.c-- <= 0) {
             this.c = this.bs.nextInt(20) + 10;
             if (entityplayer != null)
                 this.c /= 3;
             this.az = true;
             if (v() > 1)
-                this.aI.a((sn)this, "mob.slime", k(), ((this.bs.nextFloat() - this.bs.nextFloat()) * 0.2F + 1.0F) * 0.8F);
+                this.aI.a((sn) this, "mob.slime", k(), ((this.bs.nextFloat() - this.bs.nextFloat()) * 0.2F + 1.0F) * 0.8F);
             this.a = 1.0F;
             this.aw = 1.0F - this.bs.nextFloat() * 2.0F;
             this.ax = (1 * v());
-            float length = (float)Math.sqrt((this.aw * this.aw + this.ax * this.ax));
+            float length = (float) Math.sqrt((this.aw * this.aw + this.ax * this.ax));
             this.aw /= length;
             this.ax /= length;
         } else {
@@ -100,8 +100,8 @@ public class uw extends ls implements ff {
         int j = i;
         if (this.attackStrength != -1)
             j = this.attackStrength;
-        if ((i > 1 || this.attackStrength != -1) && e((sn)entityplayer) && f((sn)entityplayer) < 0.6D * i && entityplayer.a((sn)this, j))
-            this.aI.a((sn)this, "mob.slimeattack", 1.0F, (this.bs.nextFloat() - this.bs.nextFloat()) * 0.2F + 1.0F);
+        if ((i > 1 || this.attackStrength != -1) && e(entityplayer) && f(entityplayer) < 0.6D * i && entityplayer.a(this, j))
+            this.aI.a((sn) this, "mob.slimeattack", 1.0F, (this.bs.nextFloat() - this.bs.nextFloat()) * 0.2F + 1.0F);
     }
 
     protected String j_() {

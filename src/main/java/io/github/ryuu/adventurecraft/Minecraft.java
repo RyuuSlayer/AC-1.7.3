@@ -1,6 +1,8 @@
 package io.github.ryuu.adventurecraft;
 
 import io.github.ryuu.adventurecraft.blocks.Blocks;
+import io.github.ryuu.adventurecraft.gui.GuiMapSelect;
+import io.github.ryuu.adventurecraft.gui.GuiStore;
 import io.github.ryuu.adventurecraft.scripting.ScriptEntity;
 import io.github.ryuu.adventurecraft.scripting.ScriptItem;
 import io.github.ryuu.adventurecraft.scripting.ScriptVec3;
@@ -27,6 +29,7 @@ import ht;
 import ia;
 import ik;
 import in;
+
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
@@ -42,6 +45,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+
 import jg;
 import jh;
 import ji;
@@ -197,7 +201,8 @@ public abstract class Minecraft implements Runnable {
             lwjglexception.printStackTrace();
             try {
                 Thread.sleep(1000L);
-            } catch (InterruptedException interruptedexception) {}
+            } catch (InterruptedException interruptedexception) {
+            }
             Display.create();
         }
         this.Z = b();
@@ -213,7 +218,7 @@ public abstract class Minecraft implements Runnable {
         this.t = new px(this);
         EntityRenderDispatcher.a.f = new HandItemRenderer(this);
         this.I = new xi(this.k, this.Z);
-        ep.f.a((gt)new kh(this));
+        ep.f.a((gt) new kh(this));
         x();
         Keyboard.create();
         Mouse.create();
@@ -238,16 +243,16 @@ public abstract class Minecraft implements Runnable {
         c("Startup");
         this.S = new cx();
         this.B.a(this.z);
-        this.p.a((TextureBinder)this.ae);
-        this.p.a((TextureBinder)this.ad);
-        this.p.a((TextureBinder)new PortalTextureBinder());
-        this.p.a((TextureBinder)new CompassTextureBinder(this));
-        this.p.a((TextureBinder)new ClockTextureBinder(this));
-        this.p.a((TextureBinder)new FlowingWaterTextureBinder());
-        this.p.a((TextureBinder)new FlowingLavaTextureBinder2());
-        this.p.a((TextureBinder)new FireTextureBinder(0));
-        this.p.a((TextureBinder)new FireTextureBinder(1));
-        this.p.a((TextureBinder)new TextureFanFX());
+        this.p.a((TextureBinder) this.ae);
+        this.p.a((TextureBinder) this.ad);
+        this.p.a((TextureBinder) new PortalTextureBinder());
+        this.p.a((TextureBinder) new CompassTextureBinder(this));
+        this.p.a((TextureBinder) new ClockTextureBinder(this));
+        this.p.a((TextureBinder) new FlowingWaterTextureBinder());
+        this.p.a((TextureBinder) new FlowingLavaTextureBinder2());
+        this.p.a((TextureBinder) new FireTextureBinder(0));
+        this.p.a((TextureBinder) new FireTextureBinder(1));
+        this.p.a((TextureBinder) new TextureFanFX());
         this.g = new n(this, this.p);
         GL11.glViewport(0, 0, this.d, this.e);
         this.j = new ParticleManager(this.f, this.p);
@@ -255,11 +260,12 @@ public abstract class Minecraft implements Runnable {
             this.U = new cz(this.Z, this);
             this.U.start();
             this.U.a();
-        } catch (Exception exception1) {}
+        } catch (Exception exception1) {
+        }
         c("Post startup");
         this.v = new uq(this);
         if (this.ab != null) {
-            a((Screen)new vx(this, this.ab, this.ac));
+            a((Screen) new vx(this, this.ab, this.ac));
         } else {
             a(new TitleScreen());
         }
@@ -384,7 +390,7 @@ public abstract class Minecraft implements Runnable {
         }
         if (ch instanceof TitleScreen)
             this.v.b();
-        this.r = (Screen)ch;
+        this.r = (Screen) ch;
         if (ch != null) {
             h();
             ScreenScaler scaledresolution = new ScreenScaler(this.z, this.d, this.e);
@@ -416,14 +422,17 @@ public abstract class Minecraft implements Runnable {
             try {
                 if (this.U != null)
                     this.U.b();
-            } catch (Exception exception) {}
+            } catch (Exception exception) {
+            }
             System.out.println("Stopping!");
             try {
-                a((Level)null);
-            } catch (Throwable throwable) {}
+                a((Level) null);
+            } catch (Throwable throwable) {
+            }
             try {
                 ge.a();
-            } catch (Throwable throwable1) {}
+            } catch (Throwable throwable1) {
+            }
             this.B.b();
             Mouse.destroy();
             Keyboard.destroy();
@@ -479,7 +488,7 @@ public abstract class Minecraft implements Runnable {
                             k();
                         } catch (SessionLockException minecraftexception1) {
                             this.f = null;
-                            a((Level)null);
+                            a((Level) null);
                             a(new LevelSaveConflictScreen());
                         }
                     }
@@ -487,7 +496,7 @@ public abstract class Minecraft implements Runnable {
                     c("Pre render");
                     cv.a = this.z.j;
                     if (!this.cameraActive) {
-                        this.B.a((ls)this.h, this.T.c);
+                        this.B.a((ls) this.h, this.T.c);
                     } else {
                         this.B.a(this.cutsceneCameraEntity, this.T.c);
                     }
@@ -540,12 +549,12 @@ public abstract class Minecraft implements Runnable {
                     this.nextFrameTime = (this.nextFrameTime + 1) % 60;
                 } catch (SessionLockException minecraftexception) {
                     this.f = null;
-                    a((Level)null);
+                    a((Level) null);
                     a(new LevelSaveConflictScreen());
                 } catch (OutOfMemoryError outofmemoryerror) {
                     outofmemoryerror.printStackTrace();
                     e();
-                    a((Screen)new x());
+                    a((Screen) new x());
                     System.gc();
                 }
             }
@@ -566,16 +575,19 @@ public abstract class Minecraft implements Runnable {
         try {
             b = new byte[0];
             this.g.f();
-        } catch (Throwable throwable) {}
+        } catch (Throwable throwable) {
+        }
         try {
             System.gc();
             eq.a();
             bt.a();
-        } catch (Throwable throwable1) {}
+        } catch (Throwable throwable1) {
+        }
         try {
             System.gc();
-            a((Level)null);
-        } catch (Throwable throwable2) {}
+            a((Level) null);
+        } catch (Throwable throwable2) {
+        }
         System.gc();
     }
 
@@ -610,7 +622,7 @@ public abstract class Minecraft implements Runnable {
         GL11.glDisable(3553);
         Tessellator tessellator = Tessellator.a;
         tessellator.a(7);
-        int i = (int)(l1 / 200000L);
+        int i = (int) (l1 / 200000L);
         tessellator.b(536870912);
         tessellator.a(0.0D, (this.e - i), 0.0D);
         tessellator.a(0.0D, this.e, 0.0D);
@@ -625,7 +637,7 @@ public abstract class Minecraft implements Runnable {
         long l3 = 0L;
         for (int j = 0; j < E.length; j++)
             l3 += E[j];
-        int k = (int)(l3 / 200000L / E.length);
+        int k = (int) (l3 / 200000L / E.length);
         tessellator.a(7);
         tessellator.b(541065216);
         tessellator.a(0.0D, (this.e - k), 0.0D);
@@ -648,14 +660,14 @@ public abstract class Minecraft implements Runnable {
             long uTime = updateTimes[i1] / 200000L;
             long l4 = E[i1] / 200000L;
             long l5 = F[i1] / 200000L;
-            tessellator.a((i1 + 0.5F), ((float)(this.e - l4) + 0.5F), 0.0D);
+            tessellator.a((i1 + 0.5F), ((float) (this.e - l4) + 0.5F), 0.0D);
             tessellator.a((i1 + 0.5F), (this.e + 0.5F), 0.0D);
             tessellator.b(k1 * 1);
-            tessellator.a((i1 + 0.5F), ((float)(this.e - l4 - l5) + 0.5F), 0.0D);
-            tessellator.a((i1 + 0.5F), ((float)(this.e - l4 - l5 - uTime) + 0.5F), 0.0D);
+            tessellator.a((i1 + 0.5F), ((float) (this.e - l4 - l5) + 0.5F), 0.0D);
+            tessellator.a((i1 + 0.5F), ((float) (this.e - l4 - l5 - uTime) + 0.5F), 0.0D);
             tessellator.b(-16777216 + k1 * 65536 + k1 * 256 + k1 * 1);
-            tessellator.a((i1 + 0.5F), ((float)(this.e - l4) + 0.5F), 0.0D);
-            tessellator.a((i1 + 0.5F), ((float)(this.e - l4 - l5) + 0.5F), 0.0D);
+            tessellator.a((i1 + 0.5F), ((float) (this.e - l4) + 0.5F), 0.0D);
+            tessellator.a((i1 + 0.5F), ((float) (this.e - l4 - l5) + 0.5F), 0.0D);
         }
         tessellator.a();
         GL11.glEnable(3553);
@@ -672,7 +684,7 @@ public abstract class Minecraft implements Runnable {
             return;
         this.N = true;
         this.C.a();
-        a((Screen)null);
+        a((Screen) null);
         this.ag = this.V + 10000;
     }
 
@@ -688,7 +700,7 @@ public abstract class Minecraft implements Runnable {
     public void i() {
         if (this.r != null)
             return;
-        a((Screen)new oz());
+        a((Screen) new oz());
     }
 
     private void a(int i, boolean flag) {
@@ -748,9 +760,9 @@ public abstract class Minecraft implements Runnable {
                 this.W = 10;
         } else if (this.y.a == jg.b) {
             if (i == 0)
-                this.c.b((Player)this.h, this.y.g);
+                this.c.b((Player) this.h, this.y.g);
             if (i == 1)
-                this.c.a((Player)this.h, this.y.g);
+                this.c.a((Player) this.h, this.y.g);
         } else if (this.y.a == jg.a) {
             int j = this.y.b;
             int k = this.y.c;
@@ -768,10 +780,10 @@ public abstract class Minecraft implements Runnable {
                 if (i == 0) {
                     this.c.a(j, k, l, this.y.e);
                     if (itemUsing != null)
-                        itemUsing.useItemLeftClick((Player)this.h, this.f, j, k, l, i1);
+                        itemUsing.useItemLeftClick((Player) this.h, this.f, j, k, l, i1);
                 } else {
                     int j1 = (itemUsing == null) ? 0 : itemUsing.a;
-                    if (this.c.a((Player)this.h, this.f, itemUsing, j, k, l, i1)) {
+                    if (this.c.a((Player) this.h, this.f, itemUsing, j, k, l, i1)) {
                         flag = false;
                         this.h.J();
                     }
@@ -794,9 +806,9 @@ public abstract class Minecraft implements Runnable {
         }
         if (flag && i == 0)
             if (itemUsing != null && gm.c[itemUsing.c] != null)
-                gm.c[itemUsing.c].onItemLeftClick(itemUsing, this.f, (Player)this.h);
+                gm.c[itemUsing.c].onItemLeftClick(itemUsing, this.f, (Player) this.h);
         if (flag && i == 1)
-            if (itemUsing != null && this.c.a((Player)this.h, this.f, itemUsing))
+            if (itemUsing != null && this.c.a((Player) this.h, this.f, itemUsing))
                 this.t.c.c();
         if (itemUsing != null) {
             if (this.lastItemUsed != itemUsing) {
@@ -850,9 +862,9 @@ public abstract class Minecraft implements Runnable {
                 }
             }
             if (itemUsing.f()) {
-                this.f.scriptHandler.runScript(String.format("item_%d_%d.js", new Object[] { Integer.valueOf(itemUsing.c), Integer.valueOf(itemUsing.i()) }), this.f.scope, false);
+                this.f.scriptHandler.runScript(String.format("item_%d_%d.js", new Object[]{Integer.valueOf(itemUsing.c), Integer.valueOf(itemUsing.i())}), this.f.scope, false);
             } else {
-                this.f.scriptHandler.runScript(String.format("item_%d.js", new Object[] { Integer.valueOf(itemUsing.c) }), this.f.scope, false);
+                this.f.scriptHandler.runScript(String.format("item_%d.js", new Object[]{Integer.valueOf(itemUsing.c)}), this.f.scope, false);
             }
         }
         if (swapItemBack) {
@@ -936,9 +948,9 @@ public abstract class Minecraft implements Runnable {
         if (this.h != null) {
             cl ichunkprovider = this.f.w();
             if (ichunkprovider instanceof kx) {
-                kx chunkproviderloadorgenerate = (kx)ichunkprovider;
-                int j = in.d((int)this.h.aM) >> 4;
-                int i1 = in.d((int)this.h.aO) >> 4;
+                kx chunkproviderloadorgenerate = (kx) ichunkprovider;
+                int j = in.d((int) this.h.aM) >> 4;
+                int i1 = in.d((int) this.h.aO) >> 4;
                 chunkproviderloadorgenerate.d(j, i1);
             }
         }
@@ -949,12 +961,12 @@ public abstract class Minecraft implements Runnable {
             this.p.a();
         if (this.r == null && this.h != null) {
             if (this.h.Y <= 0) {
-                a((Screen)null);
+                a((Screen) null);
             } else if (this.h.N() && this.f != null && this.f.B) {
-                a((Screen)new gh());
+                a((Screen) new gh());
             }
         } else if (this.r != null && this.r instanceof gh && !this.h.N()) {
-            a((Screen)null);
+            a((Screen) null);
         }
         if (this.r != null && !this.r.disableInputGrabbing)
             this.ag = this.V + 10000;
@@ -980,7 +992,7 @@ public abstract class Minecraft implements Runnable {
                         if (DebugMode.active && altDown) {
                             DebugMode.reachDistance += k;
                             DebugMode.reachDistance = Math.min(Math.max(DebugMode.reachDistance, 2), 100);
-                            this.v.a(String.format("Reach Changed to %d", new Object[] { Integer.valueOf(DebugMode.reachDistance) }));
+                            this.v.a(String.format("Reach Changed to %d", new Object[]{Integer.valueOf(DebugMode.reachDistance)}));
                         } else {
                             if (ctrlDown) {
                                 int t = this.h.c.c;
@@ -1052,11 +1064,11 @@ public abstract class Minecraft implements Runnable {
                             if (Keyboard.getEventKey() == 65)
                                 this.h.displayGUIPalette();
                             if (Keyboard.getEventKey() == this.z.r.b)
-                                a((Screen)new ue((Player)this.h));
+                                a((Screen) new ue((Player) this.h));
                             if (Keyboard.getEventKey() == this.z.s.b)
                                 this.h.D();
                             if ((l() || DebugMode.active) && Keyboard.getEventKey() == this.z.t.b)
-                                a((Screen)new gc());
+                                a((Screen) new gc());
                             if (DebugMode.active && (Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157)))
                                 if (Keyboard.getEventKey() == 44) {
                                     this.f.undo();
@@ -1096,7 +1108,7 @@ public abstract class Minecraft implements Runnable {
                 this.ah++;
                 if (this.ah == 30) {
                     this.ah = 0;
-                    this.f.g((Entity)this.h);
+                    this.f.g((Entity) this.h);
                 }
             }
             this.f.q = this.z.y;
@@ -1151,7 +1163,8 @@ public abstract class Minecraft implements Runnable {
                 return result;
             } catch (FileNotFoundException e) {
 
-            } catch (IOException e) {}
+            } catch (IOException e) {
+            }
         return null;
     }
 
@@ -1170,20 +1183,21 @@ public abstract class Minecraft implements Runnable {
             output.close();
         } catch (FileNotFoundException e) {
 
-        } catch (IOException e) {}
+        } catch (IOException e) {
+        }
     }
 
     public void a(String s, String s1, long l) {
         String mapName = getMapUsed(s);
         if (in.a(mapName)) {
-            a((Screen)new GuiMapSelect(null, s));
+            a((Screen) new GuiMapSelect(null, s));
         } else {
             startWorld(s, s1, l, mapName);
         }
     }
 
     public void startWorld(String s, String s1, long l, String mapName) {
-        a((Level)null);
+        a((Level) null);
         System.gc();
         if (s != null && this.aa.a(s)) {
             b(s, s1);
@@ -1206,11 +1220,11 @@ public abstract class Minecraft implements Runnable {
                 a(world, "Loading level");
             }
         }
-        a((Screen)null);
+        a((Screen) null);
     }
 
     public Level getWorld(String saveName, long l, String mapName) {
-        a((Level)null);
+        a((Level) null);
         System.gc();
         DimensionData isavehandler = this.aa.a(saveName, false);
         Level world = new Level(mapName, isavehandler, saveName, l);
@@ -1224,7 +1238,7 @@ public abstract class Minecraft implements Runnable {
         } else {
             this.h.m = -1;
         }
-        this.f.e((Entity)this.h);
+        this.f.e((Entity) this.h);
         this.h.be = false;
         double d = this.h.aM;
         double d1 = this.h.aO;
@@ -1234,25 +1248,25 @@ public abstract class Minecraft implements Runnable {
             d1 /= d2;
             this.h.c(d, this.h.aN, d1, this.h.aS, this.h.aT);
             if (this.h.W())
-                this.f.a((Entity)this.h, false);
+                this.f.a((Entity) this.h, false);
             Level world = null;
             world = new Level(this.f, xa.a(-1));
-            a(world, "Entering the Nether", (Player)this.h);
+            a(world, "Entering the Nether", (Player) this.h);
         } else {
             d *= d2;
             d1 *= d2;
             this.h.c(d, this.h.aN, d1, this.h.aS, this.h.aT);
             if (this.h.W())
-                this.f.a((Entity)this.h, false);
+                this.f.a((Entity) this.h, false);
             Level world1 = null;
             world1 = new Level(this.f, xa.a(0));
-            a(world1, "Leaving the Nether", (Player)this.h);
+            a(world1, "Leaving the Nether", (Player) this.h);
         }
         this.h.aI = this.f;
         if (this.h.W()) {
             this.h.c(d, this.h.aN, d1, this.h.aS, this.h.aT);
-            this.f.a((Entity)this.h, false);
-            (new ur()).a(this.f, (Entity)this.h);
+            this.f.a((Entity) this.h, false);
+            (new ur()).a(this.f, (Entity) this.h);
         }
     }
 
@@ -1272,47 +1286,47 @@ public abstract class Minecraft implements Runnable {
         this.s.d("");
         this.B.a(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
         if (this.f != null)
-            this.f.a((yb)this.s);
+            this.f.a((yb) this.s);
         this.f = world;
         if (world != null) {
             this.f.loadMapTextures();
             this.c.a(world);
             if (!l()) {
                 if (entityplayer == null)
-                    this.h = (dc)world.a(dc.class);
+                    this.h = (dc) world.a(dc.class);
             } else if (this.h != null) {
                 this.h.t_();
                 if (world != null)
-                    world.b((Entity)this.h);
+                    world.b((Entity) this.h);
             }
             if (!world.B)
                 d(s);
             if (this.h == null) {
-                this.h = (dc)this.c.b(world);
+                this.h = (dc) this.c.b(world);
                 this.h.t_();
-                this.c.a((Player)this.h);
-                this.cutsceneCameraEntity = (ls)this.c.b(world);
+                this.c.a((Player) this.h);
+                this.cutsceneCameraEntity = (ls) this.c.b(world);
                 this.f.script.initPlayer();
             }
-            this.h.a = (uo)new lr(this.z);
+            this.h.a = (uo) new lr(this.z);
             if (this.g != null)
                 this.g.a(world);
             if (this.j != null)
                 this.j.a(world);
-            this.c.b((Player)this.h);
+            this.c.b((Player) this.h);
             if (entityplayer != null)
                 world.e();
             cl ichunkprovider = world.w();
             if (ichunkprovider instanceof kx) {
-                kx chunkproviderloadorgenerate = (kx)ichunkprovider;
-                int i = in.d((int)this.h.aM) >> 4;
-                int j = in.d((int)this.h.aO) >> 4;
+                kx chunkproviderloadorgenerate = (kx) ichunkprovider;
+                int i = in.d((int) this.h.aM) >> 4;
+                int j = in.d((int) this.h.aO) >> 4;
                 chunkproviderloadorgenerate.d(i, j);
             }
-            world.a((Player)this.h);
+            world.a((Player) this.h);
             if (world.s)
-                world.a((yb)this.s);
-            this.i = (ls)this.h;
+                world.a((yb) this.s);
+            this.i = (ls) this.h;
         } else {
             this.h = null;
         }
@@ -1323,7 +1337,7 @@ public abstract class Minecraft implements Runnable {
     private void b(String s, String s1) {
         this.s.a("Converting World to " + this.aa.a());
         this.s.d("This may take a while :)");
-        this.aa.a(s, (yb)this.s);
+        this.aa.a(s, (yb) this.s);
         a(s, s1, 0L);
     }
 
@@ -1337,18 +1351,18 @@ public abstract class Minecraft implements Runnable {
         cl ichunkprovider = this.f.w();
         br chunkcoordinates = this.f.u();
         if (this.h != null) {
-            chunkcoordinates.a = (int)this.h.aM;
-            chunkcoordinates.c = (int)this.h.aO;
+            chunkcoordinates.a = (int) this.h.aM;
+            chunkcoordinates.c = (int) this.h.aO;
         }
         if (ichunkprovider instanceof kx) {
-            kx chunkproviderloadorgenerate = (kx)ichunkprovider;
+            kx chunkproviderloadorgenerate = (kx) ichunkprovider;
             chunkproviderloadorgenerate.d(chunkcoordinates.a >> 4, chunkcoordinates.c >> 4);
         }
         for (int k = -c; k <= c; k += 16) {
             for (int l = -c; l <= c; l += 16) {
                 this.s.a(i++ * 100 / j);
                 this.f.a(chunkcoordinates.a + k, 64, chunkcoordinates.c + l);
-                while (this.f.j());
+                while (this.f.j()) ;
             }
         }
         this.s.d("Simulating world for a bit");
@@ -1399,38 +1413,38 @@ public abstract class Minecraft implements Runnable {
         br chunkcoordinates = this.f.u();
         cl ichunkprovider = this.f.w();
         if (ichunkprovider instanceof kx) {
-            kx chunkproviderloadorgenerate = (kx)ichunkprovider;
+            kx chunkproviderloadorgenerate = (kx) ichunkprovider;
             chunkproviderloadorgenerate.d(chunkcoordinates.a >> 4, chunkcoordinates.c >> 4);
         }
         this.f.v();
         int entID = 0;
         if (this.h != null) {
             entID = this.h.aD;
-            this.f.e((Entity)this.h);
+            this.f.e((Entity) this.h);
         } else {
-            this.h = (dc)this.c.b(this.f);
+            this.h = (dc) this.c.b(this.f);
             this.f.script.initPlayer();
         }
         this.g.resetForDeath();
         br spawnCoords = this.f.u();
         this.h.t_();
         this.h.c(spawnCoords.a + 0.5D, spawnCoords.b, spawnCoords.c + 0.5D, 0.0F, 0.0F);
-        this.i = (ls)this.h;
+        this.i = (ls) this.h;
         this.h.t_();
-        this.c.a((Player)this.h);
-        this.f.a((Player)this.h);
-        this.h.a = (uo)new lr(this.z);
+        this.c.a((Player) this.h);
+        this.f.a((Player) this.h);
+        this.h.a = (uo) new lr(this.z);
         this.h.aD = entID;
         this.h.v();
         this.h.c(this.f.getSpawnYaw(), 0.0F);
-        this.c.b((Player)this.h);
+        this.c.b((Player) this.h);
         d("Respawning");
         if (this.r instanceof DeathScreen)
-            a((Screen)null);
+            a((Screen) null);
     }
 
     public static void a(String s, String s1) {
-        a(s, s1, (String)null);
+        a(s, s1, null);
     }
 
     public static void a(String s, String s1, String s2) {
@@ -1442,9 +1456,9 @@ public abstract class Minecraft implements Runnable {
         frame.add(canvas, "Center");
         canvas.setPreferredSize(new Dimension(854, 480));
         frame.pack();
-        frame.setLocationRelativeTo((Component)null);
+        frame.setLocationRelativeTo(null);
         kq minecraftimpl = new kq(frame, canvas, null, 854, 480, flag, frame);
-        Thread thread = new Thread((Runnable)minecraftimpl, "Minecraft main thread");
+        Thread thread = new Thread((Runnable) minecraftimpl, "Minecraft main thread");
         thread.setPriority(10);
         minecraftimpl.l = "www.minecraft.net";
         if (s3 != null && s1 != null) {
@@ -1457,13 +1471,13 @@ public abstract class Minecraft implements Runnable {
             minecraftimpl.a(as[0], Integer.parseInt(as[1]));
         }
         frame.setVisible(true);
-        frame.addWindowListener((WindowListener)new kj((Minecraft)minecraftimpl, thread));
+        frame.addWindowListener((WindowListener) new kj((Minecraft) minecraftimpl, thread));
         thread.start();
     }
 
     public nb s() {
         if (this.h instanceof tk)
-            return ((tk)this.h).bN;
+            return ((tk) this.h).bN;
         return null;
     }
 
@@ -1494,7 +1508,7 @@ public abstract class Minecraft implements Runnable {
     }
 
     public boolean b(String s) {
-        if (!s.startsWith("/"));
+        if (!s.startsWith("/")) ;
         return false;
     }
 
@@ -1514,7 +1528,7 @@ public abstract class Minecraft implements Runnable {
 
     private cx S;
 
-    private Timer T;
+    private final Timer T;
 
     public Level f;
 
@@ -1554,7 +1568,7 @@ public abstract class Minecraft implements Runnable {
 
     private int X;
 
-    private int Y;
+    private final int Y;
 
     public vu u;
 
@@ -1594,9 +1608,9 @@ public abstract class Minecraft implements Runnable {
 
     private int ac;
 
-    private vs ad;
+    private final vs ad;
 
-    private cg ae;
+    private final cg ae;
 
     private static File af = null;
 

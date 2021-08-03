@@ -74,7 +74,7 @@ public class st {
                                 l3 = 15;
                         } else if (this.a == eb.b) {
                             if (Tile.m[j3] != null) {
-                                l3 = Tile.m[j3].getBlockLightValue((xp)world, k1, k2, l1);
+                                l3 = Tile.m[j3].getBlockLightValue((xp) world, k1, k2, l1);
                             } else {
                                 l3 = Tile.s[j3];
                             }

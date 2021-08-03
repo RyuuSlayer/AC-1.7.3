@@ -163,7 +163,7 @@ public class lx extends sn {
         }
         if (!this.aI.B) {
             iz itemstack = this.b.G();
-            if (this.b.be || !this.b.W() || itemstack == null || itemstack.a() != gm.aP || g((sn) this.b) > 1024.0D) {
+            if (this.b.be || !this.b.W() || itemstack == null || itemstack.a() != gm.aP || g(this.b) > 1024.0D) {
                 K();
                 this.b.D = null;
                 return;

@@ -17,7 +17,7 @@ public abstract class xa {
 
     public int g = 0;
 
-    private float[] h = new float[4];
+    private final float[] h = new float[4];
 
     public final void a(fd world) {
         this.a = world;
@@ -39,7 +39,7 @@ public abstract class xa {
 
     public cl b() {
         if (this.a.x.useImages)
-            return (cl)new ChunkProviderHeightMapGenerate(this.a, this.a.s());
+            return (cl) new ChunkProviderHeightMapGenerate(this.a, this.a.s());
         yf c = new yf(this.a, this.a.s());
         ei w = this.a.x;
         c.mapSize = w.mapSize;
@@ -61,14 +61,14 @@ public abstract class xa {
     }
 
     public float a(long l, float f) {
-        int i = (int)(l % 24000L);
+        int i = (int) (l % 24000L);
         float f1 = (i + f) / 24000.0F - 0.25F;
         if (f1 < 0.0F)
             f1++;
         if (f1 > 1.0F)
             f1--;
         float f2 = f1;
-        f1 = 1.0F - (float)((Math.cos(f1 * Math.PI) + 1.0D) / 2.0D);
+        f1 = 1.0F - (float) ((Math.cos(f1 * Math.PI) + 1.0D) / 2.0D);
         f1 = f2 + (f1 - f2) / 3.0F;
         return f1;
     }
@@ -111,11 +111,11 @@ public abstract class xa {
 
     public static xa a(int i) {
         if (i == -1)
-            return (xa)new wd();
+            return (xa) new wd();
         if (i == 0)
-            return (xa)new rh();
+            return (xa) new rh();
         if (i == 1)
-            return (xa)new ay();
+            return (xa) new ay();
         return null;
     }
 

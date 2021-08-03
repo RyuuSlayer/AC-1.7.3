@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
- 
+
 package org.mozilla.javascript;
 
 import java.io.Closeable;
@@ -13,17 +13,16 @@ import java.util.NoSuchElementException;
  * in the ECMAScript spec. The caller is responsible for retrieving an object that implements
  * the "iterator" pattern. This class will follow that pattern and throw appropriate
  * JavaScript exceptions.
- *
+ * <p>
  * The pattern that the target class should follow is:
  * * It must have a function property called "next"
  * * The function must return an object with a boolean value called "done".
  * * If "done" is true, then the returned object should also contain a "value" property.
  * * If it has a function property called "return" then it will be called
- *   when the caller is done iterating.
+ * when the caller is done iterating.
  */
 public class IteratorLikeIterable
-    implements Iterable<Object>, Closeable
-{
+        implements Iterable<Object>, Closeable {
     private final Context cx;
     private final Scriptable scope;
     private final Callable next;
@@ -43,7 +42,7 @@ public class IteratorLikeIterable
             if (!(retObj instanceof Callable)) {
                 throw ScriptRuntime.notFunctionError(target, retObj, ES6Iterator.RETURN_PROPERTY);
             }
-            returnFunc = (Callable)retObj;
+            returnFunc = (Callable) retObj;
         } else {
             returnFunc = null;
         }
@@ -65,8 +64,7 @@ public class IteratorLikeIterable
     }
 
     public final class Itr
-        implements Iterator<Object>
-    {
+            implements Iterator<Object> {
         private Object nextVal;
         private boolean isDone;
 
@@ -76,7 +74,7 @@ public class IteratorLikeIterable
             // This will throw if "val" is not an object. 
             // "getObjectPropNoWarn" won't, so do this as follows.
             Object doneval = ScriptableObject.getProperty(
-                ScriptableObject.ensureScriptable(val), ES6Iterator.DONE_PROPERTY);
+                    ScriptableObject.ensureScriptable(val), ES6Iterator.DONE_PROPERTY);
             if (doneval == Scriptable.NOT_FOUND) {
                 doneval = Undefined.instance;
             }

@@ -19,8 +19,8 @@ public class EntityZombiePistol extends uz {
         if (this.ae == 0 && this.bs.nextBoolean() && this.bs.nextBoolean()) {
             a(entity, 45.0F, 90.0F);
             this.ammo--;
-            this.aS = (float)(this.aS + 6.0D * this.bs.nextGaussian());
-            this.aT = (float)(this.aT + 2.0D * this.bs.nextGaussian());
+            this.aS = (float) (this.aS + 6.0D * this.bs.nextGaussian());
+            this.aT = (float) (this.aT + 2.0D * this.bs.nextGaussian());
             this.aI.a(this, "items.pistol.fire", 1.0F, 1.0F);
             UtilBullet.fireBullet(this.aI, this, 0.08F, this.c);
             this.ae = 20;

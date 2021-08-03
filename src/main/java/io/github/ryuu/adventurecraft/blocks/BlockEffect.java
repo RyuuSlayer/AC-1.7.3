@@ -7,12 +7,14 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityEffect;
+import io.github.ryuu.adventurecraft.gui.GuiEffect;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.TerrainImage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
 import net.minecraft.tile.TileWithEntity;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
@@ -35,7 +37,7 @@ public class BlockEffect extends TileWithEntity {
         return null;
     }
 
-    public boolean shouldRender(xp blockAccess, int i, int j, int k) {
+    public boolean shouldRender(TileView blockAccess, int i, int j, int k) {
         return DebugMode.active;
     }
 
@@ -48,7 +50,7 @@ public class BlockEffect extends TileWithEntity {
     }
 
     public void onTriggerActivated(Level world, int i, int j, int k) {
-        TileEntityEffect obj = (TileEntityEffect)world.b(i, j, k);
+        TileEntityEffect obj = (TileEntityEffect) world.b(i, j, k);
         obj.isActivated = true;
         obj.ticksBeforeParticle = 0;
         if (obj.changeFogColor == 1) {
@@ -164,13 +166,13 @@ public class BlockEffect extends TileWithEntity {
     }
 
     public void onTriggerDeactivated(Level world, int i, int j, int k) {
-        TileEntityEffect obj = (TileEntityEffect)world.b(i, j, k);
+        TileEntityEffect obj = (TileEntityEffect) world.b(i, j, k);
         obj.isActivated = false;
     }
 
     public boolean a(Level world, int i, int j, int k, Player entityplayer) {
         if (DebugMode.active && entityplayer.G() != null && (entityplayer.G()).c == Items.cursor.bf) {
-            TileEntityEffect obj = (TileEntityEffect)world.b(i, j, k);
+            TileEntityEffect obj = (TileEntityEffect) world.b(i, j, k);
             GuiEffect.showUI(obj);
             return true;
         }

@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
+
 import org.mozilla.javascript.Context;
 
 /**
@@ -29,112 +30,112 @@ import org.mozilla.javascript.Context;
  * </p>
  */
 public class RhinoScriptEngineFactory
-  implements ScriptEngineFactory {
+        implements ScriptEngineFactory {
 
-  public static final String NAME = "rhino";
-  private static final String LANGUAGE = "javascript";
-  private static final List<String> NAMES =
-      Arrays.asList("rhino", "Rhino", "javascript", "JavaScript");
-  private static final List<String> EXTENSIONS =
-      Collections.singletonList("js");
-  private static final List<String> MIME_TYPES =
-      Arrays.asList("application/javascript", "application/ecmascript",
-          "text/javascript", "text/ecmascript");
-  private static final String LANGUAGE_VERSION =
-      String.valueOf(RhinoScriptEngine.DEFAULT_LANGUAGE_VERSION);
+    public static final String NAME = "rhino";
+    private static final String LANGUAGE = "javascript";
+    private static final List<String> NAMES =
+            Arrays.asList("rhino", "Rhino", "javascript", "JavaScript");
+    private static final List<String> EXTENSIONS =
+            Collections.singletonList("js");
+    private static final List<String> MIME_TYPES =
+            Arrays.asList("application/javascript", "application/ecmascript",
+                    "text/javascript", "text/ecmascript");
+    private static final String LANGUAGE_VERSION =
+            String.valueOf(RhinoScriptEngine.DEFAULT_LANGUAGE_VERSION);
 
-  @Override
-  public String getEngineName() {
-    return NAME;
-  }
-
-  @Override
-  public String getEngineVersion() {
-    Context cx = Context.enter();
-    try {
-      String v = cx.getImplementationVersion();
-      return (v == null ? "unknown" : v);
-    } finally {
-      Context.exit();
-    }
-  }
-
-  @Override
-  public List<String> getExtensions() {
-    return EXTENSIONS;
-  }
-
-  @Override
-  public List<String> getMimeTypes() {
-    return MIME_TYPES;
-  }
-
-  @Override
-  public List<String> getNames() {
-    return NAMES;
-  }
-
-  @Override
-  public String getLanguageName() {
-    return LANGUAGE;
-  }
-
-  @Override
-  public String getLanguageVersion() {
-    return LANGUAGE_VERSION;
-  }
-
-  @Override
-  public Object getParameter(String key) {
-    switch (key) {
-      case ScriptEngine.ENGINE:
-        return getEngineName();
-      case ScriptEngine.ENGINE_VERSION:
-        return getEngineVersion();
-      case ScriptEngine.LANGUAGE:
-        return getLanguageName();
-      case ScriptEngine.LANGUAGE_VERSION:
-        return getLanguageVersion();
-      case ScriptEngine.NAME:
+    @Override
+    public String getEngineName() {
         return NAME;
-      case "THREADING":
-        // Engines are explicitly not thread-safe
-        return null;
-      default:
-        return null;
     }
-  }
 
-  @Override
-  public String getMethodCallSyntax(String obj, String m, String... args) {
-    StringBuilder sb = new StringBuilder();
-    sb.append(obj).append('.').append(m).append('(');
-    for (int i = 0; i < args.length; i++) {
-      if (i > 0) {
-        sb.append(',');
-      }
-      sb.append(args[i]);
+    @Override
+    public String getEngineVersion() {
+        Context cx = Context.enter();
+        try {
+            String v = cx.getImplementationVersion();
+            return (v == null ? "unknown" : v);
+        } finally {
+            Context.exit();
+        }
     }
-    sb.append(");");
-    return sb.toString();
-  }
 
-  @Override
-  public String getOutputStatement(String toDisplay) {
-    return "print('" + toDisplay + "');";
-  }
-
-  @Override
-  public String getProgram(String... statements) {
-    StringBuilder sb = new StringBuilder();
-    for (String stmt : statements) {
-      sb.append(stmt).append(";\n");
+    @Override
+    public List<String> getExtensions() {
+        return EXTENSIONS;
     }
-    return sb.toString();
-  }
 
-  @Override
-  public ScriptEngine getScriptEngine() {
-    return new RhinoScriptEngine(this);
-  }
+    @Override
+    public List<String> getMimeTypes() {
+        return MIME_TYPES;
+    }
+
+    @Override
+    public List<String> getNames() {
+        return NAMES;
+    }
+
+    @Override
+    public String getLanguageName() {
+        return LANGUAGE;
+    }
+
+    @Override
+    public String getLanguageVersion() {
+        return LANGUAGE_VERSION;
+    }
+
+    @Override
+    public Object getParameter(String key) {
+        switch (key) {
+            case ScriptEngine.ENGINE:
+                return getEngineName();
+            case ScriptEngine.ENGINE_VERSION:
+                return getEngineVersion();
+            case ScriptEngine.LANGUAGE:
+                return getLanguageName();
+            case ScriptEngine.LANGUAGE_VERSION:
+                return getLanguageVersion();
+            case ScriptEngine.NAME:
+                return NAME;
+            case "THREADING":
+                // Engines are explicitly not thread-safe
+                return null;
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public String getMethodCallSyntax(String obj, String m, String... args) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(obj).append('.').append(m).append('(');
+        for (int i = 0; i < args.length; i++) {
+            if (i > 0) {
+                sb.append(',');
+            }
+            sb.append(args[i]);
+        }
+        sb.append(");");
+        return sb.toString();
+    }
+
+    @Override
+    public String getOutputStatement(String toDisplay) {
+        return "print('" + toDisplay + "');";
+    }
+
+    @Override
+    public String getProgram(String... statements) {
+        StringBuilder sb = new StringBuilder();
+        for (String stmt : statements) {
+            sb.append(stmt).append(";\n");
+        }
+        return sb.toString();
+    }
+
+    @Override
+    public ScriptEngine getScriptEngine() {
+        return new RhinoScriptEngine(this);
+    }
 }

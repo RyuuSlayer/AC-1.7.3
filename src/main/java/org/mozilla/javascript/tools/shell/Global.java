@@ -61,8 +61,7 @@ import org.mozilla.javascript.tools.ToolErrorReporter;
  *
  * @author Norris Boyd
  */
-public class Global extends ImporterTopLevel
-{
+public class Global extends ImporterTopLevel {
     static final long serialVersionUID = 4029130780977538005L;
 
     NativeArray history;
@@ -74,15 +73,13 @@ public class Global extends ImporterTopLevel
     private boolean sealedStdLib = false;
     boolean initialized;
     private QuitAction quitAction;
-    private String[] prompts = { "js> ", "  > " };
-    private HashMap<String,String> doctestCanonicalizations;
+    private final String[] prompts = {"js> ", "  > "};
+    private HashMap<String, String> doctestCanonicalizations;
 
-    public Global()
-    {
+    public Global() {
     }
 
-    public Global(Context cx)
-    {
+    public Global(Context cx) {
         init(cx);
     }
 
@@ -93,8 +90,7 @@ public class Global extends ImporterTopLevel
     /**
      * Set the action to call from quit().
      */
-    public void initQuitAction(QuitAction quitAction)
-    {
+    public void initQuitAction(QuitAction quitAction) {
         if (quitAction == null)
             throw new IllegalArgumentException("quitAction is null");
         if (this.quitAction != null)
@@ -103,50 +99,48 @@ public class Global extends ImporterTopLevel
         this.quitAction = quitAction;
     }
 
-    public void init(ContextFactory factory)
-    {
+    public void init(ContextFactory factory) {
         factory.call(cx -> {
             init(cx);
             return null;
         });
     }
 
-    public void init(Context cx)
-    {
+    public void init(Context cx) {
         // Define some global functions particular to the shell. Note
         // that these functions are not part of ECMA.
         initStandardObjects(cx, sealedStdLib);
         String[] names = {
-            "defineClass",
-            "deserialize",
-            "doctest",
-            "gc",
-            "help",
-            "load",
-            "loadClass",
-            "print",
-            "quit",
-            "readline",
-            "readFile",
-            "readUrl",
-            "runCommand",
-            "seal",
-            "serialize",
-            "spawn",
-            "sync",
-            "toint32",
-            "version",
-            "write"
+                "defineClass",
+                "deserialize",
+                "doctest",
+                "gc",
+                "help",
+                "load",
+                "loadClass",
+                "print",
+                "quit",
+                "readline",
+                "readFile",
+                "readUrl",
+                "runCommand",
+                "seal",
+                "serialize",
+                "spawn",
+                "sync",
+                "toint32",
+                "version",
+                "write"
         };
         defineFunctionProperties(names, Global.class,
-                                 ScriptableObject.DONTENUM);
+                ScriptableObject.DONTENUM);
 
         // Set up "environment" in the global scope to provide access to the
         // System environment variables.
         Environment.defineClass(this);
         Environment environment = new Environment(this);
         defineProperty("environment", environment,
-                       ScriptableObject.DONTENUM);
+                ScriptableObject.DONTENUM);
 
         history = (NativeArray) cx.newArray(this, 0);
         defineProperty("history", history, ScriptableObject.DONTENUM);
@@ -188,35 +182,31 @@ public class Global extends ImporterTopLevel
 
     /**
      * Print a help message.
-     *
+     * <p>
      * This method is defined as a JavaScript function.
      */
     public static void help(Context cx, Scriptable thisObj,
-                            Object[] args, Function funObj)
-    {
+                            Object[] args, Function funObj) {
         PrintStream out = getInstance(funObj).getOut();
         out.println(ToolErrorReporter.getMessage("msg.help"));
     }
 
     public static void gc(Context cx, Scriptable thisObj,
-            Object[] args, Function funObj)
-    {
+                          Object[] args, Function funObj) {
         System.gc();
     }
 
 
     /**
      * Print the string values of its arguments.
-     *
+     * <p>
      * This method is defined as a JavaScript function.
      * Note that its arguments are of the "varargs" form, which
      * allows it to handle an arbitrary number of arguments
      * supplied to the JavaScript function.
-     *
      */
     public static Object print(Context cx, Scriptable thisObj,
-                               Object[] args, Function funObj)
-    {
+                               Object[] args, Function funObj) {
         return doPrint(args, funObj, true);
     }
 
@@ -224,15 +214,13 @@ public class Global extends ImporterTopLevel
      * Print just as in "print," but without the trailing newline.
      */
     public static Object write(Context cx, Scriptable thisObj,
-                               Object[] args, Function funObj)
-    {
+                               Object[] args, Function funObj) {
         return doPrint(args, funObj, false);
     }
 
-    private static Object doPrint(Object[] args, Function funObj, boolean newline)
-    {
+    private static Object doPrint(Object[] args, Function funObj, boolean newline) {
         PrintStream out = getInstance(funObj).getOut();
-        for (int i=0; i < args.length; i++) {
+        for (int i = 0; i < args.length; i++) {
             if (i > 0)
                 out.print(" ");
 
@@ -250,28 +238,26 @@ public class Global extends ImporterTopLevel
     /**
      * Call embedding-specific quit action passing its argument as
      * int32 exit code.
-     *
+     * <p>
      * This method is defined as a JavaScript function.
      */
     public static void quit(Context cx, Scriptable thisObj,
-                            Object[] args, Function funObj)
-    {
+                            Object[] args, Function funObj) {
         Global global = getInstance(funObj);
         if (global.quitAction != null) {
             int exitCode = (args.length == 0 ? 0
-                            : ScriptRuntime.toInt32(args[0]));
+                    : ScriptRuntime.toInt32(args[0]));
             global.quitAction.quit(cx, exitCode);
         }
     }
 
     /**
      * Get and set the language version.
-     *
+     * <p>
      * This method is defined as a JavaScript function.
      */
     public static double version(Context cx, Scriptable thisObj,
-                                 Object[] args, Function funObj)
-    {
+                                 Object[] args, Function funObj) {
         if (args.length > 0) {
             double d = Context.toNumber(args[0]);
             cx.setLanguageVersion((int) d);
@@ -281,13 +267,11 @@ public class Global extends ImporterTopLevel
 
     /**
      * Load and execute a set of JavaScript source files.
-     *
+     * <p>
      * This method is defined as a JavaScript function.
-     *
      */
     public static void load(Context cx, Scriptable thisObj,
-                            Object[] args, Function funObj)
-    {
+                            Object[] args, Function funObj) {
         for (Object arg : args) {
             String file = Context.toString(arg);
             try {
@@ -311,25 +295,25 @@ public class Global extends ImporterTopLevel
      * conventions outlined in ScriptableObject.defineClass.
      * <p>
      * This method is defined as a JavaScript function.
-     * @exception IllegalAccessException if access is not available
-     *            to a reflected class member
-     * @exception InstantiationException if unable to instantiate
-     *            the named class
-     * @exception InvocationTargetException if an exception is thrown
-     *            during execution of methods of the named class
-     * @see org.mozilla.javascript.ScriptableObject#defineClass(Scriptable,Class)
+     *
+     * @throws IllegalAccessException    if access is not available
+     *                                   to a reflected class member
+     * @throws InstantiationException    if unable to instantiate
+     *                                   the named class
+     * @throws InvocationTargetException if an exception is thrown
+     *                                   during execution of methods of the named class
+     * @see org.mozilla.javascript.ScriptableObject#defineClass(Scriptable, Class)
      */
     @SuppressWarnings({"unchecked"})
     public static void defineClass(Context cx, Scriptable thisObj,
                                    Object[] args, Function funObj)
-        throws IllegalAccessException, InstantiationException,
-               InvocationTargetException
-    {
+            throws IllegalAccessException, InstantiationException,
+            InvocationTargetException {
         Class<?> clazz = getClass(args);
         if (!Scriptable.class.isAssignableFrom(clazz)) {
             throw reportRuntimeError("msg.must.implement.Scriptable");
         }
-        ScriptableObject.defineClass(thisObj, (Class<? extends Scriptable>)clazz);
+        ScriptableObject.defineClass(thisObj, (Class<? extends Scriptable>) clazz);
     }
 
     /**
@@ -341,15 +325,14 @@ public class Global extends ImporterTopLevel
      * implements the Script interface, as will any script
      * compiled by jsc.
      *
-     * @exception IllegalAccessException if access is not available
-     *            to the class
-     * @exception InstantiationException if unable to instantiate
-     *            the named class
+     * @throws IllegalAccessException if access is not available
+     *                                to the class
+     * @throws InstantiationException if unable to instantiate
+     *                                the named class
      */
     public static void loadClass(Context cx, Scriptable thisObj,
                                  Object[] args, Function funObj)
-        throws IllegalAccessException, InstantiationException
-    {
+            throws IllegalAccessException, InstantiationException {
         Class<?> clazz = getClass(args);
         if (!Script.class.isAssignableFrom(clazz)) {
             throw reportRuntimeError("msg.must.implement.Script");
@@ -364,27 +347,25 @@ public class Global extends ImporterTopLevel
         }
         Object arg0 = args[0];
         if (arg0 instanceof Wrapper) {
-            Object wrapped = ((Wrapper)arg0).unwrap();
+            Object wrapped = ((Wrapper) arg0).unwrap();
             if (wrapped instanceof Class)
-                return (Class<?>)wrapped;
+                return (Class<?>) wrapped;
         }
         String className = Context.toString(args[0]);
         try {
             return Class.forName(className);
-        }
-        catch (ClassNotFoundException cnfe) {
+        } catch (ClassNotFoundException cnfe) {
             throw reportRuntimeError("msg.class.not.found", className);
         }
     }
 
     public static void serialize(Context cx, Scriptable thisObj,
                                  Object[] args, Function funObj)
-        throws IOException
-    {
+            throws IOException {
         if (args.length < 2) {
             throw Context.reportRuntimeError(
-                "Expected an object to serialize and a filename to write " +
-                "the serialization to");
+                    "Expected an object to serialize and a filename to write " +
+                            "the serialization to");
         }
         Object obj = args[0];
         String filename = Context.toString(args[1]);
@@ -397,11 +378,10 @@ public class Global extends ImporterTopLevel
 
     public static Object deserialize(Context cx, Scriptable thisObj,
                                      Object[] args, Function funObj)
-        throws IOException, ClassNotFoundException
-    {
+            throws IOException, ClassNotFoundException {
         if (args.length < 1) {
             throw Context.reportRuntimeError(
-                "Expected a filename to read the serialization from");
+                    "Expected a filename to read the serialization from");
         }
         String filename = Context.toString(args[0]);
         FileInputStream fis = new FileInputStream(filename);
@@ -415,12 +395,11 @@ public class Global extends ImporterTopLevel
     public String[] getPrompts(Context cx) {
         if (ScriptableObject.hasProperty(this, "prompts")) {
             Object promptsJS = ScriptableObject.getProperty(this,
-                                                            "prompts");
+                    "prompts");
             if (promptsJS instanceof Scriptable) {
                 Scriptable s = (Scriptable) promptsJS;
                 if (ScriptableObject.hasProperty(s, 0) &&
-                    ScriptableObject.hasProperty(s, 1))
-                {
+                        ScriptableObject.hasProperty(s, 1)) {
                     Object elem0 = ScriptableObject.getProperty(s, 0);
                     if (elem0 instanceof Function) {
                         elem0 = ((Function) elem0).call(cx, this, s,
@@ -444,7 +423,7 @@ public class Global extends ImporterTopLevel
      * (since 2 tests were executed).
      */
     public static Object doctest(Context cx, Scriptable thisObj,
-        Object[] args, Function funObj) {
+                                 Object[] args, Function funObj) {
         if (args.length == 0) {
             return Boolean.FALSE;
         }
@@ -454,7 +433,7 @@ public class Global extends ImporterTopLevel
     }
 
     public int runDoctest(Context cx, Scriptable scope, String session,
-        String sourceName, int lineNumber) {
+                          String sourceName, int lineNumber) {
         doctestCanonicalizations = new HashMap<String, String>();
         String[] lines = session.split("\r\n?|\n");
         String prompt0 = this.prompts[0].trim();
@@ -466,7 +445,7 @@ public class Global extends ImporterTopLevel
         }
         while (i < lines.length) {
             StringBuilder inputString =
-                new StringBuilder(lines[i].trim().substring(prompt0.length()));
+                    new StringBuilder(lines[i].trim().substring(prompt0.length()));
             inputString.append('\n');
             i++;
             while (i < lines.length && lines[i].trim().startsWith(prompt1)) {
@@ -476,7 +455,7 @@ public class Global extends ImporterTopLevel
             }
             StringBuilder expectedString = new StringBuilder();
             while (i < lines.length &&
-                !lines[i].trim().startsWith(prompt0)) {
+                    !lines[i].trim().startsWith(prompt0)) {
                 expectedString.append(lines[i]).append('\n');
                 i++;
             }
@@ -493,10 +472,10 @@ public class Global extends ImporterTopLevel
                 testCount++;
                 String finalInputString = inputString.toString();
                 Object result = cx.evaluateString(scope, finalInputString,
-                    "doctest input", 1, null);
+                        "doctest input", 1, null);
                 if (result != Context.getUndefinedValue() &&
-                    !(result instanceof Function &&
-                        finalInputString.trim().startsWith("function"))) {
+                        !(result instanceof Function &&
+                                finalInputString.trim().startsWith("function"))) {
                     resultString = Context.toString(result);
                 }
             } catch (RhinoException e) {
@@ -505,16 +484,16 @@ public class Global extends ImporterTopLevel
                 this.setOut(savedOut);
                 this.setErr(savedErr);
                 cx.setErrorReporter(savedErrorReporter);
-                resultString += err.toString() + out.toString();
+                resultString += err.toString() + out;
             }
             if (!doctestOutputMatches(expectedString.toString(), resultString)) {
                 String message = "doctest failure running:\n" +
-                    inputString +
-                    "expected: " + expectedString +
-                    "actual: " + resultString + "\n";
+                        inputString +
+                        "expected: " + expectedString +
+                        "actual: " + resultString + "\n";
                 if (sourceName != null) {
                     throw Context.reportRuntimeError(message, sourceName,
-                        lineNumber + i - 1, null, 0);
+                            lineNumber + i - 1, null, 0);
                 } else {
                     throw Context.reportRuntimeError(message);
                 }
@@ -530,16 +509,16 @@ public class Global extends ImporterTopLevel
      * for error messages for example.
      *
      * @param expected the expected string
-     * @param actual the actual string
+     * @param actual   the actual string
      * @return true iff actual matches expected modulo some acceptable
-     *      differences
+     * differences
      */
     private boolean doctestOutputMatches(String expected, String actual) {
         expected = expected.trim();
         actual = actual.trim().replace("\r\n", "\n");
         if (expected.equals(actual))
             return true;
-        for (Map.Entry<String,String> entry: doctestCanonicalizations.entrySet()) {
+        for (Map.Entry<String, String> entry : doctestCanonicalizations.entrySet()) {
             expected = expected.replace(entry.getKey(), entry.getValue());
         }
         if (expected.equals(actual))
@@ -553,7 +532,7 @@ public class Global extends ImporterTopLevel
         Pattern p = Pattern.compile("@[0-9a-fA-F]+");
         Matcher expectedMatcher = p.matcher(expected);
         Matcher actualMatcher = p.matcher(actual);
-        for (;;) {
+        for (; ; ) {
             if (!expectedMatcher.find())
                 return false;
             if (!actualMatcher.find())
@@ -580,7 +559,7 @@ public class Global extends ImporterTopLevel
     /**
      * The spawn function runs a given function or script in a different
      * thread.
-     *
+     * <p>
      * js&gt; function g() { a = 7; }
      * js&gt; a = 3;
      * 3
@@ -590,8 +569,7 @@ public class Global extends ImporterTopLevel
      * 3
      */
     public static Object spawn(Context cx, Scriptable thisObj, Object[] args,
-                               Function funObj)
-    {
+                               Function funObj) {
         Scriptable scope = funObj.getParentScope();
         Runner runner;
         if (args.length != 0 && args[0] instanceof Function) {
@@ -599,7 +577,9 @@ public class Global extends ImporterTopLevel
             if (args.length > 1 && args[1] instanceof Scriptable) {
                 newArgs = cx.getElements((Scriptable) args[1]);
             }
-            if (newArgs == null) { newArgs = ScriptRuntime.emptyArgs; }
+            if (newArgs == null) {
+                newArgs = ScriptRuntime.emptyArgs;
+            }
             runner = new Runner(scope, (Function) args[0], newArgs);
         } else if (args.length != 0 && args[0] instanceof Script) {
             runner = new Runner(scope, (Script) args[0]);
@@ -619,10 +599,10 @@ public class Global extends ImporterTopLevel
      * defined, or otherwise the <code>this</code> object of
      * its invocation.
      * js&gt; var o = { f : sync(function(x) {
-     *       print("entry");
-     *       Packages.java.lang.Thread.sleep(x*1000);
-     *       print("exit");
-     *     })};
+     * print("entry");
+     * Packages.java.lang.Thread.sleep(x*1000);
+     * print("exit");
+     * })};
      * js&gt; spawn(function() {o.f(5);});
      * Thread[Thread-0,5,main]
      * entry
@@ -634,16 +614,14 @@ public class Global extends ImporterTopLevel
      * exit
      */
     public static Object sync(Context cx, Scriptable thisObj, Object[] args,
-                              Function funObj)
-    {
+                              Function funObj) {
         if (args.length >= 1 && args.length <= 2 && args[0] instanceof Function) {
             Object syncObject = null;
             if (args.length == 2 && args[1] != Undefined.instance) {
                 syncObject = args[1];
             }
-            return new Synchronizer((Function)args[0], syncObject);
-        }
-        else {
+            return new Synchronizer((Function) args[0], syncObject);
+        } else {
             throw reportRuntimeError("msg.sync.args");
         }
     }
@@ -686,8 +664,7 @@ public class Global extends ImporterTopLevel
      */
     public static Object runCommand(Context cx, Scriptable thisObj,
                                     Object[] args, Function funObj)
-        throws IOException
-    {
+            throws IOException {
         int L = args.length;
         if (L == 0 || (L == 1 && args[0] instanceof Scriptable)) {
             throw reportRuntimeError("msg.runCommand.bad.args");
@@ -701,7 +678,7 @@ public class Global extends ImporterTopLevel
         Scriptable params = null;
         Object[] addArgs = null;
         if (args[L - 1] instanceof Scriptable) {
-            params = (Scriptable)args[L - 1];
+            params = (Scriptable) args[L - 1];
             --L;
             Object envObj = ScriptableObject.getProperty(params, "env");
             if (envObj != Scriptable.NOT_FOUND) {
@@ -711,29 +688,29 @@ public class Global extends ImporterTopLevel
                     if (!(envObj instanceof Scriptable)) {
                         throw reportRuntimeError("msg.runCommand.bad.env");
                     }
-                    Scriptable envHash = (Scriptable)envObj;
+                    Scriptable envHash = (Scriptable) envObj;
                     Object[] ids = ScriptableObject.getPropertyIds(envHash);
                     environment = new String[ids.length];
                     for (int i = 0; i != ids.length; ++i) {
                         Object keyObj = ids[i], val;
                         String key;
                         if (keyObj instanceof String) {
-                            key = (String)keyObj;
+                            key = (String) keyObj;
                             val = ScriptableObject.getProperty(envHash, key);
                         } else {
-                            int ikey = ((Number)keyObj).intValue();
+                            int ikey = ((Number) keyObj).intValue();
                             key = Integer.toString(ikey);
                             val = ScriptableObject.getProperty(envHash, ikey);
                         }
                         if (val == ScriptableObject.NOT_FOUND) {
                             val = Undefined.instance;
                         }
-                        environment[i] = key+'='+ScriptRuntime.toString(val);
+                        environment[i] = key + '=' + ScriptRuntime.toString(val);
                     }
                 }
             }
             Object wdObj = ScriptableObject.getProperty(params, "dir");
-            if(wdObj != Scriptable.NOT_FOUND){
+            if (wdObj != Scriptable.NOT_FOUND) {
                 wd = new File(ScriptRuntime.toString(wdObj));
             }
 
@@ -760,7 +737,7 @@ public class Global extends ImporterTopLevel
             Object addArgsObj = ScriptableObject.getProperty(params, "args");
             if (addArgsObj != Scriptable.NOT_FOUND) {
                 Scriptable s = Context.toObject(addArgsObj,
-                                                getTopLevelScope(thisObj));
+                        getTopLevelScope(thisObj));
                 addArgs = cx.getElements(s);
             }
         }
@@ -788,11 +765,11 @@ public class Global extends ImporterTopLevel
 
         int exitCode = runProcess(cmd, environment, wd, in, out, err);
         if (outBytes != null) {
-            String s = ScriptRuntime.toString(outObj) + outBytes.toString();
+            String s = ScriptRuntime.toString(outObj) + outBytes;
             ScriptableObject.putProperty(params, "output", s);
         }
         if (errBytes != null) {
-            String s = ScriptRuntime.toString(errObj) + errBytes.toString();
+            String s = ScriptRuntime.toString(errObj) + errBytes;
             ScriptableObject.putProperty(params, "err", s);
         }
 
@@ -803,14 +780,11 @@ public class Global extends ImporterTopLevel
      * The seal function seals all supplied arguments.
      */
     public static void seal(Context cx, Scriptable thisObj, Object[] args,
-                            Function funObj)
-    {
+                            Function funObj) {
         for (int i = 0; i != args.length; ++i) {
             Object arg = args[i];
-            if (!(arg instanceof ScriptableObject) || arg == Undefined.instance)
-            {
-                if (!(arg instanceof Scriptable) || arg == Undefined.instance)
-                {
+            if (!(arg instanceof ScriptableObject) || arg == Undefined.instance) {
+                if (!(arg instanceof Scriptable) || arg == Undefined.instance) {
                     throw reportRuntimeError("msg.shell.seal.not.object");
                 } else {
                     throw reportRuntimeError("msg.shell.seal.not.scriptable");
@@ -820,7 +794,7 @@ public class Global extends ImporterTopLevel
 
         for (int i = 0; i != args.length; ++i) {
             Object arg = args[i];
-            ((ScriptableObject)arg).sealObject();
+            ((ScriptableObject) arg).sealObject();
         }
     }
 
@@ -839,8 +813,7 @@ public class Global extends ImporterTopLevel
      */
     public static Object readFile(Context cx, Scriptable thisObj, Object[] args,
                                   Function funObj)
-        throws IOException
-    {
+            throws IOException {
         if (args.length == 0) {
             throw reportRuntimeError("msg.shell.readFile.bad.args");
         }
@@ -869,8 +842,7 @@ public class Global extends ImporterTopLevel
      */
     public static Object readUrl(Context cx, Scriptable thisObj, Object[] args,
                                  Function funObj)
-        throws IOException
-    {
+            throws IOException {
         if (args.length == 0) {
             throw reportRuntimeError("msg.shell.readUrl.bad.args");
         }
@@ -887,8 +859,7 @@ public class Global extends ImporterTopLevel
      * Convert the argument to int32 number.
      */
     public static Object toint32(Context cx, Scriptable thisObj, Object[] args,
-                                 Function funObj)
-    {
+                                 Function funObj) {
         Object arg = (args.length != 0 ? args[0] : Undefined.instance);
         if (arg instanceof Integer)
             return arg;
@@ -940,18 +911,16 @@ public class Global extends ImporterTopLevel
         errStream = err;
     }
 
-    public void setSealedStdLib(boolean value)
-    {
+    public void setSealedStdLib(boolean value) {
         sealedStdLib = value;
     }
 
-    private static Global getInstance(Function function)
-    {
+    private static Global getInstance(Function function) {
         Scriptable scope = function.getParentScope();
         if (!(scope instanceof Global))
             throw reportRuntimeError("msg.bad.shell.function.scope",
-                                     String.valueOf(scope));
-        return (Global)scope;
+                    String.valueOf(scope));
+        return (Global) scope;
     }
 
     /**
@@ -966,13 +935,12 @@ public class Global extends ImporterTopLevel
     private static int runProcess(String[] cmd, String[] environment,
                                   File wd, InputStream in, OutputStream out,
                                   OutputStream err)
-        throws IOException
-    {
+            throws IOException {
         Process p;
         if (environment == null) {
-            p = Runtime.getRuntime().exec(cmd,null,wd);
+            p = Runtime.getRuntime().exec(cmd, null, wd);
         } else {
-            p = Runtime.getRuntime().exec(cmd, environment,wd);
+            p = Runtime.getRuntime().exec(cmd, environment, wd);
         }
 
         try {
@@ -1001,7 +969,7 @@ public class Global extends ImporterTopLevel
             }
 
             // wait for process completion
-            for (;;) {
+            for (; ; ) {
                 try {
                     p.waitFor();
                     if (outThread != null) {
@@ -1025,12 +993,11 @@ public class Global extends ImporterTopLevel
     }
 
     static void pipe(boolean fromProcess, InputStream from, OutputStream to)
-        throws IOException
-    {
+            throws IOException {
         try {
             final int SIZE = 4096;
             byte[] buffer = new byte[SIZE];
-            for (;;) {
+            for (; ; ) {
                 int n;
                 if (!fromProcess) {
                     n = from.read(buffer, 0, SIZE);
@@ -1042,7 +1009,9 @@ public class Global extends ImporterTopLevel
                         break;
                     }
                 }
-                if (n < 0) { break; }
+                if (n < 0) {
+                    break;
+                }
                 if (fromProcess) {
                     to.write(buffer, 0, n);
                     to.flush();
@@ -1071,24 +1040,25 @@ public class Global extends ImporterTopLevel
     }
 
     private static InputStream toInputStream(Object value)
-        throws IOException
-    {
+            throws IOException {
         InputStream is = null;
         String s = null;
         if (value instanceof Wrapper) {
-            Object unwrapped = ((Wrapper)value).unwrap();
+            Object unwrapped = ((Wrapper) value).unwrap();
             if (unwrapped instanceof InputStream) {
-                is = (InputStream)unwrapped;
+                is = (InputStream) unwrapped;
             } else if (unwrapped instanceof byte[]) {
-                is = new ByteArrayInputStream((byte[])unwrapped);
+                is = new ByteArrayInputStream((byte[]) unwrapped);
             } else if (unwrapped instanceof Reader) {
-                s = readReader((Reader)unwrapped);
+                s = readReader((Reader) unwrapped);
             } else if (unwrapped instanceof char[]) {
-                s = new String((char[])unwrapped);
+                s = new String((char[]) unwrapped);
             }
         }
         if (is == null) {
-            if (s == null) { s = ScriptRuntime.toString(value); }
+            if (s == null) {
+                s = ScriptRuntime.toString(value);
+            }
             is = new ByteArrayInputStream(s.getBytes());
         }
         return is;
@@ -1097,9 +1067,9 @@ public class Global extends ImporterTopLevel
     private static OutputStream toOutputStream(Object value) {
         OutputStream os = null;
         if (value instanceof Wrapper) {
-            Object unwrapped = ((Wrapper)value).unwrap();
+            Object unwrapped = ((Wrapper) value).unwrap();
             if (unwrapped instanceof OutputStream) {
-                os = (OutputStream)unwrapped;
+                os = (OutputStream) unwrapped;
             }
         }
         return os;
@@ -1107,8 +1077,7 @@ public class Global extends ImporterTopLevel
 
     private static String readUrl(String filePath, String charCoding,
                                   boolean urlIsFile)
-        throws IOException
-    {
+            throws IOException {
         int chunkLength;
         InputStream is = null;
         try {
@@ -1133,11 +1102,13 @@ public class Global extends ImporterTopLevel
                     throw new IOException("Cannot read file: " + filePath);
                 }
                 long length = f.length();
-                chunkLength = (int)length;
+                chunkLength = (int) length;
                 if (chunkLength != length)
-                    throw new IOException("Too big file size: "+length);
+                    throw new IOException("Too big file size: " + length);
 
-                if (chunkLength == 0) { return ""; }
+                if (chunkLength == 0) {
+                    return "";
+                }
 
                 is = new FileInputStream(f);
             }
@@ -1164,19 +1135,17 @@ public class Global extends ImporterTopLevel
      * readline(prompt)
      * </pre>
      */
-     public static Object readline(Context cx, Scriptable thisObj, Object[] args, Function funObj)
-         throws IOException
-     {
-         Global self = getInstance(funObj);
+    public static Object readline(Context cx, Scriptable thisObj, Object[] args, Function funObj)
+            throws IOException {
+        Global self = getInstance(funObj);
 
-         if (args.length > 0) {
-             return self.console.readLine(Context.toString(args[0]));
-         }
-         return self.console.readLine();
-     }
+        if (args.length > 0) {
+            return self.console.readLine(Context.toString(args[0]));
+        }
+        return self.console.readLine();
+    }
 
-    private static String getCharCodingFromType(String type)
-    {
+    private static String getCharCodingFromType(String type) {
         int i = type.indexOf(';');
         if (i >= 0) {
             int end = type.length();
@@ -1185,8 +1154,7 @@ public class Global extends ImporterTopLevel
                 ++i;
             }
             String charset = "charset";
-            if (charset.regionMatches(true, 0, type, i, charset.length()))
-            {
+            if (charset.regionMatches(true, 0, type, i, charset.length())) {
                 i += charset.length();
                 while (i != end && type.charAt(i) <= ' ') {
                     ++i;
@@ -1199,7 +1167,7 @@ public class Global extends ImporterTopLevel
                     if (i != end) {
                         // i is at the start of non-empty
                         // charCoding spec
-                        while (type.charAt(end -1) <= ' ') {
+                        while (type.charAt(end - 1) <= ' ') {
                             --end;
                         }
                         return type.substring(i, end);
@@ -1211,19 +1179,19 @@ public class Global extends ImporterTopLevel
     }
 
     private static String readReader(Reader reader)
-        throws IOException
-    {
+            throws IOException {
         return readReader(reader, 4096);
     }
 
     private static String readReader(Reader reader, int initialBufferSize)
-        throws IOException
-    {
+            throws IOException {
         char[] buffer = new char[initialBufferSize];
         int offset = 0;
-        for (;;) {
+        for (; ; ) {
             int n = reader.read(buffer, offset, buffer.length - offset);
-            if (n < 0) { break;    }
+            if (n < 0) {
+                break;
+            }
             offset += n;
             if (offset == buffer.length) {
                 char[] tmp = new char[buffer.length * 2];
@@ -1239,8 +1207,7 @@ public class Global extends ImporterTopLevel
         return Context.reportRuntimeError(message);
     }
 
-    static RuntimeException reportRuntimeError(String msgId, String msgArg)
-    {
+    static RuntimeException reportRuntimeError(String msgId, String msgArg) {
         String message = ToolErrorReporter.getMessage(msgId, msgArg);
         return Context.reportRuntimeError(message);
     }
@@ -1260,13 +1227,11 @@ class Runner implements Runnable, ContextAction<Object> {
         s = script;
     }
 
-    public void run()
-    {
+    public void run() {
         factory.call(this);
     }
 
-    public Object run(Context cx)
-    {
+    public Object run(Context cx) {
         if (f != null)
             return f.call(cx, scope, scope, args);
         else
@@ -1274,7 +1239,7 @@ class Runner implements Runnable, ContextAction<Object> {
     }
 
     ContextFactory factory;
-    private Scriptable scope;
+    private final Scriptable scope;
     private Function f;
     private Script s;
     private Object[] args;
@@ -1298,8 +1263,8 @@ class PipeThread extends Thread {
         }
     }
 
-    private boolean fromProcess;
-    private InputStream from;
-    private OutputStream to;
+    private final boolean fromProcess;
+    private final InputStream from;
+    private final OutputStream to;
 }
 

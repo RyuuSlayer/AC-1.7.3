@@ -1,8 +1,10 @@
 package io.github.ryuu.adventurecraft.blocks;
 
 import java.util.Random;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 
@@ -17,7 +19,7 @@ public class BlockRedstonePower extends Tile {
         return false;
     }
 
-    public int a(xp iblockaccess, int i, int j, int k, int l) {
+    public int a(TileView iblockaccess, int i, int j, int k, int l) {
         if (l <= 1) {
             if (Minecraft.minecraftInstance.f.triggerManager.isActivated(i, j, k))
                 return 185;
@@ -68,7 +70,7 @@ public class BlockRedstonePower extends Tile {
         return true;
     }
 
-    public boolean c(xp iblockaccess, int i, int j, int k, int l) {
+    public boolean c(TileView iblockaccess, int i, int j, int k, int l) {
         return Minecraft.minecraftInstance.f.triggerManager.isActivated(i, j, k);
     }
 

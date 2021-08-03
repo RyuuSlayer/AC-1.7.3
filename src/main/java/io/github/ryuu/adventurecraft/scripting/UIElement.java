@@ -25,7 +25,8 @@ public class UIElement {
             this.parent.addToBack(this);
     }
 
-    public void render(sj fontRenderer, ji renderEngine, float partialTickTime) {}
+    public void render(sj fontRenderer, ji renderEngine, float partialTickTime) {
+    }
 
     public void onUpdate() {
         this.prevX = this.curX;

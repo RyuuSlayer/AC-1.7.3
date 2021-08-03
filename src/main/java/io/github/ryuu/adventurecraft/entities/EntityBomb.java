@@ -74,12 +74,12 @@ public class EntityBomb extends ItemEntity {
                 double dY = entity.aN - posY;
                 double dZ = entity.aO - posZ;
                 entity.d(dist * dX, dist * dY, dist * dZ);
-                entity.a(parentEntity, (int)Math.ceil(dist * 20.0D));
+                entity.a(parentEntity, (int) Math.ceil(dist * 20.0D));
             }
         }
-        int coordX = (int)posX;
-        int coordY = (int)posY;
-        int coordZ = (int)posZ;
+        int coordX = (int) posX;
+        int coordY = (int) posY;
+        int coordZ = (int) posZ;
         for (int x = -3; x <= 3; x++) {
             for (int y = -3; y <= 3; y++) {
                 for (int z = -3; z <= 3; z++) {
@@ -124,7 +124,7 @@ public class EntityBomb extends ItemEntity {
 
     public void b(nu nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.a("Fuse", (byte)this.fuse);
+        nbttagcompound.a("Fuse", (byte) this.fuse);
     }
 
     public void a(nu nbttagcompound) {
@@ -132,5 +132,6 @@ public class EntityBomb extends ItemEntity {
         this.fuse = nbttagcompound.c("Fuse");
     }
 
-    public void b(Player entityplayer) {}
+    public void b(Player entityplayer) {
+    }
 }

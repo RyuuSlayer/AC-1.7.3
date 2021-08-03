@@ -3,17 +3,17 @@ package io.github.ryuu.adventurecraft.overrides;
 import java.util.Random;
 
 public class yf implements cl {
-    private Random j;
+    private final Random j;
 
-    private uf k;
+    private final uf k;
 
-    private uf l;
+    private final uf l;
 
-    private uf m;
+    private final uf m;
 
-    private uf n;
+    private final uf n;
 
-    private uf o;
+    private final uf o;
 
     public uf a;
 
@@ -21,7 +21,7 @@ public class yf implements cl {
 
     public uf c;
 
-    private fd p;
+    private final fd p;
 
     private double[] q;
 
@@ -31,7 +31,7 @@ public class yf implements cl {
 
     private double[] t;
 
-    private fv u;
+    private final fv u;
 
     private kd[] v;
 
@@ -83,7 +83,7 @@ public class yf implements cl {
         this.r = new double[256];
         this.s = new double[256];
         this.t = new double[256];
-        this.u = (fv)new sq();
+        this.u = (fv) new sq();
         this.i = new int[32][32];
         this.p = world;
         this.j = new Random(l);
@@ -141,7 +141,7 @@ public class yf implements cl {
                                     }
                                 if (d15 - reduceBy > 0.0D)
                                     l2 = uu.u.bn;
-                                abyte0[j2] = (byte)l2;
+                                abyte0[j2] = (byte) l2;
                                 j2 += c;
                                 d15 += d16;
                             }
@@ -168,7 +168,7 @@ public class yf implements cl {
                 kd biomegenbase = abiomegenbase[k + l * 16];
                 boolean flag = (this.r[k + l * 16] + this.j.nextDouble() * 0.2D > 0.0D);
                 boolean flag1 = (this.s[k + l * 16] + this.j.nextDouble() * 0.2D > 3.0D);
-                int i1 = (int)(this.t[k + l * 16] / 3.0D + 3.0D + this.j.nextDouble() * 0.25D);
+                int i1 = (int) (this.t[k + l * 16] / 3.0D + 3.0D + this.j.nextDouble() * 0.25D);
                 int j1 = -1;
                 byte byte1 = biomegenbase.p;
                 byte byte2 = biomegenbase.q;
@@ -181,21 +181,21 @@ public class yf implements cl {
                         if (j1 == -1) {
                             if (i1 <= 0) {
                                 byte1 = 0;
-                                byte2 = (byte)uu.u.bn;
+                                byte2 = (byte) uu.u.bn;
                             } else if (k1 >= this.waterLevel - 4 && k1 <= this.waterLevel + 1) {
                                 byte1 = biomegenbase.p;
                                 byte2 = biomegenbase.q;
                                 if (flag1)
                                     byte1 = 0;
                                 if (flag1)
-                                    byte2 = (byte)uu.G.bn;
+                                    byte2 = (byte) uu.G.bn;
                                 if (flag)
-                                    byte1 = (byte)uu.F.bn;
+                                    byte1 = (byte) uu.F.bn;
                                 if (flag)
-                                    byte2 = (byte)uu.F.bn;
+                                    byte2 = (byte) uu.F.bn;
                             }
                             if (k1 < this.waterLevel && byte1 == 0)
-                                byte1 = (byte)uu.C.bn;
+                                byte1 = (byte) uu.C.bn;
                             j1 = i1;
                             if (k1 >= this.waterLevel - 1) {
                                 abyte0[l1] = byte1;
@@ -207,7 +207,7 @@ public class yf implements cl {
                             abyte0[l1] = byte2;
                             if (j1 == 0 && byte2 == uu.F.bn) {
                                 j1 = this.j.nextInt(4);
-                                byte2 = (byte)uu.R.bn;
+                                byte2 = (byte) uu.R.bn;
                             }
                         }
                     }
@@ -403,7 +403,7 @@ public class yf implements cl {
             (new fl(uu.O.bn, 6)).a(this.p, this.j, k7, l10, k13);
         }
         d = 0.5D;
-        int k4 = (int)((this.c.a(k * d, l * d) / 8.0D + this.j.nextDouble() * 4.0D + 4.0D) / 3.0D);
+        int k4 = (int) ((this.c.a(k * d, l * d) / 8.0D + this.j.nextDouble() * 4.0D + 4.0D) / 3.0D);
         int l7 = 0;
         if (this.j.nextInt(10) == 0)
             l7++;

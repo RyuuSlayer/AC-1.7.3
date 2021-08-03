@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class nh {
-    private Properties b = new Properties();
+    private final Properties b = new Properties();
 
     private nh() {
         try {
@@ -21,14 +21,16 @@ public class nh {
     public void loadMapTranslation(File levelDir) {
         try {
             this.b.load(nh.class.getResourceAsStream("/lang/en_US.lang"));
-        } catch (IOException ioexception) {}
+        } catch (IOException ioexception) {
+        }
         try {
             File langFile = new File(levelDir, "/lang/en_US.lang");
             if (langFile.exists()) {
                 InputStream is = new FileInputStream(langFile);
                 this.b.load(is);
             }
-        } catch (IOException ioexception) {}
+        } catch (IOException ioexception) {
+        }
     }
 
     public static nh a() {
@@ -54,5 +56,5 @@ public class nh {
         return t;
     }
 
-    private static nh a = new nh();
+    private static final nh a = new nh();
 }

@@ -88,9 +88,9 @@ public final class iz {
     }
 
     public nu a(nu nbttagcompound) {
-        nbttagcompound.a("id", (short)this.c);
+        nbttagcompound.a("id", (short) this.c);
         nbttagcompound.a("Count", this.a);
-        nbttagcompound.a("Damage", (short)this.d);
+        nbttagcompound.a("Damage", (short) this.d);
         return nbttagcompound;
     }
 
@@ -144,7 +144,7 @@ public final class iz {
         this.d += i;
         if (this.d > j()) {
             if (entity instanceof gs)
-                ((gs)entity).a(jl.F[this.c], 1);
+                ((gs) entity).a(jl.F[this.c], 1);
             this.a--;
             if (this.a < 0)
                 this.a = 0;
@@ -153,13 +153,13 @@ public final class iz {
     }
 
     public void a(ls entityliving, gs entityplayer) {
-        boolean flag = gm.c[this.c].a(this, entityliving, (ls)entityplayer);
+        boolean flag = gm.c[this.c].a(this, entityliving, entityplayer);
         if (flag)
             entityplayer.a(jl.E[this.c], 1);
     }
 
     public void a(int i, int j, int k, int l, gs entityplayer) {
-        boolean flag = gm.c[this.c].a(this, i, j, k, l, (ls)entityplayer);
+        boolean flag = gm.c[this.c].a(this, i, j, k, l, entityplayer);
         if (flag)
             entityplayer.a(jl.E[this.c], 1);
     }
@@ -172,7 +172,8 @@ public final class iz {
         return gm.c[this.c].a(block);
     }
 
-    public void a(gs entityplayer) {}
+    public void a(gs entityplayer) {
+    }
 
     public void a(ls entityliving) {
         gm.c[this.c].a(this, entityliving);

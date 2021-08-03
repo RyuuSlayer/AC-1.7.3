@@ -14,14 +14,14 @@ public class GuiScriptStats extends da {
         Object[] info = Minecraft.minecraftInstance.f.scriptHandler.scripts.values().toArray();
         int numGood = 0;
         for (Object o : info) {
-            JScriptInfo sInfo = (JScriptInfo)o;
+            JScriptInfo sInfo = (JScriptInfo) o;
             if (sInfo.count > 0)
                 numGood++;
         }
         int index = 0;
         this.scriptInfo = new JScriptInfo[numGood];
         for (Object o : info) {
-            JScriptInfo sInfo = (JScriptInfo)o;
+            JScriptInfo sInfo = (JScriptInfo) o;
             if (sInfo.count > 0)
                 this.scriptInfo[index++] = sInfo;
         }
@@ -31,14 +31,17 @@ public class GuiScriptStats extends da {
                 this.maxSize = s;
         }
         this.maxSize += 10;
-        Arrays.sort((Object[])this.scriptInfo);
+        Arrays.sort(this.scriptInfo);
     }
 
-    public void b() {}
+    public void b() {
+    }
 
-    public void a() {}
+    public void a() {
+    }
 
-    protected void a(ke guibutton) {}
+    protected void a(ke guibutton) {
+    }
 
     public void a(int i, int j, float f) {
         i();
@@ -53,10 +56,10 @@ public class GuiScriptStats extends da {
             double avgTime = totTime / sInfo.count;
             double maxTime = sInfo.maxTime / 1000000.0D;
             b(this.g, sInfo.name, 4, yOffset, 14737632);
-            b(this.g, String.format("%.2f", new Object[] { Double.valueOf(avgTime) }), this.maxSize, yOffset, 14737632);
-            b(this.g, String.format("%.2f", new Object[] { Double.valueOf(maxTime) }), this.maxSize + 50, yOffset, 14737632);
-            b(this.g, String.format("%.2f", new Object[] { Double.valueOf(totTime) }), this.maxSize + 100, yOffset, 14737632);
-            b(this.g, String.format("%d", new Object[] { Integer.valueOf(sInfo.count) }), this.maxSize + 150, yOffset, 14737632);
+            b(this.g, String.format("%.2f", new Object[]{Double.valueOf(avgTime)}), this.maxSize, yOffset, 14737632);
+            b(this.g, String.format("%.2f", new Object[]{Double.valueOf(maxTime)}), this.maxSize + 50, yOffset, 14737632);
+            b(this.g, String.format("%.2f", new Object[]{Double.valueOf(totTime)}), this.maxSize + 100, yOffset, 14737632);
+            b(this.g, String.format("%d", new Object[]{Integer.valueOf(sInfo.count)}), this.maxSize + 150, yOffset, 14737632);
             yOffset += 10;
         }
         super.a(i, j, f);

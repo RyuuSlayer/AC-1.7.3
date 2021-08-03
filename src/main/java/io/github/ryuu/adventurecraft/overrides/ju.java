@@ -42,7 +42,8 @@ public class ju extends sn {
         return false;
     }
 
-    protected void b() {}
+    protected void b() {
+    }
 
     public boolean h_() {
         return !this.be;
@@ -95,7 +96,7 @@ public class ju extends sn {
     }
 
     protected void b(nu nbttagcompound) {
-        nbttagcompound.a("Tile", (byte)this.a);
+        nbttagcompound.a("Tile", (byte) this.a);
         nbttagcompound.a("EntityID", this.aD);
     }
 

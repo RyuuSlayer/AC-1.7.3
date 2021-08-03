@@ -26,7 +26,7 @@ public class GuiStore extends da {
             a(this.g, t.a("store.insert"), this.c / 2, this.d / 2 - 19 - yOffset, 16777215);
         }
         if (this.supplyLeft > 0)
-            a(this.g, String.format("%s: %d", new Object[] { t.a("store.tradesLeft"), Integer.valueOf(this.supplyLeft) }), this.c / 2, this.d / 2 + 11 - yOffset, 16777215);
+            a(this.g, String.format("%s: %d", new Object[]{t.a("store.tradesLeft"), Integer.valueOf(this.supplyLeft)}), this.c / 2, this.d / 2 + 11 - yOffset, 16777215);
         if (this.buyItem.c != 0 && this.sellItem.c != 0) {
             a(this.c / 2 + 11, this.d / 2 - 9 - yOffset, this.c / 2 + 29, this.d / 2 + 9 - yOffset, -1433695349);
             a(this.c / 2 - 29, this.d / 2 - 9 - yOffset, this.c / 2 - 11, this.d / 2 + 9 - yOffset, -1433695349);
@@ -99,5 +99,5 @@ public class GuiStore extends da {
         this.supplyLeft = s;
     }
 
-    private static bb itemRenderer = new bb();
+    private static final bb itemRenderer = new bb();
 }

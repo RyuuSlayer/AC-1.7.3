@@ -9,9 +9,9 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 public class GuiMusicSheet extends Screen {
-    private String instrument;
+    private final String instrument;
 
-    private ArrayList<Integer> notesPlayed;
+    private final ArrayList<Integer> notesPlayed;
 
     private String notesPlayedString;
 
@@ -28,9 +28,11 @@ public class GuiMusicSheet extends Screen {
         this.songPlayed = null;
     }
 
-    public void a() {}
+    public void a() {
+    }
 
-    public void b() {}
+    public void b() {
+    }
 
     protected void a(char c, int i) {
         super.a(c, i);
@@ -99,11 +101,11 @@ public class GuiMusicSheet extends Screen {
         int alpha2 = Integer.MIN_VALUE;
         int alpha3 = -16777216;
         if (this.songPlayed != null) {
-            float timeDelta = (float)(this.timeToFade - System.currentTimeMillis()) / 1000.0F;
+            float timeDelta = (float) (this.timeToFade - System.currentTimeMillis()) / 1000.0F;
             if (timeDelta < 1.0F) {
                 alpha = timeDelta;
-                alpha2 = (int)(128.0F * timeDelta) << 24;
-                alpha3 = (int)(255.0F * timeDelta) << 24;
+                alpha2 = (int) (128.0F * timeDelta) << 24;
+                alpha3 = (int) (255.0F * timeDelta) << 24;
                 if (timeDelta < 0.004D) {
                     this.b.a(null);
                     return;

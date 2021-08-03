@@ -2,16 +2,18 @@ package io.github.ryuu.adventurecraft.items;
 
 import io.github.ryuu.adventurecraft.util.UtilBullet;
 import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 
-class ItemRifle extends gm implements IItemReload {
+class ItemRifle extends ItemType implements IItemReload {
     public ItemRifle(int itemIndex) {
         super(itemIndex);
         this.bg = 1;
         this.itemUseDelay = 1;
     }
 
-    public iz a(iz itemstack, Level world, Player entityplayer) {
+    public ItemInstance a(ItemInstance itemstack, Level world, Player entityplayer) {
         if (itemstack.timeLeft > 3 || itemstack.isReloading)
             return itemstack;
         if (itemstack.i() == itemstack.j()) {
@@ -30,19 +32,15 @@ class ItemRifle extends gm implements IItemReload {
         return itemstack;
     }
 
-    public boolean isLighting(iz itemstack) {
-        if (!itemstack.justReloaded && itemstack.timeLeft > 3)
-            return true;
-        return false;
+    public boolean isLighting(ItemInstance itemstack) {
+        return !itemstack.justReloaded && itemstack.timeLeft > 3;
     }
 
-    public boolean isMuzzleFlash(iz itemstack) {
-        if (!itemstack.justReloaded && itemstack.timeLeft > 3)
-            return true;
-        return false;
+    public boolean isMuzzleFlash(ItemInstance itemstack) {
+        return !itemstack.justReloaded && itemstack.timeLeft > 3;
     }
 
-    public void reload(iz itemstack, Level world, Player entityplayer) {
+    public void reload(ItemInstance itemstack, Level world, Player entityplayer) {
         if (itemstack.i() > 0 && entityplayer.c.c(Items.rifleAmmo.bf)) {
             itemstack.b(itemstack.i() - 1);
             while (itemstack.i() > 0 && entityplayer.c.c(Items.rifleAmmo.bf))

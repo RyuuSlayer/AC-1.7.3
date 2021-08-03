@@ -4,13 +4,13 @@ import io.github.ryuu.adventurecraft.blocks.Blocks;
 import net.minecraft.client.Minecraft;
 
 public class GuiLightBulb extends da {
-    private int blockX;
+    private final int blockX;
 
-    private int blockY;
+    private final int blockY;
 
-    private int blockZ;
+    private final int blockZ;
 
-    private fd world;
+    private final fd world;
 
     GuiSlider2 lightSlider;
 
@@ -24,19 +24,21 @@ public class GuiLightBulb extends da {
         this.lightValue = w.e(x, y, z);
     }
 
-    public void a() {}
+    public void a() {
+    }
 
     public void b() {
-        this.lightSlider = new GuiSlider2(4, 4, 4, 10, String.format("Light Value: %d", new Object[] { Integer.valueOf(this.lightValue) }), this.lightValue / 15.0F);
+        this.lightSlider = new GuiSlider2(4, 4, 4, 10, String.format("Light Value: %d", Integer.valueOf(this.lightValue)), this.lightValue / 15.0F);
         this.e.add(this.lightSlider);
     }
 
-    protected void a(ke guibutton) {}
+    protected void a(ke guibutton) {
+    }
 
     public void a(int i, int j, float f) {
         a(0, 0, this.c, this.d, -2147483648);
-        this.lightValue = (int)(this.lightSlider.sliderValue * 15.0F + 0.5F);
-        this.lightSlider.e = String.format("Light Value: %d", new Object[] { Integer.valueOf(this.lightValue) });
+        this.lightValue = (int) (this.lightSlider.sliderValue * 15.0F + 0.5F);
+        this.lightSlider.e = String.format("Light Value: %d", new Object[]{Integer.valueOf(this.lightValue)});
         if (this.lightValue != this.world.e(this.blockX, this.blockY, this.blockZ)) {
             this.world.b(this.blockX, this.blockY, this.blockZ, 0, 0);
             this.world.b(this.blockX, this.blockY, this.blockZ, Blocks.lightBulb.bn, this.lightValue);

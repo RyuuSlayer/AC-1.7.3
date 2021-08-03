@@ -17,15 +17,15 @@ public class hl extends sn {
         super(world);
         this.b = 0;
         this.f = 5;
-        this.d = (float)(Math.random() * Math.PI * 2.0D);
+        this.d = (float) (Math.random() * Math.PI * 2.0D);
         b(0.25F, 0.25F);
         this.bf = this.bh / 2.0F;
         e(d, d1, d2);
         this.a = itemstack;
-        this.aS = (float)(Math.random() * 360.0D);
-        this.aP = (float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D);
+        this.aS = (float) (Math.random() * 360.0D);
+        this.aP = (float) (Math.random() * 0.20000000298023224D - 0.10000000149011612D);
         this.aQ = 0.20000000298023224D;
-        this.aR = (float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D);
+        this.aR = (float) (Math.random() * 0.20000000298023224D - 0.10000000149011612D);
         if (gm.c[this.a.c] == null)
             K();
     }
@@ -38,12 +38,13 @@ public class hl extends sn {
         super(world);
         this.b = 0;
         this.f = 5;
-        this.d = (float)(Math.random() * Math.PI * 2.0D);
+        this.d = (float) (Math.random() * Math.PI * 2.0D);
         b(0.25F, 0.25F);
         this.bf = this.bh / 2.0F;
     }
 
-    protected void b() {}
+    protected void b() {
+    }
 
     public void w_() {
         super.w_();
@@ -84,7 +85,7 @@ public class hl extends sn {
     }
 
     protected void a(int i) {
-        a((sn)null, i);
+        a((sn) null, i);
     }
 
     public boolean a(sn entity, int i) {
@@ -96,8 +97,8 @@ public class hl extends sn {
     }
 
     public void b(nu nbttagcompound) {
-        nbttagcompound.a("Health", (short)(byte)this.f);
-        nbttagcompound.a("Age", (short)this.b);
+        nbttagcompound.a("Health", (short) (byte) this.f);
+        nbttagcompound.a("Age", (short) this.b);
         nbttagcompound.a("Item", this.a.a(new nu()));
     }
 
@@ -114,9 +115,9 @@ public class hl extends sn {
         int i = this.a.a;
         if (this.c == 0 && entityplayer.c.a(this.a)) {
             if (this.a.c == Tile.K.bn)
-                entityplayer.a((vr)ep.g);
+                entityplayer.a((vr) ep.g);
             if (this.a.c == gm.aD.bf)
-                entityplayer.a((vr)ep.t);
+                entityplayer.a((vr) ep.t);
             this.aI.a(this, "random.pop", 0.2F, ((this.bs.nextFloat() - this.bs.nextFloat()) * 0.7F + 1.0F) * 2.0F);
             entityplayer.b(this, i);
             if (this.a.a <= 0)

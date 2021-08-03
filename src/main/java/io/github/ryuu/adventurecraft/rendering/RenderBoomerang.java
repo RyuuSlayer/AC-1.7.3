@@ -10,7 +10,7 @@ public class RenderBoomerang extends bw {
         float pitchToUse = entityBoomerang.aV + (entityBoomerang.aT - entityBoomerang.aV) * time;
         float boomerangRotation = entityBoomerang.prevBoomerangRotation + (entityBoomerang.boomerangRotation - entityBoomerang.prevBoomerangRotation) * time;
         GL11.glPushMatrix();
-        GL11.glTranslatef((float)d, (float)d1, (float)d2);
+        GL11.glTranslatef((float) d, (float) d1, (float) d2);
         GL11.glRotatef(-yaw, 0.0F, 1.0F, 0.0F);
         GL11.glRotatef(pitchToUse, 1.0F, 0.0F, 0.0F);
         GL11.glRotatef(entityBoomerang.boomerangRotation, 0.0F, 1.0F, 0.0F);
@@ -21,7 +21,7 @@ public class RenderBoomerang extends bw {
         float halfPixelW = 0.5F / texResolution.x;
         float halfPixelH = 0.5F / texResolution.x;
         nw tessellator = nw.a;
-        int iconIndex = Items.boomerang.b((iz)null);
+        int iconIndex = Items.boomerang.b((iz) null);
         float f = ((iconIndex % 16 * 16) + 0.0F) / 256.0F;
         float f1 = ((iconIndex % 16 * 16) + 15.99F) / 256.0F;
         float f2 = ((iconIndex / 16 * 16) + 0.0F) / 256.0F;
@@ -97,6 +97,6 @@ public class RenderBoomerang extends bw {
     }
 
     public void a(sn entity, double d, double d1, double d2, float f, float f1) {
-        doRenderItem((EntityBoomerang)entity, d, d1, d2, f, f1);
+        doRenderItem((EntityBoomerang) entity, d, d1, d2, f, f1);
     }
 }

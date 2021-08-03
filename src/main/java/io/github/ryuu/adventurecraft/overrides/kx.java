@@ -1,18 +1,19 @@
 package io.github.ryuu.adventurecraft.overrides;
 
 import java.io.IOException;
+
 import net.minecraft.client.Minecraft;
 
 public class kx implements cl {
-    private lm c;
+    private final lm c;
 
-    private cl d;
+    private final cl d;
 
-    private bf e;
+    private final bf e;
 
     private lm[] f;
 
-    private fd g;
+    private final fd g;
 
     int a;
 
@@ -35,7 +36,7 @@ public class kx implements cl {
         updateVeryFar();
         this.a = -999999999;
         this.b = -999999999;
-        this.c = (lm)new li(world, new byte[32768], 0, 0);
+        this.c = (lm) new li(world, new byte[32768], 0, 0);
         this.g = world;
         this.e = ichunkloader;
         this.d = ichunkprovider;
@@ -48,7 +49,7 @@ public class kx implements cl {
             this.a = -999999999;
             this.b = -999999999;
             if (this.f != null)
-                a(true, (yb)null);
+                a(true, null);
             lm[] oldChunks = this.f;
             if (this.isVeryFar) {
                 this.f = new lm[4096];

@@ -13,7 +13,7 @@ import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 public class BlockFan extends Tile {
-    private boolean fanOn;
+    private final boolean fanOn;
 
     public BlockFan(int i, int j, boolean f) {
         super(i, j, Material.STONE);
@@ -101,23 +101,23 @@ public class BlockFan extends Tile {
             Box aabb = e(world, i, j, k).a(xOffset, yOffset, zOffset);
             List entities = world.a(sn.class, aabb);
             for (Object obj : entities) {
-                sn e = (sn)obj;
+                sn e = (sn) obj;
                 if (!(e instanceof ju)) {
                     double dist = e.h(i + 0.5D, j + 0.5D, k + 0.5D) * Math.abs(xOffset + yOffset + zOffset) / 4.0D;
                     e.d(0.07D * xOffset / dist, 0.07D * yOffset / dist, 0.07D * zOffset / dist);
-                    if (e instanceof Player && ((Player)e).usingUmbrella())
+                    if (e instanceof Player && ((Player) e).usingUmbrella())
                         e.d(0.07D * xOffset / dist, 0.07D * yOffset / dist, 0.07D * zOffset / dist);
                 }
             }
             entities = Minecraft.minecraftInstance.j.getEffectsWithinAABB(aabb);
             for (Object obj : entities) {
-                sn e = (sn)obj;
+                sn e = (sn) obj;
                 if (!(e instanceof ju)) {
                     double dist = e.h(i + 0.5D, j + 0.5D, k + 0.5D) * Math.abs(xOffset + yOffset + zOffset) / 4.0D;
                     e.d(0.03D * xOffset / dist, 0.03D * yOffset / dist, 0.03D * zOffset / dist);
                 }
             }
-            Minecraft.minecraftInstance.j.a((xw)new EntityAirFX(world, i + random.nextDouble(), j + random.nextDouble(), k + random.nextDouble()));
+            Minecraft.minecraftInstance.j.a((xw) new EntityAirFX(world, i + random.nextDouble(), j + random.nextDouble(), k + random.nextDouble()));
         }
     }
 

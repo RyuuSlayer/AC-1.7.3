@@ -3,7 +3,7 @@ package io.github.ryuu.adventurecraft.overrides;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 
 public class PlaceableTileItem extends gm {
-    private int a;
+    private final int a;
 
     public PlaceableTileItem(int i) {
         super(i);

@@ -7,6 +7,7 @@ import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
 import net.minecraft.tile.TileWithEntity;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
@@ -29,7 +30,7 @@ public class BlockTeleport extends TileWithEntity {
         return null;
     }
 
-    public boolean shouldRender(xp blockAccess, int i, int j, int k) {
+    public boolean shouldRender(TileView blockAccess, int i, int j, int k) {
         return DebugMode.active;
     }
 
@@ -38,19 +39,20 @@ public class BlockTeleport extends TileWithEntity {
     }
 
     public void onTriggerActivated(Level world, int i, int j, int k) {
-        TileEntityTeleport tileEnt = (TileEntityTeleport)world.b(i, j, k);
+        TileEntityTeleport tileEnt = (TileEntityTeleport) world.b(i, j, k);
         int y;
         for (y = tileEnt.y; y < 128; y++) {
             if (world.f(tileEnt.x, y, tileEnt.z) == Material.AIR)
                 break;
         }
         for (Object obj : world.d) {
-            Player p = (Player)obj;
+            Player p = (Player) obj;
             p.e(tileEnt.x + 0.5D, y, tileEnt.z + 0.5D);
         }
     }
 
-    public void onTriggerDeactivated(Level world, int i, int j, int k) {}
+    public void onTriggerDeactivated(Level world, int i, int j, int k) {
+    }
 
     public boolean v_() {
         return DebugMode.active;
@@ -58,11 +60,11 @@ public class BlockTeleport extends TileWithEntity {
 
     public boolean a(Level world, int i, int j, int k, Player entityplayer) {
         if (DebugMode.active && entityplayer.G() != null && (entityplayer.G()).c == Items.cursor.bf) {
-            TileEntityTeleport obj = (TileEntityTeleport)world.b(i, j, k);
+            TileEntityTeleport obj = (TileEntityTeleport) world.b(i, j, k);
             obj.x = ItemCursor.minX;
             obj.y = ItemCursor.minY;
             obj.z = ItemCursor.minZ;
-            Minecraft.minecraftInstance.v.a(String.format("Setting Teleport (%d, %d, %d)", new Object[] { Integer.valueOf(obj.x), Integer.valueOf(obj.y), Integer.valueOf(obj.z) }));
+            Minecraft.minecraftInstance.v.a(String.format("Setting Teleport (%d, %d, %d)", new Object[]{Integer.valueOf(obj.x), Integer.valueOf(obj.y), Integer.valueOf(obj.z)}));
             return true;
         }
         return false;

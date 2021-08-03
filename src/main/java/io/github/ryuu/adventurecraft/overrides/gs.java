@@ -98,7 +98,7 @@ public abstract class gs extends ls {
         this.A = false;
         this.bO = 0;
         this.D = null;
-        this.d = (dw)new aa(this.c, !world.B);
+        this.d = (dw) new aa(this.c, !world.B);
         this.e = this.d;
         this.bf = 1.62F;
         br chunkcoordinates = world.u();
@@ -117,7 +117,7 @@ public abstract class gs extends ls {
 
     protected void b() {
         super.b();
-        this.bD.a(16, Byte.valueOf((byte)0));
+        this.bD.a(16, Byte.valueOf((byte) 0));
     }
 
     public void w_() {
@@ -236,7 +236,7 @@ public abstract class gs extends ls {
         this.h = this.i;
         super.o();
         float f = in.a(this.aP * this.aP + this.aR * this.aR);
-        float f1 = (float)Math.atan(-this.aQ * 0.20000000298023224D) * 15.0F;
+        float f1 = (float) Math.atan(-this.aQ * 0.20000000298023224D) * 15.0F;
         if (f > 0.1F)
             f = 0.1F;
         if (!this.aX || this.Y <= 0)
@@ -260,7 +260,7 @@ public abstract class gs extends ls {
         int i = litFromItem | ((offItem != null && gm.c[offItem.c].isLighting(offItem)) ? 1 : 0);
         if (i != 0 || (mainItem != null && (mainItem.c == Tile.ar.bn || mainItem.c == Blocks.lights1.bn)) || (offItem != null && (offItem.c == Tile.ar.bn || offItem.c == Blocks.lights1.bn))) {
             PlayerTorch.setTorchState(this.aI, true);
-            PlayerTorch.setTorchPos(this.aI, (float)this.aM, (float)this.aN, (float)this.aO);
+            PlayerTorch.setTorchPos(this.aI, (float) this.aM, (float) this.aN, (float) this.aO);
         } else {
             PlayerTorch.setTorchState(this.aI, false);
         }
@@ -283,7 +283,7 @@ public abstract class gs extends ls {
         if (i.i() < i.j()) {
             i.b(i.i() + 1);
             PlayerTorch.setTorchState(this.aI, true);
-            PlayerTorch.setTorchPos(this.aI, (float)this.aM, (float)this.aN, (float)this.aO);
+            PlayerTorch.setTorchPos(this.aI, (float) this.aM, (float) this.aN, (float) this.aO);
         }
         if (i.i() == i.j())
             if (this.c.c(Items.oil.bf)) {
@@ -403,10 +403,10 @@ public abstract class gs extends ls {
 
     public void b(nu nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.a("Inventory", (ij)this.c.a(new sp()));
+        nbttagcompound.a("Inventory", (ij) this.c.a(new sp()));
         nbttagcompound.a("Dimension", this.m);
         nbttagcompound.a("Sleeping", this.u);
-        nbttagcompound.a("SleepTimer", (short)this.a);
+        nbttagcompound.a("SleepTimer", (short) this.a);
         if (this.b != null) {
             nbttagcompound.a("SpawnX", this.b.a);
             nbttagcompound.a("SpawnY", this.b.b);
@@ -415,13 +415,17 @@ public abstract class gs extends ls {
         nbttagcompound.a("NumHeartPieces", this.numHeartPieces);
     }
 
-    public void a(lw iinventory) {}
+    public void a(lw iinventory) {
+    }
 
-    public void displayGUIPalette() {}
+    public void displayGUIPalette() {
+    }
 
-    public void a(int i, int j, int k) {}
+    public void a(int i, int j, int k) {
+    }
 
-    public void b(sn entity, int i) {}
+    public void b(sn entity, int i) {
+    }
 
     public float w() {
         return 0.12F;
@@ -448,10 +452,10 @@ public abstract class gs extends ls {
         if (i == 0)
             return false;
         Object obj = entity;
-        if (obj instanceof sl && ((sl)obj).c != null)
-            obj = ((sl)obj).c;
+        if (obj instanceof sl && ((sl) obj).c != null)
+            obj = ((sl) obj).c;
         if (obj instanceof ls)
-            a((ls)obj, false);
+            a((ls) obj, false);
         a(jl.x, i);
         return super.a(entity, i);
     }
@@ -473,10 +477,10 @@ public abstract class gs extends ls {
         if (i == 0)
             return false;
         Object obj = entity;
-        if (obj instanceof sl && ((sl)obj).c != null)
-            obj = ((sl)obj).c;
+        if (obj instanceof sl && ((sl) obj).c != null)
+            obj = ((sl) obj).c;
         if (obj instanceof ls)
-            a((ls)obj, false);
+            a((ls) obj, false);
         a(jl.x, i);
         return super.attackEntityFromMulti(entity, i);
     }
@@ -489,7 +493,7 @@ public abstract class gs extends ls {
         if (entityliving instanceof gb || entityliving instanceof bp)
             return;
         if (entityliving instanceof gi) {
-            gi entitywolf = (gi)entityliving;
+            gi entitywolf = (gi) entityliving;
             if (entitywolf.D() && this.l.equals(entitywolf.A()))
                 return;
         }
@@ -499,7 +503,7 @@ public abstract class gs extends ls {
         Iterator<sn> iterator = list.iterator();
         while (iterator.hasNext()) {
             sn entity = iterator.next();
-            gi entitywolf1 = (gi)entity;
+            gi entitywolf1 = (gi) entity;
             if (entitywolf1.D() && entitywolf1.G() == null && this.l.equals(entitywolf1.A()) && (!flag || !entitywolf1.B())) {
                 entitywolf1.b(false);
                 entitywolf1.c(entityliving);
@@ -517,18 +521,21 @@ public abstract class gs extends ls {
         super.b(i);
     }
 
-    public void a(sk tileentityfurnace) {}
+    public void a(sk tileentityfurnace) {
+    }
 
-    public void a(Dispenser tileentitydispenser) {}
+    public void a(Dispenser tileentitydispenser) {
+    }
 
-    public void a(yk tileentitysign) {}
+    public void a(yk tileentitysign) {
+    }
 
     public void c(sn entity) {
         if (entity.a(this))
             return;
         iz itemstack = G();
         if (itemstack != null && entity instanceof ls) {
-            itemstack.a((ls)entity);
+            itemstack.a((ls) entity);
             if (itemstack.a == 0) {
                 itemstack.a(this);
                 H();
@@ -541,7 +548,7 @@ public abstract class gs extends ls {
     }
 
     public void H() {
-        this.c.a(this.c.c, (iz)null);
+        this.c.a(this.c.c, null);
     }
 
     public double I() {
@@ -577,7 +584,7 @@ public abstract class gs extends ls {
             entity.a(this, i);
             iz itemstack = G();
             if (itemstack != null && entity instanceof ls) {
-                itemstack.a((ls)entity, this);
+                itemstack.a((ls) entity, this);
                 if (itemstack.a == 0) {
                     itemstack.a(this);
                     H();
@@ -585,17 +592,19 @@ public abstract class gs extends ls {
             }
             if (entity instanceof ls) {
                 if (entity.W())
-                    a((ls)entity, true);
+                    a((ls) entity, true);
                 a(jl.w, i);
             }
         }
     }
 
-    public void p_() {}
+    public void p_() {
+    }
 
     public abstract void v();
 
-    public void b(iz itemstack) {}
+    public void b(iz itemstack) {
+    }
 
     public void K() {
         super.K();
@@ -751,7 +760,8 @@ public abstract class gs extends ls {
         return this.a;
     }
 
-    public void b(String s) {}
+    public void b(String s) {
+    }
 
     public br Q() {
         return this.b;
@@ -769,7 +779,8 @@ public abstract class gs extends ls {
         a(statbase, 1);
     }
 
-    public void a(vr statbase, int i) {}
+    public void a(vr statbase, int i) {
+    }
 
     protected void R() {
         super.R();
@@ -797,7 +808,7 @@ public abstract class gs extends ls {
                 a(jl.m, j);
         } else if (p()) {
             if (d1 > 0.0D)
-                a(jl.o, (int)Math.round(d1 * 100.0D));
+                a(jl.o, (int) Math.round(d1 * 100.0D));
         } else if (this.aX) {
             int k = Math.round(in.a(d * d + d2 * d2) * 100.0F);
             if (k > 0)
@@ -818,7 +829,7 @@ public abstract class gs extends ls {
                     if (this.bN == null) {
                         this.bN = new br(in.b(this.aM), in.b(this.aN), in.b(this.aO));
                     } else if (this.bN.a(in.b(this.aM), in.b(this.aN), in.b(this.aO)) >= 1000.0D) {
-                        a((vr)ep.q, 1);
+                        a((vr) ep.q, 1);
                     }
                 } else if (this.aH instanceof fz) {
                     a(jl.s, i);
@@ -830,13 +841,13 @@ public abstract class gs extends ls {
 
     protected void b(float f) {
         if (f >= 2.0F)
-            a(jl.n, (int)Math.round(f * 100.0D));
+            a(jl.n, (int) Math.round(f * 100.0D));
         super.b(f);
     }
 
     public void a(ls entityliving) {
         if (entityliving instanceof gz)
-            a((vr)ep.s);
+            a((vr) ep.s);
     }
 
     public int c(iz itemstack) {

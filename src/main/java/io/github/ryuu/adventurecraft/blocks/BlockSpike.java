@@ -28,6 +28,6 @@ public class BlockSpike extends Tile {
     }
 
     public void a(Level world, int i, int j, int k, sn entity) {
-        entity.a((sn)null, 10);
+        entity.a((sn) null, 10);
     }
 }

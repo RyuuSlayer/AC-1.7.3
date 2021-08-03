@@ -6,7 +6,7 @@ public class RenderBomb extends bb {
     public void a(hl entityitem, double d, double d1, double d2, float f, float f1) {
         iz itemstack = entityitem.a;
         GL11.glPushMatrix();
-        GL11.glTranslatef((float)d, (float)d1 + 0.1F, (float)d2);
+        GL11.glTranslatef((float) d, (float) d1 + 0.1F, (float) d2);
         GL11.glEnable(32826);
         int i = itemstack.b();
         a("/gui/items.png");

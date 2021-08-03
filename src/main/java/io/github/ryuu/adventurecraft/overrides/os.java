@@ -68,23 +68,23 @@ public class os extends ob {
         iz itemstack = this.a.h.G();
         boolean flag1 = this.a.h.b(Tile.m[i1]);
         if (itemstack != null) {
-            itemstack.a(i1, i, j, k, (gs)this.a.h);
+            itemstack.a(i1, i, j, k, (gs) this.a.h);
             if (itemstack.a == 0) {
-                itemstack.a((gs)this.a.h);
+                itemstack.a((gs) this.a.h);
                 this.a.h.H();
             }
         }
         if (flag && flag1)
-            Tile.m[i1].a(this.a.f, (gs)this.a.h, i, j, k, j1);
+            Tile.m[i1].a(this.a.f, (gs) this.a.h, i, j, k, j1);
         return flag;
     }
 
     public void a(int i, int j, int k, int l) {
-        this.a.f.a((gs)this.a.h, i, j, k, l);
+        this.a.f.a((gs) this.a.h, i, j, k, l);
         int i1 = this.a.f.a(i, j, k);
         if (i1 > 0 && this.f == 0.0F)
-            Tile.m[i1].b(this.a.f, i, j, k, (gs)this.a.h);
-        if (DebugMode.active && i1 > 0 && Tile.m[i1].a((gs)this.a.h) >= 1.0F)
+            Tile.m[i1].b(this.a.f, i, j, k, (gs) this.a.h);
+        if (DebugMode.active && i1 > 0 && Tile.m[i1].a((gs) this.a.h) >= 1.0F)
             b(i, j, k, l);
     }
 
@@ -105,7 +105,7 @@ public class os extends ob {
             if (i1 == 0)
                 return;
             Tile block = Tile.m[i1];
-            this.f += block.a((gs)this.a.h);
+            this.f += block.a((gs) this.a.h);
             if (this.h % 4.0F == 0.0F && block != null)
                 this.a.B.b(block.by.d(), i + 0.5F, j + 0.5F, k + 0.5F, (block.by.b() + 1.0F) / 8.0F, block.by.c() * 0.5F);
             this.h++;

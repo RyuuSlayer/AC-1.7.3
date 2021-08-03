@@ -61,7 +61,7 @@ public class GuiMapElement extends ScriptUIContainer {
         this.background = new ScriptUISprite(texture, 0.0F, 0.0F, 100.0F, 100.0F, 0.0D, 0.0D, this);
         this.topBack = new ScriptUIRect(0.0F, 0.0F, 100.0F, 12.0F, 0.0F, 0.0F, 0.0F, 0.5F, this);
         this.mapID = mID;
-        this.ratingBack = new ScriptUIRect(0.0F, 85.0F, 100.0F, 15.0F, 0.0F, 0.0F, 0.0F, 0.5F, (ScriptUIContainer)this);
+        this.ratingBack = new ScriptUIRect(0.0F, 85.0F, 100.0F, 15.0F, 0.0F, 0.0F, 0.0F, 0.5F, this);
         this.ratingBar = new ScriptUISprite("/misc/adventureCraftMisc.png", 0.0F, 86.0F, 64.0F, 13.0F, 0.0D, 0.0D, this);
         this.totalRating = tRating;
         this.numRatings = nRatings;
@@ -96,7 +96,7 @@ public class GuiMapElement extends ScriptUIContainer {
         this.topFadeBack.height = (10 * labels.length);
         this.topFadeText = new ScriptUILabel[labels.length];
         for (String label : labels) {
-            this.topFadeText[i] = new ScriptUILabel(label, 2.0F, (int)((i * 10) + this.topFadeBack.curY), this);
+            this.topFadeText[i] = new ScriptUILabel(label, 2.0F, (int) ((i * 10) + this.topFadeBack.curY), this);
             (this.topFadeText[i]).alpha = 0.0F;
             i++;
         }
@@ -136,7 +136,7 @@ public class GuiMapElement extends ScriptUIContainer {
             this.numRatings--;
         }
         this.voted = mouseX / 13 + 1;
-        SwingUtilities.invokeLater((Runnable)new Object(this));
+        SwingUtilities.invokeLater((Runnable) new Object(this));
     }
 
     void getLines(String text, List<String> lines) {
@@ -175,7 +175,7 @@ public class GuiMapElement extends ScriptUIContainer {
         if (this.fadeIn || this.fadeOut) {
             long fadeCurTime = System.nanoTime();
             long fadeDiff = fadeCurTime - this.fadeTimePrev;
-            float fadeChange = (float)(2L * fadeDiff) / 1.0E9F;
+            float fadeChange = (float) (2L * fadeDiff) / 1.0E9F;
             if (fadeChange != 0.0F) {
                 this.fadeTimePrev = fadeCurTime;
                 for (ScriptUILabel desc : this.descriptions) {

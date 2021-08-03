@@ -23,7 +23,6 @@ import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
 /**
- *
  * @author André Bargull
  */
 public abstract class ShellConsole {
@@ -190,7 +189,7 @@ public abstract class ShellConsole {
      * to use our own implementation
      */
     private static class ConsoleInputStream extends InputStream {
-        private static final byte[] EMPTY = new byte[] {};
+        private static final byte[] EMPTY = new byte[]{};
         private final ShellConsole console;
         private final Charset cs;
         private byte[] buffer = EMPTY;
@@ -319,7 +318,7 @@ public abstract class ShellConsole {
      * {@link InputStream} and {@link PrintStream} for its input/output
      */
     public static ShellConsole getConsole(InputStream in, PrintStream ps,
-            Charset cs) {
+                                          Charset cs) {
         return new SimpleShellConsole(in, ps, cs);
     }
 
@@ -377,9 +376,9 @@ public abstract class ShellConsole {
         Class<?> completorClass = Kit.classOrNull(classLoader,
                 "jline.Completor");
         Object completor = Proxy.newProxyInstance(classLoader,
-                new Class[] { completorClass },
+                new Class[]{completorClass},
                 new FlexibleCompletor(completorClass, scope));
-        tryInvoke(reader, "addCompletor", new Class[] {completorClass}, completor);
+        tryInvoke(reader, "addCompletor", new Class[]{completorClass}, completor);
 
         return new JLineShellConsoleV1(reader, cs);
     }
@@ -399,26 +398,25 @@ public abstract class ShellConsole {
         Class<?> completorClass = Kit.classOrNull(classLoader,
                 "jline.console.completer.Completer");
         Object completor = Proxy.newProxyInstance(classLoader,
-                new Class[] { completorClass },
+                new Class[]{completorClass},
                 new FlexibleCompletor(completorClass, scope));
-        tryInvoke(reader, "addCompleter", new Class[] {completorClass}, completor);
+        tryInvoke(reader, "addCompleter", new Class[]{completorClass}, completor);
 
         return new JLineShellConsoleV2(reader, cs);
     }
 }
 
 /**
-* The completors provided with JLine are pretty uptight, they only
-* complete on a line that it can fully recognize (only composed of
-* completed strings). This one completes whatever came before.
-*/
+ * The completors provided with JLine are pretty uptight, they only
+ * complete on a line that it can fully recognize (only composed of
+ * completed strings). This one completes whatever came before.
+ */
 class FlexibleCompletor implements java.lang.reflect.InvocationHandler {
-    private Method completeMethod;
-    private Scriptable global;
+    private final Method completeMethod;
+    private final Scriptable global;
 
     FlexibleCompletor(Class<?> completorClass, Scriptable global)
-        throws NoSuchMethodException
-    {
+            throws NoSuchMethodException {
         this.global = global;
         this.completeMethod = completorClass.getMethod("complete", String.class,
                 Integer.TYPE, List.class);
@@ -428,7 +426,7 @@ class FlexibleCompletor implements java.lang.reflect.InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) {
         if (method.equals(this.completeMethod)) {
-            int result = complete((String)args[0], ((Integer) args[1]).intValue(),
+            int result = complete((String) args[0], ((Integer) args[1]).intValue(),
                     (List<String>) args[2]);
             return Integer.valueOf(result);
         }
@@ -449,10 +447,10 @@ class FlexibleCompletor implements java.lang.reflect.InvocationHandler {
                 break;
             m--;
         }
-        String namesAndDots = buffer.substring(m+1, cursor);
+        String namesAndDots = buffer.substring(m + 1, cursor);
         String[] names = namesAndDots.split("\\.", -1);
         Scriptable obj = this.global;
-        for (int i=0; i < names.length - 1; i++) {
+        for (int i = 0; i < names.length - 1; i++) {
             Object val = obj.get(names[i], global);
             if (val instanceof Scriptable)
                 obj = (Scriptable) val;
@@ -461,13 +459,13 @@ class FlexibleCompletor implements java.lang.reflect.InvocationHandler {
             }
         }
         Object[] ids = (obj instanceof ScriptableObject)
-                       ? ((ScriptableObject)obj).getAllIds()
-                       : obj.getIds();
-        String lastPart = names[names.length-1];
-        for (int i=0; i < ids.length; i++) {
+                ? ((ScriptableObject) obj).getAllIds()
+                : obj.getIds();
+        String lastPart = names[names.length - 1];
+        for (int i = 0; i < ids.length; i++) {
             if (!(ids[i] instanceof String))
                 continue;
-            String id = (String)ids[i];
+            String id = (String) ids[i];
             if (id.startsWith(lastPart)) {
                 if (obj.get(id, obj) instanceof Function)
                     id += "(";

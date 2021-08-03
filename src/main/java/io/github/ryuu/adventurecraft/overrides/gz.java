@@ -24,8 +24,8 @@ public class gz extends ii implements ff {
 
     protected sn g_() {
         gs entityplayer = this.aI.a(this, 16.0D);
-        if (entityplayer != null && e((sn)entityplayer))
-            return (sn)entityplayer;
+        if (entityplayer != null && e(entityplayer))
+            return entityplayer;
         return null;
     }
 

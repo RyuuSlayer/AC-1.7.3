@@ -4,7 +4,7 @@ import io.github.ryuu.adventurecraft.entities.tile.TileEntityWeather;
 import net.minecraft.client.Minecraft;
 
 public class GuiWeather extends da {
-    private TileEntityWeather weather;
+    private final TileEntityWeather weather;
 
     private GuiSlider2 tempOffset;
 
@@ -16,7 +16,8 @@ public class GuiWeather extends da {
         this.weather = w;
     }
 
-    public void a() {}
+    public void a() {
+    }
 
     public void b() {
         ab b = new ab(0, 4, 0, "Don't Change Precipitation");
@@ -31,19 +32,19 @@ public class GuiWeather extends da {
         this.e.add(b);
         if (this.weather.changeTempOffset)
             b.e = "Change Temperature";
-        this.tempOffset = new GuiSlider2(2, 4, 44, 10, String.format("Temp Offset: %.2f", new Object[] { Double.valueOf(this.weather.tempOffset) }), (float)((this.weather.tempOffset + 1.0D) / 2.0D));
+        this.tempOffset = new GuiSlider2(2, 4, 44, 10, String.format("Temp Offset: %.2f", Double.valueOf(this.weather.tempOffset)), (float) ((this.weather.tempOffset + 1.0D) / 2.0D));
         this.e.add(this.tempOffset);
         b = new ab(3, 4, 66, "Don't Change Time");
         this.e.add(b);
         if (this.weather.changeTimeOfDay)
             b.e = "Change Time";
-        this.timeOfDay = new GuiSlider2(4, 4, 88, 10, String.format("Time: %d", new Object[] { Integer.valueOf(this.weather.timeOfDay) }), this.weather.timeOfDay / 24000.0F);
+        this.timeOfDay = new GuiSlider2(4, 4, 88, 10, String.format("Time: %d", Integer.valueOf(this.weather.timeOfDay)), this.weather.timeOfDay / 24000.0F);
         this.e.add(this.timeOfDay);
         b = new ab(5, 4, 110, "Don't Change Time Rate");
         this.e.add(b);
         if (this.weather.changeTimeRate)
             b.e = "Change Time Rate";
-        this.timeRate = new GuiSlider2(6, 4, 132, 10, String.format("Time Rate: %.2f", new Object[] { Float.valueOf(this.weather.timeRate) }), (this.weather.timeRate + 16.0F) / 32.0F);
+        this.timeRate = new GuiSlider2(6, 4, 132, 10, String.format("Time Rate: %.2f", Float.valueOf(this.weather.timeRate)), (this.weather.timeRate + 16.0F) / 32.0F);
         this.e.add(this.timeRate);
         b = new ab(7, 4, 152, "Don't Change Thundering");
         this.e.add(b);
@@ -120,11 +121,11 @@ public class GuiWeather extends da {
     public void a(int i, int j, float f) {
         a(0, 0, this.c, this.d, -2147483648);
         this.weather.tempOffset = this.tempOffset.sliderValue * 2.0D - 1.0D;
-        this.tempOffset.e = String.format("Temp Offset: %.2f", new Object[] { Double.valueOf(this.weather.tempOffset) });
-        this.weather.timeOfDay = (int)(this.timeOfDay.sliderValue * 24000.0F);
-        this.timeOfDay.e = String.format("Time: %d", new Object[] { Integer.valueOf(this.weather.timeOfDay) });
+        this.tempOffset.e = String.format("Temp Offset: %.2f", new Object[]{Double.valueOf(this.weather.tempOffset)});
+        this.weather.timeOfDay = (int) (this.timeOfDay.sliderValue * 24000.0F);
+        this.timeOfDay.e = String.format("Time: %d", new Object[]{Integer.valueOf(this.weather.timeOfDay)});
         this.weather.timeRate = this.timeRate.sliderValue * 32.0F - 16.0F;
-        this.timeRate.e = String.format("Time Rate: %.2f", new Object[] { Float.valueOf(this.weather.timeRate) });
+        this.timeRate.e = String.format("Time Rate: %.2f", new Object[]{Float.valueOf(this.weather.timeRate)});
         super.a(i, j, f);
     }
 

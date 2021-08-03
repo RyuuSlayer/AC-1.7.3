@@ -29,23 +29,23 @@ public class ScriptEntity {
         if (e == null)
             return null;
         if (e instanceof Player)
-            return new ScriptEntityPlayer((Player)e);
+            return new ScriptEntityPlayer((Player) e);
         if (e instanceof Monster)
-            return new ScriptEntityMob((Monster)e);
+            return new ScriptEntityMob((Monster) e);
         if (e instanceof Wolf)
-            return new ScriptEntityWolf((Wolf)e);
+            return new ScriptEntityWolf((Wolf) e);
         if (e instanceof WalkingEntity)
-            return new ScriptEntityCreature((WalkingEntity)e);
+            return new ScriptEntityCreature((WalkingEntity) e);
         if (e instanceof FlyingEntity)
-            return new ScriptEntityFlying((FlyingEntity)e);
+            return new ScriptEntityFlying((FlyingEntity) e);
         if (e instanceof EntityNPC)
-            return new ScriptEntityNPC((EntityNPC)e);
+            return new ScriptEntityNPC((EntityNPC) e);
         if (e instanceof EntityLivingScript)
-            return new ScriptEntityLivingScript((EntityLivingScript)e);
+            return new ScriptEntityLivingScript((EntityLivingScript) e);
         if (e instanceof Slime)
-            return new ScriptEntitySlime((Slime)e);
+            return new ScriptEntitySlime((Slime) e);
         if (e instanceof LivingEntity)
-            return new ScriptEntityLiving((LivingEntity)e);
+            return new ScriptEntityLiving((LivingEntity) e);
         if (e instanceof Arrow)
             return new ScriptEntityArrow((Arrow) e);
         return new ScriptEntity(e);
@@ -143,7 +143,7 @@ public class ScriptEntity {
         List<ScriptEntity> scriptEntities = new ArrayList<>();
         double sqDist = dist * dist;
         for (Object ent : entities) {
-            Entity e = (Entity)ent;
+            Entity e = (Entity) ent;
             if (e.g(this.entity) < sqDist)
                 scriptEntities.add(getEntityClass(e));
         }
@@ -155,7 +155,7 @@ public class ScriptEntity {
     }
 
     public ScriptEntity dropItem(ScriptItem item) {
-        return getEntityClass((Entity)this.entity.a(item.item, 0.0F));
+        return getEntityClass((Entity) this.entity.a(item.item, 0.0F));
     }
 
     public boolean isInsideOfWater() {

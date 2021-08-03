@@ -9,18 +9,19 @@ import io.github.ryuu.adventurecraft.scripting.EntityDescriptions;
 import net.minecraft.client.Minecraft;
 
 public class GuiMobSpawner extends da {
-    private TileEntityMobSpawner mobSpawner;
+    private final TileEntityMobSpawner mobSpawner;
 
     public GuiMobSpawner(TileEntityMobSpawner ms) {
         this.mobSpawner = ms;
     }
 
-    public void a() {}
+    public void a() {
+    }
 
     public void b() {
         this.e.clear();
-        this.spawnCountSlider = new GuiSlider2(50, 4, 44, 10, String.format("Spawn Count: %d", new Object[] { Integer.valueOf(this.mobSpawner.spawnNumber) }), this.mobSpawner.spawnNumber / 15.0F);
-        this.respawnSlider = new GuiSlider2(51, this.c / 2, 44, 10, String.format("Respawn Delay: %.1f", new Object[] { Float.valueOf(this.mobSpawner.respawnDelay / 20.0F) }), this.mobSpawner.respawnDelay / 12000.0F);
+        this.spawnCountSlider = new GuiSlider2(50, 4, 44, 10, String.format("Spawn Count: %d", Integer.valueOf(this.mobSpawner.spawnNumber)), this.mobSpawner.spawnNumber / 15.0F);
+        this.respawnSlider = new GuiSlider2(51, this.c / 2, 44, 10, String.format("Respawn Delay: %.1f", Float.valueOf(this.mobSpawner.respawnDelay / 20.0F)), this.mobSpawner.respawnDelay / 12000.0F);
         this.spawnCountSlider.a = 200;
         this.respawnSlider.a = 200;
         this.e.add(this.spawnCountSlider);
@@ -33,7 +34,7 @@ public class GuiMobSpawner extends da {
                 b.e = "Spawn on Timer";
             }
         this.e.add(b);
-        b = new ke(55, this.c / 2, 24, 200, 18, String.format("Spawn: (%d, %d, %d), (%d, %d, %d)", new Object[] { Integer.valueOf(this.mobSpawner.minSpawnVec.x), Integer.valueOf(this.mobSpawner.minSpawnVec.y), Integer.valueOf(this.mobSpawner.minSpawnVec.z), Integer.valueOf(this.mobSpawner.maxSpawnVec.x), Integer.valueOf(this.mobSpawner.maxSpawnVec.y), Integer.valueOf(this.mobSpawner.maxSpawnVec.z) }));
+        b = new ke(55, this.c / 2, 24, 200, 18, String.format("Spawn: (%d, %d, %d), (%d, %d, %d)", new Object[]{Integer.valueOf(this.mobSpawner.minSpawnVec.x), Integer.valueOf(this.mobSpawner.minSpawnVec.y), Integer.valueOf(this.mobSpawner.minSpawnVec.z), Integer.valueOf(this.mobSpawner.maxSpawnVec.x), Integer.valueOf(this.mobSpawner.maxSpawnVec.y), Integer.valueOf(this.mobSpawner.maxSpawnVec.z)}));
         this.e.add(b);
         int buttonWidth = (this.c - 16) / 4;
         this.e.add(new ke(57, 4, 64, buttonWidth, 18, "Select Spawn"));
@@ -44,7 +45,7 @@ public class GuiMobSpawner extends da {
             int i = 0;
             String itemToSpawn = "Spawn Item/Block: None";
             if (gm.c[this.mobSpawner.spawnID] != null)
-                itemToSpawn = String.format("Spawn Item/Block: %s", new Object[] { gm.c[this.mobSpawner.spawnID].a() });
+                itemToSpawn = String.format("Spawn Item/Block: %s", new Object[]{gm.c[this.mobSpawner.spawnID].a()});
             this.e.add(new ke(56, 2, 84, 200, 14, itemToSpawn));
             for (String entityID : entityTypes) {
                 this.e.add(new ke(i, 2 + (buttonWidth + 4) * i % 4, (i / 4 + 1) * 14 + 84, buttonWidth, 13, entityID));
@@ -130,7 +131,7 @@ public class GuiMobSpawner extends da {
             }
         } else if (guibutton.f == 55) {
             this.mobSpawner.setSpawnVec();
-            guibutton.e = String.format("Spawn: (%d, %d, %d), (%d, %d, %d)", new Object[] { Integer.valueOf(this.mobSpawner.minSpawnVec.x), Integer.valueOf(this.mobSpawner.minSpawnVec.y), Integer.valueOf(this.mobSpawner.minSpawnVec.z), Integer.valueOf(this.mobSpawner.maxSpawnVec.x), Integer.valueOf(this.mobSpawner.maxSpawnVec.y), Integer.valueOf(this.mobSpawner.maxSpawnVec.z) });
+            guibutton.e = String.format("Spawn: (%d, %d, %d), (%d, %d, %d)", new Object[]{Integer.valueOf(this.mobSpawner.minSpawnVec.x), Integer.valueOf(this.mobSpawner.minSpawnVec.y), Integer.valueOf(this.mobSpawner.minSpawnVec.z), Integer.valueOf(this.mobSpawner.maxSpawnVec.x), Integer.valueOf(this.mobSpawner.maxSpawnVec.y), Integer.valueOf(this.mobSpawner.maxSpawnVec.z)});
         } else if (guibutton.f == 56) {
             if (this.b.h.c.b() != null) {
                 this.mobSpawner.spawnID = (this.b.h.c.b()).c;
@@ -141,7 +142,7 @@ public class GuiMobSpawner extends da {
             }
             String itemToSpawn = "Spawn Item/Block: None";
             if (gm.c[this.mobSpawner.spawnID] != null)
-                itemToSpawn = String.format("Spawn Item/Block: %s", new Object[] { gm.c[this.mobSpawner.spawnID].a() });
+                itemToSpawn = String.format("Spawn Item/Block: %s", new Object[]{gm.c[this.mobSpawner.spawnID].a()});
             guibutton.e = itemToSpawn;
         } else if (guibutton.f >= 57 && guibutton.f <= 60) {
             this.displayScreen = guibutton.f - 57;
@@ -173,18 +174,18 @@ public class GuiMobSpawner extends da {
 
     public void a(int i, int j, float f) {
         a(0, 0, this.c, this.d, -2147483648);
-        b(this.g, String.format("Entity Spawn: %s", new Object[] { this.mobSpawner.entityID }), 4, 4, 14737632);
-        b(this.g, String.format("Entities Alive: %d", new Object[] { Integer.valueOf(this.mobSpawner.getNumAlive()) }), 4, 14, 14737632);
-        b(this.g, String.format("Respawn In: %.1fs", new Object[] { Float.valueOf(this.mobSpawner.delay / 20.0F) }), 4, 24, 14737632);
+        b(this.g, String.format("Entity Spawn: %s", new Object[]{this.mobSpawner.entityID}), 4, 4, 14737632);
+        b(this.g, String.format("Entities Alive: %d", new Object[]{Integer.valueOf(this.mobSpawner.getNumAlive())}), 4, 14, 14737632);
+        b(this.g, String.format("Respawn In: %.1fs", new Object[]{Float.valueOf(this.mobSpawner.delay / 20.0F)}), 4, 24, 14737632);
         if (this.mobSpawner.hasDroppedItem) {
             b(this.g, "Has Dropped An Item", 4, 34, 14737632);
         } else {
             b(this.g, "Has Not Dropped An Item", 4, 34, 14737632);
         }
-        this.mobSpawner.spawnNumber = (int)(this.spawnCountSlider.sliderValue * 15.0F + 0.5F);
-        this.spawnCountSlider.e = String.format("Spawn Count: %d", new Object[] { Integer.valueOf(this.mobSpawner.spawnNumber) });
-        this.mobSpawner.respawnDelay = (int)(this.respawnSlider.sliderValue * 12000.0F + 0.5F);
-        this.respawnSlider.e = String.format("Respawn Delay: %.1fs", new Object[] { Float.valueOf(this.mobSpawner.respawnDelay / 20.0F) });
+        this.mobSpawner.spawnNumber = (int) (this.spawnCountSlider.sliderValue * 15.0F + 0.5F);
+        this.spawnCountSlider.e = String.format("Spawn Count: %d", new Object[]{Integer.valueOf(this.mobSpawner.spawnNumber)});
+        this.mobSpawner.respawnDelay = (int) (this.respawnSlider.sliderValue * 12000.0F + 0.5F);
+        this.respawnSlider.e = String.format("Respawn Delay: %.1fs", new Object[]{Float.valueOf(this.mobSpawner.respawnDelay / 20.0F)});
         super.a(i, j, f);
         this.mobSpawner.d.b(this.mobSpawner.e, this.mobSpawner.g).g();
     }
@@ -233,7 +234,7 @@ public class GuiMobSpawner extends da {
         return null;
     }
 
-    private static ArrayList<String> entityTypes = new ArrayList<String>();
+    private static final ArrayList<String> entityTypes = new ArrayList<String>();
 
     private GuiSlider2 spawnCountSlider;
 

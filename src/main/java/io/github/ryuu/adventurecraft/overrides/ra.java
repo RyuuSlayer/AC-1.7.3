@@ -5,7 +5,7 @@ import net.minecraft.client.Minecraft;
 import org.lwjgl.opengl.GL11;
 
 public class ra {
-    private Minecraft a;
+    private final Minecraft a;
 
     private iz b;
 
@@ -13,9 +13,9 @@ public class ra {
 
     private float d;
 
-    private cv e;
+    private final cv e;
 
-    private iy f;
+    private final iy f;
 
     private int g;
 
@@ -25,7 +25,7 @@ public class ra {
 
     public ps powerGloveRuby;
 
-    private fh refBiped;
+    private final fh refBiped;
 
     public ra(Minecraft minecraft) {
         this.b = null;
@@ -52,7 +52,7 @@ public class ra {
             if (textureNum == 0) {
                 GL11.glBindTexture(3553, this.a.p.b("/terrain.png"));
             } else {
-                GL11.glBindTexture(3553, this.a.p.b(String.format("/terrain%d.png", new Object[] { Integer.valueOf(textureNum) })));
+                GL11.glBindTexture(3553, this.a.p.b(String.format("/terrain%d.png", new Object[]{Integer.valueOf(textureNum)})));
             }
             this.e.a(Tile.m[itemstack.c], itemstack.i(), entityliving.a(1.0F));
         } else {
@@ -62,7 +62,7 @@ public class ra {
                 if (textureNum == 0) {
                     textureName = "/terrain.png";
                 } else {
-                    textureName = String.format("/terrain%d.png", new Object[] { Integer.valueOf(textureNum) });
+                    textureName = String.format("/terrain%d.png", Integer.valueOf(textureNum));
                 }
             }
             GL11.glBindTexture(3553, this.a.p.b(textureName));
@@ -187,14 +187,14 @@ public class ra {
     public void renderItemInFirstPerson(float f, float swingProgress, float otherHand) {
         float f1 = this.d + (this.c - this.d) * f;
         dc entityplayersp = this.a.h;
-        float f2 = ((gs)entityplayersp).aV + (((gs)entityplayersp).aT - ((gs)entityplayersp).aV) * f;
+        float f2 = ((gs) entityplayersp).aV + (((gs) entityplayersp).aT - ((gs) entityplayersp).aV) * f;
         GL11.glPushMatrix();
         GL11.glRotatef(f2, 1.0F, 0.0F, 0.0F);
-        GL11.glRotatef(((gs)entityplayersp).aU + (((gs)entityplayersp).aS - ((gs)entityplayersp).aU) * f, 0.0F, 1.0F, 0.0F);
+        GL11.glRotatef(((gs) entityplayersp).aU + (((gs) entityplayersp).aS - ((gs) entityplayersp).aU) * f, 0.0F, 1.0F, 0.0F);
         u.b();
         GL11.glPopMatrix();
         iz itemstack = this.b;
-        float f3 = this.a.f.c(in.b(((gs)entityplayersp).aM), in.b(((gs)entityplayersp).aN), in.b(((gs)entityplayersp).aO));
+        float f3 = this.a.f.c(in.b(((gs) entityplayersp).aM), in.b(((gs) entityplayersp).aN), in.b(((gs) entityplayersp).aO));
         if (itemstack != null && gm.c[itemstack.c] != null) {
             int i = gm.c[itemstack.c].f(itemstack.i());
             float f7 = (i >> 16 & 0xFF) / 255.0F;
@@ -230,8 +230,8 @@ public class ra {
                 GL11.glRotatef(-90.0F, 0.0F, 0.0F, 1.0F);
                 GL11.glRotatef(59.0F, 0.0F, 0.0F, 1.0F);
                 GL11.glRotatef(-65.0F * f13, 0.0F, 1.0F, 0.0F);
-                bw render1 = th.a.a((sn)this.a.h);
-                ds renderplayer1 = (ds)render1;
+                bw render1 = th.a.a((sn) this.a.h);
+                ds renderplayer1 = (ds) render1;
                 float f17 = 1.0F;
                 GL11.glScalef(f17, f17, f17);
                 renderplayer1.b();
@@ -261,7 +261,7 @@ public class ra {
             tessellator.a((0 - byte0), (0 - byte0), 0.0D, 0.0D, 0.0D);
             tessellator.a();
             iu mapdata = gm.bb.a(itemstack, this.a.f);
-            this.f.a((gs)this.a.h, this.a.p, mapdata);
+            this.f.a((gs) this.a.h, this.a.p, mapdata);
             GL11.glPopMatrix();
         } else if (itemstack != null) {
             if (itemstack.c != Items.woodenShield.bf && itemstack.c != Items.powerGlove.bf) {
@@ -281,7 +281,7 @@ public class ra {
                 GL11.glScalef(0.4F, 0.4F, 0.4F);
                 if (itemstack.a().c())
                     GL11.glRotatef(180.0F, 0.0F, 1.0F, 0.0F);
-                a((ls)entityplayersp, itemstack);
+                a((ls) entityplayersp, itemstack);
                 GL11.glPopMatrix();
             } else if (itemstack.c == Items.powerGlove.bf) {
                 GL11.glPushMatrix();
@@ -303,8 +303,8 @@ public class ra {
                 GL11.glRotatef(-135.0F, 0.0F, 1.0F, 0.0F);
                 GL11.glScalef(1.0F, 1.0F, 1.0F);
                 GL11.glTranslatef(5.6F, 0.0F, 0.0F);
-                bw render = th.a.a((sn)this.a.h);
-                ds renderplayer = (ds)render;
+                bw render = th.a.a((sn) this.a.h);
+                ds renderplayer = (ds) render;
                 renderplayer.b();
                 GL11.glBindTexture(3553, this.a.p.b("/mob/powerGlove.png"));
                 this.refBiped.m = 0.0F;
@@ -347,8 +347,8 @@ public class ra {
             GL11.glRotatef(-135.0F, 0.0F, 1.0F, 0.0F);
             GL11.glScalef(1.0F, 1.0F, 1.0F);
             GL11.glTranslatef(5.6F, 0.0F, 0.0F);
-            bw render = th.a.a((sn)this.a.h);
-            ds renderplayer = (ds)render;
+            bw render = th.a.a((sn) this.a.h);
+            ds renderplayer = (ds) render;
             renderplayer.b();
             GL11.glPopMatrix();
         }
@@ -359,7 +359,7 @@ public class ra {
     public void renderShield(float f, float swingProgress, float otherHand) {
         float f1 = this.d + (this.c - this.d) * f;
         dc entityplayersp = this.a.h;
-        float f2 = this.a.f.c(in.b(((gs)entityplayersp).aM), in.b(((gs)entityplayersp).aN), in.b(((gs)entityplayersp).aO));
+        float f2 = this.a.f.c(in.b(((gs) entityplayersp).aM), in.b(((gs) entityplayersp).aN), in.b(((gs) entityplayersp).aO));
         GL11.glColor4f(f2, f2, f2, 1.0F);
         iz itemstack = new iz(AC_Items.woodenShield);
         GL11.glPushMatrix();
@@ -379,7 +379,7 @@ public class ra {
         GL11.glEnable(32826);
         GL11.glScalef(0.6F, 0.6F, 0.6F);
         this.itemRotate = false;
-        a((ls)entityplayersp, itemstack);
+        a((ls) entityplayersp, itemstack);
         this.itemRotate = true;
         GL11.glPopMatrix();
     }
@@ -514,9 +514,9 @@ public class ra {
     public void a() {
         this.d = this.c;
         dc entityplayersp = this.a.h;
-        iz itemstack = ((gs)entityplayersp).c.b();
+        iz itemstack = ((gs) entityplayersp).c.b();
         iz itemstack1 = itemstack;
-        boolean flag = (this.g == ((gs)entityplayersp).c.c && itemstack1 == this.b);
+        boolean flag = (this.g == ((gs) entityplayersp).c.c && itemstack1 == this.b);
         if (this.b == null && itemstack1 == null)
             flag = true;
         if (itemstack1 != null && this.b != null && itemstack1 != this.b && itemstack1.c == this.b.c && itemstack1.i() == this.b.i()) {
@@ -533,7 +533,7 @@ public class ra {
         this.c += f2;
         if (this.c < 0.1F) {
             this.b = itemstack1;
-            this.g = ((gs)entityplayersp).c.c;
+            this.g = ((gs) entityplayersp).c.c;
         }
     }
 

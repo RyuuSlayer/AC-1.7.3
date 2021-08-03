@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+
 import net.minecraft.client.Minecraft;
 
 public class AdventureCraft {
@@ -40,7 +41,7 @@ public class AdventureCraft {
 
     public static void startNewAC() {
         String os = System.getProperty("os.name").toLowerCase();
-        ArrayList<String> params = new ArrayList<String>();
+        ArrayList<String> params = new ArrayList<>();
         float javaVersion = Float.valueOf(System.getProperty("java.specification.version")).floatValue();
         if (os.contains("win")) {
             params.add("javaw");
@@ -75,8 +76,8 @@ public class AdventureCraft {
     public static void startAC(String[] args) {
         try {
             Field f = Minecraft.class.getDeclaredField("af");
-            Field.setAccessible((AccessibleObject[])new Field[] { f }, true);
-            f.set((Object)null, new File(".minecraft"));
+            Field.setAccessible(new Field[]{f}, true);
+            f.set(null, new File(".minecraft"));
         } catch (Exception e) {
             e.printStackTrace();
             return;
@@ -89,8 +90,8 @@ public class AdventureCraft {
             if (threads[i].getName().equals("Minecraft main thread")) {
                 try {
                     Field f = Thread.class.getDeclaredField("target");
-                    Field.setAccessible((AccessibleObject[])new Field[] { f }, true);
-                    mc = (Minecraft)f.get(threads[i]);
+                    Field.setAccessible(new Field[]{f}, true);
+                    mc = (Minecraft) f.get(threads[i]);
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.exit(0);
@@ -102,7 +103,7 @@ public class AdventureCraft {
 
     public static void startWithLauncher(String arg) {
         String os = System.getProperty("os.name").toLowerCase();
-        ArrayList<String> params = new ArrayList<String>();
+        ArrayList<String> params = new ArrayList<>();
         if (os.contains("win")) {
             params.add("javaw");
         } else {

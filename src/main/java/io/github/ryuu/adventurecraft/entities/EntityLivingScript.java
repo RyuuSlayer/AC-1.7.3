@@ -96,7 +96,8 @@ public class EntityLivingScript extends Level implements IEntityPather {
         }
     }
 
-    protected void f_() {}
+    protected void f_() {
+    }
 
     public void w_() {
         if (this.initDescTo != null) {
@@ -192,7 +193,7 @@ public class EntityLivingScript extends Level implements IEntityPather {
             Object obj = this.aI.scriptHandler.runScript(this.onAttacked, this.scope);
             if (obj == null || !(obj instanceof Boolean))
                 return true;
-            return ((Boolean)obj).booleanValue();
+            return ((Boolean) obj).booleanValue();
         }
         return true;
     }
@@ -207,7 +208,7 @@ public class EntityLivingScript extends Level implements IEntityPather {
             Object obj = this.aI.scriptHandler.runScript(this.onInteraction, this.scope);
             if (obj == null || !(obj instanceof Boolean))
                 return true;
-            return ((Boolean)obj).booleanValue();
+            return ((Boolean) obj).booleanValue();
         }
         return true;
     }
@@ -278,11 +279,11 @@ public class EntityLivingScript extends Level implements IEntityPather {
                 double dX = vec3d.a - this.aM;
                 double dZ = vec3d.c - this.aO;
                 double dY = vec3d.b - in.b(this.aW.b + 0.5D);
-                float yawDir = (float)(Math.atan2(dZ, dX) * 180.0D / 3.1415927410125732D) - 90.0F;
+                float yawDir = (float) (Math.atan2(dZ, dX) * 180.0D / 3.1415927410125732D) - 90.0F;
                 float yawDelta = yawDir - this.aS;
                 this.ax = this.aB;
-                for (; yawDelta < -180.0F; yawDelta += 360.0F);
-                for (; yawDelta >= 180.0F; yawDelta -= 360.0F);
+                for (; yawDelta < -180.0F; yawDelta += 360.0F) ;
+                for (; yawDelta >= 180.0F; yawDelta -= 360.0F) ;
                 if (yawDelta > 30.0F)
                     yawDelta = 30.0F;
                 if (yawDelta < -30.0F)

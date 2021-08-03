@@ -12,26 +12,26 @@ import io.github.ryuu.adventurecraft.rendering.*;
 import org.lwjgl.opengl.GL11;
 
 public class th {
-    private Map o;
+    private final Map o;
 
     private th() {
         this.o = new HashMap<>();
         this.o.put(cn.class, new yx());
-        this.o.put(wh.class, new me((ko)new eh(), (ko)new eh(0.5F), 0.7F));
-        this.o.put(dl.class, new xy((ko)new mw(), (ko)new ea(), 0.7F));
-        this.o.put(bx.class, new va((ko)new hh(), 0.7F));
-        this.o.put(gi.class, new we((ko)new o(), 0.5F));
-        this.o.put(ww.class, new ip((ko)new td(), 0.3F));
+        this.o.put(wh.class, new me((ko) new eh(), (ko) new eh(0.5F), 0.7F));
+        this.o.put(dl.class, new xy((ko) new mw(), (ko) new ea(), 0.7F));
+        this.o.put(bx.class, new va((ko) new hh(), 0.7F));
+        this.o.put(gi.class, new we((ko) new o(), 0.5F));
+        this.o.put(ww.class, new ip((ko) new td(), 0.3F));
         this.o.put(gb.class, new m());
-        this.o.put(fr.class, new v((fh)new lc(), 0.5F));
-        this.o.put(EntitySkeletonBoss.class, new RenderBipedScaled((fh)new lc(), 0.5F, 2.5F));
-        this.o.put(Zombie.class, new v((fh)new ej(), 0.5F));
-        this.o.put(uw.class, new mj((ko)new no(16), (ko)new no(0), 0.25F));
+        this.o.put(fr.class, new v((fh) new lc(), 0.5F));
+        this.o.put(EntitySkeletonBoss.class, new RenderBipedScaled((fh) new lc(), 0.5F, 2.5F));
+        this.o.put(Zombie.class, new v((fh) new ej(), 0.5F));
+        this.o.put(uw.class, new mj((ko) new no(16), (ko) new no(0), 0.25F));
         this.o.put(gs.class, new ds());
-        this.o.put(nt.class, new yg((ko)new ej(), 0.5F, 6.0F));
+        this.o.put(nt.class, new yg((ko) new ej(), 0.5F, 6.0F));
         this.o.put(bp.class, new pq());
-        this.o.put(xt.class, new es((ko)new wn(), 0.7F));
-        this.o.put(ls.class, new gv((ko)new fh(), 0.5F));
+        this.o.put(xt.class, new es((ko) new wn(), 0.7F));
+        this.o.put(ls.class, new gv((ko) new fh(), 0.5F));
         this.o.put(sn.class, new mb());
         this.o.put(qv.class, new dy());
         this.o.put(sl.class, new mc());
@@ -48,9 +48,9 @@ public class th {
         this.o.put(EntityBoomerang.class, new RenderBoomerang());
         this.o.put(EntityHookshot.class, new RenderHookshot());
         this.o.put(EntityBomb.class, new RenderBomb());
-        this.o.put(EntityBat.class, new gv((ko)new ModelBat(), 0.3F));
-        this.o.put(EntityRat.class, new gv((ko)new ModelRat(), 0.0F));
-        this.o.put(EntityCamera.class, new RenderCamera((ko)new ModelCamera(), 0.0F));
+        this.o.put(EntityBat.class, new gv((ko) new ModelBat(), 0.3F));
+        this.o.put(EntityRat.class, new gv((ko) new ModelRat(), 0.0F));
+        this.o.put(EntityCamera.class, new RenderCamera((ko) new ModelCamera(), 0.0F));
         this.o.put(EntityNPC.class, new RenderNPC(new fh()));
         this.o.put(EntityLivingScript.class, new RenderBipedScaledScripted(new fh()));
         for (Iterator<bw> iterator = this.o.values().iterator(); iterator.hasNext(); render.a(this))
@@ -58,7 +58,7 @@ public class th {
     }
 
     public bw a(Class<sn> class1) {
-        bw render = (bw)this.o.get(class1);
+        bw render = (bw) this.o.get(class1);
         if (render == null && class1 != sn.class) {
             render = a(class1.getSuperclass());
             this.o.put(class1, render);

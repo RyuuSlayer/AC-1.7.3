@@ -7,15 +7,15 @@ import net.minecraft.util.noise.PerlinOctaveNoise;
 import java.util.Random;
 
 public class ChunkProviderHeightMapGenerate implements cl {
-    private Random rand;
+    private final Random rand;
 
-    private PerlinOctaveNoise field_912_k;
+    private final PerlinOctaveNoise field_912_k;
 
-    private PerlinOctaveNoise field_911_l;
+    private final PerlinOctaveNoise field_911_l;
 
-    private PerlinOctaveNoise field_910_m;
+    private final PerlinOctaveNoise field_910_m;
 
-    private PerlinOctaveNoise field_908_o;
+    private final PerlinOctaveNoise field_908_o;
 
     public PerlinOctaveNoise field_922_a;
 
@@ -23,7 +23,7 @@ public class ChunkProviderHeightMapGenerate implements cl {
 
     public PerlinOctaveNoise mobSpawnerNoise;
 
-    private Level worldObj;
+    private final Level worldObj;
 
     private double[] stoneNoise;
 
@@ -81,7 +81,7 @@ public class ChunkProviderHeightMapGenerate implements cl {
                                 int height = TerrainImage.getTerrainHeight(x, y);
                                 if (k1 * 8 + l1 <= height)
                                     l2 = Tile.u.bn;
-                                abyte0[j2] = (byte)l2;
+                                abyte0[j2] = (byte) l2;
                                 j2 += c;
                             }
                         }
@@ -97,7 +97,7 @@ public class ChunkProviderHeightMapGenerate implements cl {
         for (int k = 0; k < 16; k++) {
             for (int l = 0; l < 16; l++) {
                 kd mobspawnerbase = amobspawnerbase[k + l * 16];
-                int i1 = (int)(this.stoneNoise[k + l * 16] / 3.0D + 3.0D + this.rand.nextDouble() * 0.25D);
+                int i1 = (int) (this.stoneNoise[k + l * 16] / 3.0D + 3.0D + this.rand.nextDouble() * 0.25D);
                 int j1 = -1;
                 byte byte1 = mobspawnerbase.p;
                 byte byte2 = mobspawnerbase.q;
@@ -115,12 +115,12 @@ public class ChunkProviderHeightMapGenerate implements cl {
                                 byte1 = mobspawnerbase.p;
                                 byte2 = mobspawnerbase.q;
                                 if (TerrainImage.hasSandNearWaterEdge(x, z)) {
-                                    byte1 = (byte)Tile.F.bn;
-                                    byte2 = (byte)Tile.F.bn;
+                                    byte1 = (byte) Tile.F.bn;
+                                    byte2 = (byte) Tile.F.bn;
                                 }
                             }
                             if (k1 < waterHeight && byte1 == 0)
-                                byte1 = (byte)Tile.B.bn;
+                                byte1 = (byte) Tile.B.bn;
                             j1 = i1;
                             if (k1 >= waterHeight - 1) {
                                 abyte0[l1] = byte1;
@@ -248,7 +248,7 @@ public class ChunkProviderHeightMapGenerate implements cl {
         this.rand.setSeed(i * l1 + j * l2 ^ this.worldObj.s());
         double d = 0.25D;
         d = 0.5D;
-        int k4 = (int)((this.mobSpawnerNoise.a(k * d, l * d) / 8.0D + this.rand.nextDouble() * 4.0D + 4.0D) / 3.0D);
+        int k4 = (int) ((this.mobSpawnerNoise.a(k * d, l * d) / 8.0D + this.rand.nextDouble() * 4.0D + 4.0D) / 3.0D);
         int l7 = 0;
         if (this.rand.nextInt(10) == 0)
             l7++;

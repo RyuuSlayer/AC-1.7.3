@@ -42,7 +42,7 @@ public class Skeleton extends gz {
                 entityarrow.a(d, d2 + f1, d1, 0.6F, 12.0F);
                 this.ae = 30;
             }
-            this.aS = (float)(Math.atan2(d1, d) * 180.0D / 3.1415927410125732D) - 90.0F;
+            this.aS = (float) (Math.atan2(d1, d) * 180.0D / 3.1415927410125732D) - 90.0F;
             this.e = true;
         }
     }

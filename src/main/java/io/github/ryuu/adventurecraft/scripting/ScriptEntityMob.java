@@ -7,7 +7,7 @@ public class ScriptEntityMob extends ScriptEntityCreature {
     gz entityMob;
 
     ScriptEntityMob(gz e) {
-        super((ii)e);
+        super((ii) e);
         this.entityMob = e;
     }
 

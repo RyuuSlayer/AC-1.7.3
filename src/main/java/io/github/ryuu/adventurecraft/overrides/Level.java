@@ -34,25 +34,25 @@ import org.mozilla.javascript.Scriptable;
 public class Level implements xp {
     public boolean a;
 
-    private List C;
+    private final List C;
 
     public List<Entity> b;
 
-    private List D;
+    private final List D;
 
-    private TreeSet E;
+    private final TreeSet E;
 
-    private Set F;
+    private final Set F;
 
     public List c;
 
-    private List G;
+    private final List G;
 
     public List d;
 
     public List e;
 
-    private long H;
+    private final long H;
 
     public int f;
 
@@ -100,7 +100,7 @@ public class Level implements xp {
 
     public hc z;
 
-    private ArrayList K;
+    private final ArrayList K;
 
     private boolean L;
 
@@ -210,11 +210,11 @@ public class Level implements xp {
     }
 
     public Level(wt isavehandler, String s, long l) {
-        this(null, isavehandler, s, l, (xa)null);
+        this(null, isavehandler, s, l, null);
     }
 
     public Level(String levelName, wt isavehandler, String s, long l) {
-        this(levelName, isavehandler, s, l, (xa)null);
+        this(levelName, isavehandler, s, l, null);
     }
 
     public Level(String levelName, wt isavehandler, String s, long l, xa worldprovider) {
@@ -228,7 +228,7 @@ public class Level implements xp {
         File mapDir = new File(mcDir, "../maps");
         File levelFile = new File(mapDir, levelName);
         nh.a().loadMapTranslation(levelFile);
-        this.mapHandler = (wt)new mx(mapDir, levelName, false);
+        this.mapHandler = (wt) new mx(mapDir, levelName, false);
         this.levelDir = levelFile;
         this.a = false;
         this.C = new ArrayList();
@@ -326,12 +326,13 @@ public class Level implements xp {
     public void loadMapTextures() {
         Minecraft.minecraftInstance.p.b();
         for (Object obj : Minecraft.minecraftInstance.p.b.entrySet()) {
-            Map.Entry entry = (Map.Entry)obj;
-            String texName = (String)entry.getKey();
-            int texID = ((Integer)entry.getValue()).intValue();
+            Map.Entry entry = (Map.Entry) obj;
+            String texName = (String) entry.getKey();
+            int texID = ((Integer) entry.getValue()).intValue();
             try {
                 Minecraft.minecraftInstance.p.loadTexture(texID, texName);
-            } catch (IllegalArgumentException ignoreNulls) {}
+            } catch (IllegalArgumentException ignoreNulls) {
+            }
         }
         loadTextureAnimations();
         TextureFanFX.loadImage();
@@ -366,7 +367,8 @@ public class Level implements xp {
                                 int h = Integer.parseInt(parts[6].trim());
                                 TextureAnimated t = new TextureAnimated(texName, animTex, x, y, w, h);
                                 Minecraft.minecraftInstance.p.registerTextureAnimation(parts[0].trim(), t);
-                            } catch (Exception e) {}
+                            } catch (Exception e) {
+                            }
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -382,7 +384,8 @@ public class Level implements xp {
             try {
                 BufferedImage bufferedimage = ImageIO.read(terrainTexture);
                 return bufferedimage;
-            } catch (Exception exception) {}
+            } catch (Exception exception) {
+            }
         return null;
     }
 
@@ -399,7 +402,7 @@ public class Level implements xp {
             if (this.mapHandler != null)
                 mapChunkLoader = new MapChunkLoader(this.mapHandler.a(this.t), ichunkloader);
         }
-        return new kx(this, (bf)mapChunkLoader, this.t.b());
+        return new kx(this, (bf) mapChunkLoader, this.t.b());
     }
 
     protected void c() {
@@ -427,17 +430,18 @@ public class Level implements xp {
 
     public int getFirstUncoveredBlockY(int i, int j) {
         int k;
-        for (k = 127; d(i, k, j) && k > 0; k--);
+        for (k = 127; d(i, k, j) && k > 0; k--) ;
         return k;
     }
 
     public int a(int i, int j) {
         int k;
-        for (k = 127; d(i, k, j) && k > 0; k--);
+        for (k = 127; d(i, k, j) && k > 0; k--) ;
         return a(i, k, j);
     }
 
-    public void e() {}
+    public void e() {
+    }
 
     public void a(gs entityplayer) {
         try {
@@ -447,9 +451,9 @@ public class Level implements xp {
                 this.x.a(null);
             }
             if (this.v instanceof kx) {
-                kx chunkproviderloadorgenerate = (kx)this.v;
-                int i = in.d((int)entityplayer.aM) >> 4;
-                int j = in.d((int)entityplayer.aO) >> 4;
+                kx chunkproviderloadorgenerate = (kx) this.v;
+                int i = in.d((int) entityplayer.aM) >> 4;
+                int j = in.d((int) entityplayer.aO) >> 4;
                 chunkproviderloadorgenerate.d(i, j);
             }
             b(entityplayer);
@@ -639,7 +643,7 @@ public class Level implements xp {
 
     public void j(int i, int j, int k) {
         for (int l = 0; l < this.u.size(); l++)
-            ((pm)this.u.get(l)).a(i, j, k);
+            ((pm) this.u.get(l)).a(i, j, k);
     }
 
     protected void g(int i, int j, int k, int l) {
@@ -658,12 +662,12 @@ public class Level implements xp {
 
     public void k(int i, int j, int k) {
         for (int l = 0; l < this.u.size(); l++)
-            ((pm)this.u.get(l)).b(i, j, k, i, j, k);
+            ((pm) this.u.get(l)).b(i, j, k, i, j, k);
     }
 
     public void b(int i, int j, int k, int l, int i1, int j1) {
         for (int k1 = 0; k1 < this.u.size(); k1++)
-            ((pm)this.u.get(k1)).b(i, j, k, l, i1, j1);
+            ((pm) this.u.get(k1)).b(i, j, k, l, i1, j1);
     }
 
     public void i(int i, int j, int k, int l) {
@@ -799,7 +803,7 @@ public class Level implements xp {
         lm chunk = c(i >> 4, k >> 4);
         chunk.a(enumskyblock, i & 0xF, j, k & 0xF, l);
         for (int i1 = 0; i1 < this.u.size(); i1++)
-            ((pm)this.u.get(i1)).a(i, j, k);
+            ((pm) this.u.get(i1)).a(i, j, k);
     }
 
     public float getLightValue(int i, int j, int k) {
@@ -811,9 +815,9 @@ public class Level implements xp {
     }
 
     private float getBrightnessLevel(float lightValue) {
-        int floorValue = (int)Math.floor(lightValue);
+        int floorValue = (int) Math.floor(lightValue);
         if (floorValue != lightValue) {
-            int ceilValue = (int)Math.ceil(lightValue);
+            int ceilValue = (int) Math.ceil(lightValue);
             float lerpValue = lightValue - floorValue;
             return (1.0F - lerpValue) * this.t.f[floorValue] + lerpValue * this.t.f[ceilValue];
         }
@@ -946,17 +950,17 @@ public class Level implements xp {
                 vec3d.c = d2;
             }
             bt vec3d2 = bt.b(vec3d.a, vec3d.b, vec3d.c);
-            l = (int)(vec3d2.a = in.b(vec3d.a));
+            l = (int) (vec3d2.a = in.b(vec3d.a));
             if (byte0 == 5) {
                 l--;
                 vec3d2.a++;
             }
-            i1 = (int)(vec3d2.b = in.b(vec3d.b));
+            i1 = (int) (vec3d2.b = in.b(vec3d.b));
             if (byte0 == 1) {
                 i1--;
                 vec3d2.b++;
             }
-            j1 = (int)(vec3d2.c = in.b(vec3d.c));
+            j1 = (int) (vec3d2.c = in.b(vec3d.c));
             if (byte0 == 3) {
                 j1--;
                 vec3d2.c++;
@@ -975,22 +979,22 @@ public class Level implements xp {
 
     public void a(sn entity, String s, float f, float f1) {
         for (int i = 0; i < this.u.size(); i++)
-            ((pm)this.u.get(i)).a(s, entity.aM, entity.aN - entity.bf, entity.aO, f, f1);
+            ((pm) this.u.get(i)).a(s, entity.aM, entity.aN - entity.bf, entity.aO, f, f1);
     }
 
     public void a(double d, double d1, double d2, String s, float f, float f1) {
         for (int i = 0; i < this.u.size(); i++)
-            ((pm)this.u.get(i)).a(s, d, d1, d2, f, f1);
+            ((pm) this.u.get(i)).a(s, d, d1, d2, f, f1);
     }
 
     public void a(String s, int i, int j, int k) {
         for (int l = 0; l < this.u.size(); l++)
-            ((pm)this.u.get(l)).a(s, i, j, k);
+            ((pm) this.u.get(l)).a(s, i, j, k);
     }
 
     public void a(String s, double d, double d1, double d2, double d3, double d4, double d5) {
         for (int i = 0; i < this.u.size(); i++)
-            ((pm)this.u.get(i)).a(s, d, d1, d2, d3, d4, d5);
+            ((pm) this.u.get(i)).a(s, d, d1, d2, d3, d4, d5);
     }
 
     public boolean a(sn entity) {
@@ -1001,12 +1005,10 @@ public class Level implements xp {
     public boolean b(sn entity) {
         int i = in.b(entity.aM / 16.0D);
         int j = in.b(entity.aO / 16.0D);
-        boolean flag = false;
-        if (entity instanceof gs)
-            flag = true;
+        boolean flag = entity instanceof gs;
         if (flag || f(i, j)) {
             if (entity instanceof gs) {
-                gs entityplayer = (gs)entity;
+                gs entityplayer = (gs) entity;
                 this.d.add(entityplayer);
                 y();
             }
@@ -1021,12 +1023,12 @@ public class Level implements xp {
 
     protected void c(sn entity) {
         for (int i = 0; i < this.u.size(); i++)
-            ((pm)this.u.get(i)).a(entity);
+            ((pm) this.u.get(i)).a(entity);
     }
 
     protected void d(sn entity) {
         for (int i = 0; i < this.u.size(); i++)
-            ((pm)this.u.get(i)).b(entity);
+            ((pm) this.u.get(i)).b(entity);
     }
 
     public void e(sn entity) {
@@ -1070,7 +1072,7 @@ public class Level implements xp {
         double d = 0.25D;
         List<sn> list = b(entity, axisalignedbb.b(d, d, d));
         for (int j2 = 0; j2 < list.size(); j2++) {
-            eq axisalignedbb1 = ((sn)list.get(j2)).f();
+            eq axisalignedbb1 = list.get(j2).f();
             if (axisalignedbb1 != null && axisalignedbb1.a(axisalignedbb))
                 this.K.add(axisalignedbb1);
             axisalignedbb1 = entity.a(list.get(j2));
@@ -1088,10 +1090,10 @@ public class Level implements xp {
         if (f2 > 1.0F)
             f2 = 1.0F;
         f2 = 1.0F - f2;
-        f2 = (float)(f2 * (1.0D - (g(f) * 5.0F) / 16.0D));
-        f2 = (float)(f2 * (1.0D - (f(f) * 5.0F) / 16.0D));
+        f2 = (float) (f2 * (1.0D - (g(f) * 5.0F) / 16.0D));
+        f2 = (float) (f2 * (1.0D - (f(f) * 5.0F) / 16.0D));
         f2 = 1.0F - f2;
-        return (int)(f2 * 11.0F);
+        return (int) (f2 * 11.0F);
     }
 
     public bt a(sn entity, float f) {
@@ -1103,7 +1105,7 @@ public class Level implements xp {
             f2 = 1.0F;
         int i = in.b(entity.aM);
         int j = in.b(entity.aO);
-        float f3 = (float)a().b(i, j);
+        float f3 = (float) a().b(i, j);
         int k = a().a(i, j).a(f3);
         float f4 = (k >> 16 & 0xFF) / 255.0F;
         float f5 = (k >> 8 & 0xFF) / 255.0F;
@@ -1150,9 +1152,9 @@ public class Level implements xp {
             f2 = 0.0F;
         if (f2 > 1.0F)
             f2 = 1.0F;
-        float f3 = (float)(this.H >> 16L & 0xFFL) / 255.0F;
-        float f4 = (float)(this.H >> 8L & 0xFFL) / 255.0F;
-        float f5 = (float)(this.H & 0xFFL) / 255.0F;
+        float f3 = (float) (this.H >> 16L & 0xFFL) / 255.0F;
+        float f4 = (float) (this.H >> 8L & 0xFFL) / 255.0F;
+        float f5 = (float) (this.H & 0xFFL) / 255.0F;
         float f6 = g(f);
         if (f6 > 0.0F) {
             float f7 = (f3 * 0.3F + f4 * 0.59F + f5 * 0.11F) * 0.6F;
@@ -1212,7 +1214,7 @@ public class Level implements xp {
     public int e(int i, int j) {
         lm chunk = b(i, j);
         int k;
-        for (k = 127; f(i, k, j).c() && k > 0; k--);
+        for (k = 127; f(i, k, j).c() && k > 0; k--) ;
         i &= 0xF;
         j &= 0xF;
         while (k > 0) {
@@ -1260,8 +1262,7 @@ public class Level implements xp {
 
     public void cancelBlockUpdate(int i, int j, int k, int l) {
         qy nextticklistentry = new qy(i, j, k, l);
-        if (this.F.contains(nextticklistentry))
-            this.F.remove(nextticklistentry);
+        this.F.remove(nextticklistentry);
     }
 
     public void g() {
@@ -1283,7 +1284,7 @@ public class Level implements xp {
             d(this.D.get(k));
         this.D.clear();
         for (int l = 0; l < this.b.size(); l++) {
-            sn entity2 = (sn)this.b.get(l);
+            sn entity2 = (sn) this.b.get(l);
             if (entity2.aH != null) {
                 if (!entity2.aH.be && entity2.aH.aG == entity2)
                     continue;
@@ -1402,7 +1403,7 @@ public class Level implements xp {
     }
 
     public boolean a(eq axisalignedbb) {
-        List<sn> list = b((sn)null, axisalignedbb);
+        List<sn> list = b(null, axisalignedbb);
         for (int i = 0; i < list.size(); i++) {
             sn entity = list.get(i);
             if (!entity.be && entity.aF)
@@ -1554,11 +1555,11 @@ public class Level implements xp {
         int i = 0;
         int j = 0;
         float f;
-        for (f = 0.0F; f <= 1.0F; f = (float)(f + d)) {
+        for (f = 0.0F; f <= 1.0F; f = (float) (f + d)) {
             float f1;
-            for (f1 = 0.0F; f1 <= 1.0F; f1 = (float)(f1 + d1)) {
+            for (f1 = 0.0F; f1 <= 1.0F; f1 = (float) (f1 + d1)) {
                 float f2;
-                for (f2 = 0.0F; f2 <= 1.0F; f2 = (float)(f2 + d2)) {
+                for (f2 = 0.0F; f2 <= 1.0F; f2 = (float) (f2 + d2)) {
                     double d3 = axisalignedbb.a + (axisalignedbb.d - axisalignedbb.a) * f;
                     double d4 = axisalignedbb.b + (axisalignedbb.e - axisalignedbb.b) * f1;
                     double d5 = axisalignedbb.c + (axisalignedbb.f - axisalignedbb.c) * f2;
@@ -1670,7 +1671,7 @@ public class Level implements xp {
         this.M++;
         try {
             int i = 500;
-            for (; this.C.size() > 0; ((st)this.C.remove(this.C.size() - 1)).a(this)) {
+            for (; this.C.size() > 0; ((st) this.C.remove(this.C.size() - 1)).a(this)) {
                 if (--i <= 0) {
                     boolean flag = true;
                     return flag;
@@ -1752,11 +1753,11 @@ public class Level implements xp {
         if (i != this.f) {
             this.f = i;
             for (int j = 0; j < this.u.size(); j++)
-                ((pm)this.u.get(j)).e();
+                ((pm) this.u.get(j)).e();
         }
         long l1 = this.x.f() + 1L;
         if (l1 % this.p == 0L)
-            a(false, (yb)null);
+            a(false, null);
         this.x.a(l1);
         this.x.addToTimeOfDay(this.x.getTimeRate());
         a(false);
@@ -1781,9 +1782,9 @@ public class Level implements xp {
             this.m--;
         this.i = this.j;
         if (this.x.o()) {
-            this.j = (float)(this.j + 0.01D);
+            this.j = (float) (this.j + 0.01D);
         } else {
-            this.j = (float)(this.j - 0.01D);
+            this.j = (float) (this.j - 0.01D);
         }
         if (this.j < 0.0F)
             this.j = 0.0F;
@@ -1791,9 +1792,9 @@ public class Level implements xp {
             this.j = 1.0F;
         this.k = this.l;
         if (this.x.m()) {
-            this.l = (float)(this.l + 0.01D);
+            this.l = (float) (this.l + 0.01D);
         } else {
-            this.l = (float)(this.l - 0.01D);
+            this.l = (float) (this.l - 0.01D);
         }
         if (this.l < 0.0F)
             this.l = 0.0F;
@@ -1829,8 +1830,8 @@ public class Level implements xp {
                             int chunkZ = cz + pcz;
                             iteration += (chunkX * chunkX * 3121 + chunkX * 45238971 + chunkZ * chunkZ * 418711 + chunkZ * 13761);
                             iteration = Math.abs(iteration);
-                            int x = chunkX * 16 + this.coordOrder[(int)(iteration % 256L)] % 16;
-                            int z = chunkZ * 16 + this.coordOrder[(int)(iteration % 256L)] / 16;
+                            int x = chunkX * 16 + this.coordOrder[(int) (iteration % 256L)] % 16;
+                            int z = chunkZ * 16 + this.coordOrder[(int) (iteration % 256L)] / 16;
                             SnowModUpdate(x, z);
                         }
                 }
@@ -1867,7 +1868,7 @@ public class Level implements xp {
             int i4 = coordZ + (l1 >> 8 & 0xF);
             int i5 = e(i3, i4);
             if (t(i3, i5, i4)) {
-                a((sn)new c(this, i3, i5, i4));
+                a((sn) new c(this, i3, i5, i4));
                 this.m = 2;
             }
         }
@@ -1959,13 +1960,13 @@ public class Level implements xp {
         if (i(i, j, k))
             b(i, k).g();
         for (int l = 0; l < this.u.size(); l++)
-            ((pm)this.u.get(l)).a(i, j, k, tileentity);
+            ((pm) this.u.get(l)).a(i, j, k, tileentity);
     }
 
     public int b(Class class1) {
         int i = 0;
         for (int j = 0; j < this.b.size(); j++) {
-            sn entity = (sn)this.b.get(j);
+            sn entity = (sn) this.b.get(j);
             if (class1.isAssignableFrom(entity.getClass()))
                 i++;
         }
@@ -1975,7 +1976,7 @@ public class Level implements xp {
     public void a(List<? extends Entity> list) {
         this.b.addAll(list);
         for (int i = 0; i < list.size(); i++)
-            c((sn)list.get(i));
+            c((sn) list.get(i));
     }
 
     public void b(List list) {
@@ -1983,7 +1984,7 @@ public class Level implements xp {
     }
 
     public void p() {
-        while (this.v.a());
+        while (this.v.a()) ;
     }
 
     public boolean a(int i, int j, int k, int l, boolean flag, int i1) {
@@ -2004,7 +2005,7 @@ public class Level implements xp {
         int i = in.b(entity.aM);
         int j = in.b(entity.aN);
         int k = in.b(entity.aO);
-        int l = (int)(f + 16.0F);
+        int l = (int) (f + 16.0F);
         int i1 = i - l;
         int j1 = j - l;
         int k1 = k - l;
@@ -2012,14 +2013,14 @@ public class Level implements xp {
         int i2 = j + l;
         int j2 = k + l;
         ew chunkcache = new ew(this, i1, j1, k1, l1, i2, j2);
-        return (new fw((xp)chunkcache)).a(entity, entity1, f);
+        return (new fw((xp) chunkcache)).a(entity, entity1, f);
     }
 
     public dh a(sn entity, int i, int j, int k, float f) {
         int l = in.b(entity.aM);
         int i1 = in.b(entity.aN);
         int j1 = in.b(entity.aO);
-        int k1 = (int)(f + 8.0F);
+        int k1 = (int) (f + 8.0F);
         int l1 = l - k1;
         int i2 = i1 - k1;
         int j2 = j1 - k1;
@@ -2027,7 +2028,7 @@ public class Level implements xp {
         int l2 = i1 + k1;
         int i3 = j1 + k1;
         ew chunkcache = new ew(this, l1, i2, j2, k2, l2, i3);
-        return (new fw((xp)chunkcache)).a(entity, i, j, k, f);
+        return (new fw((xp) chunkcache)).a(entity, i, j, k, f);
     }
 
     public boolean j(int i, int j, int k, int l) {
@@ -2094,7 +2095,7 @@ public class Level implements xp {
 
     public gs a(String s) {
         for (int i = 0; i < this.d.size(); i++) {
-            if (s.equals(((gs)this.d.get(i)).l))
+            if (s.equals(((gs) this.d.get(i)).l))
                 return this.d.get(i);
         }
         return null;
@@ -2132,7 +2133,8 @@ public class Level implements xp {
         }
     }
 
-    public void q() {}
+    public void q() {
+    }
 
     public void r() {
         if (this.w != null) {
@@ -2147,11 +2149,11 @@ public class Level implements xp {
     }
 
     public void setTimeOfDay(long l) {
-        this.x.setTimeOfDay((float)l);
+        this.x.setTimeOfDay((float) l);
     }
 
     public float getTimeOfDay() {
-        return (float)this.x.getTimeOfDay();
+        return (float) this.x.getTimeOfDay();
     }
 
     public long s() {
@@ -2194,7 +2196,8 @@ public class Level implements xp {
         return true;
     }
 
-    public void a(sn entity, byte byte0) {}
+    public void a(sn entity, byte byte0) {
+    }
 
     public void v() {
         this.b.removeAll(this.D);
@@ -2209,7 +2212,7 @@ public class Level implements xp {
             d(this.D.get(j));
         this.D.clear();
         for (int k = 0; k < this.b.size(); k++) {
-            sn entity1 = (sn)this.b.get(k);
+            sn entity1 = (sn) this.b.get(k);
             if (entity1.aH != null) {
                 if (!entity1.aH.be && entity1.aH.aG == entity1)
                     continue;
@@ -2324,12 +2327,12 @@ public class Level implements xp {
     }
 
     public void e(int i, int j, int k, int l, int i1) {
-        a((gs)null, i, j, k, l, i1);
+        a(null, i, j, k, l, i1);
     }
 
     public void a(gs entityplayer, int i, int j, int k, int l, int i1) {
         for (int j1 = 0; j1 < this.u.size(); j1++)
-            ((pm)this.u.get(j1)).a(entityplayer, i, j, k, l, i1);
+            ((pm) this.u.get(j1)).a(entityplayer, i, j, k, l, i1);
     }
 
     public double getTemperatureValue(int x, int z) {
@@ -2410,7 +2413,7 @@ public class Level implements xp {
             File[] musicFiles = musicDir.listFiles();
             for (File musicFile : musicFiles) {
                 if (musicFile.isFile() && musicFile.getName().endsWith(".ogg")) {
-                    String streamName = String.format("music/%s", new Object[] { musicFile.getName().toLowerCase() });
+                    String streamName = String.format("music/%s", musicFile.getName().toLowerCase());
                     Minecraft.minecraftInstance.B.b(streamName, musicFile);
                     musicCount++;
                 }
@@ -2419,7 +2422,7 @@ public class Level implements xp {
             musicCount = 0;
             for (File musicFile : musicFiles) {
                 if (musicFile.isFile() && musicFile.getName().endsWith(".ogg")) {
-                    String streamName = String.format("music.%s", new Object[] { musicFile.getName().toLowerCase().replace(".ogg", "") });
+                    String streamName = String.format("music.%s", musicFile.getName().toLowerCase().replace(".ogg", ""));
                     this.musicList[musicCount] = streamName;
                     musicCount++;
                 }
@@ -2438,7 +2441,7 @@ public class Level implements xp {
             File[] soundFiles = soundDir.listFiles();
             for (File soundFile : soundFiles) {
                 if (soundFile.isFile() && soundFile.getName().endsWith(".ogg")) {
-                    String streamName = String.format("sound/%s", new Object[] { soundFile.getName().toLowerCase() });
+                    String streamName = String.format("sound/%s", soundFile.getName().toLowerCase());
                     Minecraft.minecraftInstance.B.a(streamName, soundFile);
                     soundCount++;
                 }
@@ -2447,7 +2450,7 @@ public class Level implements xp {
             soundCount = 0;
             for (File soundFile : soundFiles) {
                 if (soundFile.isFile() && soundFile.getName().endsWith(".ogg")) {
-                    String streamName = String.format("sound.%s", new Object[] { soundFile.getName().toLowerCase().replace(".ogg", "") });
+                    String streamName = String.format("sound.%s", soundFile.getName().toLowerCase().replace(".ogg", ""));
                     this.soundList[soundCount] = streamName;
                     soundCount++;
                 }
@@ -2489,7 +2492,7 @@ public class Level implements xp {
 
     private int Q;
 
-    private List R;
+    private final List R;
 
     public boolean B;
 

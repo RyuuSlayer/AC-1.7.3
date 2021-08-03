@@ -29,8 +29,8 @@ public class GuiSlider2 extends ke {
                 this.sliderValue = 1.0F;
         }
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        b(this.c + (int)(this.sliderValue * (this.a - 8)), this.d, 0, 66, 4, 20);
-        b(this.c + (int)(this.sliderValue * (this.a - 8)) + 4, this.d, 196, 66, 4, 20);
+        b(this.c + (int) (this.sliderValue * (this.a - 8)), this.d, 0, 66, 4, 20);
+        b(this.c + (int) (this.sliderValue * (this.a - 8)) + 4, this.d, 196, 66, 4, 20);
     }
 
     public boolean c(Minecraft minecraft, int i, int j) {

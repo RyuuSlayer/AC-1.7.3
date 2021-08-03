@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityMinMax;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityTriggerPushable;
+import io.github.ryuu.adventurecraft.gui.GuiTriggerPushable;
 import io.github.ryuu.adventurecraft.items.ItemCursor;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.DebugMode;
@@ -26,7 +27,7 @@ public class BlockTriggerPushable extends BlockContainerColor {
     }
 
     public void b(Level world, int i, int j, int k, int l) {
-        TileEntityTriggerPushable obj = (TileEntityTriggerPushable)world.b(i, j, k);
+        TileEntityTriggerPushable obj = (TileEntityTriggerPushable) world.b(i, j, k);
         int metadata = world.e(i, j, k);
         boolean hasNeighbor = checkBlock(world, i + 1, j, k, metadata);
         hasNeighbor |= checkBlock(world, i - 1, j, k, metadata);
@@ -50,7 +51,7 @@ public class BlockTriggerPushable extends BlockContainerColor {
     }
 
     public void setTriggerToSelection(fd world, int i, int j, int k) {
-        TileEntityMinMax obj = (TileEntityMinMax)world.b(i, j, k);
+        TileEntityMinMax obj = (TileEntityMinMax) world.b(i, j, k);
         obj.minX = ItemCursor.minX;
         obj.minY = ItemCursor.minY;
         obj.minZ = ItemCursor.minZ;
@@ -61,7 +62,7 @@ public class BlockTriggerPushable extends BlockContainerColor {
 
     public boolean a(Level world, int i, int j, int k, Player entityplayer) {
         if (DebugMode.active && entityplayer.G() != null && (entityplayer.G()).c == Items.cursor.bf) {
-            TileEntityTriggerPushable obj = (TileEntityTriggerPushable)world.b(i, j, k);
+            TileEntityTriggerPushable obj = (TileEntityTriggerPushable) world.b(i, j, k);
             GuiTriggerPushable.showUI(obj);
             return true;
         }

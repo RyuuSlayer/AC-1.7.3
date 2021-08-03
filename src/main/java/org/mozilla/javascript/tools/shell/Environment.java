@@ -26,8 +26,7 @@ import org.mozilla.javascript.ScriptableObject;
  *
  * @author Patrick C. Beard
  */
-public class Environment extends ScriptableObject
-{
+public class Environment extends ScriptableObject {
     static final long serialVersionUID = -430727378460177065L;
 
     private Environment thePrototypeInstance = null;
@@ -88,7 +87,7 @@ public class Environment extends ScriptableObject
     }
 
     private Object[] collectIds() {
-        Map<Object,Object> props = System.getProperties();
+        Map<Object, Object> props = System.getProperties();
         return props.keySet().toArray();
     }
 

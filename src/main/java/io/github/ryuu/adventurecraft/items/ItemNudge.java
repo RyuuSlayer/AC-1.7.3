@@ -2,14 +2,16 @@ package io.github.ryuu.adventurecraft.items;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 
-public class ItemNudge extends gm {
+public class ItemNudge extends ItemType {
     public ItemNudge(int i) {
         super(i);
     }
 
-    public iz a(iz itemstack, Level world, Player entityplayer) {
+    public ItemInstance a(ItemInstance itemstack, Level world, Player entityplayer) {
         if (ItemCursor.bothSet) {
             ls camera = Minecraft.minecraftInstance.i;
             bt lookDir = camera.ac();
@@ -107,7 +109,7 @@ public class ItemNudge extends gm {
         return itemstack;
     }
 
-    public void onItemLeftClick(iz itemstack, Level world, Player entityplayer) {
+    public void onItemLeftClick(ItemInstance itemstack, Level world, Player entityplayer) {
         if (ItemCursor.bothSet) {
             ls camera = Minecraft.minecraftInstance.i;
             bt lookDir = camera.ac();

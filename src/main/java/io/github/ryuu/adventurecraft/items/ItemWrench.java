@@ -2,19 +2,21 @@ package io.github.ryuu.adventurecraft.items;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 
-public class ItemWrench extends gm {
+public class ItemWrench extends ItemType {
     protected ItemWrench(int i) {
         super(i);
     }
 
-    public boolean a(iz itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
+    public boolean a(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
         if (ItemCursor.bothSet) {
             int blockToSwapTo = world.a(i, j, k);
             int metadata = world.e(i, j, k);
-            Minecraft.minecraftInstance.v.a(String.format("Swapping blocks With BlockID %d", new Object[] { Integer.valueOf(blockToSwapTo) }));
+            Minecraft.minecraftInstance.v.a(String.format("Swapping blocks With BlockID %d", new Object[]{Integer.valueOf(blockToSwapTo)}));
             int minX = Math.min(ItemCursor.oneX, ItemCursor.twoX);
             int maxX = Math.max(ItemCursor.oneX, ItemCursor.twoX);
             int minY = Math.min(ItemCursor.oneY, ItemCursor.twoY);
@@ -67,7 +69,7 @@ public class ItemWrench extends gm {
         return false;
     }
 
-    public float a(iz itemstack, Tile block) {
+    public float a(ItemInstance itemstack, Tile block) {
         return 32.0F;
     }
 

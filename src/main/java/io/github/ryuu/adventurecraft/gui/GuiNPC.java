@@ -8,7 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Screen;
 
 public class GuiNPC extends Screen {
-    private EntityNPC npc;
+    private final EntityNPC npc;
 
     private ro npcName;
 
@@ -182,7 +182,7 @@ public class GuiNPC extends Screen {
             }
             resetScriptNames();
         }
-        this.npc.aI.b((int)this.npc.aM, (int)this.npc.aO).g();
+        this.npc.aI.b((int) this.npc.aM, (int) this.npc.aO).g();
     }
 
     private void updateScriptFile(String file) {

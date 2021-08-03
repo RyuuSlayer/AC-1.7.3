@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class BlockStairMulti extends Tile implements IBlockColor {
-    private Tile modelBlock;
+    private final Tile modelBlock;
 
     protected BlockStairMulti(int i, Tile block, int textureID) {
         super(i, textureID, block.bA);

@@ -18,8 +18,8 @@ public class EntitySkeletonShotgun extends fr {
             a(entity, 30.0F, 30.0F);
             if (this.ae == 0) {
                 a(entity, 60.0F, 90.0F);
-                this.aS = (float)(this.aS + 12.0D * bs.nextGaussian());
-                this.aT = (float)(this.aT + 6.0D * bs.nextGaussian());
+                this.aS = (float) (this.aS + 12.0D * bs.nextGaussian());
+                this.aT = (float) (this.aT + 6.0D * bs.nextGaussian());
                 for (int i = 0; i < 8; i++)
                     UtilBullet.fireBullet(this.aI, this, 0.12F, this.c);
                 this.ae = 50;
@@ -27,7 +27,7 @@ public class EntitySkeletonShotgun extends fr {
             }
             double d = entity.aM - this.aM;
             double d1 = entity.aO - this.aO;
-            this.aS = (float)(Math.atan2(d1, d) * 180.0D / 3.1415927410125732D) - 90.0F;
+            this.aS = (float) (Math.atan2(d1, d) * 180.0D / 3.1415927410125732D) - 90.0F;
             this.e = true;
         }
     }

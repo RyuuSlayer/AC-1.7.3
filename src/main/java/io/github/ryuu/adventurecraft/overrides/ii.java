@@ -84,11 +84,11 @@ public class ii extends ls implements IEntityPather {
             double d1 = vec3d.a - this.aM;
             double d2 = vec3d.c - this.aO;
             double d3 = vec3d.b - i;
-            float f2 = (float)(Math.atan2(d2, d1) * 180.0D / 3.1415927410125732D) - 90.0F;
+            float f2 = (float) (Math.atan2(d2, d1) * 180.0D / 3.1415927410125732D) - 90.0F;
             float f3 = f2 - this.aS;
             this.ax = this.aB;
-            for (; f3 < -180.0F; f3 += 360.0F);
-            for (; f3 >= 180.0F; f3 -= 360.0F);
+            for (; f3 < -180.0F; f3 += 360.0F) ;
+            for (; f3 >= 180.0F; f3 -= 360.0F) ;
             if (f3 > 30.0F)
                 f3 = 30.0F;
             if (f3 < -30.0F)
@@ -98,7 +98,7 @@ public class ii extends ls implements IEntityPather {
                 double d4 = this.d.aM - this.aM;
                 double d5 = this.d.aO - this.aO;
                 float f5 = this.aS;
-                this.aS = (float)(Math.atan2(d5, d4) * 180.0D / 3.1415927410125732D) - 90.0F;
+                this.aS = (float) (Math.atan2(d5, d4) * 180.0D / 3.1415927410125732D) - 90.0F;
                 float f4 = (f5 - this.aS + 90.0F) * 3.141593F / 180.0F;
                 this.aw = -in.a(f4) * this.ax * 1.0F;
                 this.ax = in.b(f4) * this.ax * 1.0F;
@@ -137,9 +137,11 @@ public class ii extends ls implements IEntityPather {
             this.a = this.aI.a(this, i, j, k, 10.0F);
     }
 
-    protected void a(sn entity, float f) {}
+    protected void a(sn entity, float f) {
+    }
 
-    protected void b(sn entity, float f) {}
+    protected void b(sn entity, float f) {
+    }
 
     protected float a(int i, int j, int k) {
         return 0.0F;

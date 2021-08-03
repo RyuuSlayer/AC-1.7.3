@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.util;
 
 import java.awt.image.BufferedImage;
+
 import net.minecraft.client.Minecraft;
 
 public class TextureAnimated {
@@ -41,15 +42,15 @@ public class TextureAnimated {
             bufferedimage = Minecraft.minecraftInstance.f.loadMapTexture(animatedTex);
         this.curFrame = 0;
         if (bufferedimage == null) {
-            Minecraft.minecraftInstance.v.a(String.format("Unable to load texture '%s'", new Object[] { animatedTex }));
+            Minecraft.minecraftInstance.v.a(String.format("Unable to load texture '%s'", new Object[]{animatedTex}));
             return;
         }
         if (this.width != bufferedimage.getWidth()) {
-            Minecraft.minecraftInstance.v.a(String.format("Animated texture width of %d didn't match the specified width of %d", new Object[] { Integer.valueOf(bufferedimage.getWidth()), Integer.valueOf(this.width) }));
+            Minecraft.minecraftInstance.v.a(String.format("Animated texture width of %d didn't match the specified width of %d", new Object[]{Integer.valueOf(bufferedimage.getWidth()), Integer.valueOf(this.width)}));
             return;
         }
         if (0 != bufferedimage.getHeight() % this.height) {
-            Minecraft.minecraftInstance.v.a(String.format("Animated texture height of %d isn't a multiple of the specified height of %d", new Object[] { Integer.valueOf(bufferedimage.getHeight()), Integer.valueOf(this.height) }));
+            Minecraft.minecraftInstance.v.a(String.format("Animated texture height of %d isn't a multiple of the specified height of %d", new Object[]{Integer.valueOf(bufferedimage.getHeight()), Integer.valueOf(this.height)}));
             return;
         }
         this.numFrames = bufferedimage.getHeight() / this.height;
@@ -65,10 +66,10 @@ public class TextureAnimated {
             for (int i = 0; i < this.height; i++) {
                 for (int j = 0; j < this.width; j++) {
                     int curPixel = this.frameImages[j + i * this.width + frameOffset];
-                    this.imageData[k + 0] = (byte)(curPixel >> 16 & 0xFF);
-                    this.imageData[k + 1] = (byte)(curPixel >> 8 & 0xFF);
-                    this.imageData[k + 2] = (byte)(curPixel & 0xFF);
-                    this.imageData[k + 3] = (byte)(curPixel >> 24 & 0xFF);
+                    this.imageData[k + 0] = (byte) (curPixel >> 16 & 0xFF);
+                    this.imageData[k + 1] = (byte) (curPixel >> 8 & 0xFF);
+                    this.imageData[k + 2] = (byte) (curPixel & 0xFF);
+                    this.imageData[k + 3] = (byte) (curPixel >> 24 & 0xFF);
                     k += 4;
                 }
             }

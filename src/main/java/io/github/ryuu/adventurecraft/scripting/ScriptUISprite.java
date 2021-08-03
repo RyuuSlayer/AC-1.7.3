@@ -65,8 +65,8 @@ public class ScriptUISprite extends UIElement {
         nw tessellator = nw.a;
         tessellator.b();
         tessellator.a(x, (y + this.height), 0.0D, this.u * f, (this.v + this.height) * f1);
-        tessellator.a((x + this.width), (y + this.height), 0.0D, ((float)(this.u + this.width) * f), ((float)(this.v + this.height) * f1));
-        tessellator.a((x + this.width), y, 0.0D, ((float)(this.u + this.width) * f), this.v * f1);
+        tessellator.a((x + this.width), (y + this.height), 0.0D, ((float) (this.u + this.width) * f), ((float) (this.v + this.height) * f1));
+        tessellator.a((x + this.width), y, 0.0D, ((float) (this.u + this.width) * f), this.v * f1);
         tessellator.a(x, y, 0.0D, this.u * f, this.v * f1);
         tessellator.a();
     }

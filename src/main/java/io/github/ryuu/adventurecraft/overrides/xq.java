@@ -1,4 +1,5 @@
 package io.github.ryuu.adventurecraft.overrides;
+
 import io.github.ryuu.adventurecraft.entities.EntityArrowBomb;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.DebugMode;
@@ -6,7 +7,7 @@ import io.github.ryuu.adventurecraft.util.DebugMode;
 import java.util.Random;
 
 public class xq extends rw {
-    private Random a;
+    private final Random a;
 
     protected xq(int i) {
         super(i, ln.e);
@@ -72,7 +73,7 @@ public class xq extends rw {
             return false;
         if (world.B)
             return true;
-        Dispenser tileentitydispenser = (Dispenser)world.b(i, j, k);
+        Dispenser tileentitydispenser = (Dispenser) world.b(i, j, k);
         entityplayer.a(tileentitydispenser);
         return true;
     }
@@ -90,7 +91,7 @@ public class xq extends rw {
         } else {
             i1 = -1;
         }
-        Dispenser tileentitydispenser = (Dispenser)world.b(i, j, k);
+        Dispenser tileentitydispenser = (Dispenser) world.b(i, j, k);
         iz itemstack = tileentitydispenser.b();
         double d = i + i1 * 0.6D + 0.5D;
         double d1 = j + 0.5D;
@@ -102,22 +103,22 @@ public class xq extends rw {
                 sl entityarrow = new sl(world, d, d1, d2);
                 entityarrow.a(i1, 0.10000000149011612D, j1, 1.1F, 6.0F);
                 entityarrow.a = true;
-                world.b((sn)entityarrow);
+                world.b((sn) entityarrow);
                 world.e(1002, i, j, k, 0);
             } else if (itemstack.c == gm.aN.bf) {
                 vv entityegg = new vv(world, d, d1, d2);
                 entityegg.a(i1, 0.10000000149011612D, j1, 1.1F, 6.0F);
-                world.b((sn)entityegg);
+                world.b((sn) entityegg);
                 world.e(1002, i, j, k, 0);
             } else if (itemstack.c == gm.aB.bf) {
                 by entitysnowball = new by(world, d, d1, d2);
                 entitysnowball.a(i1, 0.10000000149011612D, j1, 1.1F, 6.0F);
-                world.b((sn)entitysnowball);
+                world.b((sn) entitysnowball);
                 world.e(1002, i, j, k, 0);
             } else if (itemstack.c == Items.bombArow.bf) {
                 EntityArrowBomb aC_EntityArrowBomb = new EntityArrowBomb(world, d, d1, d2);
                 aC_EntityArrowBomb.a(i1, 0.10000000149011612D, j1, 1.1F, 6.0F);
-                world.b((sn)aC_EntityArrowBomb);
+                world.b((sn) aC_EntityArrowBomb);
                 world.e(1002, i, j, k, 0);
             } else {
                 hl entityitem = new hl(world, d, d1 - 0.3D, d2, itemstack);
@@ -128,7 +129,7 @@ public class xq extends rw {
                 entityitem.aP += random.nextGaussian() * 0.007499999832361937D * 6.0D;
                 entityitem.aQ += random.nextGaussian() * 0.007499999832361937D * 6.0D;
                 entityitem.aR += random.nextGaussian() * 0.007499999832361937D * 6.0D;
-                world.b((sn)entityitem);
+                world.b((sn) entityitem);
                 world.e(1000, i, j, k, 0);
             }
             world.e(2000, i, j, k, i1 + 1 + (j1 + 1) * 3);
@@ -149,7 +150,7 @@ public class xq extends rw {
     }
 
     protected ow a_() {
-        return (ow)new Dispenser();
+        return new Dispenser();
     }
 
     public void a(fd world, int i, int j, int k, ls entityliving) {
@@ -165,7 +166,7 @@ public class xq extends rw {
     }
 
     public void b(fd world, int i, int j, int k) {
-        Dispenser tileentitydispenser = (Dispenser)world.b(i, j, k);
+        Dispenser tileentitydispenser = (Dispenser) world.b(i, j, k);
         for (int l = 0; l < tileentitydispenser.a(); l++) {
             iz itemstack = tileentitydispenser.f_(l);
             if (itemstack != null) {
@@ -179,10 +180,10 @@ public class xq extends rw {
                     itemstack.a -= i1;
                     hl entityitem = new hl(world, (i + f), (j + f1), (k + f2), new iz(itemstack.c, i1, itemstack.i()));
                     float f3 = 0.05F;
-                    entityitem.aP = ((float)this.a.nextGaussian() * f3);
-                    entityitem.aQ = ((float)this.a.nextGaussian() * f3 + 0.2F);
-                    entityitem.aR = ((float)this.a.nextGaussian() * f3);
-                    world.b((sn)entityitem);
+                    entityitem.aP = ((float) this.a.nextGaussian() * f3);
+                    entityitem.aQ = ((float) this.a.nextGaussian() * f3 + 0.2F);
+                    entityitem.aR = ((float) this.a.nextGaussian() * f3);
+                    world.b((sn) entityitem);
                 }
             }
         }

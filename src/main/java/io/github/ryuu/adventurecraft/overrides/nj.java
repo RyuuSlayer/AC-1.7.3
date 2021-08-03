@@ -1,11 +1,11 @@
 package io.github.ryuu.adventurecraft.overrides;
 
 public class nj extends da {
-    private da i;
+    private final da i;
 
     protected String a;
 
-    private kv j;
+    private final kv j;
 
     public nj(da guiscreen, kv gamesettings) {
         this.a = "Video Settings";
@@ -35,7 +35,7 @@ public class nj extends da {
         if (!guibutton.g)
             return;
         if (guibutton.f < 100 && guibutton instanceof ab) {
-            this.j.a(((ab)guibutton).a(), 1);
+            this.j.a(((ab) guibutton).a(), 1);
             guibutton.e = this.j.c(ht.a(guibutton.f));
         }
         if (guibutton.f == 200) {
@@ -54,5 +54,5 @@ public class nj extends da {
         super.a(i, j, f);
     }
 
-    private static ht[] l = new ht[] { ht.k, ht.e, ht.l, ht.i, ht.g, ht.f, ht.m, ht.h, ht.AUTO_FAR_CLIP, ht.GRASS_3D };
+    private static final ht[] l = new ht[]{ht.k, ht.e, ht.l, ht.i, ht.g, ht.f, ht.m, ht.h, ht.AUTO_FAR_CLIP, ht.GRASS_3D};
 }

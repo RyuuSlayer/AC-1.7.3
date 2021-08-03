@@ -16,7 +16,7 @@ class ClipboardHandler {
         boolean hasTransferableText = (contents != null && contents.isDataFlavorSupported(DataFlavor.stringFlavor));
         if (hasTransferableText)
             try {
-                result = (String)contents.getTransferData(DataFlavor.stringFlavor);
+                result = (String) contents.getTransferData(DataFlavor.stringFlavor);
             } catch (UnsupportedFlavorException | IOException ex) {
                 ex.printStackTrace();
             }

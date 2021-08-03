@@ -111,8 +111,8 @@ public class uq extends ub {
             }
             if (this.g.h.a(ln.g)) {
                 int yOffset = -9 * (this.g.h.maxHealth - 1) / 40;
-                int k2 = (int)Math.ceil((this.g.h.bz - 2) * 10.0D / 300.0D);
-                int l3 = (int)Math.ceil(this.g.h.bz * 10.0D / 300.0D) - k2;
+                int k2 = (int) Math.ceil((this.g.h.bz - 2) * 10.0D / 300.0D);
+                int l3 = (int) Math.ceil(this.g.h.bz * 10.0D / 300.0D) - k2;
                 for (int l5 = 0; l5 < k2 + l3; l5++) {
                     if (l5 < k2) {
                         b(scaledWidth / 2 - 91 + l5 * 8, scaledHeight - 32 - 9 + yOffset, 16, 18, 9, 9);
@@ -144,7 +144,7 @@ public class uq extends ub {
             float f3 = i2 / 100.0F;
             if (f3 > 1.0F)
                 f3 = 1.0F - (i2 - 100) / 10.0F;
-            int j4 = (int)(220.0F * f3) << 24 | 0x101020;
+            int j4 = (int) (220.0F * f3) << 24 | 0x101020;
             a(0, 0, scaledWidth, scaledHeight, j4);
             GL11.glEnable(3008);
             GL11.glEnable(2929);
@@ -170,16 +170,16 @@ public class uq extends ub {
             b(fontrenderer, "y: " + this.g.h.aN, 2, 72, 14737632);
             b(fontrenderer, "z: " + this.g.h.aO, 2, 80, 14737632);
             b(fontrenderer, "f: " + (in.b((this.g.h.aS * 4.0F / 360.0F) + 0.5D) & 0x3), 2, 88, 14737632);
-            b(fontrenderer, String.format("Use Terrain Images: %b", new Object[] { Boolean.valueOf(this.g.f.x.useImages) }), 2, 96, 14737632);
-            b(fontrenderer, String.format("Collide X: %d Z: %d", new Object[] { Integer.valueOf(this.g.h.collisionX), Integer.valueOf(this.g.h.collisionZ) }), 2, 104, 14737632);
+            b(fontrenderer, String.format("Use Terrain Images: %b", new Object[]{Boolean.valueOf(this.g.f.x.useImages)}), 2, 96, 14737632);
+            b(fontrenderer, String.format("Collide X: %d Z: %d", new Object[]{Integer.valueOf(this.g.h.collisionX), Integer.valueOf(this.g.h.collisionZ)}), 2, 104, 14737632);
             if (this.g.f.x.useImages) {
-                int x = (int)this.g.h.aM;
-                int z = (int)this.g.h.aO;
+                int x = (int) this.g.h.aM;
+                int z = (int) this.g.h.aO;
                 int terrainHeight = TerrainImage.getTerrainHeight(x, z);
                 int waterHeight = TerrainImage.getWaterHeight(x, z);
                 double temperature = TerrainImage.getTerrainTemperature(x, z);
                 double humidity = TerrainImage.getTerrainHumidity(x, z);
-                b(fontrenderer, String.format("T: %d W: %d Temp: %.2f Humid: %.2f", new Object[] { Integer.valueOf(terrainHeight), Integer.valueOf(waterHeight), Double.valueOf(temperature), Double.valueOf(humidity) }), 2, 112, 14737632);
+                b(fontrenderer, String.format("T: %d W: %d Temp: %.2f Humid: %.2f", new Object[]{Integer.valueOf(terrainHeight), Integer.valueOf(waterHeight), Double.valueOf(temperature), Double.valueOf(humidity)}), 2, 112, 14737632);
             }
             GL11.glPopMatrix();
         } else {
@@ -194,7 +194,7 @@ public class uq extends ub {
         }
         if (this.j > 0) {
             float f2 = this.j - f;
-            int j3 = (int)(f2 * 256.0F / 20.0F);
+            int j3 = (int) (f2 * 256.0F / 20.0F);
             if (j3 > 255)
                 j3 = 255;
             if (j3 > 0) {
@@ -225,8 +225,8 @@ public class uq extends ub {
         GL11.glPushMatrix();
         GL11.glTranslatef(0.0F, (scaledHeight - 48), 0.0F);
         for (int i5 = 0; i5 < this.e.size() && i5 < byte0; i5++) {
-            if (((sw)this.e.get(i5)).b < 200 || flag2) {
-                double d = ((sw)this.e.get(i5)).b / 200.0D;
+            if (((sw) this.e.get(i5)).b < 200 || flag2) {
+                double d = ((sw) this.e.get(i5)).b / 200.0D;
                 d = 1.0D - d;
                 d *= 10.0D;
                 if (d < 0.0D)
@@ -234,13 +234,13 @@ public class uq extends ub {
                 if (d > 1.0D)
                     d = 1.0D;
                 d *= d;
-                int j6 = (int)(255.0D * d);
+                int j6 = (int) (255.0D * d);
                 if (flag2)
                     j6 = 255;
                 if (j6 > 0) {
                     byte byte1 = 2;
                     int k6 = -i5 * 9;
-                    String s1 = ((sw)this.e.get(i5)).a;
+                    String s1 = ((sw) this.e.get(i5)).a;
                     a(byte1, k6 - 1, byte1 + 320, k6 + 8, j6 / 2 << 24);
                     GL11.glEnable(3042);
                     fontrenderer.a(s1, byte1, k6, 16777215 + (j6 << 24));
@@ -278,7 +278,7 @@ public class uq extends ub {
             f = 0.0F;
         if (f > 1.0F)
             f = 1.0F;
-        this.c = (float)(this.c + (f - this.c) * 0.01D);
+        this.c = (float) (this.c + (f - this.c) * 0.01D);
         GL11.glDisable(2929);
         GL11.glDepthMask(false);
         GL11.glBlendFunc(0, 769);
@@ -369,7 +369,7 @@ public class uq extends ub {
             this.j--;
         this.h++;
         for (int i = 0; i < this.e.size(); i++)
-            ((sw)this.e.get(i)).b++;
+            ((sw) this.e.get(i)).b++;
         this.scriptUI.onUpdate();
     }
 
@@ -380,11 +380,11 @@ public class uq extends ub {
     public void a(String s) {
         for (; this.g.q.a(s) > 320; s = s.substring(i)) {
             int i;
-            for (i = 1; i < s.length() && this.g.q.a(s.substring(0, i + 1)) <= 320; i++);
+            for (i = 1; i < s.length() && this.g.q.a(s.substring(0, i + 1)) <= 320; i++) ;
             a(s.substring(0, i));
         }
         this.e.add(0, new sw(s));
-        for (; this.e.size() > 50; this.e.remove(this.e.size() - 1));
+        for (; this.e.size() > 50; this.e.remove(this.e.size() - 1)) ;
     }
 
     public void b(String s) {
@@ -399,13 +399,13 @@ public class uq extends ub {
         a(s1);
     }
 
-    private static ItemRenderer d = new ItemRenderer();
+    private static final ItemRenderer d = new ItemRenderer();
 
-    private List e;
+    private final List e;
 
-    private Random f;
+    private final Random f;
 
-    private Minecraft g;
+    private final Minecraft g;
 
     public String a;
 

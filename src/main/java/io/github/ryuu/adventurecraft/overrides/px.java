@@ -62,7 +62,7 @@ public class px {
         this.A = this.z;
         this.C = this.B;
         if (this.j.i == null)
-            this.j.i = (ls)this.j.h;
+            this.j.i = (ls) this.j.h;
         float f = this.j.f.c(in.b(this.j.i.aM), in.b(this.j.i.aN), in.b(this.j.i.aO));
         float f1 = (4 - this.j.z.e) / 4.0F;
         float f2 = f * (1.0F - f1) + f1;
@@ -94,7 +94,7 @@ public class px {
         bt vec3d2 = vec3d.c(vec3d1.a * d, vec3d1.b * d, vec3d1.c * d);
         this.m = null;
         float f1 = 1.0F;
-        List<sn> list = this.j.f.b((sn)this.j.i, this.j.i.aW.a(vec3d1.a * d, vec3d1.b * d, vec3d1.c * d).b(f1, f1, f1));
+        List<sn> list = this.j.f.b((sn) this.j.i, this.j.i.aW.a(vec3d1.a * d, vec3d1.b * d, vec3d1.c * d).b(f1, f1, f1));
         double d2 = 0.0D;
         for (int i = 0; i < list.size(); i++) {
             sn entity = list.get(i);
@@ -152,7 +152,7 @@ public class px {
     private void f(float f) {
         if (!(this.j.i instanceof gs) || this.j.cameraActive || this.j.i.stunned != 0)
             return;
-        gs entityplayer = (gs)this.j.i;
+        gs entityplayer = (gs) this.j.i;
         float f1 = entityplayer.bj - entityplayer.bi;
         float f2 = -(entityplayer.bj + f1 * f);
         float f3 = entityplayer.h + (entityplayer.i - entityplayer.h) * f;
@@ -171,7 +171,7 @@ public class px {
         double d2 = entityliving.aL + (entityliving.aO - entityliving.aL) * f;
         GL11.glRotatef(this.C + (this.B - this.C) * f, 0.0F, 0.0F, 1.0F);
         if (entityliving.N()) {
-            f1 = (float)(f1 + 1.0D);
+            f1 = (float) (f1 + 1.0D);
             GL11.glTranslatef(0.0F, 0.3F, 0.0F);
             if (!this.j.z.F) {
                 int i = this.j.f.a(in.b(entityliving.aM), in.b(entityliving.aN), in.b(entityliving.aO));
@@ -188,7 +188,7 @@ public class px {
             if (this.j.z.F) {
                 float f2 = this.w + (this.v - this.w) * f;
                 float f4 = this.y + (this.x - this.y) * f;
-                GL11.glTranslatef(0.0F, 0.0F, (float)-d3);
+                GL11.glTranslatef(0.0F, 0.0F, (float) -d3);
                 GL11.glRotatef(f4, 1.0F, 0.0F, 0.0F);
                 GL11.glRotatef(f2, 0.0F, 1.0F, 0.0F);
             } else {
@@ -213,7 +213,7 @@ public class px {
                 }
                 GL11.glRotatef(entityliving.aT - f5, 1.0F, 0.0F, 0.0F);
                 GL11.glRotatef(entityliving.aS - f3, 0.0F, 1.0F, 0.0F);
-                GL11.glTranslatef(0.0F, 0.0F, (float)-d3);
+                GL11.glTranslatef(0.0F, 0.0F, (float) -d3);
                 GL11.glRotatef(f3 - entityliving.aS, 0.0F, 1.0F, 0.0F);
                 GL11.glRotatef(f5 - entityliving.aT, 1.0F, 0.0F, 0.0F);
             }
@@ -262,7 +262,7 @@ public class px {
         if (this.j.z.g)
             GL11.glTranslatef(-(i * 2 - 1) * f1, 0.0F, 0.0F);
         if (this.E != 1.0D) {
-            GL11.glTranslatef((float)this.F, (float)-this.G, 0.0F);
+            GL11.glTranslatef((float) this.F, (float) -this.G, 0.0F);
             GL11.glScaled(this.E, this.E, 1.0D);
             GLU.gluPerspective(d(f), this.j.d / this.j.e, 0.05F, this.k);
         } else {
@@ -392,7 +392,7 @@ public class px {
                 this.j.r.h.a(f);
         } else if (this.j.y != null && this.j.y.a == jg.a) {
             if (this.j.f.a(this.j.y.b, this.j.y.c, this.j.y.d) == Blocks.store.bn) {
-                TileEntityStore storeObj = (TileEntityStore)this.j.f.b(this.j.y.b, this.j.y.c, this.j.y.d);
+                TileEntityStore storeObj = (TileEntityStore) this.j.f.b(this.j.y.b, this.j.y.c, this.j.y.d);
                 if (storeObj.buySupplyLeft != 0) {
                     this.j.storeGUI.setBuyItem(storeObj.buyItemID, storeObj.buyItemAmount, storeObj.buyItemDamage);
                     this.j.storeGUI.setSellItem(storeObj.sellItemID, storeObj.sellItemAmount, storeObj.sellItemDamage);
@@ -416,7 +416,7 @@ public class px {
         this.j.i.aO = this.j.i.bn = this.j.i.aL = p.posZ;
         this.j.i.aS = this.j.i.aU = p.rotYaw;
         this.j.i.aT = this.j.i.aV = p.rotPitch;
-        this.j.i = (ls)this.j.h;
+        this.j.i = (ls) this.j.h;
         if (this.j.h.stunned != 0) {
             this.j.h.bl = this.j.h.aJ = this.j.h.aM;
             this.j.h.bm = this.j.h.aK = this.j.h.aN;
@@ -432,9 +432,9 @@ public class px {
         double d2 = entityliving.bn + (entityliving.aO - entityliving.bn) * f;
         cl ichunkprovider = this.j.f.w();
         if (ichunkprovider instanceof kx) {
-            kx chunkproviderloadorgenerate = (kx)ichunkprovider;
-            int j = in.d((int)d) >> 4;
-            int k = in.d((int)d2) >> 4;
+            kx chunkproviderloadorgenerate = (kx) ichunkprovider;
+            int j = in.d((int) d) >> 4;
+            int k = in.d((int) d2) >> 4;
             chunkproviderloadorgenerate.d(j, k);
         }
         for (int i = 0; i < 2; i++) {
@@ -462,7 +462,7 @@ public class px {
                 GL11.glShadeModel(7425);
             sr frustrum = new sr();
             frustrum.a(d, d1, d2);
-            this.j.g.a((yn)frustrum, f);
+            this.j.g.a((yn) frustrum, f);
             if (i == 0)
                 while (!this.j.g.a(entityliving, false) && l != 0L) {
                     long l1 = l - System.nanoTime();
@@ -479,13 +479,13 @@ public class px {
             renderglobal.a(entityliving, 0, f);
             GL11.glShadeModel(7424);
             u.b();
-            renderglobal.a(entityliving.e(f), (yn)frustrum, f);
-            effectrenderer.b((sn)entityliving, f);
+            renderglobal.a(entityliving.e(f), (yn) frustrum, f);
+            effectrenderer.b(entityliving, f);
             u.a();
             a(0, f);
-            effectrenderer.a((sn)entityliving, f);
+            effectrenderer.a(entityliving, f);
             if (this.j.y != null && entityliving.a(ln.g) && entityliving instanceof gs) {
-                gs entityplayer = (gs)entityliving;
+                gs entityplayer = (gs) entityliving;
                 GL11.glDisable(3008);
                 renderglobal.a(entityplayer, this.j.y, 0, entityplayer.c.b(), f);
                 renderglobal.b(entityplayer, this.j.y, 0, entityplayer.c.b(), f);
@@ -531,30 +531,30 @@ public class px {
             GL11.glEnable(2884);
             GL11.glDisable(3042);
             if (!DebugMode.editMode && this.E == 1.0D && entityliving instanceof gs && this.j.y != null && !entityliving.a(ln.g)) {
-                gs entityplayer1 = (gs)entityliving;
+                gs entityplayer1 = (gs) entityliving;
                 GL11.glDisable(3008);
                 renderglobal.a(entityplayer1, this.j.y, 0, entityplayer1.c.b(), f);
                 renderglobal.b(entityplayer1, this.j.y, 0, entityplayer1.c.b(), f);
                 GL11.glEnable(3008);
             }
             GL11.glDisable(3008);
-            renderglobal.drawCursorSelection(entityliving, ((gs)entityliving).c.b(), f);
+            renderglobal.drawCursorSelection(entityliving, ((gs) entityliving).c.b(), f);
             if (DebugMode.active && this.j.activeCutsceneCamera != null)
                 this.j.activeCutsceneCamera.drawLines(entityliving, f);
             if (DebugMode.active || DebugMode.renderPaths)
                 for (Object obj : this.j.f.b) {
-                    sn e = (sn)obj;
+                    sn e = (sn) obj;
                     renderglobal.drawEntityPath(e, entityliving, f);
                 }
             if (DebugMode.active || DebugMode.renderFov)
                 for (Object obj : this.j.f.b) {
-                    sn e = (sn)obj;
+                    sn e = (sn) obj;
                     if (e instanceof ls)
-                        renderglobal.drawEntityFOV((ls)e, entityliving, f);
+                        renderglobal.drawEntityFOV((ls) e, entityliving, f);
                 }
             GL11.glEnable(3008);
             GL11.glDisable(2912);
-            if (this.m == null);
+            if (this.m == null) ;
             a(0, f);
             GL11.glEnable(2912);
             renderglobal.b(f);
@@ -589,7 +589,7 @@ public class px {
         double d1 = 0.0D;
         double d2 = 0.0D;
         int l = 0;
-        for (int i1 = 0; i1 < (int)(100.0F * f * f); i1++) {
+        for (int i1 = 0; i1 < (int) (100.0F * f * f); i1++) {
             int j1 = i + this.J.nextInt(byte0) - this.J.nextInt(byte0);
             int k1 = k + this.J.nextInt(byte0) - this.J.nextInt(byte0);
             int l1 = world.e(j1, k1);
@@ -599,14 +599,14 @@ public class px {
                 float f2 = this.J.nextFloat();
                 if (i2 > 0)
                     if ((Tile.m[i2]).bA == ln.h) {
-                        this.j.j.a((xw)new xn(world, (j1 + f1), (l1 + 0.1F) - (Tile.m[i2]).bt, (k1 + f2), 0.0D, 0.0D, 0.0D));
+                        this.j.j.a((xw) new xn(world, (j1 + f1), (l1 + 0.1F) - (Tile.m[i2]).bt, (k1 + f2), 0.0D, 0.0D, 0.0D));
                     } else {
                         if (this.J.nextInt(++l) == 0) {
                             d = (j1 + f1);
                             d1 = (l1 + 0.1F) - (Tile.m[i2]).bt;
                             d2 = (k1 + f2);
                         }
-                        this.j.j.a((xw)new xd(world, (j1 + f1), (l1 + 0.1F) - (Tile.m[i2]).bt, (k1 + f2)));
+                        this.j.j.a((xw) new xd(world, (j1 + f1), (l1 + 0.1F) - (Tile.m[i2]).bt, (k1 + f2)));
                     }
             }
         }
@@ -664,8 +664,8 @@ public class px {
                         this.J.setSeed((k1 * k1 * 3121 + k1 * 45238971 + i2 * i2 * 418711 + i2 * 13761));
                         float f5 = this.l + f;
                         float f6 = ((this.l & 0x1FF) + f) / 512.0F;
-                        float f7 = this.J.nextFloat() + f5 * 0.01F * (float)this.J.nextGaussian();
-                        float f8 = this.J.nextFloat() + f5 * (float)this.J.nextGaussian() * 0.001F;
+                        float f7 = this.J.nextFloat() + f5 * 0.01F * (float) this.J.nextGaussian();
+                        float f8 = this.J.nextFloat() + f5 * (float) this.J.nextGaussian() * 0.001F;
                         double d5 = (k1 + 0.5F) - entityliving.aM;
                         double d6 = (i2 + 0.5F) - entityliving.aO;
                         float f11 = in.a(d5 * d5 + d6 * d6) / i1;
@@ -745,15 +745,15 @@ public class px {
         fd world = this.j.f;
         ls entityliving = this.j.i;
         float f1 = 1.0F / (5 - this.j.z.e);
-        f1 = 1.0F - (float)Math.pow(f1, 0.25D);
-        bt vec3d = world.a((sn)this.j.i, f);
-        float f2 = (float)vec3d.a;
-        float f3 = (float)vec3d.b;
-        float f4 = (float)vec3d.c;
+        f1 = 1.0F - (float) Math.pow(f1, 0.25D);
+        bt vec3d = world.a((sn) this.j.i, f);
+        float f2 = (float) vec3d.a;
+        float f3 = (float) vec3d.b;
+        float f4 = (float) vec3d.c;
         bt vec3d1 = world.d(f);
-        this.g = (float)vec3d1.a;
-        this.h = (float)vec3d1.b;
-        this.i = (float)vec3d1.c;
+        this.g = (float) vec3d1.a;
+        this.h = (float) vec3d1.b;
+        this.i = (float) vec3d1.c;
         this.g += (f2 - this.g) * f1;
         this.h += (f3 - this.h) * f1;
         this.i += (f4 - this.i) * f1;
@@ -774,9 +774,9 @@ public class px {
         }
         if (this.D) {
             bt vec3d2 = world.c(f);
-            this.g = (float)vec3d2.a;
-            this.h = (float)vec3d2.b;
-            this.i = (float)vec3d2.c;
+            this.g = (float) vec3d2.a;
+            this.h = (float) vec3d2.b;
+            this.i = (float) vec3d2.c;
         } else if (entityliving.a(ln.g)) {
             this.g = 0.02F;
             this.h = 0.02F;
@@ -877,7 +877,7 @@ public class px {
 
     public static int b;
 
-    private Minecraft j;
+    private final Minecraft j;
 
     private float k;
 
@@ -887,27 +887,27 @@ public class px {
 
     private sn m;
 
-    private cu n;
+    private final cu n;
 
-    private cu o;
+    private final cu o;
 
-    private cu p;
+    private final cu p;
 
-    private cu q;
+    private final cu q;
 
-    private cu r;
+    private final cu r;
 
-    private cu s;
+    private final cu s;
 
-    private float t;
+    private final float t;
 
     private float u;
 
-    private float v;
+    private final float v;
 
     private float w;
 
-    private float x;
+    private final float x;
 
     private float y;
 
@@ -915,7 +915,7 @@ public class px {
 
     private float A;
 
-    private float B;
+    private final float B;
 
     private float C;
 
@@ -923,15 +923,15 @@ public class px {
 
     private double E;
 
-    private double F;
+    private final double F;
 
-    private double G;
+    private final double G;
 
     private long H;
 
     private long I;
 
-    private Random J;
+    private final Random J;
 
     private int K;
 

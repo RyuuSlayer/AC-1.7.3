@@ -1,10 +1,12 @@
 package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityHealDamage;
+import io.github.ryuu.adventurecraft.gui.GuiHealDamage;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
 import net.minecraft.tile.TileWithEntity;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
@@ -27,7 +29,7 @@ public class BlockHealDamage extends TileWithEntity {
         return null;
     }
 
-    public boolean shouldRender(xp blockAccess, int i, int j, int k) {
+    public boolean shouldRender(TileView blockAccess, int i, int j, int k) {
         return DebugMode.active;
     }
 
@@ -36,9 +38,9 @@ public class BlockHealDamage extends TileWithEntity {
     }
 
     public void onTriggerActivated(Level world, int i, int j, int k) {
-        TileEntityHealDamage tileEnt = (TileEntityHealDamage)world.b(i, j, k);
+        TileEntityHealDamage tileEnt = (TileEntityHealDamage) world.b(i, j, k);
         for (Object obj : world.d) {
-            Player p = (Player)obj;
+            Player p = (Player) obj;
             if (tileEnt.healDamage > 0) {
                 p.c(tileEnt.healDamage);
                 continue;
@@ -47,7 +49,8 @@ public class BlockHealDamage extends TileWithEntity {
         }
     }
 
-    public void onTriggerDeactivated(Level world, int i, int j, int k) {}
+    public void onTriggerDeactivated(Level world, int i, int j, int k) {
+    }
 
     public boolean v_() {
         return DebugMode.active;
@@ -55,7 +58,7 @@ public class BlockHealDamage extends TileWithEntity {
 
     public boolean a(Level world, int i, int j, int k, Player entityplayer) {
         if (DebugMode.active && entityplayer.G() != null && (entityplayer.G()).c == Items.cursor.bf) {
-            TileEntityHealDamage obj = (TileEntityHealDamage)world.b(i, j, k);
+            TileEntityHealDamage obj = (TileEntityHealDamage) world.b(i, j, k);
             GuiHealDamage.showUI(world, obj);
             return true;
         }

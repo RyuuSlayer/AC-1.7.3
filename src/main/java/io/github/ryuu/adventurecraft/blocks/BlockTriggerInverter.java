@@ -1,11 +1,13 @@
 package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityTriggerInverter;
+import io.github.ryuu.adventurecraft.gui.GuiTriggerInverter;
 import io.github.ryuu.adventurecraft.items.ItemCursor;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.TriggerArea;
 import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
 import net.minecraft.tile.TileWithEntity;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
@@ -38,11 +40,11 @@ public class BlockTriggerInverter extends TileWithEntity {
         return null;
     }
 
-    public boolean shouldRender(xp blockAccess, int i, int j, int k) {
+    public boolean shouldRender(TileView blockAccess, int i, int j, int k) {
         return DebugMode.active;
     }
 
-    public int a(xp iblockaccess, int i, int j, int k, int l) {
+    public int a(TileView iblockaccess, int i, int j, int k, int l) {
         return super.a(iblockaccess, i, j, k, l);
     }
 
@@ -64,7 +66,7 @@ public class BlockTriggerInverter extends TileWithEntity {
     }
 
     public void setTriggerToSelection(Level world, int i, int j, int k) {
-        TileEntityTriggerInverter obj = (TileEntityTriggerInverter)world.b(i, j, k);
+        TileEntityTriggerInverter obj = (TileEntityTriggerInverter) world.b(i, j, k);
         if (obj.minX == ItemCursor.minX && obj.minY == ItemCursor.minY && obj.minZ == ItemCursor.minZ && obj.maxX == ItemCursor.maxX && obj.maxY == ItemCursor.maxY && obj.maxZ == ItemCursor.maxZ)
             return;
         obj.set(ItemCursor.minX, ItemCursor.minY, ItemCursor.minZ, ItemCursor.maxX, ItemCursor.maxY, ItemCursor.maxZ);
@@ -72,7 +74,7 @@ public class BlockTriggerInverter extends TileWithEntity {
 
     public boolean a(fd world, int i, int j, int k, gs entityplayer) {
         if (DebugMode.active && entityplayer.G() != null && (entityplayer.G()).c == Items.cursor.bf) {
-            TileEntityTriggerInverter obj = (TileEntityTriggerInverter)world.b(i, j, k);
+            TileEntityTriggerInverter obj = (TileEntityTriggerInverter) world.b(i, j, k);
             GuiTriggerInverter.showUI(world, i, j, k, obj);
             return true;
         }

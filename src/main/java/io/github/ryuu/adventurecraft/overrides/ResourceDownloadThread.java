@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.URL;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+
 import net.minecraft.client.Minecraft;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -17,7 +18,7 @@ import org.w3c.dom.NodeList;
 public class ResourceDownloadThread extends Thread {
     public File a;
 
-    private Minecraft b;
+    private final Minecraft b;
 
     private boolean c;
 
@@ -47,7 +48,7 @@ public class ResourceDownloadThread extends Thread {
                 for (int j = 0; j < nodelist.getLength(); j++) {
                     Node node = nodelist.item(j);
                     if (node.getNodeType() == 1) {
-                        Element element = (Element)node;
+                        Element element = (Element) node;
                         String s = element.getElementsByTagName("Key").item(0).getChildNodes().item(0).getNodeValue();
                         long l = Long.parseLong(element.getElementsByTagName("Size").item(0).getChildNodes().item(0).getNodeValue());
                         if (l > 0L) {

@@ -26,7 +26,7 @@ public class ScriptEffect {
     }
 
     public String getReplaceTexture(String textureToReplace) {
-        String replacement = (String)this.worldObj.x.replacementTextures.get(textureToReplace);
+        String replacement = (String) this.worldObj.x.replacementTextures.get(textureToReplace);
         if (replacement == null)
             return textureToReplace;
         return replacement;

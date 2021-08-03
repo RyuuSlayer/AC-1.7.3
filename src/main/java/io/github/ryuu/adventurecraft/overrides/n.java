@@ -296,7 +296,7 @@ public class n implements pm {
         if (this.k != null) {
             ls entityliving = this.t.i;
             if (entityliving != null) {
-                b(in.b(((sn) entityliving).aM), in.b(((sn) entityliving).aN), in.b(((sn) entityliving).aO));
+                b(in.b(entityliving.aM), in.b(entityliving.aN), in.b(entityliving.aO));
                 Arrays.sort(this.n, new jo((sn) entityliving));
             }
         }
@@ -314,12 +314,12 @@ public class n implements pm {
         this.K = 0;
         this.L = 0;
         ls entityliving = this.t.i;
-        th.b = ((sn) entityliving).bl + (((sn) entityliving).aM - ((sn) entityliving).bl) * f;
-        th.c = ((sn) entityliving).bm + (((sn) entityliving).aN - ((sn) entityliving).bm) * f;
-        th.d = ((sn) entityliving).bn + (((sn) entityliving).aO - ((sn) entityliving).bn) * f;
-        ll.b = ((sn) entityliving).bl + (((sn) entityliving).aM - ((sn) entityliving).bl) * f;
-        ll.c = ((sn) entityliving).bm + (((sn) entityliving).aN - ((sn) entityliving).bm) * f;
-        ll.d = ((sn) entityliving).bn + (((sn) entityliving).aO - ((sn) entityliving).bn) * f;
+        th.b = entityliving.bl + (entityliving.aM - entityliving.bl) * f;
+        th.c = entityliving.bm + (entityliving.aN - entityliving.bm) * f;
+        th.d = entityliving.bn + (entityliving.aO - entityliving.bn) * f;
+        ll.b = entityliving.bl + (entityliving.aM - entityliving.bl) * f;
+        ll.c = entityliving.bm + (entityliving.aN - entityliving.bm) * f;
+        ll.d = entityliving.bn + (entityliving.aO - entityliving.bn) * f;
         List<sn> list = this.k.o();
         this.J = list.size();
         for (int i = 0; i < this.k.e.size(); i++) {
@@ -476,9 +476,9 @@ public class n implements pm {
                         if (!(this.n[k1]).o)
                             (this.n[k1]).x = true;
                         if ((this.n[k1]).x)
-                            (this.n[k1]).x = (this.n[k1].a((sn) entityliving) > farPlane);
+                            (this.n[k1]).x = (this.n[k1].a(entityliving) > farPlane);
                         if ((this.n[k1]).o && !(this.n[k1]).y) {
-                            float f3 = in.c(this.n[k1].a((sn) entityliving));
+                            float f3 = in.c(this.n[k1].a(entityliving));
                             int l1 = (int) (1.0F + f3 / 128.0F);
                             if (this.x % l1 == k1 % l1) {
                                 dk worldrenderer1 = this.n[k1];
@@ -901,7 +901,7 @@ public class n implements pm {
             for (int k = 0; k < j; k++) {
                 dk worldrenderer = this.m.get(i - k);
                 if (!flag) {
-                    if (worldrenderer.a((sn) entityliving) > 256.0F)
+                    if (worldrenderer.a(entityliving) > 256.0F)
                         if (worldrenderer.o) {
                             if (k >= 3)
                                 return false;
@@ -930,7 +930,7 @@ public class n implements pm {
         for (int j1 = 0; j1 < l; j1++) {
             dk worldrenderer1 = this.m.get(j1);
             if (!flag) {
-                if (worldrenderer1.a((sn) entityliving) > 256.0F) {
+                if (worldrenderer1.a(entityliving) > 256.0F) {
                     int k2;
                     for (k2 = 0; k2 < byte0 && (aworldrenderer[k2] == null || rendersorter.a(aworldrenderer[k2], worldrenderer1) <= 0); k2++)
                         ;

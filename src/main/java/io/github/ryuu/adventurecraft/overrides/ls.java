@@ -824,9 +824,9 @@ public abstract class ls extends sn {
     protected void X() {
         gs entityplayer = this.aI.a(this, -1.0D);
         if (u() && entityplayer != null) {
-            double d = ((sn) entityplayer).aM - this.aM;
-            double d1 = ((sn) entityplayer).aN - this.aN;
-            double d2 = ((sn) entityplayer).aO - this.aO;
+            double d = entityplayer.aM - this.aM;
+            double d1 = entityplayer.aN - this.aN;
+            double d2 = entityplayer.aO - this.aO;
             double d3 = d * d + d1 * d1 + d2 * d2;
             if (d3 > 16384.0D)
                 K();
@@ -848,8 +848,8 @@ public abstract class ls extends sn {
         float f = 8.0F;
         if (this.bs.nextFloat() < 0.02F) {
             gs entityplayer1 = this.aI.a(this, f);
-            if (entityplayer1 != null && e((sn) entityplayer1)) {
-                this.b = (sn) entityplayer1;
+            if (entityplayer1 != null && e(entityplayer1)) {
+                this.b = entityplayer1;
                 this.aC = 10 + this.bs.nextInt(20);
             }
         }

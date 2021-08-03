@@ -14,7 +14,7 @@ public class EntitySkeletonBoss extends fr {
         super.U();
         if (this.bv > 0)
             if (this.bv % 20 != 0 && this.bv % 5 == 0)
-                a((sn)null, 1);
+                a(null, 1);
     }
 
     protected void a(sn entity, float f) {
@@ -33,7 +33,7 @@ public class EntitySkeletonBoss extends fr {
                 }
                 this.ae = 30;
             }
-            this.aS = (float)(Math.atan2(d1, d) * 180.0D / 3.1415927410125732D) - 90.0F;
+            this.aS = (float) (Math.atan2(d1, d) * 180.0D / 3.1415927410125732D) - 90.0F;
             if (f < 7.5F)
                 this.e = true;
         }

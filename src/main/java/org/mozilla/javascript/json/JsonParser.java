@@ -15,15 +15,16 @@ import org.mozilla.javascript.Scriptable;
 
 /**
  * This class converts a stream of JSON tokens into a JSON value.
- *
+ * <p>
  * See ECMA 15.12.
+ *
  * @author Raphael Speyer
  * @author Hannes Wallnoefer
  */
 public class JsonParser {
 
-    private Context cx;
-    private Scriptable scope;
+    private final Context cx;
+    private final Scriptable scope;
 
     private int pos;
     private int length;
@@ -98,7 +99,7 @@ public class JsonParser {
         boolean needsComma = false;
         while (pos < length) {
             char c = src.charAt(pos++);
-            switch(c) {
+            switch (c) {
                 case '}':
                     if (!needsComma) {
                         throw new ParseException("Unexpected comma in object literal");
@@ -120,9 +121,9 @@ public class JsonParser {
 
                     long index = ScriptRuntime.indexFromString(id);
                     if (index < 0) {
-                      object.put(id, object, value);
+                        object.put(id, object, value);
                     } else {
-                      object.put((int)index, object, value);
+                        object.put((int) index, object, value);
                     }
 
                     needsComma = true;
@@ -146,7 +147,7 @@ public class JsonParser {
         boolean needsComma = false;
         while (pos < length) {
             char c = src.charAt(pos);
-            switch(c) {
+            switch (c) {
                 case ']':
                     if (!needsComma) {
                         throw new ParseException("Unexpected comma in array literal");
@@ -232,9 +233,9 @@ public class JsonParser {
                         throw new ParseException("Invalid character code: \\u" + src.substring(pos));
                     }
                     int code = fromHex(src.charAt(pos + 0)) << 12
-                             | fromHex(src.charAt(pos + 1)) << 8
-                             | fromHex(src.charAt(pos + 2)) << 4
-                             | fromHex(src.charAt(pos + 3));
+                            | fromHex(src.charAt(pos + 1)) << 8
+                            | fromHex(src.charAt(pos + 2)) << 4
+                            | fromHex(src.charAt(pos + 3));
                     if (code < 0) {
                         throw new ParseException("Invalid character code: " + src.substring(pos, pos + 4));
                     }
@@ -308,7 +309,7 @@ public class JsonParser {
         }
         String num = src.substring(numberStart, pos);
         final double dval = Double.parseDouble(num);
-        final int ival = (int)dval;
+        final int ival = (int) dval;
         if (ival == dval) {
             return Integer.valueOf(ival);
         }

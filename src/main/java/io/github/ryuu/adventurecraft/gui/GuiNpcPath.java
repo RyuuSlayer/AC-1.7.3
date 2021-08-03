@@ -7,20 +7,21 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Screen;
 
 public class GuiNpcPath extends Screen {
-    private TileEntityNpcPath path;
+    private final TileEntityNpcPath path;
 
     public GuiNpcPath(TileEntityNpcPath npcPath) {
         this.path = npcPath;
     }
 
-    public void a() {}
+    public void a() {
+    }
 
     public void b() {
         String entityName = "<Unselected>";
         EntityNPC e = TileEntityNpcPath.lastEntity;
         if (e != null)
             entityName = e.npcName;
-        this.e.add(new ab(0, 4, 20, String.format("Set Path NPC: %s", new Object[] { entityName })));
+        this.e.add(new ab(0, 4, 20, String.format("Set Path NPC: %s", new Object[]{entityName})));
         this.e.add(new ab(1, 4, 80, "Use Current Selection"));
         this.e.add(new ab(2, 4, 100, "Reset Target"));
     }
@@ -52,9 +53,9 @@ public class GuiNpcPath extends Screen {
         EntityNPC e = this.path.getNPC();
         if (e != null)
             entityName = e.npcName;
-        b(this.g, String.format("NPC: %s", new Object[] { entityName }), 4, 4, 14737632);
-        b(this.g, String.format("Min: (%d, %d, %d)", new Object[] { Integer.valueOf(this.path.minX), Integer.valueOf(this.path.minY), Integer.valueOf(this.path.minZ) }), 4, 44, 14737632);
-        b(this.g, String.format("Max: (%d, %d, %d)", new Object[] { Integer.valueOf(this.path.maxX), Integer.valueOf(this.path.maxY), Integer.valueOf(this.path.maxZ) }), 4, 64, 14737632);
+        b(this.g, String.format("NPC: %s", new Object[]{entityName}), 4, 4, 14737632);
+        b(this.g, String.format("Min: (%d, %d, %d)", new Object[]{Integer.valueOf(this.path.minX), Integer.valueOf(this.path.minY), Integer.valueOf(this.path.minZ)}), 4, 44, 14737632);
+        b(this.g, String.format("Max: (%d, %d, %d)", new Object[]{Integer.valueOf(this.path.maxX), Integer.valueOf(this.path.maxY), Integer.valueOf(this.path.maxZ)}), 4, 64, 14737632);
         super.a(i, j, f);
     }
 

@@ -21,17 +21,17 @@ public class ya extends uz {
     public void w_() {
         this.aB = (this.d == null) ? 0.5F : 0.95F;
         if (this.b > 0 && --this.b == 0)
-            this.aI.a((sn)this, "mob.zombiepig.zpigangry", k() * 2.0F, ((this.bs.nextFloat() - this.bs.nextFloat()) * 0.2F + 1.0F) * 1.8F);
+            this.aI.a((sn) this, "mob.zombiepig.zpigangry", k() * 2.0F, ((this.bs.nextFloat() - this.bs.nextFloat()) * 0.2F + 1.0F) * 1.8F);
         super.w_();
     }
 
     public boolean d() {
-        return (this.aI.q > 0 && this.aI.a(this.aW) && this.aI.a((sn)this, this.aW).size() == 0 && !this.aI.b(this.aW));
+        return (this.aI.q > 0 && this.aI.a(this.aW) && this.aI.a((sn) this, this.aW).size() == 0 && !this.aI.b(this.aW));
     }
 
     public void b(nu nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.a("Anger", (short)this.a);
+        nbttagcompound.a("Anger", (short) this.a);
     }
 
     public void a(nu nbttagcompound) {
@@ -51,11 +51,11 @@ public class ya extends uz {
 
     public boolean a(sn entity, int i) {
         if (entity instanceof gs) {
-            List<sn> list = this.aI.b((sn)this, this.aW.b(32.0D, 32.0D, 32.0D));
+            List<sn> list = this.aI.b((sn) this, this.aW.b(32.0D, 32.0D, 32.0D));
             for (int j = 0; j < list.size(); j++) {
                 sn entity1 = list.get(j);
                 if (entity1 instanceof ya) {
-                    ya entitypigzombie = (ya)entity1;
+                    ya entitypigzombie = (ya) entity1;
                     entitypigzombie.d(entity);
                 }
             }

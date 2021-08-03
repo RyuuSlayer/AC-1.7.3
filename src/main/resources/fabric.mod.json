@@ -2,7 +2,6 @@
   "schemaVersion": 1,
   "id": "adventurecraft",
   "version": "${version}",
-
   "name": "AdventureCraft",
   "description": "This is an example description! Tell everyone what your mod is about!",
   "authors": [
@@ -12,10 +11,8 @@
     "issues": "https://github.com/RyuuSlayer/AC-1.7.3/issues",
     "sources": "https://github.com/RyuuSlayer/AC-1.7.3"
   },
-
   "license": "CC0-1.0",
   "icon": "assets/adventurecraft/icon.png",
-
   "environment": "*",
   "entrypoints": {
     "init": [
@@ -25,7 +22,6 @@
   "mixins": [
     "adventurecraft.mixins.json"
   ],
-
   "depends": {
     "fabricloader": "*",
     "minecraft": "1.0.0-beta.7.3"

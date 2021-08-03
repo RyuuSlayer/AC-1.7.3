@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.scripting;
 
 import java.util.LinkedList;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
@@ -52,14 +53,12 @@ public class Script {
         if (!shutterSet) {
             this.cx.setClassShutter(new ClassShutter() {
                 public boolean visibleToScripts(String className) {
-                    if (className.startsWith("net.minecraft.script") || className.equals("java.lang.Object") || className.equals("java.lang.String") || className.equals("java.lang.Double") || className.equals("java.lang.Boolean"))
-                        return true;
-                    return false;
+                    return className.startsWith("net.minecraft.script") || className.equals("java.lang.Object") || className.equals("java.lang.String") || className.equals("java.lang.Double") || className.equals("java.lang.Boolean");
                 }
             });
             shutterSet = true;
         }
-        this.globalScope = (Scriptable)this.cx.initStandardObjects();
+        this.globalScope = this.cx.initStandardObjects();
         this.runScope = this.cx.newObject(this.globalScope);
         this.runScope.setParentScope(this.globalScope);
         this.time = new ScriptTime(w);
@@ -114,7 +113,7 @@ public class Script {
     }
 
     public void initPlayer() {
-        this.player = new ScriptEntityPlayer((Player)Minecraft.minecraftInstance.h);
+        this.player = new ScriptEntityPlayer((Player) Minecraft.minecraftInstance.h);
         Object wrappedOut = Context.javaToJS(this.player, this.globalScope);
         ScriptableObject.putProperty(this.globalScope, "player", wrappedOut);
     }
@@ -184,7 +183,7 @@ public class Script {
     }
 
     public void sleep(float t) {
-        int ticks = (int)(20.0F * t);
+        int ticks = (int) (20.0F * t);
         ContinuationPending cp = this.cx.captureContinuation();
         this.sleepingScripts.add(new ScriptContinuation(cp.getContinuation(), this.time.getTickCount() + ticks, this.curScope));
         throw cp;

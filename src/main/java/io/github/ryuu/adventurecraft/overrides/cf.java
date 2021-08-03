@@ -27,7 +27,7 @@ public class cf extends sn {
 
     public double e;
 
-    private float radius;
+    private final float radius;
 
     public cf(Level world) {
         super(world);
@@ -43,7 +43,8 @@ public class cf extends sn {
         this.radius = 1.0F;
     }
 
-    protected void b() {}
+    protected void b() {
+    }
 
     public boolean a(double d) {
         double d1 = this.aW.c() * 4.0D;
@@ -173,8 +174,8 @@ public class cf extends sn {
         if (movingobjectposition != null) {
             if (!this.aI.B) {
                 if (movingobjectposition.g != null)
-                    if (!movingobjectposition.g.a(this.b, 0));
-                this.aI.a((sn)null, this.aM, this.aN, this.aO, this.radius, true);
+                    if (!movingobjectposition.g.a(this.b, 0)) ;
+                this.aI.a((sn) null, this.aM, this.aN, this.aO, this.radius, true);
             }
             K();
         }
@@ -182,11 +183,12 @@ public class cf extends sn {
         this.aN += this.aQ;
         this.aO += this.aR;
         float f = in.a(this.aP * this.aP + this.aR * this.aR);
-        this.aS = (float)(Math.atan2(this.aP, this.aR) * 180.0D / 3.1415927410125732D);
-        for (this.aT = (float)(Math.atan2(this.aQ, f) * 180.0D / 3.1415927410125732D); this.aT - this.aV < -180.0F; this.aV -= 360.0F);
-        for (; this.aT - this.aV >= 180.0F; this.aV += 360.0F);
-        for (; this.aS - this.aU < -180.0F; this.aU -= 360.0F);
-        for (; this.aS - this.aU >= 180.0F; this.aU += 360.0F);
+        this.aS = (float) (Math.atan2(this.aP, this.aR) * 180.0D / 3.1415927410125732D);
+        for (this.aT = (float) (Math.atan2(this.aQ, f) * 180.0D / 3.1415927410125732D); this.aT - this.aV < -180.0F; this.aV -= 360.0F)
+            ;
+        for (; this.aT - this.aV >= 180.0F; this.aV += 360.0F) ;
+        for (; this.aS - this.aU < -180.0F; this.aU -= 360.0F) ;
+        for (; this.aS - this.aU >= 180.0F; this.aU += 360.0F) ;
         this.aT = this.aV + (this.aT - this.aV) * 0.2F;
         this.aS = this.aU + (this.aS - this.aU) * 0.2F;
         float f1 = 0.95F;
@@ -208,12 +210,12 @@ public class cf extends sn {
     }
 
     public void b(nu nbttagcompound) {
-        nbttagcompound.a("xTile", (short)this.f);
-        nbttagcompound.a("yTile", (short)this.g);
-        nbttagcompound.a("zTile", (short)this.h);
-        nbttagcompound.a("inTile", (byte)this.i);
-        nbttagcompound.a("shake", (byte)this.a);
-        nbttagcompound.a("inGround", (byte)(this.j ? 1 : 0));
+        nbttagcompound.a("xTile", (short) this.f);
+        nbttagcompound.a("yTile", (short) this.g);
+        nbttagcompound.a("zTile", (short) this.h);
+        nbttagcompound.a("inTile", (byte) this.i);
+        nbttagcompound.a("shake", (byte) this.a);
+        nbttagcompound.a("inGround", (byte) (this.j ? 1 : 0));
     }
 
     public void a(nu nbttagcompound) {

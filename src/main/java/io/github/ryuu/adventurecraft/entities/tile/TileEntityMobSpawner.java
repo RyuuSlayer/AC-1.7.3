@@ -137,24 +137,24 @@ public class TileEntityMobSpawner extends TileEntityScript {
                 return;
             if (spawnEntityID.equalsIgnoreCase("FallingSand")) {
                 if (this.spawnID < 256 && uu.m[this.spawnID] != null) {
-                    ((ju)entity).a = this.spawnID;
-                    ((ju)entity).metadata = this.spawnMeta;
+                    ((ju) entity).a = this.spawnID;
+                    ((ju) entity).metadata = this.spawnMeta;
                 } else {
                     return;
                 }
             } else if (spawnEntityID.equalsIgnoreCase("Item")) {
                 if (gm.c[this.spawnID] != null) {
-                    ((hl)entity).a = new iz(this.spawnID, 1, this.spawnMeta);
+                    ((hl) entity).a = new iz(this.spawnID, 1, this.spawnMeta);
                 } else {
                     return;
                 }
             } else if (this.entityID.startsWith("Slime") && this.entityID.length() > 6) {
                 int size = Integer.parseInt(this.entityID.split(":")[1].trim());
-                ((uw)entity).e(size);
+                ((uw) entity).e(size);
             } else if (this.entityID.equalsIgnoreCase("Minecart Chest")) {
-                ((yl)entity).d = 1;
+                ((yl) entity).d = 1;
             } else if (this.entityID.equalsIgnoreCase("Minecart Furnace")) {
-                ((yl)entity).d = 2;
+                ((yl) entity).d = 2;
             }
             if (this.maxSpawnVec.y == this.minSpawnVec.y) {
                 posY = (this.f + this.maxSpawnVec.y);
@@ -186,23 +186,23 @@ public class TileEntityMobSpawner extends TileEntityScript {
                     this.spawnedEntities.add(rider);
                     this.entitiesLeft.add(rider);
                 } else if (this.entityID.equalsIgnoreCase("Wolf (Angry)")) {
-                    gi w = (gi)entity;
+                    gi w = (gi) entity;
                     w.c(true);
                 } else if (this.entityID.equalsIgnoreCase("Wolf (Tame)")) {
-                    gi w = (gi)entity;
+                    gi w = (gi) entity;
                     w.d(true);
-                    w.a((dh)null);
+                    w.a((dh) null);
                     w.Y = 20;
                     w.a(Minecraft.minecraftInstance.h.l);
                     w.a(true);
-                    this.d.a((sn)w, (byte)7);
+                    this.d.a((sn) w, (byte) 7);
                 }
                 if (this.entityID.endsWith("(Scripted)")) {
-                    EntityLivingScript els = (EntityLivingScript)entity;
+                    EntityLivingScript els = (EntityLivingScript) entity;
                     els.setEntityDescription(this.entityID.replace(" (Scripted)", ""));
                 }
                 if (entity instanceof ls)
-                    ((ls)entity).V();
+                    ((ls) entity).V();
                 this.spawnedEntities.add(entity);
                 this.entitiesLeft.add(entity);
                 if (this.spawnedEntities.size() >= this.spawnNumber)
@@ -224,9 +224,9 @@ public class TileEntityMobSpawner extends TileEntityScript {
             if (this.ticksBeforeLoad == 0) {
                 int num = this.delayLoadData.d("numEntities");
                 for (int i = 0; i < num; i++) {
-                    int entID = this.delayLoadData.e(String.format("entID_%d", new Object[] { Integer.valueOf(i) }));
+                    int entID = this.delayLoadData.e(String.format("entID_%d", new Object[]{Integer.valueOf(i)}));
                     for (Entity obj : this.d.b) {
-                        sn e = (sn)obj;
+                        sn e = (sn) obj;
                         if (e.aD == entID) {
                             this.spawnedEntities.add(e);
                             if (e.W())
@@ -367,7 +367,7 @@ public class TileEntityMobSpawner extends TileEntityScript {
     public void b(nu nbttagcompound) {
         super.b(nbttagcompound);
         nbttagcompound.a("EntityId", this.entityID);
-        nbttagcompound.a("Delay", (short)this.delay);
+        nbttagcompound.a("Delay", (short) this.delay);
         nbttagcompound.a("RespawnDelay", this.respawnDelay);
         nbttagcompound.a("SpawnNumber", this.spawnNumber);
         nbttagcompound.a("SpawnOnTrigger", this.spawnOnTrigger);
@@ -390,10 +390,10 @@ public class TileEntityMobSpawner extends TileEntityScript {
         nbttagcompound.a("maxSpawnX", this.maxSpawnVec.x);
         nbttagcompound.a("maxSpawnY", this.maxSpawnVec.y);
         nbttagcompound.a("maxSpawnZ", this.maxSpawnVec.z);
-        nbttagcompound.a("numEntities", (short)this.spawnedEntities.size());
+        nbttagcompound.a("numEntities", (short) this.spawnedEntities.size());
         i = 0;
         for (sn e : this.spawnedEntities) {
-            nbttagcompound.a(String.format("entID_%d", new Object[] { Integer.valueOf(i) }), e.aD);
+            nbttagcompound.a(String.format("entID_%d", new Object[]{Integer.valueOf(i)}), e.aD);
             i++;
         }
         nbttagcompound.a("scope", ScopeTag.getTagFromScope(this.scope));

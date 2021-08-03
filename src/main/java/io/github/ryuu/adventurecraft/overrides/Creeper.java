@@ -13,8 +13,8 @@ public class Creeper extends gz {
 
     protected void b() {
         super.b();
-        this.bD.a(16, Byte.valueOf((byte)-1));
-        this.bD.a(17, Byte.valueOf((byte)0));
+        this.bD.a(16, Byte.valueOf((byte) -1));
+        this.bD.a(17, Byte.valueOf((byte) 0));
     }
 
     public void b(nu nbttagcompound) {
@@ -25,7 +25,7 @@ public class Creeper extends gz {
 
     public void a(nu nbttagcompound) {
         super.a(nbttagcompound);
-        this.bD.b(17, Byte.valueOf((byte)(nbttagcompound.m("powered") ? 1 : 0)));
+        this.bD.b(17, Byte.valueOf((byte) (nbttagcompound.m("powered") ? 1 : 0)));
     }
 
     protected void b(sn entity, float f) {
@@ -117,11 +117,11 @@ public class Creeper extends gz {
     }
 
     private void e(int i) {
-        this.bD.b(16, Byte.valueOf((byte)i));
+        this.bD.b(16, Byte.valueOf((byte) i));
     }
 
     public void a(c entitylightningbolt) {
         super.a(entitylightningbolt);
-        this.bD.b(17, Byte.valueOf((byte)1));
+        this.bD.b(17, Byte.valueOf((byte) 1));
     }
 }

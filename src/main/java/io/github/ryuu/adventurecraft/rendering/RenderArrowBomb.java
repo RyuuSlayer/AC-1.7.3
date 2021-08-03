@@ -6,7 +6,7 @@ public class RenderArrowBomb extends mc {
     public void a(sl entityarrow, double d, double d1, double d2, float f, float f1) {
         a("/item/arrows.png");
         GL11.glPushMatrix();
-        GL11.glTranslatef((float)d, (float)d1, (float)d2);
+        GL11.glTranslatef((float) d, (float) d1, (float) d2);
         GL11.glRotatef(entityarrow.aU + (entityarrow.aS - entityarrow.aU) * f1 - 90.0F, 0.0F, 1.0F, 0.0F);
         GL11.glRotatef(entityarrow.aV + (entityarrow.aT - entityarrow.aV) * f1, 0.0F, 0.0F, 1.0F);
         nw tessellator = nw.a;

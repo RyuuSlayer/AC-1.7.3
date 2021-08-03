@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import javax.script.ScriptContext;
+
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.ScriptRuntime;
@@ -25,35 +26,35 @@ import org.mozilla.javascript.ScriptableObject;
  */
 public class Builtins {
 
-  static final Object BUILTIN_KEY = new Object();
+    static final Object BUILTIN_KEY = new Object();
 
-  private Writer stdout;
+    private Writer stdout;
 
-  void register(Context cx, ScriptableObject scope, ScriptContext sc) {
-    if (sc.getWriter() == null) {
-      stdout = new OutputStreamWriter(System.out);
-    } else {
-      stdout = sc.getWriter();
+    void register(Context cx, ScriptableObject scope, ScriptContext sc) {
+        if (sc.getWriter() == null) {
+            stdout = new OutputStreamWriter(System.out);
+        } else {
+            stdout = sc.getWriter();
+        }
+
+        scope.defineFunctionProperties(new String[]{"print"},
+                Builtins.class,
+                ScriptableObject.PERMANENT | ScriptableObject.DONTENUM);
     }
 
-    scope.defineFunctionProperties(new String[]{"print"},
-        Builtins.class,
-        ScriptableObject.PERMANENT | ScriptableObject.DONTENUM);
-  }
-
-  public static void print(Context cx, Scriptable thisObj, Object[] args, Function f)
-      throws IOException {
-    Builtins self = getSelf(thisObj);
-    for (Object arg : args) {
-      self.stdout.write(ScriptRuntime.toString(arg));
+    public static void print(Context cx, Scriptable thisObj, Object[] args, Function f)
+            throws IOException {
+        Builtins self = getSelf(thisObj);
+        for (Object arg : args) {
+            self.stdout.write(ScriptRuntime.toString(arg));
+        }
+        self.stdout.write('\n');
     }
-    self.stdout.write('\n');
-  }
 
-  private static Builtins getSelf(Scriptable scope) {
-    // Since this class is invoked as a set of anonymous functions, "this"
-    // in JavaScript does not point to "this" in Java. We set a key on the
-    // top-level scope to address this.
-    return (Builtins) ScriptableObject.getTopScopeValue(scope, BUILTIN_KEY);
-  }
+    private static Builtins getSelf(Scriptable scope) {
+        // Since this class is invoked as a set of anonymous functions, "this"
+        // in JavaScript does not point to "this" in Java. We set a key on the
+        // top-level scope to address this.
+        return (Builtins) ScriptableObject.getTopScopeValue(scope, BUILTIN_KEY);
+    }
 }

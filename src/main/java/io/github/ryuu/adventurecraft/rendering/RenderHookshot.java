@@ -8,7 +8,7 @@ public class RenderHookshot extends bw {
     public void doRenderFish(EntityHookshot entityHookshot, double d, double d1, double d2, float f, float f1) {
         a("/item/arrows.png");
         GL11.glPushMatrix();
-        GL11.glTranslatef((float)d, (float)d1, (float)d2);
+        GL11.glTranslatef((float) d, (float) d1, (float) d2);
         GL11.glRotatef(entityHookshot.aU + (entityHookshot.aS - entityHookshot.aU) * f1 - 90.0F, 0.0F, 1.0F, 0.0F);
         GL11.glRotatef(entityHookshot.aV + (entityHookshot.aT - entityHookshot.aV) * f1, 0.0F, 0.0F, 1.0F);
         nw tessellator = nw.a;
@@ -77,9 +77,9 @@ public class RenderHookshot extends bw {
             double d12 = entityHookshot.aJ + (entityHookshot.aM - entityHookshot.aJ) * f1;
             double d13 = entityHookshot.aK + (entityHookshot.aN - entityHookshot.aK) * f1;
             double d14 = entityHookshot.aL + (entityHookshot.aO - entityHookshot.aL) * f1;
-            double d15 = (float)(d9 - d12);
-            double d16 = (float)(d10 - d13);
-            double d17 = (float)(d11 - d14);
+            double d15 = (float) (d9 - d12);
+            double d16 = (float) (d10 - d13);
+            double d17 = (float) (d11 - d14);
             GL11.glDisable(3553);
             GL11.glDisable(2896);
             GL11.glLineWidth(3.0F);
@@ -97,6 +97,6 @@ public class RenderHookshot extends bw {
     }
 
     public void a(sn entity, double d, double d1, double d2, float f, float f1) {
-        doRenderFish((EntityHookshot)entity, d, d1, d2, f, f1);
+        doRenderFish((EntityHookshot) entity, d, d1, d2, f, f1);
     }
 }

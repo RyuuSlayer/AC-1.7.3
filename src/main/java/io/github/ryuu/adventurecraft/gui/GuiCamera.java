@@ -24,7 +24,7 @@ public class GuiCamera extends Screen {
             b.e = "Quadratic Interpolation";
         }
         this.e.add(b);
-        this.timerText = new ro(this, this.g, 80, 46, 70, 16, String.format("%.2f", new Object[] { Float.valueOf(this.cam.time) }));
+        this.timerText = new ro(this, this.g, 80, 46, 70, 16, String.format("%.2f", new Object[]{Float.valueOf(this.cam.time)}));
     }
 
     public void a() {
@@ -51,7 +51,7 @@ public class GuiCamera extends Screen {
             this.b.activeCutsceneCamera.setPointType(this.cam.cameraID, this.cam.type);
             for (Entity obj : this.b.f.b) {
                 if (obj instanceof EntityCamera) {
-                    EntityCamera c = (EntityCamera)obj;
+                    EntityCamera c = (EntityCamera) obj;
                     if (c.W() && c.cameraID == this.cam.cameraID) {
                         this.cam = c;
                         break;
@@ -74,7 +74,8 @@ public class GuiCamera extends Screen {
             Float value = Float.valueOf(this.timerText.a());
             this.cam.time = value.floatValue();
             this.b.activeCutsceneCamera.setTime(this.cam.cameraID, value.floatValue());
-        } catch (NumberFormatException e) {}
+        } catch (NumberFormatException e) {
+        }
         b(this.g, "Active At:", 4, 49, 14737632);
         this.timerText.c();
         super.a(i, j, f);

@@ -1,3 +1,4 @@
 package io.github.ryuu.adventurecraft.overrides;
 
-public class t extends kd {}
+public class t extends kd {
+}

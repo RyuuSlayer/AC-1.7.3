@@ -34,7 +34,8 @@ public class Tile {
         return this;
     }
 
-    protected void k() {}
+    protected void k() {
+    }
 
     protected Tile(int i, int j, ln material) {
         this(i, material);
@@ -57,7 +58,7 @@ public class Tile {
     }
 
     protected Tile a(float f) {
-        s[this.bn] = (int)(15.0F * f);
+        s[this.bn] = (int) (15.0F * f);
         return this;
     }
 
@@ -174,19 +175,24 @@ public class Tile {
         return true;
     }
 
-    public void a(fd world, int i, int j, int k, Random random) {}
+    public void a(fd world, int i, int j, int k, Random random) {
+    }
 
-    public void b(fd world, int i, int j, int k, Random random) {}
+    public void b(fd world, int i, int j, int k, Random random) {
+    }
 
-    public void c(fd world, int i, int j, int k, int l) {}
+    public void c(fd world, int i, int j, int k, int l) {
+    }
 
-    public void b(fd world, int i, int j, int k, int l) {}
+    public void b(fd world, int i, int j, int k, int l) {
+    }
 
     public int e() {
         return 10;
     }
 
-    public void c(fd world, int i, int j, int k) {}
+    public void c(fd world, int i, int j, int k) {
+    }
 
     public void b(fd world, int i, int j, int k) {
         world.triggerManager.removeArea(i, j, k);
@@ -212,9 +218,11 @@ public class Tile {
         a(world, i, j, k, l, 1.0F);
     }
 
-    public void a(fd world, int i, int j, int k, int l, float f) {}
+    public void a(fd world, int i, int j, int k, int l, float f) {
+    }
 
-    protected void a(fd world, int i, int j, int k, iz itemstack) {}
+    protected void a(fd world, int i, int j, int k, iz itemstack) {
+    }
 
     protected int b_(int i) {
         return 0;
@@ -225,7 +233,7 @@ public class Tile {
     }
 
     public vf a(fd world, int i, int j, int k, bt vec3d, bt vec3d1) {
-        a((xp)world, i, j, k);
+        a((xp) world, i, j, k);
         vec3d = vec3d.c(-i, -j, -k);
         vec3d1 = vec3d1.c(-i, -j, -k);
         bt vec3d2 = vec3d.a(vec3d1, this.bs);
@@ -295,7 +303,8 @@ public class Tile {
         return (vec3d.a >= this.bs && vec3d.a <= this.bv && vec3d.b >= this.bt && vec3d.b <= this.bw);
     }
 
-    public void d(fd world, int i, int j, int k) {}
+    public void d(fd world, int i, int j, int k) {
+    }
 
     public int b_() {
         return 0;
@@ -314,15 +323,20 @@ public class Tile {
         return false;
     }
 
-    public void b(fd world, int i, int j, int k, sn entity) {}
+    public void b(fd world, int i, int j, int k, sn entity) {
+    }
 
-    public void e(fd world, int i, int j, int k, int l) {}
+    public void e(fd world, int i, int j, int k, int l) {
+    }
 
-    public void b(fd world, int i, int j, int k, gs entityplayer) {}
+    public void b(fd world, int i, int j, int k, gs entityplayer) {
+    }
 
-    public void a(fd world, int i, int j, int k, sn entity, bt vec3d) {}
+    public void a(fd world, int i, int j, int k, sn entity, bt vec3d) {
+    }
 
-    public void a(xp iblockaccess, int i, int j, int k) {}
+    public void a(xp iblockaccess, int i, int j, int k) {
+    }
 
     public int b(int i) {
         return 16777215;
@@ -340,13 +354,15 @@ public class Tile {
         return false;
     }
 
-    public void a(fd world, int i, int j, int k, sn entity) {}
+    public void a(fd world, int i, int j, int k, sn entity) {
+    }
 
     public boolean d(fd world, int i, int j, int k, int l) {
         return false;
     }
 
-    public void g() {}
+    public void g() {
+    }
 
     public void a(fd world, gs entityplayer, int i, int j, int k, int l) {
         entityplayer.a(jl.C[this.bn], 1);
@@ -357,7 +373,8 @@ public class Tile {
         return true;
     }
 
-    public void a(fd world, int i, int j, int k, ls entityliving) {}
+    public void a(fd world, int i, int j, int k, ls entityliving) {
+    }
 
     public Tile a(String s) {
         this.a = "tile." + s;
@@ -372,7 +389,8 @@ public class Tile {
         return this.a;
     }
 
-    public void a(fd world, int i, int j, int k, int l, int i1) {}
+    public void a(fd world, int i, int j, int k, int l, int i1) {
+    }
 
     public boolean p() {
         return this.br;
@@ -424,11 +442,14 @@ public class Tile {
         resetActive = oldResetActive;
     }
 
-    public void onTriggerActivated(fd world, int i, int j, int k) {}
+    public void onTriggerActivated(fd world, int i, int j, int k) {
+    }
 
-    public void onTriggerDeactivated(fd world, int i, int j, int k) {}
+    public void onTriggerDeactivated(fd world, int i, int j, int k) {
+    }
 
-    public void reset(fd world, int i, int j, int k, boolean death) {}
+    public void reset(fd world, int i, int j, int k, boolean death) {
+    }
 
     public int alwaysUseClick(fd world, int i, int j, int k) {
         return -1;
@@ -472,13 +493,13 @@ public class Tile {
         g = new ct("grass", 1.0F, 1.0F);
         h = new ct("stone", 1.0F, 1.0F);
         Tile.i = new ct("stone", 1.0F, 1.5F);
-        j = (ct)new al("stone", 1.0F, 1.0F);
+        j = (ct) new al("stone", 1.0F, 1.0F);
         k = new ct("cloth", 1.0F, 1.0F);
-        l = (ct)new aj("sand", 1.0F, 1.0F);
+        l = (ct) new aj("sand", 1.0F, 1.0F);
         m = new Tile[256];
         r = new boolean[256];
         u = (new eo(1, 215)).c(1.5F).b(10.0F).a(h).a("stone");
-        v = (wp)(new wp(2)).c(0.6F).a(g).a("grass").setSubTypes(5);
+        v = (wp) (new wp(2)).c(0.6F).a(g).a("grass").setSubTypes(5);
         w = (new ot(3, 2)).c(0.5F).a(f).a("dirt");
         x = (new AC_BlockColor(4, 214, ln.e)).c(2.0F).b(10.0F).a(h).a("stonebrick");
         y = (new Tile(5, 4, ln.d)).c(2.0F).b(5.0F).a(e).a("wood").j();
@@ -494,7 +515,7 @@ public class Tile {
         I = (new mt(15, 33)).c(3.0F).b(5.0F).a(h).a("oreIron");
         J = (new mt(16, 34)).c(3.0F).b(5.0F).a(h).a("oreCoal");
         K = (new vg(17)).c(2.0F).a(e).a("log").j();
-        L = (bk)(new bk(18, 52)).c(0.2F).g(1).a(g).a("leaves").q().j();
+        L = (bk) (new bk(18, 52)).c(0.2F).g(1).a(g).a("leaves").q().j();
         M = (new xf(19)).c(0.6F).a(g).a("sponge");
         N = (new fk(20, 49, ln.p, false)).c(0.3F).a(j).a("glass");
         O = (new mt(21, 160)).c(3.0F).b(5.0F).a(h).a("oreLapis");
@@ -507,16 +528,16 @@ public class Tile {
         V = (new ph(28, 195)).c(0.7F).a(Tile.i).a("detectorRail").j();
         W = (new jq(29, 106, true)).a("pistonStickyBase").j();
         X = (new rn(30, 11)).g(1).c(4.0F).a("web");
-        Y = (ru)(new ru(31, 39)).c(0.0F).a(g).a("tallgrass");
-        Z = (jb)(new jb(32, 55)).c(0.0F).a(g).a("deadbush");
+        Y = (ru) (new ru(31, 39)).c(0.0F).a(g).a("tallgrass");
+        Z = (jb) (new jb(32, 55)).c(0.0F).a(g).a("deadbush");
         aa = (new jq(33, 107, false)).a("pistonBase").j();
-        ab = (h)(new h(34, 107)).j();
+        ab = (h) (new h(34, 107)).j();
         ac = (new ee()).c(0.8F).a(k).a("cloth").j();
         ad = new ut(36);
-        ae = (wb)(new wb(37, 13)).c(0.0F).a(g).a("flower");
-        af = (wb)(new wb(38, 12)).c(0.0F).a(g).a("rose");
-        ag = (wb)(new tl(39, 29)).c(0.0F).a(g).a(0.125F).a("mushroom");
-        ah = (wb)(new tl(40, 28)).c(0.0F).a(g).a("mushroom");
+        ae = (wb) (new wb(37, 13)).c(0.0F).a(g).a("flower");
+        af = (wb) (new wb(38, 12)).c(0.0F).a(g).a("rose");
+        ag = (wb) (new tl(39, 29)).c(0.0F).a(g).a(0.125F).a("mushroom");
+        ah = (wb) (new tl(40, 28)).c(0.0F).a(g).a("mushroom");
         ai = (new l(41, 23)).c(3.0F).b(10.0F).a(Tile.i).a("blockGold");
         aj = (new l(42, 22)).c(5.0F).b(10.0F).a(Tile.i).a("blockIron");
         ak = (new ys(43, true)).c(2.0F).b(10.0F).a(h).a("stoneSlab");
@@ -527,7 +548,7 @@ public class Tile {
         ap = (new Tile(48, 36, ln.e)).c(2.0F).b(10.0F).a(h).a("stoneMoss");
         aq = (new fb(49, 37)).c(10.0F).b(2000.0F).a(h).a("obsidian");
         ar = (new vm(50, 80)).c(0.0F).a(0.9375F).a(e).a("torch").j();
-        as = (yq)(new yq(51, 31)).c(0.0F).a(1.0F).a(e).a("fire").q().j();
+        as = (yq) (new yq(51, 31)).c(0.0F).a(1.0F).a(e).a("fire").q().j();
         at = (new dd(52, 65)).c(5.0F).a(Tile.i).a("mobSpawner").q();
         au = (new ss(53, y)).a("stairsWood").j();
         av = (new e(54)).c(2.5F).a(e).a("chest").j();
@@ -566,7 +587,7 @@ public class Tile {
         bc = (new yi(87, 103)).c(0.4F).a(h).a("hellrock");
         bd = (new oa(88, 104)).c(0.5F).a(l).a("hellsand");
         be = (new ly(89, 105, ln.e)).c(0.3F).a(j).a(1.0F).a("lightgem");
-        bf = (ak)(new ak(90, 14)).c(-1.0F).a(j).a(0.75F).a("portal");
+        bf = (ak) (new ak(90, 14)).c(-1.0F).a(j).a(0.75F).a("portal");
         bg = (new fc(91, 102, true)).c(1.0F).a(e).a(1.0F).a("litpumpkin").j();
         bh = (new um(92, 121)).c(0.5F).a(k).a("cake").q().j();
         bi = (new wo(93, false)).c(0.0F).a(e).a("diode").q().j();
@@ -581,11 +602,11 @@ public class Tile {
         gm.c[al.bn] = (new en(al.bn - 256)).a("stoneSlab");
         gm.c[z.bn] = (new mr(z.bn - 256)).a("sapling");
         gm.c[L.bn] = (new uy(L.bn - 256)).a("leaves");
-        gm.c[aa.bn] = (gm)new qr(aa.bn - 256);
-        gm.c[W.bn] = (gm)new qr(W.bn - 256);
+        gm.c[aa.bn] = (gm) new qr(aa.bn - 256);
+        gm.c[W.bn] = (gm) new qr(W.bn - 256);
         for (int i = 0; i < 256; i++) {
             if (m[i] != null && gm.c[i] == null) {
-                gm.c[i] = (gm)new ck(i - 256);
+                gm.c[i] = (gm) new ck(i - 256);
                 m[i].k();
             }
         }

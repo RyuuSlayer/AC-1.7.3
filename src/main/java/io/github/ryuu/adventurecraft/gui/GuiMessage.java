@@ -4,11 +4,11 @@ import io.github.ryuu.adventurecraft.entities.tile.TileEntityMessage;
 import net.minecraft.client.Minecraft;
 
 public class GuiMessage extends da {
-    private TileEntityMessage msg;
+    private final TileEntityMessage msg;
 
     private TileEntityMessage soundFile;
 
-    private fd world;
+    private final fd world;
 
     private int page;
 
@@ -28,7 +28,7 @@ public class GuiMessage extends da {
         }
         int numPages = this.world.soundList.length / maxEntries + 1;
         for (int j = 0; j < numPages; j++) {
-            ke b = new ke(100 + j, 4 + j * 50, 40, 46, 18, String.format("Page %d", new Object[] { Integer.valueOf(j + 1) }));
+            ke b = new ke(100 + j, 4 + j * 50, 40, 46, 18, String.format("Page %d", new Object[]{Integer.valueOf(j + 1)}));
             this.e.add(b);
         }
     }
@@ -57,9 +57,9 @@ public class GuiMessage extends da {
 
     public void a(int i, int j, float f) {
         i();
-        b(this.g, String.format("Message: '%s'", new Object[] { this.msg.message }), 4, 4, 14737632);
+        b(this.g, String.format("Message: '%s'", new Object[]{this.msg.message}), 4, 4, 14737632);
         if (this.msg.sound != "") {
-            b(this.g, String.format("Sound: %s", new Object[] { this.msg.sound }), 4, 24, 14737632);
+            b(this.g, String.format("Sound: %s", new Object[]{this.msg.sound}), 4, 24, 14737632);
         } else {
             b(this.g, String.format("Sound: None", new Object[0]), 4, 24, 14737632);
         }

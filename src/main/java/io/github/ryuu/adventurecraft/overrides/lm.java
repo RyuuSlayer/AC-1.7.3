@@ -420,7 +420,7 @@ public class lm {
         tileentity.f = j;
         tileentity.g = this.k * 16 + k;
         if (a(i, j, k) == 0 || !(Tile.m[a(i, j, k)] instanceof rw)) {
-            System.out.printf("No container :( BlockID: %d Tile Entity: %s Coord: %d, %d, %d\n", new Object[]{Integer.valueOf(a(i, j, k)), tileentity.getClassName(), Integer.valueOf(tileentity.e), Integer.valueOf(tileentity.f), Integer.valueOf(tileentity.g)});
+            System.out.printf("No container :( BlockID: %d Tile Entity: %s Coord: %d, %d, %d\n", Integer.valueOf(a(i, j, k)), tileentity.getClassName(), Integer.valueOf(tileentity.e), Integer.valueOf(tileentity.f), Integer.valueOf(tileentity.g));
             return;
         }
         tileentity.j();

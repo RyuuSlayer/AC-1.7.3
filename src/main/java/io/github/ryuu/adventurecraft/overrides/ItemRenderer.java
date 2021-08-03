@@ -6,9 +6,9 @@ import io.github.ryuu.adventurecraft.items.IItemReload;
 import org.lwjgl.opengl.GL11;
 
 public class ItemRenderer extends bw {
-    private TileRenderer e = new TileRenderer();
+    private final TileRenderer e = new TileRenderer();
 
-    private Random f = new Random();
+    private final Random f = new Random();
 
     public boolean a = true;
 
@@ -25,7 +25,7 @@ public class ItemRenderer extends bw {
             byte0 = 3;
         if (entityitem.a.a > 20)
             byte0 = 4;
-        GL11.glTranslatef((float)d, (float)d1 + f2, (float)d2);
+        GL11.glTranslatef((float) d, (float) d1 + f2, (float) d2);
         GL11.glEnable(32826);
         if (itemstack.c < 256 && TileRenderer.a(Tile.m[itemstack.c].b())) {
             GL11.glRotatef(f3, 0.0F, 1.0F, 0.0F);
@@ -33,7 +33,7 @@ public class ItemRenderer extends bw {
             if (textureNum == 0) {
                 a("/terrain.png");
             } else {
-                a(String.format("/terrain%d.png", new Object[] { Integer.valueOf(textureNum) }));
+                a(String.format("/terrain%d.png", new Object[]{Integer.valueOf(textureNum)}));
             }
             float f4 = 0.25F;
             if (!Tile.m[itemstack.c].d() && itemstack.c != Tile.al.bn && Tile.m[itemstack.c].b() != 16)
@@ -58,7 +58,7 @@ public class ItemRenderer extends bw {
                 if (textureNum == 0) {
                     a("/terrain.png");
                 } else {
-                    a(String.format("/terrain%d.png", new Object[] { Integer.valueOf(textureNum) }));
+                    a(String.format("/terrain%d.png", new Object[]{Integer.valueOf(textureNum)}));
                 }
             } else {
                 a("/gui/items.png");
@@ -108,7 +108,7 @@ public class ItemRenderer extends bw {
             if (textureNum == 0) {
                 renderengine.b(renderengine.b("/terrain.png"));
             } else {
-                renderengine.b(renderengine.b(String.format("/terrain%d.png", new Object[] { Integer.valueOf(textureNum) })));
+                renderengine.b(renderengine.b(String.format("/terrain%d.png", Integer.valueOf(textureNum))));
             }
             Tile block = Tile.m[i];
             GL11.glPushMatrix();
@@ -136,7 +136,7 @@ public class ItemRenderer extends bw {
                 if (textureNum == 0) {
                     renderengine.b(renderengine.b("/terrain.png"));
                 } else {
-                    renderengine.b(renderengine.b(String.format("/terrain%d.png", new Object[] { Integer.valueOf(textureNum) })));
+                    renderengine.b(renderengine.b(String.format("/terrain%d.png", Integer.valueOf(textureNum))));
                 }
             } else {
                 renderengine.b(renderengine.b("/gui/items.png"));
@@ -178,8 +178,8 @@ public class ItemRenderer extends bw {
             GL11.glEnable(2929);
         }
         if (itemstack.g() || gm.c[itemstack.c] instanceof IItemReload) {
-            int k = (int)Math.round(13.0D - itemstack.h() * 13.0D / itemstack.j());
-            int l = (int)Math.round(255.0D - itemstack.h() * 255.0D / itemstack.j());
+            int k = (int) Math.round(13.0D - itemstack.h() * 13.0D / itemstack.j());
+            int l = (int) Math.round(255.0D - itemstack.h() * 255.0D / itemstack.j());
             GL11.glDisable(2896);
             GL11.glDisable(2929);
             GL11.glDisable(3553);
@@ -220,7 +220,7 @@ public class ItemRenderer extends bw {
     }
 
     public void a(sn entity, double d, double d1, double d2, float f, float f1) {
-        a((hl)entity, d, d1, d2, f, f1);
+        a((hl) entity, d, d1, d2, f, f1);
     }
 
     public float scale = 1.0F;

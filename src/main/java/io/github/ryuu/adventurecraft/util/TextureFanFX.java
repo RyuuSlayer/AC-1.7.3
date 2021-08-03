@@ -50,10 +50,10 @@ public class TextureFanFX extends aw {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < height; j++) {
                 int curPixel = fanImage[i + j * width + frameOffset];
-                this.a[k * 4 + 0] = (byte)(curPixel >> 16 & 0xFF);
-                this.a[k * 4 + 1] = (byte)(curPixel >> 8 & 0xFF);
-                this.a[k * 4 + 2] = (byte)(curPixel & 0xFF);
-                this.a[k * 4 + 3] = (byte)(curPixel >> 24 & 0xFF);
+                this.a[k * 4 + 0] = (byte) (curPixel >> 16 & 0xFF);
+                this.a[k * 4 + 1] = (byte) (curPixel >> 8 & 0xFF);
+                this.a[k * 4 + 2] = (byte) (curPixel & 0xFF);
+                this.a[k * 4 + 3] = (byte) (curPixel >> 24 & 0xFF);
                 k++;
             }
         }

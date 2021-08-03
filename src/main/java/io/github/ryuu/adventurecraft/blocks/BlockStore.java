@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityStore;
+import io.github.ryuu.adventurecraft.gui.GuiStoreDebug;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.Player;
@@ -27,7 +28,7 @@ public class BlockStore extends TileWithEntity {
     }
 
     public boolean a(Level world, int i, int j, int k, Player entityplayer) {
-        TileEntityStore store = (TileEntityStore)world.b(i, j, k);
+        TileEntityStore store = (TileEntityStore) world.b(i, j, k);
         if (DebugMode.active) {
             GuiStoreDebug.showUI(store);
             return true;
@@ -50,7 +51,7 @@ public class BlockStore extends TileWithEntity {
     }
 
     public void reset(Level world, int i, int j, int k, boolean death) {
-        TileEntityStore store = (TileEntityStore)world.b(i, j, k);
+        TileEntityStore store = (TileEntityStore) world.b(i, j, k);
         store.buySupplyLeft = store.buySupply;
     }
 }

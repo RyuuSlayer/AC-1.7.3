@@ -48,9 +48,9 @@ public class PlayerTorch {
             posX = x;
             posY = y;
             posZ = z;
-            iX = (int)posX;
-            iY = (int)posY;
-            iZ = (int)posZ;
+            iX = (int) posX;
+            iY = (int) posY;
+            iZ = (int) posZ;
             markBlocksDirty(world);
         }
     }
@@ -81,7 +81,7 @@ public class PlayerTorch {
                     if (blockId != 0 && Tile.m[blockId].c() && blockId != Tile.al.bn && blockId != Tile.aB.bn) {
                         cache[index++] = 0.0F;
                     } else {
-                        float distance = (float)(Math.abs(i + 0.5D - xDiff) + Math.abs(j + 0.5D - yDiff) + Math.abs(k + 0.5D - zDiff));
+                        float distance = (float) (Math.abs(i + 0.5D - xDiff) + Math.abs(j + 0.5D - yDiff) + Math.abs(k + 0.5D - zDiff));
                         if (distance <= torchBrightness) {
                             if (torchBrightness - distance > world.n(blockX, blockY, blockZ))
                                 world.j(blockX, blockY, blockZ);

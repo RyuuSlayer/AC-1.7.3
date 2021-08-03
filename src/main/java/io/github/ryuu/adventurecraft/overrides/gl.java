@@ -7,7 +7,7 @@ public class gl extends xw {
 
     private int o;
 
-    private ji p;
+    private final ji p;
 
     public gl(ji renderengine, fd world, double d, double d1, double d2) {
         super(world, d, d1, d2, 0.0D, 0.0D, 0.0D);
@@ -27,9 +27,9 @@ public class gl extends xw {
         f7 *= 0.2F;
         GL11.glDisable(2896);
         float f8 = 0.125F;
-        float f9 = (float)(this.aM - l);
-        float f10 = (float)(this.aN - m);
-        float f11 = (float)(this.aO - n);
+        float f9 = (float) (this.aM - l);
+        float f10 = (float) (this.aN - m);
+        float f11 = (float) (this.aO - n);
         float f12 = this.aI.c(in.b(this.aM), in.b(this.aN), in.b(this.aO));
         this.p.b(this.p.b("/misc/footprint.png"));
         GL11.glEnable(3042);

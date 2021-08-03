@@ -7,11 +7,11 @@ import java.io.IOException;
 import java.util.Iterator;
 
 public class to implements bf {
-    private File a;
+    private final File a;
 
-    private File levelDir;
+    private final File levelDir;
 
-    private boolean b;
+    private final boolean b;
 
     public to(File file, boolean flag) {
         this.a = file;
@@ -90,7 +90,7 @@ public class to implements bf {
             FileOutputStream fileoutputstream = new FileOutputStream(file1);
             nu nbttagcompound = new nu();
             nu nbttagcompound1 = new nu();
-            nbttagcompound.a("Level", (ij)nbttagcompound1);
+            nbttagcompound.a("Level", (ij) nbttagcompound1);
             a(chunk, world, nbttagcompound1);
             as.a(nbttagcompound, fileoutputstream);
             fileoutputstream.close();
@@ -121,21 +121,21 @@ public class to implements bf {
         for (int i = 0; i < chunk.m.length; i++) {
             Iterator<?> iterator = chunk.m[i].iterator();
             while (iterator.hasNext()) {
-                sn entity = (sn)iterator.next();
+                sn entity = (sn) iterator.next();
                 chunk.q = true;
                 nu nbttagcompound1 = new nu();
                 if (entity.c(nbttagcompound1))
-                    nbttaglist.a((ij)nbttagcompound1);
+                    nbttaglist.a((ij) nbttagcompound1);
             }
         }
-        nbttagcompound.a("Entities", (ij)nbttaglist);
+        nbttagcompound.a("Entities", (ij) nbttaglist);
         sp nbttaglist1 = new sp();
-        for (Iterator<ow> iterator1 = chunk.l.values().iterator(); iterator1.hasNext(); nbttaglist1.a((ij)nbttagcompound2)) {
+        for (Iterator<ow> iterator1 = chunk.l.values().iterator(); iterator1.hasNext(); nbttaglist1.a((ij) nbttagcompound2)) {
             ow tileentity = iterator1.next();
             nu nbttagcompound2 = new nu();
             tileentity.b(nbttagcompound2);
         }
-        nbttagcompound.a("TileEntities", (ij)nbttaglist1);
+        nbttagcompound.a("TileEntities", (ij) nbttaglist1);
     }
 
     public static lm a(fd world, nu nbttagcompound) {
@@ -165,7 +165,7 @@ public class to implements bf {
         sp nbttaglist = nbttagcompound.l("Entities");
         if (nbttaglist != null)
             for (int k = 0; k < nbttaglist.c(); k++) {
-                nu nbttagcompound1 = (nu)nbttaglist.a(k);
+                nu nbttagcompound1 = (nu) nbttaglist.a(k);
                 sn entity = jc.a(nbttagcompound1, world);
                 chunk.q = true;
                 if (entity != null)
@@ -174,7 +174,7 @@ public class to implements bf {
         sp nbttaglist1 = nbttagcompound.l("TileEntities");
         if (nbttaglist1 != null)
             for (int l = 0; l < nbttaglist1.c(); l++) {
-                nu nbttagcompound2 = (nu)nbttaglist1.a(l);
+                nu nbttagcompound2 = (nu) nbttaglist1.a(l);
                 ow tileentity = ow.c(nbttagcompound2);
                 if (tileentity != null)
                     chunk.a(tileentity);
@@ -182,9 +182,12 @@ public class to implements bf {
         return chunk;
     }
 
-    public void a() {}
+    public void a() {
+    }
 
-    public void b() {}
+    public void b() {
+    }
 
-    public void b(fd world, lm chunk) throws IOException {}
+    public void b(fd world, lm chunk) throws IOException {
+    }
 }

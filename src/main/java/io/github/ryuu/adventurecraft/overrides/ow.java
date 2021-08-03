@@ -20,7 +20,7 @@ public class ow {
     }
 
     public void b(nu nbttagcompound) {
-        String s = (String)b.get(getClass());
+        String s = (String) b.get(getClass());
         if (s == null)
             throw new RuntimeException(getClass() + " is missing a mapping! This is a bug!");
         nbttagcompound.a("id", s);
@@ -30,15 +30,16 @@ public class ow {
     }
 
     protected String getClassName() {
-        return (String)b.get(getClass());
+        return (String) b.get(getClass());
     }
 
-    public void n_() {}
+    public void n_() {
+    }
 
     public static ow c(nu nbttagcompound) {
         ow tileentity = null;
         try {
-            Class<ow> class1 = (Class)a.get(nbttagcompound.i("id"));
+            Class<ow> class1 = (Class) a.get(nbttagcompound.i("id"));
             if (class1 != null)
                 tileentity = class1.newInstance();
         } catch (Exception exception) {
@@ -92,9 +93,9 @@ public class ow {
         }
     }
 
-    private static Map a = new HashMap<>();
+    private static final Map a = new HashMap<>();
 
-    private static Map b = new HashMap<>();
+    private static final Map b = new HashMap<>();
 
     public fd d;
 

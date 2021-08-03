@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.util;
 
 import java.util.LinkedList;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.level.Level;
 import net.minecraft.util.io.CompoundTag;
@@ -74,7 +75,7 @@ public class UndoStack {
             this.redoSelectionStack.addLast(sel);
             if (this.redoSelectionStack.size() > 128)
                 this.redoSelectionStack.removeFirst();
-            Minecraft.minecraftInstance.v.a(String.format("Undo (Undo Actions Left: %d Redo Actions Left: %d)", new Object[] { Integer.valueOf(this.undoStack.size()), Integer.valueOf(this.redoStack.size()) }));
+            Minecraft.minecraftInstance.v.a(String.format("Undo (Undo Actions Left: %d Redo Actions Left: %d)", new Object[]{Integer.valueOf(this.undoStack.size()), Integer.valueOf(this.redoStack.size())}));
         }
     }
 
@@ -90,7 +91,7 @@ public class UndoStack {
             this.undoSelectionStack.addLast(sel);
             if (this.undoSelectionStack.size() > 128)
                 this.undoSelectionStack.removeFirst();
-            Minecraft.minecraftInstance.v.a(String.format("Redo (Undo Actions Left: %d Redo Actions Left: %d)", new Object[] { Integer.valueOf(this.undoStack.size()), Integer.valueOf(this.redoStack.size()) }));
+            Minecraft.minecraftInstance.v.a(String.format("Redo (Undo Actions Left: %d Redo Actions Left: %d)", new Object[]{Integer.valueOf(this.undoStack.size()), Integer.valueOf(this.redoStack.size())}));
         }
     }
 

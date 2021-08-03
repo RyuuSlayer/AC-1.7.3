@@ -4,15 +4,15 @@ import net.minecraft.client.Minecraft;
 import org.lwjgl.opengl.GL11;
 
 public class ds extends gv {
-    private fh a;
+    private final fh a;
 
-    private fh g;
+    private final fh g;
 
-    private fh h;
+    private final fh h;
 
     public ds() {
-        super((ko)new fh(0.0F), 0.5F);
-        this.a = (fh)this.e;
+        super((ko) new fh(0.0F), 0.5F);
+        this.a = (fh) this.e;
         this.g = new fh(1.0F);
         this.h = new fh(0.5F);
     }
@@ -22,7 +22,7 @@ public class ds extends gv {
         if (itemstack != null) {
             gm item = itemstack.a();
             if (item instanceof wa) {
-                wa itemarmor = (wa)item;
+                wa itemarmor = (wa) item;
                 a("/armor/" + ds.i[itemarmor.bm] + "_" + ((i != 2) ? 1 : 2) + ".png");
                 fh modelbiped = (i != 2) ? this.g : this.h;
                 modelbiped.a.h = (i == 0);
@@ -32,7 +32,7 @@ public class ds extends gv {
                 modelbiped.e.h = (i == 1);
                 modelbiped.f.h = (i == 2 || i == 3);
                 modelbiped.g.h = (i == 2 || i == 3);
-                a((ko)modelbiped);
+                a((ko) modelbiped);
                 return true;
             }
         }
@@ -68,7 +68,7 @@ public class ds extends gv {
                 } else {
                     sj fontrenderer = a();
                     GL11.glPushMatrix();
-                    GL11.glTranslatef((float)d + 0.0F, (float)d1 + 2.3F, (float)d2);
+                    GL11.glTranslatef((float) d + 0.0F, (float) d1 + 2.3F, (float) d2);
                     GL11.glNormal3f(0.0F, 1.0F, 0.0F);
                     GL11.glRotatef(-this.b.i, 0.0F, 1.0F, 0.0F);
                     GL11.glRotatef(this.b.j, 1.0F, 0.0F, 0.0F);
@@ -114,7 +114,7 @@ public class ds extends gv {
             this.b.f.a(entityplayer, itemstack);
             GL11.glPopMatrix();
         }
-        if (entityplayer.l.equals("deadmau5") && a(entityplayer.bA, (String)null))
+        if (entityplayer.l.equals("deadmau5") && a(entityplayer.bA, (String) null))
             for (int i = 0; i < 2; i++) {
                 float f2 = entityplayer.aU + (entityplayer.aS - entityplayer.aU) * f - entityplayer.I + (entityplayer.H - entityplayer.I) * f;
                 float f6 = entityplayer.aV + (entityplayer.aT - entityplayer.aV) * f;
@@ -130,7 +130,7 @@ public class ds extends gv {
                 this.a.a(0.0625F);
                 GL11.glPopMatrix();
             }
-        if (entityplayer.cloakTexture != null || a(entityplayer.n, (String)null)) {
+        if (entityplayer.cloakTexture != null || a(entityplayer.n, (String) null)) {
             if (entityplayer.cloakTexture != null)
                 a(entityplayer.cloakTexture);
             GL11.glPushMatrix();
@@ -141,13 +141,13 @@ public class ds extends gv {
             float f8 = entityplayer.I + (entityplayer.H - entityplayer.I) * f;
             double d3 = in.a(f8 * 3.141593F / 180.0F);
             double d4 = -in.b(f8 * 3.141593F / 180.0F);
-            float f9 = (float)d1 * 10.0F;
+            float f9 = (float) d1 * 10.0F;
             if (f9 < -6.0F)
                 f9 = -6.0F;
             if (f9 > 32.0F)
                 f9 = 32.0F;
-            float f10 = (float)(d * d3 + d2 * d4) * 100.0F;
-            float f11 = (float)(d * d4 - d2 * d3) * 100.0F;
+            float f10 = (float) (d * d3 + d2 * d4) * 100.0F;
+            float f11 = (float) (d * d4 - d2 * d3) * 100.0F;
             if (f10 < 0.0F)
                 f10 = 0.0F;
             float f12 = entityplayer.h + (entityplayer.i - entityplayer.h) * f;
@@ -228,36 +228,36 @@ public class ds extends gv {
     }
 
     protected void a(ls entityliving, double d, double d1, double d2) {
-        a((gs)entityliving, d, d1, d2);
+        a((gs) entityliving, d, d1, d2);
     }
 
     protected void a(ls entityliving, float f) {
-        b((gs)entityliving, f);
+        b((gs) entityliving, f);
     }
 
     protected boolean a(ls entityliving, int i, float f) {
-        return a((gs)entityliving, i, f);
+        return a((gs) entityliving, i, f);
     }
 
     protected void b(ls entityliving, float f) {
-        a((gs)entityliving, f);
+        a((gs) entityliving, f);
     }
 
     protected void a(ls entityliving, float f, float f1, float f2) {
-        a((gs)entityliving, f, f1, f2);
+        a((gs) entityliving, f, f1, f2);
     }
 
     protected void b(ls entityliving, double d, double d1, double d2) {
-        b((gs)entityliving, d, d1, d2);
+        b((gs) entityliving, d, d1, d2);
     }
 
     public void a(ls entityliving, double d, double d1, double d2, float f, float f1) {
-        a((gs)entityliving, d, d1, d2, f, f1);
+        a((gs) entityliving, d, d1, d2, f, f1);
     }
 
     public void a(sn entity, double d, double d1, double d2, float f, float f1) {
-        a((gs)entity, d, d1, d2, f, f1);
+        a((gs) entity, d, d1, d2, f, f1);
     }
 
-    private static final String[] i = new String[] { "cloth", "chain", "iron", "diamond", "gold" };
+    private static final String[] i = new String[]{"cloth", "chain", "iron", "diamond", "gold"};
 }

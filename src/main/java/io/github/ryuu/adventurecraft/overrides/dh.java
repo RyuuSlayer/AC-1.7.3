@@ -33,9 +33,9 @@ public class dh {
     }
 
     public bt a(sn entity) {
-        double d3 = (this.b[this.c]).a + (int)(entity.bg + 1.0F) * 0.5D;
+        double d3 = (this.b[this.c]).a + (int) (entity.bg + 1.0F) * 0.5D;
         double d1 = (this.b[this.c]).b;
-        double d2 = (this.b[this.c]).c + (int)(entity.bg + 1.0F) * 0.5D;
+        double d2 = (this.b[this.c]).c + (int) (entity.bg + 1.0F) * 0.5D;
         return bt.b(d3, d1, d2);
     }
 

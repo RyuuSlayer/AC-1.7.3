@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.blocks;
 
 import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
 import net.minecraft.util.maths.Box;
 
 public class BlockHalfStep extends BlockSolid {
@@ -20,7 +21,7 @@ public class BlockHalfStep extends BlockSolid {
         return this.bm + j;
     }
 
-    public boolean b(xp iblockaccess, int i, int j, int k, int l) {
+    public boolean b(TileView iblockaccess, int i, int j, int k, int l) {
         updateBlockBounds(iblockaccess, i, j, k);
         return super.b(iblockaccess, i, j, k, l);
     }

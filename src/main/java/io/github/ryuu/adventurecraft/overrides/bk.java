@@ -3,7 +3,7 @@ package io.github.ryuu.adventurecraft.overrides;
 import java.util.Random;
 
 public class bk extends nr {
-    private int c;
+    private final int c;
 
     int[] a;
 
@@ -50,7 +50,8 @@ public class bk extends nr {
             }
     }
 
-    public void a(Level world, int i, int j, int k, Random random) {}
+    public void a(Level world, int i, int j, int k, Random random) {
+    }
 
     private void h(Level world, int i, int j, int k) {
         g(world, i, j, k, world.e(i, j, k));

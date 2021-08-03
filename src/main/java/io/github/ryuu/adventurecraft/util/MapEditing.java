@@ -24,7 +24,7 @@ class MapEditing {
 
     HitResult cursor;
 
-    private TileRenderer renderBlocks;
+    private final TileRenderer renderBlocks;
 
     int selectedBlockID;
 
@@ -106,9 +106,9 @@ class MapEditing {
         if (!this.mc.N) {
             drawCursor(camera, time);
             if (this.cursor != null) {
-                float x = (float)(camera.bl + (camera.aM - camera.bl) * time);
-                float y = (float)(camera.bm + (camera.aN - camera.bm) * time);
-                float z = (float)(camera.bn + (camera.aO - camera.bn) * time);
+                float x = (float) (camera.bl + (camera.aM - camera.bl) * time);
+                float y = (float) (camera.bm + (camera.aN - camera.bm) * time);
+                float z = (float) (camera.bn + (camera.aO - camera.bn) * time);
                 GL11.glPushMatrix();
                 GL11.glTranslatef(-x, -y, -z);
                 GL14.glBlendColor(1.0F, 1.0F, 1.0F, 0.4F);
@@ -127,23 +127,23 @@ class MapEditing {
     public void renderSelection(float time) {
         if (ItemCursor.bothSet) {
             LivingEntity camera = Minecraft.minecraftInstance.i;
-            float x = (float)(camera.bl + (camera.aM - camera.bl) * time);
-            float y = (float)(camera.bm + (camera.aN - camera.bm) * time);
-            float z = (float)(camera.bn + (camera.aO - camera.bn) * time);
+            float x = (float) (camera.bl + (camera.aM - camera.bl) * time);
+            float y = (float) (camera.bm + (camera.aN - camera.bm) * time);
+            float z = (float) (camera.bn + (camera.aO - camera.bn) * time);
             GL11.glPushMatrix();
             GL11.glTranslatef(-x, -y, -z);
             GL14.glBlendColor(1.0F, 1.0F, 1.0F, 0.4F);
             GL11.glEnable(3042);
             GL11.glBlendFunc(32771, 32772);
             bt lookDir = camera.ac();
-            int xOffset = (int)(camera.aM + DebugMode.reachDistance * lookDir.a) - ItemCursor.minX;
-            int yOffset = (int)(camera.aN + DebugMode.reachDistance * lookDir.b) - ItemCursor.minY;
-            int zOffset = (int)(camera.aO + DebugMode.reachDistance * lookDir.c) - ItemCursor.minZ;
+            int xOffset = (int) (camera.aM + DebugMode.reachDistance * lookDir.a) - ItemCursor.minX;
+            int yOffset = (int) (camera.aN + DebugMode.reachDistance * lookDir.b) - ItemCursor.minY;
+            int zOffset = (int) (camera.aO + DebugMode.reachDistance * lookDir.c) - ItemCursor.minZ;
             for (int texNum = 0; texNum <= 3; texNum++) {
                 if (texNum == 0) {
                     this.mc.p.b(this.mc.p.b("/terrain.png"));
                 } else {
-                    this.mc.p.b(this.mc.p.b(String.format("/terrain%d.png", new Object[] { Integer.valueOf(texNum) })));
+                    this.mc.p.b(this.mc.p.b(String.format("/terrain%d.png", new Object[]{Integer.valueOf(texNum)})));
                 }
                 this.renderBlocks.startRenderingBlocks(this.world);
                 for (int i = ItemCursor.minX; i <= ItemCursor.maxX; i++) {

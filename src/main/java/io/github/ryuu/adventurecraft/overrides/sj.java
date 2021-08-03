@@ -4,16 +4,17 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.IntBuffer;
 import javax.imageio.ImageIO;
+
 import org.lwjgl.opengl.GL11;
 
 public class sj {
-    private int[] b;
+    private final int[] b;
 
     public int a;
 
-    private int c;
+    private final int c;
 
-    private IntBuffer d;
+    private final IntBuffer d;
 
     public sj(kv gamesettings, String s, ji renderengine) {
         BufferedImage bufferedimage;
@@ -158,7 +159,7 @@ public class sj {
         this.d.put(this.c + c);
     }
 }
-      if (this.d.remaining() == 0) {
+      if(this.d.remaining()==0){
               this.d.flip();
               GL11.glCallLists(this.d);
               this.d.clear();
@@ -169,80 +170,80 @@ public class sj {
               GL11.glPopMatrix();
               }
 
-public int a(String s) {
-        if (s == null)
+public int a(String s){
+        if(s==null)
         return 0;
-        int i = 0;
-        for (int j = 0; j < s.length(); j++) {
-        if (s.charAt(j) == ') {
+        int i=0;
+        for(int j=0;j<s.length();j++){
+        if(s.charAt(j)==') {
         j++;
-        } else {
-        int k = fp.a.indexOf(s.charAt(j));
-        char c = s.charAt(j);
-        if (k >= 0 && c < ') {
-        i += this.b[k + 32];
-        } else if (c < ') {
-        i += this.b[c];
+        }else{
+        int k=fp.a.indexOf(s.charAt(j));
+        char c=s.charAt(j);
+        if(k>=0&&c< ') {
+        i+=this.b[k+32];
+        }else if(c< ') {
+        i+=this.b[c];
         }
         }
         }
         return i;
         }
 
-public void a(String s, int i, int j, int k, int l) {
-        String[] as = s.split("\n");
-        if (as.length > 1) {
-        for (int i1 = 0; i1 < as.length; i1++) {
-        a(as[i1], i, j, k, l);
-        j += a(as[i1], k);
+public void a(String s,int i,int j,int k,int l){
+        String[]as=s.split("\n");
+        if(as.length>1){
+        for(int i1=0;i1<as.length;i1++){
+        a(as[i1],i,j,k,l);
+        j+=a(as[i1],k);
         }
         return;
         }
-        String[] as1 = s.split(" ");
-        int j1 = 0;
-        while (j1 < as1.length) {
+        String[]as1=s.split(" ");
+        int j1=0;
+        while(j1<as1.length){
         String s1;
-        for (s1 = as1[j1++] + " "; j1 < as1.length && a(s1 + as1[j1]) < k; s1 = s1 + as1[j1++] + " ");
-        for (; a(s1) > k; s1 = s1.substring(k1)) {
+        for(s1=as1[j1++]+" ";j1<as1.length&&a(s1+as1[j1])<k; s1=s1+as1[j1++]+" ");
+        for(;a(s1)>k;s1=s1.substring(k1)){
         int k1;
-        for (k1 = 0; a(s1.substring(0, k1 + 1)) <= k; k1++);
-        if (s1.substring(0, k1).trim().length() > 0) {
-        b(s1.substring(0, k1), i, j, l);
-        j += 8;
+        for(k1=0;a(s1.substring(0,k1+1))<=k;k1++);
+        if(s1.substring(0,k1).trim().length()>0){
+        b(s1.substring(0,k1),i,j,l);
+        j+=8;
         }
         }
-        if (s1.trim().length() > 0) {
-        b(s1, i, j, l);
-        j += 8;
+        if(s1.trim().length()>0){
+        b(s1,i,j,l);
+        j+=8;
         }
         }
         }
 
-public int a(String s, int i) {
-        String[] as = s.split("\n");
-        if (as.length > 1) {
-        int j = 0;
-        for (int k = 0; k < as.length; k++)
-        j += a(as[k], i);
+public int a(String s,int i){
+        String[]as=s.split("\n");
+        if(as.length>1){
+        int j=0;
+        for(int k=0;k<as.length;k++)
+        j+=a(as[k],i);
         return j;
         }
-        String[] as1 = s.split(" ");
-        int l = 0;
-        int i1 = 0;
-        while (l < as1.length) {
+        String[]as1=s.split(" ");
+        int l=0;
+        int i1=0;
+        while(l<as1.length){
         String s1;
-        for (s1 = as1[l++] + " "; l < as1.length && a(s1 + as1[l]) < i; s1 = s1 + as1[l++] + " ");
-        for (; a(s1) > i; s1 = s1.substring(j1)) {
+        for(s1=as1[l++]+" ";l<as1.length&&a(s1+as1[l])<i; s1=s1+as1[l++]+" ");
+        for(;a(s1)>i;s1=s1.substring(j1)){
         int j1;
-        for (j1 = 0; a(s1.substring(0, j1 + 1)) <= i; j1++);
-        if (s1.substring(0, j1).trim().length() > 0)
-        i1 += 8;
+        for(j1=0;a(s1.substring(0,j1+1))<=i;j1++);
+        if(s1.substring(0,j1).trim().length()>0)
+        i1+=8;
         }
-        if (s1.trim().length() > 0)
-        i1 += 8;
+        if(s1.trim().length()>0)
+        i1+=8;
         }
-        if (i1 < 8)
-        i1 += 8;
+        if(i1< 8)
+        i1+=8;
         return i1;
         }
         }

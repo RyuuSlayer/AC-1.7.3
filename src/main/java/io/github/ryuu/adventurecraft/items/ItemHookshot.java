@@ -2,16 +2,18 @@ package io.github.ryuu.adventurecraft.items;
 
 import io.github.ryuu.adventurecraft.entities.EntityHookshot;
 import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 
-class ItemHookshot extends gm {
+class ItemHookshot extends ItemType {
     public EntityHookshot mainHookshot;
 
     public EntityHookshot offHookshot;
 
-    iz mainActiveHookshot;
+    ItemInstance mainActiveHookshot;
 
-    iz offActiveHookshot;
+    ItemInstance offActiveHookshot;
 
     Player player;
 
@@ -36,7 +38,7 @@ class ItemHookshot extends gm {
         return this.bh;
     }
 
-    public iz a(iz itemstack, Level world, Player entityplayer) {
+    public ItemInstance a(ItemInstance itemstack, Level world, Player entityplayer) {
         EntityHookshot hookshot, other;
         boolean main = true;
         if (!entityplayer.swappedItems) {

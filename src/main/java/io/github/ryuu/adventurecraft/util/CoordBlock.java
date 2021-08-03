@@ -43,7 +43,7 @@ public final class CoordBlock {
 
     public boolean equals(Object obj) {
         if (obj instanceof CoordBlock) {
-            CoordBlock otherCoord = (CoordBlock)obj;
+            CoordBlock otherCoord = (CoordBlock) obj;
             return (this.x == otherCoord.x && this.y == otherCoord.y && this.z == otherCoord.z);
         }
         return false;
@@ -53,7 +53,7 @@ public final class CoordBlock {
         return this.x << 16 ^ this.z ^ this.y << 24;
     }
 
-    private static List<CoordBlock> blockCoords = new ArrayList<>();
+    private static final List<CoordBlock> blockCoords = new ArrayList<>();
 
     public static int numBlockCoordsInUse = 0;
 }

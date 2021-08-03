@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.blocks;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
@@ -34,12 +35,12 @@ public class BlockLockedDoor extends Tile {
         return super.e(world, i, j, k);
     }
 
-    public boolean shouldRender(xp blockAccess, int i, int j, int k) {
+    public boolean shouldRender(TileView blockAccess, int i, int j, int k) {
         int metadata = blockAccess.e(i, j, k);
         return (DebugMode.active || metadata == 0);
     }
 
-    public int a(xp world, int i, int j, int k, int side) {
+    public int a(TileView world, int i, int j, int k, int side) {
         if (side == 0 || side == 1)
             return this.bm;
         int height = 1;

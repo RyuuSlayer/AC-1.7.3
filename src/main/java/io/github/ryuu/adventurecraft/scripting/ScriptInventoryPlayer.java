@@ -8,7 +8,7 @@ public class ScriptInventoryPlayer extends ScriptInventory {
     ix invPlayer;
 
     ScriptInventoryPlayer(ix i) {
-        super((lw)i);
+        super((lw) i);
         this.invPlayer = i;
     }
 

@@ -44,7 +44,7 @@ class XmlProcessor implements Serializable {
     private transient javax.xml.parsers.DocumentBuilderFactory dom;
     private transient javax.xml.transform.TransformerFactory xform;
     private transient LinkedBlockingDeque<DocumentBuilder> documentBuilderPool;
-    private RhinoSAXErrorHandler errorHandler = new RhinoSAXErrorHandler();
+    private final RhinoSAXErrorHandler errorHandler = new RhinoSAXErrorHandler();
 
     private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
@@ -54,18 +54,18 @@ class XmlProcessor implements Serializable {
         //create TF and set settings to secure it from XSLT attacks if given a malicious node in toXMLString
         this.xform = javax.xml.transform.TransformerFactory.newInstance();
         Context ctx = Context.getCurrentContext();
-        if(ctx == null || ctx.hasFeature(Context.FEATURE_ENABLE_XML_SECURE_PARSING)) {
+        if (ctx == null || ctx.hasFeature(Context.FEATURE_ENABLE_XML_SECURE_PARSING)) {
             configureSecureDBF(this.dom);
             configureSecureTF(this.xform);
         }
         int poolSize = Runtime.getRuntime().availableProcessors() * 2;
         this.documentBuilderPool = new LinkedBlockingDeque<DocumentBuilder>(poolSize);
     }
-    
+
     /*
-     * Secure implementation of a DocumentBuilderFactory to prevent XXE and SSRF attacks 
+     * Secure implementation of a DocumentBuilderFactory to prevent XXE and SSRF attacks
      */
-    private void configureSecureDBF(DocumentBuilderFactory dbf){
+    private void configureSecureDBF(DocumentBuilderFactory dbf) {
         try {
             // This feature is required to be supported by all DocumentBuilderFactories.
             dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
@@ -79,7 +79,7 @@ class XmlProcessor implements Serializable {
         // The rest of these features should be set for the best security by default.
         // However, not all XML processing implementations support them.
         // So we will attempt to set each one but continue if we can't.
-        
+
         try {
             //Prevent File attacks in DBF
             //Disallow all doctypes, removing all ENTITY-type tags as a vector
@@ -98,9 +98,9 @@ class XmlProcessor implements Serializable {
     }
 
     /*
-     * Secure implementation of a TransformerFactory to prevent XXE and SSRF attacks 
+     * Secure implementation of a TransformerFactory to prevent XXE and SSRF attacks
      */
-    private void configureSecureTF(javax.xml.transform.TransformerFactory xform){
+    private void configureSecureTF(javax.xml.transform.TransformerFactory xform) {
         try {
             // Disallow all XXEs and SSRF via external calls for DTDs or Stylesheets.
             // This feature is required to be supported by all TransformerFactory implementations.
@@ -116,7 +116,7 @@ class XmlProcessor implements Serializable {
         } catch (IllegalArgumentException e) {
             // Ignore this, because it will not work on all implementations
         }
-       
+
         try {
             xform.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
         } catch (IllegalArgumentException e) {
@@ -130,7 +130,7 @@ class XmlProcessor implements Serializable {
 
         private void throwError(SAXParseException e) {
             throw ScriptRuntime.constructError("TypeError", e.getMessage(),
-                e.getLineNumber() - 1);
+                    e.getLineNumber() - 1);
         }
 
         public void error(SAXParseException e) {
@@ -154,7 +154,7 @@ class XmlProcessor implements Serializable {
         //create TF and set settings to secure it from XSLT attacks if given a malicious node in toXMLString
         this.xform = javax.xml.transform.TransformerFactory.newInstance();
         Context ctx = Context.getCurrentContext();
-        if(ctx == null || ctx.hasFeature(Context.FEATURE_ENABLE_XML_SECURE_PARSING)) {
+        if (ctx == null || ctx.hasFeature(Context.FEATURE_ENABLE_XML_SECURE_PARSING)) {
             configureSecureDBF(this.dom);
             configureSecureTF(this.xform);
         }
@@ -212,9 +212,9 @@ class XmlProcessor implements Serializable {
 
     private String toXmlNewlines(String rv) {
         StringBuilder nl = new StringBuilder();
-        for (int i=0; i<rv.length(); i++) {
+        for (int i = 0; i < rv.length(); i++) {
             if (rv.charAt(i) == '\r') {
-                if (rv.charAt(i+1) == '\n') {
+                if (rv.charAt(i + 1) == '\n') {
                     //    DOS, do nothing and skip the \r
                 } else {
                     //    Macintosh, substitute \n
@@ -235,7 +235,7 @@ class XmlProcessor implements Serializable {
     private DocumentBuilder getDocumentBuilderFromPool()
             throws ParserConfigurationException {
         DocumentBuilder builder = documentBuilderPool.pollFirst();
-        if (builder == null){
+        if (builder == null) {
             builder = getDomFactory().newDocumentBuilder();
         }
         builder.setErrorHandler(errorHandler);
@@ -258,7 +258,7 @@ class XmlProcessor implements Serializable {
             list.add(node);
         }
         if (node.getChildNodes() != null) {
-            for (int i=0; i<node.getChildNodes().getLength(); i++) {
+            for (int i = 0; i < node.getChildNodes().getLength(); i++) {
                 addProcessingInstructionsTo(list, node.getChildNodes().item(i));
             }
         }
@@ -269,7 +269,7 @@ class XmlProcessor implements Serializable {
             list.add(node);
         }
         if (node.getChildNodes() != null) {
-            for (int i=0; i<node.getChildNodes().getLength(); i++) {
+            for (int i = 0; i < node.getChildNodes().getLength(); i++) {
                 addProcessingInstructionsTo(list, node.getChildNodes().item(i));
             }
         }
@@ -277,7 +277,7 @@ class XmlProcessor implements Serializable {
 
     private void addTextNodesToRemoveAndTrim(List<Node> toRemove, Node node) {
         if (node instanceof Text) {
-            Text text = (Text)node;
+            Text text = (Text) node;
             boolean BUG_369394_IS_VALID = false;
             if (!BUG_369394_IS_VALID) {
                 text.setData(text.getData().trim());
@@ -291,7 +291,7 @@ class XmlProcessor implements Serializable {
             }
         }
         if (node.getChildNodes() != null) {
-            for (int i=0; i<node.getChildNodes().getLength(); i++) {
+            for (int i = 0; i < node.getChildNodes().getLength(); i++) {
                 addTextNodesToRemoveAndTrim(toRemove, node.getChildNodes().item(i));
             }
         }
@@ -302,20 +302,20 @@ class XmlProcessor implements Serializable {
         DocumentBuilder builder = null;
         try {
             String syntheticXml = "<parent xmlns=\"" + defaultNamespaceUri +
-                "\">" + xml + "</parent>";
+                    "\">" + xml + "</parent>";
             builder = getDocumentBuilderFromPool();
-            Document document = builder.parse( new org.xml.sax.InputSource(new java.io.StringReader(syntheticXml)) );
+            Document document = builder.parse(new org.xml.sax.InputSource(new java.io.StringReader(syntheticXml)));
             if (ignoreProcessingInstructions) {
                 List<Node> list = new java.util.ArrayList<Node>();
                 addProcessingInstructionsTo(list, document);
-                for (Node node: list) {
+                for (Node node : list) {
                     node.getParentNode().removeChild(node);
                 }
             }
             if (ignoreComments) {
                 List<Node> list = new java.util.ArrayList<Node>();
                 addCommentsTo(list, document);
-                for (Node node: list) {
+                for (Node node : list) {
                     node.getParentNode().removeChild(node);
                 }
             }
@@ -327,7 +327,7 @@ class XmlProcessor implements Serializable {
                 //    Instead we will try to delete it ourselves.
                 List<Node> list = new java.util.ArrayList<Node>();
                 addTextNodesToRemoveAndTrim(list, document);
-                for (Node node: list) {
+                for (Node node : list) {
                     node.getParentNode().removeChild(node);
                 }
             }
@@ -399,12 +399,12 @@ class XmlProcessor implements Serializable {
         String elementText = toString(e);
         int begin = elementText.indexOf('"');
         int end = elementText.lastIndexOf('"');
-        return elementText.substring(begin+1,end);
+        return elementText.substring(begin + 1, end);
     }
 
     String escapeTextValue(Object value) {
         if (value instanceof XMLObjectImpl) {
-            return ((XMLObjectImpl)value).toXMLString();
+            return ((XMLObjectImpl) value).toXMLString();
         }
 
         String text = ScriptRuntime.toString(value);
@@ -428,7 +428,7 @@ class XmlProcessor implements Serializable {
 
     private String elementToXmlString(Element element) {
         //    TODO    My goodness ECMA is complicated (see 10.2.1).  We'll try this first.
-        Element copy = (Element)element.cloneNode(true);
+        Element copy = (Element) element.cloneNode(true);
         if (prettyPrint) {
             beautifyElement(copy, 0);
         }
@@ -440,43 +440,43 @@ class XmlProcessor implements Serializable {
         StringBuilder s = new StringBuilder();
         int indentLevel = 0;
         if (prettyPrint) {
-            for (int i=0; i<indentLevel; i++) {
+            for (int i = 0; i < indentLevel; i++) {
                 s.append(' ');
             }
         }
         if (node instanceof Text) {
-            String data = ((Text)node).getData();
+            String data = ((Text) node).getData();
             //    TODO Does Java trim() work same as XMLWhitespace?
             String v = (prettyPrint) ? data.trim() : data;
             s.append(escapeElementValue(v));
             return s.toString();
         }
         if (node instanceof Attr) {
-            String value = ((Attr)node).getValue();
+            String value = ((Attr) node).getValue();
             s.append(escapeAttributeValue(value));
             return s.toString();
         }
         if (node instanceof Comment) {
-            s.append("<!--" + ((Comment)node).getNodeValue() + "-->");
+            s.append("<!--" + node.getNodeValue() + "-->");
             return s.toString();
         }
         if (node instanceof ProcessingInstruction) {
-            ProcessingInstruction pi = (ProcessingInstruction)node;
+            ProcessingInstruction pi = (ProcessingInstruction) node;
             s.append("<?" + pi.getTarget() + " " + pi.getData() + "?>");
             return s.toString();
         }
-        s.append(elementToXmlString((Element)node));
+        s.append(elementToXmlString((Element) node));
         return s.toString();
     }
 
     private void beautifyElement(Element e, int indent) {
         StringBuilder s = new StringBuilder();
         s.append('\n');
-        for (int i=0; i<indent; i++) {
+        for (int i = 0; i < indent; i++) {
             s.append(' ');
         }
         String afterContent = s.toString();
-        for (int i=0; i<prettyIndent; i++) {
+        for (int i = 0; i < prettyIndent; i++) {
             s.append(' ');
         }
         String beforeContent = s.toString();
@@ -485,7 +485,7 @@ class XmlProcessor implements Serializable {
         //    would contribute to the length and it might never terminate).
         ArrayList<Node> toIndent = new ArrayList<Node>();
         boolean indentChildren = false;
-        for (int i=0; i<e.getChildNodes().getLength(); i++) {
+        for (int i = 0; i < e.getChildNodes().getLength(); i++) {
             if (i == 1) indentChildren = true;
             if (e.getChildNodes().item(i) instanceof Text) {
                 toIndent.add(e.getChildNodes().item(i));
@@ -495,19 +495,19 @@ class XmlProcessor implements Serializable {
             }
         }
         if (indentChildren) {
-            for (int i=0; i<toIndent.size(); i++) {
+            for (int i = 0; i < toIndent.size(); i++) {
                 e.insertBefore(e.getOwnerDocument().createTextNode(beforeContent),
                         toIndent.get(i));
             }
         }
         NodeList nodes = e.getChildNodes();
         ArrayList<Element> list = new ArrayList<Element>();
-        for (int i=0; i < nodes.getLength(); i++) {
+        for (int i = 0; i < nodes.getLength(); i++) {
             if (nodes.item(i) instanceof Element) {
-                list.add((Element)nodes.item(i));
+                list.add((Element) nodes.item(i));
             }
         }
-        for (Element elem: list) {
+        for (Element elem : list) {
             beautifyElement(elem, indent + prettyIndent);
         }
         if (indentChildren) {

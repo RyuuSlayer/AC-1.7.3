@@ -38,16 +38,20 @@ public class EntityDescriptions {
             try {
                 Integer health = Integer.valueOf(Integer.parseInt(p.getProperty("health", "10")));
                 desc.health = health.intValue();
-            } catch (NumberFormatException e) {}
+            } catch (NumberFormatException e) {
+            }
             try {
                 desc.width = Float.parseFloat(p.getProperty("width", "0.6"));
-            } catch (NumberFormatException e) {}
+            } catch (NumberFormatException e) {
+            }
             try {
                 desc.height = Float.parseFloat(p.getProperty("height", "1.8"));
-            } catch (NumberFormatException e) {}
+            } catch (NumberFormatException e) {
+            }
             try {
                 desc.moveSpeed = Float.parseFloat(p.getProperty("moveSpeed", "0.7"));
-            } catch (NumberFormatException e) {}
+            } catch (NumberFormatException e) {
+            }
             desc.texture = p.getProperty("texture", "/mob/char.png");
             desc.onCreated = p.getProperty("onCreated", "");
             desc.onUpdate = p.getProperty("onUpdate", "");

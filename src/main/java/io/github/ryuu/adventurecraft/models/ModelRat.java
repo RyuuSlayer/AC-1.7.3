@@ -1,38 +1,40 @@
 package io.github.ryuu.adventurecraft.models;
 
+import net.minecraft.client.model.ModelPart;
+import net.minecraft.client.render.entity.model.EntityModel;
 import org.lwjgl.opengl.GL11;
 
-public class ModelRat extends ko {
-    public ps snout;
+public class ModelRat extends EntityModel {
+    public ModelPart snout;
 
-    public ps theHead;
+    public ModelPart theHead;
 
-    public ps leftEar;
+    public ModelPart leftEar;
 
-    public ps rightEar;
+    public ModelPart rightEar;
 
-    public ps theBody;
+    public ModelPart theBody;
 
-    public ps tail;
+    public ModelPart tail;
 
     public ModelRat() {
         float offset = 20.0F;
-        this.theHead = new ps(0, 0);
+        this.theHead = new ModelPart(0, 0);
         this.theHead.a(-1.5F, 0.0F, -3.0F, 3, 3, 3, 0.0F);
         this.theHead.a(0.0F, offset, -4.0F);
-        this.snout = new ps(0, 6);
+        this.snout = new ModelPart(0, 6);
         this.snout.a(-1.5F, 1.0F, -5.0F, 3, 2, 2, 0.0F);
         this.snout.a(0.0F, offset, -4.0F);
-        this.leftEar = new ps(10, 6);
+        this.leftEar = new ModelPart(10, 6);
         this.leftEar.a(-1.5F, -1.0F, -2.0F, 0, 1, 1, 0.0F);
         this.leftEar.a(0.0F, offset, -4.0F);
-        this.rightEar = new ps(12, 6);
+        this.rightEar = new ModelPart(12, 6);
         this.rightEar.a(1.5F, -1.0F, -2.0F, 0, 1, 1, 0.0F);
         this.rightEar.a(0.0F, offset, -4.0F);
-        this.theBody = new ps(0, 10);
+        this.theBody = new ModelPart(0, 10);
         this.theBody.a(-2.0F, -0.5F, -4.0F, 4, 4, 8, 0.0F);
         this.theBody.a(0.0F, 0.0F + offset, 0.0F);
-        this.tail = new ps(16, 0);
+        this.tail = new ModelPart(16, 0);
         this.tail.a(-0.5F, 0.0F, 0.0F, 1, 1, 7, 0.0F);
         this.tail.a(0.0F, 2.0F + offset, 3.5F);
     }

@@ -5,11 +5,11 @@ import net.minecraft.entity.player.Player;
 import net.minecraft.tile.Tile;
 
 public class InventoryDebug implements lw {
-    private String inventoryTitle;
+    private final String inventoryTitle;
 
-    private int size;
+    private final int size;
 
-    private iz[] inventoryContents;
+    private final iz[] inventoryContents;
 
     public int firstItem;
 
@@ -620,7 +620,8 @@ public class InventoryDebug implements lw {
         return 64;
     }
 
-    public void y_() {}
+    public void y_() {
+    }
 
     public boolean a_(Player entityplayer) {
         return true;

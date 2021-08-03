@@ -35,7 +35,7 @@ class MusicPlayer {
                 return;
         }
         if (sharp)
-            pitch = (float)(pitch * 1.059463D);
+            pitch = (float) (pitch * 1.059463D);
         world.a(x, y, z, instrument, volume, pitch * octave);
     }
 
@@ -71,7 +71,7 @@ class MusicPlayer {
                 octave *= 0.5F;
                 note = 'G';
             } else {
-                note = (char)(note - 1);
+                note = (char) (note - 1);
             }
             sharp = true;
         }

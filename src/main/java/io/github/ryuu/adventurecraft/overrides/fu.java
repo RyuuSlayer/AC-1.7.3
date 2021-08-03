@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.overrides;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -21,7 +22,7 @@ public class fu extends da {
         this.j = "missingno";
         try {
             ArrayList<String> arraylist = new ArrayList();
-            BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(fu.class.getResourceAsStream("/title/splashes.txt"), Charset.forName("UTF-8")));
+            BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(fu.class.getResourceAsStream("/title/splashes.txt"), StandardCharsets.UTF_8));
             String s = "";
             String s1;
             while ((s1 = bufferedreader.readLine()) != null) {
@@ -30,14 +31,16 @@ public class fu extends da {
                     arraylist.add(s1);
             }
             this.j = arraylist.get(a.nextInt(arraylist.size()));
-        } catch (Exception exception) {}
+        } catch (Exception exception) {
+        }
     }
 
     public void a() {
         this.i++;
     }
 
-    protected void a(char c, int i) {}
+    protected void a(char c, int i) {
+    }
 
     public void b() {
         Calendar calendar = Calendar.getInstance();
@@ -70,21 +73,21 @@ public class fu extends da {
 
     protected void a(ke guibutton) {
         if (guibutton.f == 0) {
-            this.b.a((da)new co(this, this.b.z));
+            this.b.a((da) new co(this, this.b.z));
         } else if (guibutton.f == 1) {
             this.b.a(new rq(this));
         } else if (guibutton.f == 2) {
-            this.b.a((da)new lq(this));
+            this.b.a((da) new lq(this));
         } else if (guibutton.f == 3) {
-            this.b.a((da)new ft(this));
+            this.b.a((da) new ft(this));
         } else if (guibutton.f == 4) {
             this.b.f();
         } else if (guibutton.f == 5) {
-            this.b.a((da)new AC_GuiMapDownload(this));
+            this.b.a((da) new AC_GuiMapDownload(this));
         } else if (guibutton.f == 6) {
-            this.b.a((da)new AC_GuiMapSelect(this, ""));
+            this.b.a((da) new AC_GuiMapSelect(this, ""));
         } else if (guibutton.f == 7) {
-            this.b.a((da)new AC_GuiMapSelect(this, null));
+            this.b.a((da) new AC_GuiMapSelect(this, null));
         }
     }
 
@@ -102,7 +105,7 @@ public class fu extends da {
         GL11.glPushMatrix();
         GL11.glTranslatef((this.c / 2 + 90), 70.0F, 0.0F);
         GL11.glRotatef(-20.0F, 0.0F, 0.0F, 1.0F);
-        float f1 = 1.8F - in.e(in.a((float)(System.currentTimeMillis() % 1000L) / 1000.0F * 3.141593F * 2.0F) * 0.1F);
+        float f1 = 1.8F - in.e(in.a((float) (System.currentTimeMillis() % 1000L) / 1000.0F * 3.141593F * 2.0F) * 0.1F);
         f1 = f1 * 100.0F / (this.g.a(this.j) + 32);
         GL11.glScalef(f1, f1, f1);
         a(this.g, this.j, 0, -8, 16776960);

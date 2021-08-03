@@ -47,7 +47,7 @@ public class ji {
 
     public int[] a(String s) {
         i texturepackbase = this.l.a;
-        int[] ai = (int[])this.c.get(s);
+        int[] ai = (int[]) this.c.get(s);
         if (ai != null)
             return ai;
         try {
@@ -97,7 +97,7 @@ public class ji {
 
     public int b(String s) {
         i texturepackbase = this.l.a;
-        Integer integer = (Integer)this.b.get(s);
+        Integer integer = (Integer) this.b.get(s);
         if (integer != null)
             return integer.intValue();
         this.e.clear();
@@ -117,7 +117,7 @@ public class ji {
 
     public void revertTextures() {
         for (String replacement : this.replacedTextures) {
-            Integer integer = (Integer)this.b.get(replacement);
+            Integer integer = (Integer) this.b.get(replacement);
             if (integer != null)
                 loadTexture(integer.intValue(), replacement);
         }
@@ -230,10 +230,10 @@ public class ji {
                 j2 = l3;
                 l2 = j4;
             }
-            abyte0[l * 4 + 0] = (byte)l1;
-            abyte0[l * 4 + 1] = (byte)j2;
-            abyte0[l * 4 + 2] = (byte)l2;
-            abyte0[l * 4 + 3] = (byte)j1;
+            abyte0[l * 4 + 0] = (byte) l1;
+            abyte0[l * 4 + 1] = (byte) j2;
+            abyte0[l * 4 + 2] = (byte) l2;
+            abyte0[l * 4 + 3] = (byte) j1;
         }
         if (this.f.capacity() < j * k * 4)
             this.f = ge.c(j * k * 4);
@@ -294,10 +294,10 @@ public class ji {
                 k1 = j2;
                 l1 = k2;
             }
-            abyte0[l * 4 + 0] = (byte)j1;
-            abyte0[l * 4 + 1] = (byte)k1;
-            abyte0[l * 4 + 2] = (byte)l1;
-            abyte0[l * 4 + 3] = (byte)i1;
+            abyte0[l * 4 + 0] = (byte) j1;
+            abyte0[l * 4 + 1] = (byte) k1;
+            abyte0[l * 4 + 2] = (byte) l1;
+            abyte0[l * 4 + 3] = (byte) i1;
         }
         this.f.clear();
         this.f.put(abyte0);
@@ -314,7 +314,7 @@ public class ji {
     }
 
     public int a(String s, String s1) {
-        ek threaddownloadimagedata = (ek)this.h.get(s);
+        ek threaddownloadimagedata = (ek) this.h.get(s);
         if (threaddownloadimagedata != null && threaddownloadimagedata.a != null && !threaddownloadimagedata.d) {
             if (threaddownloadimagedata.c < 0) {
                 threaddownloadimagedata.c = a(threaddownloadimagedata.a);
@@ -332,7 +332,7 @@ public class ji {
     }
 
     public ek a(String s, nf imagebuffer) {
-        ek threaddownloadimagedata = (ek)this.h.get(s);
+        ek threaddownloadimagedata = (ek) this.h.get(s);
         if (threaddownloadimagedata == null) {
             this.h.put(s, new ek(s, imagebuffer));
         } else {
@@ -342,7 +342,7 @@ public class ji {
     }
 
     public void c(String s) {
-        ek threaddownloadimagedata = (ek)this.h.get(s);
+        ek threaddownloadimagedata = (ek) this.h.get(s);
         if (threaddownloadimagedata != null) {
             threaddownloadimagedata.b--;
             if (threaddownloadimagedata.b == 0) {
@@ -462,8 +462,8 @@ public class ji {
     public void b() {
         i texturepackbase = this.l.a;
         for (Iterator<Integer> iterator = this.d.keySet().iterator(); iterator.hasNext(); a(bufferedimage, i)) {
-            int i = ((Integer)iterator.next()).intValue();
-            BufferedImage bufferedimage = (BufferedImage)this.d.get(Integer.valueOf(i));
+            int i = iterator.next().intValue();
+            BufferedImage bufferedimage = (BufferedImage) this.d.get(Integer.valueOf(i));
         }
         for (Iterator<ek> iterator1 = this.h.values().iterator(); iterator1.hasNext(); ) {
             ek threaddownloadimagedata = iterator1.next();
@@ -471,7 +471,7 @@ public class ji {
         }
         for (Iterator<String> iterator2 = this.b.keySet().iterator(); iterator2.hasNext(); ) {
             String s = iterator2.next();
-            int j = ((Integer)this.b.get(s)).intValue();
+            int j = ((Integer) this.b.get(s)).intValue();
             loadTexture(j, s);
         }
         for (Iterator<String> iterator3 = this.c.keySet().iterator(); iterator3.hasNext(); ) {
@@ -489,7 +489,7 @@ public class ji {
                 } else {
                     bufferedimage2 = a(texturepackbase.a(s1));
                 }
-                a(bufferedimage2, (int[])this.c.get(s1));
+                a(bufferedimage2, (int[]) this.c.get(s1));
                 this.k = false;
                 this.j = false;
             } catch (IOException ioexception1) {
@@ -511,9 +511,9 @@ public class ji {
     }
 
     public Vec2 getTextureResolution(String texName) {
-        Integer i = (Integer)this.b.get(texName);
+        Integer i = (Integer) this.b.get(texName);
         if (i != null)
-            return (Vec2)this.textureResolutions.get(i);
+            return this.textureResolutions.get(i);
         return null;
     }
 
@@ -544,33 +544,33 @@ public class ji {
 
     public HashMap b;
 
-    private HashMap c;
+    private final HashMap c;
 
-    private HashMap d;
+    private final HashMap d;
 
-    private IntBuffer e;
+    private final IntBuffer e;
 
     private ByteBuffer f;
 
-    private List g;
+    private final List g;
 
-    private Map h;
+    private final Map h;
 
-    private kv i;
+    private final kv i;
 
     private boolean j;
 
     private boolean k;
 
-    private ik l;
+    private final ik l;
 
-    private BufferedImage m;
+    private final BufferedImage m;
 
     public File mapDir;
 
     public ArrayList<String> replacedTextures;
 
-    private HashMap<Integer, Vec2> textureResolutions;
+    private final HashMap<Integer, Vec2> textureResolutions;
 
-    private HashMap<String, TextureAnimated> textureAnimations;
+    private final HashMap<String, TextureAnimated> textureAnimations;
 }

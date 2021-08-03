@@ -23,7 +23,7 @@ public class TileEntityMinMaxRenderer extends je {
             GL11.glBlendFunc(770, 771);
             GL11.glDisable(3553);
             GL11.glDisable(2896);
-            GL11.glTranslatef((float)d + 0.5F, (float)d1 + 0.5F, (float)d2 + 0.5F);
+            GL11.glTranslatef((float) d + 0.5F, (float) d1 + 0.5F, (float) d2 + 0.5F);
             GL11.glLineWidth(6.0F);
             GL11.glShadeModel(7425);
             GL11.glBegin(1);
@@ -50,6 +50,6 @@ public class TileEntityMinMaxRenderer extends je {
     }
 
     public void a(ow tileentity, double d, double d1, double d2, float f) {
-        render((TileEntityMinMax)tileentity, d, d1, d2, f);
+        render((TileEntityMinMax) tileentity, d, d1, d2, f);
     }
 }

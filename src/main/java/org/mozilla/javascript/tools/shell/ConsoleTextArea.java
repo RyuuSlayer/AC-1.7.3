@@ -23,8 +23,8 @@ import javax.swing.text.Document;
 import javax.swing.text.Segment;
 
 class ConsoleWrite implements Runnable {
-    private ConsoleTextArea textArea;
-    private String str;
+    private final ConsoleTextArea textArea;
+    private final String str;
 
     public ConsoleWrite(ConsoleTextArea textArea, String str) {
         this.textArea = textArea;
@@ -38,8 +38,8 @@ class ConsoleWrite implements Runnable {
 
 class ConsoleWriter extends java.io.OutputStream {
 
-    private ConsoleTextArea textArea;
-    private StringBuffer buffer;
+    private final ConsoleTextArea textArea;
+    private final StringBuffer buffer;
 
     public ConsoleWriter(ConsoleTextArea textArea) {
         this.textArea = textArea;
@@ -48,16 +48,16 @@ class ConsoleWriter extends java.io.OutputStream {
 
     @Override
     public synchronized void write(int ch) {
-        buffer.append((char)ch);
-        if(ch == '\n') {
+        buffer.append((char) ch);
+        if (ch == '\n') {
             flushBuffer();
         }
     }
 
-    public synchronized void write (char[] data, int off, int len) {
-        for(int i = off; i < len; i++) {
+    public synchronized void write(char[] data, int off, int len) {
+        for (int i = off; i < len; i++) {
             buffer.append(data[i]);
-            if(data[i] == '\n') {
+            if (data[i] == '\n') {
                 flushBuffer();
             }
         }
@@ -71,7 +71,7 @@ class ConsoleWriter extends java.io.OutputStream {
     }
 
     @Override
-    public void close () {
+    public void close() {
         flush();
     }
 
@@ -83,17 +83,16 @@ class ConsoleWriter extends java.io.OutputStream {
 }
 
 public class ConsoleTextArea
-    extends JTextArea implements KeyListener, DocumentListener
-{
+        extends JTextArea implements KeyListener, DocumentListener {
     static final long serialVersionUID = 8557083244830872961L;
 
-    private ConsoleWriter console1;
-    private ConsoleWriter console2;
-    private PrintStream out;
-    private PrintStream err;
-    private PrintWriter inPipe;
-    private PipedInputStream in;
-    private java.util.List<String> history;
+    private final ConsoleWriter console1;
+    private final ConsoleWriter console2;
+    private final PrintStream out;
+    private final PrintStream err;
+    private final PrintWriter inPipe;
+    private final PipedInputStream in;
+    private final java.util.List<String> history;
     private int historyIndex = -1;
     private int outputMark = 0;
 
@@ -115,7 +114,7 @@ public class ConsoleTextArea
         in = new PipedInputStream();
         try {
             outPipe.connect(in);
-        } catch(IOException exc) {
+        } catch (IOException exc) {
             exc.printStackTrace();
         }
         getDocument().addDocumentListener(this);
@@ -131,10 +130,10 @@ public class ConsoleTextArea
         Segment segment = new Segment();
         try {
             doc.getText(outputMark, len - outputMark, segment);
-        } catch(javax.swing.text.BadLocationException ignored) {
+        } catch (javax.swing.text.BadLocationException ignored) {
             ignored.printStackTrace();
         }
-        if(segment.count > 0) {
+        if (segment.count > 0) {
             history.add(segment.toString());
         }
         historyIndex = history.size();
@@ -155,34 +154,34 @@ public class ConsoleTextArea
 
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
-        if(code == KeyEvent.VK_BACK_SPACE || code == KeyEvent.VK_LEFT) {
-            if(outputMark == getCaretPosition()) {
+        if (code == KeyEvent.VK_BACK_SPACE || code == KeyEvent.VK_LEFT) {
+            if (outputMark == getCaretPosition()) {
                 e.consume();
             }
-        } else if(code == KeyEvent.VK_HOME) {
-           int caretPos = getCaretPosition();
-           if(caretPos == outputMark) {
-               e.consume();
-           } else if(caretPos > outputMark) {
-               if(!e.isControlDown()) {
-                   if(e.isShiftDown()) {
-                       moveCaretPosition(outputMark);
-                   } else {
-                       setCaretPosition(outputMark);
-                   }
-                   e.consume();
-               }
-           }
-        } else if(code == KeyEvent.VK_ENTER) {
+        } else if (code == KeyEvent.VK_HOME) {
+            int caretPos = getCaretPosition();
+            if (caretPos == outputMark) {
+                e.consume();
+            } else if (caretPos > outputMark) {
+                if (!e.isControlDown()) {
+                    if (e.isShiftDown()) {
+                        moveCaretPosition(outputMark);
+                    } else {
+                        setCaretPosition(outputMark);
+                    }
+                    e.consume();
+                }
+            }
+        } else if (code == KeyEvent.VK_ENTER) {
             returnPressed();
             e.consume();
-        } else if(code == KeyEvent.VK_UP) {
+        } else if (code == KeyEvent.VK_UP) {
             historyIndex--;
-            if(historyIndex >= 0) {
-                if(historyIndex >= history.size()) {
-                    historyIndex = history.size() -1;
+            if (historyIndex >= 0) {
+                if (historyIndex >= history.size()) {
+                    historyIndex = history.size() - 1;
                 }
-                if(historyIndex >= 0) {
+                if (historyIndex >= 0) {
                     String str = history.get(historyIndex);
                     int len = getDocument().getLength();
                     replaceRange(str, outputMark, len);
@@ -195,11 +194,13 @@ public class ConsoleTextArea
                 historyIndex++;
             }
             e.consume();
-        } else if(code == KeyEvent.VK_DOWN) {
+        } else if (code == KeyEvent.VK_DOWN) {
             int caretPos = outputMark;
-            if(history.size() > 0) {
+            if (history.size() > 0) {
                 historyIndex++;
-                if(historyIndex < 0) {historyIndex = 0;}
+                if (historyIndex < 0) {
+                    historyIndex = 0;
+                }
                 int len = getDocument().getLength();
                 if (historyIndex < history.size()) {
                     String str = history.get(historyIndex);
@@ -217,11 +218,11 @@ public class ConsoleTextArea
 
     public void keyTyped(KeyEvent e) {
         int keyChar = e.getKeyChar();
-        if(keyChar == 0x8 /* KeyEvent.VK_BACK_SPACE */) {
-            if(outputMark == getCaretPosition()) {
+        if (keyChar == 0x8 /* KeyEvent.VK_BACK_SPACE */) {
+            if (outputMark == getCaretPosition()) {
                 e.consume();
             }
-        } else if(getCaretPosition() < outputMark) {
+        } else if (getCaretPosition() < outputMark) {
             setCaretPosition(outputMark);
         }
     }
@@ -239,7 +240,7 @@ public class ConsoleTextArea
     public synchronized void insertUpdate(DocumentEvent e) {
         int len = e.getLength();
         int off = e.getOffset();
-        if(outputMark > off) {
+        if (outputMark > off) {
             outputMark += len;
         }
     }
@@ -247,8 +248,8 @@ public class ConsoleTextArea
     public synchronized void removeUpdate(DocumentEvent e) {
         int len = e.getLength();
         int off = e.getOffset();
-        if(outputMark > off) {
-            if(outputMark >= off + len) {
+        if (outputMark > off) {
+            if (outputMark >= off + len) {
                 outputMark -= len;
             } else {
                 outputMark = off;

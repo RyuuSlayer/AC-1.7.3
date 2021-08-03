@@ -9,7 +9,7 @@ import java.util.List;
 
 public class NativeJavaList extends NativeJavaObject {
 
-    private List<Object> list;
+    private final List<Object> list;
 
     @SuppressWarnings("unchecked")
     public NativeJavaList(Scriptable scope, Object list) {
@@ -95,6 +95,6 @@ public class NativeJavaList extends NativeJavaObject {
     }
 
     private boolean isWithValidIndex(int index) {
-        return index >= 0  && index < list.size();
+        return index >= 0 && index < list.size();
     }
 }

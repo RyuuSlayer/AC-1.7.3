@@ -14,6 +14,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,10 +30,10 @@ public class Main {
     private static final String STRING_TAG_STR = "string";
 
     private static final int
-        NORMAL_LINE        = 0,
-        SWITCH_TAG         = 1,
-        GENERATED_TAG      = 2,
-        STRING_TAG         = 3;
+            NORMAL_LINE = 0,
+            SWITCH_TAG = 1,
+            GENERATED_TAG = 2,
+            STRING_TAG = 3;
 
     private final List<IdValuePair> all_pairs = new ArrayList<IdValuePair>();
 
@@ -47,16 +48,19 @@ public class Main {
     private int tag_value_end;
 
     private static boolean is_value_type(int id) {
-        if (id == STRING_TAG) { return true; }
-        return false;
+        return id == STRING_TAG;
     }
 
     private static String tag_name(int id) {
         switch (id) {
-            case SWITCH_TAG: return SWITCH_TAG_STR;
-            case -SWITCH_TAG: return "/" + SWITCH_TAG_STR;
-            case GENERATED_TAG: return GENERATED_TAG_STR;
-            case -GENERATED_TAG: return "/" + GENERATED_TAG_STR;
+            case SWITCH_TAG:
+                return SWITCH_TAG_STR;
+            case -SWITCH_TAG:
+                return "/" + SWITCH_TAG_STR;
+            case GENERATED_TAG:
+                return GENERATED_TAG_STR;
+            case -GENERATED_TAG:
+                return "/" + GENERATED_TAG_STR;
         }
         return "";
     }
@@ -69,15 +73,15 @@ public class Main {
         InputStream is;
         if (file_path.equals("-")) {
             is = System.in;
-        }
-        else {
+        } else {
             is = new FileInputStream(file_path);
         }
         try {
-            Reader r = new InputStreamReader(is, "ASCII");
+            Reader r = new InputStreamReader(is, StandardCharsets.US_ASCII);
             body.readData(r);
+        } finally {
+            is.close();
         }
-        finally { is.close(); }
 
         process_file();
 
@@ -85,8 +89,7 @@ public class Main {
             OutputStream os;
             if (file_path.equals("-")) {
                 os = System.out;
-            }
-            else {
+            } else {
                 os = new FileOutputStream(file_path);
             }
 
@@ -94,8 +97,9 @@ public class Main {
                 Writer w = new OutputStreamWriter(os);
                 body.writeData(w);
                 w.flush();
+            } finally {
+                os.close();
             }
-            finally { os.close(); }
         }
     }
 
@@ -119,79 +123,77 @@ public class Main {
                         cur_state = SWITCH_TAG;
                         all_pairs.clear();
                         generated_begin = -1;
-                    }
-                    else if (tag_id == -SWITCH_TAG) {
+                    } else if (tag_id == -SWITCH_TAG) {
                         bad_tag = true;
                     }
                     break;
                 case SWITCH_TAG:
                     if (tag_id == 0) {
                         look_for_id_definitions(buffer, begin, end, false);
-                    }
-                    else if (tag_id == STRING_TAG) {
+                    } else if (tag_id == STRING_TAG) {
                         look_for_id_definitions(buffer, begin, end, true);
-                    }
-                    else if (tag_id == GENERATED_TAG) {
-                        if (generated_begin >= 0) { bad_tag = true; }
-                        else {
+                    } else if (tag_id == GENERATED_TAG) {
+                        if (generated_begin >= 0) {
+                            bad_tag = true;
+                        } else {
                             cur_state = GENERATED_TAG;
                             time_stamp_begin = tag_definition_end;
                             time_stamp_end = end;
                         }
-                    }
-                    else if (tag_id == -SWITCH_TAG) {
+                    } else if (tag_id == -SWITCH_TAG) {
                         cur_state = 0;
                         if (generated_begin >= 0 && !all_pairs.isEmpty()) {
                             generate_java_code();
                             String code = P.toString();
                             boolean different = body.setReplacement
-                                (generated_begin, generated_end, code);
+                                    (generated_begin, generated_end, code);
                             if (different) {
                                 String stamp = get_time_stamp();
                                 body.setReplacement
-                                    (time_stamp_begin, time_stamp_end, stamp);
+                                        (time_stamp_begin, time_stamp_end, stamp);
                             }
                         }
 
                         break;
-                    }
-                    else {
+                    } else {
                         bad_tag = true;
                     }
                     break;
                 case GENERATED_TAG:
                     if (tag_id == 0) {
-                        if (generated_begin < 0) { generated_begin = begin; }
-                    }
-                    else if (tag_id == -GENERATED_TAG) {
-                        if (generated_begin < 0) { generated_begin = begin; }
+                        if (generated_begin < 0) {
+                            generated_begin = begin;
+                        }
+                    } else if (tag_id == -GENERATED_TAG) {
+                        if (generated_begin < 0) {
+                            generated_begin = begin;
+                        }
                         cur_state = SWITCH_TAG;
                         generated_end = begin;
-                    }
-                    else {
+                    } else {
                         bad_tag = true;
                     }
                     break;
             }
             if (bad_tag) {
                 String text = ToolErrorReporter.getMessage(
-                    "msg.idswitch.bad_tag_order", tag_name(tag_id));
+                        "msg.idswitch.bad_tag_order", tag_name(tag_id));
                 throw R.runtimeError
-                    (text, source_file, body.getLineNumber(), null, 0);
+                        (text, source_file, body.getLineNumber(), null, 0);
             }
         }
 
         if (cur_state != 0) {
             String text = ToolErrorReporter.getMessage(
-                "msg.idswitch.file_end_in_switch", tag_name(cur_state));
+                    "msg.idswitch.file_end_in_switch", tag_name(cur_state));
             throw R.runtimeError
-                (text, source_file, body.getLineNumber(), null, 0);
+                    (text, source_file, body.getLineNumber(), null, 0);
         }
     }
 
     private String get_time_stamp() {
         SimpleDateFormat f = new SimpleDateFormat
-            (" 'Last update:' yyyy-MM-dd HH:mm:ss z");
+                (" 'Last update:' yyyy-MM-dd HH:mm:ss z");
         return f.format(new Date());
     }
 
@@ -223,14 +225,17 @@ public class Main {
 
                 boolean end_tag = false;
                 if (cursor != end && array[cursor] == '/') {
-                    ++cursor; end_tag = true;
+                    ++cursor;
+                    end_tag = true;
                 }
 
                 int tag_start = cursor;
 
                 for (; cursor != end; ++cursor) {
                     int c = array[cursor];
-                    if (c == '#' || c == '=' ||is_white_space(c)) { break; }
+                    if (c == '#' || c == '=' || is_white_space(c)) {
+                        break;
+                    }
                 }
 
                 if (cursor != end) {
@@ -240,7 +245,7 @@ public class Main {
                         int c = array[cursor];
                         if (c == '=' || c == '#') {
                             id = get_tag_id
-                                (array, tag_start, tag_end, at_line_start);
+                                    (array, tag_start, tag_end, at_line_start);
                             if (id != 0) {
                                 String bad = null;
                                 if (c == '#') {
@@ -251,23 +256,21 @@ public class Main {
                                         }
                                     }
                                     tag_definition_end = cursor + 1;
-                                }
-                                else  {
+                                } else {
                                     if (end_tag) {
                                         bad = "msg.idswitch.no_end_with_value";
-                                    }
-                                    else if (!is_value_type(id)) {
+                                    } else if (!is_value_type(id)) {
                                         bad = "msg.idswitch.no_value_allowed";
                                     }
                                     id = extract_tag_value
-                                        (array, cursor + 1, end, id);
+                                            (array, cursor + 1, end, id);
                                 }
                                 if (bad != null) {
                                     String s = ToolErrorReporter.getMessage(
-                                        bad, tag_name(id));
+                                            bad, tag_name(id));
                                     throw R.runtimeError
-                                        (s, source_file, body.getLineNumber(),
-                                         null, 0);
+                                            (s, source_file, body.getLineNumber(),
+                                                    null, 0);
                                 }
                             }
                         }
@@ -278,7 +281,7 @@ public class Main {
         return id;
     }
 
-// Return position after first of // or end if not found
+    // Return position after first of // or end if not found
     private int look_for_slash_slash(char[] array, int cursor, int end) {
         while (cursor + 2 <= end) {
             int c = array[cursor++];
@@ -310,12 +313,10 @@ public class Main {
                         break;
                     }
                     cursor = after_space + 1;
-                }
-                else if (c == '#') {
+                } else if (c == '#') {
                     value_end = cursor;
                     break;
-                }
-                else {
+                } else {
                     ++cursor;
                 }
             }
@@ -331,8 +332,7 @@ public class Main {
     }
 
     private int get_tag_id
-        (char[] array, int begin, int end, boolean at_line_start)
-    {
+            (char[] array, int begin, int end, boolean at_line_start) {
         if (at_line_start) {
             if (equals(SWITCH_TAG_STR, array, begin, end)) {
                 return SWITCH_TAG;
@@ -348,11 +348,10 @@ public class Main {
     }
 
     private void look_for_id_definitions
-        (char[] array, int begin, int end, boolean use_tag_value_as_string)
-    {
-    // Look for the pattern
-    // '^[ \t]+Id_([a-zA-Z0-9_]+)[ \t]*=.*$'
-    // where \1 gives field or method name
+            (char[] array, int begin, int end, boolean use_tag_value_as_string) {
+        // Look for the pattern
+        // '^[ \t]+Id_([a-zA-Z0-9_]+)[ \t]*=.*$'
+        // where \1 gives field or method name
         int cursor = begin;
         // Skip tab and spaces at the beginning
         cursor = skip_white_space(array, cursor, end);
@@ -381,8 +380,7 @@ public class Main {
     }
 
     private void add_id
-        (char[] array, int id_start, int id_end, int name_start, int name_end)
-    {
+            (char[] array, int id_start, int id_end, int name_start, int name_end) {
         String name = new String(array, name_start, name_end - name_start);
         String value = new String(array, id_start, id_end - id_start);
 
@@ -401,32 +399,35 @@ public class Main {
         int cursor = begin;
         for (; cursor != end; ++cursor) {
             int c = array[cursor];
-            if (!is_white_space(c)) { break; }
+            if (!is_white_space(c)) {
+                break;
+            }
         }
         return cursor;
     }
 
     private static int skip_matched_prefix
-        (String prefix, char[] array, int begin, int end)
-    {
+            (String prefix, char[] array, int begin, int end) {
         int cursor = -1;
         int prefix_length = prefix.length();
         if (prefix_length <= end - begin) {
             cursor = begin;
             for (int i = 0; i != prefix_length; ++i, ++cursor) {
                 if (prefix.charAt(i) != array[cursor]) {
-                    cursor = -1; break;
+                    cursor = -1;
+                    break;
                 }
             }
         }
         return cursor;
     }
 
-    private static boolean equals(String str, char[] array, int begin, int end)
-    {
+    private static boolean equals(String str, char[] array, int begin, int end) {
         if (str.length() == end - begin) {
             for (int i = begin, j = 0; i != end; ++i, ++j) {
-                if (array[i] != str.charAt(j)) { return false; }
+                if (array[i] != str.charAt(j)) {
+                    return false;
+                }
             }
             return true;
         }
@@ -461,12 +462,12 @@ public class Main {
 
         if (arg_count == 0) {
             option_error(ToolErrorReporter.getMessage(
-                             "msg.idswitch.no_file_argument"));
+                    "msg.idswitch.no_file_argument"));
             return -1;
         }
         if (arg_count > 1) {
             option_error(ToolErrorReporter.getMessage(
-                             "msg.idswitch.too_many_arguments"));
+                    "msg.idswitch.too_many_arguments"));
             return -1;
         }
 
@@ -476,13 +477,11 @@ public class Main {
 
         try {
             process_file(args[0]);
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             print_error(ToolErrorReporter.getMessage(
-                            "msg.idswitch.io_error", ex.toString()));
+                    "msg.idswitch.io_error", ex.toString()));
             return -1;
-        }
-        catch (EvaluatorException ex) {
+        } catch (EvaluatorException ex) {
             return -1;
         }
         return 0;
@@ -496,37 +495,39 @@ public class Main {
         boolean show_version = false;
 
         int N = args.length;
-        L: for (int i = 0; i != N; ++i) {
+        L:
+        for (int i = 0; i != N; ++i) {
             String arg = args[i];
             int arg_length = arg.length();
             if (arg_length >= 2) {
                 if (arg.charAt(0) == '-') {
                     if (arg.charAt(1) == '-') {
                         if (arg_length == 2) {
-                            args[i] = null; break;
+                            args[i] = null;
+                            break;
                         }
                         if (arg.equals("--help")) {
                             show_usage = true;
-                        }
-                        else if (arg.equals("--version")) {
+                        } else if (arg.equals("--version")) {
                             show_version = true;
-                        }
-                        else {
+                        } else {
                             option_error(ToolErrorReporter.getMessage(
-                                             "msg.idswitch.bad_option", arg));
-                            status = -1; break L;
+                                    "msg.idswitch.bad_option", arg));
+                            status = -1;
+                            break L;
                         }
-                    }
-                    else {
+                    } else {
                         for (int j = 1; j != arg_length; ++j) {
                             char c = arg.charAt(j);
                             switch (c) {
-                                case 'h': show_usage = true; break;
+                                case 'h':
+                                    show_usage = true;
+                                    break;
                                 default:
                                     option_error(
-                                        ToolErrorReporter.getMessage(
-                                            "msg.idswitch.bad_option_char",
-                                            String.valueOf(c)));
+                                            ToolErrorReporter.getMessage(
+                                                    "msg.idswitch.bad_option_char",
+                                                    String.valueOf(c)));
                                     status = -1;
                                     break L;
                             }
@@ -539,29 +540,37 @@ public class Main {
         }
 
         if (status == 1) {
-            if (show_usage) { show_usage(); status = 0; }
-            if (show_version) { show_version(); status = 0; }
+            if (show_usage) {
+                show_usage();
+                status = 0;
+            }
+            if (show_version) {
+                show_version();
+                status = 0;
+            }
         }
 
-        if (status != 1) { System.exit(status); }
+        if (status != 1) {
+            System.exit(status);
+        }
 
         return remove_nulls(args);
     }
 
     private void show_usage() {
         System.out.println(
-            ToolErrorReporter.getMessage("msg.idswitch.usage"));
+                ToolErrorReporter.getMessage("msg.idswitch.usage"));
         System.out.println();
     }
 
     private void show_version() {
         System.out.println(
-            ToolErrorReporter.getMessage("msg.idswitch.version"));
+                ToolErrorReporter.getMessage("msg.idswitch.version"));
     }
 
     private void option_error(String str) {
         print_error(
-            ToolErrorReporter.getMessage("msg.idswitch.bad_invocation", str));
+                ToolErrorReporter.getMessage("msg.idswitch.bad_invocation", str));
     }
 
     private void print_error(String text) {
@@ -572,7 +581,9 @@ public class Main {
         int N = array.length;
         int cursor = 0;
         for (; cursor != N; ++cursor) {
-            if (array[cursor] == null) { break; }
+            if (array[cursor] == null) {
+                break;
+            }
         }
         int destination = cursor;
         if (cursor != N) {
@@ -580,7 +591,8 @@ public class Main {
             for (; cursor != N; ++cursor) {
                 String elem = array[cursor];
                 if (elem != null) {
-                    array[destination] = elem; ++destination;
+                    array[destination] = elem;
+                    ++destination;
                 }
             }
         }

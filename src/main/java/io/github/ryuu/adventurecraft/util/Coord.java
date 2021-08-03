@@ -23,7 +23,7 @@ public class Coord {
 
     public boolean equals(Object obj) {
         if (obj instanceof Coord) {
-            Coord otherCoord = (Coord)obj;
+            Coord otherCoord = (Coord) obj;
             return (this.x == otherCoord.x && this.y == otherCoord.y && this.z == otherCoord.z);
         }
         return false;

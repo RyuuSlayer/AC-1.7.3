@@ -36,8 +36,8 @@ public class Biome {
 
     public pg a(Random random) {
         if (random.nextInt(10) == 0)
-            return (pg)new ih();
-        return (pg)new yh();
+            return (pg) new ih();
+        return (pg) new yh();
     }
 
     protected Biome b() {
@@ -61,8 +61,8 @@ public class Biome {
     }
 
     public static Biome a(double d, double d1) {
-        int i = (int)(d * 63.0D);
-        int j = (int)(d1 * 63.0D);
+        int i = (int) (d * 63.0D);
+        int j = (int) (d1 * 63.0D);
         return x[i + j * 64];
     }
 
@@ -148,7 +148,7 @@ public class Biome {
 
     public static final Biome m = (new ry()).b(8421631).a("Sky").e();
 
-    private static Biome[] x = new Biome[4096];
+    private static final Biome[] x = new Biome[4096];
 
     public String n;
 

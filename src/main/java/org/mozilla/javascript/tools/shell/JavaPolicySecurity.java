@@ -25,8 +25,7 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.GeneratedClassLoader;
 import org.mozilla.javascript.Scriptable;
 
-public class JavaPolicySecurity extends SecurityProxy
-{
+public class JavaPolicySecurity extends SecurityProxy {
 
     @Override
     public Class<?> getStaticSecurityDomainClassInternal() {
@@ -34,9 +33,8 @@ public class JavaPolicySecurity extends SecurityProxy
     }
 
     private static class Loader extends ClassLoader
-        implements GeneratedClassLoader
-    {
-        private ProtectionDomain domain;
+            implements GeneratedClassLoader {
+        private final ProtectionDomain domain;
 
         Loader(ClassLoader parent, ProtectionDomain domain) {
             super(parent != null ? parent : getSystemClassLoader());
@@ -52,11 +50,10 @@ public class JavaPolicySecurity extends SecurityProxy
         }
     }
 
-    private static class ContextPermissions extends PermissionCollection
-    {
+    private static class ContextPermissions extends PermissionCollection {
         static final long serialVersionUID = -1721494496320750721L;
 
-// Construct PermissionCollection that permits an action only
+        // Construct PermissionCollection that permits an action only
 // if it is permitted by staticDomain and by security context of Java stack on
 // the moment of constructor invocation
         ContextPermissions(ProtectionDomain staticDomain) {
@@ -82,17 +79,21 @@ public class JavaPolicySecurity extends SecurityProxy
             try {
                 _context.checkPermission(permission);
                 return true;
-            }catch (AccessControlException ex) {
+            } catch (AccessControlException ex) {
                 return false;
             }
         }
 
         @Override
-        public Enumeration<Permission> elements()
-        {
+        public Enumeration<Permission> elements() {
             return new Enumeration<Permission>() {
-                public boolean hasMoreElements() { return false; }
-                public Permission nextElement() { return null; }
+                public boolean hasMoreElements() {
+                    return false;
+                }
+
+                public Permission nextElement() {
+                    return null;
+                }
             };
         }
 
@@ -114,24 +115,22 @@ public class JavaPolicySecurity extends SecurityProxy
         PermissionCollection _statisPermissions;
     }
 
-    public JavaPolicySecurity()
-    {
+    public JavaPolicySecurity() {
         // To trigger error on jdk-1.1 with lazy load
-        new CodeSource(null,  (java.security.cert.Certificate[])null);
+        new CodeSource(null, (java.security.cert.Certificate[]) null);
     }
 
     @Override
     protected void callProcessFileSecure(final Context cx,
                                          final Scriptable scope,
-                                         final String filename)
-    {
+                                         final String filename) {
         AccessController.doPrivileged(new PrivilegedAction<Object>() {
             public Object run() {
                 URL url = getUrlObj(filename);
                 ProtectionDomain staticDomain = getUrlDomain(url);
                 try {
                     Main.processFileSecure(cx, scope, url.toExternalForm(),
-                                           staticDomain);
+                            staticDomain);
                 } catch (IOException ioex) {
                     throw new RuntimeException(ioex);
                 }
@@ -140,8 +139,7 @@ public class JavaPolicySecurity extends SecurityProxy
         });
     }
 
-    private URL getUrlObj(String url)
-    {
+    private URL getUrlObj(String url) {
         URL urlObj;
         try {
             urlObj = new URL(url);
@@ -151,33 +149,31 @@ public class JavaPolicySecurity extends SecurityProxy
             String curDir = System.getProperty("user.dir");
             curDir = curDir.replace('\\', '/');
             if (!curDir.endsWith("/")) {
-                curDir = curDir+'/';
+                curDir = curDir + '/';
             }
             try {
-                URL curDirURL = new URL("file:"+curDir);
+                URL curDirURL = new URL("file:" + curDir);
                 urlObj = new URL(curDirURL, url);
             } catch (MalformedURLException ex2) {
                 throw new RuntimeException
-                    ("Can not construct file URL for '"+url+"':"
-                     +ex2.getMessage());
+                        ("Can not construct file URL for '" + url + "':"
+                                + ex2.getMessage());
             }
         }
         return urlObj;
     }
 
-    private ProtectionDomain getUrlDomain(URL url)
-    {
+    private ProtectionDomain getUrlDomain(URL url) {
         CodeSource cs;
-        cs = new CodeSource(url, (java.security.cert.Certificate[])null);
+        cs = new CodeSource(url, (java.security.cert.Certificate[]) null);
         PermissionCollection pc = Policy.getPolicy().getPermissions(cs);
         return new ProtectionDomain(cs, pc);
     }
 
     @Override
     public GeneratedClassLoader
-    createClassLoader(final ClassLoader parentLoader, Object securityDomain)
-    {
-        final ProtectionDomain domain = (ProtectionDomain)securityDomain;
+    createClassLoader(final ClassLoader parentLoader, Object securityDomain) {
+        final ProtectionDomain domain = (ProtectionDomain) securityDomain;
         return AccessController.doPrivileged(new PrivilegedAction<Loader>() {
             public Loader run() {
                 return new Loader(parentLoader, domain);
@@ -186,9 +182,8 @@ public class JavaPolicySecurity extends SecurityProxy
     }
 
     @Override
-    public Object getDynamicSecurityDomain(Object securityDomain)
-    {
-        ProtectionDomain staticDomain = (ProtectionDomain)securityDomain;
+    public Object getDynamicSecurityDomain(Object securityDomain) {
+        ProtectionDomain staticDomain = (ProtectionDomain) securityDomain;
         return getDynamicDomain(staticDomain);
     }
 
@@ -204,9 +199,8 @@ public class JavaPolicySecurity extends SecurityProxy
                                  final Callable callable,
                                  final Scriptable scope,
                                  final Scriptable thisObj,
-                                 final Object[] args)
-    {
-        ProtectionDomain staticDomain = (ProtectionDomain)securityDomain;
+                                 final Object[] args) {
+        ProtectionDomain staticDomain = (ProtectionDomain) securityDomain;
         // There is no direct way in Java to intersect permissions according
         // stack context with additional domain.
         // The following implementation first constructs ProtectionDomain
@@ -223,7 +217,7 @@ public class JavaPolicySecurity extends SecurityProxy
         // AccessController.doPrivileged with this untrusted context
 
         ProtectionDomain dynamicDomain = getDynamicDomain(staticDomain);
-        ProtectionDomain[] tmp = { dynamicDomain };
+        ProtectionDomain[] tmp = {dynamicDomain};
         AccessControlContext restricted = new AccessControlContext(tmp);
 
         PrivilegedAction<Object> action = new PrivilegedAction<Object>() {

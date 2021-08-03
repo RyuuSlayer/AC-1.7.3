@@ -4,12 +4,13 @@ import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+
 import net.minecraft.client.Minecraft;
 
 public class GuiUrlRequest extends da {
-    private String url;
+    private final String url;
 
-    private String msg;
+    private final String msg;
 
     public GuiUrlRequest(String u) {
         this(u, "The map wants you to goto");
@@ -20,7 +21,8 @@ public class GuiUrlRequest extends da {
         this.msg = m;
     }
 
-    public void a() {}
+    public void a() {
+    }
 
     public void b() {
         this.e.add(new ab(0, this.c / 2 - 75, this.d / 2 + 10, "Open URL"));

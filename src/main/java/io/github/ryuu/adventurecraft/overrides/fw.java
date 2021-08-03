@@ -1,17 +1,18 @@
 package io.github.ryuu.adventurecraft.overrides;
 
 import java.util.LinkedList;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.PathPoint;
 
 public class fw {
-    private xp a;
+    private final xp a;
 
-    private lf b;
+    private final lf b;
 
-    private jx c;
+    private final jx c;
 
-    private d[] d;
+    private final d[] d;
 
     public fw(xp iblockaccess) {
         this.b = new lf();
@@ -122,7 +123,7 @@ public class fw {
 
     private final d a(int i, int j, int k) {
         int l = d.a(i, j, k);
-        d pathpoint = (d)this.c.a(l);
+        d pathpoint = (d) this.c.a(l);
         if (pathpoint == null) {
             pathpoint = new d(i, j, k);
             this.c.a(l, pathpoint);
@@ -216,7 +217,7 @@ public class fw {
                         if (dZ < 0)
                             sign = -1;
                         for (int zOffset = 1; zOffset < Math.abs(dZ); zOffset++) {
-                            if (a((sn)null, prevPoint.a + (int)xOffset, prevPoint.b, prevPoint.c + zOffset * sign, clearSize) != 1 || a((sn)null, prevPoint.a + (int)xOffset, prevPoint.b - 1, prevPoint.c + zOffset * sign, clearSize) == 1 || a((sn)null, prevPoint.a + (int)xOffset + 1, prevPoint.b, prevPoint.c + zOffset * sign, clearSize) != 1 || a((sn)null, prevPoint.a + (int)xOffset + 1, prevPoint.b - 1, prevPoint.c + zOffset * sign, clearSize) == 1 || a((sn)null, prevPoint.a + (int)xOffset - 1, prevPoint.b, prevPoint.c + zOffset * sign, clearSize) != 1 || a((sn)null, prevPoint.a + (int)xOffset - 1, prevPoint.b - 1, prevPoint.c + zOffset * sign, clearSize) == 1) {
+                            if (a((sn) null, prevPoint.a + (int) xOffset, prevPoint.b, prevPoint.c + zOffset * sign, clearSize) != 1 || a((sn) null, prevPoint.a + (int) xOffset, prevPoint.b - 1, prevPoint.c + zOffset * sign, clearSize) == 1 || a((sn) null, prevPoint.a + (int) xOffset + 1, prevPoint.b, prevPoint.c + zOffset * sign, clearSize) != 1 || a((sn) null, prevPoint.a + (int) xOffset + 1, prevPoint.b - 1, prevPoint.c + zOffset * sign, clearSize) == 1 || a((sn) null, prevPoint.a + (int) xOffset - 1, prevPoint.b, prevPoint.c + zOffset * sign, clearSize) != 1 || a((sn) null, prevPoint.a + (int) xOffset - 1, prevPoint.b - 1, prevPoint.c + zOffset * sign, clearSize) == 1) {
                                 points.add(potentialPoint);
                                 points.add(point);
                                 addRestThePoints = true;
@@ -231,7 +232,7 @@ public class fw {
                         if (dX < 0)
                             sign = -1;
                         for (int xOffset = 1; xOffset < Math.abs(dX); xOffset++) {
-                            if (a((sn)null, prevPoint.a + xOffset * sign, prevPoint.b, prevPoint.c + (int)zOffset, clearSize) != 1 || a((sn)null, prevPoint.a + xOffset * sign, prevPoint.b - 1, prevPoint.c + (int)zOffset, clearSize) == 1 || a((sn)null, prevPoint.a + xOffset * sign, prevPoint.b, prevPoint.c + (int)zOffset + 1, clearSize) != 1 || a((sn)null, prevPoint.a + xOffset * sign, prevPoint.b - 1, prevPoint.c + (int)zOffset + 1, clearSize) == 1 || a((sn)null, prevPoint.a + xOffset * sign, prevPoint.b, prevPoint.c + (int)zOffset - 1, clearSize) != 1 || a((sn)null, prevPoint.a + xOffset * sign, prevPoint.b - 1, prevPoint.c + (int)zOffset - 1, clearSize) == 1) {
+                            if (a((sn) null, prevPoint.a + xOffset * sign, prevPoint.b, prevPoint.c + (int) zOffset, clearSize) != 1 || a((sn) null, prevPoint.a + xOffset * sign, prevPoint.b - 1, prevPoint.c + (int) zOffset, clearSize) == 1 || a((sn) null, prevPoint.a + xOffset * sign, prevPoint.b, prevPoint.c + (int) zOffset + 1, clearSize) != 1 || a((sn) null, prevPoint.a + xOffset * sign, prevPoint.b - 1, prevPoint.c + (int) zOffset + 1, clearSize) == 1 || a((sn) null, prevPoint.a + xOffset * sign, prevPoint.b, prevPoint.c + (int) zOffset - 1, clearSize) != 1 || a((sn) null, prevPoint.a + xOffset * sign, prevPoint.b - 1, prevPoint.c + (int) zOffset - 1, clearSize) == 1) {
                                 prevPoint = potentialPoint;
                                 points.add(potentialPoint);
                                 points.add(point);

@@ -48,10 +48,9 @@ import javax.swing.tree.TreePath;
  * all of the event dispatching support provided by the superclass:
  * the AbstractTableModel.
  *
- * @version 1.2 10/27/98
- *
  * @author Philip Milne
  * @author Scott Violet
+ * @version 1.2 10/27/98
  */
 public class TreeTableModelAdapter extends AbstractTableModel {
     private static final long serialVersionUID = 48741114609209052L;
@@ -66,10 +65,11 @@ public class TreeTableModelAdapter extends AbstractTableModel {
             // Don't use fireTableRowsInserted() here; the selection model
             // would get updated twice.
             public void treeExpanded(TreeExpansionEvent event) {
-              fireTableDataChanged();
+                fireTableDataChanged();
             }
+
             public void treeCollapsed(TreeExpansionEvent event) {
-              fireTableDataChanged();
+                fireTableDataChanged();
             }
         });
 
@@ -127,7 +127,7 @@ public class TreeTableModelAdapter extends AbstractTableModel {
 
     @Override
     public boolean isCellEditable(int row, int column) {
-         return treeTableModel.isCellEditable(nodeForRow(row), column);
+        return treeTableModel.isCellEditable(nodeForRow(row), column);
     }
 
     @Override

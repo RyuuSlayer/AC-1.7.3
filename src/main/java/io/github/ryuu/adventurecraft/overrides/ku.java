@@ -8,11 +8,11 @@ import io.github.ryuu.adventurecraft.util.Vec2;
 import net.minecraft.client.Minecraft;
 
 public class ku extends TextureBinder {
-    private Minecraft g;
+    private final Minecraft g;
 
-    private int[] h;
+    private final int[] h;
 
-    private int[] i;
+    private final int[] i;
 
     private double j;
 
@@ -45,8 +45,8 @@ public class ku extends TextureBinder {
                 d = Math.random() * 3.1415927410125732D * 2.0D;
         }
         double d1;
-        for (d1 = d - this.j; d1 < -3.141592653589793D; d1 += 6.283185307179586D);
-        for (; d1 >= Math.PI; d1 -= 6.283185307179586D);
+        for (d1 = d - this.j; d1 < -3.141592653589793D; d1 += 6.283185307179586D) ;
+        for (; d1 >= Math.PI; d1 -= 6.283185307179586D) ;
         if (d1 < -1.0D)
             d1 = -1.0D;
         if (d1 > 1.0D)
@@ -65,8 +65,8 @@ public class ku extends TextureBinder {
                 double d4 = -((i % 16) / 15.0D - 0.5D);
                 double d5 = (i / 16) / 15.0D - 0.5D;
                 int i2 = k;
-                int j2 = (int)((d4 * d3 + d5 * d2 + 0.5D) * 16.0D);
-                int k2 = (int)((d5 * d3 - d4 * d2 + 0.5D) * 16.0D);
+                int j2 = (int) ((d4 * d3 + d5 * d2 + 0.5D) * 16.0D);
+                int k2 = (int) ((d5 * d3 - d4 * d2 + 0.5D) * 16.0D);
                 int l2 = (j2 & 0xF) + (k2 & 0xF) * 16;
                 j = this.i[l2] >> 24 & 0xFF;
                 k = (this.i[l2] >> 16 & 0xFF) * i2 / 255;
@@ -81,10 +81,10 @@ public class ku extends TextureBinder {
                 l = k1;
                 i1 = l1;
             }
-            this.a[i * 4 + 0] = (byte)k;
-            this.a[i * 4 + 1] = (byte)l;
-            this.a[i * 4 + 2] = (byte)i1;
-            this.a[i * 4 + 3] = (byte)j;
+            this.a[i * 4 + 0] = (byte) k;
+            this.a[i * 4 + 1] = (byte) l;
+            this.a[i * 4 + 2] = (byte) i1;
+            this.a[i * 4 + 3] = (byte) j;
         }
     }
 }

@@ -22,7 +22,7 @@ import org.mozilla.javascript.WrappedException;
 
 /**
  * Error reporter for tools.
- *
+ * <p>
  * Currently used by both the shell and the compiler.
  */
 public class ToolErrorReporter implements ErrorReporter {
@@ -42,17 +42,16 @@ public class ToolErrorReporter implements ErrorReporter {
      * For internationalization support.
      */
     public static String getMessage(String messageId) {
-        return getMessage(messageId, (Object []) null);
+        return getMessage(messageId, (Object[]) null);
     }
 
     public static String getMessage(String messageId, String argument) {
-        Object[] args = { argument };
+        Object[] args = {argument};
         return getMessage(messageId, args);
     }
 
-    public static String getMessage(String messageId, Object arg1, Object arg2)
-    {
-        Object[] args = { arg1, arg2 };
+    public static String getMessage(String messageId, Object arg1, Object arg2) {
+        Object[] args = {arg1, arg2};
         return getMessage(messageId, args);
     }
 
@@ -62,14 +61,14 @@ public class ToolErrorReporter implements ErrorReporter {
 
         // ResourceBundle does caching.
         ResourceBundle rb = ResourceBundle.getBundle
-            ("org.mozilla.javascript.tools.resources.Messages", locale);
+                ("org.mozilla.javascript.tools.resources.Messages", locale);
 
         String formatString;
         try {
             formatString = rb.getString(messageId);
         } catch (java.util.MissingResourceException mre) {
             throw new RuntimeException("no message resource found for message property "
-                                       + messageId);
+                    + messageId);
         }
 
         if (args == null) {
@@ -80,8 +79,7 @@ public class ToolErrorReporter implements ErrorReporter {
         }
     }
 
-    private static String getExceptionMessage(RhinoException ex)
-    {
+    private static String getExceptionMessage(RhinoException ex) {
         String msg;
         if (ex instanceof JavaScriptException) {
             msg = getMessage("msg.uncaughtJSException", ex.details());
@@ -96,28 +94,25 @@ public class ToolErrorReporter implements ErrorReporter {
     }
 
     public void warning(String message, String sourceName, int line,
-                        String lineSource, int lineOffset)
-    {
+                        String lineSource, int lineOffset) {
         if (!reportWarnings)
             return;
         reportErrorMessage(message, sourceName, line, lineSource, lineOffset,
-                           true);
+                true);
     }
 
     public void error(String message, String sourceName, int line,
-                      String lineSource, int lineOffset)
-    {
+                      String lineSource, int lineOffset) {
         hasReportedErrorFlag = true;
         reportErrorMessage(message, sourceName, line, lineSource, lineOffset,
-                           false);
+                false);
     }
 
     public EvaluatorException runtimeError(String message, String sourceName,
                                            int line, String lineSource,
-                                           int lineOffset)
-    {
+                                           int lineOffset) {
         return new EvaluatorException(message, sourceName, line,
-                                      lineSource, lineOffset);
+                lineSource, lineOffset);
     }
 
     public boolean hasReportedError() {
@@ -132,47 +127,44 @@ public class ToolErrorReporter implements ErrorReporter {
         this.reportWarnings = reportWarnings;
     }
 
-    public static void reportException(ErrorReporter er, RhinoException ex)
-    {
+    public static void reportException(ErrorReporter er, RhinoException ex) {
         if (er instanceof ToolErrorReporter) {
-            ((ToolErrorReporter)er).reportException(ex);
+            ((ToolErrorReporter) er).reportException(ex);
         } else {
             String msg = getExceptionMessage(ex);
             er.error(msg, ex.sourceName(), ex.lineNumber(),
-                     ex.lineSource(), ex.columnNumber());
+                    ex.lineSource(), ex.columnNumber());
         }
     }
 
-    public void reportException(RhinoException ex)
-    {
+    public void reportException(RhinoException ex) {
         if (ex instanceof WrappedException) {
-            WrappedException we = (WrappedException)ex;
+            WrappedException we = (WrappedException) ex;
             we.printStackTrace(err);
         } else {
             String lineSeparator =
-                SecurityUtilities.getSystemProperty("line.separator");
+                    SecurityUtilities.getSystemProperty("line.separator");
             String msg = getExceptionMessage(ex) + lineSeparator +
-                ex.getScriptStackTrace();
+                    ex.getScriptStackTrace();
             reportErrorMessage(msg, ex.sourceName(), ex.lineNumber(),
-                               ex.lineSource(), ex.columnNumber(), false);
+                    ex.lineSource(), ex.columnNumber(), false);
         }
     }
 
     private void reportErrorMessage(String message, String sourceName, int line,
                                     String lineSource, int lineOffset,
-                                    boolean justWarning)
-    {
+                                    boolean justWarning) {
         if (line > 0) {
             String lineStr = String.valueOf(line);
             if (sourceName != null) {
-                Object[] args = { sourceName, lineStr, message };
+                Object[] args = {sourceName, lineStr, message};
                 message = getMessage("msg.format3", args);
             } else {
-                Object[] args = { lineStr, message };
+                Object[] args = {lineStr, message};
                 message = getMessage("msg.format2", args);
             }
         } else {
-            Object[] args = { message };
+            Object[] args = {message};
             message = getMessage("msg.format1", args);
         }
         if (justWarning) {
@@ -185,9 +177,9 @@ public class ToolErrorReporter implements ErrorReporter {
         }
     }
 
-    private String buildIndicator(int offset){
+    private String buildIndicator(int offset) {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < offset-1; i++)
+        for (int i = 0; i < offset - 1; i++)
             sb.append(".");
         sb.append("^");
         return sb.toString();
@@ -196,5 +188,5 @@ public class ToolErrorReporter implements ErrorReporter {
     private final static String messagePrefix = "js: ";
     private boolean hasReportedErrorFlag;
     private boolean reportWarnings;
-    private PrintStream err;
+    private final PrintStream err;
 }

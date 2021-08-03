@@ -3,14 +3,16 @@ package io.github.ryuu.adventurecraft.items;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 
-public class ItemPaste extends gm {
+public class ItemPaste extends ItemType {
     public ItemPaste(int i) {
         super(i);
     }
 
-    public iz a(iz itemstack, Level world, Player entityplayer) {
+    public ItemInstance a(ItemInstance itemstack, Level world, Player entityplayer) {
         if (ItemCursor.bothSet) {
             ls camera = Minecraft.minecraftInstance.i;
             bt lookDir = camera.ac();
@@ -29,9 +31,9 @@ public class ItemPaste extends gm {
                     }
                 }
             }
-            int xOffset = (int)(camera.aM + DebugMode.reachDistance * lookDir.a);
-            int yOffset = (int)(camera.aN + DebugMode.reachDistance * lookDir.b);
-            int zOffset = (int)(camera.aO + DebugMode.reachDistance * lookDir.c);
+            int xOffset = (int) (camera.aM + DebugMode.reachDistance * lookDir.a);
+            int yOffset = (int) (camera.aN + DebugMode.reachDistance * lookDir.b);
+            int zOffset = (int) (camera.aO + DebugMode.reachDistance * lookDir.c);
             int j;
             for (j = 0; j < width; j++) {
                 for (int k = 0; k < height; k++) {

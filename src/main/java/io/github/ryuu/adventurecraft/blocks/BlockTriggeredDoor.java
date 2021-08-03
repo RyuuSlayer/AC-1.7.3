@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.blocks;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
@@ -21,7 +22,7 @@ public class BlockTriggeredDoor extends Tile {
         return DebugMode.active;
     }
 
-    public boolean shouldRender(xp blockAccess, int i, int j, int k) {
+    public boolean shouldRender(TileView blockAccess, int i, int j, int k) {
         return (DebugMode.active || Minecraft.minecraftInstance.f.triggerManager.isActivated(i, j, k));
     }
 

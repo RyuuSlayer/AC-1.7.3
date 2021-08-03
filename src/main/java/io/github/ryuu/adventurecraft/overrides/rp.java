@@ -132,9 +132,7 @@ public abstract class rp extends Tile {
             }
         }
         if (iblockaccess.e(i, j, k) >= 8) {
-            boolean flag = false;
-            if (flag || d(iblockaccess, i, j, k - 1, 2))
-                flag = true;
+            boolean flag = flag || d(iblockaccess, i, j, k - 1, 2);
             if (flag || d(iblockaccess, i, j, k + 1, 3))
                 flag = true;
             if (flag || d(iblockaccess, i - 1, j, k, 4))
@@ -157,7 +155,7 @@ public abstract class rp extends Tile {
     }
 
     public void a(fd world, int i, int j, int k, sn entity, bt vec3d) {
-        bt vec3d1 = e((xp)world, i, j, k);
+        bt vec3d1 = e((xp) world, i, j, k);
         vec3d.a += vec3d1.a;
         vec3d.b += vec3d1.b;
         vec3d.c += vec3d1.c;
@@ -220,9 +218,7 @@ public abstract class rp extends Tile {
         if (world.a(i, j, k) != this.bn)
             return;
         if (this.bA == ln.h) {
-            boolean flag = false;
-            if (flag || world.f(i, j, k - 1) == ln.g)
-                flag = true;
+            boolean flag = flag || world.f(i, j, k - 1) == ln.g;
             if (flag || world.f(i, j, k + 1) == ln.g)
                 flag = true;
             if (flag || world.f(i - 1, j, k) == ln.g)

@@ -60,11 +60,11 @@ public class rq extends da {
     }
 
     protected String c(int i) {
-        return ((vb)this.n.get(i)).a();
+        return ((vb) this.n.get(i)).a();
     }
 
     protected String d(int i) {
-        String s = ((vb)this.n.get(i)).b();
+        String s = ((vb) this.n.get(i)).b();
         if (s == null || in.a(s)) {
             nh stringtranslate = nh.a();
             s = stringtranslate.a("selectWorld.world") + " " + (i + 1);
@@ -94,14 +94,14 @@ public class rq extends da {
                 String s3 = stringtranslate.a("selectWorld.deleteButton");
                 String s4 = stringtranslate.a("gui.cancel");
                 qt guiyesno = new qt(this, s1, s2, s3, s4, this.m);
-                this.b.a((da)guiyesno);
+                this.b.a((da) guiyesno);
             }
         } else if (guibutton.f == 1) {
             e(this.m);
         } else if (guibutton.f == 3) {
-            this.b.a((da)new GuiMapSelect(this, ""));
+            this.b.a((da) new GuiMapSelect(this, ""));
         } else if (guibutton.f == 6) {
-            this.b.a((da)new jk(this, c(this.m)));
+            this.b.a((da) new jk(this, c(this.m)));
         } else if (guibutton.f == 0) {
             this.b.a(this.a);
         } else {
@@ -114,7 +114,7 @@ public class rq extends da {
         if (this.l)
             return;
         this.l = true;
-        this.b.c = (ob)new os(this.b);
+        this.b.c = (ob) new os(this.b);
         String s = c(i);
         if (s == null)
             s = "World" + i;

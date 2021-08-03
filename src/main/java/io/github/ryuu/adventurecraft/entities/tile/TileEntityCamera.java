@@ -31,7 +31,7 @@ public class TileEntityCamera extends TileEntity {
         super.a(nbttagcompound);
         int numPoints = nbttagcompound.e("numPoints");
         for (int i = 0; i < numPoints; i++) {
-            readPointTag(nbttagcompound.k(String.format("point%d", new Object[] { Integer.valueOf(i) })));
+            readPointTag(nbttagcompound.k(String.format("point%d", new Object[]{Integer.valueOf(i)})));
         }
         if (nbttagcompound.b("type"))
             this.type = nbttagcompound.c("type");
@@ -43,11 +43,11 @@ public class TileEntityCamera extends TileEntity {
         super.b(nbttagcompound);
         int numPoints = 0;
         for (CutsceneCameraPoint p : this.camera.cameraPoints) {
-            nbttagcompound.a(String.format("point%d", new Object[] { Integer.valueOf(numPoints) }), getPointTag(p));
+            nbttagcompound.a(String.format("point%d", new Object[]{Integer.valueOf(numPoints)}), getPointTag(p));
             numPoints++;
         }
         nbttagcompound.a("numPoints", numPoints);
-        nbttagcompound.a("type", (byte)this.type);
+        nbttagcompound.a("type", (byte) this.type);
         nbttagcompound.a("pauseGame", this.pauseGame);
     }
 
@@ -59,7 +59,7 @@ public class TileEntityCamera extends TileEntity {
         nbttagcompound.a("posZ", point.posZ);
         nbttagcompound.a("yaw", point.rotYaw);
         nbttagcompound.a("pitch", point.rotPitch);
-        nbttagcompound.a("type", (byte)point.cameraBlendType);
+        nbttagcompound.a("type", (byte) point.cameraBlendType);
         return nbttagcompound;
     }
 

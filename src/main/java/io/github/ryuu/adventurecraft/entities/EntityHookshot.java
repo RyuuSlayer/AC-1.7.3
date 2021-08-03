@@ -54,19 +54,19 @@ public class EntityHookshot extends sn {
 
     public void setHeading() {
         float f3 = in.a(this.aP * this.aP + this.aR * this.aR);
-        this.aU = this.aS = (float)(Math.atan2(this.aP, this.aR) * 180.0D / 3.1415927410125732D);
-        this.aV = this.aT = (float)(Math.atan2(this.aQ, f3) * 180.0D / 3.1415927410125732D);
+        this.aU = this.aS = (float) (Math.atan2(this.aP, this.aR) * 180.0D / 3.1415927410125732D);
+        this.aV = this.aT = (float) (Math.atan2(this.aQ, f3) * 180.0D / 3.1415927410125732D);
     }
 
     public void setHeadingReverse() {
         float f3 = in.a(this.aP * this.aP + this.aR * this.aR);
-        this.aU = this.aS = (float)(Math.atan2(-this.aP, -this.aR) * 180.0D / 3.1415927410125732D);
-        this.aV = this.aT = (float)(Math.atan2(-this.aQ, f3) * 180.0D / 3.1415927410125732D);
+        this.aU = this.aS = (float) (Math.atan2(-this.aP, -this.aR) * 180.0D / 3.1415927410125732D);
+        this.aV = this.aT = (float) (Math.atan2(-this.aQ, f3) * 180.0D / 3.1415927410125732D);
     }
 
     public void w_() {
         if (this.item != null && this.returnsTo instanceof gs) {
-            Player player = (Player)this.returnsTo;
+            Player player = (Player) this.returnsTo;
             if (this.mainHand && this.item != player.c.b())
                 Items.hookshot.releaseHookshot(this);
             if (!this.mainHand && this.item != player.c.getOffhandItem())
@@ -151,19 +151,22 @@ public class EntityHookshot extends sn {
         }
     }
 
-    protected void b(nu nbttagcompound) {}
+    protected void b(nu nbttagcompound) {
+    }
 
     public void a(nu nbttagcompound) {
         K();
     }
 
-    public void b(Player entityplayer) {}
+    public void b(Player entityplayer) {
+    }
 
     public boolean a(sn entity, int i) {
         return false;
     }
 
-    protected void b() {}
+    protected void b() {
+    }
 
     public void K() {
         if (this.item != null)

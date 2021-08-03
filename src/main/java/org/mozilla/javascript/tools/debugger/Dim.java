@@ -97,13 +97,13 @@ public class Dim {
      * Synchronization object used to allow script evaluations to
      * happen when a thread is resumed.
      */
-    private Object monitor = new Object();
+    private final Object monitor = new Object();
 
     /**
      * Synchronization object used to wait for valid
      * {@link #interruptedContextData}.
      */
-    private Object eventThreadMonitor = new Object();
+    private final Object eventThreadMonitor = new Object();
 
     /**
      * The action to perform to end the interruption loop.
@@ -150,20 +150,20 @@ public class Dim {
     /**
      * Table mapping URLs to information about the script source.
      */
-    private final Map<String,SourceInfo> urlToSourceInfo =
-        Collections.synchronizedMap(new HashMap<String,SourceInfo>());
+    private final Map<String, SourceInfo> urlToSourceInfo =
+            Collections.synchronizedMap(new HashMap<String, SourceInfo>());
 
     /**
      * Table mapping function names to information about the function.
      */
-    private final Map<String,FunctionSource> functionNames =
-        Collections.synchronizedMap(new HashMap<String,FunctionSource>());
+    private final Map<String, FunctionSource> functionNames =
+            Collections.synchronizedMap(new HashMap<String, FunctionSource>());
 
     /**
      * Table mapping functions to information about the function.
      */
-    private final Map<DebuggableScript,FunctionSource> functionToSource =
-        Collections.synchronizedMap(new HashMap<DebuggableScript,FunctionSource>());
+    private final Map<DebuggableScript, FunctionSource> functionToSource =
+            Collections.synchronizedMap(new HashMap<DebuggableScript, FunctionSource>());
 
     /**
      * ContextFactory.Listener instance attached to {@link #contextFactory}.
@@ -268,7 +268,7 @@ public class Dim {
                     String source = loadSource(url);
                     if (source != null) {
                         DebuggableScript top = fnOrScript;
-                        for (;;) {
+                        for (; ; ) {
                             DebuggableScript parent = top.getParent();
                             if (parent == null) {
                                 break;
@@ -295,7 +295,7 @@ public class Dim {
         }
         try {
             InputStream is;
-          openStream:
+            openStream:
             {
                 if (sourceUrl.indexOf(':') < 0) {
                     // Can be a file name
@@ -316,7 +316,8 @@ public class Dim {
                             is = new FileInputStream(f);
                             break openStream;
                         }
-                    } catch (SecurityException ex) { }
+                    } catch (SecurityException ex) {
+                    }
                     // No existing file, assume missed http://
                     if (sourceUrl.startsWith("//")) {
                         sourceUrl = "http:" + sourceUrl;
@@ -337,7 +338,7 @@ public class Dim {
             }
         } catch (IOException ex) {
             System.err.println
-                ("Failed to load source from "+sourceUrl+": "+ ex);
+                    ("Failed to load source from " + sourceUrl + ": " + ex);
         }
         return source;
     }
@@ -353,7 +354,7 @@ public class Dim {
         DebuggableScript[] functions = getAllFunctions(topScript);
         if (sourceProvider != null) {
             final String providedSource = sourceProvider.getSource(topScript);
-            if(providedSource != null) {
+            if (providedSource != null) {
                 source = providedSource;
             }
         }
@@ -420,8 +421,9 @@ public class Dim {
      */
     private String getNormalizedUrl(DebuggableScript fnOrScript) {
         String url = fnOrScript.getSourceName();
-        if (url == null) { url = "<stdin>"; }
-        else {
+        if (url == null) {
+            url = "<stdin>";
+        } else {
             // Not to produce window for eval from different lines,
             // strip line numbers, i.e. replace all #[0-9]+\(eval\) by
             // (eval)
@@ -430,7 +432,7 @@ public class Dim {
             StringBuilder sb = null;
             int urlLength = url.length();
             int cursor = 0;
-            for (;;) {
+            for (; ; ) {
                 int searchStart = url.indexOf(evalSeparator, cursor);
                 if (searchStart < 0) {
                     break;
@@ -456,7 +458,7 @@ public class Dim {
                 }
                 if (sb == null) {
                     sb = new StringBuilder();
-                    sb.append(url.substring(0, searchStart));
+                    sb.append(url, 0, searchStart);
                 }
                 sb.append(replace);
             }
@@ -474,7 +476,7 @@ public class Dim {
      * Returns an array of all functions in the given script.
      */
     private static DebuggableScript[] getAllFunctions
-            (DebuggableScript function) {
+    (DebuggableScript function) {
         ObjArray functions = new ObjArray();
         collectFunctions_r(function, functions);
         DebuggableScript[] result = new DebuggableScript[functions.size()];
@@ -486,7 +488,7 @@ public class Dim {
      * Helper function for {@link #getAllFunctions(DebuggableScript)}.
      */
     private static void collectFunctions_r(DebuggableScript function,
-                                             ObjArray array) {
+                                           ObjArray array) {
         array.add(function);
         for (int i = 0; i != function.getFunctionCount(); ++i) {
             collectFunctions_r(function.getFunction(i), array);
@@ -497,7 +499,7 @@ public class Dim {
      * Clears all breakpoints.
      */
     public void clearAllBreakpoints() {
-        for (SourceInfo si: urlToSourceInfo.values()) {
+        for (SourceInfo si : urlToSourceInfo.values()) {
             si.removeAllBreakpoints();
         }
     }
@@ -514,7 +516,7 @@ public class Dim {
      * Called when a script exception has been thrown.
      */
     private void handleExceptionThrown(Context cx, Throwable ex,
-                                         StackFrame frame) {
+                                       StackFrame frame) {
         if (breakOnExceptions) {
             ContextData cd = frame.contextData();
             if (cd.lastProcessedException != ex) {
@@ -653,11 +655,11 @@ public class Dim {
      * Returns the value of a property on the given script object.
      */
     private Object getObjectPropertyImpl(Context cx, Object object,
-                                           Object id) {
-        Scriptable scriptable = (Scriptable)object;
+                                         Object id) {
+        Scriptable scriptable = (Scriptable) object;
         Object result;
         if (id instanceof String) {
-            String name = (String)id;
+            String name = (String) id;
             if (name.equals("this")) {
                 result = scriptable;
             } else if (name.equals("__proto__")) {
@@ -671,7 +673,7 @@ public class Dim {
                 }
             }
         } else {
-            int index = ((Integer)id).intValue();
+            int index = ((Integer) id).intValue();
             result = ScriptableObject.getProperty(scriptable, index);
             if (result == ScriptableObject.NOT_FOUND) {
                 result = Undefined.instance;
@@ -689,9 +691,9 @@ public class Dim {
         }
 
         Object[] ids;
-        Scriptable scriptable = (Scriptable)object;
+        Scriptable scriptable = (Scriptable) object;
         if (scriptable instanceof DebuggableObject) {
-            ids = ((DebuggableObject)scriptable).getAllIds();
+            ids = ((DebuggableObject) scriptable).getAllIds();
         } else {
             ids = scriptable.getIds();
         }
@@ -725,14 +727,14 @@ public class Dim {
      * Interrupts script execution.
      */
     private void interrupted(Context cx, final StackFrame frame,
-                               Throwable scriptException) {
+                             Throwable scriptException) {
         ContextData contextData = frame.contextData();
         boolean eventThreadFlag = callback.isGuiEventThread();
         contextData.eventThreadFlag = eventThreadFlag;
 
         boolean recursiveEventThreadCall = false;
 
-interruptedCheck:
+        interruptedCheck:
         synchronized (eventThreadMonitor) {
             if (eventThreadFlag) {
                 if (interruptedContextData != null) {
@@ -757,8 +759,8 @@ interruptedCheck:
             // Note: it can make GUI unresponsive if long-running script
             // will be called on GUI thread while processing another interrupt
             if (false) {
-               // Run event dispatch until gui sets a flag to exit the initial
-               // call to interrupted.
+                // Run event dispatch until gui sets a flag to exit the initial
+                // call to interrupted.
                 while (this.returnValue == -1) {
                     try {
                         callback.dispatchNextGuiEvent();
@@ -774,7 +776,7 @@ interruptedCheck:
         try {
             do {
                 int frameCount = contextData.frameCount();
-                this.frameIndex = frameCount -1;
+                this.frameIndex = frameCount - 1;
 
                 final String threadTitle = Thread.currentThread().toString();
                 final String alertMessage;
@@ -792,9 +794,9 @@ interruptedCheck:
                         this.evalRequest = null;
                         this.returnValue = -1;
                         callback.enterInterrupt(frame, threadTitle,
-                                                alertMessage);
+                                alertMessage);
                         try {
-                            for (;;) {
+                            for (; ; ) {
                                 try {
                                     monitor.wait();
                                 } catch (InterruptedException exc) {
@@ -805,7 +807,7 @@ interruptedCheck:
                                     this.evalResult = null;
                                     try {
                                         evalResult = do_eval(cx, evalFrame,
-                                                             evalRequest);
+                                                evalRequest);
                                     } finally {
                                         evalRequest = null;
                                         evalFrame = null;
@@ -834,21 +836,21 @@ interruptedCheck:
                     returnValue = this.returnValue;
                 }
                 switch (returnValue) {
-                case STEP_OVER:
-                    contextData.breakNextLine = true;
-                    contextData.stopAtFrameDepth = contextData.frameCount();
-                    break;
-                case STEP_INTO:
-                    contextData.breakNextLine = true;
-                    contextData.stopAtFrameDepth = -1;
-                    break;
-                case STEP_OUT:
-                    if (contextData.frameCount() > 1) {
+                    case STEP_OVER:
                         contextData.breakNextLine = true;
-                        contextData.stopAtFrameDepth
-                            = contextData.frameCount() -1;
-                    }
-                    break;
+                        contextData.stopAtFrameDepth = contextData.frameCount();
+                        break;
+                    case STEP_INTO:
+                        contextData.breakNextLine = true;
+                        contextData.stopAtFrameDepth = -1;
+                        break;
+                    case STEP_OUT:
+                        if (contextData.frameCount() > 1) {
+                            contextData.breakNextLine = true;
+                            contextData.stopAtFrameDepth
+                                    = contextData.frameCount() - 1;
+                        }
+                        break;
                 }
             } while (false);
         } finally {
@@ -873,9 +875,9 @@ interruptedCheck:
         cx.setOptimizationLevel(-1);
         cx.setGeneratingDebug(false);
         try {
-            Callable script = (Callable)cx.compileString(expr, "", 0, null);
+            Callable script = (Callable) cx.compileString(expr, "", 0, null);
             Object result = script.call(cx, frame.scope, frame.thisObj,
-                                        ScriptRuntime.emptyArgs);
+                    ScriptRuntime.emptyArgs);
             if (result == Undefined.instance) {
                 resultString = "";
             } else {
@@ -899,18 +901,18 @@ interruptedCheck:
      * files.
      */
     private static class DimIProxy
-        implements ContextAction, ContextFactory.Listener, Debugger {
+            implements ContextAction, ContextFactory.Listener, Debugger {
 
         /**
          * The debugger.
          */
-        private Dim dim;
+        private final Dim dim;
 
         /**
          * The interface implementation type.  One of the IPROXY_* constants
          * defined in {@link Dim}.
          */
-        private int type;
+        private final int type;
 
         /**
          * The URL origin of the script to compile or evaluate.
@@ -967,12 +969,11 @@ interruptedCheck:
          */
         public Object run(Context cx) {
             switch (type) {
-              case IPROXY_COMPILE_SCRIPT:
-                cx.compileString(text, url, 1, null);
-                break;
+                case IPROXY_COMPILE_SCRIPT:
+                    cx.compileString(text, url, 1, null);
+                    break;
 
-              case IPROXY_EVAL_SCRIPT:
-                {
+                case IPROXY_EVAL_SCRIPT: {
                     Scriptable scope = null;
                     if (dim.scopeProvider != null) {
                         scope = dim.scopeProvider.getScope();
@@ -984,32 +985,32 @@ interruptedCheck:
                 }
                 break;
 
-              case IPROXY_STRING_IS_COMPILABLE:
-                booleanResult = cx.stringIsCompilableUnit(text);
-                break;
+                case IPROXY_STRING_IS_COMPILABLE:
+                    booleanResult = cx.stringIsCompilableUnit(text);
+                    break;
 
-              case IPROXY_OBJECT_TO_STRING:
-                if (object == Undefined.instance) {
-                    stringResult = "undefined";
-                } else if (object == null) {
-                    stringResult = "null";
-                } else if (object instanceof NativeCall) {
-                    stringResult = "[object Call]";
-                } else {
-                    stringResult = Context.toString(object);
-                }
-                break;
+                case IPROXY_OBJECT_TO_STRING:
+                    if (object == Undefined.instance) {
+                        stringResult = "undefined";
+                    } else if (object == null) {
+                        stringResult = "null";
+                    } else if (object instanceof NativeCall) {
+                        stringResult = "[object Call]";
+                    } else {
+                        stringResult = Context.toString(object);
+                    }
+                    break;
 
-              case IPROXY_OBJECT_PROPERTY:
-                objectResult = dim.getObjectPropertyImpl(cx, object, id);
-                break;
+                case IPROXY_OBJECT_PROPERTY:
+                    objectResult = dim.getObjectPropertyImpl(cx, object, id);
+                    break;
 
-              case IPROXY_OBJECT_IDS:
-                objectArrayResult = dim.getObjectIdsImpl(cx, object);
-                break;
+                case IPROXY_OBJECT_IDS:
+                    objectArrayResult = dim.getObjectIdsImpl(cx, object);
+                    break;
 
-              default:
-                throw Kit.codeBug();
+                default:
+                    throw Kit.codeBug();
             }
             return null;
         }
@@ -1083,7 +1084,7 @@ interruptedCheck:
         /**
          * The stack frames.
          */
-        private ObjArray frameStack = new ObjArray();
+        private final ObjArray frameStack = new ObjArray();
 
         /**
          * Whether the debugger should break at the next line in this context.
@@ -1151,12 +1152,12 @@ interruptedCheck:
         /**
          * The debugger.
          */
-        private Dim dim;
+        private final Dim dim;
 
         /**
          * The ContextData for the Context being debugged.
          */
-        private ContextData contextData;
+        private final ContextData contextData;
 
         /**
          * The scope.
@@ -1171,12 +1172,12 @@ interruptedCheck:
         /**
          * Information about the function.
          */
-        private FunctionSource fsource;
+        private final FunctionSource fsource;
 
         /**
          * Array of breakpoint state for each source line.
          */
-        private boolean[] breakpoints;
+        private final boolean[] breakpoints;
 
         /**
          * Current line number.
@@ -1217,7 +1218,7 @@ interruptedCheck:
                 boolean lineBreak = contextData.breakNextLine;
                 if (lineBreak && contextData.stopAtFrameDepth >= 0) {
                     lineBreak = (contextData.frameCount()
-                                 <= contextData.stopAtFrameDepth);
+                            <= contextData.stopAtFrameDepth);
                 }
                 if (!lineBreak) {
                     return;
@@ -1295,7 +1296,7 @@ interruptedCheck:
         public int getLineNumber() {
             return lineNumber;
         }
-        
+
         /**
          * Returns the current function name.
          */
@@ -1312,23 +1313,23 @@ interruptedCheck:
         /**
          * Information about the source of the function.
          */
-        private SourceInfo sourceInfo;
+        private final SourceInfo sourceInfo;
 
         /**
          * Line number of the first line of the function.
          */
-        private int firstLine;
+        private final int firstLine;
 
         /**
          * The function name.
          */
-        private String name;
+        private final String name;
 
         /**
          * Creates a new FunctionSource.
          */
         private FunctionSource(SourceInfo sourceInfo, int firstLine,
-                                 String name) {
+                               String name) {
             if (name == null) throw new IllegalArgumentException();
             this.sourceInfo = sourceInfo;
             this.firstLine = firstLine;
@@ -1371,33 +1372,33 @@ interruptedCheck:
         /**
          * The script.
          */
-        private String source;
+        private final String source;
 
         /**
          * The URL of the script.
          */
-        private String url;
+        private final String url;
 
         /**
          * Array indicating which lines can have breakpoints set.
          */
-        private boolean[] breakableLines;
+        private final boolean[] breakableLines;
 
         /**
          * Array indicating whether a breakpoint is set on the line.
          */
-        private boolean[] breakpoints;
+        private final boolean[] breakpoints;
 
         /**
          * Array of FunctionSource objects for the functions in the script.
          */
-        private FunctionSource[] functionSources;
+        private final FunctionSource[] functionSources;
 
         /**
          * Creates a new SourceInfo object.
          */
         private SourceInfo(String source, DebuggableScript[] functions,
-                             String normilizedUrl) {
+                           String normilizedUrl) {
             this.source = source;
             this.url = normilizedUrl;
 
@@ -1468,7 +1469,7 @@ interruptedCheck:
                     name = "";
                 }
                 this.functionSources[i]
-                    = new FunctionSource(this, firstLines[i], name);
+                        = new FunctionSource(this, firstLines[i], name);
             }
         }
 
@@ -1522,7 +1523,7 @@ interruptedCheck:
          */
         public boolean breakableLine(int line) {
             return (line < this.breakableLines.length)
-                   && this.breakableLines[line];
+                    && this.breakableLines[line];
         }
 
         /**

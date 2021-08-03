@@ -25,7 +25,8 @@ public class TextureBinder {
         this.b = i;
     }
 
-    public void onTick(Vec2 texRes) {}
+    public void onTick(Vec2 texRes) {
+    }
 
     public void a(ji renderengine) {
         GL11.glBindTexture(3553, renderengine.b(getTexture()));

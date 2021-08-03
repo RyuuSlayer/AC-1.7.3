@@ -2,15 +2,17 @@ package io.github.ryuu.adventurecraft.items;
 
 import io.github.ryuu.adventurecraft.blocks.IBlockColor;
 import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 
-public class ItemPaintBucket extends gm {
+public class ItemPaintBucket extends ItemType {
     protected ItemPaintBucket(int i) {
         super(i);
     }
 
-    public boolean a(iz itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
+    public boolean a(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
         if (ItemCursor.bothSet) {
             int minX = Math.min(ItemCursor.oneX, ItemCursor.twoX);
             int maxX = Math.max(ItemCursor.oneX, ItemCursor.twoX);
@@ -23,7 +25,7 @@ public class ItemPaintBucket extends gm {
                     for (int z = minZ; z <= maxZ; z++) {
                         Tile b = Tile.m[world.a(x, y, z)];
                         if (b != null && b instanceof IBlockColor) {
-                            ((IBlockColor)b).incrementColor(world, x, y, z);
+                            ((IBlockColor) b).incrementColor(world, x, y, z);
                             world.j(x, y, z);
                         }
                     }

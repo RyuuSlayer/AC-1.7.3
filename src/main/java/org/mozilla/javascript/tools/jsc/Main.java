@@ -24,19 +24,18 @@ public class Main {
 
     /**
      * Main entry point.
-     *
+     * <p>
      * Process arguments as would a normal Java program.
      * Then set up the execution environment and begin to
      * compile scripts.
      */
-    public static void main(String args[])
-    {
+    public static void main(String[] args) {
         Main main = new Main();
         args = main.processOptions(args);
         if (args == null) {
             if (main.printHelp) {
                 System.out.println(ToolErrorReporter.getMessage(
-                    "msg.jsc.usage", Main.class.getName()));
+                        "msg.jsc.usage", Main.class.getName()));
                 System.exit(0);
             }
             System.exit(1);
@@ -46,8 +45,7 @@ public class Main {
         }
     }
 
-    public Main()
-    {
+    public Main() {
         reporter = new ToolErrorReporter(true);
         compilerEnv = new CompilerEnvirons();
         compilerEnv.setErrorReporter(reporter);
@@ -56,13 +54,11 @@ public class Main {
 
     /**
      * Parse arguments.
-     *
      */
-    public String[] processOptions(String args[])
-    {
+    public String[] processOptions(String[] args) {
         targetPackage = "";        // default to no package
         compilerEnv.setGenerateDebugInfo(false);   // default to no symbols
-        for (int i=0; i < args.length; i++) {
+        for (int i = 0; i < args.length; i++) {
             String arg = args[i];
             if (!arg.startsWith("-")) {
                 int tail = args.length - i;
@@ -77,8 +73,7 @@ public class Main {
                 return result;
             }
             if (arg.equals("-help") || arg.equals("-h")
-                || arg.equals("--help"))
-            {
+                    || arg.equals("--help")) {
                 printHelp = true;
                 return null;
             }
@@ -89,15 +84,13 @@ public class Main {
                     compilerEnv.setLanguageVersion(version);
                     continue;
                 }
-                if ((arg.equals("-opt") || arg.equals("-O"))  &&
-                    ++i < args.length)
-                {
+                if ((arg.equals("-opt") || arg.equals("-O")) &&
+                        ++i < args.length) {
                     int optLevel = Integer.parseInt(args[i]);
                     compilerEnv.setOptimizationLevel(optLevel);
                     continue;
                 }
-            }
-            catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 badUsage(args[i]);
                 return null;
             }
@@ -121,8 +114,7 @@ public class Main {
                 String name = args[i];
                 int end = name.length();
                 if (end == 0
-                    || !Character.isJavaIdentifierStart(name.charAt(0)))
-                {
+                        || !Character.isJavaIdentifierStart(name.charAt(0))) {
                     addError("msg.invalid.classfile.name", name);
                     continue;
                 }
@@ -186,7 +178,7 @@ public class Main {
                 // TODO: allow for multiple comma-separated interfaces.
                 String targetImplements = args[i];
                 StringTokenizer st = new StringTokenizer(targetImplements,
-                                                         ",");
+                        ",");
                 List<Class<?>> list = new ArrayList<Class<?>>();
                 while (st.hasMoreTokens()) {
                     String className = st.nextToken();
@@ -211,20 +203,19 @@ public class Main {
         p(ToolErrorReporter.getMessage("msg.no.file"));
         return null;
     }
+
     /**
      * Print a usage message.
      */
     private static void badUsage(String s) {
         System.err.println(ToolErrorReporter.getMessage(
-            "msg.jsc.bad.usage", Main.class.getName(), s));
+                "msg.jsc.bad.usage", Main.class.getName(), s));
     }
 
     /**
      * Compile JavaScript source.
-     *
      */
-    public void processSource(String[] filenames)
-    {
+    public void processSource(String[] filenames) {
         for (int i = 0; i != filenames.length; ++i) {
             String filename = filenames[i];
             if (!filename.endsWith(".js")) {
@@ -242,12 +233,12 @@ public class Main {
                 mainClassName = getClassName(nojs);
             }
             if (targetPackage.length() != 0) {
-                mainClassName = targetPackage+"."+mainClassName;
+                mainClassName = targetPackage + "." + mainClassName;
             }
 
             Object[] compiled
-                = compiler.compileToClassFiles(source, filename, 1,
-                                               mainClassName);
+                    = compiler.compileToClassFiles(source, filename, 1,
+                    mainClassName);
             if (compiled == null || compiled.length == 0) {
                 return;
             }
@@ -262,8 +253,8 @@ public class Main {
                 }
             }
             for (int j = 0; j != compiled.length; j += 2) {
-                String className = (String)compiled[j];
-                byte[] bytes = (byte[])compiled[j + 1];
+                String className = (String) compiled[j];
+                byte[] bytes = (byte[]) compiled[j + 1];
                 try {
                     File outfile = getOutputFile(targetTopDir, className);
                     FileOutputStream os = new FileOutputStream(outfile);
@@ -279,15 +270,14 @@ public class Main {
         }
     }
 
-    private String readSource(File f)
-    {
+    private String readSource(File f) {
         String absPath = f.getAbsolutePath();
         if (!f.isFile()) {
             addError("msg.jsfile.not.found", absPath);
             return null;
         }
         try {
-            return (String)SourceReader.readFileOrUrl(absPath, true,
+            return (String) SourceReader.readFileOrUrl(absPath, true,
                     characterEncoding);
         } catch (FileNotFoundException ex) {
             addError("msg.couldnt.open", absPath);
@@ -297,8 +287,7 @@ public class Main {
         return null;
     }
 
-    private File getOutputFile(File parentDir, String className) throws IOException
-    {
+    private File getOutputFile(File parentDir, String className) throws IOException {
         String path = className.replace('.', File.separatorChar);
         path = path.concat(".class");
         File f = new File(parentDir, path);
@@ -321,30 +310,29 @@ public class Main {
      */
 
     String getClassName(String name) {
-        char[] s = new char[name.length()+1];
+        char[] s = new char[name.length() + 1];
         char c;
         int j = 0;
 
         if (!Character.isJavaIdentifierStart(name.charAt(0))) {
             s[j++] = '_';
         }
-        for (int i=0; i < name.length(); i++, j++) {
+        for (int i = 0; i < name.length(); i++, j++) {
             c = name.charAt(i);
-            if ( Character.isJavaIdentifierPart(c) ) {
+            if (Character.isJavaIdentifierPart(c)) {
                 s[j] = c;
             } else {
                 s[j] = '_';
             }
         }
         return (new String(s)).trim();
-     }
+    }
 
     private static void p(String s) {
         System.out.println(s);
     }
 
-    private void addError(String messageId, String arg)
-    {
+    private void addError(String messageId, String arg) {
         String msg;
         if (arg == null) {
             msg = ToolErrorReporter.getMessage(messageId);
@@ -354,15 +342,14 @@ public class Main {
         addFormatedError(msg);
     }
 
-    private void addFormatedError(String message)
-    {
+    private void addFormatedError(String message) {
         reporter.error(message, null, -1, null, -1);
     }
 
     private boolean printHelp;
-    private ToolErrorReporter reporter;
-    private CompilerEnvirons compilerEnv;
-    private ClassCompiler compiler;
+    private final ToolErrorReporter reporter;
+    private final CompilerEnvirons compilerEnv;
+    private final ClassCompiler compiler;
     private String targetName;
     private String targetPackage;
     private String destinationDir;

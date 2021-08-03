@@ -8,7 +8,7 @@ public class ScriptEntityCreature extends ScriptEntityLiving {
     ii entityCreature;
 
     ScriptEntityCreature(ii e) {
-        super((ls)e);
+        super((ls) e);
         this.entityCreature = e;
     }
 
@@ -25,11 +25,11 @@ public class ScriptEntityCreature extends ScriptEntityLiving {
     }
 
     public void pathToEntity(ScriptEntity e) {
-        this.entityCreature.a(this.entityCreature.aI.a((sn)this.entityCreature, e.entity, 1.0F));
+        this.entityCreature.a(this.entityCreature.aI.a((sn) this.entityCreature, e.entity, 1.0F));
     }
 
     public void pathToBlock(int x, int y, int z) {
-        this.entityCreature.a(this.entityCreature.aI.a((sn)this.entityCreature, x, y, z, 1.0F));
+        this.entityCreature.a(this.entityCreature.aI.a((sn) this.entityCreature, x, y, z, 1.0F));
     }
 
     public boolean getCanForgetTargetRandomly() {

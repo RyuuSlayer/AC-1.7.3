@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.scripting;
 
 import java.util.HashMap;
+
 import net.minecraft.client.options.GameOptions;
 import net.minecraft.level.Level;
 import org.lwjgl.input.Keyboard;
@@ -9,7 +10,7 @@ import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
 public class ScriptKeyboard {
-    private GameOptions gameSettings;
+    private final GameOptions gameSettings;
 
     public String keyForwardScript;
 
@@ -120,6 +121,6 @@ public class ScriptKeyboard {
         Object result = this.world.scriptHandler.runScript(scriptName, this.scope);
         if (result == null || !(result instanceof Boolean))
             return true;
-        return ((Boolean)result).booleanValue();
+        return ((Boolean) result).booleanValue();
     }
 }

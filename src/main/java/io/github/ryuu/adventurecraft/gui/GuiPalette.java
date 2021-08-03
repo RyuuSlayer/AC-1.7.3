@@ -4,7 +4,7 @@ import io.github.ryuu.adventurecraft.util.InventoryDebug;
 import org.lwjgl.opengl.GL11;
 
 public class GuiPalette extends hp {
-    private InventoryDebug palette;
+    private final InventoryDebug palette;
 
     GuiSlider2 extraWidth;
 
@@ -13,14 +13,14 @@ public class GuiPalette extends hp {
     private ke a;
 
     public GuiPalette(lw iinventory, InventoryDebug p) {
-        super(iinventory, (lw)p);
+        super(iinventory, (lw) p);
         this.palette = p;
     }
 
     public void b() {
         super.b();
-        this.extraDepth = new GuiSlider2(50, this.c / 2 + 2, 3, 10, String.format("Extra Depth: %d", new Object[] { Integer.valueOf(this.b.c.destroyExtraDepth) }), this.b.c.destroyExtraDepth / 16.0F);
-        this.extraWidth = new GuiSlider2(50, this.c / 2 - 2 - this.extraDepth.a, 3, 10, String.format("Extra Width: %d", new Object[] { Integer.valueOf(this.b.c.destroyExtraWidth) }), this.b.c.destroyExtraWidth / 5.0F);
+        this.extraDepth = new GuiSlider2(50, this.c / 2 + 2, 3, 10, String.format("Extra Depth: %d", Integer.valueOf(this.b.c.destroyExtraDepth)), this.b.c.destroyExtraDepth / 16.0F);
+        this.extraWidth = new GuiSlider2(50, this.c / 2 - 2 - this.extraDepth.a, 3, 10, String.format("Extra Width: %d", Integer.valueOf(this.b.c.destroyExtraWidth)), this.b.c.destroyExtraWidth / 5.0F);
         this.e.add(this.extraDepth);
         this.e.add(this.extraWidth);
     }
@@ -46,10 +46,10 @@ public class GuiPalette extends hp {
         GL11.glEnable(2896);
         GL11.glEnable(2929);
         GL11.glPopMatrix();
-        this.b.c.destroyExtraDepth = (int)Math.min(16.0F * this.extraDepth.sliderValue, 15.0F);
-        this.b.c.destroyExtraWidth = (int)Math.min(5.0F * this.extraWidth.sliderValue, 4.0F);
-        this.extraWidth.e = String.format("Extra Width: %d", new Object[] { Integer.valueOf(this.b.c.destroyExtraWidth) });
-        this.extraDepth.e = String.format("Extra Depth: %d", new Object[] { Integer.valueOf(this.b.c.destroyExtraDepth) });
+        this.b.c.destroyExtraDepth = (int) Math.min(16.0F * this.extraDepth.sliderValue, 15.0F);
+        this.b.c.destroyExtraWidth = (int) Math.min(5.0F * this.extraWidth.sliderValue, 4.0F);
+        this.extraWidth.e = String.format("Extra Width: %d", new Object[]{Integer.valueOf(this.b.c.destroyExtraWidth)});
+        this.extraDepth.e = String.format("Extra Depth: %d", new Object[]{Integer.valueOf(this.b.c.destroyExtraDepth)});
     }
 
     protected void a(int i, int j, int k) {

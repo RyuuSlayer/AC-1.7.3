@@ -1,9 +1,11 @@
 package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityMobSpawner;
+import io.github.ryuu.adventurecraft.gui.GuiMobSpawner;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.TileWithEntity;
 import net.minecraft.tile.entity.TileEntity;
@@ -39,14 +41,14 @@ public class BlockMobSpawner extends TileWithEntity {
 
     public boolean a(Level world, int i, int j, int k, Player entityplayer) {
         if (DebugMode.active) {
-            TileEntityMobSpawner obj = (TileEntityMobSpawner)world.b(i, j, k);
+            TileEntityMobSpawner obj = (TileEntityMobSpawner) world.b(i, j, k);
             GuiMobSpawner.showUI(obj);
             return true;
         }
         return false;
     }
 
-    public boolean shouldRender(xp blockAccess, int i, int j, int k) {
+    public boolean shouldRender(TileView blockAccess, int i, int j, int k) {
         return DebugMode.active;
     }
 
@@ -55,13 +57,13 @@ public class BlockMobSpawner extends TileWithEntity {
     }
 
     public void onTriggerActivated(Level world, int i, int j, int k) {
-        TileEntityMobSpawner obj = (TileEntityMobSpawner)world.b(i, j, k);
+        TileEntityMobSpawner obj = (TileEntityMobSpawner) world.b(i, j, k);
         if (obj.spawnOnTrigger && !Tile.resetActive)
             obj.spawnMobs();
     }
 
     public void onTriggerDeactivated(Level world, int i, int j, int k) {
-        TileEntityMobSpawner obj = (TileEntityMobSpawner)world.b(i, j, k);
+        TileEntityMobSpawner obj = (TileEntityMobSpawner) world.b(i, j, k);
         if (obj.spawnOnDetrigger && !Tile.resetActive)
             obj.spawnMobs();
     }
@@ -71,7 +73,7 @@ public class BlockMobSpawner extends TileWithEntity {
     }
 
     public void reset(Level world, int i, int j, int k, boolean death) {
-        TileEntityMobSpawner obj = (TileEntityMobSpawner)world.b(i, j, k);
+        TileEntityMobSpawner obj = (TileEntityMobSpawner) world.b(i, j, k);
         if (!death)
             obj.hasDroppedItem = false;
         obj.resetMobs();

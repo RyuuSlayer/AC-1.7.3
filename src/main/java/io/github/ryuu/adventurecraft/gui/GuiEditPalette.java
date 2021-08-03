@@ -48,7 +48,7 @@ class GuiEditPalette extends ub {
                     mc.B.a("random.click", 1.0F, 1.0F);
                     int i = columnClicked + rowClicked * columns;
                     if (i + getOffset() < this.blocks.size()) {
-                        DebugMode.mapEditing.setBlock(((uu)this.blocks.get(i + getOffset())).bn, 0);
+                        DebugMode.mapEditing.setBlock(((uu) this.blocks.get(i + getOffset())).bn, 0);
                         return true;
                     }
                 } else if (columnClicked == columns && x % 16 < 4 && needScrollbar()) {
@@ -69,7 +69,7 @@ class GuiEditPalette extends ub {
             pWidth += 4;
         a(pLeft, pTop, pLeft + pWidth, pTop + pHeight, -2147483648);
         if (needScrollbar()) {
-            int yOffset = (int)(this.scrollPosition * (pHeight - scrollHeight));
+            int yOffset = (int) (this.scrollPosition * (pHeight - scrollHeight));
             a(pLeft + pWidth - 4, pTop + yOffset, pLeft + pWidth, pTop + yOffset + scrollHeight, -2130706433);
         }
         GL11.glPushMatrix();
@@ -82,7 +82,7 @@ class GuiEditPalette extends ub {
         for (int i = 0; i < rows * columns; i++) {
             if (i + offset >= this.blocks.size())
                 break;
-            this.item.c = ((uu)this.blocks.get(i + offset)).bn;
+            this.item.c = ((uu) this.blocks.get(i + offset)).bn;
             itemRenderer.a(fontRenderer, mc.p, this.item, i % columns * 16, height / 2 - rows * 8 + 16 * i / columns);
         }
         GL11.glDisable(32826);
@@ -90,14 +90,14 @@ class GuiEditPalette extends ub {
     }
 
     private int getOffset() {
-        return columns * (int)((this.scrollPosition * (this.numRows - rows)) + 0.5D);
+        return columns * (int) ((this.scrollPosition * (this.numRows - rows)) + 0.5D);
     }
 
     private boolean needScrollbar() {
         return (this.numRows > rows);
     }
 
-    private static bb itemRenderer = new bb();
+    private static final bb itemRenderer = new bb();
 
     static int rows = 8;
 

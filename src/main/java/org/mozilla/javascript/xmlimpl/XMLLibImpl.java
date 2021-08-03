@@ -25,17 +25,17 @@ public final class XMLLibImpl extends XMLLib implements Serializable {
     //
     //    EXPERIMENTAL Java interface
     //
-   
+
     private static final long serialVersionUID = 1L;
 
     /**
-      This experimental interface is undocumented.
-    */
+     * This experimental interface is undocumented.
+     */
     public static org.w3c.dom.Node toDomNode(Object xmlObject) {
         //    Could return DocumentFragment for XMLList
         //    Probably a single node for XMLList with one element
         if (xmlObject instanceof XML) {
-            return ((XML)xmlObject).toDomNode();
+            return ((XML) xmlObject).toDomNode();
         } else {
             throw new IllegalArgumentException(
                     "xmlObject is not an XML object in JavaScript.");
@@ -91,7 +91,7 @@ public final class XMLLibImpl extends XMLLib implements Serializable {
     }
 
     @Override
-    public  boolean isPrettyPrinting() {
+    public boolean isPrettyPrinting() {
         return options.isPrettyPrinting();
     }
 
@@ -101,26 +101,30 @@ public final class XMLLibImpl extends XMLLib implements Serializable {
     }
 
 
-    private Scriptable globalScope;
+    private final Scriptable globalScope;
 
     private XML xmlPrototype;
     private XMLList xmlListPrototype;
     private Namespace namespacePrototype;
     private QName qnamePrototype;
 
-    private XmlProcessor options = new XmlProcessor();
+    private final XmlProcessor options = new XmlProcessor();
 
     private XMLLibImpl(Scriptable globalScope) {
         this.globalScope = globalScope;
     }
 
-    /** @deprecated */
+    /**
+     * @deprecated
+     */
     @Deprecated
     QName qnamePrototype() {
         return qnamePrototype;
     }
 
-    /** @deprecated */
+    /**
+     * @deprecated
+     */
     @Deprecated
     Scriptable globalScope() {
         return globalScope;
@@ -144,24 +148,26 @@ public final class XMLLibImpl extends XMLLib implements Serializable {
         qnamePrototype.exportAsJSClass(sealed);
     }
 
-    /** @deprecated */
+    /**
+     * @deprecated
+     */
     @Deprecated
     XMLName toAttributeName(Context cx, Object nameValue) {
         if (nameValue instanceof XMLName) {
             //    TODO    Will this always be an XMLName of type attribute name?
-            return (XMLName)nameValue;
+            return (XMLName) nameValue;
         } else if (nameValue instanceof QName) {
-            return XMLName.create( ((QName)nameValue).getDelegate(), true, false );
+            return XMLName.create(((QName) nameValue).getDelegate(), true, false);
         } else if (nameValue instanceof Boolean
-            || nameValue instanceof Number
-            || nameValue == Undefined.instance
-            || nameValue == null) {
+                || nameValue instanceof Number
+                || nameValue == Undefined.instance
+                || nameValue == null) {
             throw badXMLName(nameValue);
         } else {
             //    TODO    Not 100% sure that putting these in global namespace is the right thing to do
             String localName = null;
             if (nameValue instanceof String) {
-                localName = (String)nameValue;
+                localName = (String) nameValue;
             } else {
                 localName = ScriptRuntime.toString(nameValue);
             }
@@ -171,8 +177,7 @@ public final class XMLLibImpl extends XMLLib implements Serializable {
         }
     }
 
-    private static RuntimeException badXMLName(Object value)
-    {
+    private static RuntimeException badXMLName(Object value) {
         String msg;
         if (value instanceof Number) {
             msg = "Can not construct XML name from number: ";
@@ -183,7 +188,7 @@ public final class XMLLibImpl extends XMLLib implements Serializable {
         } else {
             throw new IllegalArgumentException(value.toString());
         }
-        return ScriptRuntime.typeError(msg+ScriptRuntime.toString(value));
+        return ScriptRuntime.typeError(msg + ScriptRuntime.toString(value));
     }
 
     XMLName toXMLNameFromString(Context cx, String name) {
@@ -195,16 +200,16 @@ public final class XMLLibImpl extends XMLLib implements Serializable {
         XMLName result;
 
         if (nameValue instanceof XMLName) {
-            result = (XMLName)nameValue;
+            result = (XMLName) nameValue;
         } else if (nameValue instanceof QName) {
-            QName qname = (QName)nameValue;
+            QName qname = (QName) nameValue;
             result = XMLName.formProperty(qname.uri(), qname.localName());
         } else if (nameValue instanceof String) {
-            result = toXMLNameFromString(cx, (String)nameValue);
+            result = toXMLNameFromString(cx, (String) nameValue);
         } else if (nameValue instanceof Boolean
-            || nameValue instanceof Number
-            || nameValue == Undefined.instance
-            || nameValue == null) {
+                || nameValue instanceof Number
+                || nameValue == Undefined.instance
+                || nameValue == null) {
             throw badXMLName(nameValue);
         } else {
             String name = ScriptRuntime.toString(nameValue);
@@ -219,14 +224,13 @@ public final class XMLLibImpl extends XMLLib implements Serializable {
      * ScriptRuntime.lastUint32Result(cx) and return null.
      * Otherwise return the same value as toXMLName(cx, value).
      */
-    XMLName toXMLNameOrIndex(Context cx, Object value)
-    {
+    XMLName toXMLNameOrIndex(Context cx, Object value) {
         XMLName result;
 
         if (value instanceof XMLName) {
-            result = (XMLName)value;
+            result = (XMLName) value;
         } else if (value instanceof String) {
-            String str = (String)value;
+            String str = (String) value;
             long test = ScriptRuntime.testUint32String(str);
             if (test >= 0) {
                 ScriptRuntime.storeUint32Result(cx, test);
@@ -235,8 +239,8 @@ public final class XMLLibImpl extends XMLLib implements Serializable {
                 result = toXMLNameFromString(cx, str);
             }
         } else if (value instanceof Number) {
-            double d = ((Number)value).doubleValue();
-            long l = (long)d;
+            double d = ((Number) value).doubleValue();
+            long l = (long) d;
             if (l == d && 0 <= l && l <= 0xFFFFFFFFL) {
                 ScriptRuntime.storeUint32Result(cx, l);
                 result = null;
@@ -244,7 +248,7 @@ public final class XMLLibImpl extends XMLLib implements Serializable {
                 throw badXMLName(value);
             }
         } else if (value instanceof QName) {
-            QName qname = (QName)value;
+            QName qname = (QName) value;
             String uri = qname.uri();
             boolean number = false;
             result = null;
@@ -260,9 +264,8 @@ public final class XMLLibImpl extends XMLLib implements Serializable {
                 result = XMLName.formProperty(uri, qname.localName());
             }
         } else if (value instanceof Boolean
-                   || value == Undefined.instance
-                   || value == null)
-        {
+                || value == Undefined.instance
+                || value == null) {
             throw badXMLName(value);
         } else {
             String str = ScriptRuntime.toString(value);
@@ -278,12 +281,11 @@ public final class XMLLibImpl extends XMLLib implements Serializable {
         return result;
     }
 
-    Object addXMLObjects(Context cx, XMLObject obj1, XMLObject obj2)
-    {
+    Object addXMLObjects(Context cx, XMLObject obj1, XMLObject obj2) {
         XMLList listToAdd = newXMLList();
 
         if (obj1 instanceof XMLList) {
-            XMLList list1 = (XMLList)obj1;
+            XMLList list1 = (XMLList) obj1;
             if (list1.length() == 1) {
                 listToAdd.addToList(list1.item(0));
             } else {
@@ -297,7 +299,7 @@ public final class XMLLibImpl extends XMLLib implements Serializable {
         }
 
         if (obj2 instanceof XMLList) {
-            XMLList list2 = (XMLList)obj2;
+            XMLList list2 = (XMLList) obj2;
             for (int i = 0; i < list2.length(); i++) {
                 listToAdd.addToList(list2.item(i));
             }
@@ -311,11 +313,11 @@ public final class XMLLibImpl extends XMLLib implements Serializable {
     private Ref xmlPrimaryReference(Context cx, XMLName xmlName, Scriptable scope) {
         XMLObjectImpl xmlObj;
         XMLObjectImpl firstXml = null;
-        for (;;) {
+        for (; ; ) {
             // XML object can only present on scope chain as a wrapper
             // of XMLWithScope
             if (scope instanceof XMLWithScope) {
-                xmlObj = (XMLObjectImpl)scope.getPrototype();
+                xmlObj = (XMLObjectImpl) scope.getPrototype();
                 if (xmlObj.hasXMLProperty(xmlName)) {
                     break;
                 }
@@ -363,7 +365,7 @@ public final class XMLLibImpl extends XMLLib implements Serializable {
             return namespacePrototype;
         } else {
             if (ns instanceof Namespace) {
-                return (Namespace)ns;
+                return (Namespace) ns;
             } else {
                 //    TODO    Clarify or remove the following comment
                 // Should not happen but for now it could
@@ -375,7 +377,7 @@ public final class XMLLibImpl extends XMLLib implements Serializable {
 
     Namespace[] createNamespaces(XmlNode.Namespace[] declarations) {
         Namespace[] rv = new Namespace[declarations.length];
-        for (int i=0; i<declarations.length; i++) {
+        for (int i = 0; i < declarations.length; i++) {
             rv[i] = this.namespacePrototype.newNamespace(
                     declarations[i].getPrefix(), declarations[i].getUri());
         }
@@ -447,9 +449,9 @@ public final class XMLLibImpl extends XMLLib implements Serializable {
         if (object == null || object == Undefined.instance) {
             throw ScriptRuntime.typeError("Cannot convert " + object + " to XML");
         }
-        if (object instanceof XML) return (XML)object;
+        if (object instanceof XML) return (XML) object;
         if (object instanceof XMLList) {
-            XMLList list = (XMLList)object;
+            XMLList list = (XMLList) object;
             if (list.getXML() != null) {
                 return list.getXML();
             } else {
@@ -532,7 +534,7 @@ public final class XMLLibImpl extends XMLLib implements Serializable {
         String localName;
 
         if (nameValue instanceof QName) {
-            QName qname = (QName)nameValue;
+            QName qname = (QName) nameValue;
             localName = qname.localName();
         } else {
             localName = ScriptRuntime.toString(nameValue);
@@ -548,7 +550,7 @@ public final class XMLLibImpl extends XMLLib implements Serializable {
         } else if (namespaceValue == null) {
             ns = null;
         } else if (namespaceValue instanceof Namespace) {
-            ns = ((Namespace)namespaceValue).getDelegate();
+            ns = ((Namespace) namespaceValue).getDelegate();
         } else {
             ns = this.namespacePrototype.constructNamespace(namespaceValue).getDelegate();
         }
@@ -576,21 +578,21 @@ public final class XMLLibImpl extends XMLLib implements Serializable {
      */
     XmlNode.QName toNodeQName(Context cx, Object nameValue, boolean attribute) {
         if (nameValue instanceof XMLName) {
-            return ((XMLName)nameValue).toQname();
+            return ((XMLName) nameValue).toQname();
         } else if (nameValue instanceof QName) {
-            QName qname = (QName)nameValue;
+            QName qname = (QName) nameValue;
             return qname.getDelegate();
         } else if (
-            nameValue instanceof Boolean
-            || nameValue instanceof Number
-            || nameValue == Undefined.instance
-            || nameValue == null
+                nameValue instanceof Boolean
+                        || nameValue instanceof Number
+                        || nameValue == Undefined.instance
+                        || nameValue == null
         ) {
             throw badXMLName(nameValue);
         } else {
             String local = null;
             if (nameValue instanceof String) {
-                local = (String)nameValue;
+                local = (String) nameValue;
             } else {
                 local = ScriptRuntime.toString(nameValue);
             }

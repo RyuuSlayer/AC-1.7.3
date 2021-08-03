@@ -19,7 +19,7 @@ import java.util.NoSuchElementException;
 import org.mozilla.javascript.ScriptableObject.SlotAccess;
 
 public class EmbeddedSlotMap
-    implements SlotMap {
+        implements SlotMap {
 
     private ScriptableObject.Slot[] slots;
 
@@ -33,8 +33,7 @@ public class EmbeddedSlotMap
     private static final int INITIAL_SLOT_SIZE = 4;
 
     private static final class Iter
-        implements Iterator<ScriptableObject.Slot>
-    {
+            implements Iterator<ScriptableObject.Slot> {
         private ScriptableObject.Slot next;
 
         Iter(ScriptableObject.Slot slot) {
@@ -57,8 +56,7 @@ public class EmbeddedSlotMap
         }
     }
 
-    public EmbeddedSlotMap()
-    {
+    public EmbeddedSlotMap() {
     }
 
     @Override
@@ -80,8 +78,7 @@ public class EmbeddedSlotMap
      * Locate the slot with the given name or index.
      */
     @Override
-    public ScriptableObject.Slot query(Object key, int index)
-    {
+    public ScriptableObject.Slot query(Object key, int index) {
         if (slots == null) {
             return null;
         }
@@ -89,12 +86,12 @@ public class EmbeddedSlotMap
         final int indexOrHash = (key != null ? key.hashCode() : index);
         final int slotIndex = getSlotIndex(slots.length, indexOrHash);
         for (ScriptableObject.Slot slot = slots[slotIndex];
-            slot != null;
-            slot = slot.next) {
+             slot != null;
+             slot = slot.next) {
             Object skey = slot.name;
             if (indexOrHash == slot.indexOrHash &&
-                (skey == key ||
-                    (key != null && key.equals(skey)))) {
+                    (skey == key ||
+                            (key != null && key.equals(skey)))) {
                 return slot;
             }
         }
@@ -105,12 +102,11 @@ public class EmbeddedSlotMap
      * Locate the slot with given name or index. Depending on the accessType
      * parameter and the current slot status, a new slot may be allocated.
      *
-     * @param key either a String or a Symbol object that identifies the property
+     * @param key   either a String or a Symbol object that identifies the property
      * @param index index or 0 if slot holds property name.
      */
     @Override
-    public ScriptableObject.Slot get(Object key, int index, ScriptableObject.SlotAccess accessType)
-    {
+    public ScriptableObject.Slot get(Object key, int index, ScriptableObject.SlotAccess accessType) {
         if (slots == null && accessType == SlotAccess.QUERY) {
             return null;
         }
@@ -145,7 +141,7 @@ public class EmbeddedSlotMap
                     }
                     break;
                 case CONVERT_ACCESSOR_TO_DATA:
-                    if ( !(slot instanceof ScriptableObject.GetterSlot) ) {
+                    if (!(slot instanceof ScriptableObject.GetterSlot)) {
                         return slot;
                     }
                     break;
@@ -158,7 +154,7 @@ public class EmbeddedSlotMap
     }
 
     private ScriptableObject.Slot createSlot(Object key, int indexOrHash,
-        ScriptableObject.SlotAccess accessType, ScriptableObject.Slot existingSlot) {
+                                             ScriptableObject.SlotAccess accessType, ScriptableObject.Slot existingSlot) {
         if (count == 0) {
             // Always throw away old slots if any on empty insert.
             slots = new ScriptableObject.Slot[INITIAL_SLOT_SIZE];
@@ -170,8 +166,8 @@ public class EmbeddedSlotMap
             ScriptableObject.Slot slot = prev;
             while (slot != null) {
                 if (slot.indexOrHash == indexOrHash &&
-                    (slot.name == key ||
-                        (key != null && key.equals(slot.name)))) {
+                        (slot.name == key ||
+                                (key != null && key.equals(slot.name)))) {
                     break;
                 }
                 prev = slot;
@@ -187,11 +183,11 @@ public class EmbeddedSlotMap
                 ScriptableObject.Slot newSlot;
 
                 if (accessType == SlotAccess.MODIFY_GETTER_SETTER
-                    && !(slot instanceof ScriptableObject.GetterSlot)) {
+                        && !(slot instanceof ScriptableObject.GetterSlot)) {
                     newSlot = new ScriptableObject.GetterSlot(key, indexOrHash,
-                        slot.getAttributes());
+                            slot.getAttributes());
                 } else if (accessType == SlotAccess.CONVERT_ACCESSOR_TO_DATA
-                    && (slot instanceof ScriptableObject.GetterSlot)) {
+                        && (slot instanceof ScriptableObject.GetterSlot)) {
                     newSlot = new ScriptableObject.Slot(key, indexOrHash, slot.getAttributes());
                 } else if (accessType == SlotAccess.MODIFY_CONST) {
                     return null;
@@ -281,8 +277,7 @@ public class EmbeddedSlotMap
             while (slot != null) {
                 if (slot.indexOrHash == indexOrHash &&
                         (slot.name == key ||
-                                (key != null && key.equals(slot.name))))
-                {
+                                (key != null && key.equals(slot.name)))) {
                     break;
                 }
                 prev = slot;
@@ -327,8 +322,7 @@ public class EmbeddedSlotMap
         }
     }
 
-    private static void copyTable(ScriptableObject.Slot[] oldSlots, ScriptableObject.Slot[] newSlots)
-    {
+    private static void copyTable(ScriptableObject.Slot[] oldSlots, ScriptableObject.Slot[] newSlots) {
         for (ScriptableObject.Slot slot : oldSlots) {
             while (slot != null) {
                 ScriptableObject.Slot nextSlot = slot.next;
@@ -344,16 +338,14 @@ public class EmbeddedSlotMap
      * This is an optimization to use when inserting into empty table,
      * after table growth or during deserialization.
      */
-    private static void addKnownAbsentSlot(ScriptableObject.Slot[] addSlots, ScriptableObject.Slot slot)
-    {
+    private static void addKnownAbsentSlot(ScriptableObject.Slot[] addSlots, ScriptableObject.Slot slot) {
         final int insertPos = getSlotIndex(addSlots.length, slot.indexOrHash);
         ScriptableObject.Slot old = addSlots[insertPos];
         addSlots[insertPos] = slot;
         slot.next = old;
     }
 
-    private static int getSlotIndex(int tableSize, int indexOrHash)
-    {
+    private static int getSlotIndex(int tableSize, int indexOrHash) {
         // This is a Java trick to efficiently "mod" the hash code by the table size.
         // It only works if the table size is a power of 2.
         // The performance improvement is measurable.

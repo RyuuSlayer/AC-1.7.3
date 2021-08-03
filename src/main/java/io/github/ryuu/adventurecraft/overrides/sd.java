@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.overrides;
 
 import java.awt.image.BufferedImage;
+
 import net.minecraft.client.Minecraft;
 
 public class sd extends TextureBinder {
@@ -41,10 +42,10 @@ public class sd extends TextureBinder {
                         for (int x = 0; x < ratio; x++) {
                             for (int y = 0; y < ratio; y++) {
                                 i = m * ratio + x + (j * ratio + y) * w;
-                                this.a[i * 4 + 0] = (byte)(curPixel >> 16 & 0xFF);
-                                this.a[i * 4 + 1] = (byte)(curPixel >> 8 & 0xFF);
-                                this.a[i * 4 + 2] = (byte)(curPixel & 0xFF);
-                                this.a[i * 4 + 3] = (byte)(curPixel >> 24 & 0xFF);
+                                this.a[i * 4 + 0] = (byte) (curPixel >> 16 & 0xFF);
+                                this.a[i * 4 + 1] = (byte) (curPixel >> 8 & 0xFF);
+                                this.a[i * 4 + 2] = (byte) (curPixel & 0xFF);
+                                this.a[i * 4 + 3] = (byte) (curPixel >> 24 & 0xFF);
                             }
                         }
                     }
@@ -62,10 +63,10 @@ public class sd extends TextureBinder {
                                 a += curPixel >> 24 & 0xFF;
                             }
                         }
-                        this.a[i * 4 + 0] = (byte)(r / ratio / ratio);
-                        this.a[i * 4 + 1] = (byte)(g / ratio / ratio);
-                        this.a[i * 4 + 2] = (byte)(b / ratio / ratio);
-                        this.a[i * 4 + 3] = (byte)(a / ratio / ratio);
+                        this.a[i * 4 + 0] = (byte) (r / ratio / ratio);
+                        this.a[i * 4 + 1] = (byte) (g / ratio / ratio);
+                        this.a[i * 4 + 2] = (byte) (b / ratio / ratio);
+                        this.a[i * 4 + 3] = (byte) (a / ratio / ratio);
                         i++;
                     }
                 }
@@ -105,7 +106,7 @@ public class sd extends TextureBinder {
                     }
                     this.h[i + j * w] = f1 / l * reduceAmount;
                     if (j >= h - 1)
-                        this.h[i + j * w] = (float)(Math.random() * Math.random() * Math.random() * 4.0D + Math.random() * 0.10000000149011612D + 0.20000000298023224D);
+                        this.h[i + j * w] = (float) (Math.random() * Math.random() * Math.random() * 4.0D + Math.random() * 0.10000000149011612D + 0.20000000298023224D);
                 }
             }
             float[] af = this.h;
@@ -121,9 +122,9 @@ public class sd extends TextureBinder {
             if (f < 0.0F)
                 f = 0.0F;
             float f2 = f;
-            int j1 = (int)(f2 * 155.0F + 100.0F);
-            int l1 = (int)(f2 * f2 * 255.0F);
-            int j2 = (int)(f2 * f2 * f2 * f2 * f2 * f2 * f2 * f2 * f2 * f2 * 255.0F);
+            int j1 = (int) (f2 * 155.0F + 100.0F);
+            int l1 = (int) (f2 * f2 * 255.0F);
+            int j2 = (int) (f2 * f2 * f2 * f2 * f2 * f2 * f2 * f2 * f2 * f2 * 255.0F);
             char c = ';
             if (f2 < 0.5F)
                 c = Character.MIN_VALUE;
@@ -136,10 +137,10 @@ public class sd extends TextureBinder {
                 l1 = i3;
                 j2 = j3;
             }
-            this.a[k * 4 + 0] = (byte)j1;
-            this.a[k * 4 + 1] = (byte)l1;
-            this.a[k * 4 + 2] = (byte)j2;
-            this.a[k * 4 + 3] = (byte)c;
+            this.a[k * 4 + 0] = (byte) j1;
+            this.a[k * 4 + 1] = (byte) l1;
+            this.a[k * 4 + 2] = (byte) j2;
+            this.a[k * 4 + 3] = (byte) c;
         }
     }
 

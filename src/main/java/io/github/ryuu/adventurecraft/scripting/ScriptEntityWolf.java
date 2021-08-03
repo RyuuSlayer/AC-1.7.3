@@ -7,7 +7,7 @@ public class ScriptEntityWolf extends ScriptEntityCreature {
     Wolf entityWolf;
 
     ScriptEntityWolf(Wolf e) {
-        super((WalkingEntity)e);
+        super((WalkingEntity) e);
         this.entityWolf = e;
     }
 

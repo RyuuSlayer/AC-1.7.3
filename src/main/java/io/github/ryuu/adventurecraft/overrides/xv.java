@@ -19,7 +19,8 @@ public class xv {
 
     private fd worldObj;
 
-    protected xv() {}
+    protected xv() {
+    }
 
     public xv(fd world) {
         this.e = new ug(new Random(world.s() * 9871L), 4);

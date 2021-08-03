@@ -6,6 +6,7 @@ import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
 import net.minecraft.tile.TileWithEntity;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
@@ -28,7 +29,7 @@ public class BlockNpcPath extends TileWithEntity {
         return false;
     }
 
-    public boolean shouldRender(xp blockAccess, int i, int j, int k) {
+    public boolean shouldRender(TileView blockAccess, int i, int j, int k) {
         return DebugMode.active;
     }
 
@@ -41,14 +42,14 @@ public class BlockNpcPath extends TileWithEntity {
     }
 
     public void onTriggerActivated(Level world, int i, int j, int k) {
-        TileEntityNpcPath obj = (TileEntityNpcPath)world.b(i, j, k);
+        TileEntityNpcPath obj = (TileEntityNpcPath) world.b(i, j, k);
         if (obj != null)
             obj.pathEntity();
     }
 
     public boolean a(Level world, int i, int j, int k, Player entityplayer) {
         if (DebugMode.active && entityplayer.G() != null && (entityplayer.G()).c == Items.cursor.bf) {
-            TileEntityNpcPath obj = (TileEntityNpcPath)world.b(i, j, k);
+            TileEntityNpcPath obj = (TileEntityNpcPath) world.b(i, j, k);
             if (obj != null)
                 GuiNpcPath.showUI(obj);
             return true;

@@ -8,10 +8,11 @@ public class ch extends Screen {
         this.e.add(new ke(1, this.c / 2 - 100, this.d / 4 + 72, "Respawn"));
         this.e.add(new ke(2, this.c / 2 - 100, this.d / 4 + 96, "Title menu"));
         if (this.b.k == null)
-            ((ke)this.e.get(1)).g = false;
+            ((ke) this.e.get(1)).g = false;
     }
 
-    protected void a(char c, int i) {}
+    protected void a(char c, int i) {
+    }
 
     protected void a(ke guibutton) {
         // Byte code:

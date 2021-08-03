@@ -31,7 +31,7 @@ public class bp extends wq implements ff {
 
     protected void b() {
         super.b();
-        this.bD.a(16, Byte.valueOf((byte)0));
+        this.bD.a(16, Byte.valueOf((byte) 0));
     }
 
     public void w_() {
@@ -78,7 +78,7 @@ public class bp extends wq implements ff {
             double d5 = this.g.aM - this.aM;
             double d6 = this.g.aW.b + (this.g.bh / 2.0F) - this.aN + (this.bh / 2.0F);
             double d7 = this.g.aO - this.aO;
-            this.H = this.aS = -((float)Math.atan2(d5, d7)) * 180.0F / 3.141593F;
+            this.H = this.aS = -((float) Math.atan2(d5, d7)) * 180.0F / 3.141593F;
             if (e(this.g)) {
                 if (this.f == 10)
                     this.aI.a(this, "mob.ghast.charge", k(), (this.bs.nextFloat() - this.bs.nextFloat()) * 0.2F + 1.0F);
@@ -98,13 +98,13 @@ public class bp extends wq implements ff {
                 this.f--;
             }
         } else {
-            this.H = this.aS = -((float)Math.atan2(this.aP, this.aR)) * 180.0F / 3.141593F;
+            this.H = this.aS = -((float) Math.atan2(this.aP, this.aR)) * 180.0F / 3.141593F;
             if (this.f > 0)
                 this.f--;
         }
         if (!this.aI.B) {
             byte byte0 = this.bD.a(16);
-            byte byte1 = (byte)((this.f <= 10) ? 0 : 1);
+            byte byte1 = (byte) ((this.f <= 10) ? 0 : 1);
             if (byte0 != byte1)
                 this.bD.b(16, Byte.valueOf(byte1));
         }

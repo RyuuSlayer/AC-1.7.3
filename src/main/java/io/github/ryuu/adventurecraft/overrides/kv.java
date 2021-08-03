@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+
 import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Keyboard;
 
@@ -32,7 +33,7 @@ public class kv {
         this.t = new qb("key.chat", 20);
         this.u = new qb("key.fog", 33);
         this.v = new qb("key.sneak", 42);
-        this.w = new qb[] { this.m, this.n, this.o, this.p, this.q, this.v, this.s, this.r, this.t, this.u };
+        this.w = new qb[]{this.m, this.n, this.o, this.p, this.q, this.v, this.s, this.r, this.t, this.u};
         this.y = 2;
         this.z = false;
         this.A = false;
@@ -74,7 +75,7 @@ public class kv {
         this.t = new qb("key.chat", 20);
         this.u = new qb("key.fog", 33);
         this.v = new qb("key.sneak", 42);
-        this.w = new qb[] { this.m, this.n, this.o, this.p, this.q, this.v, this.s, this.r, this.t, this.u };
+        this.w = new qb[]{this.m, this.n, this.o, this.p, this.q, this.v, this.s, this.r, this.t, this.u};
         this.y = 2;
         this.z = false;
         this.A = false;
@@ -196,11 +197,11 @@ public class kv {
                     return s + stringtranslate.a("options.sensitivity.min");
                 if (f == 1.0F)
                     return s + stringtranslate.a("options.sensitivity.max");
-                return s + (int)(f * 200.0F) + "%";
+                return s + (int) (f * 200.0F) + "%";
             }
             if (f == 0.0F)
                 return s + stringtranslate.a("options.off");
-            return s + (int)(f * 100.0F) + "%";
+            return s + (int) (f * 100.0F) + "%";
         }
         if (enumoptions.b()) {
             boolean flag = b(enumoptions);
@@ -233,7 +234,7 @@ public class kv {
             if (!this.N.exists())
                 return;
             BufferedReader bufferedreader = new BufferedReader(new FileReader(this.N));
-            for (String s = ""; (s = bufferedreader.readLine()) != null;) {
+            for (String s = ""; (s = bufferedreader.readLine()) != null; ) {
                 try {
                     String[] as = s.split(":");
                     if (as[0].equals("music"))
@@ -324,13 +325,13 @@ public class kv {
         }
     }
 
-    private static final String[] J = new String[] { "options.renderDistance.veryFar", "options.renderDistance.far", "options.renderDistance.normal", "options.renderDistance.short", "options.renderDistance.tiny" };
+    private static final String[] J = new String[]{"options.renderDistance.veryFar", "options.renderDistance.far", "options.renderDistance.normal", "options.renderDistance.short", "options.renderDistance.tiny"};
 
-    private static final String[] K = new String[] { "options.difficulty.peaceful", "options.difficulty.easy", "options.difficulty.normal", "options.difficulty.hard" };
+    private static final String[] K = new String[]{"options.difficulty.peaceful", "options.difficulty.easy", "options.difficulty.normal", "options.difficulty.hard"};
 
-    private static final String[] L = new String[] { "options.guiScale.auto", "options.guiScale.small", "options.guiScale.normal", "options.guiScale.large" };
+    private static final String[] L = new String[]{"options.guiScale.auto", "options.guiScale.small", "options.guiScale.normal", "options.guiScale.large"};
 
-    private static final String[] M = new String[] { "performance.max", "performance.balanced", "performance.powersaver" };
+    private static final String[] M = new String[]{"performance.max", "performance.balanced", "performance.powersaver"};
 
     public float a;
 

@@ -5,7 +5,7 @@ import java.util.Random;
 public class Dispenser extends ow implements lw {
     private iz[] a = new iz[9];
 
-    private Random b = new Random();
+    private final Random b = new Random();
 
     public int a() {
         return 9;
@@ -65,7 +65,7 @@ public class Dispenser extends ow implements lw {
         sp nbttaglist = nbttagcompound.l("Items");
         this.a = new iz[a()];
         for (int i = 0; i < nbttaglist.c(); i++) {
-            nu nbttagcompound1 = (nu)nbttaglist.a(i);
+            nu nbttagcompound1 = (nu) nbttaglist.a(i);
             int j = nbttagcompound1.c("Slot") & 0xFF;
             if (j >= 0 && j < this.a.length)
                 this.a[j] = new iz(nbttagcompound1);
@@ -78,12 +78,12 @@ public class Dispenser extends ow implements lw {
         for (int i = 0; i < this.a.length; i++) {
             if (this.a[i] != null) {
                 nu nbttagcompound1 = new nu();
-                nbttagcompound1.a("Slot", (byte)i);
+                nbttagcompound1.a("Slot", (byte) i);
                 this.a[i].a(nbttagcompound1);
                 nbttaglist.a(nbttagcompound1);
             }
         }
-        nbttagcompound.a("Items", (ij)nbttaglist);
+        nbttagcompound.a("Items", (ij) nbttaglist);
     }
 
     public int d() {

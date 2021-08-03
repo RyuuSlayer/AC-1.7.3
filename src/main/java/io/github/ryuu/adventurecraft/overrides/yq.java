@@ -3,9 +3,9 @@ package io.github.ryuu.adventurecraft.overrides;
 import java.util.Random;
 
 public class yq extends uu {
-    private int[] a;
+    private final int[] a;
 
-    private int[] b;
+    private final int[] b;
 
     protected yq(int i, int j) {
         super(i, j, ln.m);
@@ -74,7 +74,7 @@ public class yq extends uu {
                 world.f(i, j, k, 0);
             return;
         }
-        if (!flag && !c((xp)world, i, j - 1, k) && l == 15 && random.nextInt(4) == 0) {
+        if (!flag && !c((xp) world, i, j - 1, k) && l == 15 && random.nextInt(4) == 0) {
             world.f(i, j, k, 0);
             return;
         }
@@ -125,17 +125,17 @@ public class yq extends uu {
     }
 
     private boolean h(fd world, int i, int j, int k) {
-        if (c((xp)world, i + 1, j, k))
+        if (c((xp) world, i + 1, j, k))
             return true;
-        if (c((xp)world, i - 1, j, k))
+        if (c((xp) world, i - 1, j, k))
             return true;
-        if (c((xp)world, i, j - 1, k))
+        if (c((xp) world, i, j - 1, k))
             return true;
-        if (c((xp)world, i, j + 1, k))
+        if (c((xp) world, i, j + 1, k))
             return true;
-        if (c((xp)world, i, j, k - 1))
+        if (c((xp) world, i, j, k - 1))
             return true;
-        return c((xp)world, i, j, k + 1);
+        return c((xp) world, i, j, k + 1);
     }
 
     private int i(fd world, int i, int j, int k) {
@@ -190,7 +190,7 @@ public class yq extends uu {
     public void b(fd world, int i, int j, int k, Random random) {
         if (random.nextInt(24) == 0)
             world.a((i + 0.5F), (j + 0.5F), (k + 0.5F), "fire.fire", 1.0F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F);
-        if (world.h(i, j - 1, k) || uu.as.c((xp)world, i, j - 1, k)) {
+        if (world.h(i, j - 1, k) || uu.as.c((xp) world, i, j - 1, k)) {
             for (int l = 0; l < 3; l++) {
                 float f = i + random.nextFloat();
                 float f6 = j + random.nextFloat() * 0.5F + 0.5F;
@@ -198,35 +198,35 @@ public class yq extends uu {
                 world.a("largesmoke", f, f6, f12, 0.0D, 0.0D, 0.0D);
             }
         } else {
-            if (uu.as.c((xp)world, i - 1, j, k))
+            if (uu.as.c((xp) world, i - 1, j, k))
                 for (int i1 = 0; i1 < 2; i1++) {
                     float f1 = i + random.nextFloat() * 0.1F;
                     float f7 = j + random.nextFloat();
                     float f13 = k + random.nextFloat();
                     world.a("largesmoke", f1, f7, f13, 0.0D, 0.0D, 0.0D);
                 }
-            if (uu.as.c((xp)world, i + 1, j, k))
+            if (uu.as.c((xp) world, i + 1, j, k))
                 for (int j1 = 0; j1 < 2; j1++) {
                     float f2 = (i + 1) - random.nextFloat() * 0.1F;
                     float f8 = j + random.nextFloat();
                     float f14 = k + random.nextFloat();
                     world.a("largesmoke", f2, f8, f14, 0.0D, 0.0D, 0.0D);
                 }
-            if (uu.as.c((xp)world, i, j, k - 1))
+            if (uu.as.c((xp) world, i, j, k - 1))
                 for (int k1 = 0; k1 < 2; k1++) {
                     float f3 = i + random.nextFloat();
                     float f9 = j + random.nextFloat();
                     float f15 = k + random.nextFloat() * 0.1F;
                     world.a("largesmoke", f3, f9, f15, 0.0D, 0.0D, 0.0D);
                 }
-            if (uu.as.c((xp)world, i, j, k + 1))
+            if (uu.as.c((xp) world, i, j, k + 1))
                 for (int l1 = 0; l1 < 2; l1++) {
                     float f4 = i + random.nextFloat();
                     float f10 = j + random.nextFloat();
                     float f16 = (k + 1) - random.nextFloat() * 0.1F;
                     world.a("largesmoke", f4, f10, f16, 0.0D, 0.0D, 0.0D);
                 }
-            if (uu.as.c((xp)world, i, j + 1, k))
+            if (uu.as.c((xp) world, i, j + 1, k))
                 for (int i2 = 0; i2 < 2; i2++) {
                     float f5 = i + random.nextFloat();
                     float f11 = (j + 1) - random.nextFloat() * 0.1F;

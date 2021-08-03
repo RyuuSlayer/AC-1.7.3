@@ -37,12 +37,12 @@ public class CutsceneCamera {
     public void loadCameraEntities() {
         for (Entity obj : Minecraft.minecraftInstance.f.b) {
             if (obj instanceof EntityCamera)
-                ((Entity)obj).K();
+                ((Entity) obj).K();
         }
         for (CutsceneCameraPoint p : this.cameraPoints) {
             EntityCamera e = new EntityCamera(Minecraft.minecraftInstance.f, p.time, p.cameraBlendType, p.cameraID);
             e.b(p.posX, p.posY, p.posZ, p.rotYaw, p.rotPitch);
-            Minecraft.minecraftInstance.f.b((Entity)e);
+            Minecraft.minecraftInstance.f.b((Entity) e);
         }
         CutsceneCamera c = new CutsceneCamera();
         for (CutsceneCameraPoint p : this.cameraPoints)
@@ -157,7 +157,7 @@ public class CutsceneCamera {
     }
 
     CutsceneCameraPoint getCurrentPoint(float partialTickTime) {
-        float elapsed = ((float)(Minecraft.minecraftInstance.f.t() - this.startTime) + partialTickTime) / 20.0F;
+        float elapsed = ((float) (Minecraft.minecraftInstance.f.t() - this.startTime) + partialTickTime) / 20.0F;
         return getPoint(elapsed);
     }
 
@@ -168,10 +168,10 @@ public class CutsceneCamera {
                 return this.curPoint;
             if (this.startType != 0) {
                 Entity player = Minecraft.minecraftInstance.h;
-                this.prevPoint = new CutsceneCameraPoint(0.0F, (float)player.aM, (float)player.aN, (float)player.aO, player.aS, player.aT, this.startType);
+                this.prevPoint = new CutsceneCameraPoint(0.0F, (float) player.aM, (float) player.aN, (float) player.aO, player.aS, player.aT, this.startType);
                 fixYawPitch(player.aS, player.aT);
             } else {
-                CutsceneCameraPoint start = (CutsceneCameraPoint)this.cameraPoints.get(0);
+                CutsceneCameraPoint start = this.cameraPoints.get(0);
                 this.prevPoint = new CutsceneCameraPoint(0.0F, start.posX, start.posY, start.posZ, start.rotYaw, start.rotPitch, this.startType);
             }
         }

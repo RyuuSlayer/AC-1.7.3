@@ -74,7 +74,7 @@ public class GuiMapSelect extends da {
                         File saveDir = new File(mcDir, "saves");
                         int i = 1;
                         do {
-                            this.saveName = String.format("%s - Save %d", new Object[] { this.selectedMap.name, Integer.valueOf(i) });
+                            this.saveName = String.format("%s - Save %d", this.selectedMap.name, Integer.valueOf(i));
                             worldDir = new File(saveDir, this.saveName);
                             i++;
                         } while (worldDir.exists());
@@ -85,7 +85,7 @@ public class GuiMapSelect extends da {
                 this.b.startWorld(this.saveName, this.saveName, 0L, this.selectedMap.name);
             }
         } else if (guibutton.f == 7) {
-            this.b.a((da)new GuiCreateNewMap(this));
+            this.b.a((da) new GuiCreateNewMap(this));
         }
     }
 
@@ -111,7 +111,7 @@ public class GuiMapSelect extends da {
                     int i1 = this.c / 2 + 110;
                     int j1 = (j - this.field_6459_i + this.field_6460_h - 2) / 36;
                     if (i >= k && i <= i1 && j1 >= 0 && j1 < list.size())
-                        this.selectedMap = (MapInfo)list.get(j1);
+                        this.selectedMap = list.get(j1);
                     this.field_6455_n = j;
                 } else {
                     this.field_6455_n = -2;
@@ -122,7 +122,7 @@ public class GuiMapSelect extends da {
             }
         } else {
             if (this.field_6455_n >= 0)
-                if (this.field_6455_n != j);
+                if (this.field_6455_n != j) ;
             this.field_6455_n = -1;
         }
         int l = list.size() * 36 - this.field_6458_j - this.field_6459_i - 4;
@@ -146,7 +146,7 @@ public class GuiMapSelect extends da {
         tessellator.a(this.field_6457_l, this.field_6459_i, 0.0D, (this.field_6457_l / f1), ((this.field_6459_i + this.field_6460_h) / f1));
         tessellator.a();
         for (int k1 = 0; k1 < list.size(); k1++) {
-            MapInfo mInfo = (MapInfo)list.get(k1);
+            MapInfo mInfo = list.get(k1);
             int l1 = this.c / 2 - 92 - 16;
             int i2 = 36 + k1 * 36 - this.field_6460_h;
             byte byte1 = 32;

@@ -25,7 +25,7 @@ public class sl extends sn {
 
     protected int k;
 
-    private int attackStrength;
+    private final int attackStrength;
 
     public sl(fd world) {
         super(world);
@@ -132,8 +132,8 @@ public class sl extends sn {
         this.aQ = d1;
         this.aR = d2;
         float f3 = in.a(d * d + d2 * d2);
-        this.aU = this.aS = (float)(Math.atan2(d, d2) * 180.0D / 3.1415927410125732D);
-        this.aV = this.aT = (float)(Math.atan2(d1, f3) * 180.0D / 3.1415927410125732D);
+        this.aU = this.aS = (float) (Math.atan2(d, d2) * 180.0D / 3.1415927410125732D);
+        this.aV = this.aT = (float) (Math.atan2(d1, f3) * 180.0D / 3.1415927410125732D);
         this.j = 0;
     }
 
@@ -143,8 +143,8 @@ public class sl extends sn {
         this.aR = d2;
         if (this.aV == 0.0F && this.aU == 0.0F) {
             float f = in.a(d * d + d2 * d2);
-            this.aU = this.aS = (float)(Math.atan2(d, d2) * 180.0D / 3.1415927410125732D);
-            this.aV = this.aT = (float)(Math.atan2(d1, f) * 180.0D / 3.1415927410125732D);
+            this.aU = this.aS = (float) (Math.atan2(d, d2) * 180.0D / 3.1415927410125732D);
+            this.aV = this.aT = (float) (Math.atan2(d1, f) * 180.0D / 3.1415927410125732D);
             this.aV = this.aT;
             this.aU = this.aS;
             c(this.aM, this.aN, this.aO, this.aS, this.aT);
@@ -156,12 +156,12 @@ public class sl extends sn {
         super.w_();
         if (this.aV == 0.0F && this.aU == 0.0F) {
             float f = in.a(this.aP * this.aP + this.aR * this.aR);
-            this.aU = this.aS = (float)(Math.atan2(this.aP, this.aR) * 180.0D / 3.1415927410125732D);
-            this.aV = this.aT = (float)(Math.atan2(this.aQ, f) * 180.0D / 3.1415927410125732D);
+            this.aU = this.aS = (float) (Math.atan2(this.aP, this.aR) * 180.0D / 3.1415927410125732D);
+            this.aV = this.aT = (float) (Math.atan2(this.aQ, f) * 180.0D / 3.1415927410125732D);
         }
         int i = this.aI.a(this.d, this.e, this.f);
         if (i > 0 && i != AC_Blocks.clipBlock.bn && !dp.isLadderID(i)) {
-            Tile.m[i].a((xp)this.aI, this.d, this.e, this.f);
+            Tile.m[i].a((xp) this.aI, this.d, this.e, this.f);
             eq axisalignedbb = Tile.m[i].e(this.aI, this.d, this.e, this.f);
             if (axisalignedbb != null && axisalignedbb.a(bt.b(this.aM, this.aN, this.aO)))
                 this.i = true;
@@ -222,9 +222,9 @@ public class sl extends sn {
                 this.f = movingobjectposition.d;
                 this.g = this.aI.a(this.d, this.e, this.f);
                 this.h = this.aI.e(this.d, this.e, this.f);
-                this.aP = (float)(movingobjectposition.f.a - this.aM);
-                this.aQ = (float)(movingobjectposition.f.b - this.aN);
-                this.aR = (float)(movingobjectposition.f.c - this.aO);
+                this.aP = (float) (movingobjectposition.f.a - this.aM);
+                this.aQ = (float) (movingobjectposition.f.b - this.aN);
+                this.aR = (float) (movingobjectposition.f.c - this.aO);
                 float f1 = in.a(this.aP * this.aP + this.aQ * this.aQ + this.aR * this.aR);
                 this.aM -= this.aP / f1 * 0.05000000074505806D;
                 this.aN -= this.aQ / f1 * 0.05000000074505806D;
@@ -237,11 +237,12 @@ public class sl extends sn {
         this.aN += this.aQ;
         this.aO += this.aR;
         float f2 = in.a(this.aP * this.aP + this.aR * this.aR);
-        this.aS = (float)(Math.atan2(this.aP, this.aR) * 180.0D / 3.1415927410125732D);
-        for (this.aT = (float)(Math.atan2(this.aQ, f2) * 180.0D / 3.1415927410125732D); this.aT - this.aV < -180.0F; this.aV -= 360.0F);
-        for (; this.aT - this.aV >= 180.0F; this.aV += 360.0F);
-        for (; this.aS - this.aU < -180.0F; this.aU -= 360.0F);
-        for (; this.aS - this.aU >= 180.0F; this.aU += 360.0F);
+        this.aS = (float) (Math.atan2(this.aP, this.aR) * 180.0D / 3.1415927410125732D);
+        for (this.aT = (float) (Math.atan2(this.aQ, f2) * 180.0D / 3.1415927410125732D); this.aT - this.aV < -180.0F; this.aV -= 360.0F)
+            ;
+        for (; this.aT - this.aV >= 180.0F; this.aV += 360.0F) ;
+        for (; this.aS - this.aU < -180.0F; this.aU -= 360.0F) ;
+        for (; this.aS - this.aU >= 180.0F; this.aU += 360.0F) ;
         this.aT = this.aV + (this.aT - this.aV) * 0.2F;
         this.aS = this.aU + (this.aS - this.aU) * 0.2F;
         float f3 = 0.99F;
@@ -261,10 +262,10 @@ public class sl extends sn {
     }
 
     public void handleHitEntity(vf movingobjectposition) {
-        if (movingobjectposition.g instanceof ls && ((ls)movingobjectposition.g).protectedByShield(this.aJ, this.aK, this.aL)) {
+        if (movingobjectposition.g instanceof ls && ((ls) movingobjectposition.g).protectedByShield(this.aJ, this.aK, this.aL)) {
             this.aI.a(this, "random.drr", 1.0F, 1.2F / (this.bs.nextFloat() * 0.2F + 0.9F));
             K();
-        } else if (movingobjectposition.g.a((sn)this.c, this.attackStrength)) {
+        } else if (movingobjectposition.g.a((sn) this.c, this.attackStrength)) {
             this.aI.a(this, "random.drr", 1.0F, 1.2F / (this.bs.nextFloat() * 0.2F + 0.9F));
             K();
         } else {
@@ -278,13 +279,13 @@ public class sl extends sn {
     }
 
     public void b(nu nbttagcompound) {
-        nbttagcompound.a("xTile", (short)this.d);
-        nbttagcompound.a("yTile", (short)this.e);
-        nbttagcompound.a("zTile", (short)this.f);
-        nbttagcompound.a("inTile", (byte)this.g);
-        nbttagcompound.a("inData", (byte)this.h);
-        nbttagcompound.a("shake", (byte)this.b);
-        nbttagcompound.a("inGround", (byte)(this.i ? 1 : 0));
+        nbttagcompound.a("xTile", (short) this.d);
+        nbttagcompound.a("yTile", (short) this.e);
+        nbttagcompound.a("zTile", (short) this.f);
+        nbttagcompound.a("inTile", (byte) this.g);
+        nbttagcompound.a("inData", (byte) this.h);
+        nbttagcompound.a("shake", (byte) this.b);
+        nbttagcompound.a("inGround", (byte) (this.i ? 1 : 0));
         nbttagcompound.a("player", this.a);
     }
 

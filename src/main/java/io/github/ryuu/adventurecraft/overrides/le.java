@@ -40,12 +40,12 @@ public class le extends Tile {
     }
 
     public eq f(fd world, int i, int j, int k) {
-        a((xp)world, i, j, k);
+        a((xp) world, i, j, k);
         return super.f(world, i, j, k);
     }
 
     public eq e(fd world, int i, int j, int k) {
-        a((xp)world, i, j, k);
+        a((xp) world, i, j, k);
         return super.e(world, i, j, k);
     }
 
@@ -142,7 +142,7 @@ public class le extends Tile {
     }
 
     public vf a(fd world, int i, int j, int k, bt vec3d, bt vec3d1) {
-        a((xp)world, i, j, k);
+        a((xp) world, i, j, k);
         int m = world.e(i, j, k);
         if (this.bA == ln.f && (m & 0x8) == 8)
             this.bt = 0.8125D;

@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class NativeJavaMap extends NativeJavaObject {
 
-    private Map<Object, Object> map;
+    private final Map<Object, Object> map;
 
     @SuppressWarnings("unchecked")
     public NativeJavaMap(Scriptable scope, Object map) {
@@ -77,7 +77,7 @@ public class NativeJavaMap extends NativeJavaObject {
         List<Object> ids = new ArrayList<>(map.size());
         for (Object key : map.keySet()) {
             if (key instanceof Integer) {
-                ids.add((Integer)key);
+                ids.add(key);
             } else {
                 ids.add(ScriptRuntime.toString(key));
             }

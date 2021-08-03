@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.util;
 
 import java.awt.image.BufferedImage;
+
 import net.minecraft.client.Minecraft;
 import org.lwjgl.opengl.GL11;
 
@@ -11,7 +12,7 @@ public class MapInfo {
 
     public String description2;
 
-    private BufferedImage mapThumbnail;
+    private final BufferedImage mapThumbnail;
 
     private int textureID;
 

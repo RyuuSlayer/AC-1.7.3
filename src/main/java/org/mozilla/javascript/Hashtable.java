@@ -39,23 +39,23 @@ public class Hashtable implements Serializable, Iterable<Hashtable.Entry> {
      * node in the linked list.
      */
 
-      public static final class Entry implements Serializable {
-      private static final long serialVersionUID = 4086572107122965503L;
-      protected Object key;
-      protected Object value;
-      protected boolean deleted;
-      protected Entry next;
-      protected Entry prev;
-      private final int hashCode;
+    public static final class Entry implements Serializable {
+        private static final long serialVersionUID = 4086572107122965503L;
+        protected Object key;
+        protected Object value;
+        protected boolean deleted;
+        protected Entry next;
+        protected Entry prev;
+        private final int hashCode;
 
         Entry() {
             hashCode = 0;
         }
 
         Entry(Object k, Object value) {
-            if ((k instanceof Number) && ( ! ( k instanceof Double))) {
+            if ((k instanceof Number) && (!(k instanceof Double))) {
                 // Hash comparison won't work if we don't do this
-                this.key = Double.valueOf(((Number)k).doubleValue());
+                this.key = Double.valueOf(((Number) k).doubleValue());
             } else if (k instanceof ConsString) {
                 this.key = k.toString();
             } else {
@@ -103,7 +103,7 @@ public class Hashtable implements Serializable, Iterable<Hashtable.Entry> {
                 return false;
             }
             try {
-                return ScriptRuntime.sameZero(key, ((Entry)o).key);
+                return ScriptRuntime.sameZero(key, ((Entry) o).key);
             } catch (ClassCastException cce) {
                 return false;
             }
@@ -187,7 +187,7 @@ public class Hashtable implements Serializable, Iterable<Hashtable.Entry> {
             if (v.next != null) {
                 v.next.prev = prev;
             } else {
-                assert(v == last);
+                assert (v == last);
                 last = prev;
             }
         }
@@ -221,8 +221,7 @@ public class Hashtable implements Serializable, Iterable<Hashtable.Entry> {
     // The iterator for this class works directly on the linked list so that it implements
     // the specified iteration behavior, which is very different from Java.
     private final static class Iter
-        implements Iterator<Entry>
-    {
+            implements Iterator<Entry> {
         private Entry pos;
 
         Iter(Entry start) {

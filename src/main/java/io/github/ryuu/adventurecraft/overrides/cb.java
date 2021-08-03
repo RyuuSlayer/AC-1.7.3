@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import org.lwjgl.Sys;
 import org.lwjgl.opengl.GL11;
 
@@ -74,10 +75,10 @@ public class cb extends Panel {
         s3 = s3 + "\n";
         TextArea textarea = new TextArea(s3, 0, 0, 1);
         textarea.setFont(new Font("Monospaced", 0, 12));
-        add((Component)new fy(), "North");
-        add((Component)new wv(80), "East");
-        add((Component)new wv(80), "West");
-        add((Component)new wv(100), "South");
+        add((Component) new fy(), "North");
+        add((Component) new wv(80), "East");
+        add((Component) new wv(80), "West");
+        add((Component) new wv(100), "South");
         add(textarea, "Center");
     }
 }

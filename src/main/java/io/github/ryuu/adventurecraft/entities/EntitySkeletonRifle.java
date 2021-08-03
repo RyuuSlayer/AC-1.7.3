@@ -2,9 +2,10 @@ package io.github.ryuu.adventurecraft.entities;
 
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.UtilBullet;
+import net.minecraft.entity.monster.Skeleton;
 import net.minecraft.level.Level;
 
-public class EntitySkeletonRifle extends fr {
+public class EntitySkeletonRifle extends Skeleton {
     int ammo;
 
     public EntitySkeletonRifle(Level world) {
@@ -20,8 +21,8 @@ public class EntitySkeletonRifle extends fr {
             if (this.ae == 0) {
                 this.ammo--;
                 a(entity, 60.0F, 90.0F);
-                this.aS = (float)(this.aS + 10.0D * this.bs.nextGaussian());
-                this.aT = (float)(this.aT + 3.0D * this.bs.nextGaussian());
+                this.aS = (float) (this.aS + 10.0D * this.bs.nextGaussian());
+                this.aT = (float) (this.aT + 3.0D * this.bs.nextGaussian());
                 this.aI.a(this, "items.rifle.fire", 1.0F, 1.0F);
                 UtilBullet.fireBullet(this.aI, this, 0.07F, this.c);
                 this.ae = 5;
@@ -32,7 +33,7 @@ public class EntitySkeletonRifle extends fr {
             }
             double d = entity.aM - this.aM;
             double d1 = entity.aO - this.aO;
-            this.aS = (float)(Math.atan2(d1, d) * 180.0D / 3.1415927410125732D) - 90.0F;
+            this.aS = (float) (Math.atan2(d1, d) * 180.0D / 3.1415927410125732D) - 90.0F;
             this.e = true;
         }
     }

@@ -84,8 +84,8 @@ public class ix implements lw {
         if (i < 0)
             i = -1;
         int prevCurrentItem = this.c;
-        for (this.c -= i; this.c < 0; this.c += 9);
-        for (; this.c >= 9; this.c -= 9);
+        for (this.c -= i; this.c < 0; this.c += 9) ;
+        for (; this.c >= 9; this.c -= 9) ;
         if (this.c == this.offhandItem)
             this.offhandItem = prevCurrentItem;
     }
@@ -119,11 +119,11 @@ public class ix implements lw {
         for (int i = 0; i < this.a.length; i++) {
             if (this.a[i] != null) {
                 iz itemStack = this.a[i];
-                itemStack.a(this.d.aI, (sn)this.d, i, (this.c == i));
+                itemStack.a(this.d.aI, this.d, i, (this.c == i));
                 if (itemStack.timeLeft > 0)
                     itemStack.timeLeft--;
                 if ((i == this.c || i == this.offhandItem) && itemStack.timeLeft == 0 && itemStack.isReloading) {
-                    IItemReload item = (IItemReload)gm.c[itemStack.c];
+                    IItemReload item = (IItemReload) gm.c[itemStack.c];
                     item.reload(itemStack, this.d.aI, this.d);
                 }
                 if (itemStack.i() > 0 && (gm.c[itemStack.c]).decrementDamage)
@@ -232,7 +232,7 @@ public class ix implements lw {
         for (int i = 0; i < this.a.length; i++) {
             if (this.a[i] != null) {
                 nu nbttagcompound = new nu();
-                nbttagcompound.a("Slot", (byte)i);
+                nbttagcompound.a("Slot", (byte) i);
                 this.a[i].a(nbttagcompound);
                 nbttaglist.a(nbttagcompound);
             }
@@ -240,7 +240,7 @@ public class ix implements lw {
         for (int j = 0; j < this.b.length; j++) {
             if (this.b[j] != null) {
                 nu nbttagcompound1 = new nu();
-                nbttagcompound1.a("Slot", (byte)(j + 100));
+                nbttagcompound1.a("Slot", (byte) (j + 100));
                 this.b[j].a(nbttagcompound1);
                 nbttaglist.a(nbttagcompound1);
             }
@@ -252,7 +252,7 @@ public class ix implements lw {
         this.a = new iz[36];
         this.b = new iz[4];
         for (int i = 0; i < nbttaglist.c(); i++) {
-            nu nbttagcompound = (nu)nbttaglist.a(i);
+            nu nbttagcompound = (nu) nbttaglist.a(i);
             int j = nbttagcompound.c("Slot") & 0xFF;
             iz itemstack = new iz(nbttagcompound);
             if (itemstack.a() != null) {
@@ -316,18 +316,18 @@ public class ix implements lw {
                 int k1 = i1 - j1;
                 j += k1;
                 k += i1;
-                i += ((wa)this.b[l].a()).bl;
+                i += ((wa) this.b[l].a()).bl;
             }
         }
         if (k == 0)
             return 0;
-        return (int)((i - 1.0F) * j) / k + 1;
+        return (int) ((i - 1.0F) * j) / k + 1;
     }
 
     public void e(int i) {
         for (int j = 0; j < this.b.length; j++) {
             if (this.b[j] != null && this.b[j].a() instanceof wa) {
-                this.b[j].a(i, (sn)this.d);
+                this.b[j].a(i, this.d);
                 if ((this.b[j]).a == 0) {
                     int prevItemID = (this.b[j]).c;
                     int prevDamage = this.b[j].i();
@@ -374,7 +374,7 @@ public class ix implements lw {
     public boolean a_(gs entityplayer) {
         if (this.d.be)
             return false;
-        return (entityplayer.g((sn)this.d) <= 64.0D);
+        return (entityplayer.g(this.d) <= 64.0D);
     }
 
     public boolean c(iz itemstack) {

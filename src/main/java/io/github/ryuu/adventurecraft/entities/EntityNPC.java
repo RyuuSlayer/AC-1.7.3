@@ -45,7 +45,8 @@ public class EntityNPC extends EntityLivingScript {
         this.chatMsg = "Hello!";
     }
 
-    protected void b() {}
+    protected void b() {
+    }
 
     public void w_() {
         if (!this.ranOnCreate) {
@@ -53,20 +54,20 @@ public class EntityNPC extends EntityLivingScript {
             runCreatedScript();
         }
         if (this.pathToHome && !isPathing() && g(this.spawnX, this.spawnY, this.spawnZ) > 4.0D)
-            pathToPosition((int)this.spawnX, (int)this.spawnY, (int)this.spawnZ);
+            pathToPosition((int) this.spawnX, (int) this.spawnY, (int) this.spawnZ);
         super.w_();
         if (this.trackPlayer && this.entityToTrack == null)
             this.entityToTrack = findPlayerToTrack();
         if (this.entityToTrack != null)
             if (!this.entityToTrack.W()) {
                 this.entityToTrack = null;
-            } else if (this.entityToTrack.f((sn)this) > 16.0F || !e(this.entityToTrack)) {
+            } else if (this.entityToTrack.f((sn) this) > 16.0F || !e(this.entityToTrack)) {
                 this.entityToTrack = null;
             }
         if (this.entityToTrack != null) {
             double d4 = this.entityToTrack.aM - this.aM;
             double d5 = this.entityToTrack.aO - this.aO;
-            float desiredYaw = (float)(Math.atan2(d5, d4) * 180.0D / 3.1415927410125732D) - 90.0F;
+            float desiredYaw = (float) (Math.atan2(d5, d4) * 180.0D / 3.1415927410125732D) - 90.0F;
             float delta = desiredYaw - this.aS;
             while (delta < -180.0F)
                 delta += 360.0F;
@@ -87,7 +88,7 @@ public class EntityNPC extends EntityLivingScript {
     }
 
     protected sn findPlayerToTrack() {
-        Player entityplayer = this.aI.a((sn)this, 16.0D);
+        Player entityplayer = this.aI.a((sn) this, 16.0D);
         if (entityplayer != null && e(entityplayer))
             return entityplayer;
         return null;
@@ -139,7 +140,7 @@ public class EntityNPC extends EntityLivingScript {
     public boolean a(Player entityplayer) {
         if (super.a(entityplayer)) {
             if (this.chatMsg != null && !this.chatMsg.equals(""))
-                Minecraft.minecraftInstance.v.a(String.format("<%s> %s", new Object[] { this.npcName, this.chatMsg }));
+                Minecraft.minecraftInstance.v.a(String.format("<%s> %s", new Object[]{this.npcName, this.chatMsg}));
             return true;
         }
         return false;

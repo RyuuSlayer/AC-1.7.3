@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.entities;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
@@ -58,9 +59,9 @@ public class EntityBoomerang extends sn {
         this.timeBeforeTurnAround = 30;
         this.turningAround = false;
         this.returnsTo = entity;
-        this.chunkX = (int)Math.floor(this.aM);
-        this.chunkY = (int)Math.floor(this.aN);
-        this.chunkZ = (int)Math.floor(this.aO);
+        this.chunkX = (int) Math.floor(this.aM);
+        this.chunkY = (int) Math.floor(this.aN);
+        this.chunkZ = (int) Math.floor(this.aO);
     }
 
     public void w_() {
@@ -131,9 +132,9 @@ public class EntityBoomerang extends sn {
             if (!e.be)
                 e.e(this.aM, this.aN, this.aO);
         }
-        int curChunkX = (int)Math.floor(this.aM);
-        int curChunkY = (int)Math.floor(this.aN);
-        int curChunkZ = (int)Math.floor(this.aO);
+        int curChunkX = (int) Math.floor(this.aM);
+        int curChunkY = (int) Math.floor(this.aN);
+        int curChunkZ = (int) Math.floor(this.aO);
         if (curChunkX != this.chunkX || curChunkY != this.chunkY || curChunkZ != this.chunkZ) {
             this.chunkX = curChunkX;
             this.chunkY = curChunkY;
@@ -141,7 +142,7 @@ public class EntityBoomerang extends sn {
             int blockID = this.aI.a(this.chunkX, this.chunkY, this.chunkZ);
             if (blockID == uu.aK.bn)
                 if (this.returnsTo instanceof gs)
-                    Tile.aK.a(this.aI, this.chunkX, this.chunkY, this.chunkZ, (gs)this.returnsTo);
+                    Tile.aK.a(this.aI, this.chunkX, this.chunkY, this.chunkZ, (gs) this.returnsTo);
         }
     }
 
@@ -152,22 +153,25 @@ public class EntityBoomerang extends sn {
     }
 
     public void determineRotation() {
-        this.aS = -57.29578F * (float)Math.atan2(this.aP, this.aR);
+        this.aS = -57.29578F * (float) Math.atan2(this.aP, this.aR);
         double xzLength = Math.sqrt(this.aR * this.aR + this.aP * this.aP);
-        this.aT = -57.29578F * (float)Math.atan2(this.aQ, xzLength);
+        this.aT = -57.29578F * (float) Math.atan2(this.aQ, xzLength);
     }
 
-    protected void b(nu nbttagcompound) {}
+    protected void b(nu nbttagcompound) {
+    }
 
     public void a(nu nbttagcompound) {
         K();
     }
 
-    public void b(Player entityplayer) {}
+    public void b(Player entityplayer) {
+    }
 
     public boolean a(sn entity, int i) {
         return false;
     }
 
-    protected void b() {}
+    protected void b() {
+    }
 }

@@ -177,14 +177,14 @@ public class SwingGui extends JFrame implements GuiCallback {
     /**
      * Hash table of internal frame names to the internal frames themselves.
      */
-    private final Map<String,JFrame> toplevels =
-        Collections.synchronizedMap(new HashMap<String,JFrame>());
+    private final Map<String, JFrame> toplevels =
+            Collections.synchronizedMap(new HashMap<String, JFrame>());
 
     /**
      * Hash table of script URLs to their internal frames.
      */
-    private final Map<String,FileWindow> fileWindows =
-        Collections.synchronizedMap(new TreeMap<String,FileWindow>());
+    private final Map<String, FileWindow> fileWindows =
+            Collections.synchronizedMap(new TreeMap<String, FileWindow>());
 
 
     /**
@@ -273,12 +273,12 @@ public class SwingGui extends JFrame implements GuiCallback {
         toolBar = new JToolBar();
         JButton button;
         JButton breakButton, goButton, stepIntoButton,
-            stepOverButton, stepOutButton;
-        String [] toolTips = {"Break (Pause)",
-                              "Go (F5)",
-                              "Step Into (F11)",
-                              "Step Over (F7)",
-                              "Step Out (F8)"};
+                stepOverButton, stepOutButton;
+        String[] toolTips = {"Break (Pause)",
+                "Go (F5)",
+                "Step Into (F11)",
+                "Step Over (F7)",
+                "Step Out (F8)"};
         int count = 0;
         button = breakButton = new JButton("Break");
         button.setToolTipText("Break");
@@ -351,7 +351,7 @@ public class SwingGui extends JFrame implements GuiCallback {
         context.setMinimumSize(new Dimension(50, 50));
 
         split1 = new JSplitPane(JSplitPane.VERTICAL_SPLIT, desk,
-                                          context);
+                context);
         split1.setOneTouchExpandable(true);
         SwingGui.setResizeWeight(split1, 0.66);
         contentPane.add(split1, BorderLayout.CENTER);
@@ -361,7 +361,7 @@ public class SwingGui extends JFrame implements GuiCallback {
         dlg = new JFileChooser();
 
         javax.swing.filechooser.FileFilter filter =
-            new javax.swing.filechooser.FileFilter() {
+                new javax.swing.filechooser.FileFilter() {
                     @Override
                     public boolean accept(File f) {
                         if (f.isDirectory()) {
@@ -369,11 +369,9 @@ public class SwingGui extends JFrame implements GuiCallback {
                         }
                         String n = f.getName();
                         int i = n.lastIndexOf('.');
-                        if (i > 0 && i < n.length() -1) {
+                        if (i > 0 && i < n.length() - 1) {
                             String ext = n.substring(i + 1).toLowerCase();
-                            if (ext.equals("js")) {
-                                return true;
-                            }
+                            return ext.equals("js");
                         }
                         return false;
                     }
@@ -385,11 +383,11 @@ public class SwingGui extends JFrame implements GuiCallback {
                 };
         dlg.addChoosableFileFilter(filter);
         addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosing(WindowEvent e) {
-                    exit();
-                }
-            });
+            @Override
+            public void windowClosing(WindowEvent e) {
+                exit();
+            }
+        });
     }
 
     /**
@@ -434,7 +432,7 @@ public class SwingGui extends JFrame implements GuiCallback {
         fileWindows.remove(w.getUrl());
         JMenu windowMenu = getWindowMenu();
         int count = windowMenu.getItemCount();
-        JMenuItem lastItem = windowMenu.getItem(count -1);
+        JMenuItem lastItem = windowMenu.getItem(count - 1);
         String name = getShortName(w.getUrl());
         for (int i = 5; i < count; i++) {
             JMenuItem item = windowMenu.getItem(i);
@@ -455,7 +453,7 @@ public class SwingGui extends JFrame implements GuiCallback {
                     windowMenu.remove(4);
                 } else {
                     int j = i - 4;
-                    for (;i < count -1; i++) {
+                    for (; i < count - 1; i++) {
                         JMenuItem thisItem = windowMenu.getItem(i);
                         if (thisItem != null) {
                             //1 D:\foo.js
@@ -465,8 +463,8 @@ public class SwingGui extends JFrame implements GuiCallback {
                                 break;
                             }
                             pos = text.indexOf(' ');
-                            thisItem.setText((char)('0' + j) + " " +
-                                             text.substring(pos + 1));
+                            thisItem.setText((char) ('0' + j) + " " +
+                                    text.substring(pos + 1));
                             thisItem.setMnemonic('0' + j);
                             j++;
                         }
@@ -506,20 +504,19 @@ public class SwingGui extends JFrame implements GuiCallback {
      * Shows a {@link FileWindow} for the given source, creating it
      * if it doesn't exist yet. if <code>lineNumber</code> is greater
      * than -1, it indicates the line number to select and display.
-     * @param sourceUrl the source URL
+     *
+     * @param sourceUrl  the source URL
      * @param lineNumber the line number to select, or -1
      */
     protected void showFileWindow(String sourceUrl, int lineNumber) {
         FileWindow w;
         if (sourceUrl != null) {
             w = getFileWindow(sourceUrl);
-        }
-        else {
+        } else {
             JInternalFrame f = getSelectedFrame();
             if (f != null && f instanceof FileWindow) {
                 w = (FileWindow) f;
-            }
-            else {
+            } else {
                 w = currentWindow;
             }
         }
@@ -532,8 +529,8 @@ public class SwingGui extends JFrame implements GuiCallback {
             return;
         }
         if (lineNumber > -1) {
-            int start = w.getPosition(lineNumber-1);
-            int end = w.getPosition(lineNumber)-1;
+            int start = w.getPosition(lineNumber - 1);
+            int end = w.getPosition(lineNumber) - 1;
             if (start <= 0) {
                 return;
             }
@@ -569,7 +566,7 @@ public class SwingGui extends JFrame implements GuiCallback {
                 currentWindow.setPosition(-1);
             }
             try {
-                w.setPosition(w.textArea.getLineStartOffset(line-1));
+                w.setPosition(w.textArea.getLineStartOffset(line - 1));
             } catch (BadLocationException exc) {
                 try {
                     w.setPosition(w.textArea.getLineStartOffset(0));
@@ -599,9 +596,10 @@ public class SwingGui extends JFrame implements GuiCallback {
      * Update the source text for <code>sourceInfo</code>. This returns true
      * if a {@link FileWindow} for the given source exists and could be updated.
      * Otherwise, this does nothing and returns false.
+     *
      * @param sourceInfo the source info
      * @return true if a {@link FileWindow} for the given source exists
-     *              and could be updated, false otherwise.
+     * and could be updated, false otherwise.
      */
     protected boolean updateFileWindow(Dim.SourceInfo sourceInfo) {
         String fileName = sourceInfo.url();
@@ -628,7 +626,7 @@ public class SwingGui extends JFrame implements GuiCallback {
                     currentWindow = null;
                 }
             } else {
-                int loc = ta.getLineStartOffset(line-1);
+                int loc = ta.getLineStartOffset(line - 1);
                 if (currentWindow != null && currentWindow != w) {
                     currentWindow.setPosition(-1);
                 }
@@ -663,9 +661,9 @@ public class SwingGui extends JFrame implements GuiCallback {
 
         if (alertMessage != null) {
             MessageDialogWrapper.showMessageDialog(this,
-                                                   alertMessage,
-                                                   "Exception in Script",
-                                                   JOptionPane.ERROR_MESSAGE);
+                    alertMessage,
+                    "Exception in Script",
+                    JOptionPane.ERROR_MESSAGE);
         }
 
         updateEnabled(true);
@@ -739,13 +737,13 @@ public class SwingGui extends JFrame implements GuiCallback {
      * Returns the current selected internal frame.
      */
     private JInternalFrame getSelectedFrame() {
-       JInternalFrame[] frames = desk.getAllFrames();
-       for (int i = 0; i < frames.length; i++) {
-           if (frames[i].isShowing()) {
-               return frames[i];
-           }
-       }
-       return frames[frames.length - 1];
+        JInternalFrame[] frames = desk.getAllFrames();
+        for (int i = 0; i < frames.length; i++) {
+            if (frames[i].isShowing()) {
+                return frames[i];
+            }
+        }
+        return frames[frames.length - 1];
     }
 
     /**
@@ -753,7 +751,7 @@ public class SwingGui extends JFrame implements GuiCallback {
      * state of script execution.
      */
     private void updateEnabled(boolean interrupted) {
-        ((Menubar)getJMenuBar()).updateEnabled(interrupted);
+        ((Menubar) getJMenuBar()).updateEnabled(interrupted);
         for (int ci = 0, cc = toolBar.getComponentCount(); ci < cc; ci++) {
             boolean enableButton;
             if (ci == 0) {
@@ -786,8 +784,8 @@ public class SwingGui extends JFrame implements GuiCallback {
     static void setResizeWeight(JSplitPane pane, double weight) {
         try {
             Method m = JSplitPane.class.getMethod("setResizeWeight",
-                                                  new Class[]{double.class});
-            m.invoke(pane, new Object[]{new Double(weight)});
+                    double.class);
+            m.invoke(pane, new Double(weight));
         } catch (NoSuchMethodException exc) {
         } catch (IllegalAccessException exc) {
         } catch (java.lang.reflect.InvocationTargetException exc) {
@@ -805,9 +803,9 @@ public class SwingGui extends JFrame implements GuiCallback {
             }
         } catch (IOException ex) {
             MessageDialogWrapper.showMessageDialog(this,
-                                                   ex.getMessage(),
-                                                   "Error reading "+fileName,
-                                                   JOptionPane.ERROR_MESSAGE);
+                    ex.getMessage(),
+                    "Error reading " + fileName,
+                    JOptionPane.ERROR_MESSAGE);
             text = null;
         }
         return text;
@@ -863,14 +861,14 @@ public class SwingGui extends JFrame implements GuiCallback {
         }
         AWTEvent event = queue.getNextEvent();
         if (event instanceof ActiveEvent) {
-            ((ActiveEvent)event).dispatch();
+            ((ActiveEvent) event).dispatch();
         } else {
             Object source = event.getSource();
             if (source instanceof Component) {
-                Component comp = (Component)source;
+                Component comp = (Component) source;
                 comp.dispatchEvent(event);
             } else if (source instanceof MenuComponent) {
-                ((MenuComponent)source).dispatchEvent(event);
+                ((MenuComponent) source).dispatchEvent(event);
             }
         }
     }
@@ -886,7 +884,7 @@ public class SwingGui extends JFrame implements GuiCallback {
         if (cmd.equals("Cut") || cmd.equals("Copy") || cmd.equals("Paste")) {
             JInternalFrame f = getSelectedFrame();
             if (f != null && f instanceof ActionListener) {
-                ((ActionListener)f).actionPerformed(e);
+                ((ActionListener) f).actionPerformed(e);
             }
         } else if (cmd.equals("Step Over")) {
             returnValue = Dim.STEP_OVER;
@@ -924,7 +922,7 @@ public class SwingGui extends JFrame implements GuiCallback {
             }
         } else if (cmd.equals("More Windows...")) {
             MoreWindows dlg = new MoreWindows(this, fileWindows,
-                                              "Window", "Files");
+                    "Window", "Files");
             dlg.showDialog(this);
         } else if (cmd.equals("Console")) {
             if (console.isIcon()) {
@@ -938,7 +936,7 @@ public class SwingGui extends JFrame implements GuiCallback {
         } else if (cmd.equals("Paste")) {
         } else if (cmd.equals("Go to function...")) {
             FindFunction dlg = new FindFunction(this, "Go to function",
-                                                "Function");
+                    "Function");
             dlg.showDialog(this);
         } else if (cmd.equals("Go to line...")) {
             final String s = (String) JOptionPane.showInputDialog(
@@ -955,29 +953,28 @@ public class SwingGui extends JFrame implements GuiCallback {
             try {
                 final int line = Integer.parseInt(s);
                 showFileWindow(null, line);
-            }
-            catch (final NumberFormatException nfe) {
+            } catch (final NumberFormatException nfe) {
                 // ignore
             }
         } else if (cmd.equals("Tile")) {
             JInternalFrame[] frames = desk.getAllFrames();
             int count = frames.length;
             int rows, cols;
-            rows = cols = (int)Math.sqrt(count);
-            if (rows*cols < count) {
+            rows = cols = (int) Math.sqrt(count);
+            if (rows * cols < count) {
                 cols++;
                 if (rows * cols < count) {
                     rows++;
                 }
             }
             Dimension size = desk.getSize();
-            int w = size.width/cols;
-            int h = size.height/rows;
+            int w = size.width / cols;
+            int h = size.height / rows;
             int x = 0;
             int y = 0;
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < cols; j++) {
-                    int index = (i*cols) + j;
+                    int index = (i * cols) + j;
                     if (index >= frames.length) {
                         break;
                     }
@@ -988,7 +985,7 @@ public class SwingGui extends JFrame implements GuiCallback {
                     } catch (Exception exc) {
                     }
                     desk.getDesktopManager().setBoundsForFrame(f, x, y,
-                                                               w, h);
+                            w, h);
                     x += w;
                 }
                 y += h;
@@ -1002,7 +999,7 @@ public class SwingGui extends JFrame implements GuiCallback {
             h = desk.getHeight();
             int d = h / count;
             if (d > 30) d = 30;
-            for (int i = count -1; i >= 0; i--, x += d, y += d) {
+            for (int i = count - 1; i >= 0; i--, x += d, y += d) {
                 JInternalFrame f = frames[i];
                 try {
                     f.setIcon(false);
@@ -1017,7 +1014,7 @@ public class SwingGui extends JFrame implements GuiCallback {
         } else {
             Object obj = getFileWindow(cmd);
             if (obj != null) {
-                FileWindow w = (FileWindow)obj;
+                FileWindow w = (FileWindow) obj;
                 try {
                     if (w.isIcon()) {
                         w.setIcon(false);
@@ -1081,8 +1078,8 @@ class MessageDialogWrapper {
  * Extension of JTextArea for script evaluation input.
  */
 class EvalTextArea
-    extends JTextArea
-    implements KeyListener, DocumentListener {
+        extends JTextArea
+        implements KeyListener, DocumentListener {
 
     /**
      * Serializable magic number.
@@ -1092,12 +1089,12 @@ class EvalTextArea
     /**
      * The debugger GUI.
      */
-    private SwingGui debugGui;
+    private final SwingGui debugGui;
 
     /**
      * History of expressions that have been evaluated
      */
-    private List<String> history;
+    private final List<String> history;
 
     /**
      * Index of the selected history item.
@@ -1148,8 +1145,8 @@ class EvalTextArea
         String text = segment.toString();
         if (debugGui.dim.stringIsCompilableUnit(text)) {
             if (text.trim().length() > 0) {
-               history.add(text);
-               historyIndex = history.size();
+                history.add(text);
+                historyIndex = history.size();
             }
             append("\n");
             String result = debugGui.dim.eval(text);
@@ -1187,19 +1184,19 @@ class EvalTextArea
                 e.consume();
             }
         } else if (code == KeyEvent.VK_HOME) {
-           int caretPos = getCaretPosition();
-           if (caretPos == outputMark) {
-               e.consume();
-           } else if (caretPos > outputMark) {
-               if (!e.isControlDown()) {
-                   if (e.isShiftDown()) {
-                       moveCaretPosition(outputMark);
-                   } else {
-                       setCaretPosition(outputMark);
-                   }
-                   e.consume();
-               }
-           }
+            int caretPos = getCaretPosition();
+            if (caretPos == outputMark) {
+                e.consume();
+            } else if (caretPos > outputMark) {
+                if (!e.isControlDown()) {
+                    if (e.isShiftDown()) {
+                        moveCaretPosition(outputMark);
+                    } else {
+                        setCaretPosition(outputMark);
+                    }
+                    e.consume();
+                }
+            }
         } else if (code == KeyEvent.VK_ENTER) {
             returnPressed();
             e.consume();
@@ -1207,7 +1204,7 @@ class EvalTextArea
             historyIndex--;
             if (historyIndex >= 0) {
                 if (historyIndex >= history.size()) {
-                    historyIndex = history.size() -1;
+                    historyIndex = history.size() - 1;
                 }
                 if (historyIndex >= 0) {
                     String str = history.get(historyIndex);
@@ -1226,7 +1223,9 @@ class EvalTextArea
             int caretPos = outputMark;
             if (history.size() > 0) {
                 historyIndex++;
-                if (historyIndex < 0) {historyIndex = 0;}
+                if (historyIndex < 0) {
+                    historyIndex = 0;
+                }
                 int len = getDocument().getLength();
                 if (historyIndex < history.size()) {
                     String str = history.get(historyIndex);
@@ -1324,7 +1323,7 @@ class EvalWindow extends JInternalFrame implements ActionListener {
     /**
      * The text area into which expressions can be typed.
      */
-    private EvalTextArea evalTextArea;
+    private final EvalTextArea evalTextArea;
 
     /**
      * Creates a new EvalWindow.
@@ -1390,15 +1389,15 @@ class JSInternalConsole extends JInternalFrame implements ActionListener {
         setContentPane(scroller);
         pack();
         addInternalFrameListener(new InternalFrameAdapter() {
-                @Override
-                public void internalFrameActivated(InternalFrameEvent e) {
-                    // hack
-                    if (consoleTextArea.hasFocus()) {
-                        consoleTextArea.getCaret().setVisible(false);
-                        consoleTextArea.getCaret().setVisible(true);
-                    }
+            @Override
+            public void internalFrameActivated(InternalFrameEvent e) {
+                // hack
+                if (consoleTextArea.hasFocus()) {
+                    consoleTextArea.getCaret().setVisible(false);
+                    consoleTextArea.getCaret().setVisible(true);
                 }
-            });
+            }
+        });
     }
 
     /**
@@ -1492,8 +1491,8 @@ class FilePopupMenu extends JPopupMenu {
  * Text area to display script source.
  */
 class FileTextArea
-    extends JTextArea
-    implements ActionListener, PopupMenuListener, KeyListener, MouseListener {
+        extends JTextArea
+        implements ActionListener, PopupMenuListener, KeyListener, MouseListener {
 
     /**
      * Serializable magic number.
@@ -1503,12 +1502,12 @@ class FileTextArea
     /**
      * The owning {@link FileWindow}.
      */
-    private FileWindow w;
+    private final FileWindow w;
 
     /**
      * The popup menu.
      */
-    private FilePopupMenu popup;
+    private final FilePopupMenu popup;
 
     /**
      * Creates a new FileTextArea.
@@ -1535,20 +1534,20 @@ class FileTextArea
                 } else {
                     try {
                         Rectangle nrect =
-                            modelToView(getLineStartOffset(line + 1));
+                                modelToView(getLineStartOffset(line + 1));
                         if (nrect != null) {
                             rect = nrect;
                         }
                     } catch (Exception exc) {
                     }
-                    JViewport vp = (JViewport)getParent();
+                    JViewport vp = (JViewport) getParent();
                     Rectangle viewRect = vp.getViewRect();
                     if (viewRect.y + viewRect.height > rect.y) {
                         // need to scroll up
                         select(pos, pos);
                     } else {
                         // need to scroll down
-                        rect.y += (viewRect.height - rect.height)/2;
+                        rect.y += (viewRect.height - rect.height) / 2;
                         scrollRectToVisible(rect);
                         select(pos, pos);
                     }
@@ -1666,12 +1665,12 @@ class FileTextArea
     @Override
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
-        case KeyEvent.VK_BACK_SPACE:
-        case KeyEvent.VK_ENTER:
-        case KeyEvent.VK_DELETE:
-        case KeyEvent.VK_TAB:
-            e.consume();
-            break;
+            case KeyEvent.VK_BACK_SPACE:
+            case KeyEvent.VK_ENTER:
+            case KeyEvent.VK_DELETE:
+            case KeyEvent.VK_TAB:
+                e.consume();
+                break;
         }
     }
 
@@ -1710,27 +1709,27 @@ class MoreWindows extends JDialog implements ActionListener {
     /**
      * The list component.
      */
-    private JList<String> list;
+    private final JList<String> list;
 
     /**
      * Our parent frame.
      */
-    private SwingGui swingGui;
+    private final SwingGui swingGui;
 
     /**
      * The "Select" button.
      */
-    private JButton setButton;
+    private final JButton setButton;
 
     /**
      * The "Cancel" button.
      */
-    private JButton cancelButton;
+    private final JButton cancelButton;
 
     /**
      * Creates a new MoreWindows.
      */
-    MoreWindows(SwingGui frame, Map<String,FileWindow> fileWindows, String title,
+    MoreWindows(SwingGui frame, Map<String, FileWindow> fileWindows, String title,
                 String labelText) {
         super(frame, title, true);
         this.swingGui = frame;
@@ -1743,10 +1742,10 @@ class MoreWindows extends JDialog implements ActionListener {
 
         //dim part of the dialog
         list = new JList<>(new DefaultListModel<String>());
-        DefaultListModel<String> model = (DefaultListModel<String>)list.getModel();
+        DefaultListModel<String> model = (DefaultListModel<String>) list.getModel();
         model.clear();
         //model.fireIntervalRemoved(model, 0, size);
-        for (String data: fileWindows.keySet()) {
+        for (String data : fileWindows.keySet()) {
             model.addElement(data);
         }
         list.setSelectedIndex(0);
@@ -1768,11 +1767,11 @@ class MoreWindows extends JDialog implements ActionListener {
         JPanel listPane = new JPanel();
         listPane.setLayout(new BoxLayout(listPane, BoxLayout.Y_AXIS));
         JLabel label = new JLabel(labelText);
-        label.setLabelFor (list);
+        label.setLabelFor(list);
         listPane.add(label);
-        listPane.add(Box.createRigidArea(new Dimension(0,5)));
+        listPane.add(Box.createRigidArea(new Dimension(0, 5)));
         listPane.add(listScroller);
-        listPane.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+        listPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         //Lay out the buttons from left to right.
         JPanel buttonPane = new JPanel();
@@ -1789,16 +1788,16 @@ class MoreWindows extends JDialog implements ActionListener {
         contentPane.add(buttonPane, BorderLayout.SOUTH);
         pack();
         addKeyListener(new KeyAdapter() {
-                @Override
-                public void keyPressed(KeyEvent ke) {
-                    int code = ke.getKeyCode();
-                    if (code == KeyEvent.VK_ESCAPE) {
-                        ke.consume();
-                        value = null;
-                        setVisible(false);
-                    }
+            @Override
+            public void keyPressed(KeyEvent ke) {
+                int code = ke.getKeyCode();
+                if (code == KeyEvent.VK_ESCAPE) {
+                    ke.consume();
+                    value = null;
+                    setVisible(false);
                 }
-            });
+            }
+        });
     }
 
     /**
@@ -1860,22 +1859,22 @@ class FindFunction extends JDialog implements ActionListener {
     /**
      * List of functions.
      */
-    private JList<String> list;
+    private final JList<String> list;
 
     /**
      * The debug GUI frame.
      */
-    private SwingGui debugGui;
+    private final SwingGui debugGui;
 
     /**
      * The "Select" button.
      */
-    private JButton setButton;
+    private final JButton setButton;
 
     /**
      * The "Cancel" button.
      */
-    private JButton cancelButton;
+    private final JButton cancelButton;
 
     /**
      * Creates a new FindFunction.
@@ -1891,7 +1890,7 @@ class FindFunction extends JDialog implements ActionListener {
         getRootPane().setDefaultButton(setButton);
 
         list = new JList<>(new DefaultListModel<String>());
-        DefaultListModel<String> model = (DefaultListModel<String>)list.getModel();
+        DefaultListModel<String> model = (DefaultListModel<String>) list.getModel();
         model.clear();
 
         String[] a = debugGui.dim.functionNames();
@@ -1916,11 +1915,11 @@ class FindFunction extends JDialog implements ActionListener {
         JPanel listPane = new JPanel();
         listPane.setLayout(new BoxLayout(listPane, BoxLayout.Y_AXIS));
         JLabel label = new JLabel(labelText);
-        label.setLabelFor (list);
+        label.setLabelFor(list);
         listPane.add(label);
-        listPane.add(Box.createRigidArea(new Dimension(0,5)));
+        listPane.add(Box.createRigidArea(new Dimension(0, 5)));
         listPane.add(listScroller);
-        listPane.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+        listPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         //Lay out the buttons from left to right.
         JPanel buttonPane = new JPanel();
@@ -1937,16 +1936,16 @@ class FindFunction extends JDialog implements ActionListener {
         contentPane.add(buttonPane, BorderLayout.SOUTH);
         pack();
         addKeyListener(new KeyAdapter() {
-                @Override
-                public void keyPressed(KeyEvent ke) {
-                    int code = ke.getKeyCode();
-                    if (code == KeyEvent.VK_ESCAPE) {
-                        ke.consume();
-                        value = null;
-                        setVisible(false);
-                    }
+            @Override
+            public void keyPressed(KeyEvent ke) {
+                int code = ke.getKeyCode();
+                if (code == KeyEvent.VK_ESCAPE) {
+                    ke.consume();
+                    value = null;
+                    setVisible(false);
                 }
-            });
+            }
+        });
     }
 
     /**
@@ -2021,7 +2020,7 @@ class FileHeader extends JPanel implements MouseListener {
     /**
      * The owning FileWindow.
      */
-    private FileWindow fileWindow;
+    private final FileWindow fileWindow;
 
     /**
      * Creates a new FileHeader.
@@ -2085,7 +2084,7 @@ class FileHeader extends JPanel implements MouseListener {
             } catch (BadLocationException ignored) {
             }
             boolean isBreakPoint = fileWindow.isBreakPoint(i + 1);
-            text = Integer.toString(i + 1) + " ";
+            text = i + 1 + " ";
             int y = i * h;
             g.setColor(Color.blue);
             g.drawString(text, 0, y + ascent);
@@ -2165,7 +2164,7 @@ class FileHeader extends JPanel implements MouseListener {
             Font font = fileWindow.textArea.getFont();
             FontMetrics metrics = getFontMetrics(font);
             int h = metrics.getHeight();
-            int line = y/h;
+            int line = y / h;
             if (line == pressLine) {
                 fileWindow.toggleBreakPoint(line + 1);
             } else {
@@ -2188,7 +2187,7 @@ class FileWindow extends JInternalFrame implements ActionListener {
     /**
      * The debugger GUI.
      */
-    private SwingGui debugGui;
+    private final SwingGui debugGui;
 
     /**
      * The SourceInfo object that describes the file.
@@ -2203,12 +2202,12 @@ class FileWindow extends JInternalFrame implements ActionListener {
     /**
      * The FileHeader that is the gutter for {@link #textArea}.
      */
-    private FileHeader fileHeader;
+    private final FileHeader fileHeader;
 
     /**
      * Scroll pane for containing {@link #textArea}.
      */
-    private JScrollPane p;
+    private final JScrollPane p;
 
     /**
      * The current offset position.
@@ -2287,7 +2286,7 @@ class FileWindow extends JInternalFrame implements ActionListener {
      */
     public FileWindow(SwingGui debugGui, Dim.SourceInfo sourceInfo) {
         super(SwingGui.getShortName(sourceInfo.url()),
-              true, true, true, true);
+                true, true, true, true);
         this.debugGui = debugGui;
         this.sourceInfo = sourceInfo;
         updateToolTip();
@@ -2320,7 +2319,7 @@ class FileWindow extends JInternalFrame implements ActionListener {
         Component c = getComponent(n);
         // this will work at least for Metal L&F
         if (c != null && c instanceof JComponent) {
-            ((JComponent)c).setToolTipText(getUrl());
+            ((JComponent) c).setToolTipText(getUrl());
         }
     }
 
@@ -2407,17 +2406,17 @@ class MyTableModel extends AbstractTableModel {
     /**
      * The debugger GUI.
      */
-    private SwingGui debugGui;
+    private final SwingGui debugGui;
 
     /**
      * List of watched expressions.
      */
-    private List<String> expressions;
+    private final List<String> expressions;
 
     /**
      * List of values from evaluated from {@link #expressions}.
      */
-    private List<String> values;
+    private final List<String> values;
 
     /**
      * Creates a new MyTableModel.
@@ -2452,10 +2451,10 @@ class MyTableModel extends AbstractTableModel {
     @Override
     public String getColumnName(int column) {
         switch (column) {
-        case 0:
-            return "Expression";
-        case 1:
-            return "Value";
+            case 0:
+                return "Expression";
+            case 1:
+                return "Value";
         }
         return null;
     }
@@ -2474,10 +2473,10 @@ class MyTableModel extends AbstractTableModel {
     @Override
     public Object getValueAt(int row, int column) {
         switch (column) {
-        case 0:
-            return expressions.get(row);
-        case 1:
-            return values.get(row);
+            case 0:
+                return expressions.get(row);
+            case 1:
+                return values.get(row);
         }
         return "";
     }
@@ -2488,25 +2487,25 @@ class MyTableModel extends AbstractTableModel {
     @Override
     public void setValueAt(Object value, int row, int column) {
         switch (column) {
-        case 0:
-            String expr = value.toString();
-            expressions.set(row, expr);
-            String result = "";
-            if (expr.length() > 0) {
-                result = debugGui.dim.eval(expr);
-                if (result == null) result = "";
-            }
-            values.set(row, result);
-            updateModel();
-            if (row + 1 == expressions.size()) {
-                expressions.add("");
-                values.add("");
-                fireTableRowsInserted(row + 1, row + 1);
-            }
-            break;
-        case 1:
-            // just reset column 2; ignore edits
-            fireTableDataChanged();
+            case 0:
+                String expr = value.toString();
+                expressions.set(row, expr);
+                String result = "";
+                if (expr.length() > 0) {
+                    result = debugGui.dim.eval(expr);
+                    if (result == null) result = "";
+                }
+                values.set(row, result);
+                updateModel();
+                if (row + 1 == expressions.size()) {
+                    expressions.add("");
+                    values.add("");
+                    fireTableRowsInserted(row + 1, row + 1);
+                }
+                break;
+            case 1:
+                // just reset column 2; ignore edits
+                fireTableDataChanged();
         }
     }
 
@@ -2550,7 +2549,7 @@ class Evaluator extends JTable {
      */
     public Evaluator(SwingGui debugGui) {
         super(new MyTableModel(debugGui));
-        tableModel = (MyTableModel)getModel();
+        tableModel = (MyTableModel) getModel();
     }
 }
 
@@ -2562,13 +2561,13 @@ class VariableModel implements TreeTableModel {
     /**
      * Serializable magic number.
      */
-    private static final String[] cNames = { " Name", " Value" };
+    private static final String[] cNames = {" Name", " Value"};
 
     /**
      * Tree column types.
      */
     private static final Class<?>[] cTypes =
-        { TreeTableModel.class, String.class };
+            {TreeTableModel.class, String.class};
 
     /**
      * Empty {@link VariableNode} array.
@@ -2679,22 +2678,26 @@ class VariableModel implements TreeTableModel {
      * Sets the value at the given cell.
      */
     @Override
-    public void setValueAt(Object value, Object node, int column) { }
+    public void setValueAt(Object value, Object node, int column) {
+    }
 
     /**
      * Adds a TreeModelListener to this tree.
      */
     @Override
-    public void addTreeModelListener(TreeModelListener l) { }
+    public void addTreeModelListener(TreeModelListener l) {
+    }
 
     /**
      * Removes a TreeModelListener from this tree.
      */
     @Override
-    public void removeTreeModelListener(TreeModelListener l) { }
+    public void removeTreeModelListener(TreeModelListener l) {
+    }
 
     @Override
-    public void valueForPathChanged(TreePath path, Object newValue) { }
+    public void valueForPathChanged(TreePath path, Object newValue) {
+    }
 
     // TreeTableNode
 
@@ -2727,31 +2730,33 @@ class VariableModel implements TreeTableModel {
      */
     @Override
     public Object getValueAt(Object nodeObj, int column) {
-        if (debugger == null) { return null; }
-        VariableNode node = (VariableNode)nodeObj;
+        if (debugger == null) {
+            return null;
+        }
+        VariableNode node = (VariableNode) nodeObj;
         switch (column) {
-        case 0: // Name
-            return node.toString();
-        case 1: // Value
-            String result;
-            try {
-                result = debugger.objectToString(getValue(node));
-            } catch (RuntimeException exc) {
-                result = exc.getMessage();
-                if (result == null) {
-                    result = exc.toString();
+            case 0: // Name
+                return node.toString();
+            case 1: // Value
+                String result;
+                try {
+                    result = debugger.objectToString(getValue(node));
+                } catch (RuntimeException exc) {
+                    result = exc.getMessage();
+                    if (result == null) {
+                        result = exc.toString();
+                    }
                 }
-            }
-            StringBuilder buf = new StringBuilder();
-            int len = result.length();
-            for (int i = 0; i < len; i++) {
-                char ch = result.charAt(i);
-                if (Character.isISOControl(ch)) {
-                    ch = ' ';
+                StringBuilder buf = new StringBuilder();
+                int len = result.length();
+                for (int i = 0; i < len; i++) {
+                    char ch = result.charAt(i);
+                    if (Character.isISOControl(ch)) {
+                        ch = ' ';
+                    }
+                    buf.append(ch);
                 }
-                buf.append(ch);
-            }
-            return buf.toString();
+                return buf.toString();
         }
         return null;
     }
@@ -2773,21 +2778,20 @@ class VariableModel implements TreeTableModel {
         } else {
             Arrays.sort(ids, new Comparator<Object>() {
                 @Override
-                    public int compare(Object l, Object r)
-                    {
-                        if (l instanceof String) {
-                            if (r instanceof Integer) {
-                                return -1;
-                            }
-                            return ((String)l).compareToIgnoreCase((String)r);
+                public int compare(Object l, Object r) {
+                    if (l instanceof String) {
+                        if (r instanceof Integer) {
+                            return -1;
                         }
-                        if (r instanceof String) {
-                            return 1;
-                        }
-                        int lint = ((Integer)l).intValue();
-                        int rint = ((Integer)r).intValue();
-                        return lint - rint;
+                        return ((String) l).compareToIgnoreCase((String) r);
                     }
+                    if (r instanceof String) {
+                        return 1;
+                    }
+                    int lint = ((Integer) l).intValue();
+                    int rint = ((Integer) r).intValue();
+                    return lint - rint;
+                }
             });
             children = new VariableNode[ids.length];
             for (int i = 0; i != ids.length; ++i) {
@@ -2817,12 +2821,12 @@ class VariableModel implements TreeTableModel {
         /**
          * The script object.
          */
-        private Object object;
+        private final Object object;
 
         /**
          * The object name.  Either a String or an Integer.
          */
-        private Object id;
+        private final Object id;
 
         /**
          * Array of child nodes.  This is filled with the properties of
@@ -2844,7 +2848,7 @@ class VariableModel implements TreeTableModel {
         @Override
         public String toString() {
             return id instanceof String
-                ? (String) id : "[" + ((Integer) id).intValue() + "]";
+                    ? (String) id : "[" + ((Integer) id).intValue() + "]";
         }
     }
 }
@@ -2877,7 +2881,7 @@ class MyTreeTable extends JTreeTable {
 
         // Force the JTable and JTree to share their row selection models.
         ListToTreeSelectionModelWrapper selectionWrapper = new
-            ListToTreeSelectionModelWrapper();
+                ListToTreeSelectionModelWrapper();
         tree.setSelectionModel(selectionWrapper);
         setSelectionModel(selectionWrapper.getListSelectionModel());
 
@@ -2893,10 +2897,10 @@ class MyTreeTable extends JTreeTable {
         setDefaultRenderer(TreeTableModel.class, tree);
         setDefaultEditor(TreeTableModel.class, new TreeTableCellEditor());
         setShowGrid(true);
-        setIntercellSpacing(new Dimension(1,1));
+        setIntercellSpacing(new Dimension(1, 1));
         tree.setRootVisible(false);
         tree.setShowsRootHandles(true);
-        DefaultTreeCellRenderer r = (DefaultTreeCellRenderer)tree.getCellRenderer();
+        DefaultTreeCellRenderer r = (DefaultTreeCellRenderer) tree.getCellRenderer();
         r.setOpenIcon(null);
         r.setClosedIcon(null);
         r.setLeafIcon(null);
@@ -2909,7 +2913,7 @@ class MyTreeTable extends JTreeTable {
      */
     public boolean isCellEditable(EventObject e) {
         if (e instanceof MouseEvent) {
-            MouseEvent me = (MouseEvent)e;
+            MouseEvent me = (MouseEvent) e;
             // If the modifiers are not 0 (or the left mouse button),
             // tree may try and toggle the selection, and table
             // will then try and toggle, resulting in the
@@ -2917,43 +2921,37 @@ class MyTreeTable extends JTreeTable {
             // only dispatch when the modifiers are 0 (or the left mouse
             // button).
             if (me.getModifiers() == 0 ||
-                ((me.getModifiers() & (InputEvent.BUTTON1_MASK|1024)) != 0 &&
-                 (me.getModifiers() &
-                  (InputEvent.SHIFT_MASK |
-                   InputEvent.CTRL_MASK |
-                   InputEvent.ALT_MASK |
-                   InputEvent.BUTTON2_MASK |
-                   InputEvent.BUTTON3_MASK |
-                   64   | //SHIFT_DOWN_MASK
-                   128  | //CTRL_DOWN_MASK
-                   512  | // ALT_DOWN_MASK
-                   2048 | //BUTTON2_DOWN_MASK
-                   4096   //BUTTON3_DOWN_MASK
-                   )) == 0)) {
+                    ((me.getModifiers() & (InputEvent.BUTTON1_MASK | 1024)) != 0 &&
+                            (me.getModifiers() &
+                                    (InputEvent.SHIFT_MASK |
+                                            InputEvent.CTRL_MASK |
+                                            InputEvent.ALT_MASK |
+                                            InputEvent.BUTTON2_MASK |
+                                            InputEvent.BUTTON3_MASK |
+                                            64 | //SHIFT_DOWN_MASK
+                                            128 | //CTRL_DOWN_MASK
+                                            512 | // ALT_DOWN_MASK
+                                            2048 | //BUTTON2_DOWN_MASK
+                                            4096   //BUTTON3_DOWN_MASK
+                                    )) == 0)) {
                 int row = rowAtPoint(me.getPoint());
                 for (int counter = getColumnCount() - 1; counter >= 0;
                      counter--) {
                     if (TreeTableModel.class == getColumnClass(counter)) {
                         MouseEvent newME = new MouseEvent
-                            (MyTreeTable.this.tree, me.getID(),
-                             me.getWhen(), me.getModifiers(),
-                             me.getX() - getCellRect(row, counter, true).x,
-                             me.getY(), me.getClickCount(),
-                             me.isPopupTrigger());
+                                (MyTreeTable.this.tree, me.getID(),
+                                        me.getWhen(), me.getModifiers(),
+                                        me.getX() - getCellRect(row, counter, true).x,
+                                        me.getY(), me.getClickCount(),
+                                        me.isPopupTrigger());
                         MyTreeTable.this.tree.dispatchEvent(newME);
                         break;
                     }
                 }
             }
-            if (me.getClickCount() >= 3) {
-                return true;
-            }
-            return false;
+            return me.getClickCount() >= 3;
         }
-        if (e == null) {
-            return true;
-        }
-        return false;
+        return e == null;
     }
 }
 
@@ -2970,7 +2968,7 @@ class ContextWindow extends JPanel implements ActionListener {
     /**
      * The debugger GUI.
      */
-    private SwingGui debugGui;
+    private final SwingGui debugGui;
 
     /**
      * The combo box that holds the stack frames.
@@ -2985,37 +2983,37 @@ class ContextWindow extends JPanel implements ActionListener {
     /**
      * Tabbed pane for "this" and "locals".
      */
-    private JTabbedPane tabs;
+    private final JTabbedPane tabs;
 
     /**
      * Tabbed pane for "watch" and "evaluate".
      */
-    private JTabbedPane tabs2;
+    private final JTabbedPane tabs2;
 
     /**
      * The table showing the "this" object.
      */
-    private MyTreeTable thisTable;
+    private final MyTreeTable thisTable;
 
     /**
      * The table showing the stack local variables.
      */
-    private MyTreeTable localsTable;
+    private final MyTreeTable localsTable;
 
     /**
      * The {@link #evaluator}'s table model.
      */
-    private MyTableModel tableModel;
+    private final MyTableModel tableModel;
 
     /**
      * The script evaluator table.
      */
-    private Evaluator evaluator;
+    private final Evaluator evaluator;
 
     /**
      * The script evaluation text area.
      */
-    private EvalTextArea cmdLine;
+    private final EvalTextArea cmdLine;
 
     /**
      * The split pane.
@@ -3065,17 +3063,17 @@ class ContextWindow extends JPanel implements ActionListener {
         layout.setConstraints(context, c);
         left.add(context);
         tabs = new JTabbedPane(SwingConstants.BOTTOM);
-        tabs.setPreferredSize(new Dimension(500,300));
+        tabs.setPreferredSize(new Dimension(500, 300));
         thisTable = new MyTreeTable(new VariableModel());
         JScrollPane jsp = new JScrollPane(thisTable);
-        jsp.getViewport().setViewSize(new Dimension(5,2));
+        jsp.getViewport().setViewSize(new Dimension(5, 2));
         tabs.add("this", jsp);
         localsTable = new MyTreeTable(new VariableModel());
         localsTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         localsTable.setPreferredSize(null);
         jsp = new JScrollPane(localsTable);
         tabs.add("Locals", jsp);
-        c.weightx  = c.weighty = 1;
+        c.weightx = c.weighty = 1;
         c.gridheight = GridBagConstraints.REMAINDER;
         c.fill = GridBagConstraints.BOTH;
         c.anchor = GridBagConstraints.WEST;
@@ -3091,13 +3089,13 @@ class ContextWindow extends JPanel implements ActionListener {
         tabs2 = new JTabbedPane(SwingConstants.BOTTOM);
         tabs2.add("Watch", jsp);
         tabs2.add("Evaluate", new JScrollPane(cmdLine));
-        tabs2.setPreferredSize(new Dimension(500,300));
+        tabs2.setPreferredSize(new Dimension(500, 300));
         t2.setLayout(new GridLayout());
         t2.add(tabs2);
         p2.add(t2);
         evaluator.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-                               p1, p2);
+                p1, p2);
         split.setOneTouchExpandable(true);
         SwingGui.setResizeWeight(split, 0.5);
         setLayout(new BorderLayout());
@@ -3111,121 +3109,122 @@ class ContextWindow extends JPanel implements ActionListener {
         final JPanel finalThis = this;
 
         ComponentListener clistener = new ComponentListener() {
-                boolean t2Docked = true;
-                void check(Component comp) {
-                    Component thisParent = finalThis.getParent();
-                    if (thisParent == null) {
-                        return;
-                    }
-                    Component parent = finalT1.getParent();
-                    boolean leftDocked = true;
-                    boolean rightDocked = true;
-                    boolean adjustVerticalSplit = false;
-                    if (parent != null) {
-                        if (parent != finalP1) {
-                            while (!(parent instanceof JFrame)) {
-                                parent = parent.getParent();
-                            }
-                            JFrame frame = (JFrame)parent;
-                            debugGui.addTopLevel("Variables", frame);
+            boolean t2Docked = true;
 
-                            // We need the following hacks because:
-                            // - We want an undocked toolbar to be
-                            //   resizable.
-                            // - We are using JToolbar as a container of a
-                            //   JComboBox. Without this JComboBox's popup
-                            //   can get left floating when the toolbar is
-                            //   re-docked.
-                            //
-                            // We make the frame resizable and then
-                            // remove JToolbar's window listener
-                            // and insert one of our own that first ensures
-                            // the JComboBox's popup window is closed
-                            // and then calls JToolbar's window listener.
-                            if (!frame.isResizable()) {
-                                frame.setResizable(true);
-                                frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-                                final WindowListener[] l =
-                                    frame.getListeners(WindowListener.class);
-                                frame.removeWindowListener(l[0]);
-                                frame.addWindowListener(new WindowAdapter() {
-                                        @Override
-                                        public void windowClosing(WindowEvent e) {
-                                            context.hidePopup();
-                                            l[0].windowClosing(e);
-                                        }
-                                    });
-                                //adjustVerticalSplit = true;
-                            }
-                            leftDocked = false;
-                        } else {
-                            leftDocked = true;
+            void check(Component comp) {
+                Component thisParent = finalThis.getParent();
+                if (thisParent == null) {
+                    return;
+                }
+                Component parent = finalT1.getParent();
+                boolean leftDocked = true;
+                boolean rightDocked = true;
+                boolean adjustVerticalSplit = false;
+                if (parent != null) {
+                    if (parent != finalP1) {
+                        while (!(parent instanceof JFrame)) {
+                            parent = parent.getParent();
                         }
-                    }
-                    parent = finalT2.getParent();
-                    if (parent != null) {
-                        if (parent != finalP2) {
-                            while (!(parent instanceof JFrame)) {
-                                parent = parent.getParent();
-                            }
-                            JFrame frame = (JFrame)parent;
-                            debugGui.addTopLevel("Evaluate", frame);
+                        JFrame frame = (JFrame) parent;
+                        debugGui.addTopLevel("Variables", frame);
+
+                        // We need the following hacks because:
+                        // - We want an undocked toolbar to be
+                        //   resizable.
+                        // - We are using JToolbar as a container of a
+                        //   JComboBox. Without this JComboBox's popup
+                        //   can get left floating when the toolbar is
+                        //   re-docked.
+                        //
+                        // We make the frame resizable and then
+                        // remove JToolbar's window listener
+                        // and insert one of our own that first ensures
+                        // the JComboBox's popup window is closed
+                        // and then calls JToolbar's window listener.
+                        if (!frame.isResizable()) {
                             frame.setResizable(true);
-                            rightDocked = false;
-                        } else {
-                            rightDocked = true;
+                            frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+                            final WindowListener[] l =
+                                    frame.getListeners(WindowListener.class);
+                            frame.removeWindowListener(l[0]);
+                            frame.addWindowListener(new WindowAdapter() {
+                                @Override
+                                public void windowClosing(WindowEvent e) {
+                                    context.hidePopup();
+                                    l[0].windowClosing(e);
+                                }
+                            });
+                            //adjustVerticalSplit = true;
                         }
-                    }
-                    if (leftDocked && t2Docked && rightDocked && t2Docked) {
-                        // no change
-                        return;
-                    }
-                    t2Docked = rightDocked;
-                    JSplitPane split = (JSplitPane)thisParent;
-                    if (leftDocked) {
-                        if (rightDocked) {
-                            finalSplit.setDividerLocation(0.5);
-                        } else {
-                            finalSplit.setDividerLocation(1.0);
-                        }
-                        if (adjustVerticalSplit) {
-                            split.setDividerLocation(0.66);
-                        }
-
-                    } else if (rightDocked) {
-                            finalSplit.setDividerLocation(0.0);
-                            split.setDividerLocation(0.66);
+                        leftDocked = false;
                     } else {
-                        // both undocked
-                        split.setDividerLocation(1.0);
+                        leftDocked = true;
                     }
                 }
-
-                @Override
-                public void componentHidden(ComponentEvent e) {
-                    check(e.getComponent());
+                parent = finalT2.getParent();
+                if (parent != null) {
+                    if (parent != finalP2) {
+                        while (!(parent instanceof JFrame)) {
+                            parent = parent.getParent();
+                        }
+                        JFrame frame = (JFrame) parent;
+                        debugGui.addTopLevel("Evaluate", frame);
+                        frame.setResizable(true);
+                        rightDocked = false;
+                    } else {
+                        rightDocked = true;
+                    }
                 }
-
-                @Override
-                public void componentMoved(ComponentEvent e) {
-                    check(e.getComponent());
+                if (leftDocked && t2Docked && rightDocked && t2Docked) {
+                    // no change
+                    return;
                 }
+                t2Docked = rightDocked;
+                JSplitPane split = (JSplitPane) thisParent;
+                if (leftDocked) {
+                    if (rightDocked) {
+                        finalSplit.setDividerLocation(0.5);
+                    } else {
+                        finalSplit.setDividerLocation(1.0);
+                    }
+                    if (adjustVerticalSplit) {
+                        split.setDividerLocation(0.66);
+                    }
 
-                @Override
-                public void componentResized(ComponentEvent e) {
-                    check(e.getComponent());
+                } else if (rightDocked) {
+                    finalSplit.setDividerLocation(0.0);
+                    split.setDividerLocation(0.66);
+                } else {
+                    // both undocked
+                    split.setDividerLocation(1.0);
                 }
+            }
 
-                @Override
-                public void componentShown(ComponentEvent e) {
-                    check(e.getComponent());
-                }
-            };
+            @Override
+            public void componentHidden(ComponentEvent e) {
+                check(e.getComponent());
+            }
+
+            @Override
+            public void componentMoved(ComponentEvent e) {
+                check(e.getComponent());
+            }
+
+            @Override
+            public void componentResized(ComponentEvent e) {
+                check(e.getComponent());
+            }
+
+            @Override
+            public void componentShown(ComponentEvent e) {
+                check(e.getComponent());
+            }
+        };
         p1.addContainerListener(new ContainerListener() {
             @Override
             public void componentAdded(ContainerEvent e) {
                 Component thisParent = finalThis.getParent();
-                JSplitPane split = (JSplitPane)thisParent;
+                JSplitPane split = (JSplitPane) thisParent;
                 if (e.getChild() == finalT1) {
                     if (finalT2.getParent() == finalP2) {
                         // both docked
@@ -3241,7 +3240,7 @@ class ContextWindow extends JPanel implements ActionListener {
             @Override
             public void componentRemoved(ContainerEvent e) {
                 Component thisParent = finalThis.getParent();
-                JSplitPane split = (JSplitPane)thisParent;
+                JSplitPane split = (JSplitPane) thisParent;
                 if (e.getChild() == finalT1) {
                     if (finalT2.getParent() == finalP2) {
                         // right docked only
@@ -3253,7 +3252,7 @@ class ContextWindow extends JPanel implements ActionListener {
                     }
                 }
             }
-            });
+        });
         t1.addComponentListener(clistener);
         t2.addComponentListener(clistener);
         setEnabled(false);
@@ -3295,7 +3294,9 @@ class ContextWindow extends JPanel implements ActionListener {
         if (!enabled) return;
         if (e.getActionCommand().equals("ContextSwitch")) {
             Dim.ContextData contextData = debugGui.dim.currentContextData();
-            if (contextData == null) { return; }
+            if (contextData == null) {
+                return;
+            }
             int frameIndex = context.getSelectedIndex();
             context.setToolTipText(toolTips.get(frameIndex));
             int frameCount = contextData.frameCount();
@@ -3333,39 +3334,39 @@ class Menubar extends JMenuBar implements ActionListener {
     /**
      * Items that are enabled only when interrupted.
      */
-    private List<JMenuItem> interruptOnlyItems =
-        Collections.synchronizedList(new ArrayList<JMenuItem>());
+    private final List<JMenuItem> interruptOnlyItems =
+            Collections.synchronizedList(new ArrayList<JMenuItem>());
 
     /**
      * Items that are enabled only when running.
      */
-    private List<JMenuItem> runOnlyItems =
-        Collections.synchronizedList(new ArrayList<JMenuItem>());
+    private final List<JMenuItem> runOnlyItems =
+            Collections.synchronizedList(new ArrayList<JMenuItem>());
 
     /**
      * The debugger GUI.
      */
-    private SwingGui debugGui;
+    private final SwingGui debugGui;
 
     /**
      * The menu listing the internal frames.
      */
-    private JMenu windowMenu;
+    private final JMenu windowMenu;
 
     /**
      * The "Break on exceptions" menu item.
      */
-    private JCheckBoxMenuItem breakOnExceptions;
+    private final JCheckBoxMenuItem breakOnExceptions;
 
     /**
      * The "Break on enter" menu item.
      */
-    private JCheckBoxMenuItem breakOnEnter;
+    private final JCheckBoxMenuItem breakOnEnter;
 
     /**
      * The "Break on return" menu item.
      */
-    private JCheckBoxMenuItem breakOnReturn;
+    private final JCheckBoxMenuItem breakOnReturn;
 
     /**
      * Creates a new Menubar.
@@ -3373,26 +3374,26 @@ class Menubar extends JMenuBar implements ActionListener {
     Menubar(SwingGui debugGui) {
         super();
         this.debugGui = debugGui;
-        String[] fileItems  = {"Open...", "Run...", "", "Exit"};
-        String[] fileCmds  = {"Open", "Load", "", "Exit"};
+        String[] fileItems = {"Open...", "Run...", "", "Exit"};
+        String[] fileCmds = {"Open", "Load", "", "Exit"};
         char[] fileShortCuts = {'0', 'N', 0, 'X'};
         int[] fileAccelerators = {KeyEvent.VK_O,
-                                  KeyEvent.VK_N,
-                                  0,
-                                  KeyEvent.VK_Q};
+                KeyEvent.VK_N,
+                0,
+                KeyEvent.VK_Q};
         String[] editItems = {"Cut", "Copy", "Paste", "Go to function...", "Go to line..."};
         char[] editShortCuts = {'T', 'C', 'P', 'F', 'L'};
-        int[] editAccelerators = {0, 0, 0, 0, KeyEvent.VK_L };
+        int[] editAccelerators = {0, 0, 0, 0, KeyEvent.VK_L};
         String[] debugItems = {"Break", "Go", "Step Into", "Step Over", "Step Out"};
         char[] debugShortCuts = {'B', 'G', 'I', 'O', 'T'};
         String[] plafItems = {"Metal", "Windows", "Motif"};
-        char [] plafShortCuts = {'M', 'W', 'F'};
+        char[] plafShortCuts = {'M', 'W', 'F'};
         int[] debugAccelerators = {KeyEvent.VK_PAUSE,
-                                   KeyEvent.VK_F5,
-                                   KeyEvent.VK_F11,
-                                   KeyEvent.VK_F7,
-                                   KeyEvent.VK_F8,
-                                   0, 0};
+                KeyEvent.VK_F5,
+                KeyEvent.VK_F11,
+                KeyEvent.VK_F7,
+                KeyEvent.VK_F8,
+                0, 0};
 
         JMenu fileMenu = new JMenu("File");
         fileMenu.setMnemonic('F');
@@ -3409,7 +3410,7 @@ class Menubar extends JMenuBar implements ActionListener {
                 fileMenu.addSeparator();
             } else {
                 JMenuItem item = new JMenuItem(fileItems[i],
-                                               fileShortCuts[i]);
+                        fileShortCuts[i]);
                 item.setActionCommand(fileCmds[i]);
                 item.addActionListener(this);
                 fileMenu.add(item);
@@ -3421,7 +3422,7 @@ class Menubar extends JMenuBar implements ActionListener {
         }
         for (int i = 0; i < editItems.length; ++i) {
             JMenuItem item = new JMenuItem(editItems[i],
-                                           editShortCuts[i]);
+                    editShortCuts[i]);
             item.addActionListener(this);
             editMenu.add(item);
             if (editAccelerators[i] != 0) {
@@ -3431,13 +3432,13 @@ class Menubar extends JMenuBar implements ActionListener {
         }
         for (int i = 0; i < plafItems.length; ++i) {
             JMenuItem item = new JMenuItem(plafItems[i],
-                                           plafShortCuts[i]);
+                    plafShortCuts[i]);
             item.addActionListener(this);
             plafMenu.add(item);
         }
         for (int i = 0; i < debugItems.length; ++i) {
             JMenuItem item = new JMenuItem(debugItems[i],
-                                           debugShortCuts[i]);
+                    debugShortCuts[i]);
             item.addActionListener(this);
             if (debugAccelerators[i] != 0) {
                 KeyStroke k = KeyStroke.getKeyStroke(debugAccelerators[i], 0);
@@ -3560,11 +3561,11 @@ class Menubar extends JMenuBar implements ActionListener {
             windowMenu.addSeparator();
             count++;
         }
-        JMenuItem lastItem = windowMenu.getItem(count -1);
+        JMenuItem lastItem = windowMenu.getItem(count - 1);
         boolean hasMoreWin = false;
         int maxWin = 5;
         if (lastItem != null &&
-           lastItem.getText().equals("More Windows...")) {
+                lastItem.getText().equals("More Windows...")) {
             hasMoreWin = true;
             maxWin++;
         }
@@ -3580,7 +3581,7 @@ class Menubar extends JMenuBar implements ActionListener {
             }
             String shortName = SwingGui.getShortName(url);
 
-            windowMenu.add(item = new JMenuItem((char)('0' + (count-4)) + " " + shortName, '0' + (count - 4)));
+            windowMenu.add(item = new JMenuItem((char) ('0' + (count - 4)) + " " + shortName, '0' + (count - 4)));
             if (hasMoreWin) {
                 windowMenu.add(lastItem);
             }
@@ -3622,13 +3623,13 @@ class RunProxy implements Runnable {
     /**
      * The debugger GUI.
      */
-    private SwingGui debugGui;
+    private final SwingGui debugGui;
 
     /**
      * The type of Runnable this object is.  Takes one of the constants
      * defined in this class.
      */
-    private int type;
+    private final int type;
 
     /**
      * The name of the file to open or load.
@@ -3675,28 +3676,27 @@ class RunProxy implements Runnable {
     @Override
     public void run() {
         switch (type) {
-          case OPEN_FILE:
-            try {
-                debugGui.dim.compileScript(fileName, text);
-            } catch (RuntimeException ex) {
-                MessageDialogWrapper.showMessageDialog(
-                    debugGui, ex.getMessage(), "Error Compiling "+fileName,
-                    JOptionPane.ERROR_MESSAGE);
-            }
-            break;
+            case OPEN_FILE:
+                try {
+                    debugGui.dim.compileScript(fileName, text);
+                } catch (RuntimeException ex) {
+                    MessageDialogWrapper.showMessageDialog(
+                            debugGui, ex.getMessage(), "Error Compiling " + fileName,
+                            JOptionPane.ERROR_MESSAGE);
+                }
+                break;
 
-          case LOAD_FILE:
-            try {
-                debugGui.dim.evalScript(fileName, text);
-            } catch (RuntimeException ex) {
-                MessageDialogWrapper.showMessageDialog(
-                    debugGui, ex.getMessage(), "Run error for "+fileName,
-                    JOptionPane.ERROR_MESSAGE);
-            }
-            break;
+            case LOAD_FILE:
+                try {
+                    debugGui.dim.evalScript(fileName, text);
+                } catch (RuntimeException ex) {
+                    MessageDialogWrapper.showMessageDialog(
+                            debugGui, ex.getMessage(), "Run error for " + fileName,
+                            JOptionPane.ERROR_MESSAGE);
+                }
+                break;
 
-          case UPDATE_SOURCE_TEXT:
-            {
+            case UPDATE_SOURCE_TEXT: {
                 String fileName = sourceInfo.url();
                 if (!debugGui.updateFileWindow(sourceInfo) &&
                         !fileName.equals("<stdin>")) {
@@ -3705,12 +3705,12 @@ class RunProxy implements Runnable {
             }
             break;
 
-          case ENTER_INTERRUPT:
-            debugGui.enterInterruptImpl(lastFrame, threadTitle, alertMessage);
-            break;
+            case ENTER_INTERRUPT:
+                debugGui.enterInterruptImpl(lastFrame, threadTitle, alertMessage);
+                break;
 
-          default:
-            throw new IllegalArgumentException(String.valueOf(type));
+            default:
+                throw new IllegalArgumentException(String.valueOf(type));
 
         }
     }

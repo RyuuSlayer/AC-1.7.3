@@ -5,6 +5,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.util.ArrayList;
 import java.util.List;
+
 import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -45,10 +46,11 @@ public class Screen extends ub {
         try {
             Transferable transferable = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
             if (transferable != null && transferable.isDataFlavorSupported(DataFlavor.stringFlavor)) {
-                String s = (String)transferable.getTransferData(DataFlavor.stringFlavor);
+                String s = (String) transferable.getTransferData(DataFlavor.stringFlavor);
                 return s;
             }
-        } catch (Exception exception) {}
+        } catch (Exception exception) {
+        }
         return null;
     }
 
@@ -71,7 +73,8 @@ public class Screen extends ub {
         }
     }
 
-    protected void a(ke guibutton) {}
+    protected void a(ke guibutton) {
+    }
 
     public void a(Minecraft minecraft, int i, int j) {
         this.h = new du(minecraft);
@@ -83,11 +86,12 @@ public class Screen extends ub {
         b();
     }
 
-    public void b() {}
+    public void b() {
+    }
 
     public void e() {
-        for (; Mouse.next(); f());
-        for (; Keyboard.next(); g());
+        for (; Mouse.next(); f()) ;
+        for (; Keyboard.next(); g()) ;
     }
 
     public void f() {
@@ -112,9 +116,11 @@ public class Screen extends ub {
         }
     }
 
-    public void a() {}
+    public void a() {
+    }
 
-    public void h() {}
+    public void h() {
+    }
 
     public void i() {
         a(0);
@@ -148,9 +154,11 @@ public class Screen extends ub {
         return true;
     }
 
-    public void a(boolean flag, int i) {}
+    public void a(boolean flag, int i) {
+    }
 
-    public void j() {}
+    public void j() {
+    }
 
     public boolean disableInputGrabbing = false;
 }

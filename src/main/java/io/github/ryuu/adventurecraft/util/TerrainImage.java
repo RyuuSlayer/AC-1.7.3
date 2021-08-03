@@ -124,7 +124,7 @@ public class TerrainImage {
         isWaterLoaded = false;
         try {
             File terrainFile = new File(f, "terrainMap.png");
-            System.out.printf("Exists: %b Path: %s\n", new Object[] { Boolean.valueOf(terrainFile.exists()), terrainFile.getCanonicalPath() });
+            System.out.printf("Exists: %b Path: %s\n", Boolean.valueOf(terrainFile.exists()), terrainFile.getCanonicalPath());
             BufferedImage bufferedimage = ImageIO.read(terrainFile);
             imageWidth = bufferedimage.getWidth();
             imageHeight = bufferedimage.getHeight();

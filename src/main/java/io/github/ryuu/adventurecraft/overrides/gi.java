@@ -32,7 +32,7 @@ public class gi extends bg {
 
     protected void b() {
         super.b();
-        this.bD.a(16, Byte.valueOf((byte)0));
+        this.bD.a(16, Byte.valueOf((byte) 0));
         this.bD.a(17, "");
         this.bD.a(18, new Integer(this.Y));
     }
@@ -107,7 +107,7 @@ public class gi extends bg {
         if (!this.e && !F() && D() && this.aH == null) {
             gs entityplayer = this.aI.a(A());
             if (entityplayer != null) {
-                float f = entityplayer.f((sn)this);
+                float f = entityplayer.f((sn) this);
                 if (f > 5.0F)
                     c(entityplayer, f);
             } else if (!ag()) {
@@ -130,13 +130,13 @@ public class gi extends bg {
         if (Y() && !F() && !C()) {
             sn entity = Z();
             if (entity instanceof gs) {
-                gs entityplayer = (gs)entity;
+                gs entityplayer = (gs) entity;
                 iz itemstack = entityplayer.c.b();
                 if (itemstack != null)
                     if (!D() && itemstack.c == gm.aV.bf) {
                         this.a = true;
                     } else if (D() && gm.c[itemstack.c] instanceof yw) {
-                        this.a = ((yw)gm.c[itemstack.c]).m();
+                        this.a = ((yw) gm.c[itemstack.c]).m();
                     }
             }
         }
@@ -144,7 +144,7 @@ public class gi extends bg {
             this.g = true;
             this.h = 0.0F;
             this.i = 0.0F;
-            this.aI.a((sn)this, (byte)8);
+            this.aI.a((sn) this, (byte) 8);
         }
     }
 
@@ -165,7 +165,7 @@ public class gi extends bg {
             this.i = 0.0F;
         } else if ((this.f || this.g) && this.g) {
             if (this.h == 0.0F)
-                this.aI.a((sn)this, "mob.wolf.shake", k(), (this.bs.nextFloat() - this.bs.nextFloat()) * 0.2F + 1.0F);
+                this.aI.a((sn) this, "mob.wolf.shake", k(), (this.bs.nextFloat() - this.bs.nextFloat()) * 0.2F + 1.0F);
             this.i = this.h;
             this.h += 0.05F;
             if (this.i >= 2.0F) {
@@ -175,8 +175,8 @@ public class gi extends bg {
                 this.h = 0.0F;
             }
             if (this.h > 0.4F) {
-                float f = (float)this.aW.b;
-                int i = (int)(in.a((this.h - 0.4F) * 3.141593F) * 7.0F);
+                float f = (float) this.aW.b;
+                int i = (int) (in.a((this.h - 0.4F) * 3.141593F) * 7.0F);
                 for (int j = 0; j < i; j++) {
                     float f1 = (this.bs.nextFloat() * 2.0F - 1.0F) * this.bg * 0.5F;
                     float f2 = (this.bs.nextFloat() * 2.0F - 1.0F) * this.bg * 0.5F;
@@ -219,7 +219,7 @@ public class gi extends bg {
     }
 
     private void c(sn entity, float f) {
-        dh pathentity = this.aI.a((sn)this, entity, 16.0F);
+        dh pathentity = this.aI.a((sn) this, entity, 16.0F);
         if (pathentity == null && f > 12.0F) {
             int i = in.b(entity.aM) - 2;
             int j = in.b(entity.aO) - 2;
@@ -251,14 +251,14 @@ public class gi extends bg {
                     c(true);
                     this.d = entity;
                 }
-                if (entity instanceof sl && ((sl)entity).c != null)
-                    entity = ((sl)entity).c;
+                if (entity instanceof sl && ((sl) entity).c != null)
+                    entity = ((sl) entity).c;
                 if (entity instanceof ls) {
                     List list = this.aI.a(gi.class, eq.b(this.aM, this.aN, this.aO, this.aM + 1.0D, this.aN + 1.0D, this.aO + 1.0D).b(16.0D, 4.0D, 16.0D));
                     Iterator<sn> iterator = list.iterator();
                     while (iterator.hasNext()) {
                         sn entity1 = iterator.next();
-                        gi entitywolf = (gi)entity1;
+                        gi entitywolf = (gi) entity1;
                         if (!entitywolf.D() && entitywolf.d == null) {
                             entitywolf.d = entity;
                             if (entity instanceof gs)
@@ -267,7 +267,7 @@ public class gi extends bg {
                     }
                 }
             } else if (entity != this && entity != null) {
-                if (D() && entity instanceof gs && ((gs)entity).l.equalsIgnoreCase(A()))
+                if (D() && entity instanceof gs && ((gs) entity).l.equalsIgnoreCase(A()))
                     return true;
                 this.d = entity;
             }
@@ -278,7 +278,7 @@ public class gi extends bg {
 
     protected sn g_() {
         if (C())
-            return this.aI.a((sn)this, 16.0D);
+            return this.aI.a((sn) this, 16.0D);
         return null;
     }
 
@@ -299,7 +299,7 @@ public class gi extends bg {
                 byte0 = 4;
             if (this.attackStrength != -1)
                 byte0 = this.attackStrength;
-            entity.a((sn)this, byte0);
+            entity.a((sn) this, byte0);
         }
     }
 
@@ -309,30 +309,30 @@ public class gi extends bg {
             if (itemstack != null && itemstack.c == gm.aV.bf && !C()) {
                 itemstack.a--;
                 if (itemstack.a <= 0)
-                    entityplayer.c.a(entityplayer.c.c, (iz)null);
+                    entityplayer.c.a(entityplayer.c.c, null);
                 if (!this.aI.B)
                     if (this.bs.nextInt(3) == 0) {
                         d(true);
-                        a((dh)null);
+                        a((dh) null);
                         b(true);
                         this.Y = 20;
                         a(entityplayer.l);
                         a(true);
-                        this.aI.a((sn)this, (byte)7);
+                        this.aI.a((sn) this, (byte) 7);
                     } else {
                         a(false);
-                        this.aI.a((sn)this, (byte)6);
+                        this.aI.a((sn) this, (byte) 6);
                     }
                 return true;
             }
         } else {
             if (itemstack != null && gm.c[itemstack.c] instanceof yw) {
-                yw itemfood = (yw)gm.c[itemstack.c];
+                yw itemfood = (yw) gm.c[itemstack.c];
                 if (itemfood.m() && this.bD.b(18) < 20) {
                     itemstack.a--;
                     if (itemstack.a <= 0)
-                        entityplayer.c.a(entityplayer.c.c, (iz)null);
-                    c(((yw)gm.ao).l());
+                        entityplayer.c.a(entityplayer.c.c, null);
+                    c(((yw) gm.ao).l());
                     return true;
                 }
             }
@@ -340,7 +340,7 @@ public class gi extends bg {
                 if (!this.aI.B) {
                     b(!B());
                     this.az = false;
-                    a((dh)null);
+                    a((dh) null);
                 }
                 return true;
             }
@@ -401,9 +401,9 @@ public class gi extends bg {
     public void b(boolean flag) {
         byte byte0 = this.bD.a(16);
         if (flag) {
-            this.bD.b(16, Byte.valueOf((byte)(byte0 | 0x1)));
+            this.bD.b(16, Byte.valueOf((byte) (byte0 | 0x1)));
         } else {
-            this.bD.b(16, Byte.valueOf((byte)(byte0 & 0xFFFFFFFE)));
+            this.bD.b(16, Byte.valueOf((byte) (byte0 & 0xFFFFFFFE)));
         }
     }
 
@@ -414,9 +414,9 @@ public class gi extends bg {
     public void c(boolean flag) {
         byte byte0 = this.bD.a(16);
         if (flag) {
-            this.bD.b(16, Byte.valueOf((byte)(byte0 | 0x2)));
+            this.bD.b(16, Byte.valueOf((byte) (byte0 | 0x2)));
         } else {
-            this.bD.b(16, Byte.valueOf((byte)(byte0 & 0xFFFFFFFD)));
+            this.bD.b(16, Byte.valueOf((byte) (byte0 & 0xFFFFFFFD)));
         }
     }
 
@@ -427,9 +427,9 @@ public class gi extends bg {
     public void d(boolean flag) {
         byte byte0 = this.bD.a(16);
         if (flag) {
-            this.bD.b(16, Byte.valueOf((byte)(byte0 | 0x4)));
+            this.bD.b(16, Byte.valueOf((byte) (byte0 | 0x4)));
         } else {
-            this.bD.b(16, Byte.valueOf((byte)(byte0 & 0xFFFFFFFB)));
+            this.bD.b(16, Byte.valueOf((byte) (byte0 & 0xFFFFFFFB)));
         }
     }
 }
