@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.gui;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityTimer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.level.Level;
 
 public class GuiTimer extends da {
     boolean ignoreNext;
@@ -15,7 +16,7 @@ public class GuiTimer extends da {
 
     private final int blockZ;
 
-    private final fd world;
+    private final Level world;
 
     boolean useTextFields;
 
@@ -31,7 +32,7 @@ public class GuiTimer extends da {
 
     private ro delayTimeText;
 
-    public GuiTimer(fd w, int x, int y, int z, TileEntityTimer timerClicked) {
+    public GuiTimer(Level w, int x, int y, int z, TileEntityTimer timerClicked) {
         this.ignoreNext = false;
         this.world = w;
         this.blockX = x;
@@ -169,7 +170,7 @@ public class GuiTimer extends da {
     }
 
     public static void showUI(fd w, int x, int y, int z, TileEntityTimer timerClicked) {
-        Minecraft.minecraftInstance.a(new AC_GuiTimer(w, x, y, z, timerClicked));
+        Minecraft.minecraftInstance.a(new GuiTimer(w, x, y, z, timerClicked));
     }
 
     public boolean c() {

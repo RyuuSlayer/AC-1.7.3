@@ -29,14 +29,14 @@ public class th {
         this.o.put(uw.class, new mj((ko) new no(16), (ko) new no(0), 0.25F));
         this.o.put(gs.class, new ds());
         this.o.put(nt.class, new yg((ko) new ej(), 0.5F, 6.0F));
-        this.o.put(bp.class, new pq());
+        this.o.put(Ghast.class, new pq());
         this.o.put(xt.class, new es((ko) new wn(), 0.7F));
         this.o.put(ls.class, new gv((ko) new fh(), 0.5F));
         this.o.put(sn.class, new mb());
         this.o.put(qv.class, new dy());
         this.o.put(sl.class, new mc());
-        this.o.put(by.class, new dg(gm.aB.a(0)));
-        this.o.put(vv.class, new dg(gm.aN.a(0)));
+        this.o.put(by.class, new dg(ItemType.aB.a(0)));
+        this.o.put(vv.class, new dg(ItemType.aN.a(0)));
         this.o.put(cf.class, new kl());
         this.o.put(hl.class, new ItemRenderer());
         this.o.put(qw.class, new on());

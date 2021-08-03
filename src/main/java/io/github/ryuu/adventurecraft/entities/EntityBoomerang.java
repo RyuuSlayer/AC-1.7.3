@@ -5,8 +5,10 @@ import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
+import net.minecraft.util.io.CompoundTag;
 
 public class EntityBoomerang extends sn {
     double bounceFactor;
@@ -23,7 +25,7 @@ public class EntityBoomerang extends sn {
 
     List<Entity> itemsPickedUp;
 
-    iz item;
+    ItemInstance item;
 
     int chunkX;
 
@@ -43,7 +45,7 @@ public class EntityBoomerang extends sn {
         this.collidesWithClipBlocks = false;
     }
 
-    public EntityBoomerang(Level world, sn entity, iz b) {
+    public EntityBoomerang(Level world, sn entity, ItemInstance b) {
         this(world);
         this.item = b;
         c(entity.aS, entity.aT);
@@ -158,10 +160,10 @@ public class EntityBoomerang extends sn {
         this.aT = -57.29578F * (float) Math.atan2(this.aQ, xzLength);
     }
 
-    protected void b(nu nbttagcompound) {
+    protected void b(CompoundTag nbttagcompound) {
     }
 
-    public void a(nu nbttagcompound) {
+    public void a(CompoundTag nbttagcompound) {
         K();
     }
 

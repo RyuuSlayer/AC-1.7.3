@@ -1327,11 +1327,11 @@ public class n implements pm {
         } else if (s.equals("reddust")) {
             im im = new im(this.k, d, d1, d2, (float) d3, (float) d4, (float) d5);
         } else if (s.equals("snowballpoof")) {
-            pb pb = new pb(this.k, d, d1, d2, gm.aB);
+            pb pb = new pb(this.k, d, d1, d2, ItemType.aB);
         } else if (s.equals("snowshovel")) {
             mu mu = new mu(this.k, d, d1, d2, d3, d4, d5);
         } else if (s.equals("slime")) {
-            pb pb = new pb(this.k, d, d1, d2, gm.aK);
+            pb pb = new pb(this.k, d, d1, d2, ItemType.aK);
         } else if (s.equals("heart")) {
             kc = new kc(this.k, d, d1, d2, d3, d4, d5);
         }
@@ -1427,8 +1427,8 @@ public class n implements pm {
             case 1005:
                 break;
         }
-        if (gm.c[i1] instanceof tr)
-            this.k.a(((tr) gm.c[i1]).a, j, k, l);
+        if (ItemType.c[i1] instanceof tr)
+            this.k.a(((tr) ItemType.c[i1]).a, j, k, l);
         this.k.a(null, j, k, l);
     }
 

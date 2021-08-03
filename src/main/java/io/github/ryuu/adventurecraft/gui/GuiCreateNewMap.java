@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.gui;
 
 import java.util.Random;
 
+import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.client.gui.Screen;
 import org.lwjgl.input.Keyboard;
 
@@ -158,7 +159,7 @@ public class GuiCreateNewMap extends Screen {
                     l = s.hashCode();
                 }
             this.b.c = new os(this.b);
-            AC_DebugMode.levelEditing = true;
+            DebugMode.levelEditing = true;
             String mapName = this.textboxMapName.a().trim();
             this.b.saveMapUsed(mapName, mapName);
             fd w = this.b.getWorld(mapName, l, mapName);

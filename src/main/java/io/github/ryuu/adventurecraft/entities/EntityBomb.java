@@ -8,6 +8,8 @@ import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
+import net.minecraft.util.io.CompoundTag;
+import net.minecraft.util.maths.Box;
 
 import java.util.List;
 import java.util.Random;
@@ -64,7 +66,7 @@ public class EntityBomb extends ItemEntity {
     public static void explode(Entity exploding, Entity parentEntity, Level worldObj, double posX, double posY, double posZ) {
         exploding.K();
         worldObj.a(posX, posY, posZ, "random.explode", 4.0F, 1.0F);
-        List<Entity> list = worldObj.b(exploding, eq.b(Math.floor(posX - 5.0D), Math.floor(posY - 5.0D), Math.floor(posZ - 5.0D), Math.ceil(posX + 5.0D), Math.ceil(posY + 5.0D), Math.ceil(posZ + 5.0D)));
+        List<Entity> list = worldObj.b(exploding, Box.b(Math.floor(posX - 5.0D), Math.floor(posY - 5.0D), Math.floor(posZ - 5.0D), Math.ceil(posX + 5.0D), Math.ceil(posY + 5.0D), Math.ceil(posZ + 5.0D)));
         for (int i = 0; i < list.size(); i++) {
             Entity entity = list.get(i);
             double dist = entity.h(posX, posY, posZ);
@@ -122,12 +124,12 @@ public class EntityBomb extends ItemEntity {
         return false;
     }
 
-    public void b(nu nbttagcompound) {
+    public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
         nbttagcompound.a("Fuse", (byte) this.fuse);
     }
 
-    public void a(nu nbttagcompound) {
+    public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
         this.fuse = nbttagcompound.c("Fuse");
     }

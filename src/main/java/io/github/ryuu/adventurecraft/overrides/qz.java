@@ -3,7 +3,7 @@ package io.github.ryuu.adventurecraft.overrides;
 import io.github.ryuu.adventurecraft.entities.EntityArrowBomb;
 import io.github.ryuu.adventurecraft.items.Items;
 
-public class qz extends gm {
+public class qz extends ItemType {
     public qz(int i) {
         super(i);
         this.bg = 1;
@@ -18,7 +18,7 @@ public class qz extends gm {
                 if (!world.B)
                     world.b((sn) new EntityArrowBomb(world, (ls) entityplayer));
             }
-        } else if (entityplayer.c.c(gm.j.bf)) {
+        } else if (entityplayer.c.c(ItemType.j.bf)) {
             world.a((sn) entityplayer, "random.bow", 1.0F, 1.0F / (b.nextFloat() * 0.4F + 0.8F));
             if (!world.B)
                 world.b(new sl(world, entityplayer));

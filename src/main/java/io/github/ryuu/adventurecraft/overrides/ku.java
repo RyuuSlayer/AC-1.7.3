@@ -19,7 +19,7 @@ public class ku extends TextureBinder {
     private double k;
 
     public ku(Minecraft minecraft) {
-        super(gm.aQ.a(0));
+        super(ItemType.aQ.a(0));
         this.h = new int[256];
         this.i = new int[256];
         this.g = minecraft;

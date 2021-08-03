@@ -2,10 +2,10 @@ package io.github.ryuu.adventurecraft.overrides;
 
 import io.github.ryuu.adventurecraft.util.DebugMode;
 
-public class PlaceableTileItem extends gm {
+public class ck extends ItemType {
     private final int a;
 
-    public PlaceableTileItem(int i) {
+    public ck(int i) {
         super(i);
         this.a = i + 256;
         c(Tile.m[i + 256].a(2));

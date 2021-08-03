@@ -160,7 +160,7 @@ public class qv extends sn {
         if (!this.be && !this.aI.B) {
             K();
             ai();
-            this.aI.b((sn) new hl(this.aI, this.aM, this.aN, this.aO, new iz(gm.aq)));
+            this.aI.b((sn) new hl(this.aI, this.aM, this.aN, this.aO, new iz(ItemType.aq)));
         }
         return true;
     }
@@ -194,14 +194,14 @@ public class qv extends sn {
     public void b(double d, double d1, double d2) {
         if (!this.aI.B && d * d + d1 * d1 + d2 * d2 > 0.0D) {
             K();
-            this.aI.b((sn) new hl(this.aI, this.aM, this.aN, this.aO, new iz(gm.aq)));
+            this.aI.b((sn) new hl(this.aI, this.aM, this.aN, this.aO, new iz(ItemType.aq)));
         }
     }
 
     public void d(double d, double d1, double d2) {
         if (!this.aI.B && d * d + d1 * d1 + d2 * d2 > 0.0D) {
             K();
-            this.aI.b((sn) new hl(this.aI, this.aM, this.aN, this.aO, new iz(gm.aq)));
+            this.aI.b((sn) new hl(this.aI, this.aM, this.aN, this.aO, new iz(ItemType.aq)));
         }
     }
 }

@@ -2,10 +2,12 @@ package io.github.ryuu.adventurecraft.entities;
 
 import io.github.ryuu.adventurecraft.Minecraft;
 import io.github.ryuu.adventurecraft.gui.GuiCamera;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
+import net.minecraft.util.io.CompoundTag;
 
-public class EntityCamera extends ls {
+public class EntityCamera extends LivingEntity {
     float time;
 
     int type;
@@ -27,10 +29,10 @@ public class EntityCamera extends ls {
         Minecraft.minecraftInstance.activeCutsceneCamera.loadCameraEntities();
     }
 
-    public void a(nu nbttagcompound) {
+    public void a(CompoundTag nbttagcompound) {
     }
 
-    public void b(nu nbttagcompound) {
+    public void b(CompoundTag nbttagcompound) {
     }
 
     public void U() {

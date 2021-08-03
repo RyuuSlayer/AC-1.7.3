@@ -4,7 +4,7 @@ public class Skeleton extends gz {
     public Skeleton(fd world) {
         super(world);
         this.O = "/mob/skeleton.png";
-        this.heldItem = new iz(gm.i, 1);
+        this.heldItem = new iz(ItemType.i, 1);
     }
 
     protected String g() {
@@ -56,7 +56,7 @@ public class Skeleton extends gz {
     }
 
     protected int j() {
-        return gm.j.bf;
+        return ItemType.j.bf;
     }
 
     protected void q() {
@@ -64,12 +64,12 @@ public class Skeleton extends gz {
             int m = this.bs.nextInt(3) + 1;
             for (int j = 0; j < m; j++) {
                 hl item = b(j(), 1);
-                if (j() != gm.j.bf)
+                if (j() != ItemType.j.bf)
                     item.a.a = 3;
             }
         }
         int i = this.bs.nextInt(3);
         for (int k = 0; k < i; k++)
-            b(gm.aV.bf, 1);
+            b(ItemType.aV.bf, 1);
     }
 }

@@ -2,16 +2,18 @@ package io.github.ryuu.adventurecraft.entities;
 
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.UtilBullet;
+import net.minecraft.entity.monster.Zombie;
+import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
 
 
-public class EntityZombiePistol extends uz {
+public class EntityZombiePistol extends Zombie {
     int ammo;
 
     public EntityZombiePistol(Level world) {
         super(world);
         this.ammo = 15;
-        this.heldItem = new iz(Items.pistol, 1);
+        this.heldItem = new ItemInstance(Items.pistol, 1);
         this.c = 6;
     }
 

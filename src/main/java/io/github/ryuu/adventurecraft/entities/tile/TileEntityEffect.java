@@ -1,11 +1,12 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
 import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.util.io.CompoundTag;
 
 import java.util.Random;
 
 public class TileEntityEffect extends TileEntity {
-    public void a(nu nbttagcompound) {
+    public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
         this.particleType = nbttagcompound.i("particleType");
         this.particlesPerSpawn = nbttagcompound.e("particlesPerSpawn");
@@ -37,7 +38,7 @@ public class TileEntityEffect extends TileEntity {
         this.textureReplacement = nbttagcompound.i("textureReplacement");
     }
 
-    public void b(nu nbttagcompound) {
+    public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
         if (!this.particleType.equals(""))
             nbttagcompound.a("particleType", this.particleType);

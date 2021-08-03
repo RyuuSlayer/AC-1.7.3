@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.overrides;
 
-public class wa extends gm {
+public class wa extends ItemType {
     public wa(int i, int j, int k, int l) {
         super(i);
         this.a = j;

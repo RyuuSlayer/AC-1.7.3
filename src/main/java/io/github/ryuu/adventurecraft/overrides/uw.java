@@ -114,7 +114,7 @@ public class uw extends ls implements ff {
 
     protected int j() {
         if (v() == 1)
-            return gm.aK.bf;
+            return ItemType.aK.bf;
         return 0;
     }
 

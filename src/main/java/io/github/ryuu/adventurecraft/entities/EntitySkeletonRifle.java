@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.entities;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.UtilBullet;
 import net.minecraft.entity.monster.Skeleton;
+import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
 
 public class EntitySkeletonRifle extends Skeleton {
@@ -12,7 +13,7 @@ public class EntitySkeletonRifle extends Skeleton {
         super(world);
         this.c = 6;
         this.ammo = 30;
-        this.heldItem = new iz(Items.rifle, 1);
+        this.heldItem = new ItemInstance(Items.rifle, 1);
     }
 
     protected void a(sn entity, float f) {

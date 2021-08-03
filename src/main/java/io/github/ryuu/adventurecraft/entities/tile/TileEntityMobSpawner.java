@@ -13,6 +13,7 @@ import io.github.ryuu.adventurecraft.util.Coord;
 import io.github.ryuu.adventurecraft.util.TriggerArea;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.io.CompoundTag;
 import org.mozilla.javascript.Scriptable;
 
 public class TileEntityMobSpawner extends TileEntityScript {
@@ -52,7 +53,7 @@ public class TileEntityMobSpawner extends TileEntityScript {
 
     public int ticksBeforeLoad;
 
-    public nu delayLoadData;
+    public CompoundTag delayLoadData;
 
     private boolean spawnStill;
 
@@ -331,7 +332,7 @@ public class TileEntityMobSpawner extends TileEntityScript {
         this.d.triggerManager.removeArea(this.e, this.f, this.g);
     }
 
-    public void a(nu nbttagcompound) {
+    public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
         this.entityID = nbttagcompound.i("EntityId");
         this.delay = nbttagcompound.d("Delay");
@@ -364,7 +365,7 @@ public class TileEntityMobSpawner extends TileEntityScript {
             ScopeTag.loadScopeFromTag(this.scope, nbttagcompound.k("scope"));
     }
 
-    public void b(nu nbttagcompound) {
+    public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
         nbttagcompound.a("EntityId", this.entityID);
         nbttagcompound.a("Delay", (short) this.delay);

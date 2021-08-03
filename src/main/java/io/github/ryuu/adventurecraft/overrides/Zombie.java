@@ -32,6 +32,6 @@ public class Zombie extends gz {
     }
 
     protected int j() {
-        return gm.J.bf;
+        return ItemType.J.bf;
     }
 }

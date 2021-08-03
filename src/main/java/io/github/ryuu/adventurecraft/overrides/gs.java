@@ -256,8 +256,8 @@ public abstract class gs extends ls {
         }
         iz mainItem = this.c.a[this.c.c];
         iz offItem = this.c.a[this.c.offhandItem];
-        boolean litFromItem = (mainItem != null && gm.c[mainItem.c].isLighting(mainItem));
-        int i = litFromItem | ((offItem != null && gm.c[offItem.c].isLighting(offItem)) ? 1 : 0);
+        boolean litFromItem = (mainItem != null && ItemType.c[mainItem.c].isLighting(mainItem));
+        int i = litFromItem | ((offItem != null && ItemType.c[offItem.c].isLighting(offItem)) ? 1 : 0);
         if (i != 0 || (mainItem != null && (mainItem.c == Tile.ar.bn || mainItem.c == Blocks.lights1.bn)) || (offItem != null && (offItem.c == Tile.ar.bn || offItem.c == Blocks.lights1.bn))) {
             PlayerTorch.setTorchState(this.aI, true);
             PlayerTorch.setTorchPos(this.aI, (float) this.aM, (float) this.aN, (float) this.aO);
@@ -308,7 +308,7 @@ public abstract class gs extends ls {
         e(this.aM, this.aN, this.aO);
         this.aQ = 0.10000000149011612D;
         if (this.l.equals("Notch"))
-            a(new iz(gm.h, 1), true);
+            a(new iz(ItemType.h, 1), true);
         if (entity != null) {
             this.aP = (-in.b((this.ac + this.aS) * 3.141593F / 180.0F) * 0.1F);
             this.aR = (-in.a((this.ac + this.aS) * 3.141593F / 180.0F) * 0.1F);
@@ -490,7 +490,7 @@ public abstract class gs extends ls {
     }
 
     protected void a(ls entityliving, boolean flag) {
-        if (entityliving instanceof gb || entityliving instanceof bp)
+        if (entityliving instanceof gb || entityliving instanceof Ghast)
             return;
         if (entityliving instanceof gi) {
             gi entitywolf = (gi) entityliving;
@@ -852,7 +852,7 @@ public abstract class gs extends ls {
 
     public int c(iz itemstack) {
         int i = super.c(itemstack);
-        if (itemstack.c == gm.aP.bf && this.D != null)
+        if (itemstack.c == ItemType.aP.bf && this.D != null)
             i = itemstack.b() + 16;
         return i;
     }

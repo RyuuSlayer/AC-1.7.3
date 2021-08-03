@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.entities.tile;
 
 import io.github.ryuu.adventurecraft.util.TriggerArea;
 import net.minecraft.tile.Tile;
+import net.minecraft.util.io.CompoundTag;
 
 public class TileEntityTimer extends TileEntityMinMax {
     public boolean resetOnTrigger;
@@ -54,7 +55,7 @@ public class TileEntityTimer extends TileEntityMinMax {
         }
     }
 
-    public void a(nu nbttagcompound) {
+    public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
         this.resetOnTrigger = nbttagcompound.m("resetOnTrigger");
         this.timeActive = nbttagcompound.e("timeActive");
@@ -66,7 +67,7 @@ public class TileEntityTimer extends TileEntityMinMax {
         this.canActivate = nbttagcompound.m("canActivate");
     }
 
-    public void b(nu nbttagcompound) {
+    public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
         nbttagcompound.a("resetOnTrigger", this.resetOnTrigger);
         nbttagcompound.a("timeActive", this.timeActive);

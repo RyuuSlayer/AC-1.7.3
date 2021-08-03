@@ -27,15 +27,15 @@ public final class iz {
         this(block.bn, i, j);
     }
 
-    public iz(gm item) {
+    public iz(ItemType item) {
         this(item.bf, 1, 0);
     }
 
-    public iz(gm item, int i) {
+    public iz(ItemType item, int i) {
         this(item.bf, i, 0);
     }
 
-    public iz(gm item, int i, int j) {
+    public iz(ItemType item, int i, int j) {
         this(item.bf, i, j);
     }
 
@@ -60,8 +60,8 @@ public final class iz {
         return new iz(this.c, i, this.d);
     }
 
-    public gm a() {
-        return gm.c[this.c];
+    public ItemType a() {
+        return ItemType.c[this.c];
     }
 
     public int b() {
@@ -111,11 +111,11 @@ public final class iz {
     }
 
     public boolean e() {
-        return (gm.c[this.c].f() > 0);
+        return (ItemType.c[this.c].f() > 0);
     }
 
     public boolean f() {
-        return gm.c[this.c].e();
+        return ItemType.c[this.c].e();
     }
 
     public boolean g() {
@@ -135,7 +135,7 @@ public final class iz {
     }
 
     public int j() {
-        return gm.c[this.c].f();
+        return ItemType.c[this.c].f();
     }
 
     public void a(int i, sn entity) {
@@ -153,30 +153,30 @@ public final class iz {
     }
 
     public void a(ls entityliving, gs entityplayer) {
-        boolean flag = gm.c[this.c].a(this, entityliving, entityplayer);
+        boolean flag = ItemType.c[this.c].a(this, entityliving, entityplayer);
         if (flag)
             entityplayer.a(jl.E[this.c], 1);
     }
 
     public void a(int i, int j, int k, int l, gs entityplayer) {
-        boolean flag = gm.c[this.c].a(this, i, j, k, l, entityplayer);
+        boolean flag = ItemType.c[this.c].a(this, i, j, k, l, entityplayer);
         if (flag)
             entityplayer.a(jl.E[this.c], 1);
     }
 
     public int a(sn entity) {
-        return gm.c[this.c].a(entity);
+        return ItemType.c[this.c].a(entity);
     }
 
     public boolean b(Tile block) {
-        return gm.c[this.c].a(block);
+        return ItemType.c[this.c].a(block);
     }
 
     public void a(gs entityplayer) {
     }
 
     public void a(ls entityliving) {
-        gm.c[this.c].a(this, entityliving);
+        ItemType.c[this.c].a(this, entityliving);
     }
 
     public iz k() {
@@ -204,7 +204,7 @@ public final class iz {
     }
 
     public String l() {
-        return gm.c[this.c].a(this);
+        return ItemType.c[this.c].a(this);
     }
 
     public static iz b(iz itemstack) {
@@ -212,18 +212,18 @@ public final class iz {
     }
 
     public String toString() {
-        return this.a + "x" + gm.c[this.c].a() + "@" + this.d;
+        return this.a + "x" + ItemType.c[this.c].a() + "@" + this.d;
     }
 
     public void a(fd world, sn entity, int i, boolean flag) {
         if (this.b > 0)
             this.b--;
-        gm.c[this.c].a(this, world, entity, i, flag);
+        ItemType.c[this.c].a(this, world, entity, i, flag);
     }
 
     public void b(fd world, gs entityplayer) {
         entityplayer.a(jl.D[this.c], this.a);
-        gm.c[this.c].b(this, world, entityplayer);
+        ItemType.c[this.c].b(this, world, entityplayer);
     }
 
     public boolean c(iz itemstack) {

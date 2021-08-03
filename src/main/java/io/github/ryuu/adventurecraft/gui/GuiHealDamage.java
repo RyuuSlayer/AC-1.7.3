@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.gui;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityHealDamage;
 import net.minecraft.client.Minecraft;
+import net.minecraft.level.Level;
 
 public class GuiHealDamage extends da {
     private final TileEntityHealDamage tileEnt;
@@ -34,7 +35,7 @@ public class GuiHealDamage extends da {
         this.tileEnt.d.b(this.tileEnt.e, this.tileEnt.g).g();
     }
 
-    public static void showUI(fd worldArg, TileEntityHealDamage w) {
+    public static void showUI(Level worldArg, TileEntityHealDamage w) {
         Minecraft.minecraftInstance.a(new GuiHealDamage(w));
     }
 
