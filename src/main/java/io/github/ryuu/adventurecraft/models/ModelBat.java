@@ -18,39 +18,41 @@ public class ModelBat extends EntityModel {
     public ModelBat() {
         float offset = 16.0F;
         this.theHead = new ModelPart(0, 0);
-        this.theHead.a(-1.5F, -3.0F, -1.5F, 3, 3, 3, 0.0F);
-        this.theHead.a(0.0F, -4.0F + offset, 0.0F);
+        this.theHead.addCuboid(-1.5F, -3.0F, -1.5F, 3, 3, 3, 0.0F);
+        this.theHead.setPivot(0.0F, -4.0F + offset, 0.0F);
         this.ears = new ModelPart(12, 10);
-        this.ears.a(-1.5F, -4.0F, 0.0F, 3, 1, 0, 0.0F);
-        this.ears.a(0.0F, -4.0F + offset, 0.0F);
+        this.ears.addCuboid(-1.5F, -4.0F, 0.0F, 3, 1, 0, 0.0F);
+        this.ears.setPivot(0.0F, -4.0F + offset, 0.0F);
         this.theBody = new ModelPart(0, 6);
-        this.theBody.a(-1.5F, -4.0F, -1.5F, 3, 5, 3, 0.0F);
-        this.theBody.a(0.0F, 0.0F + offset, 0.0F);
+        this.theBody.addCuboid(-1.5F, -4.0F, -1.5F, 3, 5, 3, 0.0F);
+        this.theBody.setPivot(0.0F, 0.0F + offset, 0.0F);
         this.leftWing = new ModelPart(12, 0);
-        this.leftWing.a(0.0F, -4.0F, 0.0F, 7, 5, 0, 0.0F);
-        this.leftWing.a(1.5F, 0.0F + offset, 0.0F);
+        this.leftWing.addCuboid(0.0F, -4.0F, 0.0F, 7, 5, 0, 0.0F);
+        this.leftWing.setPivot(1.5F, 0.0F + offset, 0.0F);
         this.rightWing = new ModelPart(12, 5);
-        this.rightWing.a(-7.0F, -4.0F, 0.0F, 7, 5, 0, 0.0F);
-        this.rightWing.a(-1.5F, 0.0F + offset, 0.0F);
+        this.rightWing.addCuboid(-7.0F, -4.0F, 0.0F, 7, 5, 0, 0.0F);
+        this.rightWing.setPivot(-1.5F, 0.0F + offset, 0.0F);
     }
 
-    public void a(float f, float f1, float f2, float f3, float f4, float f5) {
+    @Override
+    public void render(float f, float f1, float f2, float f3, float f4, float f5) {
         GL11.glEnable(2884);
-        b(f, f1, f2, f3, f4, f5);
-        this.theHead.a(f5);
-        this.ears.a(f5);
-        this.theBody.a(f5);
-        this.leftWing.a(f5);
-        this.rightWing.a(f5);
+        setAngles(f, f1, f2, f3, f4, f5);
+        this.theHead.render(f5);
+        this.ears.render(f5);
+        this.theBody.render(f5);
+        this.leftWing.render(f5);
+        this.rightWing.render(f5);
     }
 
-    public void b(float f, float f1, float f2, float f3, float f4, float f5) {
-        this.theHead.d = -(f4 / 57.29578F);
-        this.theHead.e = f3 / 57.29578F;
-        this.ears.d = this.theHead.d;
-        this.ears.e = this.theHead.e;
+    @Override
+    public void setAngles(float f, float f1, float f2, float f3, float f4, float f5) {
+        this.theHead.pitch = -(f4 / 57.29578F);
+        this.theHead.yaw = f3 / 57.29578F;
+        this.ears.pitch = this.theHead.pitch;
+        this.ears.yaw = this.theHead.yaw;
         double t = (System.currentTimeMillis() % 500L) / 500.0D;
-        this.leftWing.e = 0.3F * (float) Math.cos(2.0D * t * Math.PI);
-        this.rightWing.e = -0.3F * (float) Math.cos(2.0D * t * Math.PI);
+        this.leftWing.yaw = 0.3F * (float) Math.cos(2.0D * t * Math.PI);
+        this.rightWing.yaw = -0.3F * (float) Math.cos(2.0D * t * Math.PI);
     }
 }
