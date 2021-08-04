@@ -1,21 +1,21 @@
 package io.github.ryuu.adventurecraft.util;
 
 public class CutsceneCameraPoint {
-    float time;
+    public float time;
 
-    float posX;
+    public float posX;
 
-    float posY;
+    public float posY;
 
-    float posZ;
+    public float posZ;
 
-    float rotYaw;
+    public float rotYaw;
 
-    float rotPitch;
+    public float rotPitch;
 
-    int cameraBlendType;
+    public int cameraBlendType;
 
-    int cameraID;
+    public int cameraID;
 
     CutsceneCameraPoint(float t, float x, float y, float z, float ya, float p, int i) {
         this.time = t;

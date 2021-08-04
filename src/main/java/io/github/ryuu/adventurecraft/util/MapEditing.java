@@ -17,7 +17,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 import org.lwjgl.util.glu.GLU;
 
-class MapEditing {
+public class MapEditing {
     Minecraft mc;
 
     Level world;
@@ -30,7 +30,7 @@ class MapEditing {
 
     int selectedMetadata;
 
-    MapEditing(Minecraft mcInstance, Level w) {
+    public MapEditing(Minecraft mcInstance, Level w) {
         this.mc = mcInstance;
         this.world = w;
         this.renderBlocks = new TileRenderer(w);
@@ -269,7 +269,7 @@ class MapEditing {
         }
     }
 
-    void setBlock(int bID, int m) {
+    public void setBlock(int bID, int m) {
         this.selectedBlockID = bID;
         this.selectedMetadata = m;
     }

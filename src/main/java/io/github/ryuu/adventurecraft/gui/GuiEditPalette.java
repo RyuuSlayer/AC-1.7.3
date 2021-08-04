@@ -5,39 +5,44 @@ import java.util.List;
 
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.client.Minecraft;
-import net.minecraft.src.Block;
-import net.minecraft.src.GuiButton;
+import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.widgets.Button;
+import net.minecraft.client.render.RenderHelper;
+import net.minecraft.client.render.TextRenderer;
+import net.minecraft.client.render.entity.ItemRenderer;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.tile.Tile;
 import org.lwjgl.opengl.GL11;
 
-class GuiEditPalette extends ub {
+class GuiEditPalette extends DrawableHelper {
     int numRows;
 
-    List<GuiButton> controlList;
+    List<Button> controlList;
 
-    ArrayList<Block> blocks;
+    ArrayList<Tile> blocks;
 
-    ke selectedButton;
+    Button selectedButton;
 
-    iz item;
+    ItemInstance item;
 
-    GuiEditPalette() {
+    public GuiEditPalette() {
         this.scrollPosition = 0.0F;
-        this.controlList = new ArrayList<GuiButton>();
-        this.item = new iz(0, 0, 0);
-        this.blocks = new ArrayList<Block>();
+        this.controlList = new ArrayList<Button>();
+        this.item = new ItemInstance(0, 0, 0);
+        this.blocks = new ArrayList<Tile>();
         filterBlocks(0);
     }
 
-    void filterBlocks(int f) {
+    public void filterBlocks(int f) {
         this.blocks.clear();
         for (int i = 0; i < 255; i++) {
-            if (uu.m[i] != null)
-                this.blocks.add(uu.m[i]);
+            if (Tile.BY_ID[i] != null)
+                this.blocks.add(Tile.BY_ID[i]);
         }
         this.numRows = (this.blocks.size() + columns - 1) / columns;
     }
 
-    boolean mouseClicked(int x, int y, int buttonClicked, Minecraft mc, int width, int height) {
+    public boolean mouseClicked(int x, int y, int buttonClicked, Minecraft mc, int width, int height) {
         if (buttonClicked == 0) {
             int pLeft = 0;
             int pTop = height / 2 - rows * 8;
@@ -45,10 +50,10 @@ class GuiEditPalette extends ub {
             int rowClicked = (y - pTop) / 16;
             if (rowClicked < rows && rowClicked >= 0)
                 if (columnClicked < columns && columnClicked >= 0) {
-                    mc.B.a("random.click", 1.0F, 1.0F);
+                    mc.soundHelper.playSound("random.click", 1.0F, 1.0F);
                     int i = columnClicked + rowClicked * columns;
                     if (i + getOffset() < this.blocks.size()) {
-                        DebugMode.mapEditing.setBlock(((uu) this.blocks.get(i + getOffset())).bn, 0);
+                        DebugMode.mapEditing.setBlock(this.blocks.get(i + getOffset()).id, 0);
                         return true;
                     }
                 } else if (columnClicked == columns && x % 16 < 4 && needScrollbar()) {
@@ -60,21 +65,21 @@ class GuiEditPalette extends ub {
         return false;
     }
 
-    void drawPalette(Minecraft mc, sj fontRenderer, int width, int height) {
+    public void drawPalette(Minecraft mc, TextRenderer fontRenderer, int width, int height) {
         int pLeft = 0;
         int pWidth = 16 * columns;
         int pTop = height / 2 - rows * 8;
         int pHeight = rows * 16;
         if (needScrollbar())
             pWidth += 4;
-        a(pLeft, pTop, pLeft + pWidth, pTop + pHeight, -2147483648);
+        fill(pLeft, pTop, pLeft + pWidth, pTop + pHeight, -2147483648);
         if (needScrollbar()) {
             int yOffset = (int) (this.scrollPosition * (pHeight - scrollHeight));
-            a(pLeft + pWidth - 4, pTop + yOffset, pLeft + pWidth, pTop + yOffset + scrollHeight, -2130706433);
+            fill(pLeft + pWidth - 4, pTop + yOffset, pLeft + pWidth, pTop + yOffset + scrollHeight, -2130706433);
         }
         GL11.glPushMatrix();
         GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
-        u.b();
+        RenderHelper.enableLighting();
         GL11.glPopMatrix();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glEnable(32826);
@@ -82,11 +87,11 @@ class GuiEditPalette extends ub {
         for (int i = 0; i < rows * columns; i++) {
             if (i + offset >= this.blocks.size())
                 break;
-            this.item.c = ((uu) this.blocks.get(i + offset)).bn;
-            itemRenderer.a(fontRenderer, mc.p, this.item, i % columns * 16, height / 2 - rows * 8 + 16 * i / columns);
+            this.item.itemId = this.blocks.get(i + offset).id;
+            itemRenderer.renderItemInstance(fontRenderer, mc.textureManager, this.item, i % columns * 16, height / 2 - rows * 8 + 16 * i / columns);
         }
         GL11.glDisable(32826);
-        u.a();
+        RenderHelper.disableLighting();
     }
 
     private int getOffset() {
@@ -97,7 +102,7 @@ class GuiEditPalette extends ub {
         return (this.numRows > rows);
     }
 
-    private static final bb itemRenderer = new bb();
+    private static final ItemRenderer itemRenderer = new ItemRenderer();
 
     static int rows = 8;
 

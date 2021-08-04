@@ -8,11 +8,11 @@ import net.minecraft.level.Level;
 import net.minecraft.util.io.CompoundTag;
 
 public class EntityCamera extends LivingEntity {
-    float time;
+    public float time;
 
-    int type;
+    public int type;
 
-    int cameraID;
+    public int cameraID;
 
     EntityCamera(Level world, float t, int ty, int id) {
         super(world);
@@ -21,7 +21,7 @@ public class EntityCamera extends LivingEntity {
         this.type = ty;
     }
 
-    protected void b() {
+    protected void initDataTracker() {
     }
 
     public void deleteCameraPoint() {
@@ -29,30 +29,30 @@ public class EntityCamera extends LivingEntity {
         Minecraft.minecraftInstance.activeCutsceneCamera.loadCameraEntities();
     }
 
-    public void a(CompoundTag nbttagcompound) {
+    public void readCustomDataFromTag(CompoundTag nbttagcompound) {
     }
 
-    public void b(CompoundTag nbttagcompound) {
+    public void writeCustomDataToTag(CompoundTag nbttagcompound) {
     }
 
-    public void U() {
+    public void baseTick() {
     }
 
-    public void o() {
+    public void updateDespawnCounter() {
     }
 
-    public void w_() {
+    public void tick() {
     }
 
-    public boolean h_() {
+    public boolean method_1356() {
         return true;
     }
 
-    public boolean i_() {
+    public boolean method_1380() {
         return false;
     }
 
-    public boolean a(Player entityplayer) {
+    public boolean interact(Player entityplayer) {
         GuiCamera.showUI(this);
         return true;
     }

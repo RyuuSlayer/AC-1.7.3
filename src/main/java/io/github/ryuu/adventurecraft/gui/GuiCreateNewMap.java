@@ -2,16 +2,21 @@ package io.github.ryuu.adventurecraft.gui;
 
 import java.util.Random;
 
-import io.github.ryuu.adventurecraft.util.DebugMode;
+import net.minecraft.class_520;
 import net.minecraft.client.gui.Screen;
+import net.minecraft.client.gui.widgets.Button;
+import net.minecraft.client.gui.widgets.Textbox;
+import net.minecraft.client.resource.language.TranslationStorage;
+import net.minecraft.level.Level;
+import net.minecraft.util.maths.MathsHelper;
 import org.lwjgl.input.Keyboard;
 
 public class GuiCreateNewMap extends Screen {
     private final Screen parent;
 
-    private ro textboxMapName;
+    private Textbox textboxMapName;
 
-    private ro textboxSeed;
+    private Textbox textboxSeed;
 
     private String folderName;
 
@@ -71,23 +76,25 @@ public class GuiCreateNewMap extends Screen {
         this.parent = guiscreen;
     }
 
-    public void a() {
-        this.textboxMapName.b();
-        this.textboxSeed.b();
+    @Override
+    public void tick() {
+        this.textboxMapName.tick();
+        this.textboxSeed.tick();
     }
 
-    public void b() {
-        nh stringtranslate = nh.a();
+    @Override
+    public void init() {
+        TranslationStorage stringtranslate = TranslationStorage.getInstance();
         Keyboard.enableRepeatEvents(true);
-        this.e.clear();
-        this.e.add(new ke(0, this.c / 2 - 205, 200, "Create Map"));
-        this.e.add(new ke(1, this.c / 2 + 5, 200, stringtranslate.a("gui.cancel")));
-        this.textboxMapName = new ro(this, this.g, this.c / 2 - 100, 38, 200, 20, stringtranslate.a("selectWorld.newWorld"));
-        this.textboxMapName.a = true;
-        this.textboxMapName.a(32);
-        this.textboxSeed = new ro(this, this.g, this.c / 2 - 100, 62, 200, 20, "");
-        int xPos1 = this.c / 2 - 4 - 150;
-        int xPos2 = this.c / 2 + 4;
+        this.buttons.clear();
+        this.buttons.add(new Button(0, this.width / 2 - 205, 200, "Create Map"));
+        this.buttons.add(new Button(1, this.width / 2 + 5, 200, stringtranslate.translate("gui.cancel")));
+        this.textboxMapName = new Textbox(this, this.textManager, this.width / 2 - 100, 38, 200, 20, stringtranslate.translate("selectWorld.newWorld"));
+        this.textboxMapName.field_2420 = true;
+        this.textboxMapName.method_1878(32);
+        this.textboxSeed = new Textbox(this, this.textManager, this.width / 2 - 100, 62, 200, 20, "");
+        int xPos1 = this.width / 2 - 4 - 150;
+        int xPos2 = this.width / 2 + 4;
         this.sliderMapSize = new GuiSlider2(2, xPos1, 88, 10, "", (float) (this.mapSize - 100.0D) / 650.0F);
         this.sliderWaterLevel = new GuiSlider2(2, xPos2, 88, 10, "", this.waterLevel / 128.0F);
         this.sliderFracHorizontal = new GuiSlider2(2, xPos1, 109, 10, "", (float) this.fractureHorizontal / 2.0F);
@@ -99,16 +106,16 @@ public class GuiCreateNewMap extends Screen {
         this.sliderVolatilityWeight1 = new GuiSlider2(2, xPos1, 172, 10, "", (float) (this.volatilityWeight1 + 0.5D));
         this.sliderVolatilityWeight2 = new GuiSlider2(2, xPos2, 172, 10, "", (float) (this.volatilityWeight2 - 0.5D));
         updateSliders();
-        this.e.add(this.sliderMapSize);
-        this.e.add(this.sliderWaterLevel);
-        this.e.add(this.sliderFracHorizontal);
-        this.e.add(this.sliderFracVertical);
-        this.e.add(this.sliderMaxAvgDepth);
-        this.e.add(this.sliderMaxAvgHeight);
-        this.e.add(this.sliderVolatility1);
-        this.e.add(this.sliderVolatility2);
-        this.e.add(this.sliderVolatilityWeight1);
-        this.e.add(this.sliderVolatilityWeight2);
+        this.buttons.add(this.sliderMapSize);
+        this.buttons.add(this.sliderWaterLevel);
+        this.buttons.add(this.sliderFracHorizontal);
+        this.buttons.add(this.sliderFracVertical);
+        this.buttons.add(this.sliderMaxAvgDepth);
+        this.buttons.add(this.sliderMaxAvgHeight);
+        this.buttons.add(this.sliderVolatility1);
+        this.buttons.add(this.sliderVolatility2);
+        this.buttons.add(this.sliderVolatilityWeight1);
+        this.buttons.add(this.sliderVolatilityWeight2);
     }
 
     private void updateSliders() {
@@ -122,35 +129,37 @@ public class GuiCreateNewMap extends Screen {
         this.volatility2 = this.sliderVolatility2.sliderValue * 5.0D;
         this.volatilityWeight1 = this.sliderVolatilityWeight1.sliderValue - 0.5D;
         this.volatilityWeight2 = this.sliderVolatilityWeight2.sliderValue + 0.5D;
-        this.sliderMapSize.e = String.format("Map Size: %.1f", new Object[]{Double.valueOf(this.mapSize)});
-        this.sliderWaterLevel.e = String.format("Water Level: %d", new Object[]{Integer.valueOf(this.waterLevel)});
-        this.sliderFracHorizontal.e = String.format("Fracture Horizontal: %.2f", new Object[]{Double.valueOf(this.fractureHorizontal)});
-        this.sliderFracVertical.e = String.format("Fracture Vertical: %.2f", new Object[]{Double.valueOf(this.fractureVertical)});
-        this.sliderMaxAvgDepth.e = String.format("Max Avg Depth: %.2f", new Object[]{Double.valueOf(this.maxAvgDepth)});
-        this.sliderMaxAvgHeight.e = String.format("Max Avg Height: %.2f", new Object[]{Double.valueOf(this.maxAvgHeight)});
-        this.sliderVolatility1.e = String.format("Volatility 1: %.2f", new Object[]{Double.valueOf(this.volatility1)});
-        this.sliderVolatility2.e = String.format("Volatility 2: %.2f", new Object[]{Double.valueOf(this.volatility2)});
-        this.sliderVolatilityWeight1.e = String.format("Volatility Weight 1: %.2f", new Object[]{Double.valueOf(this.volatilityWeight1)});
-        this.sliderVolatilityWeight2.e = String.format("Volatility Weight 2: %.2f", new Object[]{Double.valueOf(this.volatilityWeight2)});
+        this.sliderMapSize.text = String.format("Map Size: %.1f", this.mapSize);
+        this.sliderWaterLevel.text = String.format("Water Level: %d", this.waterLevel);
+        this.sliderFracHorizontal.text = String.format("Fracture Horizontal: %.2f", this.fractureHorizontal);
+        this.sliderFracVertical.text = String.format("Fracture Vertical: %.2f", this.fractureVertical);
+        this.sliderMaxAvgDepth.text = String.format("Max Avg Depth: %.2f", this.maxAvgDepth);
+        this.sliderMaxAvgHeight.text = String.format("Max Avg Height: %.2f", this.maxAvgHeight);
+        this.sliderVolatility1.text = String.format("Volatility 1: %.2f", this.volatility1);
+        this.sliderVolatility2.text = String.format("Volatility 2: %.2f", this.volatility2);
+        this.sliderVolatilityWeight1.text = String.format("Volatility Weight 1: %.2f", this.volatilityWeight1);
+        this.sliderVolatilityWeight2.text = String.format("Volatility Weight 2: %.2f", this.volatilityWeight2);
     }
 
-    public void h() {
+    @Override
+    public void onClose() {
         Keyboard.enableRepeatEvents(false);
     }
 
-    protected void a(ke guibutton) {
-        if (!guibutton.g)
+    @Override
+    protected void buttonClicked(Button guibutton) {
+        if (!guibutton.active)
             return;
-        if (guibutton.f == 1) {
-            this.b.a(this.parent);
-        } else if (guibutton.f == 0) {
-            this.b.a(null);
+        if (guibutton.id == 1) {
+            this.minecraft.openScreen(this.parent);
+        } else if (guibutton.id == 0) {
+            this.minecraft.openScreen(null); //TODO: Unsure about mappings (openScreen or setLevel)
             if (this.createClicked)
                 return;
             this.createClicked = true;
             long l = (new Random()).nextLong();
-            String s = this.textboxSeed.a();
-            if (!in.a(s))
+            String s = this.textboxSeed.method_1876();
+            if (!MathsHelper.isStringEmpty(s))
                 try {
                     long l1 = Long.parseLong(s);
                     if (l1 != 0L)
@@ -158,53 +167,56 @@ public class GuiCreateNewMap extends Screen {
                 } catch (NumberFormatException numberformatexception) {
                     l = s.hashCode();
                 }
-            this.b.c = new os(this.b);
-            DebugMode.levelEditing = true;
-            String mapName = this.textboxMapName.a().trim();
-            this.b.saveMapUsed(mapName, mapName);
-            fd w = this.b.getWorld(mapName, l, mapName);
-            w.x.useImages = false;
-            w.x.mapSize = this.mapSize;
-            w.x.waterLevel = this.waterLevel;
-            w.x.fractureHorizontal = this.fractureHorizontal;
-            w.x.fractureVertical = this.fractureVertical;
-            w.x.maxAvgDepth = this.maxAvgDepth;
-            w.x.maxAvgHeight = this.maxAvgHeight;
-            w.x.volatility1 = this.volatility1;
-            w.x.volatility2 = this.volatility2;
-            w.x.volatilityWeight1 = this.volatilityWeight1;
-            w.x.volatilityWeight2 = this.volatilityWeight2;
+            this.minecraft.interactionManager = new class_520(this.minecraft);
+            AC_DebugMode.levelEditing = true;
+            String mapName = this.textboxMapName.method_1876().trim();
+            this.minecraft.saveMapUsed(mapName, mapName);
+            Level w = this.minecraft.getWorld(mapName, l, mapName);
+            w.properties.useImages = false;
+            w.properties.mapSize = this.mapSize;
+            w.properties.waterLevel = this.waterLevel;
+            w.properties.fractureHorizontal = this.fractureHorizontal;
+            w.properties.fractureVertical = this.fractureVertical;
+            w.properties.maxAvgDepth = this.maxAvgDepth;
+            w.properties.maxAvgHeight = this.maxAvgHeight;
+            w.properties.volatility1 = this.volatility1;
+            w.properties.volatility2 = this.volatility2;
+            w.properties.volatilityWeight1 = this.volatilityWeight1;
+            w.properties.volatilityWeight2 = this.volatilityWeight2;
             w.updateChunkProvider();
-            this.b.a(w, "Generating level");
-            this.b.a(null);
+            this.minecraft.notifyStatus(w, "Generating level");
+            this.minecraft.openScreen(null); //TODO: Unsure about mappings (openScreen or setLevel; setLevel would nullify notifyStatus)
         }
     }
 
-    protected void a(char c, int i) {
-        this.textboxMapName.a(c, i);
-        this.textboxSeed.a(c, i);
+    @Override
+    protected void keyPressed(char c, int i) {
+        this.textboxMapName.method_1877(c, i);
+        this.textboxSeed.method_1877(c, i);
         if (c == '\r')
-            a(this.e.get(0));
-        ((ke) this.e.get(0)).g = (this.textboxMapName.a().length() > 0);
+            buttonClicked((Button)this.buttons.get(0));
+        ((Button) this.buttons.get(0)).active = (this.textboxMapName.method_1876().length() > 0);
     }
 
-    protected void a(int i, int j, int k) {
-        super.a(i, j, k);
-        this.textboxMapName.a(i, j, k);
-        this.textboxSeed.a(i, j, k);
+    @Override
+    protected void mouseClicked(int i, int j, int k) {
+        super.mouseClicked(i, j, k);
+        this.textboxMapName.method_1879(i, j, k);
+        this.textboxSeed.method_1879(i, j, k);
     }
 
-    public void a(int i, int j, float f) {
-        nh stringtranslate = nh.a();
-        i();
-        a(this.g, "Create Random Map", this.c / 2, 20, 16777215);
+    @Override
+    public void render(int i, int j, float f) {
+        TranslationStorage stringtranslate = TranslationStorage.getInstance();
+        renderBackground();
+        drawTextWithShadow(this.textManager, "Create Random Map", this.width / 2, 20, 16777215);
         String enterName = "Map Name:";
         String enterSeed = "Seed:";
-        b(this.g, enterName, this.c / 2 - 110 - this.g.a(enterName), 44, 10526880);
-        b(this.g, enterSeed, this.c / 2 - 110 - this.g.a(enterSeed), 68, 10526880);
-        this.textboxMapName.c();
-        this.textboxSeed.c();
+        drawTextWithShadow(this.textManager, enterName, this.width / 2 - 110 - this.textManager.getTextWidth(enterName), 44, 10526880);
+        drawTextWithShadow(this.textManager, enterSeed, this.width / 2 - 110 - this.textManager.getTextWidth(enterSeed), 68, 10526880);
+        this.textboxMapName.method_1883();
+        this.textboxSeed.method_1883();
         updateSliders();
-        super.a(i, j, f);
+        super.render(i, j, f);
     }
 }

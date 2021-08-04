@@ -2,9 +2,11 @@ package io.github.ryuu.adventurecraft.gui;
 
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
+import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.level.Level;
 
-public class GuiLightBulb extends da {
+public class GuiLightBulb extends Screen {
     private final int blockX;
 
     private final int blockY;
@@ -22,37 +24,42 @@ public class GuiLightBulb extends da {
         this.blockX = x;
         this.blockY = y;
         this.blockZ = z;
-        this.lightValue = w.e(x, y, z);
+        this.lightValue = w.getTileMeta(x, y, z);
     }
 
-    public void a() {
+    @Override
+    public void tick() {
     }
 
-    public void b() {
-        this.lightSlider = new GuiSlider2(4, 4, 4, 10, String.format("Light Value: %d", Integer.valueOf(this.lightValue)), this.lightValue / 15.0F);
-        this.e.add(this.lightSlider);
+    @Override
+    public void init() {
+        this.lightSlider = new GuiSlider2(4, 4, 4, 10, String.format("Light Value: %d", this.lightValue), this.lightValue / 15.0F);
+        this.buttons.add(this.lightSlider);
     }
 
-    protected void a(ke guibutton) {
+    @Override
+    protected void buttonClicked(Button guibutton) {
     }
 
-    public void a(int i, int j, float f) {
-        a(0, 0, this.c, this.d, -2147483648);
+    @Override
+    public void render(int i, int j, float f) {
+        fill(0, 0, this.width, this.height, -2147483648);
         this.lightValue = (int) (this.lightSlider.sliderValue * 15.0F + 0.5F);
-        this.lightSlider.e = String.format("Light Value: %d", new Object[]{Integer.valueOf(this.lightValue)});
-        if (this.lightValue != this.world.e(this.blockX, this.blockY, this.blockZ)) {
-            this.world.b(this.blockX, this.blockY, this.blockZ, 0, 0);
-            this.world.b(this.blockX, this.blockY, this.blockZ, Blocks.lightBulb.bn, this.lightValue);
+        this.lightSlider.text = String.format("Light Value: %d", this.lightValue);
+        if (this.lightValue != this.world.getTileMeta(this.blockX, this.blockY, this.blockZ)) {
+            this.world.method_201(this.blockX, this.blockY, this.blockZ, 0, 0);
+            this.world.method_201(this.blockX, this.blockY, this.blockZ, Blocks.lightBulb.id, this.lightValue);
         }
-        super.a(i, j, f);
-        this.world.b(this.blockX, this.blockZ).g();
+        super.render(i, j, f);
+        this.world.getChunk(this.blockX, this.blockZ).method_885();
     }
 
     public static void showUI(Level w, int x, int y, int z) {
         Minecraft.minecraftInstance.a(new GuiLightBulb(w, x, y, z));
     }
 
-    public boolean c() {
+    @Override
+    public boolean isPauseScreen() {
         return false;
     }
 }

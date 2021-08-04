@@ -28,56 +28,56 @@ public class TileEntityCamera extends TileEntity {
             tgt.addCameraPoint(p.time, p.posX, p.posY, p.posZ, p.rotYaw, p.rotPitch, p.cameraBlendType);
     }
 
-    public void a(CompoundTag nbttagcompound) {
-        super.a(nbttagcompound);
-        int numPoints = nbttagcompound.e("numPoints");
+    public void readIdentifyingData(CompoundTag nbttagcompound) {
+        super.readIdentifyingData(nbttagcompound);
+        int numPoints = nbttagcompound.getInt("numPoints");
         for (int i = 0; i < numPoints; i++) {
-            readPointTag(nbttagcompound.k(String.format("point%d", new Object[]{Integer.valueOf(i)})));
+            readPointTag(nbttagcompound.getCompoundTag(String.format("point%d", i)));
         }
-        if (nbttagcompound.b("type"))
-            this.type = nbttagcompound.c("type");
-        if (nbttagcompound.b("pauseGame"))
-            this.pauseGame = nbttagcompound.m("pauseGame");
+        if (nbttagcompound.containsKey("type"))
+            this.type = nbttagcompound.getByte("type");
+        if (nbttagcompound.containsKey("pauseGame"))
+            this.pauseGame = nbttagcompound.getBoolean("pauseGame");
     }
 
-    public void b(CompoundTag nbttagcompound) {
-        super.b(nbttagcompound);
+    public void writeIdentifyingData(CompoundTag nbttagcompound) {
+        super.writeIdentifyingData(nbttagcompound);
         int numPoints = 0;
         for (CutsceneCameraPoint p : this.camera.cameraPoints) {
-            nbttagcompound.a(String.format("point%d", new Object[]{Integer.valueOf(numPoints)}), getPointTag(p));
+            nbttagcompound.put(String.format("point%d", numPoints), getPointTag(p));
             numPoints++;
         }
-        nbttagcompound.a("numPoints", numPoints);
-        nbttagcompound.a("type", (byte) this.type);
-        nbttagcompound.a("pauseGame", this.pauseGame);
+        nbttagcompound.put("numPoints", numPoints);
+        nbttagcompound.put("type", (byte) this.type);
+        nbttagcompound.put("pauseGame", this.pauseGame);
     }
 
     private CompoundTag getPointTag(CutsceneCameraPoint point) {
         CompoundTag nbttagcompound = new CompoundTag();
-        nbttagcompound.a("time", point.time);
-        nbttagcompound.a("posX", point.posX);
-        nbttagcompound.a("posY", point.posY);
-        nbttagcompound.a("posZ", point.posZ);
-        nbttagcompound.a("yaw", point.rotYaw);
-        nbttagcompound.a("pitch", point.rotPitch);
-        nbttagcompound.a("type", (byte) point.cameraBlendType);
+        nbttagcompound.put("time", point.time);
+        nbttagcompound.put("posX", point.posX);
+        nbttagcompound.put("posY", point.posY);
+        nbttagcompound.put("posZ", point.posZ);
+        nbttagcompound.put("yaw", point.rotYaw);
+        nbttagcompound.put("pitch", point.rotPitch);
+        nbttagcompound.put("type", (byte) point.cameraBlendType);
         return nbttagcompound;
     }
 
     private void readPointTag(CompoundTag nbttagcompound) {
-        float time = nbttagcompound.g("time");
-        float posX = nbttagcompound.g("posX");
-        float posY = nbttagcompound.g("posY");
-        float posZ = nbttagcompound.g("posZ");
-        float yaw = nbttagcompound.g("yaw");
-        float pitch = nbttagcompound.g("pitch");
+        float time = nbttagcompound.getFloat("time");
+        float posX = nbttagcompound.getFloat("posX");
+        float posY = nbttagcompound.getFloat("posY");
+        float posZ = nbttagcompound.getFloat("posZ");
+        float yaw = nbttagcompound.getFloat("yaw");
+        float pitch = nbttagcompound.getFloat("pitch");
         int type = 2;
-        if (nbttagcompound.b("type"))
-            type = nbttagcompound.c("type");
+        if (nbttagcompound.containsKey("type"))
+            type = nbttagcompound.getByte("type");
         this.camera.addCameraPoint(time, posX, posY, posZ, yaw, pitch, type);
     }
 
-    int type = 2;
+    public int type = 2;
 
     public boolean pauseGame = true;
 }
