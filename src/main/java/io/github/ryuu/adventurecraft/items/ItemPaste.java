@@ -2,10 +2,12 @@ package io.github.ryuu.adventurecraft.items;
 
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
+import net.minecraft.util.maths.Vec3f;
 
 public class ItemPaste extends ItemType {
     public ItemPaste(int i) {
@@ -14,8 +16,8 @@ public class ItemPaste extends ItemType {
 
     public ItemInstance a(ItemInstance itemstack, Level world, Player entityplayer) {
         if (ItemCursor.bothSet) {
-            ls camera = Minecraft.minecraftInstance.i;
-            bt lookDir = camera.ac();
+            LivingEntity camera = Minecraft.minecraftInstance.i;
+            Vec3f lookDir = camera.ac();
             int width = ItemCursor.maxX - ItemCursor.minX + 1;
             int height = ItemCursor.maxY - ItemCursor.minY + 1;
             int depth = ItemCursor.maxZ - ItemCursor.minZ + 1;

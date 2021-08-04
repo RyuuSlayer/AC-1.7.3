@@ -1,14 +1,14 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import ii;
-import ls;
-import sn;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.WalkingEntity;
 
 public class ScriptEntityCreature extends ScriptEntityLiving {
-    ii entityCreature;
+    WalkingEntity entityCreature;
 
-    ScriptEntityCreature(ii e) {
-        super((ls) e);
+    ScriptEntityCreature(WalkingEntity e) {
+        super(e);
         this.entityCreature = e;
     }
 
@@ -25,11 +25,11 @@ public class ScriptEntityCreature extends ScriptEntityLiving {
     }
 
     public void pathToEntity(ScriptEntity e) {
-        this.entityCreature.a(this.entityCreature.aI.a((sn) this.entityCreature, e.entity, 1.0F));
+        this.entityCreature.a(this.entityCreature.aI.a((Entity) this.entityCreature, e.entity, 1.0F));
     }
 
     public void pathToBlock(int x, int y, int z) {
-        this.entityCreature.a(this.entityCreature.aI.a((sn) this.entityCreature, x, y, z, 1.0F));
+        this.entityCreature.a(this.entityCreature.aI.a((Entity) this.entityCreature, x, y, z, 1.0F));
     }
 
     public boolean getCanForgetTargetRandomly() {

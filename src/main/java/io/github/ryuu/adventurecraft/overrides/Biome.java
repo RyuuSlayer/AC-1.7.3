@@ -1,5 +1,7 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import net.minecraft.level.biome.SparseBiome;
+
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
@@ -130,17 +132,17 @@ public class Biome {
 
     public static final Biome d = (new rb()).b(353825).a("Forest").a(5159473);
 
-    public static final Biome e = (new fs()).b(14278691).a("Savanna");
+    public static final Biome e = (new SparseBiome()).b(14278691).a("Savanna");
 
     public static final Biome f = (new Biome()).b(10595616).a("Shrubland");
 
     public static final Biome g = (new g()).b(3060051).a("Taiga").b().a(8107825);
 
-    public static final Biome h = (new fs()).b(16421912).a("Desert").e();
+    public static final Biome h = (new SparseBiome()).b(16421912).a("Desert").e();
 
-    public static final Biome i = (new fs()).b(16767248).a("Plains");
+    public static final Biome i = (new SparseBiome()).b(16767248).a("Plains");
 
-    public static final Biome j = (new fs()).b(16772499).a("Ice Desert").b().e().a(12899129);
+    public static final Biome j = (new SparseBiome()).b(16772499).a("Ice Desert").b().e().a(12899129);
 
     public static final Biome k = (new Biome()).b(5762041).a("Tundra").b().a(12899129);
 

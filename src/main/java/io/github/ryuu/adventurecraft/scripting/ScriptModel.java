@@ -4,15 +4,14 @@ import java.nio.FloatBuffer;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import ji;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.ModelPart;
+import net.minecraft.client.texture.TextureManager;
 import net.minecraft.level.Level;
-import net.minecraft.src.ModelRenderer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector4f;
-import ps;
 
 public class ScriptModel {
     HashMap<String, ModelRenderer> boxes;
@@ -67,7 +66,7 @@ public class ScriptModel {
     }
 
     public void addBoxExpanded(String boxName, float offsetX, float offsetY, float offsetZ, int width, int height, int depth, int u, int v, float expand) {
-        ps r = new ps(u, v, this.textureWidth, this.textureHeight);
+        ModelPart r = new ModelPart(u, v, this.textureWidth, this.textureHeight);
         r.addBoxInverted(offsetX, offsetY, offsetZ, width, height, depth, expand);
         this.boxes.put(boxName, r);
     }
@@ -151,7 +150,7 @@ public class ScriptModel {
 
     private void render(float f) {
         Level w = Minecraft.minecraftInstance.f;
-        ji renderEngine = Minecraft.minecraftInstance.p;
+        TextureManager renderEngine = Minecraft.minecraftInstance.p;
         if (this.texture != null && !this.texture.equals(""))
             renderEngine.b(renderEngine.b(this.texture));
         GL11.glPushMatrix();
@@ -167,7 +166,7 @@ public class ScriptModel {
         GL11.glColor3f(b, b, b);
         GL11.glPushMatrix();
         transform(f);
-        for (ps r : this.boxes.values())
+        for (ModelPart r : this.boxes.values())
             r.a(0.0625F);
         GL11.glPopMatrix();
     }
@@ -188,7 +187,7 @@ public class ScriptModel {
 
     private static final Vector4f vr = new Vector4f();
 
-    static LinkedList<ScriptModel> activeModels = new LinkedList<ScriptModel>();
+    static LinkedList<ScriptModel> activeModels = new LinkedList<>();
 
     public static void renderAll(float f) {
         GL11.glEnable(32826);

@@ -1,8 +1,9 @@
 package io.github.ryuu.adventurecraft.blocks;
 
 import net.minecraft.level.Level;
+import net.minecraft.tile.LadderTile;
 
-public class BlockLadderSubtypes extends dp implements IBlockColor {
+public class BlockLadderSubtypes extends LadderTile implements IBlockColor {
     protected BlockLadderSubtypes(int i, int j) {
         super(i, j);
     }

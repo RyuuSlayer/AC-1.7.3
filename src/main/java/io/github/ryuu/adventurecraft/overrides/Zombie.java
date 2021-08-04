@@ -1,8 +1,9 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import net.minecraft.entity.monster.Monster;
 import net.minecraft.level.Level;
 
-public class Zombie extends gz {
+public class Zombie extends Monster {
     public Zombie(Level world) {
         super(world);
         this.O = "/mob/zombie.png";

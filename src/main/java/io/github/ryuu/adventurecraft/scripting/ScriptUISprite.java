@@ -2,6 +2,9 @@ package io.github.ryuu.adventurecraft.scripting;
 
 import ji;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.TextRenderer;
+import net.minecraft.client.texture.TextureManager;
 import nw;
 import org.lwjgl.opengl.GL11;
 import sj;
@@ -51,7 +54,7 @@ public class ScriptUISprite extends UIElement {
             parent.add(this);
     }
 
-    public void render(sj fontRenderer, ji renderEngine, float partialTickTime) {
+    public void render(TextRenderer fontRenderer, TextureManager renderEngine, float partialTickTime) {
         if (this.texture.startsWith("http")) {
             renderEngine.b(renderEngine.a(this.texture, "./pack.png"));
         } else {
@@ -62,7 +65,7 @@ public class ScriptUISprite extends UIElement {
         float y = getYAtTime(partialTickTime);
         float f = 1.0F / this.imageWidth;
         float f1 = 1.0F / this.imageHeight;
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         tessellator.b();
         tessellator.a(x, (y + this.height), 0.0D, this.u * f, (this.v + this.height) * f1);
         tessellator.a((x + this.width), (y + this.height), 0.0D, ((float) (this.u + this.width) * f), ((float) (this.v + this.height) * f1));

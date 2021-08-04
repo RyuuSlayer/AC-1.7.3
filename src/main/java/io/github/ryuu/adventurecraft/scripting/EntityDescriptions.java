@@ -70,5 +70,5 @@ public class EntityDescriptions {
         return descriptions.keySet();
     }
 
-    static final HashMap<String, ScriptEntityDescription> descriptions = new HashMap<String, ScriptEntityDescription>();
+    static final HashMap<String, ScriptEntityDescription> descriptions = new HashMap<>();
 }

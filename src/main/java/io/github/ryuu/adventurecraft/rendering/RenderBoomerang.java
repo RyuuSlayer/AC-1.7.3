@@ -3,9 +3,13 @@ package io.github.ryuu.adventurecraft.rendering;
 import io.github.ryuu.adventurecraft.entities.EntityBoomerang;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.Vec2;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.entity.EntityRenderer;
+import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemInstance;
 import org.lwjgl.opengl.GL11;
 
-public class RenderBoomerang extends bw {
+public class RenderBoomerang extends EntityRenderer {
     public void doRenderItem(EntityBoomerang entityBoomerang, double d, double d1, double d2, float yaw, float time) {
         float pitchToUse = entityBoomerang.aV + (entityBoomerang.aT - entityBoomerang.aV) * time;
         float boomerangRotation = entityBoomerang.prevBoomerangRotation + (entityBoomerang.boomerangRotation - entityBoomerang.prevBoomerangRotation) * time;
@@ -20,8 +24,8 @@ public class RenderBoomerang extends bw {
         int height = texResolution.y / 16;
         float halfPixelW = 0.5F / texResolution.x;
         float halfPixelH = 0.5F / texResolution.x;
-        nw tessellator = nw.a;
-        int iconIndex = Items.boomerang.b((iz) null);
+        Tessellator tessellator = Tessellator.a;
+        int iconIndex = Items.boomerang.b((ItemInstance) null);
         float f = ((iconIndex % 16 * 16) + 0.0F) / 256.0F;
         float f1 = ((iconIndex % 16 * 16) + 15.99F) / 256.0F;
         float f2 = ((iconIndex / 16 * 16) + 0.0F) / 256.0F;
@@ -96,7 +100,7 @@ public class RenderBoomerang extends bw {
         GL11.glPopMatrix();
     }
 
-    public void a(sn entity, double d, double d1, double d2, float f, float f1) {
+    public void a(Entity entity, double d, double d1, double d2, float f, float f1) {
         doRenderItem((EntityBoomerang) entity, d, d1, d2, f, f1);
     }
 }

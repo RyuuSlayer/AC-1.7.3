@@ -1,13 +1,12 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import bt;
 import io.github.ryuu.adventurecraft.util.TriggerArea;
 import io.github.ryuu.adventurecraft.util.UtilBullet;
-import jc;
-import jg;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityRegistry;
 import net.minecraft.level.Level;
 import net.minecraft.util.hit.HitResult;
-import sn;
+import net.minecraft.util.hit.HitType;
 
 public class ScriptWorld {
     Level worldObj;
@@ -66,7 +65,7 @@ public class ScriptWorld {
     }
 
     public ScriptEntity spawnEntity(String entityType, double x, double y, double z) {
-        sn e = jc.a(entityType, this.worldObj);
+        Entity e = EntityRegistry.a(entityType, this.worldObj);
         if (e != null) {
             e.e(x, y, z);
             this.worldObj.g(e);
@@ -101,7 +100,7 @@ public class ScriptWorld {
         HitResult hit = UtilBullet.rayTrace(this.worldObj, null, bt.b(startX, startY, startZ), bt.b(endX, endY, endZ));
         if (hit != null) {
             results[0] = new ScriptVec3(hit.f.a, hit.f.b, hit.f.c);
-            if (hit.a == jg.a) {
+            if (hit.a == HitType.a) {
                 results[1] = new ScriptVec3(hit.b, hit.c, hit.d);
             } else {
                 results[2] = ScriptEntity.getEntityClass(hit.g);

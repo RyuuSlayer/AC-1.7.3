@@ -1,25 +1,30 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import io.github.ryuu.adventurecraft.blocks.Blocks;
+import net.minecraft.level.Level;
+import net.minecraft.level.chunk.ChunkIO;
+import net.minecraft.util.io.CompoundTag;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
 
-public class to implements bf {
+public class DimensionFileChunkIO implements ChunkIO {
     private final File a;
 
     private final File levelDir;
 
     private final boolean b;
 
-    public to(File file, boolean flag) {
+    public DimensionFileChunkIO(File file, boolean flag) {
         this.a = file;
         this.levelDir = null;
         this.b = flag;
     }
 
-    public to(File file, File levelFile, boolean flag) {
+    public DimensionFileChunkIO(File file, File levelFile, boolean flag) {
         this.a = file;
         this.levelDir = levelFile;
         this.b = flag;
@@ -49,12 +54,12 @@ public class to implements bf {
         return file;
     }
 
-    public lm a(fd world, int i, int j) throws IOException {
+    public lm a(Level world, int i, int j) throws IOException {
         File file = a(i, j);
         if (file != null && file.exists())
             try {
                 FileInputStream fileinputstream = new FileInputStream(file);
-                nu nbttagcompound = as.a(fileinputstream);
+                CompoundTag nbttagcompound = as.a(fileinputstream);
                 if (!nbttagcompound.b("Level")) {
                     System.out.println("Chunk file at " + i + "," + j + " is missing level data, skipping");
                     return null;
@@ -78,7 +83,7 @@ public class to implements bf {
         return null;
     }
 
-    public void a(fd world, lm chunk) throws IOException {
+    public void a(Level world, lm chunk) throws IOException {
         world.r();
         File file = a(chunk.j, chunk.k);
         if (file.exists()) {
@@ -104,7 +109,7 @@ public class to implements bf {
         }
     }
 
-    public static void a(lm chunk, fd world, nu nbttagcompound) {
+    public static void a(lm chunk, Level world, nu nbttagcompound) {
         world.r();
         nbttagcompound.a("xPos", chunk.j);
         nbttagcompound.a("zPos", chunk.k);
@@ -123,7 +128,7 @@ public class to implements bf {
             while (iterator.hasNext()) {
                 sn entity = (sn) iterator.next();
                 chunk.q = true;
-                nu nbttagcompound1 = new nu();
+                CompoundTag nbttagcompound1 = new nu();
                 if (entity.c(nbttagcompound1))
                     nbttaglist.a((ij) nbttagcompound1);
             }
@@ -138,7 +143,7 @@ public class to implements bf {
         nbttagcompound.a("TileEntities", (ij) nbttaglist1);
     }
 
-    public static lm a(fd world, nu nbttagcompound) {
+    public static lm a(Level world, nu nbttagcompound) {
         int i = nbttagcompound.e("xPos");
         int j = nbttagcompound.e("zPos");
         lm chunk = new lm(world, i, j, false);
@@ -152,7 +157,7 @@ public class to implements bf {
             chunk.e = new wi(chunk.b.length);
         if (!nbttagcompound.b("acVersion"))
             if (world.x.originallyFromAC)
-                AC_Blocks.convertACVersion(chunk.b);
+                Blocks.convertACVersion(chunk.b);
         if (chunk.h == null || !chunk.f.a()) {
             chunk.h = new byte[256];
             chunk.f = new wi(chunk.b.length);
@@ -188,6 +193,6 @@ public class to implements bf {
     public void b() {
     }
 
-    public void b(fd world, lm chunk) throws IOException {
+    public void b(Level world, lm chunk) throws IOException {
     }
 }

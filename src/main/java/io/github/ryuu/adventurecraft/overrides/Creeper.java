@@ -1,11 +1,15 @@
 package io.github.ryuu.adventurecraft.overrides;
 
-public class Creeper extends gz {
+import net.minecraft.entity.monster.Monster;
+import net.minecraft.level.Level;
+import net.minecraft.util.io.CompoundTag;
+
+public class Creeper extends Monster {
     int a;
 
     int b;
 
-    public Creeper(fd world) {
+    public Creeper(Level world) {
         super(world);
         this.O = "/mob/creeper.png";
         this.c = 3;
@@ -17,13 +21,13 @@ public class Creeper extends gz {
         this.bD.a(17, Byte.valueOf((byte) 0));
     }
 
-    public void b(nu nbttagcompound) {
+    public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
         if (this.bD.a(17) == 1)
             nbttagcompound.a("powered", true);
     }
 
-    public void a(nu nbttagcompound) {
+    public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
         this.bD.b(17, Byte.valueOf((byte) (nbttagcompound.m("powered") ? 1 : 0)));
     }

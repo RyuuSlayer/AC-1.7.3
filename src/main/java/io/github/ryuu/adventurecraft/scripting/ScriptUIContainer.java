@@ -3,10 +3,10 @@ package io.github.ryuu.adventurecraft.scripting;
 import java.util.LinkedList;
 import java.util.List;
 
-import ji;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.TextRenderer;
+import net.minecraft.client.texture.TextureManager;
 import org.lwjgl.opengl.GL11;
-import sj;
 
 public class ScriptUIContainer extends UIElement {
     public String text;
@@ -21,12 +21,12 @@ public class ScriptUIContainer extends UIElement {
         this.text = "";
         this.prevX = this.curX = xPos;
         this.prevY = this.curY = yPos;
-        this.uiElements = new LinkedList<UIElement>();
+        this.uiElements = new LinkedList<>();
         if (p != null)
             p.add(this);
     }
 
-    public void render(sj fontRenderer, ji renderEngine, float partialTickTime) {
+    public void render(TextRenderer fontRenderer, TextureManager renderEngine, float partialTickTime) {
         float x = getXAtTime(partialTickTime);
         float y = getYAtTime(partialTickTime);
         if (x != 0.0F || y != 0.0F) {

@@ -1,7 +1,11 @@
 package io.github.ryuu.adventurecraft.overrides;
 
-public class Skeleton extends gz {
-    public Skeleton(fd world) {
+import net.minecraft.entity.monster.Monster;
+import net.minecraft.level.Level;
+import net.minecraft.util.io.CompoundTag;
+
+public class Skeleton extends Monster {
+    public Skeleton(Level world) {
         super(world);
         this.O = "/mob/skeleton.png";
         this.heldItem = new iz(ItemType.i, 1);
@@ -47,11 +51,11 @@ public class Skeleton extends gz {
         }
     }
 
-    public void b(nu nbttagcompound) {
+    public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
     }
 
-    public void a(nu nbttagcompound) {
+    public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
     }
 

@@ -1,15 +1,18 @@
 package io.github.ryuu.adventurecraft.rendering;
 
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.entity.ArrowRenderer;
+import net.minecraft.entity.projectile.Arrow;
 import org.lwjgl.opengl.GL11;
 
-public class RenderArrowBomb extends mc {
-    public void a(sl entityarrow, double d, double d1, double d2, float f, float f1) {
+public class RenderArrowBomb extends ArrowRenderer {
+    public void a(Arrow entityarrow, double d, double d1, double d2, float f, float f1) {
         a("/item/arrows.png");
         GL11.glPushMatrix();
         GL11.glTranslatef((float) d, (float) d1, (float) d2);
         GL11.glRotatef(entityarrow.aU + (entityarrow.aS - entityarrow.aU) * f1 - 90.0F, 0.0F, 1.0F, 0.0F);
         GL11.glRotatef(entityarrow.aV + (entityarrow.aT - entityarrow.aV) * f1, 0.0F, 0.0F, 1.0F);
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         int i = 0;
         float f2 = 0.0F;
         float f3 = 0.5F;

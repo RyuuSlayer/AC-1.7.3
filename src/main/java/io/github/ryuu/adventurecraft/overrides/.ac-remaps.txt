@@ -23,5 +23,6 @@ nh = TranslationStorage
 nu = CompoundTag
 os = class_520
 ro = Textbox
+to = DimensionFileChunkIO
 uu = Tile
 uz = Zombie
