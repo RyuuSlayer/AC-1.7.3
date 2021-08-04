@@ -16,6 +16,7 @@ public class GuiCamera extends Screen {
         this.cam = c;
     }
 
+    @Override
     public void init() {
         Button b = new Button(0, 4, 4, 160, 18, "Delete Camera Point");
         this.buttons.add(b);
@@ -29,21 +30,25 @@ public class GuiCamera extends Screen {
         this.timerText = new Textbox(this, this.textManager, 80, 46, 70, 16, String.format("%.2f", this.cam.time));
     }
 
+    @Override
     public void tick() {
         this.timerText.tick();
     }
 
+    @Override
     protected void keyPressed(char c, int i) {
         if (this.timerText.field_2420 && (i == 14 || (c >= '0' && c <= '9') || c == '.' || c == '\t'))
             this.timerText.method_1877(c, i);
         super.keyPressed(c, i);
     }
 
+    @Override
     protected void mouseClicked(int i, int j, int k) {
         this.timerText.method_1879(i, j, k);
         super.mouseClicked(i, j, k);
     }
 
+    @Override
     protected void buttonClicked(Button guibutton) {
         if (guibutton.id == 0) {
             this.cam.deleteCameraPoint();
@@ -70,6 +75,7 @@ public class GuiCamera extends Screen {
         }
     }
 
+    @Override
     public void render(int i, int j, float f) {
         renderBackground();
         try {

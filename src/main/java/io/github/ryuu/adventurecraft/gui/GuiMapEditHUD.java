@@ -3,10 +3,12 @@ package io.github.ryuu.adventurecraft.gui;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.MapEditing;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
+import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.level.Level;
 import org.lwjgl.input.Keyboard;
 
-public class GuiMapEditHUD extends da {
+public class GuiMapEditHUD extends Screen {
     private final Level world;
 
     private long clickedTime;
@@ -24,60 +26,68 @@ public class GuiMapEditHUD extends da {
         this.palette = new GuiEditPalette();
     }
 
-    public void b() {
+    @Override
+    public void init() {
     }
 
-    protected void a(ke guibutton) {
+    @Override
+    protected void buttonClicked(Button guibutton) {
     }
 
-    public void g() {
+    @Override
+    public void onKeyboardEvent() {
         if (Keyboard.getEventKeyState()) {
             if (Keyboard.getEventKey() == 87) {
-                this.b.j();
+                this.minecraft.toggleFullscreen();
                 return;
             }
-            a(Keyboard.getEventCharacter(), Keyboard.getEventKey());
+            keyPressed(Keyboard.getEventCharacter(), Keyboard.getEventKey());
         }
-        this.b.h.a(Keyboard.getEventKey(), Keyboard.getEventKeyState());
+        this.minecraft.player.method_136(Keyboard.getEventKey(), Keyboard.getEventKeyState());
     }
 
-    protected void a(char c, int i) {
+    @Override
+    protected void keyPressed(char c, int i) {
         if (i == 1) {
-            this.b.a(null);
-            this.b.g();
+            this.minecraft.openScreen(null);
+            this.minecraft.lockCursor();
             DebugMode.editMode = false;
         }
     }
 
-    protected void a(int i, int j, int k) {
-        if (this.palette.mouseClicked(i, j, k, this.b, this.c, this.d))
+    @Override
+    protected void mouseClicked(int i, int j, int k) {
+        if (this.palette.mouseClicked(i, j, k, this.minecraft, this.width, this.height))
             return;
         if (k == 0) {
-            long curTime = this.world.t();
+            long curTime = this.world.getLevelTime();
             if (this.clickedTime != curTime)
                 DebugMode.mapEditing.paint();
         } else if (k == 1) {
-            this.b.C.a();
-            this.b.N = true;
+            this.minecraft.field_2767.method_1970();
+            this.minecraft.field_2778 = true;
         }
     }
 
-    protected void b(int i, int j, int k) {
-        if (this.a != null && k == 0) {
-            this.a.a(i, j);
-            this.a = null;
+    @Override
+    protected void mouseReleased(int i, int j, int k) {
+        if (this.lastClickedButton != null && k == 0) {
+            this.lastClickedButton.mouseReleased(i, j);
+            this.lastClickedButton = null;
         } else if (k == 1) {
-            this.b.N = false;
-            this.b.C.b();
+            this.minecraft.field_2778 = true;
+            this.minecraft.field_2767.method_1971();
         }
     }
 
-    public void a(int i, int j, float f) {
-        super.a(i, j, f);
-        this.palette.drawPalette(this.b, this.g, this.c, this.d);
+    @Override
+    public void render(int i, int j, float f) {
+        super.render(i, j, f);
+        this.palette.drawPalette(this.minecraft, this.textManager, this.width, this.height);
     }
 
-    public boolean c() {
+    @Override
+    public boolean isPauseScreen() {
         return false;
     }
 }

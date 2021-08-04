@@ -56,6 +56,7 @@ public class GuiEffect extends Screen {
         this.effect = m;
     }
 
+    @Override
     public void init() {
         int buttonWidth = (this.width - 16) / 4;
         this.buttons.add(new Button(-1, 4, 0, buttonWidth, 18, "Particles"));
@@ -173,11 +174,12 @@ public class GuiEffect extends Screen {
         }
     }
 
+    @Override
     protected void buttonClicked(Button guibutton) {
         if (guibutton.id < 0) {
             this.page = -guibutton.id - 1;
             this.buttons.clear();
-            b();
+            init();
             return;
         }
         if (this.page == 0) {
@@ -240,6 +242,7 @@ public class GuiEffect extends Screen {
         }
     }
 
+    @Override
     public void render(int i, int j, float f) {
         fill(0, 0, this.width, this.height, -2147483648);
         if (this.page == 0) {
@@ -296,6 +299,7 @@ public class GuiEffect extends Screen {
         Minecraft.minecraftInstance.a(new GuiEffect(m));
     }
 
+    @Override
     public boolean isPauseScreen() {
         return false;
     }

@@ -1,5 +1,7 @@
 package io.github.ryuu.adventurecraft.gui;
 
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.SwingUtilities;
@@ -9,6 +11,8 @@ import io.github.ryuu.adventurecraft.scripting.ScriptUILabel;
 import io.github.ryuu.adventurecraft.scripting.ScriptUIRect;
 import io.github.ryuu.adventurecraft.scripting.ScriptUISprite;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.TextRenderer;
+import net.minecraft.client.texture.TextureManager;
 
 public class GuiMapElement extends ScriptUIContainer {
     ScriptUIRect topBack;
@@ -130,13 +134,24 @@ public class GuiMapElement extends ScriptUIContainer {
         }
     }
 
-    void ratingClicked(int mouseX, int mouseY) {
+    public void ratingClicked(int mouseX, int mouseY) {
         if (this.voted != 0) {
             this.totalRating -= this.voted;
             this.numRatings--;
         }
         this.voted = mouseX / 13 + 1;
-        SwingUtilities.invokeLater((Runnable) new Object(this));
+        SwingUtilities.invokeLater(new Runnable() { // TODO: validate if this is the correct code (should be)
+            public void run() {
+                try{
+                    URL url = new URL(String.format("http://www.adventurecraft.org/cgi-bin/vote.py?mapID=%d&rating=%d", GuiMapElement.this.mapID, GuiMapElement.this.voted));
+                    URLConnection urlconnection=url.openConnection();
+                    urlconnection.connect();
+                    urlconnection.getInputStream();
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     void getLines(String text, List<String> lines) {
@@ -147,7 +162,7 @@ public class GuiMapElement extends ScriptUIContainer {
                 curLine = part;
             } else {
                 String potential = curLine + " " + part;
-                if (Minecraft.minecraftInstance.q.a(potential) > 100) {
+                if (Minecraft.minecraftInstance.textRenderer.getTextWidth(potential) > 100) {
                     lines.add(curLine);
                     curLine = part;
                 } else {
@@ -171,7 +186,8 @@ public class GuiMapElement extends ScriptUIContainer {
         this.fadeTimePrev = System.nanoTime();
     }
 
-    public void render(sj fontRenderer, ji renderEngine, float partialTickTime) {
+    @Override
+    public void render(TextRenderer fontRenderer, TextureManager renderEngine, float partialTickTime) {
         if (this.fadeIn || this.fadeOut) {
             long fadeCurTime = System.nanoTime();
             long fadeDiff = fadeCurTime - this.fadeTimePrev;
@@ -214,7 +230,7 @@ public class GuiMapElement extends ScriptUIContainer {
 
     public void setAsDownloaded() {
         if (!this.downloaded) {
-            int stringLength = Minecraft.minecraftInstance.q.a("Downloaded");
+            int stringLength = Minecraft.minecraftInstance.textRenderer.getTextWidth("Downloaded");
             new ScriptUIRect(0.0F, 0.0F, 100.0F, 100.0F, 0.0F, 0.0F, 0.0F, 0.5F, this);
             new ScriptUILabel("Downloaded", (50 - stringLength / 2), 46.0F, this);
             this.downloaded = true;

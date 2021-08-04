@@ -76,11 +76,13 @@ public class GuiCreateNewMap extends Screen {
         this.parent = guiscreen;
     }
 
+    @Override
     public void tick() {
         this.textboxMapName.tick();
         this.textboxSeed.tick();
     }
 
+    @Override
     public void init() {
         TranslationStorage stringtranslate = TranslationStorage.getInstance();
         Keyboard.enableRepeatEvents(true);
@@ -139,10 +141,12 @@ public class GuiCreateNewMap extends Screen {
         this.sliderVolatilityWeight2.text = String.format("Volatility Weight 2: %.2f", this.volatilityWeight2);
     }
 
+    @Override
     public void onClose() {
         Keyboard.enableRepeatEvents(false);
     }
 
+    @Override
     protected void buttonClicked(Button guibutton) {
         if (!guibutton.active)
             return;
@@ -185,6 +189,7 @@ public class GuiCreateNewMap extends Screen {
         }
     }
 
+    @Override
     protected void keyPressed(char c, int i) {
         this.textboxMapName.method_1877(c, i);
         this.textboxSeed.method_1877(c, i);
@@ -193,12 +198,14 @@ public class GuiCreateNewMap extends Screen {
         ((Button) this.buttons.get(0)).active = (this.textboxMapName.method_1876().length() > 0);
     }
 
+    @Override
     protected void mouseClicked(int i, int j, int k) {
         super.mouseClicked(i, j, k);
         this.textboxMapName.method_1879(i, j, k);
         this.textboxSeed.method_1879(i, j, k);
     }
 
+    @Override
     public void render(int i, int j, float f) {
         TranslationStorage stringtranslate = TranslationStorage.getInstance();
         renderBackground();

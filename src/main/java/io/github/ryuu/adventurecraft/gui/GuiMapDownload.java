@@ -18,11 +18,14 @@ import java.util.zip.ZipInputStream;
 import javax.swing.SwingUtilities;
 
 import io.github.ryuu.adventurecraft.scripting.ScriptUIContainer;
+import net.minecraft.class_520;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
+import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.render.Tessellator;
 import org.lwjgl.opengl.GL11;
 
-class GuiMapDownload extends da {
+class GuiMapDownload extends Screen {
 
     //TODO: We will want to get rid of the ingame Map Download in favor for the Launcher.
 
@@ -32,7 +35,7 @@ class GuiMapDownload extends da {
 
     private final File mapDownloadFolder = new File("./mapDownloads/");
 
-    GuiMapDownload(da guiscreen) {
+    public GuiMapDownload(Screen guiscreen) {
         if (!this.mapDownloadFolder.exists())
             this.mapDownloadFolder.mkdirs();
         this.rand = new Random();
@@ -46,23 +49,27 @@ class GuiMapDownload extends da {
         this.mapName = null;
     }
 
-    public void b() {
-        this.e.add(new ke(0, 2, 2, 50, 20, "Back"));
+    @Override
+    public void init() {
+        this.buttons.add(new Button(0, 2, 2, 50, 20, "Back"));
     }
 
-    protected void a(ke guibutton) {
-        if (guibutton.f == 0)
-            this.b.a(this.parentScreen);
+    @Override
+    protected void buttonClicked(Button guibutton) {
+        if (guibutton.id == 0)
+            this.minecraft.openScreen(this.parentScreen);
     }
 
-    protected void a(char c, int i) {
+    @Override
+    protected void keyPressed(char c, int i) {
         if (!this.downloading)
-            super.a(c, i);
+            super.keyPressed(c, i);
     }
 
-    protected void a(int i, int j, int k) {
+    @Override
+    protected void mouseClicked(int i, int j, int k) {
         if (!this.downloading) {
-            super.a(i, j, k);
+            super.mouseClicked(i, j, k);
             if (k == 0) {
                 if (j > 24) {
                     GuiMapElement map = getMapAtCoord(i, j);
@@ -85,7 +92,7 @@ class GuiMapDownload extends da {
                         }
                 }
                 if (this.maxOffset < 26 && i >= this.scrollBarX && i <= this.scrollBarX + 8 && j > 26) {
-                    float yOffset = Math.max(Math.min((j - 8 - 26) / (this.d - 26.0F - 16.0F - 32.0F), 1.0F), 0.0F);
+                    float yOffset = Math.max(Math.min((j - 8 - 26) / (this.height - 26.0F - 16.0F - 32.0F), 1.0F), 0.0F);
                     this.ui.curY = (26 - (int) (yOffset * (26 - this.maxOffset)));
                     this.scrolling = true;
                 }
@@ -96,7 +103,8 @@ class GuiMapDownload extends da {
         }
     }
 
-    protected void b(int i, int j, int k) {
+    @Override
+    protected void mouseReleased(int i, int j, int k) {
         if (!this.downloading) {
             if (this.rightClickDown && j != this.mouseY) {
                 this.ui.curY += (j - this.mouseY);
@@ -107,7 +115,7 @@ class GuiMapDownload extends da {
                     this.ui.curY = this.maxOffset;
                 }
             } else if (this.scrolling) {
-                float yOffset = Math.max(Math.min((j - 8 - 26) / (this.d - 26.0F - 16.0F - 32.0F), 1.0F), 0.0F);
+                float yOffset = Math.max(Math.min((j - 8 - 26) / (this.height - 26.0F - 16.0F - 32.0F), 1.0F), 0.0F);
                 this.ui.curY = (26 - (int) (yOffset * (26 - this.maxOffset)));
             }
             this.ui.onUpdate();
@@ -119,19 +127,20 @@ class GuiMapDownload extends da {
             for (GuiMapElement m : this.maps)
                 m.mouseMoved((int) (i - m.curX - this.ui.curX), (int) (j - m.curY - this.ui.curY));
         }
-        super.b(i, j, k);
+        super.mouseReleased(i, j, k);
     }
 
-    public void a(int i, int j, float f) {
-        i();
+    @Override
+    public void render(int i, int j, float f) {
+        renderBackground();
         if (!this.downloading) {
             if (this.mapName != null) {
                 startMap();
                 return;
             }
-            a(0, 24, this.c + 32, this.d + 32, 1073741824);
-            a(0, 24, this.c + 32, 32, -16777216, 0);
-            a(0, this.d - 32 - 8, this.c + 32, this.d - 32, 0, -16777216);
+            fill(0, 24, this.width + 32, this.height + 32, 1073741824);
+            fillGradient(0, 24, this.width + 32, 32, -16777216, 0);
+            fillGradient(0, this.height - 32 - 8, this.width + 32, this.height - 32, 0, -16777216);
             GuiMapElement newMap = getMapAtCoord(i, j);
             if (newMap != this.mouseOver) {
                 if (newMap != null)
@@ -144,32 +153,32 @@ class GuiMapDownload extends da {
             GL11.glBlendFunc(770, 771);
             GL11.glDisable(3008);
             GL11.glDisable(2929);
-            this.ui.render(this.g, this.b.p, f);
+            this.ui.render(this.textManager, this.minecraft.textureManager, f);
             GL11.glEnable(2929);
             if (this.maxOffset < 26) {
-                a(this.scrollBarX, 26, this.scrollBarX + 8, this.d - 32, -2147483648);
+                fill(this.scrollBarX, 26, this.scrollBarX + 8, this.height - 32, -2147483648);
                 float yOffset = 1.0F - (this.ui.curY - this.maxOffset) / (26.0F - this.maxOffset);
-                int y = (int) ((this.d - 26 - 16 - 32) * yOffset);
-                a(this.scrollBarX, 26 + y, this.scrollBarX + 8, 26 + y + 16, -1325400065);
+                int y = (int) ((this.height - 26 - 16 - 32) * yOffset);
+                fill(this.scrollBarX, 26 + y, this.scrollBarX + 8, 26 + y + 16, -1325400065);
             }
             drawBackground(0, 24, 255, 255);
-            drawBackground(this.d - 32, this.d, 255, 255);
+            drawBackground(this.height - 32, this.height, 255, 255);
             GL11.glEnable(3042);
             GL11.glBlendFunc(770, 771);
             GL11.glDisable(3008);
             GL11.glDisable(2929);
-            int w = this.g.a("Maps Available For Download");
-            this.g.b("Maps Available For Download", this.c / 2 - w / 2, 8, 16777215);
+            int w = this.textManager.getTextWidth("Maps Available For Download");
+            this.textManager.drawText("Maps Available For Download", this.width / 2 - w / 2, 8, 16777215);
             String s = "Additional maps can be found on the AdventureCraft Wiki";
-            w = this.g.a(s);
-            this.g.b(s, this.c / 2 - w / 2, this.d - 26, 16777215);
+            w = this.textManager.getTextWidth(s);
+            this.textManager.drawText(s, this.width / 2 - w / 2, this.height - 26, 16777215);
             s = "http://adventurecraft.wikkii.com/";
-            w = this.g.a(s);
-            this.g.b(s, this.c / 2 - w / 2, this.d - 14, 16777215);
+            w = this.textManager.getTextWidth(s);
+            this.textManager.drawText(s, this.width / 2 - w / 2, this.height - 14, 16777215);
             GL11.glDisable(3042);
             GL11.glEnable(3008);
             GL11.glEnable(3553);
-            super.a(i, j, f);
+            super.render(i, j, f);
         } else if (!this.downloadingMap) {
             drawStatus("Downloading Map Info", this.mapImagesDownloaded, this.totalMaps);
         } else {
@@ -177,28 +186,29 @@ class GuiMapDownload extends da {
             if (this.downloadSize != 0) {
                 float downloadedAmountMegs = this.downloadedAmount / 1024.0F / 1024.0F;
                 float downloadSizeMegs = this.downloadSize / 1024.0F / 1024.0F;
-                String downloaded = String.format("Downloaded %.2f/%.2f MBs", Float.valueOf(downloadedAmountMegs), Float.valueOf(downloadSizeMegs));
-                int w = this.g.a(downloaded);
-                this.g.b(downloaded, this.c / 2 - w / 2, this.d / 2 + 15, 16777215);
+                String downloaded = String.format("Downloaded %.2f/%.2f MBs", downloadedAmountMegs, downloadSizeMegs);
+                int w = this.textManager.getTextWidth(downloaded);
+                this.textManager.drawText(downloaded, this.width / 2 - w / 2, this.height / 2 + 15, 16777215);
             }
         }
     }
 
     private void drawStatus(String s, int cur, int total) {
-        int w = this.g.a(s);
-        this.g.b(s, this.c / 2 - w / 2, this.d / 2 - 4, 16777215);
-        a(this.c / 2 - 50, this.d / 2 + 5, this.c / 2 + 50, this.d / 2 + 13, -2147483648);
+        int w = this.textManager.getTextWidth(s);
+        this.textManager.drawText(s, this.width / 2 - w / 2, this.height / 2 - 4, 16777215);
+        fill(this.width / 2 - 50, this.height / 2 + 5, this.width / 2 + 50, this.height / 2 + 13, -2147483648);
         if (total > 0) {
             int xOffset = (int) (100.0D * cur / total - 50.0D);
-            a(this.c / 2 - 50, this.d / 2 + 5, this.c / 2 + xOffset, this.d / 2 + 13, -15675632);
+            fill(this.width / 2 - 50, this.height / 2 + 5, this.width / 2 + xOffset, this.height / 2 + 13, -15675632);
         }
     }
 
-    public void a(Minecraft minecraft, int i, int j) {
-        super.a(minecraft, i, j);
+    @Override
+    public void init(Minecraft minecraft, int i, int j) {
+        super.init(minecraft, i, j);
         this.ui.setX((i / 2 - 152));
-        this.scrollBarX = 1 + this.c / 2 + 152;
-        this.maxOffset = Math.min(this.d - 32 - 102 * (this.maps.size() + 2) / 3, 26);
+        this.scrollBarX = 1 + this.width / 2 + 152;
+        this.maxOffset = Math.min(this.height - 32 - 102 * (this.maps.size() + 2) / 3, 26);
         if (this.ui.curY < this.maxOffset)
             this.ui.setY(this.maxOffset);
     }
@@ -207,7 +217,7 @@ class GuiMapDownload extends da {
         int i = this.maps.size();
         GuiMapElement r = new GuiMapElement(102 * i % 3, 102 * i / 3, this.ui, title, topDescription, description, texture, mURL, mapID, totalRating, numRatings);
         this.maps.add(r);
-        this.maxOffset = Math.min(this.d - 32 - 102 * (this.maps.size() + 2) / 3, 26);
+        this.maxOffset = Math.min(this.height - 32 - 102 * (this.maps.size() + 2) / 3, 26);
         return r;
     }
 
@@ -236,7 +246,7 @@ class GuiMapDownload extends da {
                 for (String line : lines) {
                     String[] parts = line.split(", ");
                     if (parts.length >= 13) {
-                        int mapID = (new Integer(parts[9])).intValue();
+                        int mapID = new Integer(parts[9]);
                         String mapName = parts[0];
                         String mapDescription = parts[4];
                         String mapTexture = "http://www.adventurecraft.org/mapThumbnails/" + parts[0].replace(" ", "%20") + ".png";
@@ -254,8 +264,8 @@ class GuiMapDownload extends da {
                             topDescription = topDescription + "Downloads: " + parts[8];
                             first = false;
                         }
-                        int totalRating = (new Integer(parts[10])).intValue();
-                        int numRatings = (new Integer(parts[11])).intValue();
+                        int totalRating = new Integer(parts[10]);
+                        int numRatings = new Integer(parts[11]);
                         GuiMapElement map = addMap(mapName, topDescription, mapDescription, "./mapDownloads/" + mapName + ".png", mapURL, mapID, totalRating, numRatings);
                         File mFolder = new File("./maps/" + map.mapName);
                         if (mFolder.exists())
@@ -329,17 +339,17 @@ class GuiMapDownload extends da {
 
     private void startMap() {
         String saveName = "";
-        File mcDir = Minecraft.b();
+        File mcDir = Minecraft.getGameDirectory();
         File saveDir = new File(mcDir, "saves");
         int i = 1;
         while (true) {
-            saveName = String.format("%s - Save %d", this.mapName, Integer.valueOf(i));
+            saveName = String.format("%s - Save %d", this.mapName, i);
             File worldDir = new File(saveDir, saveName);
             i++;
             if (!worldDir.exists()) {
-                this.b.saveMapUsed(saveName, this.mapName);
-                this.b.c = new os(this.b);
-                this.b.startWorld(saveName, saveName, 0L, this.mapName);
+                this.minecraft.saveMapUsed(saveName, this.mapName);
+                this.minecraft.interactionManager = new class_520(this.minecraft);
+                this.minecraft.startWorld(saveName, saveName, 0L, this.mapName);
                 return;
             }
         }
@@ -377,18 +387,18 @@ class GuiMapDownload extends da {
     }
 
     public void drawBackground(int top, int bottom, int topAlpha, int bottomAlpha) {
-        Tessellator tessellator = Tessellator.a;
-        GL11.glBindTexture(3553, this.b.p.b("/gui/background.png"));
+        Tessellator tessellator = Tessellator.INSTANCE;
+        GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId("/gui/background.png"));
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         float f = 32.0F;
-        tessellator.b();
-        tessellator.a(4210752, bottomAlpha);
-        tessellator.a(0.0D, bottom, 0.0D, 0.0D, (bottom / f));
-        tessellator.a(this.c, bottom, 0.0D, (this.c / f), (bottom / f));
-        tessellator.a(4210752, topAlpha);
-        tessellator.a(this.c, top, 0.0D, (this.c / f), (top / f));
-        tessellator.a(0.0D, top, 0.0D, 0.0D, (top / f));
-        tessellator.a();
+        tessellator.start();
+        tessellator.colour(4210752, bottomAlpha);
+        tessellator.vertex(0.0D, bottom, 0.0D, 0.0D, (bottom / f));
+        tessellator.vertex(this.width, bottom, 0.0D, (this.width / f), (bottom / f));
+        tessellator.colour(4210752, topAlpha);
+        tessellator.vertex(this.width, top, 0.0D, (this.width / f), (top / f));
+        tessellator.vertex(0.0D, top, 0.0D, 0.0D, (top / f));
+        tessellator.draw();
     }
 
     private boolean downloading = true;
@@ -405,7 +415,7 @@ class GuiMapDownload extends da {
 
     static final String url = "http://www.adventurecraft.gq/";
 
-    protected da parentScreen;
+    protected Screen parentScreen;
 
     private GuiMapElement mouseOver;
 

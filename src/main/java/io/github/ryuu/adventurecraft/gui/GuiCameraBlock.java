@@ -12,6 +12,7 @@ public class GuiCameraBlock extends Screen {
         this.cam = c;
     }
 
+    @Override
     public void init() {
         Button b = new Button(0, 4, 4, 160, 18, "Skip to first point");
         if (this.cam.type == 1) {
@@ -26,6 +27,7 @@ public class GuiCameraBlock extends Screen {
         this.buttons.add(b);
     }
 
+    @Override
     protected void buttonClicked(Button guibutton) {
         if (guibutton.id == 0) {
             this.cam.type = (this.cam.type + 1) % 3;
@@ -45,6 +47,7 @@ public class GuiCameraBlock extends Screen {
         this.cam.level.getChunk(this.cam.x, this.cam.z).method_885();
     }
 
+    @Override
     public void render(int i, int j, float f) {
         renderBackground();
         super.render(i, j, f);
