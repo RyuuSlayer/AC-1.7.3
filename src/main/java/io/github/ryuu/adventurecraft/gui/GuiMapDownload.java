@@ -19,6 +19,7 @@ import javax.swing.SwingUtilities;
 
 import io.github.ryuu.adventurecraft.scripting.ScriptUIContainer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.Tessellator;
 import org.lwjgl.opengl.GL11;
 
 class GuiMapDownload extends da {
@@ -376,7 +377,7 @@ class GuiMapDownload extends da {
     }
 
     public void drawBackground(int top, int bottom, int topAlpha, int bottomAlpha) {
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         GL11.glBindTexture(3553, this.b.p.b("/gui/background.png"));
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         float f = 32.0F;

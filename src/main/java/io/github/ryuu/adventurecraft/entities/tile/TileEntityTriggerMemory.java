@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
 import io.github.ryuu.adventurecraft.blocks.Blocks;
+import net.minecraft.util.io.CompoundTag;
 
 public class TileEntityTriggerMemory extends TileEntityMinMax {
     public boolean isActivated;
@@ -23,14 +24,14 @@ public class TileEntityTriggerMemory extends TileEntityMinMax {
             Blocks.triggerMemory.triggerActivate(this.d, this.e, this.f, this.g);
     }
 
-    public void a(nu nbttagcompound) {
+    public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
         this.isActivated = nbttagcompound.m("IsActivated");
         this.activateOnDetrigger = nbttagcompound.m("ActivateOnDetrigger");
         this.resetOnDeath = nbttagcompound.m("ResetOnDeath");
     }
 
-    public void b(nu nbttagcompound) {
+    public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
         nbttagcompound.a("IsActivated", this.isActivated);
         nbttagcompound.a("ActivateOnDetrigger", this.activateOnDetrigger);

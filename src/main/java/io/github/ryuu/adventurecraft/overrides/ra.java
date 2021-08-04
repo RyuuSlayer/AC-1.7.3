@@ -152,7 +152,7 @@ public class ra {
                 tessellator.a(f4, f20, (0.0F - f8), f, f16);
             }
             tessellator.a();
-            if (gm.c[itemstack.c].isMuzzleFlash(itemstack))
+            if (ItemType.c[itemstack.c].isMuzzleFlash(itemstack))
                 renderMuzzleFlash();
             GL11.glDisable(32826);
         }
@@ -195,8 +195,8 @@ public class ra {
         GL11.glPopMatrix();
         iz itemstack = this.b;
         float f3 = this.a.f.c(in.b(((gs) entityplayersp).aM), in.b(((gs) entityplayersp).aN), in.b(((gs) entityplayersp).aO));
-        if (itemstack != null && gm.c[itemstack.c] != null) {
-            int i = gm.c[itemstack.c].f(itemstack.i());
+        if (itemstack != null && ItemType.c[itemstack.c] != null) {
+            int i = ItemType.c[itemstack.c].f(itemstack.i());
             float f7 = (i >> 16 & 0xFF) / 255.0F;
             float f11 = (i >> 8 & 0xFF) / 255.0F;
             float f15 = (i & 0xFF) / 255.0F;
@@ -204,7 +204,7 @@ public class ra {
         } else {
             GL11.glColor4f(f3, f3, f3, 1.0F);
         }
-        if (itemstack != null && itemstack.c == gm.bb.bf) {
+        if (itemstack != null && itemstack.c == ItemType.bb.bf) {
             GL11.glPushMatrix();
             float f4 = 0.8F;
             float f7 = entityplayersp.d(f);
@@ -260,7 +260,7 @@ public class ra {
             tessellator.a((128 + byte0), (0 - byte0), 0.0D, 1.0D, 0.0D);
             tessellator.a((0 - byte0), (0 - byte0), 0.0D, 0.0D, 0.0D);
             tessellator.a();
-            iu mapdata = gm.bb.a(itemstack, this.a.f);
+            iu mapdata = ItemType.bb.a(itemstack, this.a.f);
             this.f.a((gs) this.a.h, this.a.p, mapdata);
             GL11.glPopMatrix();
         } else if (itemstack != null) {

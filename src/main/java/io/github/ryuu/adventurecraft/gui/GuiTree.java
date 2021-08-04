@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.gui;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityTree;
 import net.minecraft.client.Minecraft;
+import net.minecraft.level.Level;
 
 public class GuiTree extends da {
     private final int blockX;
@@ -10,7 +11,7 @@ public class GuiTree extends da {
 
     private final int blockZ;
 
-    private final fd world;
+    private final Level world;
 
     TileEntityTree tree;
 
@@ -18,7 +19,7 @@ public class GuiTree extends da {
 
     float prevValue;
 
-    public GuiTree(fd w, int x, int y, int z, TileEntityTree t) {
+    public GuiTree(Level w, int x, int y, int z, TileEntityTree t) {
         this.world = w;
         this.blockX = x;
         this.blockY = y;
@@ -49,7 +50,7 @@ public class GuiTree extends da {
         super.a(i, j, f);
     }
 
-    public static void showUI(fd w, int x, int y, int z, TileEntityTree t) {
+    public static void showUI(Level w, int x, int y, int z, TileEntityTree t) {
         Minecraft.minecraftInstance.a(new GuiTree(w, x, y, z, t));
     }
 

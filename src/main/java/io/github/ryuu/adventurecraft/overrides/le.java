@@ -137,8 +137,8 @@ public class le extends Tile {
         if ((i & 0x8) != 0)
             return 0;
         if (this.bA == ln.f)
-            return gm.az.bf;
-        return gm.at.bf;
+            return ItemType.az.bf;
+        return ItemType.at.bf;
     }
 
     public vf a(fd world, int i, int j, int k, bt vec3d, bt vec3d1) {

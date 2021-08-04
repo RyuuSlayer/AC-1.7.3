@@ -594,19 +594,19 @@ public class Tile {
         bj = (new wo(94, true)).c(0.0F).a(0.625F).a(e).a("diode").q().j();
         bk = (new ks(95)).c(0.0F).a(1.0F).a(e).a("lockedchest").b(true).j();
         bl = (new oq(96, ln.d)).c(3.0F).a(e).a("trapdoor").q().j();
-        gm.c[ac.bn] = (new bi(ac.bn - 256)).a("cloth");
-        gm.c[K.bn] = (new go(K.bn - 256)).a("log");
-        gm.c[v.bn] = (new ItemSubtypes(v.bn - 256)).a("grass");
-        gm.c[F.bn] = (new ItemSubtypes(F.bn - 256)).a("sand");
-        gm.c[Y.bn] = (new ItemSubtypes(Y.bn - 256)).a("tallgrass");
-        gm.c[al.bn] = (new en(al.bn - 256)).a("stoneSlab");
-        gm.c[z.bn] = (new mr(z.bn - 256)).a("sapling");
-        gm.c[L.bn] = (new uy(L.bn - 256)).a("leaves");
-        gm.c[aa.bn] = (gm) new qr(aa.bn - 256);
-        gm.c[W.bn] = (gm) new qr(W.bn - 256);
+        ItemType.c[ac.bn] = (new bi(ac.bn - 256)).a("cloth");
+        ItemType.c[K.bn] = (new go(K.bn - 256)).a("log");
+        ItemType.c[v.bn] = (new ItemSubtypes(v.bn - 256)).a("grass");
+        ItemType.c[F.bn] = (new ItemSubtypes(F.bn - 256)).a("sand");
+        ItemType.c[Y.bn] = (new ItemSubtypes(Y.bn - 256)).a("tallgrass");
+        ItemType.c[al.bn] = (new en(al.bn - 256)).a("stoneSlab");
+        ItemType.c[z.bn] = (new mr(z.bn - 256)).a("sapling");
+        ItemType.c[L.bn] = (new uy(L.bn - 256)).a("leaves");
+        ItemType.c[aa.bn] = (ItemType) new qr(aa.bn - 256);
+        ItemType.c[W.bn] = (ItemType) new qr(W.bn - 256);
         for (int i = 0; i < 256; i++) {
-            if (m[i] != null && gm.c[i] == null) {
-                gm.c[i] = (gm) new ck(i - 256);
+            if (m[i] != null && ItemType.c[i] == null) {
+                ItemType.c[i] = (ItemType) new ck(i - 256);
                 m[i].k();
             }
         }

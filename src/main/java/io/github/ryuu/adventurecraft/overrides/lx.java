@@ -163,7 +163,7 @@ public class lx extends sn {
         }
         if (!this.aI.B) {
             iz itemstack = this.b.G();
-            if (this.b.be || !this.b.W() || itemstack == null || itemstack.a() != gm.aP || g(this.b) > 1024.0D) {
+            if (this.b.be || !this.b.W() || itemstack == null || itemstack.a() != ItemType.aP || g(this.b) > 1024.0D) {
                 K();
                 this.b.D = null;
                 return;
@@ -329,7 +329,7 @@ public class lx extends sn {
             this.c.aR += d4 * d8;
             byte0 = 3;
         } else if (this.k > 0) {
-            hl entityitem = new hl(this.aI, this.aM, this.aN, this.aO, new iz(gm.aS));
+            hl entityitem = new hl(this.aI, this.aM, this.aN, this.aO, new iz(ItemType.aS));
             double d1 = this.b.aM - this.aM;
             double d3 = this.b.aN - this.aN;
             double d5 = this.b.aO - this.aO;

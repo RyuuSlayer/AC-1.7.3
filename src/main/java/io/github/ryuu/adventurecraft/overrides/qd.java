@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.overrides;
 
-public class qd extends gm {
+public class qd extends ItemType {
     private final int a;
 
     public qd(int i, bu enumtoolmaterial) {

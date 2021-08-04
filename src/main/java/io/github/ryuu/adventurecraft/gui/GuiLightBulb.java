@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.gui;
 
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import net.minecraft.client.Minecraft;
+import net.minecraft.level.Level;
 
 public class GuiLightBulb extends da {
     private final int blockX;
@@ -10,13 +11,13 @@ public class GuiLightBulb extends da {
 
     private final int blockZ;
 
-    private final fd world;
+    private final Level world;
 
     GuiSlider2 lightSlider;
 
     int lightValue;
 
-    public GuiLightBulb(fd w, int x, int y, int z) {
+    public GuiLightBulb(Level w, int x, int y, int z) {
         this.world = w;
         this.blockX = x;
         this.blockY = y;
@@ -47,7 +48,7 @@ public class GuiLightBulb extends da {
         this.world.b(this.blockX, this.blockZ).g();
     }
 
-    public static void showUI(fd w, int x, int y, int z) {
+    public static void showUI(Level w, int x, int y, int z) {
         Minecraft.minecraftInstance.a(new GuiLightBulb(w, x, y, z));
     }
 

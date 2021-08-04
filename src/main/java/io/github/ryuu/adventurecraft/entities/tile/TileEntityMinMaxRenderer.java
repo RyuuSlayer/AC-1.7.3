@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
 import io.github.ryuu.adventurecraft.util.DebugMode;
+import net.minecraft.tile.Tile;
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityMinMaxRenderer extends je {
@@ -30,7 +31,7 @@ public class TileEntityMinMaxRenderer extends je {
             for (int i = minMax.minX; i <= minMax.maxX; i++) {
                 for (int j = minMax.minY; j <= minMax.maxY; j++) {
                     for (int k = minMax.minZ; k <= minMax.maxZ; k++) {
-                        uu block = uu.m[minMax.d.a(i, j, k)];
+                        Tile block = net.minecraft.tile.Tile.m[minMax.d.a(i, j, k)];
                         if (block != null && block.canBeTriggered()) {
                             GL11.glColor3f(0.0F, 0.0F, 0.0F);
                             GL11.glVertex3f(0.0F, 0.0F, 0.0F);

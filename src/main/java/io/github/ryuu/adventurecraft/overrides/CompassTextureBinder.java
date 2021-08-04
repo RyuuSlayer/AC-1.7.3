@@ -17,7 +17,7 @@ public class CompassTextureBinder extends TextureBinder {
     private double j;
 
     public CompassTextureBinder(Minecraft minecraft) {
-        super(gm.aO.a(0));
+        super(ItemType.aO.a(0));
         this.h = new int[256];
         this.g = minecraft;
         this.f = 1;

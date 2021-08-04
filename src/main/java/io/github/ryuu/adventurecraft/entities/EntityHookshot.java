@@ -3,8 +3,10 @@ package io.github.ryuu.adventurecraft.entities;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.items.Items;
 import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
+import net.minecraft.util.io.CompoundTag;
 
 import java.util.List;
 
@@ -21,7 +23,7 @@ public class EntityHookshot extends sn {
 
     sn entityGrabbed;
 
-    iz item;
+    ItemInstance item;
 
     public EntityHookshot(Level world) {
         super(world);
@@ -31,7 +33,7 @@ public class EntityHookshot extends sn {
         this.collidesWithClipBlocks = false;
     }
 
-    public EntityHookshot(Level world, ls entity, boolean main, iz i) {
+    public EntityHookshot(Level world, ls entity, boolean main, ItemInstance i) {
         this(world);
         this.mainHand = main;
         c(entity.aS, entity.aT);
@@ -151,10 +153,10 @@ public class EntityHookshot extends sn {
         }
     }
 
-    protected void b(nu nbttagcompound) {
+    protected void b(CompoundTag nbttagcompound) {
     }
 
-    public void a(nu nbttagcompound) {
+    public void a(CompoundTag nbttagcompound) {
         K();
     }
 

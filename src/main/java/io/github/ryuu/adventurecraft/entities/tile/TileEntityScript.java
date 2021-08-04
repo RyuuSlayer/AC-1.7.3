@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.entities.tile;
 import io.github.ryuu.adventurecraft.scripting.ScopeTag;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.util.io.CompoundTag;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
@@ -34,7 +35,7 @@ public class TileEntityScript extends TileEntity {
             this.d.scriptHandler.runScript(this.onUpdateScriptFile, this.scope);
     }
 
-    public void a(nu nbttagcompound) {
+    public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
         this.onTriggerScriptFile = nbttagcompound.i("onTriggerScriptFile");
         this.onDetriggerScriptFile = nbttagcompound.i("onDetriggerScriptFile");
@@ -44,7 +45,7 @@ public class TileEntityScript extends TileEntity {
             ScopeTag.loadScopeFromTag(this.scope, nbttagcompound.k("scope"));
     }
 
-    public void b(nu nbttagcompound) {
+    public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
         if (!this.onTriggerScriptFile.isEmpty())
             nbttagcompound.a("onTriggerScriptFile", this.onTriggerScriptFile);

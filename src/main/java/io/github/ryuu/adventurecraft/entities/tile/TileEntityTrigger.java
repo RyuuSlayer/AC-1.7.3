@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.entities.tile;
 
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.io.CompoundTag;
 
 public class TileEntityTrigger extends TileEntityMinMax {
     public int activated = 0;
@@ -18,12 +19,12 @@ public class TileEntityTrigger extends TileEntityMinMax {
         }
     }
 
-    public void a(nu nbttagcompound) {
+    public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
         this.resetOnTrigger = nbttagcompound.m("ResetOnTrigger");
     }
 
-    public void b(nu nbttagcompound) {
+    public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
         nbttagcompound.a("ResetOnTrigger", this.resetOnTrigger);
     }

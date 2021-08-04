@@ -67,7 +67,7 @@ public class bk extends nr {
     }
 
     public void a(Level world, gs entityplayer, int i, int j, int k, int l) {
-        if (!world.B && entityplayer.G() != null && (entityplayer.G()).c == gm.bc.bf) {
+        if (!world.B && entityplayer.G() != null && (entityplayer.G()).c == ItemType.bc.bf) {
             entityplayer.a(jl.C[this.bn], 1);
             a(world, i, j, k, new iz(Tile.L.bn, 1, l & 0x3));
         } else {

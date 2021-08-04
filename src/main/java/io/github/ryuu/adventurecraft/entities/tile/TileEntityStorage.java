@@ -6,6 +6,7 @@ import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.items.ItemCursor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.NBTTagCompound;
+import net.minecraft.util.io.CompoundTag;
 
 public class TileEntityStorage extends TileEntityMinMax {
     byte[] blockIDs = null;
@@ -42,7 +43,7 @@ public class TileEntityStorage extends TileEntityMinMax {
                     this.metadatas[offset] = (byte) metadata;
                     ow te = this.d.b(x, y, z);
                     if (te != null) {
-                        nu tag = new nu();
+                        CompoundTag tag = new CompoundTag();
                         te.b(tag);
                         this.tileEntities.add(tag);
                     }
@@ -70,13 +71,13 @@ public class TileEntityStorage extends TileEntityMinMax {
                 }
             }
         }
-        for (nu tag : this.tileEntities) {
+        for (CompoundTag tag : this.tileEntities) {
             ow te = ow.c(tag);
             this.d.a(te.e, te.f, te.g, te);
         }
     }
 
-    public void a(nu nbttagcompound) {
+    public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
         if (nbttagcompound.b("blockIDs"))
             this.blockIDs = nbttagcompound.j("blockIDs");
@@ -94,7 +95,7 @@ public class TileEntityStorage extends TileEntityMinMax {
                 Blocks.convertACVersion(this.blockIDs);
     }
 
-    public void b(nu nbttagcompound) {
+    public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
         if (this.blockIDs != null)
             nbttagcompound.a("blockIDs", this.blockIDs);
@@ -102,7 +103,7 @@ public class TileEntityStorage extends TileEntityMinMax {
             nbttagcompound.a("metadatas", this.metadatas);
         if (!this.tileEntities.isEmpty()) {
             int i = 0;
-            for (nu tag : this.tileEntities) {
+            for (CompoundTag tag : this.tileEntities) {
                 nbttagcompound.a(String.format("tile%d", new Object[]{Integer.valueOf(i)}), tag);
                 i++;
             }

@@ -1,8 +1,12 @@
 package io.github.ryuu.adventurecraft.entities;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.entity.projectile.Arrow;
 import net.minecraft.level.Level;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.io.CompoundTag;
 
 public class EntityArrowBomb extends Arrow {
     private int fuse;
@@ -17,7 +21,7 @@ public class EntityArrowBomb extends Arrow {
         this.fuse = 45;
     }
 
-    public EntityArrowBomb(Level world, ls entityliving) {
+    public EntityArrowBomb(Level world, LivingEntity entityliving) {
         super(world, entityliving);
         this.fuse = 45;
     }
@@ -33,7 +37,7 @@ public class EntityArrowBomb extends Arrow {
         }
     }
 
-    public void handleHitEntity(vf movingobjectposition) {
+    public void handleHitEntity(HitResult movingobjectposition) {
         this.aP *= -0.10000000149011612D;
         this.aQ *= -0.10000000149011612D;
         this.aR *= -0.10000000149011612D;
@@ -42,12 +46,12 @@ public class EntityArrowBomb extends Arrow {
         this.k = 0;
     }
 
-    public void b(nu nbttagcompound) {
+    public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
         nbttagcompound.a("fuse", (byte) this.fuse);
     }
 
-    public void a(nu nbttagcompound) {
+    public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
         this.fuse = nbttagcompound.c("fuse") & 0xFF;
     }
@@ -55,7 +59,7 @@ public class EntityArrowBomb extends Arrow {
     public void b(Player entityplayer) {
     }
 
-    public boolean a(sn entity, int i) {
+    public boolean a(Entity entity, int i) {
         if (!this.be) {
             ai();
             EntityBomb.explode(this, this.c, this.aI, this.aM, this.aN, this.aO);

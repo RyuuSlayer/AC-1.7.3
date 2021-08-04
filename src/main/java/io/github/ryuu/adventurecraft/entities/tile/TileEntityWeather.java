@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
 import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.util.io.CompoundTag;
 
 public class TileEntityWeather extends TileEntity {
     public boolean changePrecipitate;
@@ -23,7 +24,7 @@ public class TileEntityWeather extends TileEntity {
 
     public boolean changeThundering;
 
-    public void a(nu nbttagcompound) {
+    public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
         this.changePrecipitate = nbttagcompound.m("changePrecipitate");
         this.precipitate = nbttagcompound.m("precipitate");
@@ -37,7 +38,7 @@ public class TileEntityWeather extends TileEntity {
         this.thundering = nbttagcompound.m("thundering");
     }
 
-    public void b(nu nbttagcompound) {
+    public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
         nbttagcompound.a("changePrecipitate", this.changePrecipitate);
         nbttagcompound.a("precipitate", this.precipitate);

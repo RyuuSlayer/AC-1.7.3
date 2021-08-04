@@ -2,9 +2,13 @@ package io.github.ryuu.adventurecraft.entities;
 
 
 import net.minecraft.entity.FlyingEntity;
+import net.minecraft.entity.MonsterEntityType;
 import net.minecraft.level.Level;
+import net.minecraft.util.maths.Box;
 
-public class EntityBat extends FlyingEntity implements ff {
+import java.util.Random;
+
+public class EntityBat extends FlyingEntity implements MonsterEntityType {
     public int courseChangeCooldown;
 
     public double waypointX;
@@ -102,7 +106,7 @@ public class EntityBat extends FlyingEntity implements ff {
         double d4 = (this.waypointX - this.aM) / d3;
         double d5 = (this.waypointY - this.aN) / d3;
         double d6 = (this.waypointZ - this.aO) / d3;
-        eq axisalignedbb = this.aW.d();
+        Box axisalignedbb = this.aW.d();
         for (int i = 1; i < d3; i++) {
             axisalignedbb.d(d4, d5, d6);
             if (this.aI.a(this, axisalignedbb).size() > 0)

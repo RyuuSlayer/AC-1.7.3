@@ -99,18 +99,18 @@ public class xq extends rw {
         if (itemstack == null) {
             world.e(1001, i, j, k, 0);
         } else {
-            if (itemstack.c == gm.j.bf) {
+            if (itemstack.c == ItemType.j.bf) {
                 sl entityarrow = new sl(world, d, d1, d2);
                 entityarrow.a(i1, 0.10000000149011612D, j1, 1.1F, 6.0F);
                 entityarrow.a = true;
                 world.b((sn) entityarrow);
                 world.e(1002, i, j, k, 0);
-            } else if (itemstack.c == gm.aN.bf) {
+            } else if (itemstack.c == ItemType.aN.bf) {
                 vv entityegg = new vv(world, d, d1, d2);
                 entityegg.a(i1, 0.10000000149011612D, j1, 1.1F, 6.0F);
                 world.b((sn) entityegg);
                 world.e(1002, i, j, k, 0);
-            } else if (itemstack.c == gm.aB.bf) {
+            } else if (itemstack.c == ItemType.aB.bf) {
                 by entitysnowball = new by(world, d, d1, d2);
                 entitysnowball.a(i1, 0.10000000149011612D, j1, 1.1F, 6.0F);
                 world.b((sn) entitysnowball);

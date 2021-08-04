@@ -221,7 +221,7 @@ public class by extends sn {
     }
 
     public void b(gs entityplayer) {
-        if (this.f && this.g == entityplayer && this.a <= 0 && entityplayer.c.a(new iz(gm.j, 1))) {
+        if (this.f && this.g == entityplayer && this.a <= 0 && entityplayer.c.a(new iz(ItemType.j, 1))) {
             this.aI.a(this, "random.pop", 0.2F, ((this.bs.nextFloat() - this.bs.nextFloat()) * 0.7F + 1.0F) * 2.0F);
             entityplayer.b(this, 1);
             K();

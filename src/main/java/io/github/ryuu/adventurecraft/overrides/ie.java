@@ -2,7 +2,7 @@ package io.github.ryuu.adventurecraft.overrides;
 
 import io.github.ryuu.adventurecraft.util.DebugMode;
 
-public class ie extends gm {
+public class ie extends ItemType {
     public ie(int i) {
         super(i);
     }
