@@ -2,16 +2,19 @@ package io.github.ryuu.adventurecraft.rendering;
 
 import io.github.ryuu.adventurecraft.entities.EntityHookshot;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.entity.EntityRenderer;
+import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
 
-public class RenderHookshot extends bw {
+public class RenderHookshot extends EntityRenderer {
     public void doRenderFish(EntityHookshot entityHookshot, double d, double d1, double d2, float f, float f1) {
         a("/item/arrows.png");
         GL11.glPushMatrix();
         GL11.glTranslatef((float) d, (float) d1, (float) d2);
         GL11.glRotatef(entityHookshot.aU + (entityHookshot.aS - entityHookshot.aU) * f1 - 90.0F, 0.0F, 1.0F, 0.0F);
         GL11.glRotatef(entityHookshot.aV + (entityHookshot.aT - entityHookshot.aV) * f1, 0.0F, 0.0F, 1.0F);
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         int i = 0;
         float f2 = 0.0F;
         float f3 = 0.5F;
@@ -96,7 +99,7 @@ public class RenderHookshot extends bw {
         }
     }
 
-    public void a(sn entity, double d, double d1, double d2, float f, float f1) {
+    public void a(Entity entity, double d, double d1, double d2, float f, float f1) {
         doRenderFish((EntityHookshot) entity, d, d1, d2, f, f1);
     }
 }

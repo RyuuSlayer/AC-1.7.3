@@ -1,13 +1,12 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import gz;
-import ii;
+import net.minecraft.entity.monster.Monster;
 
 public class ScriptEntityMob extends ScriptEntityCreature {
-    gz entityMob;
+    Monster entityMob;
 
-    ScriptEntityMob(gz e) {
-        super((ii) e);
+    ScriptEntityMob(Monster e) {
+        super(e);
         this.entityMob = e;
     }
 

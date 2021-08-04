@@ -1,14 +1,13 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import ix;
-import iz;
-import lw;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemInstance;
 
 public class ScriptInventoryPlayer extends ScriptInventory {
-    ix invPlayer;
+    PlayerInventory invPlayer;
 
-    ScriptInventoryPlayer(ix i) {
-        super((lw) i);
+    ScriptInventoryPlayer(PlayerInventory i) {
+        super(i);
         this.invPlayer = i;
     }
 
@@ -16,7 +15,7 @@ public class ScriptInventoryPlayer extends ScriptInventory {
         int i = this.invPlayer.f(itemID);
         if (i == -1)
             for (int j = 36; j < 40; j++) {
-                iz k = this.invPlayer.f_(j);
+                ItemInstance k = this.invPlayer.f_(j);
                 if (k != null && k.c == itemID)
                     return j;
             }
@@ -25,7 +24,7 @@ public class ScriptInventoryPlayer extends ScriptInventory {
 
     public int getSlotContainingItemDamage(int itemID, int damage) {
         for (int i = 0; i < this.invPlayer.a(); i++) {
-            iz j = this.invPlayer.f_(i);
+            ItemInstance j = this.invPlayer.f_(i);
             if (j != null && j.c == itemID && j.i() == damage)
                 return i;
         }
@@ -57,14 +56,14 @@ public class ScriptInventoryPlayer extends ScriptInventory {
     }
 
     public ScriptItem getCurrentItem() {
-        iz i = this.invPlayer.b();
+        ItemInstance i = this.invPlayer.b();
         if (i == null || i.c == 0)
             return null;
         return new ScriptItem(i);
     }
 
     public ScriptItem getOffhandItem() {
-        iz i = this.invPlayer.getOffhandItem();
+        ItemInstance i = this.invPlayer.getOffhandItem();
         if (i == null || i.c == 0)
             return null;
         return new ScriptItem(i);
@@ -79,7 +78,7 @@ public class ScriptInventoryPlayer extends ScriptInventory {
     }
 
     public ScriptItem getCursorItem() {
-        iz i = this.invPlayer.i();
+        ItemInstance i = this.invPlayer.i();
         if (i == null || i.c == 0)
             return null;
         return new ScriptItem(i);

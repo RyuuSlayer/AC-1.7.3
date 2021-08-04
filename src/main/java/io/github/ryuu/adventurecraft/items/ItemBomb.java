@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.items;
 
 import io.github.ryuu.adventurecraft.entities.EntityBomb;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
@@ -14,7 +15,7 @@ class ItemBomb extends ItemType {
 
     public ItemInstance a(ItemInstance itemstack, Level world, Player entityplayer) {
         itemstack.a--;
-        world.b((sn) new EntityBomb(world, entityplayer));
+        world.b((Entity) new EntityBomb(world, entityplayer));
         return itemstack;
     }
 }

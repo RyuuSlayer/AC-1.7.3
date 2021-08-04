@@ -1,10 +1,12 @@
 package io.github.ryuu.adventurecraft.items;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
+import net.minecraft.util.maths.Vec3f;
 
 public class ItemNudge extends ItemType {
     public ItemNudge(int i) {
@@ -13,8 +15,8 @@ public class ItemNudge extends ItemType {
 
     public ItemInstance a(ItemInstance itemstack, Level world, Player entityplayer) {
         if (ItemCursor.bothSet) {
-            ls camera = Minecraft.minecraftInstance.i;
-            bt lookDir = camera.ac();
+            LivingEntity camera = Minecraft.minecraftInstance.i;
+            Vec3f lookDir = camera.ac();
             int width = ItemCursor.maxX - ItemCursor.minX + 1;
             int height = ItemCursor.maxY - ItemCursor.minY + 1;
             int depth = ItemCursor.maxZ - ItemCursor.minZ + 1;
@@ -111,8 +113,8 @@ public class ItemNudge extends ItemType {
 
     public void onItemLeftClick(ItemInstance itemstack, Level world, Player entityplayer) {
         if (ItemCursor.bothSet) {
-            ls camera = Minecraft.minecraftInstance.i;
-            bt lookDir = camera.ac();
+            LivingEntity camera = Minecraft.minecraftInstance.i;
+            Vec3f lookDir = camera.ac();
             int width = ItemCursor.maxX - ItemCursor.minX + 1;
             int height = ItemCursor.maxY - ItemCursor.minY + 1;
             int depth = ItemCursor.maxZ - ItemCursor.minZ + 1;

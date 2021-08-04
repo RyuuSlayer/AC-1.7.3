@@ -1,16 +1,20 @@
 package io.github.ryuu.adventurecraft.rendering;
 
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.entity.ItemRenderer;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.item.ItemInstance;
 import org.lwjgl.opengl.GL11;
 
-public class RenderBomb extends bb {
-    public void a(hl entityitem, double d, double d1, double d2, float f, float f1) {
-        iz itemstack = entityitem.a;
+public class RenderBomb extends ItemRenderer {
+    public void a(ItemEntity entityitem, double d, double d1, double d2, float f, float f1) {
+        ItemInstance itemstack = entityitem.a;
         GL11.glPushMatrix();
         GL11.glTranslatef((float) d, (float) d1 + 0.1F, (float) d2);
         GL11.glEnable(32826);
         int i = itemstack.b();
         a("/gui/items.png");
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         float f6 = (i % 16 * 16 + 0) / 256.0F;
         float f8 = (i % 16 * 16 + 16) / 256.0F;
         float f10 = (i / 16 * 16 + 0) / 256.0F;

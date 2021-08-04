@@ -1,8 +1,8 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import ji;
 import net.minecraft.client.Minecraft;
-import sj;
+import net.minecraft.client.render.TextRenderer;
+import net.minecraft.client.texture.TextureManager;
 
 public class ScriptUILabel extends UIElement {
     private String text;
@@ -41,7 +41,7 @@ public class ScriptUILabel extends UIElement {
             parent.add(this);
     }
 
-    public void render(sj fontRenderer, ji renderEngine, float partialTickTime) {
+    public void render(TextRenderer fontRenderer, TextureManager renderEngine, float partialTickTime) {
         int color = Math.max(Math.min((int) (this.alpha * 255.0F), 255), 0);
         if (color == 0)
             return;

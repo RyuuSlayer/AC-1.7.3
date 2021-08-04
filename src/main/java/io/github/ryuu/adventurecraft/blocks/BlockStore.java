@@ -5,6 +5,7 @@ import io.github.ryuu.adventurecraft.gui.GuiStoreDebug;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
 import net.minecraft.tile.TileWithEntity;
 import net.minecraft.tile.entity.TileEntity;
@@ -36,7 +37,7 @@ public class BlockStore extends TileWithEntity {
         if (store.buySupplyLeft != 0) {
             if (store.sellItemID == 0 || entityplayer.c.consumeItemAmount(store.sellItemID, store.sellItemDamage, store.sellItemAmount)) {
                 if (store.buyItemID != 0)
-                    entityplayer.c.a(new iz(store.buyItemID, store.buyItemAmount, store.buyItemDamage));
+                    entityplayer.c.a(new ItemInstance(store.buyItemID, store.buyItemAmount, store.buyItemDamage));
                 store.buySupplyLeft--;
                 if (store.tradeTrigger != null) {
                     world.triggerManager.addArea(i, j, k, store.tradeTrigger);

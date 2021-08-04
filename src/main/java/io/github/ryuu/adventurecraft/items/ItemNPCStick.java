@@ -2,6 +2,8 @@ package io.github.ryuu.adventurecraft.items;
 
 import io.github.ryuu.adventurecraft.entities.EntityNPC;
 import io.github.ryuu.adventurecraft.gui.GuiNPC;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
@@ -18,11 +20,11 @@ class ItemNPCStick extends ItemType {
         EntityNPC npc = new EntityNPC(world);
         npc.b(i + 0.5D, (j + 1), k + 0.5D, entityplayer.aS + 180.0F, 0.0F);
         npc.H = npc.aS;
-        world.b((sn) npc);
+        world.b((Entity) npc);
         return true;
     }
 
-    public boolean a(ItemInstance itemstack, ls entityliving, ls entityliving1) {
+    public boolean a(ItemInstance itemstack, LivingEntity entityliving, LivingEntity entityliving1) {
         if (entityliving instanceof EntityNPC) {
             GuiNPC.showUI((EntityNPC) entityliving);
             return true;

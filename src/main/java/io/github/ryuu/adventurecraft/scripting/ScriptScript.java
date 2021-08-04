@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.scripting;
 
+import io.github.ryuu.adventurecraft.gui.GuiUrlRequest;
 import net.minecraft.level.Level;
 
 public class ScriptScript {

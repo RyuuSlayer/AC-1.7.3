@@ -2,6 +2,8 @@ package io.github.ryuu.adventurecraft.scripting;
 
 import ji;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.TextRenderer;
+import net.minecraft.client.texture.TextureManager;
 import sj;
 
 public class UIElement {
@@ -25,7 +27,7 @@ public class UIElement {
             this.parent.addToBack(this);
     }
 
-    public void render(sj fontRenderer, ji renderEngine, float partialTickTime) {
+    public void render(TextRenderer fontRenderer, TextureManager renderEngine, float partialTickTime) {
     }
 
     public void onUpdate() {

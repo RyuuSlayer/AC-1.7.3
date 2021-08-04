@@ -2,6 +2,9 @@ package io.github.ryuu.adventurecraft.scripting;
 
 import ji;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.TextRenderer;
+import net.minecraft.client.texture.TextureManager;
 import nw;
 import org.lwjgl.opengl.GL11;
 import sj;
@@ -40,10 +43,10 @@ public class ScriptUIRect extends UIElement {
             parent.add(this);
     }
 
-    public void render(sj fontRenderer, ji renderEngine, float partialTickTime) {
+    public void render(TextRenderer fontRenderer, TextureManager renderEngine, float partialTickTime) {
         float x = getXAtTime(partialTickTime);
         float y = getYAtTime(partialTickTime);
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         GL11.glDisable(3553);
         GL11.glColor4f(this.red, this.green, this.blue, this.alpha);
         tessellator.b();
