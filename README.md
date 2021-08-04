@@ -4,6 +4,8 @@ Decompiled AdventureCraft rewrite for 1.7.3.
 ## Setup
 Run the following command, replacing "idea" with the command your specific ide if you are not using intelliJ:
 
+Note: If you do this using cmd in the projects folder do "gradlew", not "./gradlew".
+
 ```
 ./gradlew idea
 ```
