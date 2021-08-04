@@ -19,11 +19,11 @@ public class CutsceneCamera {
 
     CutsceneCameraPoint prevPoint;
 
-    List<CutsceneCameraPoint> cameraPoints = new LinkedList<>();
+    public List<CutsceneCameraPoint> cameraPoints = new LinkedList<>();
 
     List<Vec3D> lineVecs = new LinkedList<Vec3D>();
 
-    void addCameraPoint(float time, float posX, float posY, float posZ, float yaw, float pitch, int type) {
+    public void addCameraPoint(float time, float posX, float posY, float posZ, float yaw, float pitch, int type) {
         int index = 0;
         for (CutsceneCameraPoint p : this.cameraPoints) {
             if (time < p.time)
@@ -123,7 +123,7 @@ public class CutsceneCamera {
         }
     }
 
-    void clearPoints() {
+    public void clearPoints() {
         this.prevPrevPoint = null;
         this.prevPoint = null;
         this.cameraPoints.clear();
@@ -239,7 +239,7 @@ public class CutsceneCamera {
         return this.curPoint;
     }
 
-    void deletePoint(int id) {
+    public void deletePoint(int id) {
         CutsceneCameraPoint deleting = null;
         for (CutsceneCameraPoint p : this.cameraPoints) {
             if (p.cameraID == id) {
