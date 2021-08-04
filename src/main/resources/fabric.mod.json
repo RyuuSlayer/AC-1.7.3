@@ -5,7 +5,8 @@
   "name": "AdventureCraft",
   "description": "This is an example description! Tell everyone what your mod is about!",
   "authors": [
-    "Ryuu"
+    "Ryuu",
+    "TechPizza"
   ],
   "contact": {
     "issues": "https://github.com/RyuuSlayer/AC-1.7.3/issues",
