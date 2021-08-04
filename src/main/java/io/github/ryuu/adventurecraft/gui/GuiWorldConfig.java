@@ -1,6 +1,8 @@
 package io.github.ryuu.adventurecraft.gui;
 
 import net.minecraft.client.gui.Screen;
+import net.minecraft.client.gui.widgets.Button;
+import net.minecraft.client.gui.widgets.Textbox;
 import net.minecraft.level.Level;
 
 import java.io.File;
@@ -10,17 +12,17 @@ public class GuiWorldConfig extends Screen {
 
     private final Level world;
 
-    private ro playerName;
+    private Textbox playerName;
 
     int selectedID;
 
-    private ke setOnNewSave;
+    private Button setOnNewSave;
 
-    private ke setOnLoad;
+    private Button setOnLoad;
 
-    private ke setOnUpdate;
+    private Button setOnUpdate;
 
-    private final ro[] lightLevels;
+    private final Textbox[] lightLevels;
 
     private boolean lightChanged;
 
@@ -29,57 +31,59 @@ public class GuiWorldConfig extends Screen {
         this.selectedID = 0;
         this.lightChanged = false;
         this.world = w;
-        this.lightLevels = new ro[16];
+        this.lightLevels = new Textbox[16];
     }
 
-    public void a() {
+    @Override
+    public void tick() {
         if (this.page == 0) {
-            this.playerName.b();
+            this.playerName.tick();
         } else if (this.page == 2) {
             for (int i = 0; i < 16; i++)
-                this.lightLevels[i].b();
+                this.lightLevels[i].tick();
         }
     }
 
-    public void b() {
-        int buttonWidth = (this.c - 16) / 4;
-        this.e.add(new ke(-1, 4, 0, buttonWidth, 18, "Misc"));
-        this.e.add(new ke(-2, 4 + 4 + buttonWidth, 0, buttonWidth, 18, "Script"));
-        this.e.add(new ke(-3, 4 + 2 * (4 + buttonWidth), 0, buttonWidth, 18, "Light Levels"));
-        buttonWidth = (this.c - 16) / 3;
+    @Override
+    public void init() {
+        int buttonWidth = (this.width - 16) / 4;
+        this.buttons.add(new Button(-1, 4, 0, buttonWidth, 18, "Misc"));
+        this.buttons.add(new Button(-2, 4 + 4 + buttonWidth, 0, buttonWidth, 18, "Script"));
+        this.buttons.add(new Button(-3, 4 + 2 * (4 + buttonWidth), 0, buttonWidth, 18, "Light Levels"));
+        buttonWidth = (this.width - 16) / 3;
         if (this.page == 0) {
-            int w = this.g.a("Player Name:") + 8;
-            this.playerName = new ro(this, this.g, w, 24, this.c / 2 - w, 20, this.world.x.playerName);
-            this.playerName.a = true;
-            this.playerName.a(32);
-            ke b = new ke(0, 4, 44, buttonWidth, 18, "Crafting: Enabled");
-            this.e.add(b);
-            if (!this.b.f.x.allowsInventoryCrafting)
-                b.e = "Crafting: Disabled";
+            int w = this.textManager.getTextWidth("Player Name:") + 8;
+            this.playerName = new Textbox(this, this.textManager, w, 24, this.width / 2 - w, 20, this.world.properties.playerName);
+            this.playerName.field_2420 = true;
+            this.playerName.method_1878(32);
+            Button b = new Button(0, 4, 44, buttonWidth, 18, "Crafting: Enabled");
+            this.buttons.add(b);
+            if (!this.minecraft.level.properties.allowsInventoryCrafting)
+                b.text = "Crafting: Disabled";
         } else if (this.page == 1) {
             this.selectedID = 0;
-            this.setOnNewSave = new ke(0, 4, 24, "OnNewSave (selected): " + this.world.x.onNewSaveScript);
-            this.setOnLoad = new ke(1, 4, 46, "OnLoad: " + this.world.x.onLoadScript);
-            this.setOnUpdate = new ke(2, 4, 68, "OnUpdate: " + this.world.x.onUpdateScript);
-            this.e.add(this.setOnNewSave);
-            this.e.add(this.setOnLoad);
-            this.e.add(this.setOnUpdate);
-            ke b = new ke(3, 4, 90, 200, 20, "Reload Scripts");
-            this.e.add(b);
-            b = new ke(4, 4, 112, 160, 18, "None");
-            this.e.add(b);
+            this.setOnNewSave = new Button(0, 4, 24, "OnNewSave (selected): " + this.world.properties.onNewSaveScript);
+            this.setOnLoad = new Button(1, 4, 46, "OnLoad: " + this.world.properties.onLoadScript);
+            this.setOnUpdate = new Button(2, 4, 68, "OnUpdate: " + this.world.properties.onUpdateScript);
+            this.buttons.add(this.setOnNewSave);
+            this.buttons.add(this.setOnLoad);
+            this.buttons.add(this.setOnUpdate);
+            Button b = new Button(3, 4, 90, 200, 20, "Reload Scripts");
+            this.buttons.add(b);
+            b = new Button(4, 4, 112, 160, 18, "None");
+            this.buttons.add(b);
             String[] scripts = getScriptFiles();
             if (scripts != null) {
                 int i = 1;
                 for (String scriptFile : scripts) {
-                    b = new ke(4 + i, 4 + i % 3 * this.c / 3, 112 + i / 3 * 20, 160, 18, scriptFile);
-                    this.e.add(b);
+                    b = new Button(4 + i, 4 + i % 3 * this.width / 3, 112 + i / 3 * 20, 160, 18, scriptFile);
+                    this.buttons.add(b);
                     i++;
                 }
             }
         } else if (this.page == 2) {
             for (int i = 0; i < 16; i++) {
-                this.lightLevels[i] = new ro(this, this.g, 80, 22 + 14 * i, 80, 11, String.format("%.7f", new Object[]{Float.valueOf(this.b.f.x.brightness[i])}));
+                this.lightLevels[i] = new Textbox(this, this.textManager, 80, 22 + 14 * i, 80, 11, String.format("%.7f", Float.valueOf(this.minecraft.level.properties.brightness[i])));
             }
         } else if (this.page == 3) {
 
@@ -87,7 +91,7 @@ public class GuiWorldConfig extends Screen {
     }
 
     private String[] getScriptFiles() {
-        File scriptDir = new File(this.b.f.levelDir, "scripts");
+        File scriptDir = new File(this.minecraft.level.levelDir, "scripts");
         if (scriptDir.exists() && scriptDir.isDirectory()) {
             File[] scriptFiles = scriptDir.listFiles();
             String[] fileNames = new String[scriptFiles.length];
@@ -99,29 +103,30 @@ public class GuiWorldConfig extends Screen {
         return null;
     }
 
-    protected void a(ke guibutton) {
-        if (guibutton.f < 0) {
-            this.page = -guibutton.f - 1;
-            this.e.clear();
-            b();
+    @Override
+    protected void buttonClicked(Button guibutton) {
+        if (guibutton.id < 0) {
+            this.page = -guibutton.id - 1;
+            this.buttons.clear();
+            init();
             return;
         }
         if (this.page == 0) {
-            if (guibutton.f == 0) {
-                this.b.f.x.allowsInventoryCrafting = !this.b.f.x.allowsInventoryCrafting;
-                guibutton.e = "Crafting: Enabled";
-                if (!this.b.f.x.allowsInventoryCrafting)
-                    guibutton.e = "Crafting: Disabled";
+            if (guibutton.id == 0) {
+                this.minecraft.level.properties.allowsInventoryCrafting = !this.minecraft.level.properties.allowsInventoryCrafting;
+                guibutton.text = "Crafting: Enabled";
+                if (!this.minecraft.level.properties.allowsInventoryCrafting)
+                    guibutton.text = "Crafting: Disabled";
             }
         } else if (this.page == 1) {
-            if (guibutton.f < 3) {
-                this.selectedID = guibutton.f;
-            } else if (guibutton.f == 3) {
+            if (guibutton.id < 3) {
+                this.selectedID = guibutton.id;
+            } else if (guibutton.id == 3) {
                 this.world.scriptHandler.loadScripts();
-            } else if (guibutton.f == 4) {
+            } else if (guibutton.id == 4) {
                 updateScriptFile("");
             } else {
-                updateScriptFile(guibutton.e);
+                updateScriptFile(guibutton.text);
             }
             resetScriptNames();
         } else if (this.page != 2) {
@@ -131,83 +136,87 @@ public class GuiWorldConfig extends Screen {
 
     private void updateScriptFile(String file) {
         if (this.selectedID == 0) {
-            this.world.x.onNewSaveScript = file;
+            this.world.properties.onNewSaveScript = file;
         } else if (this.selectedID == 1) {
-            this.world.x.onLoadScript = file;
+            this.world.properties.onLoadScript = file;
         } else if (this.selectedID == 2) {
-            this.world.x.onUpdateScript = file;
+            this.world.properties.onUpdateScript = file;
         }
     }
 
     private void resetScriptNames() {
-        this.setOnNewSave.e = "OnNewSave: " + this.world.x.onNewSaveScript;
-        this.setOnLoad.e = "OnLoad: " + this.world.x.onLoadScript;
-        this.setOnUpdate.e = "OnUpdate: " + this.world.x.onUpdateScript;
+        this.setOnNewSave.text = "OnNewSave: " + this.world.properties.onNewSaveScript;
+        this.setOnLoad.text = "OnLoad: " + this.world.properties.onLoadScript;
+        this.setOnUpdate.text = "OnUpdate: " + this.world.properties.onUpdateScript;
         if (this.selectedID == 0) {
-            this.setOnNewSave.e = "OnNewSave (selected): " + this.world.x.onNewSaveScript;
+            this.setOnNewSave.text = "OnNewSave (selected): " + this.world.properties.onNewSaveScript;
         } else if (this.selectedID == 1) {
-            this.setOnLoad.e = "OnLoad (selected): " + this.world.x.onLoadScript;
+            this.setOnLoad.text = "OnLoad (selected): " + this.world.properties.onLoadScript;
         } else if (this.selectedID == 2) {
-            this.setOnUpdate.e = "OnUpdate (selected): " + this.world.x.onUpdateScript;
+            this.setOnUpdate.text = "OnUpdate (selected): " + this.world.properties.onUpdateScript;
         }
     }
 
-    protected void a(char c, int i) {
+    @Override
+    protected void keyPressed(char c, int i) {
         if (this.page == 0) {
-            if (this.playerName.a)
-                this.playerName.a(c, i);
+            if (this.playerName.field_2420)
+                this.playerName.method_1877(c, i);
         } else if (this.page == 2) {
             for (int k = 0; k < 16; k++) {
-                if ((this.lightLevels[k]).a && (i == 14 || (c >= '0' && c <= '9') || c == '.' || c == '\t'))
-                    this.lightLevels[k].a(c, i);
+                if ((this.lightLevels[k]).field_2420 && (i == 14 || (c >= '0' && c <= '9') || c == '.' || c == '\t'))
+                    this.lightLevels[k].method_1877(c, i);
             }
         }
-        super.a(c, i);
+        super.keyPressed(c, i);
         if (i == 1 && this.lightChanged)
-            this.b.g.updateAllTheRenderers();
+            this.minecraft.worldRenderer.updateAllTheRenderers();
     }
 
-    protected void a(int i, int j, int k) {
-        super.a(i, j, k);
+    @Override
+    protected void mouseClicked(int i, int j, int k) {
+        super.mouseClicked(i, j, k);
         if (this.page == 0) {
-            this.playerName.a(i, j, k);
+            this.playerName.method_1879(i, j, k);
         } else if (this.page == 2) {
             for (int l = 0; l < 16; l++)
-                this.lightLevels[l].a(i, j, k);
+                this.lightLevels[l].method_1879(i, j, k);
         }
     }
 
-    public void a(int i, int j, float f) {
-        a(0, 0, this.c, this.d, -2147483648);
+    @Override
+    public void render(int i, int j, float f) {
+        fill(0, 0, this.width, this.height, -2147483648);
         if (this.page == 0) {
-            b(this.g, "Player Name:", 4, 30, 10526880);
-            this.playerName.c();
-            this.world.x.playerName = this.playerName.a();
-            this.b.h.l = this.playerName.a();
+            drawTextWithShadow(this.textManager, "Player Name:", 4, 30, 10526880);
+            this.playerName.method_1883();
+            this.world.properties.playerName = this.playerName.method_1876();
+            this.minecraft.player.name = this.playerName.method_1876();
         } else if (this.page != 1) {
             if (this.page == 2) {
                 for (int k = 0; k < 16; k++) {
-                    b(this.g, String.format("Light Level %d", new Object[]{Integer.valueOf(k)}), 4, 24 + 14 * k, 10526880);
-                    this.lightLevels[k].c();
+                    drawTextWithShadow(this.textManager, String.format("Light Level %d", k), 4, 24 + 14 * k, 10526880);
+                    this.lightLevels[k].method_1883();
                     try {
-                        Float value = Float.valueOf(this.lightLevels[k].a());
+                        Float value = Float.valueOf(this.lightLevels[k].method_1876());
                         if (value != null)
-                            if (value.floatValue() != Math.floor((this.b.f.x.brightness[k] * 1.0E7F)) / 1.0E7D) {
-                                this.b.f.x.brightness[k] = value.floatValue();
+                            if (value != Math.floor((this.minecraft.level.properties.brightness[k] * 1.0E7F)) / 1.0E7D) {
+                                this.minecraft.level.properties.brightness[k] = value;
                                 this.lightChanged = true;
                             }
                     } catch (NumberFormatException e) {
                     }
                 }
-                this.b.f.loadBrightness();
+                this.minecraft.level.loadBrightness();
             } else if (this.page == 3) {
 
             }
         }
-        super.a(i, j, f);
+        super.render(i, j, f);
     }
 
-    public boolean c() {
+    @Override
+    public boolean isPauseScreen() {
         return false;
     }
 }

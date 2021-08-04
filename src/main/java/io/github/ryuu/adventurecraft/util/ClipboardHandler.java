@@ -8,8 +8,8 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 
-class ClipboardHandler {
-    static String getClipboard() {
+public class ClipboardHandler {
+    public static String getClipboard() {
         String result = "";
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         Transferable contents = clipboard.getContents(null);
@@ -23,7 +23,7 @@ class ClipboardHandler {
         return result;
     }
 
-    static void setClipboard(String c) {
+    public static void setClipboard(String c) {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         StringSelection contents = new StringSelection(c);
         clipboard.setContents(contents, contents);

@@ -2,45 +2,53 @@ package io.github.ryuu.adventurecraft.gui;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityStorage;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
+import net.minecraft.client.gui.widgets.Button;
+import net.minecraft.client.gui.widgets.OptionButton;
 
-public class GuiStorage extends da {
+public class GuiStorage extends Screen {
     private final TileEntityStorage storage;
 
     public GuiStorage(TileEntityStorage storageClicked) {
         this.storage = storageClicked;
     }
 
-    public void a() {
+    @Override
+    public void tick() {
     }
 
-    public void b() {
-        this.e.add(new ab(0, 4, 40, "Use Current Selection"));
-        this.e.add(new ab(1, 4, 60, "Resave Set Selection"));
-        this.e.add(new ab(2, 4, 80, "Load Saved Data"));
+    @Override
+    public void init() {
+        this.buttons.add(new OptionButton(0, 4, 40, "Use Current Selection"));
+        this.buttons.add(new OptionButton(1, 4, 60, "Resave Set Selection"));
+        this.buttons.add(new OptionButton(2, 4, 80, "Load Saved Data"));
     }
 
-    protected void a(ke guibutton) {
-        if (guibutton.f == 0) {
+    @Override
+    protected void buttonClicked(Button guibutton) {
+        if (guibutton.id == 0) {
             this.storage.setArea();
-        } else if (guibutton.f == 1) {
+        } else if (guibutton.id == 1) {
             this.storage.saveCurrentArea();
-        } else if (guibutton.f == 2) {
+        } else if (guibutton.id == 2) {
             this.storage.loadCurrentArea();
         }
     }
 
-    public void a(int i, int j, float f) {
-        a(0, 0, this.c, this.d, -2147483648);
-        b(this.g, String.format("Min: (%d, %d, %d)", new Object[]{Integer.valueOf(this.storage.minX), Integer.valueOf(this.storage.minY), Integer.valueOf(this.storage.minZ)}), 4, 4, 14737632);
-        b(this.g, String.format("Max: (%d, %d, %d)", new Object[]{Integer.valueOf(this.storage.maxX), Integer.valueOf(this.storage.maxY), Integer.valueOf(this.storage.maxZ)}), 4, 24, 14737632);
-        super.a(i, j, f);
+    @Override
+    public void render(int i, int j, float f) {
+        fill(0, 0, this.width, this.height, -2147483648);
+        drawTextWithShadow(this.textManager, String.format("Min: (%d, %d, %d)", this.storage.minX, this.storage.minY, this.storage.minZ), 4, 4, 14737632);
+        drawTextWithShadow(this.textManager, String.format("Max: (%d, %d, %d)", this.storage.maxX, this.storage.maxY, this.storage.maxZ), 4, 24, 14737632);
+        super.render(i, j, f);
     }
 
     public static void showUI(TileEntityStorage storageClicked) {
         Minecraft.minecraftInstance.a(new GuiStorage(storageClicked));
     }
 
-    public boolean c() {
+    @Override
+    public boolean isPauseScreen() {
         return false;
     }
 }

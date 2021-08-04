@@ -54,17 +54,17 @@ public class ItemCursor extends ItemType {
 
     static int twoZ;
 
-    static int minX;
+    public static int minX;
 
-    static int minY;
+    public static int minY;
 
-    static int minZ;
+    public static int minZ;
 
-    static int maxX;
+    public static int maxX;
 
-    static int maxY;
+    public static int maxY;
 
-    static int maxZ;
+    public static int maxZ;
 
     static {
         bothSet = false;

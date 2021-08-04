@@ -7,187 +7,194 @@ import io.github.ryuu.adventurecraft.entities.tile.TileEntityMobSpawner;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.scripting.EntityDescriptions;
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemType;
+import net.minecraft.client.gui.Screen;
+import net.minecraft.client.gui.widgets.Button;
 
-public class GuiMobSpawner extends da {
+public class GuiMobSpawner extends Screen {
     private final TileEntityMobSpawner mobSpawner;
 
     public GuiMobSpawner(TileEntityMobSpawner ms) {
         this.mobSpawner = ms;
     }
 
-    public void a() {
+    @Override
+    public void tick() {
     }
-
-    public void b() {
-        this.e.clear();
-        this.spawnCountSlider = new GuiSlider2(50, 4, 44, 10, String.format("Spawn Count: %d", Integer.valueOf(this.mobSpawner.spawnNumber)), this.mobSpawner.spawnNumber / 15.0F);
-        this.respawnSlider = new GuiSlider2(51, this.c / 2, 44, 10, String.format("Respawn Delay: %.1f", Float.valueOf(this.mobSpawner.respawnDelay / 20.0F)), this.mobSpawner.respawnDelay / 12000.0F);
-        this.spawnCountSlider.a = 200;
-        this.respawnSlider.a = 200;
-        this.e.add(this.spawnCountSlider);
-        this.e.add(this.respawnSlider);
-        ke b = new ke(53, this.c / 2, 4, 200, 18, "Spawn On Trigger");
+    
+    @Override
+    public void init() {
+        this.buttons.clear();
+        this.spawnCountSlider = new GuiSlider2(50, 4, 44, 10, String.format("Spawn Count: %d", this.mobSpawner.spawnNumber), this.mobSpawner.spawnNumber / 15.0F);
+        this.respawnSlider = new GuiSlider2(51, this.width / 2, 44, 10, String.format("Respawn Delay: %.1f", this.mobSpawner.respawnDelay / 20.0F), this.mobSpawner.respawnDelay / 12000.0F);
+        this.spawnCountSlider.width = 200;
+        this.respawnSlider.width = 200;
+        this.buttons.add(this.spawnCountSlider);
+        this.buttons.add(this.respawnSlider);
+        Button b = new Button(53, this.width / 2, 4, 200, 18, "Spawn On Trigger");
         if (!this.mobSpawner.spawnOnTrigger)
             if (this.mobSpawner.spawnOnDetrigger) {
-                b.e = "Spawn on Detrigger";
+                b.text = "Spawn on Detrigger";
             } else {
-                b.e = "Spawn on Timer";
+                b.text = "Spawn on Timer";
             }
-        this.e.add(b);
-        b = new ke(55, this.c / 2, 24, 200, 18, String.format("Spawn: (%d, %d, %d), (%d, %d, %d)", new Object[]{Integer.valueOf(this.mobSpawner.minSpawnVec.x), Integer.valueOf(this.mobSpawner.minSpawnVec.y), Integer.valueOf(this.mobSpawner.minSpawnVec.z), Integer.valueOf(this.mobSpawner.maxSpawnVec.x), Integer.valueOf(this.mobSpawner.maxSpawnVec.y), Integer.valueOf(this.mobSpawner.maxSpawnVec.z)}));
-        this.e.add(b);
-        int buttonWidth = (this.c - 16) / 4;
-        this.e.add(new ke(57, 4, 64, buttonWidth, 18, "Select Spawn"));
-        this.e.add(new ke(58, 4 + 4 + buttonWidth, 64, buttonWidth, 18, "Select Drops"));
-        this.e.add(new ke(59, 4 + 2 * (4 + buttonWidth), 64, buttonWidth, 18, "Select Triggers"));
-        this.e.add(new ke(60, 4 + 3 * (4 + buttonWidth), 64, buttonWidth, 18, "Select Scripts"));
+        this.buttons.add(b);
+        b = new Button(55, this.width / 2, 24, 200, 18, String.format("Spawn: (%d, %d, %d), (%d, %d, %d)", this.mobSpawner.minSpawnVec.x, this.mobSpawner.minSpawnVec.y, this.mobSpawner.minSpawnVec.z, this.mobSpawner.maxSpawnVec.x, this.mobSpawner.maxSpawnVec.y, this.mobSpawner.maxSpawnVec.z));
+        this.buttons.add(b);
+        int buttonWidth = (this.width - 16) / 4;
+        this.buttons.add(new Button(57, 4, 64, buttonWidth, 18, "Select Spawn"));
+        this.buttons.add(new Button(58, 4 + 4 + buttonWidth, 64, buttonWidth, 18, "Select Drops"));
+        this.buttons.add(new Button(59, 4 + 2 * (4 + buttonWidth), 64, buttonWidth, 18, "Select Triggers"));
+        this.buttons.add(new Button(60, 4 + 3 * (4 + buttonWidth), 64, buttonWidth, 18, "Select Scripts"));
         if (this.displayScreen == 0) {
             int i = 0;
             String itemToSpawn = "Spawn Item/Block: None";
-            if (gm.c[this.mobSpawner.spawnID] != null)
-                itemToSpawn = String.format("Spawn Item/Block: %s", new Object[]{gm.c[this.mobSpawner.spawnID].a()});
-            this.e.add(new ke(56, 2, 84, 200, 14, itemToSpawn));
+            if (ItemType.byId[this.mobSpawner.spawnID] != null)
+                itemToSpawn = String.format("Spawn Item/Block: %s", ItemType.byId[this.mobSpawner.spawnID].getTranslationKey());
+            this.buttons.add(new Button(56, 2, 84, 200, 14, itemToSpawn));
             for (String entityID : entityTypes) {
-                this.e.add(new ke(i, 2 + (buttonWidth + 4) * i % 4, (i / 4 + 1) * 14 + 84, buttonWidth, 13, entityID));
+                this.buttons.add(new Button(i, 2 + (buttonWidth + 4) * i % 4, (i / 4 + 1) * 14 + 84, buttonWidth, 13, entityID));
                 i++;
             }
             for (String descName : EntityDescriptions.getDescriptions()) {
-                this.e.add(new ke(i, 2 + (buttonWidth + 4) * i % 4, (i / 4 + 1) * 14 + 84, buttonWidth, 13, descName + " (Scripted)"));
+                this.buttons.add(new Button(i, 2 + (buttonWidth + 4) * i % 4, (i / 4 + 1) * 14 + 84, buttonWidth, 13, descName + " (Scripted)"));
                 i++;
             }
         } else if (this.displayScreen == 1) {
-            b = new ke(52, 4, 84, 200, 18, "Drop Nothing");
+            b = new Button(52, 4, 84, 200, 18, "Drop Nothing");
             if (this.mobSpawner.dropItem > 0)
-                if (this.mobSpawner.dropItem == Items.doorKey.bf) {
-                    b.e = "Drop key";
-                } else if (this.mobSpawner.dropItem == Items.heartContainer.bf) {
-                    b.e = "Drop heart container";
-                } else if (this.mobSpawner.dropItem == Items.bossKey.bf) {
-                    b.e = "Drop boss key";
+                if (this.mobSpawner.dropItem == Items.doorKey.id) {
+                    b.text = "Drop key";
+                } else if (this.mobSpawner.dropItem == Items.heartContainer.id) {
+                    b.text = "Drop heart container";
+                } else if (this.mobSpawner.dropItem == Items.bossKey.id) {
+                    b.text = "Drop boss key";
                 }
-            this.e.add(b);
+            this.buttons.add(b);
         } else if (this.displayScreen == 2) {
             for (int trigger = 0; trigger < 8; trigger++) {
                 String isSet = ": Not Set";
                 if (this.mobSpawner.isTriggerSet(trigger))
                     isSet = ": Set";
                 if (trigger < 4) {
-                    b = new ke(70 + trigger, 4, 84 + trigger * 19, 200, 18, "Trigger ".concat(Integer.toString(trigger)).concat(isSet));
+                    b = new Button(70 + trigger, 4, 84 + trigger * 19, 200, 18, "Trigger ".concat(Integer.toString(trigger)).concat(isSet));
                 } else {
-                    b = new ke(70 + trigger, this.c / 2, 84 + (trigger - 4) * 19, 200, 18, "OnDeath Trigger ".concat(Integer.toString(trigger)).concat(isSet));
+                    b = new Button(70 + trigger, this.width / 2, 84 + (trigger - 4) * 19, 200, 18, "OnDeath Trigger ".concat(Integer.toString(trigger)).concat(isSet));
                 }
-                this.e.add(b);
+                this.buttons.add(b);
             }
         } else if (this.displayScreen == 3) {
             this.selectedID = 0;
-            this.setOnTrigger = new ke(61, 4, 84, "OnSpawn (selected): " + this.mobSpawner.onTriggerScriptFile);
-            this.setOnDetrigger = new ke(62, this.c / 2, 84, "OnDeath: " + this.mobSpawner.onDetriggerScriptFile);
-            this.setOnUpdate = new ke(63, 4, 104, "OnUpdate: " + this.mobSpawner.onUpdateScriptFile);
-            this.e.add(this.setOnTrigger);
-            this.e.add(this.setOnDetrigger);
-            this.e.add(this.setOnUpdate);
-            this.e.add(new ke(64, this.c / 2, 104, 200, 20, "Reload Scripts"));
-            this.e.add(new ke(65, 4, 124, (this.c - 12) / 3, 18, "None"));
+            this.setOnTrigger = new Button(61, 4, 84, "OnSpawn (selected): " + this.mobSpawner.onTriggerScriptFile);
+            this.setOnDetrigger = new Button(62, this.width / 2, 84, "OnDeath: " + this.mobSpawner.onDetriggerScriptFile);
+            this.setOnUpdate = new Button(63, 4, 104, "OnUpdate: " + this.mobSpawner.onUpdateScriptFile);
+            this.buttons.add(this.setOnTrigger);
+            this.buttons.add(this.setOnDetrigger);
+            this.buttons.add(this.setOnUpdate);
+            this.buttons.add(new Button(64, this.width / 2, 104, 200, 20, "Reload Scripts"));
+            this.buttons.add(new Button(65, 4, 124, (this.width - 12) / 3, 18, "None"));
             String[] scripts = getScriptFiles();
             if (scripts != null) {
                 int i = 1;
                 for (String scriptFile : scripts) {
-                    b = new ke(119 + i, 4 + i % 3 * (this.c - 8) / 3, 124 + i / 3 * 20, (this.c - 12) / 3, 18, scriptFile);
-                    this.e.add(b);
+                    b = new Button(119 + i, 4 + i % 3 * (this.width - 8) / 3, 124 + i / 3 * 20, (this.width - 12) / 3, 18, scriptFile);
+                    this.buttons.add(b);
                     i++;
                 }
             }
         }
     }
 
-    protected void a(ke guibutton) {
-        if (guibutton.f < 50) {
-            this.mobSpawner.entityID = guibutton.e;
-        } else if (guibutton.f == 52) {
-            if (this.mobSpawner.dropItem == Items.doorKey.bf) {
-                guibutton.e = "Drop heart container";
-                this.mobSpawner.dropItem = Items.heartContainer.bf;
-            } else if (this.mobSpawner.dropItem == Items.heartContainer.bf) {
-                guibutton.e = "Drop boss key";
-                this.mobSpawner.dropItem = Items.bossKey.bf;
-            } else if (this.mobSpawner.dropItem == Items.bossKey.bf) {
-                guibutton.e = "Drop nothing";
+    @Override
+    protected void buttonClicked(Button guibutton) {
+        if (guibutton.id < 50) {
+            this.mobSpawner.entityID = guibutton.text;
+        } else if (guibutton.id == 52) {
+            if (this.mobSpawner.dropItem == Items.doorKey.id) {
+                guibutton.text = "Drop heart container";
+                this.mobSpawner.dropItem = Items.heartContainer.id;
+            } else if (this.mobSpawner.dropItem == Items.heartContainer.id) {
+                guibutton.text = "Drop boss key";
+                this.mobSpawner.dropItem = Items.bossKey.id;
+            } else if (this.mobSpawner.dropItem == Items.bossKey.id) {
+                guibutton.text = "Drop nothing";
                 this.mobSpawner.dropItem = 0;
             } else {
-                guibutton.e = "Drop key";
-                this.mobSpawner.dropItem = Items.doorKey.bf;
+                guibutton.text = "Drop key";
+                this.mobSpawner.dropItem = Items.doorKey.id;
             }
-        } else if (guibutton.f == 53) {
+        } else if (guibutton.id == 53) {
             if (this.mobSpawner.spawnOnTrigger) {
                 this.mobSpawner.spawnOnTrigger = false;
                 this.mobSpawner.spawnOnDetrigger = true;
-                guibutton.e = "Spawn On Detrigger";
+                guibutton.text = "Spawn On Detrigger";
             } else if (this.mobSpawner.spawnOnDetrigger) {
                 this.mobSpawner.spawnOnDetrigger = false;
-                guibutton.e = "Spawn On Timer";
+                guibutton.text = "Spawn On Timer";
             } else {
                 this.mobSpawner.spawnOnTrigger = true;
-                guibutton.e = "Spawn on Trigger";
+                guibutton.text = "Spawn on Trigger";
             }
-        } else if (guibutton.f == 55) {
+        } else if (guibutton.id == 55) {
             this.mobSpawner.setSpawnVec();
-            guibutton.e = String.format("Spawn: (%d, %d, %d), (%d, %d, %d)", new Object[]{Integer.valueOf(this.mobSpawner.minSpawnVec.x), Integer.valueOf(this.mobSpawner.minSpawnVec.y), Integer.valueOf(this.mobSpawner.minSpawnVec.z), Integer.valueOf(this.mobSpawner.maxSpawnVec.x), Integer.valueOf(this.mobSpawner.maxSpawnVec.y), Integer.valueOf(this.mobSpawner.maxSpawnVec.z)});
-        } else if (guibutton.f == 56) {
-            if (this.b.h.c.b() != null) {
-                this.mobSpawner.spawnID = (this.b.h.c.b()).c;
-                this.mobSpawner.spawnMeta = this.b.h.c.b().i();
+            guibutton.text = String.format("Spawn: (%d, %d, %d), (%d, %d, %d)", this.mobSpawner.minSpawnVec.x, this.mobSpawner.minSpawnVec.y, this.mobSpawner.minSpawnVec.z, this.mobSpawner.maxSpawnVec.x, this.mobSpawner.maxSpawnVec.y, this.mobSpawner.maxSpawnVec.z);
+        } else if (guibutton.id == 56) {
+            if (this.minecraft.player.inventory.getHeldItem() != null) {
+                this.mobSpawner.spawnID = (this.minecraft.player.inventory.getHeldItem()).itemId;
+                this.mobSpawner.spawnMeta = this.minecraft.player.inventory.getHeldItem().getDamage();
             } else {
                 this.mobSpawner.spawnID = 0;
                 this.mobSpawner.spawnMeta = 0;
             }
             String itemToSpawn = "Spawn Item/Block: None";
-            if (gm.c[this.mobSpawner.spawnID] != null)
-                itemToSpawn = String.format("Spawn Item/Block: %s", new Object[]{gm.c[this.mobSpawner.spawnID].a()});
-            guibutton.e = itemToSpawn;
-        } else if (guibutton.f >= 57 && guibutton.f <= 60) {
-            this.displayScreen = guibutton.f - 57;
-            b();
-        } else if (guibutton.f >= 61 && guibutton.f <= 63) {
-            this.selectedID = guibutton.f - 61;
+            if (ItemType.byId[this.mobSpawner.spawnID] != null)
+                itemToSpawn = String.format("Spawn Item/Block: %s", ItemType.byId[this.mobSpawner.spawnID].getTranslationKey());
+            guibutton.text = itemToSpawn;
+        } else if (guibutton.id >= 57 && guibutton.id <= 60) {
+            this.displayScreen = guibutton.id - 57;
+            init();
+        } else if (guibutton.id >= 61 && guibutton.id <= 63) {
+            this.selectedID = guibutton.id - 61;
             resetNames();
-        } else if (guibutton.f == 64) {
-            this.mobSpawner.d.scriptHandler.loadScripts();
+        } else if (guibutton.id == 64) {
+            this.mobSpawner.level.scriptHandler.loadScripts();
             resetNames();
-        } else if (guibutton.f == 65) {
+        } else if (guibutton.id == 65) {
             updateScriptFile("");
             resetNames();
-        } else if (guibutton.f >= 120) {
-            updateScriptFile(guibutton.e);
+        } else if (guibutton.id >= 120) {
+            updateScriptFile(guibutton.text);
             resetNames();
-        } else if (guibutton.f >= 70 && guibutton.f < 120) {
-            int i = guibutton.f - 70;
+        } else if (guibutton.id >= 70 && guibutton.id < 120) {
+            int i = guibutton.id - 70;
             if (this.mobSpawner.isTriggerSet(i)) {
                 this.mobSpawner.setCursor(i);
                 this.mobSpawner.clearTrigger(i);
-                guibutton.e = "Trigger ".concat(Integer.toString(i)).concat(": Not Set");
+                guibutton.text = "Trigger ".concat(Integer.toString(i)).concat(": Not Set");
             } else {
                 this.mobSpawner.setTrigger(i);
-                guibutton.e = "Trigger ".concat(Integer.toString(i)).concat(": Set");
+                guibutton.text = "Trigger ".concat(Integer.toString(i)).concat(": Set");
             }
         }
     }
 
-    public void a(int i, int j, float f) {
-        a(0, 0, this.c, this.d, -2147483648);
-        b(this.g, String.format("Entity Spawn: %s", new Object[]{this.mobSpawner.entityID}), 4, 4, 14737632);
-        b(this.g, String.format("Entities Alive: %d", new Object[]{Integer.valueOf(this.mobSpawner.getNumAlive())}), 4, 14, 14737632);
-        b(this.g, String.format("Respawn In: %.1fs", new Object[]{Float.valueOf(this.mobSpawner.delay / 20.0F)}), 4, 24, 14737632);
+    @Override
+    public void render(int i, int j, float f) {
+        fill(0, 0, this.width, this.height, -2147483648);
+        drawTextWithShadow(this.textManager, String.format("Entity Spawn: %s", this.mobSpawner.entityID), 4, 4, 14737632);
+        drawTextWithShadow(this.textManager, String.format("Entities Alive: %d", this.mobSpawner.getNumAlive()), 4, 14, 14737632);
+        drawTextWithShadow(this.textManager, String.format("Respawn In: %.1fs", this.mobSpawner.delay / 20.0F), 4, 24, 14737632);
         if (this.mobSpawner.hasDroppedItem) {
-            b(this.g, "Has Dropped An Item", 4, 34, 14737632);
+            drawTextWithShadow(this.textManager, "Has Dropped An Item", 4, 34, 14737632);
         } else {
-            b(this.g, "Has Not Dropped An Item", 4, 34, 14737632);
+            drawTextWithShadow(this.textManager, "Has Not Dropped An Item", 4, 34, 14737632);
         }
         this.mobSpawner.spawnNumber = (int) (this.spawnCountSlider.sliderValue * 15.0F + 0.5F);
-        this.spawnCountSlider.e = String.format("Spawn Count: %d", new Object[]{Integer.valueOf(this.mobSpawner.spawnNumber)});
+        this.spawnCountSlider.text = String.format("Spawn Count: %d", this.mobSpawner.spawnNumber);
         this.mobSpawner.respawnDelay = (int) (this.respawnSlider.sliderValue * 12000.0F + 0.5F);
-        this.respawnSlider.e = String.format("Respawn Delay: %.1fs", new Object[]{Float.valueOf(this.mobSpawner.respawnDelay / 20.0F)});
-        super.a(i, j, f);
-        this.mobSpawner.d.b(this.mobSpawner.e, this.mobSpawner.g).g();
+        this.respawnSlider.text = String.format("Respawn Delay: %.1fs", this.mobSpawner.respawnDelay / 20.0F);
+        super.render(i, j, f);
+        this.mobSpawner.level.getChunk(this.mobSpawner.x, this.mobSpawner.z).method_885();
     }
 
     public static void showUI(TileEntityMobSpawner ms) {
@@ -199,15 +206,15 @@ public class GuiMobSpawner extends da {
     }
 
     private void resetNames() {
-        this.setOnTrigger.e = "OnSpawn: " + this.mobSpawner.onTriggerScriptFile;
-        this.setOnDetrigger.e = "OnDeath: " + this.mobSpawner.onDetriggerScriptFile;
-        this.setOnUpdate.e = "OnUpdate: " + this.mobSpawner.onUpdateScriptFile;
+        this.setOnTrigger.text = "OnSpawn: " + this.mobSpawner.onTriggerScriptFile;
+        this.setOnDetrigger.text = "OnDeath: " + this.mobSpawner.onDetriggerScriptFile;
+        this.setOnUpdate.text = "OnUpdate: " + this.mobSpawner.onUpdateScriptFile;
         if (this.selectedID == 0) {
-            this.setOnTrigger.e = "OnSpawn (selected): " + this.mobSpawner.onTriggerScriptFile;
+            this.setOnTrigger.text = "OnSpawn (selected): " + this.mobSpawner.onTriggerScriptFile;
         } else if (this.selectedID == 1) {
-            this.setOnDetrigger.e = "OnDeath (selected): " + this.mobSpawner.onDetriggerScriptFile;
+            this.setOnDetrigger.text = "OnDeath (selected): " + this.mobSpawner.onDetriggerScriptFile;
         } else if (this.selectedID == 2) {
-            this.setOnUpdate.e = "OnUpdate (selected): " + this.mobSpawner.onUpdateScriptFile;
+            this.setOnUpdate.text = "OnUpdate (selected): " + this.mobSpawner.onUpdateScriptFile;
         }
     }
 
@@ -222,7 +229,7 @@ public class GuiMobSpawner extends da {
     }
 
     private String[] getScriptFiles() {
-        File scriptDir = new File(this.b.f.levelDir, "scripts");
+        File scriptDir = new File(this.minecraft.level.levelDir, "scripts");
         if (scriptDir.exists() && scriptDir.isDirectory()) {
             File[] scriptFiles = scriptDir.listFiles();
             String[] fileNames = new String[scriptFiles.length];
@@ -234,7 +241,7 @@ public class GuiMobSpawner extends da {
         return null;
     }
 
-    private static final ArrayList<String> entityTypes = new ArrayList<String>();
+    private static final ArrayList<String> entityTypes = new ArrayList<>();
 
     private GuiSlider2 spawnCountSlider;
 
@@ -244,11 +251,11 @@ public class GuiMobSpawner extends da {
 
     private int displayScreen;
 
-    ke setOnTrigger;
+    Button setOnTrigger;
 
-    ke setOnDetrigger;
+    Button setOnDetrigger;
 
-    ke setOnUpdate;
+    Button setOnUpdate;
 
     int selectedID;
 

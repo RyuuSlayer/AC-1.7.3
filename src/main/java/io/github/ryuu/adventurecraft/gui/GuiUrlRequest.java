@@ -6,8 +6,11 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
+import net.minecraft.client.gui.widgets.Button;
+import net.minecraft.client.gui.widgets.OptionButton;
 
-public class GuiUrlRequest extends da {
+public class GuiUrlRequest extends Screen {
     private final String url;
 
     private final String msg;
@@ -21,16 +24,19 @@ public class GuiUrlRequest extends da {
         this.msg = m;
     }
 
-    public void a() {
+    @Override
+    public void tick() {
     }
 
-    public void b() {
-        this.e.add(new ab(0, this.c / 2 - 75, this.d / 2 + 10, "Open URL"));
-        this.e.add(new ab(1, this.c / 2 - 75, this.d / 2 + 32, "Don't Open"));
+    @Override
+    public void init() {
+        this.buttons.add(new OptionButton(0, this.width / 2 - 75, this.height / 2 + 10, "Open URL"));
+        this.buttons.add(new OptionButton(1, this.width / 2 - 75, this.height / 2 + 32, "Don't Open"));
     }
 
-    protected void a(ke guibutton) {
-        if (guibutton.f == 0) {
+    @Override
+    protected void buttonClicked(Button guibutton) {
+        if (guibutton.id == 0) {
             Desktop desktop = Desktop.getDesktop();
             if (desktop.isSupported(Desktop.Action.BROWSE))
                 try {
@@ -41,14 +47,15 @@ public class GuiUrlRequest extends da {
                     e.printStackTrace();
                 }
         }
-        this.b.a(null);
+        this.minecraft.openScreen(null);
     }
 
-    public void a(int i, int j, float f) {
-        a(0, 0, this.c, this.d, -2147483648);
-        b(this.g, this.msg, this.c / 2 - this.g.a(this.msg) / 2, this.d / 2 - 15, 14737632);
-        b(this.g, this.url, this.c / 2 - this.g.a(this.url) / 2, this.d / 2, 14737632);
-        super.a(i, j, f);
+    @Override
+    public void render(int i, int j, float f) {
+        fill(0, 0, this.width, this.height, -2147483648);
+        drawTextWithShadow(this.textManager, this.msg, this.width / 2 - this.textManager.getTextWidth(this.msg) / 2, this.height / 2 - 15, 14737632);
+        drawTextWithShadow(this.textManager, this.url, this.width / 2 - this.textManager.getTextWidth(this.url) / 2, this.height / 2, 14737632);
+        super.render(i, j, f);
     }
 
     public static void showUI(String url) {
@@ -59,7 +66,8 @@ public class GuiUrlRequest extends da {
         Minecraft.minecraftInstance.a(new GuiUrlRequest(url, msg));
     }
 
-    public boolean c() {
+    @Override
+    public boolean isPauseScreen() {
         return true;
     }
 }

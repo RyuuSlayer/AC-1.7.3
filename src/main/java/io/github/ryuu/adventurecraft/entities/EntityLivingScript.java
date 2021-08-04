@@ -8,6 +8,7 @@ import io.github.ryuu.adventurecraft.scripting.ScriptEntityDescription;
 import io.github.ryuu.adventurecraft.util.CoordBlock;
 import io.github.ryuu.adventurecraft.util.IEntityPather;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.util.io.CompoundTag;
@@ -15,7 +16,7 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
-public class EntityLivingScript extends Level implements IEntityPather {
+public class EntityLivingScript extends LivingEntity implements IEntityPather {
     String initDescTo;
 
     String descriptionName;
@@ -50,7 +51,7 @@ public class EntityLivingScript extends Level implements IEntityPather {
 
     private double prevDistToPoint;
 
-    TileEntityNpcPath triggerOnPath;
+    public TileEntityNpcPath triggerOnPath;
 
     public EntityLivingScript(Level w) {
         super(w);

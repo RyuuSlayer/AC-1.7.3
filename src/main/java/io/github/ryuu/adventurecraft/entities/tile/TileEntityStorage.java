@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.items.ItemCursor;
 import net.minecraft.client.Minecraft;
-import net.minecraft.src.NBTTagCompound;
 import net.minecraft.util.io.CompoundTag;
 
 public class TileEntityStorage extends TileEntityMinMax {
@@ -13,9 +12,9 @@ public class TileEntityStorage extends TileEntityMinMax {
 
     byte[] metadatas = null;
 
-    ArrayList<NBTTagCompound> tileEntities = new ArrayList<NBTTagCompound>();
+    ArrayList<CompoundTag> tileEntities = new ArrayList<>();
 
-    void setArea() {
+    public void setArea() {
         this.minX = ItemCursor.minX;
         this.minY = ItemCursor.minY;
         this.minZ = ItemCursor.minZ;
@@ -31,7 +30,7 @@ public class TileEntityStorage extends TileEntityMinMax {
         saveCurrentArea();
     }
 
-    void saveCurrentArea() {
+    public void saveCurrentArea() {
         int offset = 0;
         this.tileEntities.clear();
         for (int x = this.minX; x <= this.maxX; x++) {
@@ -54,7 +53,7 @@ public class TileEntityStorage extends TileEntityMinMax {
         this.d.b(this.e, this.g).g();
     }
 
-    void loadCurrentArea() {
+    public void loadCurrentArea() {
         if (this.blockIDs == null)
             return;
         int offset = 0;

@@ -2,9 +2,12 @@ package io.github.ryuu.adventurecraft.gui;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityWeather;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
+import net.minecraft.client.gui.widgets.Button;
+import net.minecraft.client.gui.widgets.OptionButton;
 import net.minecraft.level.Level;
 
-public class GuiWeather extends da {
+public class GuiWeather extends Screen {
     private final TileEntityWeather weather;
 
     private GuiSlider2 tempOffset;
@@ -17,48 +20,51 @@ public class GuiWeather extends da {
         this.weather = w;
     }
 
-    public void a() {
+    @Override
+    public void tick() {
     }
 
-    public void b() {
-        ab b = new ab(0, 4, 0, "Don't Change Precipitation");
-        this.e.add(b);
+    @Override
+    public void init() {
+        OptionButton b = new OptionButton(0, 4, 0, "Don't Change Precipitation");
+        this.buttons.add(b);
         if (this.weather.changePrecipitate)
             if (this.weather.precipitate) {
-                b.e = "Start Precipitation";
+                b.text = "Start Precipitation";
             } else {
-                b.e = "Stop Precipitation";
+                b.text = "Stop Precipitation";
             }
-        b = new ab(1, 4, 22, "Don't Change Temperature");
-        this.e.add(b);
+        b = new OptionButton(1, 4, 22, "Don't Change Temperature");
+        this.buttons.add(b);
         if (this.weather.changeTempOffset)
-            b.e = "Change Temperature";
-        this.tempOffset = new GuiSlider2(2, 4, 44, 10, String.format("Temp Offset: %.2f", Double.valueOf(this.weather.tempOffset)), (float) ((this.weather.tempOffset + 1.0D) / 2.0D));
-        this.e.add(this.tempOffset);
-        b = new ab(3, 4, 66, "Don't Change Time");
-        this.e.add(b);
+            b.text = "Change Temperature";
+        this.tempOffset = new GuiSlider2(2, 4, 44, 10, String.format("Temp Offset: %.2f", this.weather.tempOffset), (float) ((this.weather.tempOffset + 1.0D) / 2.0D));
+        this.buttons.add(this.tempOffset);
+        b = new OptionButton(3, 4, 66, "Don't Change Time");
+        this.buttons.add(b);
         if (this.weather.changeTimeOfDay)
-            b.e = "Change Time";
-        this.timeOfDay = new GuiSlider2(4, 4, 88, 10, String.format("Time: %d", Integer.valueOf(this.weather.timeOfDay)), this.weather.timeOfDay / 24000.0F);
-        this.e.add(this.timeOfDay);
-        b = new ab(5, 4, 110, "Don't Change Time Rate");
-        this.e.add(b);
+            b.text = "Change Time";
+        this.timeOfDay = new GuiSlider2(4, 4, 88, 10, String.format("Time: %d", this.weather.timeOfDay), this.weather.timeOfDay / 24000.0F);
+        this.buttons.add(this.timeOfDay);
+        b = new OptionButton(5, 4, 110, "Don't Change Time Rate");
+        this.buttons.add(b);
         if (this.weather.changeTimeRate)
-            b.e = "Change Time Rate";
-        this.timeRate = new GuiSlider2(6, 4, 132, 10, String.format("Time Rate: %.2f", Float.valueOf(this.weather.timeRate)), (this.weather.timeRate + 16.0F) / 32.0F);
-        this.e.add(this.timeRate);
-        b = new ab(7, 4, 152, "Don't Change Thundering");
-        this.e.add(b);
+            b.text = "Change Time Rate";
+        this.timeRate = new GuiSlider2(6, 4, 132, 10, String.format("Time Rate: %.2f", this.weather.timeRate), (this.weather.timeRate + 16.0F) / 32.0F);
+        this.buttons.add(this.timeRate);
+        b = new OptionButton(7, 4, 152, "Don't Change Thundering");
+        this.buttons.add(b);
         if (this.weather.changeThundering)
             if (this.weather.thundering) {
-                b.e = "Start Thundering";
+                b.text = "Start Thundering";
             } else {
-                b.e = "Stop Thundering";
+                b.text = "Stop Thundering";
             }
     }
 
-    protected void a(ke guibutton) {
-        if (guibutton.f == 0) {
+    @Override
+    protected void buttonClicked(Button guibutton) {
+        if (guibutton.id == 0) {
             if (this.weather.changePrecipitate && this.weather.precipitate) {
                 this.weather.precipitate = false;
             } else if (this.weather.changePrecipitate && !this.weather.precipitate) {
@@ -69,15 +75,15 @@ public class GuiWeather extends da {
             }
             if (this.weather.changePrecipitate) {
                 if (this.weather.precipitate) {
-                    guibutton.e = "Start Precipitation";
+                    guibutton.text = "Start Precipitation";
                 } else {
-                    guibutton.e = "Stop Precipitation";
+                    guibutton.text = "Stop Precipitation";
                 }
             } else {
-                guibutton.e = "Don't Change Precipitation";
+                guibutton.text = "Don't Change Precipitation";
             }
         }
-        if (guibutton.f == 7) {
+        if (guibutton.id == 7) {
             if (this.weather.changeThundering && this.weather.thundering) {
                 this.weather.thundering = false;
             } else if (this.weather.changeThundering && !this.weather.thundering) {
@@ -88,53 +94,55 @@ public class GuiWeather extends da {
             }
             if (this.weather.changeThundering) {
                 if (this.weather.thundering) {
-                    guibutton.e = "Start Thundering";
+                    guibutton.text = "Start Thundering";
                 } else {
-                    guibutton.e = "Stop Thundering";
+                    guibutton.text = "Stop Thundering";
                 }
             } else {
-                guibutton.e = "Don't Change Thundering";
+                guibutton.text = "Don't Change Thundering";
             }
-        } else if (guibutton.f == 1) {
+        } else if (guibutton.id == 1) {
             this.weather.changeTempOffset = !this.weather.changeTempOffset;
             if (this.weather.changeTempOffset) {
-                guibutton.e = "Change Temperature";
+                guibutton.text = "Change Temperature";
             } else {
-                guibutton.e = "Don't Change Temperature";
+                guibutton.text = "Don't Change Temperature";
             }
-        } else if (guibutton.f == 3) {
+        } else if (guibutton.id == 3) {
             this.weather.changeTimeOfDay = !this.weather.changeTimeOfDay;
             if (this.weather.changeTimeOfDay) {
-                guibutton.e = "Change Time";
+                guibutton.text = "Change Time";
             } else {
-                guibutton.e = "Don't Change Time";
+                guibutton.text = "Don't Change Time";
             }
-        } else if (guibutton.f == 5) {
+        } else if (guibutton.id == 5) {
             this.weather.changeTimeRate = !this.weather.changeTimeRate;
             if (this.weather.changeTimeRate) {
-                guibutton.e = "Change Time Rate";
+                guibutton.text = "Change Time Rate";
             } else {
-                guibutton.e = "Don't Change Time Rate";
+                guibutton.text = "Don't Change Time Rate";
             }
         }
     }
 
-    public void a(int i, int j, float f) {
-        a(0, 0, this.c, this.d, -2147483648);
+    @Override
+    public void render(int i, int j, float f) {
+        fill(0, 0, this.width, this.height, -2147483648);
         this.weather.tempOffset = this.tempOffset.sliderValue * 2.0D - 1.0D;
-        this.tempOffset.e = String.format("Temp Offset: %.2f", new Object[]{Double.valueOf(this.weather.tempOffset)});
+        this.tempOffset.text = String.format("Temp Offset: %.2f", this.weather.tempOffset);
         this.weather.timeOfDay = (int) (this.timeOfDay.sliderValue * 24000.0F);
-        this.timeOfDay.e = String.format("Time: %d", new Object[]{Integer.valueOf(this.weather.timeOfDay)});
+        this.timeOfDay.text = String.format("Time: %d", this.weather.timeOfDay);
         this.weather.timeRate = this.timeRate.sliderValue * 32.0F - 16.0F;
-        this.timeRate.e = String.format("Time Rate: %.2f", new Object[]{Float.valueOf(this.weather.timeRate)});
-        super.a(i, j, f);
+        this.timeRate.text = String.format("Time Rate: %.2f", this.weather.timeRate);
+        super.render(i, j, f);
     }
 
     public static void showUI(Level worldArg, TileEntityWeather w) {
         Minecraft.minecraftInstance.a(new GuiWeather(worldArg, w));
     }
 
-    public boolean c() {
+    @Override
+    public boolean isPauseScreen() {
         return false;
     }
 }

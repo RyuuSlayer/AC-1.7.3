@@ -3,9 +3,12 @@ package io.github.ryuu.adventurecraft.gui;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityTriggerInverter;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
+import net.minecraft.client.gui.widgets.Button;
+import net.minecraft.client.gui.widgets.OptionButton;
 import net.minecraft.level.Level;
 
-public class GuiTriggerInverter extends da {
+public class GuiTriggerInverter extends Screen {
     private final TileEntityTriggerInverter trigger;
 
     private final int blockX;
@@ -24,32 +27,37 @@ public class GuiTriggerInverter extends da {
         this.trigger = triggerClicked;
     }
 
-    public void a() {
+    @Override
+    public void tick() {
     }
 
-    public void b() {
-        this.e.add(new ab(0, 4, 40, "Use Current Selection"));
+    @Override
+    public void init() {
+        this.buttons.add(new OptionButton(0, 4, 40, "Use Current Selection"));
     }
 
-    protected void a(ke guibutton) {
-        int blockID = this.world.a(this.blockX, this.blockY, this.blockZ);
-        if (blockID == Blocks.triggerInverter.bn)
+    @Override
+    protected void buttonClicked(Button guibutton) {
+        int blockID = this.world.getTileId(this.blockX, this.blockY, this.blockZ);
+        if (blockID == Blocks.triggerInverter.id)
             Blocks.triggerInverter.setTriggerToSelection(this.world, this.blockX, this.blockY, this.blockZ);
-        this.world.b(this.blockX, this.blockZ).g();
+        this.world.getChunk(this.blockX, this.blockZ).method_885();
     }
 
-    public void a(int i, int j, float f) {
-        a(0, 0, this.c, this.d, -2147483648);
-        b(this.g, String.format("Min: (%d, %d, %d)", new Object[]{Integer.valueOf(this.trigger.minX), Integer.valueOf(this.trigger.minY), Integer.valueOf(this.trigger.minZ)}), 4, 4, 14737632);
-        b(this.g, String.format("Max: (%d, %d, %d)", new Object[]{Integer.valueOf(this.trigger.maxX), Integer.valueOf(this.trigger.maxY), Integer.valueOf(this.trigger.maxZ)}), 4, 24, 14737632);
-        super.a(i, j, f);
+    @Override
+    public void render(int i, int j, float f) {
+        fill(0, 0, this.width, this.height, -2147483648);
+        drawTextWithShadow(this.textManager, String.format("Min: (%d, %d, %d)", this.trigger.minX, this.trigger.minY, this.trigger.minZ), 4, 4, 14737632);
+        drawTextWithShadow(this.textManager, String.format("Max: (%d, %d, %d)", this.trigger.maxX, this.trigger.maxY, this.trigger.maxZ), 4, 24, 14737632);
+        super.render(i, j, f);
     }
 
     public static void showUI(Level w, int x, int y, int z, TileEntityTriggerInverter triggerClicked) {
         Minecraft.minecraftInstance.a(new GuiTriggerInverter(w, x, y, z, triggerClicked));
     }
 
-    public boolean c() {
+    @Override
+    public boolean isPauseScreen() {
         return false;
     }
 }

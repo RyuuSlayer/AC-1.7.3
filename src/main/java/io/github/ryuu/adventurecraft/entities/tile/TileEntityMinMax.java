@@ -16,24 +16,26 @@ public class TileEntityMinMax extends TileEntity {
 
     public int maxZ;
 
-    public void a(nu nbttagcompound) {
-        super.a(nbttagcompound);
-        this.minX = nbttagcompound.e("minX");
-        this.minY = nbttagcompound.e("minY");
-        this.minZ = nbttagcompound.e("minZ");
-        this.maxX = nbttagcompound.e("maxX");
-        this.maxY = nbttagcompound.e("maxY");
-        this.maxZ = nbttagcompound.e("maxZ");
+    @Override
+    public void readIdentifyingData(CompoundTag nbttagcompound) {
+        super.readIdentifyingData(nbttagcompound);
+        this.minX = nbttagcompound.getInt("minX");
+        this.minY = nbttagcompound.getInt("minY");
+        this.minZ = nbttagcompound.getInt("minZ");
+        this.maxX = nbttagcompound.getInt("maxX");
+        this.maxY = nbttagcompound.getInt("maxY");
+        this.maxZ = nbttagcompound.getInt("maxZ");
     }
 
-    public void b(CompoundTag nbttagcompound) {
-        super.b(nbttagcompound);
-        nbttagcompound.a("minX", this.minX);
-        nbttagcompound.a("minY", this.minY);
-        nbttagcompound.a("minZ", this.minZ);
-        nbttagcompound.a("maxX", this.maxX);
-        nbttagcompound.a("maxY", this.maxY);
-        nbttagcompound.a("maxZ", this.maxZ);
+    @Override
+    public void writeIdentifyingData(CompoundTag nbttagcompound) {
+        super.writeIdentifyingData(nbttagcompound);
+        nbttagcompound.put("minX", this.minX);
+        nbttagcompound.put("minY", this.minY);
+        nbttagcompound.put("minZ", this.minZ);
+        nbttagcompound.put("maxX", this.maxX);
+        nbttagcompound.put("maxY", this.maxY);
+        nbttagcompound.put("maxZ", this.maxZ);
     }
 
     public boolean isSet() {

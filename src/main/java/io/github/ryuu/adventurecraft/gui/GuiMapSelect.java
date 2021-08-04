@@ -55,10 +55,10 @@ public class GuiMapSelect extends Screen {
         this.minecraft.mapList.findMaps();
         TranslationStorage stringtranslate = TranslationStorage.getInstance();
         if (this.saveName == null) {
-            this.buttons.add(new OptionButton(6, this.width / 2 + 5, this.height - 48, stringtranslate.a("gui.done")));
+            this.buttons.add(new OptionButton(6, this.width / 2 + 5, this.height - 48, stringtranslate.translate("gui.done")));
             this.buttons.add(new Button(7, this.width / 2 - 155, this.height - 48, 150, 20, "New Map"));
         } else {
-            this.buttons.add(new OptionButton(6, this.width / 2 - 75, this.height - 48, stringtranslate.a("gui.done")));
+            this.buttons.add(new OptionButton(6, this.width / 2 - 75, this.height - 48, stringtranslate.translate("gui.done")));
         }
         this.minecraft.texturePackManager.findTexturePacks();
         this.fileLocation = (new File(Minecraft.getGameDirectory(), "texturepacks")).getAbsolutePath();

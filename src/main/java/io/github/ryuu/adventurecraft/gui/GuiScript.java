@@ -4,15 +4,17 @@ import java.io.File;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityScript;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
+import net.minecraft.client.gui.widgets.Button;
 
-public class GuiScript extends da {
+public class GuiScript extends Screen {
     TileEntityScript script;
 
-    ke setOnTrigger;
+    Button setOnTrigger;
 
-    ke setOnDetrigger;
+    Button setOnDetrigger;
 
-    ke setOnUpdate;
+    Button setOnUpdate;
 
     int selectedID;
 
@@ -20,31 +22,32 @@ public class GuiScript extends da {
         this.script = s;
     }
 
-    public void b() {
+    @Override
+    public void init() {
         this.selectedID = 0;
-        this.setOnTrigger = new ke(0, 4, 4, "OnTrigger (selected): " + this.script.onTriggerScriptFile);
-        this.setOnDetrigger = new ke(1, 4, 26, "OnDetrigger: " + this.script.onDetriggerScriptFile);
-        this.setOnUpdate = new ke(2, 4, 48, "OnUpdate: " + this.script.onUpdateScriptFile);
-        this.e.add(this.setOnTrigger);
-        this.e.add(this.setOnDetrigger);
-        this.e.add(this.setOnUpdate);
-        ke b = new ke(3, 4, 70, 200, 20, "Reload Scripts");
-        this.e.add(b);
-        b = new ke(4, 4, 92, 160, 18, "None");
-        this.e.add(b);
+        this.setOnTrigger = new Button(0, 4, 4, "OnTrigger (selected): " + this.script.onTriggerScriptFile);
+        this.setOnDetrigger = new Button(1, 4, 26, "OnDetrigger: " + this.script.onDetriggerScriptFile);
+        this.setOnUpdate = new Button(2, 4, 48, "OnUpdate: " + this.script.onUpdateScriptFile);
+        this.buttons.add(this.setOnTrigger);
+        this.buttons.add(this.setOnDetrigger);
+        this.buttons.add(this.setOnUpdate);
+        Button b = new Button(3, 4, 70, 200, 20, "Reload Scripts");
+        this.buttons.add(b);
+        b = new Button(4, 4, 92, 160, 18, "None");
+        this.buttons.add(b);
         String[] scripts = getScriptFiles();
         if (scripts != null) {
             int i = 1;
             for (String scriptFile : scripts) {
-                b = new ke(4 + i, 4 + i % 3 * this.c / 3, 92 + i / 3 * 20, 160, 18, scriptFile);
-                this.e.add(b);
+                b = new Button(4 + i, 4 + i % 3 * this.width / 3, 92 + i / 3 * 20, 160, 18, scriptFile);
+                this.buttons.add(b);
                 i++;
             }
         }
     }
 
     private String[] getScriptFiles() {
-        File scriptDir = new File(this.b.f.levelDir, "scripts");
+        File scriptDir = new File(this.minecraft.level.levelDir, "scripts");
         if (scriptDir.exists() && scriptDir.isDirectory()) {
             File[] scriptFiles = scriptDir.listFiles();
             String[] fileNames = new String[scriptFiles.length];
@@ -57,27 +60,28 @@ public class GuiScript extends da {
     }
 
     private void resetNames() {
-        this.setOnTrigger.e = "OnTrigger: " + this.script.onTriggerScriptFile;
-        this.setOnDetrigger.e = "OnDetrigger: " + this.script.onDetriggerScriptFile;
-        this.setOnUpdate.e = "OnUpdate: " + this.script.onUpdateScriptFile;
+        this.setOnTrigger.text = "OnTrigger: " + this.script.onTriggerScriptFile;
+        this.setOnDetrigger.text = "OnDetrigger: " + this.script.onDetriggerScriptFile;
+        this.setOnUpdate.text = "OnUpdate: " + this.script.onUpdateScriptFile;
         if (this.selectedID == 0) {
-            this.setOnTrigger.e = "OnTrigger (selected): " + this.script.onTriggerScriptFile;
+            this.setOnTrigger.text = "OnTrigger (selected): " + this.script.onTriggerScriptFile;
         } else if (this.selectedID == 1) {
-            this.setOnDetrigger.e = "OnDetrigger (selected): " + this.script.onDetriggerScriptFile;
+            this.setOnDetrigger.text = "OnDetrigger (selected): " + this.script.onDetriggerScriptFile;
         } else if (this.selectedID == 2) {
-            this.setOnUpdate.e = "OnUpdate (selected): " + this.script.onUpdateScriptFile;
+            this.setOnUpdate.text = "OnUpdate (selected): " + this.script.onUpdateScriptFile;
         }
     }
 
-    protected void a(ke guibutton) {
-        if (guibutton.f < 3) {
-            this.selectedID = guibutton.f;
-        } else if (guibutton.f == 3) {
-            this.script.d.scriptHandler.loadScripts();
-        } else if (guibutton.f == 4) {
+    @Override
+    protected void buttonClicked(Button guibutton) {
+        if (guibutton.id < 3) {
+            this.selectedID = guibutton.id;
+        } else if (guibutton.id == 3) {
+            this.script.level.scriptHandler.loadScripts();
+        } else if (guibutton.id == 4) {
             updateScriptFile("");
         } else {
-            updateScriptFile(guibutton.e);
+            updateScriptFile(guibutton.text);
         }
         resetNames();
     }
@@ -92,16 +96,18 @@ public class GuiScript extends da {
         }
     }
 
-    public void a(int i, int j, float f) {
-        a(0, 0, this.c, this.d, -2147483648);
-        super.a(i, j, f);
+    @Override
+    public void render(int i, int j, float f) {
+        fill(0, 0, this.width, this.height, -2147483648);
+        super.render(i, j, f);
     }
 
     public static void showUI(TileEntityScript s) {
         Minecraft.minecraftInstance.a(new GuiScript(s));
     }
 
-    public boolean c() {
+    @Override
+    public boolean isPauseScreen() {
         return false;
     }
 }

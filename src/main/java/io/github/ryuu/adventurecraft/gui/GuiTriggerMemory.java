@@ -3,9 +3,12 @@ package io.github.ryuu.adventurecraft.gui;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityTriggerMemory;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
+import net.minecraft.client.gui.widgets.Button;
+import net.minecraft.client.gui.widgets.OptionButton;
 import net.minecraft.level.Level;
 
-public class GuiTriggerMemory extends da {
+public class GuiTriggerMemory extends Screen {
     private final TileEntityTriggerMemory trigger;
 
     private final int blockX;
@@ -24,61 +27,66 @@ public class GuiTriggerMemory extends da {
         this.trigger = triggerClicked;
     }
 
-    public void a() {
+    @Override
+    public void tick() {
     }
 
-    public void b() {
-        this.e.add(new ab(0, 4, 40, "Use Current Selection"));
-        ab b = new ab(1, 4, 60, "Activate on Trigger");
+    @Override
+    public void init() {
+        this.buttons.add(new OptionButton(0, 4, 40, "Use Current Selection"));
+        OptionButton b = new OptionButton(1, 4, 60, "Activate on Trigger");
         if (this.trigger.activateOnDetrigger)
-            b.e = "Activate on Detrigger";
-        this.e.add(b);
-        b = new ab(2, 4, 80, "Reset on Death");
+            b.text = "Activate on Detrigger";
+        this.buttons.add(b);
+        b = new OptionButton(2, 4, 80, "Reset on Death");
         if (!this.trigger.resetOnDeath)
-            b.e = "Don't Reset on Death";
-        this.e.add(b);
+            b.text = "Don't Reset on Death";
+        this.buttons.add(b);
     }
 
-    protected void a(ke guibutton) {
-        if (guibutton.f == 0) {
-            int blockID = this.world.a(this.blockX, this.blockY, this.blockZ);
-            if (blockID == Blocks.triggerMemory.bn)
+    @Override
+    protected void buttonClicked(Button guibutton) {
+        if (guibutton.id == 0) {
+            int blockID = this.world.getTileId(this.blockX, this.blockY, this.blockZ);
+            if (blockID == Blocks.triggerMemory.id)
                 Blocks.triggerMemory.setTriggerToSelection(this.world, this.blockX, this.blockY, this.blockZ);
-        } else if (guibutton.f == 1) {
+        } else if (guibutton.id == 1) {
             this.trigger.activateOnDetrigger = !this.trigger.activateOnDetrigger;
             if (this.trigger.activateOnDetrigger) {
-                guibutton.e = "Activate on Detrigger";
+                guibutton.text = "Activate on Detrigger";
             } else {
-                guibutton.e = "Activate on Trigger";
+                guibutton.text = "Activate on Trigger";
             }
-        } else if (guibutton.f == 2) {
+        } else if (guibutton.id == 2) {
             this.trigger.resetOnDeath = !this.trigger.resetOnDeath;
             if (this.trigger.resetOnDeath) {
-                guibutton.e = "Reset on Death";
+                guibutton.text = "Reset on Death";
             } else {
-                guibutton.e = "Don't Reset on Death";
+                guibutton.text = "Don't Reset on Death";
             }
         }
-        this.world.b(this.blockX, this.blockZ).g();
+        this.world.getChunk(this.blockX, this.blockZ).method_885();
     }
 
-    public void a(int i, int j, float f) {
-        a(0, 0, this.c, this.d, -2147483648);
-        b(this.g, String.format("Min: (%d, %d, %d)", new Object[]{Integer.valueOf(this.trigger.minX), Integer.valueOf(this.trigger.minY), Integer.valueOf(this.trigger.minZ)}), 4, 4, 14737632);
-        b(this.g, String.format("Max: (%d, %d, %d)", new Object[]{Integer.valueOf(this.trigger.maxX), Integer.valueOf(this.trigger.maxY), Integer.valueOf(this.trigger.maxZ)}), 4, 24, 14737632);
+    @Override
+    public void render(int i, int j, float f) {
+        fill(0, 0, this.width, this.height, -2147483648);
+        drawTextWithShadow(this.textManager, String.format("Min: (%d, %d, %d)", this.trigger.minX, this.trigger.minY, this.trigger.minZ), 4, 4, 14737632);
+        drawTextWithShadow(this.textManager, String.format("Max: (%d, %d, %d)", this.trigger.maxX, this.trigger.maxY, this.trigger.maxZ), 4, 24, 14737632);
         if (this.trigger.isActivated) {
-            b(this.g, "Memory Set", 4, 104, 14737632);
+            drawTextWithShadow(this.textManager, "Memory Set", 4, 104, 14737632);
         } else {
-            b(this.g, "Memory Unset", 4, 104, 14737632);
+            drawTextWithShadow(this.textManager, "Memory Unset", 4, 104, 14737632);
         }
-        super.a(i, j, f);
+        super.render(i, j, f);
     }
 
     public static void showUI(Level w, int x, int y, int z, TileEntityTriggerMemory triggerClicked) {
         Minecraft.minecraftInstance.a(new GuiTriggerMemory(w, x, y, z, triggerClicked));
     }
 
-    public boolean c() {
+    @Override
+    public boolean isPauseScreen() {
         return false;
     }
 }

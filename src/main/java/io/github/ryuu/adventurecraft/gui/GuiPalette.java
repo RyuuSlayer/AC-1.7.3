@@ -1,32 +1,37 @@
 package io.github.ryuu.adventurecraft.gui;
 
 import io.github.ryuu.adventurecraft.util.InventoryDebug;
+import net.minecraft.client.gui.screen.container.DoubleChestScreen;
+import net.minecraft.client.gui.widgets.Button;
+import net.minecraft.inventory.Inventory;
 import org.lwjgl.opengl.GL11;
 
-public class GuiPalette extends hp {
+public class GuiPalette extends DoubleChestScreen {
     private final InventoryDebug palette;
 
     GuiSlider2 extraWidth;
 
     GuiSlider2 extraDepth;
 
-    private ke a;
+    private Button a;
 
-    public GuiPalette(lw iinventory, InventoryDebug p) {
-        super(iinventory, (lw) p);
+    public GuiPalette(Inventory iinventory, InventoryDebug p) {
+        super(iinventory, (Inventory) p);
         this.palette = p;
     }
 
-    public void b() {
-        super.b();
-        this.extraDepth = new GuiSlider2(50, this.c / 2 + 2, 3, 10, String.format("Extra Depth: %d", Integer.valueOf(this.b.c.destroyExtraDepth)), this.b.c.destroyExtraDepth / 16.0F);
-        this.extraWidth = new GuiSlider2(50, this.c / 2 - 2 - this.extraDepth.a, 3, 10, String.format("Extra Width: %d", Integer.valueOf(this.b.c.destroyExtraWidth)), this.b.c.destroyExtraWidth / 5.0F);
-        this.e.add(this.extraDepth);
-        this.e.add(this.extraWidth);
+    @Override
+    public void init() {
+        super.init();
+        this.extraDepth = new GuiSlider2(50, this.width / 2 + 2, 3, 10, String.format("Extra Depth: %d", Integer.valueOf(this.minecraft.interactionManager.destroyExtraDepth)), this.minecraft.interactionManager.destroyExtraDepth / 16.0F);
+        this.extraWidth = new GuiSlider2(50, this.width / 2 - 2 - this.extraDepth.width, 3, 10, String.format("Extra Width: %d", Integer.valueOf(this.minecraft.interactionManager.destroyExtraWidth)), this.minecraft.interactionManager.destroyExtraWidth / 5.0F);
+        this.buttons.add(this.extraDepth);
+        this.buttons.add(this.extraWidth);
     }
 
-    protected void a(char c, int i) {
-        super.a(c, i);
+    @Override
+    protected void keyPressed(char c, int i) {
+        super.keyPressed(c, i);
         if (i == 65 && this.palette.firstItem > 1) {
             this.palette.fillInventoryBackwards(this.palette.firstItem - 1);
         } else if (i == 66 && !this.palette.atEnd) {
@@ -34,42 +39,45 @@ public class GuiPalette extends hp {
         }
     }
 
-    public void a(int i, int j, float f) {
-        super.a(i, j, f);
+    @Override
+    public void render(int i, int j, float f) {
+        super.render(i, j, f);
         GL11.glPushMatrix();
         GL11.glDisable(2896);
         GL11.glDisable(2929);
-        for (int k = 0; k < this.e.size(); k++) {
-            ke guibutton = this.e.get(k);
-            guibutton.a(this.b, i, j);
+        for (int k = 0; k < this.buttons.size(); k++) {
+            Button guibutton = this.buttons.get(k);
+            guibutton.render(this.minecraft, i, j);
         }
         GL11.glEnable(2896);
         GL11.glEnable(2929);
         GL11.glPopMatrix();
-        this.b.c.destroyExtraDepth = (int) Math.min(16.0F * this.extraDepth.sliderValue, 15.0F);
-        this.b.c.destroyExtraWidth = (int) Math.min(5.0F * this.extraWidth.sliderValue, 4.0F);
-        this.extraWidth.e = String.format("Extra Width: %d", new Object[]{Integer.valueOf(this.b.c.destroyExtraWidth)});
-        this.extraDepth.e = String.format("Extra Depth: %d", new Object[]{Integer.valueOf(this.b.c.destroyExtraDepth)});
+        this.minecraft.interactionManager.destroyExtraDepth = (int) Math.min(16.0F * this.extraDepth.sliderValue, 15.0F);
+        this.minecraft.interactionManager.destroyExtraWidth = (int) Math.min(5.0F * this.extraWidth.sliderValue, 4.0F);
+        this.extraWidth.text = String.format("Extra Width: %d", Integer.valueOf(this.minecraft.interactionManager.destroyExtraWidth));
+        this.extraDepth.text = String.format("Extra Depth: %d", Integer.valueOf(this.minecraft.interactionManager.destroyExtraDepth));
     }
 
-    protected void a(int i, int j, int k) {
+    @Override
+    protected void mouseClicked(int i, int j, int k) {
         if (k == 0)
-            for (int l = 0; l < this.e.size(); l++) {
-                ke guibutton = this.e.get(l);
-                if (guibutton.c(this.b, i, j)) {
+            for (int l = 0; l < this.buttons.size(); l++) {
+                Button guibutton = this.buttons.get(l);
+                if (guibutton.isMouseOver(this.minecraft, i, j)) {
                     this.a = guibutton;
-                    this.b.B.a("random.click", 1.0F, 1.0F);
-                    a(guibutton);
+                    this.minecraft.soundHelper.playSound("random.click", 1.0F, 1.0F);
+                    buttonClicked(guibutton);
                 }
             }
-        super.a(i, j, k);
+        super.mouseClicked(i, j, k);
     }
 
-    protected void b(int i, int j, int k) {
+    @Override
+    protected void mouseReleased(int i, int j, int k) {
         if (this.a != null && k == 0) {
-            this.a.a(i, j);
+            this.a.mouseReleased(i, j);
             this.a = null;
         }
-        super.b(i, j, k);
+        super.mouseReleased(i, j, k);
     }
 }
