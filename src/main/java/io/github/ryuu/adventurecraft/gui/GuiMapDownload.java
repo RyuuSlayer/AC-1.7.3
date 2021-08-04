@@ -31,7 +31,7 @@ class GuiMapDownload extends Screen {
 
     public ScriptUIContainer ui = new ScriptUIContainer(0.0F, 26.0F, null);
 
-    private final ArrayList<GuiMapElement> maps = new ArrayList<GuiMapElement>();
+    private final ArrayList<GuiMapElement> maps = new ArrayList<>();
 
     private final File mapDownloadFolder = new File("./mapDownloads/");
 
@@ -172,7 +172,7 @@ class GuiMapDownload extends Screen {
             String s = "Additional maps can be found on the AdventureCraft Wiki";
             w = this.textManager.getTextWidth(s);
             this.textManager.drawText(s, this.width / 2 - w / 2, this.height - 26, 16777215);
-            s = "http://adventurecraft.wikkii.com/";
+            s = "https://wiki.adventurecraft.gq/";
             w = this.textManager.getTextWidth(s);
             this.textManager.drawText(s, this.width / 2 - w / 2, this.height - 14, 16777215);
             GL11.glDisable(3042);
@@ -236,7 +236,7 @@ class GuiMapDownload extends Screen {
         if (mapInfo.exists())
             try {
                 BufferedReader input = new BufferedReader(new FileReader(mapInfo));
-                ArrayList<String> lines = new ArrayList<String>();
+                ArrayList<String> lines = new ArrayList<>();
                 while (input.ready()) {
                     String line = input.readLine();
                     line = line.replace("\\n", "\n");
@@ -413,7 +413,7 @@ class GuiMapDownload extends Screen {
 
     private boolean scrolling = false;
 
-    static final String url = "http://www.adventurecraft.gq/";
+    static final String url = "https://www.adventurecraft.gq/";
 
     protected Screen parentScreen;
 

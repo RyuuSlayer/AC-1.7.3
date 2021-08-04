@@ -29,7 +29,7 @@ class GuiEditPalette extends DrawableHelper {
         this.scrollPosition = 0.0F;
         this.controlList = new ArrayList<Button>();
         this.item = new ItemInstance(0, 0, 0);
-        this.blocks = new ArrayList<Tile>();
+        this.blocks = new ArrayList<>();
         filterBlocks(0);
     }
 

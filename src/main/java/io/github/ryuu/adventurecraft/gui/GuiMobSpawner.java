@@ -191,7 +191,7 @@ public class GuiMobSpawner extends da {
     }
 
     public static void showUI(TileEntityMobSpawner ms) {
-        Minecraft.minecraftInstance.a(new AC_GuiMobSpawner(ms));
+        Minecraft.minecraftInstance.a(new GuiMobSpawner(ms));
     }
 
     public boolean c() {
