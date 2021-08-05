@@ -1,0 +1,82 @@
+
+protected TileEntity a_() -> createTileEntity
+
+public int a(int i, int j) -> getTextureForSide
+
+public int b() -> method_1621
+
+public boolean c() -> isFullOpaque
+
+public boolean d() -> isFullCube
+
+public int e() -> getTickrate
+
+public float a(Entity entity) -> method_1575
+
+public int a(Random random) -> getDropCount
+
+public int a(int i, Random random) -> getDropId
+
+public boolean a(int i, boolean flag) -> method_1571
+
+public void a(TileView iblockaccess, int i, int j, int k) -> method_1616
+
+public boolean a(Level world, int i, int j, int k) -> canPlaceAt
+
+public void a(Level world, int i, int j, int k, LivingEntity entityliving) -> afterPlaced
+
+public boolean a(Level world, int i, int j, int k, Player entityplayer) -> activate
+
+public void a(Level world, int i, int j, int k, Entity entity) -> onEntityCollision
+
+public void a(Level world, int i, int j, int k, Random random) -> onScheduledTick
+
+public int a(TileView world, int i, int j, int k, int side) -> method_1626
+public int a(TileView iblockaccess, int i, int j, int k, int l) -> method_1626
+
+public void a(Level world, int i, int j, int k, int l, float f) -> beforeDestroyedByExplosion
+ 
+public HitResult a(Level world, int i, int j, int k, Vec3f vec3d, Vec3f vec3d1) -> raycast
+
+public void a(Level world, int i, int j, int k, Entity entity, Vec3f vec3d) -> method_1572
+
+public void a(Level world, int i, int j, int k, Box axisalignedbb, ArrayList arraylist) -> intersectsInLevel
+
+public int b_() -> method_1619
+
+public int b(TileView iblockaccess, int i, int j, int k) -> getTint
+
+public void b(Level world, int i, int j, int k) -> onTileRemoved
+
+public void b(Level world, int i, int j, int k, Entity entity) -> method_1560
+
+public void b(Level world, int i, int j, int k, Player entityplayer) -> onPunched
+ 
+public void b(Level world, int i, int j, int k, Random random) -> randomDisplayTick
+
+public void b(Level world, int i, int j, int k, int l) -> method_1609
+
+public boolean b(TileView iblockaccess, int i, int j, int k, int l) -> method_1618
+
+public void c(Level world, int i, int j, int k) -> method_1611
+
+public boolean c(TileView iblockaccess, int i, int j, int k, int l) -> method_1568
+
+public void c(Level world, int i, int j, int k, int l) -> method_1612
+
+public void d(Level world, int i, int j, int k) -> onDestroyedByExplosion
+
+public float d(TileView iblockaccess, int i, int j, int k) -> method_1604
+
+public boolean d(Level world, int i, int j, int k, int l) -> method_1570
+
+public Box e(Level world, int i, int j, int k) -> getCollisionShape
+
+public void e(Level world, int i, int j, int k, int l) -> onPlaced
+
+public Box f(Level world, int i, int j, int k) -> getOutlineShape
+
+public void g(Level world, int i, int j, int k, int l) -> drop
+
+public boolean v_() -> method_1576
+
