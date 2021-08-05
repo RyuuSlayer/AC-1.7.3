@@ -9,9 +9,13 @@ import java.io.IOException;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityEffect;
 import io.github.ryuu.adventurecraft.gui.GuiEffect;
 import io.github.ryuu.adventurecraft.items.Items;
+import io.github.ryuu.adventurecraft.overrides.FlowingLavaTextureBinder2;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.TerrainImage;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.colour.FoliageColour;
+import net.minecraft.client.colour.GrassColour;
+import net.minecraft.client.render.*;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
@@ -25,15 +29,18 @@ public class BlockEffect extends TileWithEntity {
         super(i, j, Material.AIR);
     }
 
-    protected TileEntity a_() {
+    @Override
+    protected TileEntity createTileEntity() {
         return new TileEntityEffect();
     }
 
-    public boolean c() {
+    @Override
+    public boolean isFullOpaque() {
         return false;
     }
 
-    public Box e(Level world, int i, int j, int k) {
+    @Override
+    public Box getCollisionShape(Level world, int i, int j, int k) {
         return null;
     }
 
@@ -41,7 +48,8 @@ public class BlockEffect extends TileWithEntity {
         return DebugMode.active;
     }
 
-    public boolean v_() {
+    @Override
+    public boolean method_1576() {
         return DebugMode.active;
     }
 
@@ -50,26 +58,26 @@ public class BlockEffect extends TileWithEntity {
     }
 
     public void onTriggerActivated(Level world, int i, int j, int k) {
-        TileEntityEffect obj = (TileEntityEffect) world.b(i, j, k);
+        TileEntityEffect obj = (TileEntityEffect) world.getTileEntity(i, j, k);
         obj.isActivated = true;
         obj.ticksBeforeParticle = 0;
         if (obj.changeFogColor == 1) {
-            world.x.overrideFogColor = true;
-            world.x.fogR = obj.fogR;
-            world.x.fogG = obj.fogG;
-            world.x.fogB = obj.fogB;
+            world.properties.overrideFogColor = true;
+            world.properties.fogR = obj.fogR;
+            world.properties.fogG = obj.fogG;
+            world.properties.fogB = obj.fogB;
         } else if (obj.changeFogColor == 2) {
-            world.x.overrideFogColor = false;
+            world.properties.overrideFogColor = false;
         }
         if (obj.changeFogDensity == 1) {
-            world.x.overrideFogDensity = true;
-            world.x.fogStart = obj.fogStart;
-            world.x.fogEnd = obj.fogEnd;
+            world.properties.overrideFogDensity = true;
+            world.properties.fogStart = obj.fogStart;
+            world.properties.fogEnd = obj.fogEnd;
         } else if (obj.changeFogDensity == 2) {
-            world.x.overrideFogDensity = false;
+            world.properties.overrideFogDensity = false;
         }
         if (obj.setOverlay)
-            world.x.overlay = obj.overlay;
+            world.properties.overlay = obj.overlay;
         if (obj.replaceTextures) {
             replaceTextures(world, obj.textureReplacement);
         } else if (obj.revertTextures) {
@@ -80,14 +88,14 @@ public class BlockEffect extends TileWithEntity {
     public static void revertTextures(Level world) {
         Minecraft.minecraftInstance.p.revertTextures();
         if (needsReloadForRevert) {
-            ia.loadGrass("/misc/grasscolor.png");
-            jh.loadFoliage("/misc/foliagecolor.png");
+            GrassColour.loadGrass("/misc/grasscolor.png");
+            FoliageColour.loadFoliage("/misc/foliagecolor.png");
             TerrainImage.loadWaterMap(new File(world.levelDir, "watermap.png"));
             TerrainImage.loadBiomeMap(new File(world.levelDir, "biomemap.png"));
             Minecraft.minecraftInstance.g.e();
             needsReloadForRevert = false;
         }
-        world.x.revertTextures();
+        world.properties.revertTextures();
     }
 
     public void replaceTextures(Level world, String replacement) {
@@ -115,7 +123,7 @@ public class BlockEffect extends TileWithEntity {
 
     public static boolean replaceTexture(Level world, String textureToReplace, String replacementTexture) {
         String lTextureToReplace = textureToReplace.toLowerCase();
-        if (!world.x.addReplacementTexture(textureToReplace, replacementTexture))
+        if (!world.properties.addReplacementTexture(textureToReplace, replacementTexture))
             return false;
         if (lTextureToReplace.equals("/watermap.png")) {
             TerrainImage.loadWaterMap(new File(world.levelDir, replacementTexture));
@@ -128,37 +136,37 @@ public class BlockEffect extends TileWithEntity {
             return true;
         }
         if (lTextureToReplace.equals("/misc/grasscolor.png")) {
-            ia.loadGrass(replacementTexture);
+            GrassColour.loadGrass(replacementTexture);
             needsReloadForRevert = true;
             return true;
         }
         if (lTextureToReplace.equals("/misc/foliagecolor.png")) {
-            jh.loadFoliage(replacementTexture);
+            FoliageColour.loadFoliage(replacementTexture);
             needsReloadForRevert = true;
             return true;
         }
         if (lTextureToReplace.equals("/custom_fire.png")) {
-            sd.loadImage(replacementTexture);
+            FireTextureBinder.loadImage(replacementTexture);
             return true;
         }
         if (lTextureToReplace.equals("/custom_lava_flowing.png")) {
-            if.loadImage(replacementTexture);
+            FlowingLavaTextureBinder2.loadImage(replacementTexture);
             return true;
         }
         if (lTextureToReplace.equals("/custom_lava_still.png")) {
-            cg.loadImage(replacementTexture);
+            FlowingLavaTextureBinder.loadImage(replacementTexture);
             return true;
         }
         if (lTextureToReplace.equals("/custom_portal.png")) {
-            hs.loadImage(replacementTexture);
+            PortalTextureBinder.loadImage(replacementTexture);
             return true;
         }
         if (lTextureToReplace.equals("/custom_water_flowing.png")) {
-            oh.loadImage(replacementTexture);
+            FlowingWaterTextureBinder.loadImage(replacementTexture);
             return true;
         }
         if (lTextureToReplace.equals("/custom_water_still.png")) {
-            vs.loadImage(replacementTexture);
+            FlowingWaterTextureBinder2.loadImage(replacementTexture);
             return true;
         }
         Minecraft.minecraftInstance.p.replaceTexture(textureToReplace, replacementTexture);
@@ -166,13 +174,13 @@ public class BlockEffect extends TileWithEntity {
     }
 
     public void onTriggerDeactivated(Level world, int i, int j, int k) {
-        TileEntityEffect obj = (TileEntityEffect) world.b(i, j, k);
+        TileEntityEffect obj = (TileEntityEffect) world.getTileEntity(i, j, k);
         obj.isActivated = false;
     }
 
-    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
-        if (DebugMode.active && entityplayer.G() != null && (entityplayer.G()).c == Items.cursor.bf) {
-            TileEntityEffect obj = (TileEntityEffect) world.b(i, j, k);
+    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
+        if (DebugMode.active && entityplayer.getHeldItem() != null && (entityplayer.getHeldItem()).itemId == Items.cursor.id) {
+            TileEntityEffect obj = (TileEntityEffect) world.getTileEntity(i, j, k);
             GuiEffect.showUI(obj);
             return true;
         }

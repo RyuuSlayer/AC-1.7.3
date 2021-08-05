@@ -9,31 +9,36 @@ public class BlockPlant extends Tile implements IBlockColor {
     protected BlockPlant(int i, int j) {
         super(i, j, Material.PLANT);
         float f = 0.2F;
-        a(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, f * 3.0F, 0.5F + f);
+        setBoundingBox(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, f * 3.0F, 0.5F + f);
     }
 
-    public int a(int i, int j) {
-        return this.bm + j;
+    @Override
+    public int getTextureForSide(int i, int j) {
+        return this.tex + j;
     }
 
-    public Box e(Level world, int i, int j, int k) {
+    @Override
+    public Box getCollisionShape(Level world, int i, int j, int k) {
         return null;
     }
 
-    public boolean c() {
+    @Override
+    public boolean isFullOpaque() {
         return false;
     }
 
-    public boolean d() {
+    @Override
+    public boolean isFullCube() {
         return false;
     }
 
-    public int b() {
+    @Override
+    public int method_1621() {
         return 1;
     }
 
     public void incrementColor(Level world, int i, int j, int k) {
-        int metadata = world.e(i, j, k);
-        world.d(i, j, k, (metadata + 1) % subTypes[this.bn]);
+        int metadata = world.getTileMeta(i, j, k);
+        world.setTileMeta(i, j, k, (metadata + 1) % subTypes[this.id]);
     }
 }

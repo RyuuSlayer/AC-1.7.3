@@ -10,7 +10,7 @@ public class BlockClip extends Tile {
         super(i, j, material);
     }
 
-    public boolean c() {
+    public boolean isFullOpaque() {
         return false;
     }
 

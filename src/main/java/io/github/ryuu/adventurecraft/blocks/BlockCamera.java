@@ -17,15 +17,18 @@ public class BlockCamera extends TileWithEntity {
         super(i, j, Material.AIR);
     }
 
-    protected TileEntity a_() {
+    @Override
+    protected TileEntity createTileEntity() {
         return new TileEntityCamera();
     }
 
-    public boolean c() {
+    @Override
+    public boolean isFullOpaque() {
         return false;
     }
 
-    public Box e(Level world, int i, int j, int k) {
+    @Override
+    public Box getCollisionShape(Level world, int i, int j, int k) {
         return null;
     }
 
@@ -38,7 +41,7 @@ public class BlockCamera extends TileWithEntity {
     }
 
     public void onTriggerActivated(Level world, int i, int j, int k) {
-        TileEntityCamera obj = (TileEntityCamera) world.b(i, j, k);
+        TileEntityCamera obj = (TileEntityCamera) world.getTileEntity(i, j, k);
         obj.loadCamera();
         Minecraft.minecraftInstance.cutsceneCamera.startCamera();
         Minecraft.minecraftInstance.cameraActive = true;
@@ -48,10 +51,11 @@ public class BlockCamera extends TileWithEntity {
     public void onTriggerDeactivated(Level world, int i, int j, int k) {
     }
 
-    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
+    @Override
+    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
         if (DebugMode.active) {
-            Minecraft.minecraftInstance.v.a("Set Active Editing Camera");
-            TileEntityCamera obj = (TileEntityCamera) world.b(i, j, k);
+            Minecraft.minecraftInstance.overlay.addChatMessage("Set Active Editing Camera");
+            TileEntityCamera obj = (TileEntityCamera) world.getTileEntity(i, j, k);
             Minecraft.minecraftInstance.activeCutsceneCamera = obj.camera;
             obj.camera.loadCameraEntities();
             GuiCameraBlock.showUI(obj);

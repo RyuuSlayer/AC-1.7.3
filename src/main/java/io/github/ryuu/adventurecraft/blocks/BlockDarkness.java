@@ -10,14 +10,16 @@ import net.minecraft.util.maths.Box;
 public class BlockDarkness extends Tile {
     protected BlockDarkness(int i, int j) {
         super(i, j, Material.AIR);
-        g(2);
+        method_1590(2);
     }
 
-    public boolean c() {
+    @Override
+    public boolean isFullOpaque() {
         return false;
     }
 
-    public Box e(Level world, int i, int j, int k) {
+    @Override
+    public Box getCollisionShape(Level world, int i, int j, int k) {
         return null;
     }
 
@@ -25,7 +27,8 @@ public class BlockDarkness extends Tile {
         return DebugMode.active;
     }
 
-    public boolean v_() {
+    @Override
+    public boolean method_1576() {
         return DebugMode.active;
     }
 }

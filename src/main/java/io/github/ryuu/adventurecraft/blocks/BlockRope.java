@@ -7,39 +7,43 @@ public class BlockRope extends BlockPlant {
     protected BlockRope(int i, int j) {
         super(i, j);
         float f = 0.2F;
-        a(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 1.0F, 0.5F + f);
+        setBoundingBox(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 1.0F, 0.5F + f);
     }
 
-    public Box f(Level world, int i, int j, int k) {
+    @Override
+    public Box getOutlineShape(Level world, int i, int j, int k) {
         updateBounds(world, i, j, k);
-        return super.f(world, i, j, k);
+        return super.getOutlineShape(world, i, j, k);
     }
 
-    public Box e(Level world, int i, int j, int k) {
-        int m = world.e(i, j, k) % 3;
+    @Override
+    public Box getCollisionShape(Level world, int i, int j, int k) {
+        int m = world.getTileMeta(i, j, k) % 3;
         if (m == 0)
             return null;
         updateBounds(world, i, j, k);
-        return eq.b(i + this.bs, j + this.bt, k + this.bu, i + this.bv, j + this.bw, k + this.bx);
+        return Box.getOrCreate(i + this.minX, j + this.minY, k + this.minZ, i + this.maxX, j + this.maxY, k + this.maxZ);
     }
 
     private void updateBounds(Level world, int i, int j, int k) {
-        int m = world.e(i, j, k) % 3;
+        int m = world.getTileMeta(i, j, k) % 3;
         float f = 0.2F;
         if (m == 0) {
-            a(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 1.0F, 0.5F + f);
+            setBoundingBox(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 1.0F, 0.5F + f);
         } else if (m == 1) {
-            a(0.0F, 0.5F - f, 0.5F - f, 1.0F, 0.5F + f, 0.5F + f);
+            setBoundingBox(0.0F, 0.5F - f, 0.5F - f, 1.0F, 0.5F + f, 0.5F + f);
         } else {
-            a(0.5F - f, 0.5F - f, 0.0F, 0.5F + f, 0.5F + f, 1.0F);
+            setBoundingBox(0.5F - f, 0.5F - f, 0.0F, 0.5F + f, 0.5F + f, 1.0F);
         }
     }
 
-    public int b() {
+    @Override
+    public int method_1621() {
         return 35;
     }
 
-    public int a(int i, int j) {
-        return this.bm + j / 3;
+    @Override
+    public int getTextureForSide(int i, int j) {
+        return this.tex + j / 3;
     }
 }

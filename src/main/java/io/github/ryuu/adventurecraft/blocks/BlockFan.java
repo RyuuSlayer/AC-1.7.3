@@ -6,6 +6,8 @@ import java.util.Random;
 import io.github.ryuu.adventurecraft.entities.EntityAirFX;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.FallingTile;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
@@ -20,38 +22,44 @@ public class BlockFan extends Tile {
         this.fanOn = f;
     }
 
-    public int a(int i, int j) {
+    public int getTextureForSide(int i, int j) {
         if (i == j)
-            return this.bm;
+            return this.tex;
         return 74;
     }
 
-    public int e() {
+    @Override
+    public int getTickrate() {
         return 1;
     }
 
-    public void e(Level world, int i, int j, int k, int l) {
-        world.d(i, j, k, l);
+    @Override
+    public void onPlaced(Level world, int i, int j, int k, int l) {
+        world.setTileMeta(i, j, k, l);
         if (this.fanOn)
-            world.c(i, j, k, this.bn, e());
+            world.method_216(i, j, k, this.id, getTickrate());
     }
 
     private boolean canGoThroughBlock(int blockID) {
-        return (Tile.m[blockID] != null && (Tile.m[blockID]).bA != ln.a && (Tile.m[blockID]).bA != ln.g && (Tile.m[blockID]).bA != ln.h);
+        return (Tile.BY_ID[blockID] != null &&
+                (Tile.BY_ID[blockID]).material != Material.AIR &&
+                (Tile.BY_ID[blockID]).material != Material.WATER &&
+                (Tile.BY_ID[blockID]).material != Material.LAVA);
     }
 
-    public void a(Level world, int i, int j, int k, Random random) {
+    @Override
+    public void onScheduledTick(Level world, int i, int j, int k, Random random) {
         if (!this.fanOn)
             return;
-        world.c(i, j, k, this.bn, e());
+        world.method_216(i, j, k, this.id, getTickrate());
         if (!DebugMode.active) {
-            int direction = world.e(i, j, k);
+            int direction = world.getTileMeta(i, j, k);
             int xOffset = 0;
             int yOffset = 0;
             int zOffset = 0;
             if (direction == 0) {
                 for (yOffset = -1; yOffset >= -4; yOffset--) {
-                    int blockID = world.a(i, j + yOffset, k);
+                    int blockID = world.getTileId(i, j + yOffset, k);
                     if (canGoThroughBlock(blockID)) {
                         yOffset++;
                         break;
@@ -59,7 +67,7 @@ public class BlockFan extends Tile {
                 }
             } else if (direction == 1) {
                 for (yOffset = 1; yOffset <= 4; yOffset++) {
-                    int blockID = world.a(i, j + yOffset, k);
+                    int blockID = world.getTileId(i, j + yOffset, k);
                     if (canGoThroughBlock(blockID)) {
                         yOffset--;
                         break;
@@ -67,7 +75,7 @@ public class BlockFan extends Tile {
                 }
             } else if (direction == 2) {
                 for (zOffset = -1; zOffset >= -4; zOffset--) {
-                    int blockID = world.a(i, j, k + zOffset);
+                    int blockID = world.getTileId(i, j, k + zOffset);
                     if (canGoThroughBlock(blockID)) {
                         zOffset++;
                         break;
@@ -75,7 +83,7 @@ public class BlockFan extends Tile {
                 }
             } else if (direction == 3) {
                 for (zOffset = 1; zOffset <= 4; zOffset++) {
-                    int blockID = world.a(i, j, k + zOffset);
+                    int blockID = world.getTileId(i, j, k + zOffset);
                     if (canGoThroughBlock(blockID)) {
                         zOffset--;
                         break;
@@ -83,7 +91,7 @@ public class BlockFan extends Tile {
                 }
             } else if (direction == 4) {
                 for (xOffset = -1; xOffset >= -4; xOffset--) {
-                    int blockID = world.a(i + xOffset, j, k);
+                    int blockID = world.getTileId(i + xOffset, j, k);
                     if (canGoThroughBlock(blockID)) {
                         xOffset++;
                         break;
@@ -91,63 +99,65 @@ public class BlockFan extends Tile {
                 }
             } else if (direction == 5) {
                 for (xOffset = 1; xOffset <= 4; xOffset++) {
-                    int blockID = world.a(i + xOffset, j, k);
+                    int blockID = world.getTileId(i + xOffset, j, k);
                     if (canGoThroughBlock(blockID)) {
                         xOffset--;
                         break;
                     }
                 }
             }
-            Box aabb = e(world, i, j, k).a(xOffset, yOffset, zOffset);
-            List entities = world.a(sn.class, aabb);
+            Box aabb = getCollisionShape(world, i, j, k).add(xOffset, yOffset, zOffset);
+            List entities = world.getEntities(Entity.class, aabb);
             for (Object obj : entities) {
-                sn e = (sn) obj;
-                if (!(e instanceof ju)) {
-                    double dist = e.h(i + 0.5D, j + 0.5D, k + 0.5D) * Math.abs(xOffset + yOffset + zOffset) / 4.0D;
-                    e.d(0.07D * xOffset / dist, 0.07D * yOffset / dist, 0.07D * zOffset / dist);
+                Entity e = (Entity) obj;
+                if (!(e instanceof FallingTile)) {
+                    double dist = e.method_1350(i + 0.5D, j + 0.5D, k + 0.5D) * Math.abs(xOffset + yOffset + zOffset) / 4.0D;
+                    e.method_1322(0.07D * xOffset / dist, 0.07D * yOffset / dist, 0.07D * zOffset / dist);
                     if (e instanceof Player && ((Player) e).usingUmbrella())
-                        e.d(0.07D * xOffset / dist, 0.07D * yOffset / dist, 0.07D * zOffset / dist);
+                        e.method_1322(0.07D * xOffset / dist, 0.07D * yOffset / dist, 0.07D * zOffset / dist);
                 }
             }
-            entities = Minecraft.minecraftInstance.j.getEffectsWithinAABB(aabb);
+            entities = Minecraft.minecraftInstance.particleManager.getEffectsWithinAABB(aabb);
             for (Object obj : entities) {
-                sn e = (sn) obj;
-                if (!(e instanceof ju)) {
-                    double dist = e.h(i + 0.5D, j + 0.5D, k + 0.5D) * Math.abs(xOffset + yOffset + zOffset) / 4.0D;
-                    e.d(0.03D * xOffset / dist, 0.03D * yOffset / dist, 0.03D * zOffset / dist);
+                Entity e = (Entity) obj;
+                if (!(e instanceof FallingTile)) {
+                    double dist = e.method_1350(i + 0.5D, j + 0.5D, k + 0.5D) * Math.abs(xOffset + yOffset + zOffset) / 4.0D;
+                    e.method_1322(0.03D * xOffset / dist, 0.03D * yOffset / dist, 0.03D * zOffset / dist);
                 }
             }
-            Minecraft.minecraftInstance.j.a((xw) new EntityAirFX(world, i + random.nextDouble(), j + random.nextDouble(), k + random.nextDouble()));
+            Minecraft.minecraftInstance.particleManager.addParticle(new EntityAirFX(world, i + random.nextDouble(), j + random.nextDouble(), k + random.nextDouble()));
         }
     }
 
-    public void b(Level world, int i, int j, int k, Random random) {
+    public void randomDisplayTick(Level world, int i, int j, int k, Random random) {
         if (this.fanOn)
-            world.c(i, j, k, this.bn, e());
+            world.method_216(i, j, k, this.id, getTickrate());
     }
 
-    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
+    @Override
+    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
         if (DebugMode.active) {
-            world.d(i, j, k, (world.e(i, j, k) + 1) % 6);
-            world.k(i, j, k);
+            world.setTileMeta(i, j, k, (world.getTileMeta(i, j, k) + 1) % 6);
+            world.method_246(i, j, k);
             return true;
         }
         return false;
     }
 
-    public void b(Level world, int i, int j, int k, int l) {
-        if (world.B)
+    @Override
+    public void method_1609(Level world, int i, int j, int k, int l) {
+        if (world.isClient)
             return;
-        if (world.s(i, j, k)) {
+        if (world.hasRedstonePower(i, j, k)) {
             if (this.fanOn) {
-                int m = world.e(i, j, k);
-                world.b(i, j, k, Blocks.fanOff.bn, m);
+                int m = world.getTileMeta(i, j, k);
+                world.method_201(i, j, k, Blocks.fanOff.id, m);
             }
         } else if (!this.fanOn) {
-            int m = world.e(i, j, k);
-            world.b(i, j, k, Blocks.fan.bn, m);
-            world.c(i, j, k, Blocks.fan.bn, e());
+            int m = world.getTileMeta(i, j, k);
+            world.method_201(i, j, k, Blocks.fan.id, m);
+            world.method_216(i, j, k, Blocks.fan.id, getTickrate());
         }
-        super.b(world, i, j, k, l);
+        super.method_1609(world, i, j, k, l);
     }
 }

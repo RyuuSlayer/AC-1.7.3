@@ -1,31 +1,33 @@
 package io.github.ryuu.adventurecraft.blocks;
 
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.level.Level;
+import net.minecraft.util.maths.MathsHelper;
 
 public class BlockChair extends BlockSolid {
     protected BlockChair(int i, int j) {
         super(i, j);
-        a(0.125F, 0.5F, 0.125F, 0.875F, 0.625F, 0.875F);
+        setBoundingBox(0.125F, 0.5F, 0.125F, 0.875F, 0.625F, 0.875F);
     }
 
-    public int a(int i, int j) {
+    public int getTextureForSide(int i, int j) {
         j /= 4;
         if (i <= 1)
-            return this.bm + j;
-        return this.bm + 16 + j;
+            return this.tex + j;
+        return this.tex + 16 + j;
     }
 
-    public boolean c() {
+    public boolean isFullOpaque() {
         return false;
     }
 
-    public int b() {
+    public int method_1621() {
         return 34;
     }
 
-    public void a(Level world, int i, int j, int k, ls entityliving) {
-        int meta = world.e(i, j, k);
-        int l = in.b((entityliving.aS * 4.0F / 360.0F) + 0.5D) & 0x3;
-        world.d(i, j, k, meta + (l + 1) % 4);
+    public void afterPlaced(Level world, int i, int j, int k, LivingEntity entityliving) {
+        int meta = world.getTileMeta(i, j, k);
+        int l = MathsHelper.floor((entityliving.yaw * 4.0F / 360.0F) + 0.5D) & 0x3;
+        world.setTileMeta(i, j, k, meta + (l + 1) % 4);
     }
 }

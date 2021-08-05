@@ -16,7 +16,8 @@ public abstract class BlockContainerColor extends TileWithEntity implements IBlo
         this.defaultColor = 13421772;
     }
 
-    public int b(TileView iblockaccess, int i, int j, int k) {
+    @Override
+    public int getTint(TileView iblockaccess, int i, int j, int k) {
         int color = getColorMetaData(iblockaccess, i, j, k);
         if (color == 1) {
             color = 16775065;
@@ -37,11 +38,11 @@ public abstract class BlockContainerColor extends TileWithEntity implements IBlo
     }
 
     protected int getColorMetaData(TileView iblockaccess, int i, int j, int k) {
-        return iblockaccess.e(i, j, k);
+        return iblockaccess.getTileMeta(i, j, k);
     }
 
     protected void setColorMetaData(Level world, int i, int j, int k, int color) {
-        world.d(i, j, k, color);
+        world.setTileMeta(i, j, k, color);
     }
 
     public void incrementColor(Level world, int i, int j, int k) {
