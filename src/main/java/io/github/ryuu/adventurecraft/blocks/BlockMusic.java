@@ -18,15 +18,18 @@ public class BlockMusic extends TileWithEntity {
         super(i, j, Material.AIR);
     }
 
-    protected TileEntity a_() {
+    @Override
+    protected TileEntity createTileEntity() {
         return new TileEntityMusic();
     }
 
-    public boolean c() {
+    @Override
+    public boolean isFullOpaque() {
         return false;
     }
 
-    public Box e(Level world, int i, int j, int k) {
+    @Override
+    public Box getCollisionShape(Level world, int i, int j, int k) {
         return null;
     }
 
@@ -39,27 +42,29 @@ public class BlockMusic extends TileWithEntity {
     }
 
     public void onTriggerActivated(Level world, int i, int j, int k) {
-        TileEntityMusic obj = (TileEntityMusic) world.b(i, j, k);
+        TileEntityMusic obj = (TileEntityMusic) world.getTileEntity(i, j, k);
         if (!obj.musicName.equals("")) {
-            Minecraft.minecraftInstance.B.playMusicFromStreaming(obj.musicName, obj.fadeOut, obj.fadeIn);
+            Minecraft.minecraftInstance.soundHelper.playMusicFromStreaming(obj.musicName, obj.fadeOut, obj.fadeIn);
         } else {
-            Minecraft.minecraftInstance.B.stopMusic();
+            Minecraft.minecraftInstance.soundHelper.stopMusic();
         }
     }
 
     public void onTriggerDeactivated(Level world, int i, int j, int k) {
     }
 
-    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
-        if (DebugMode.active && entityplayer.G() != null && (entityplayer.G()).c == Items.cursor.bf) {
-            TileEntityMusic obj = (TileEntityMusic) world.b(i, j, k);
+    @Override
+    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
+        if (DebugMode.active && entityplayer.getHeldItem() != null && (entityplayer.getHeldItem()).itemId == Items.cursor.id) {
+            TileEntityMusic obj = (TileEntityMusic) world.getTileEntity(i, j, k);
             GuiMusic.showUI(world, obj);
             return true;
         }
         return false;
     }
 
-    public boolean v_() {
+    @Override
+    public boolean method_1576() {
         return DebugMode.active;
     }
 }

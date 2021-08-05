@@ -16,15 +16,18 @@ public class BlockStorage extends TileWithEntity {
         super(i, j, Material.AIR);
     }
 
-    protected TileEntity a_() {
+    @Override
+    protected TileEntity createTileEntity() {
         return new TileEntityStorage();
     }
 
-    public boolean c() {
+    @Override
+    public boolean isFullOpaque() {
         return false;
     }
 
-    public Box e(Level world, int i, int j, int k) {
+    @Override
+    public Box getCollisionShape(Level world, int i, int j, int k) {
         return null;
     }
 
@@ -44,15 +47,17 @@ public class BlockStorage extends TileWithEntity {
     public void onTriggerDeactivated(Level world, int i, int j, int k) {
     }
 
-    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
+    @Override
+    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
         if (DebugMode.active) {
-            TileEntityStorage obj = (TileEntityStorage) world.b(i, j, k);
+            TileEntityStorage obj = (TileEntityStorage) world.getTileEntity(i, j, k);
             GuiStorage.showUI(obj);
         }
         return true;
     }
 
-    public boolean v_() {
+    @Override
+    public boolean method_1576() {
         return DebugMode.active;
     }
 }

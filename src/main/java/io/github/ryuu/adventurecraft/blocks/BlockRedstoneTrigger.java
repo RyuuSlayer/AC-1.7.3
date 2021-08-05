@@ -18,27 +18,30 @@ public class BlockRedstoneTrigger extends TileWithEntity {
         super(i, j, Material.STONE);
     }
 
-    protected TileEntity a_() {
+    @Override
+    protected TileEntity createTileEntity() {
         return new TileEntityRedstoneTrigger();
     }
 
-    public void b(Level world, int i, int j, int k, int l) {
+    @Override
+    public void method_1609(Level world, int i, int j, int k, int l) {
         updateBlock(world, i, j, k, l);
     }
 
-    public int a(TileView iblockaccess, int i, int j, int k, int l) {
-        TileEntityRedstoneTrigger obj = (TileEntityRedstoneTrigger) iblockaccess.b(i, j, k);
+    @Override
+    public int method_1626(TileView iblockaccess, int i, int j, int k, int l) {
+        TileEntityRedstoneTrigger obj = (TileEntityRedstoneTrigger) iblockaccess.getTileEntity(i, j, k);
         if (obj.isActivated)
-            return this.bm;
-        return this.bm + 1;
+            return this.tex;
+        return this.tex + 1;
     }
 
     private void updateBlock(Level world, int i, int j, int k, int l) {
-        boolean flag = world.s(i, j, k);
-        TileEntityRedstoneTrigger obj = (TileEntityRedstoneTrigger) world.b(i, j, k);
+        boolean flag = world.hasRedstonePower(i, j, k);
+        TileEntityRedstoneTrigger obj = (TileEntityRedstoneTrigger) world.getTileEntity(i, j, k);
         if (obj != null && obj.isActivated != flag) {
             obj.isActivated = flag;
-            world.j(i, j, k);
+            world.method_243(i, j, k);
             if (flag) {
                 if (!obj.resetOnTrigger) {
                     world.triggerManager.addArea(i, j, k, new TriggerArea(obj.minX, obj.minY, obj.minZ, obj.maxX, obj.maxY, obj.maxZ));
@@ -51,16 +54,17 @@ public class BlockRedstoneTrigger extends TileWithEntity {
         }
     }
 
-    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
-        if (DebugMode.active && entityplayer.G() != null && (entityplayer.G()).c == Items.cursor.bf) {
-            TileEntityRedstoneTrigger obj = (TileEntityRedstoneTrigger) world.b(i, j, k);
+    @Override
+    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
+        if (DebugMode.active && entityplayer.getHeldItem() != null && (entityplayer.getHeldItem()).itemId == Items.cursor.id) {
+            TileEntityRedstoneTrigger obj = (TileEntityRedstoneTrigger) world.getTileEntity(i, j, k);
             GuiRedstoneTrigger.showUI(world, i, j, k, obj);
         }
         return true;
     }
 
     public void setTriggerToSelection(Level world, int i, int j, int k) {
-        TileEntityRedstoneTrigger obj = (TileEntityRedstoneTrigger) world.b(i, j, k);
+        TileEntityRedstoneTrigger obj = (TileEntityRedstoneTrigger) world.getTileEntity(i, j, k);
         if (obj.minX == ItemCursor.minX && obj.minY == ItemCursor.minY && obj.minZ == ItemCursor.minZ && obj.maxX == ItemCursor.maxX && obj.maxY == ItemCursor.maxY && obj.maxZ == ItemCursor.maxZ)
             return;
         obj.minX = ItemCursor.minX;

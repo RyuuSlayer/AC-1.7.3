@@ -178,6 +178,7 @@ public class BlockEffect extends TileWithEntity {
         obj.isActivated = false;
     }
 
+    @Override
     public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
         if (DebugMode.active && entityplayer.getHeldItem() != null && (entityplayer.getHeldItem()).itemId == Items.cursor.id) {
             TileEntityEffect obj = (TileEntityEffect) world.getTileEntity(i, j, k);

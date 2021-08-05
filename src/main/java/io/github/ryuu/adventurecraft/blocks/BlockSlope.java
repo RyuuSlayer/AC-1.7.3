@@ -7,7 +7,8 @@ public class BlockSlope extends BlockStairMulti {
         super(i, block, textureID);
     }
 
-    public int b() {
+    @Override
+    public int method_1621() {
         return 38;
     }
 }

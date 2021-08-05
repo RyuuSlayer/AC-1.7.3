@@ -5,7 +5,8 @@ public class BlockChain extends BlockRope {
         super(i, j);
     }
 
-    public int a(int i, int j) {
-        return this.bm + i % 2 + j / 3 * 2;
+    @Override
+    public int getTextureForSide(int i, int j) {
+        return this.tex + i % 2 + j / 3 * 2;
     }
 }

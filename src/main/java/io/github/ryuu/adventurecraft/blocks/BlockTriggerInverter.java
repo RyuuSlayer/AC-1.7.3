@@ -6,6 +6,7 @@ import io.github.ryuu.adventurecraft.items.ItemCursor;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.TriggerArea;
+import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
 import net.minecraft.tile.TileWithEntity;
@@ -20,23 +21,28 @@ public class BlockTriggerInverter extends TileWithEntity {
         super(i, j, Material.AIR);
     }
 
-    protected TileEntity a_() {
+    @Override
+    protected TileEntity createTileEntity() {
         return new TileEntityTriggerInverter();
     }
 
-    public int a(int i, Random random) {
+    @Override
+    public int getDropId(int i, Random random) {
         return 0;
     }
 
-    public int a(Random random) {
+    @Override
+    public int getDropCount(Random random) {
         return 0;
     }
 
-    public boolean c() {
+    @Override
+    public boolean isFullOpaque() {
         return false;
     }
 
-    public Box e(Level world, int i, int j, int k) {
+    @Override
+    public Box getCollisionShape(Level world, int i, int j, int k) {
         return null;
     }
 
@@ -44,11 +50,13 @@ public class BlockTriggerInverter extends TileWithEntity {
         return DebugMode.active;
     }
 
-    public int a(TileView iblockaccess, int i, int j, int k, int l) {
-        return super.a(iblockaccess, i, j, k, l);
+    @Override
+    public int method_1626(TileView iblockaccess, int i, int j, int k, int l) {
+        return super.method_1626(iblockaccess, i, j, k, l);
     }
 
-    public boolean v_() {
+    @Override
+    public boolean method_1576() {
         return DebugMode.active;
     }
 
@@ -61,20 +69,21 @@ public class BlockTriggerInverter extends TileWithEntity {
     }
 
     public void onTriggerDeactivated(Level world, int i, int j, int k) {
-        TileEntityTriggerInverter obj = TileEntityTriggerInverter)world.b(i, j, k);
+        TileEntityTriggerInverter obj = (TileEntityTriggerInverter)world.getTileEntity(i, j, k);
         world.triggerManager.addArea(i, j, k, new TriggerArea(obj.minX, obj.minY, obj.minZ, obj.maxX, obj.maxY, obj.maxZ));
     }
 
     public void setTriggerToSelection(Level world, int i, int j, int k) {
-        TileEntityTriggerInverter obj = (TileEntityTriggerInverter) world.b(i, j, k);
+        TileEntityTriggerInverter obj = (TileEntityTriggerInverter) world.getTileEntity(i, j, k);
         if (obj.minX == ItemCursor.minX && obj.minY == ItemCursor.minY && obj.minZ == ItemCursor.minZ && obj.maxX == ItemCursor.maxX && obj.maxY == ItemCursor.maxY && obj.maxZ == ItemCursor.maxZ)
             return;
         obj.set(ItemCursor.minX, ItemCursor.minY, ItemCursor.minZ, ItemCursor.maxX, ItemCursor.maxY, ItemCursor.maxZ);
     }
 
-    public boolean a(fd world, int i, int j, int k, gs entityplayer) {
-        if (DebugMode.active && entityplayer.G() != null && (entityplayer.G()).c == Items.cursor.bf) {
-            TileEntityTriggerInverter obj = (TileEntityTriggerInverter) world.b(i, j, k);
+    @Override
+    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
+        if (DebugMode.active && entityplayer.getHeldItem() != null && (entityplayer.getHeldItem()).itemId == Items.cursor.id) {
+            TileEntityTriggerInverter obj = (TileEntityTriggerInverter) world.getTileEntity(i, j, k);
             GuiTriggerInverter.showUI(world, i, j, k, obj);
             return true;
         }

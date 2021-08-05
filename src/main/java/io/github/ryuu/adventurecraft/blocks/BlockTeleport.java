@@ -18,15 +18,18 @@ public class BlockTeleport extends TileWithEntity {
         super(i, j, Material.AIR);
     }
 
-    protected TileEntity a_() {
+    @Override
+    protected TileEntity createTileEntity() {
         return new TileEntityTeleport();
     }
 
-    public boolean c() {
+    @Override
+    public boolean isFullOpaque() {
         return false;
     }
 
-    public Box e(Level world, int i, int j, int k) {
+    @Override
+    public Box getCollisionShape(Level world, int i, int j, int k) {
         return null;
     }
 
@@ -39,32 +42,34 @@ public class BlockTeleport extends TileWithEntity {
     }
 
     public void onTriggerActivated(Level world, int i, int j, int k) {
-        TileEntityTeleport tileEnt = (TileEntityTeleport) world.b(i, j, k);
+        TileEntityTeleport tileEnt = (TileEntityTeleport) world.getTileEntity(i, j, k);
         int y;
         for (y = tileEnt.y; y < 128; y++) {
-            if (world.f(tileEnt.x, y, tileEnt.z) == Material.AIR)
+            if (world.getMaterial(tileEnt.x, y, tileEnt.z) == Material.AIR)
                 break;
         }
-        for (Object obj : world.d) {
+        for (Object obj : world.players) {
             Player p = (Player) obj;
-            p.e(tileEnt.x + 0.5D, y, tileEnt.z + 0.5D);
+            p.setPosition(tileEnt.x + 0.5D, y, tileEnt.z + 0.5D);
         }
     }
 
     public void onTriggerDeactivated(Level world, int i, int j, int k) {
     }
 
-    public boolean v_() {
+    @Override
+    public boolean method_1576() {
         return DebugMode.active;
     }
 
-    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
-        if (DebugMode.active && entityplayer.G() != null && (entityplayer.G()).c == Items.cursor.bf) {
-            TileEntityTeleport obj = (TileEntityTeleport) world.b(i, j, k);
+    @Override
+    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
+        if (DebugMode.active && entityplayer.getHeldItem() != null && (entityplayer.getHeldItem()).itemId == Items.cursor.id) {
+            TileEntityTeleport obj = (TileEntityTeleport) world.getTileEntity(i, j, k);
             obj.x = ItemCursor.minX;
             obj.y = ItemCursor.minY;
             obj.z = ItemCursor.minZ;
-            Minecraft.minecraftInstance.v.a(String.format("Setting Teleport (%d, %d, %d)", new Object[]{Integer.valueOf(obj.x), Integer.valueOf(obj.y), Integer.valueOf(obj.z)}));
+            Minecraft.minecraftInstance.overlay.addChatMessage(String.format("Setting Teleport (%d, %d, %d)", obj.x, obj.y, obj.z));
             return true;
         }
         return false;

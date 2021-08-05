@@ -42,7 +42,7 @@ public class TileEntityNpcPath extends TileEntityMinMax {
         }
     }
 
-    void pathEntity() {
+    public void pathEntity() {
         EntityNPC ent = getNPC();
         if (ent != null) {
             this.npc.pathToPosition(this.x, this.y, this.z);

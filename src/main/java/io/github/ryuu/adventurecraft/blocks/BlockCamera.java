@@ -64,7 +64,8 @@ public class BlockCamera extends TileWithEntity {
         return false;
     }
 
-    public boolean v_() {
+    @Override
+    public boolean method_1576() {
         return DebugMode.active;
     }
 }

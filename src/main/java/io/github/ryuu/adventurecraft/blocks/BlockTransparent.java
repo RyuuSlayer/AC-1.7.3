@@ -7,14 +7,16 @@ public class BlockTransparent extends BlockSolid {
         super(i, j);
     }
 
-    public boolean c() {
+    @Override
+    public boolean isFullOpaque() {
         return false;
     }
 
-    public boolean b(TileView iblockaccess, int i, int j, int k, int l) {
-        int i1 = iblockaccess.a(i, j, k);
-        if (i1 == this.bn)
+    @Override
+    public boolean method_1618(TileView iblockaccess, int i, int j, int k, int l) {
+        int i1 = iblockaccess.getTileId(i, j, k);
+        if (i1 == this.id)
             return false;
-        return super.b(iblockaccess, i, j, k, l);
+        return super.method_1618(iblockaccess, i, j, k, l);
     }
 }

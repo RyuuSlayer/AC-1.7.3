@@ -45,6 +45,7 @@ public abstract class BlockContainerColor extends TileWithEntity implements IBlo
         world.setTileMeta(i, j, k, color);
     }
 
+    @Override
     public void incrementColor(Level world, int i, int j, int k) {
         int color = (getColorMetaData(world, i, j, k) + 1) % numColors;
         setColorMetaData(world, i, j, k, color);

@@ -16,44 +16,53 @@ public class BlockTree extends TileWithEntity implements IBlockColor {
         float f = 0.2F;
     }
 
-    protected TileEntity a_() {
+    @Override
+    protected TileEntity createTileEntity() {
         return new TileEntityTree();
     }
 
-    public int a(int i, int j) {
-        return this.bm + j;
+    @Override
+    public int getTextureForSide(int i, int j) {
+        return this.tex + j;
     }
 
-    public Box e(Level world, int i, int j, int k) {
+    @Override
+    public Box getCollisionShape(Level world, int i, int j, int k) {
         return null;
     }
 
-    public boolean v_() {
+    @Override
+    public boolean method_1576() {
         return DebugMode.active;
     }
 
-    public boolean c() {
+    @Override
+    public boolean isFullOpaque() {
         return false;
     }
 
-    public boolean d() {
+    @Override
+    public boolean isFullCube() {
         return false;
     }
 
-    public int b() {
+    @Override
+    public int method_1621() {
         return 36;
     }
 
-    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
+    @Override
+    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
         if (DebugMode.active) {
-            TileEntityTree obj = (TileEntityTree) world.b(i, j, k);
+            TileEntityTree obj = (TileEntityTree) world.getTileEntity(i, j, k);
             GuiTree.showUI(world, i, j, k, obj);
         }
         return true;
     }
 
+    @Override
     public void incrementColor(Level world, int i, int j, int k) {
-        int metadata = world.e(i, j, k);
-        world.d(i, j, k, (metadata + 1) % subTypes[this.bn]);
+        int metadata = world.getTileMeta(i, j, k);
+        world.setTileMeta(i, j, k, (metadata + 1) % subTypes[this.id]);
     }
 }

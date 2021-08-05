@@ -37,6 +37,7 @@ public class BlockPlant extends Tile implements IBlockColor {
         return 1;
     }
 
+    @Override
     public void incrementColor(Level world, int i, int j, int k) {
         int metadata = world.getTileMeta(i, j, k);
         world.setTileMeta(i, j, k, (metadata + 1) % subTypes[this.id]);

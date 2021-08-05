@@ -19,29 +19,35 @@ public class BlockMobSpawner extends TileWithEntity {
         super(i, j, Material.AIR);
     }
 
-    protected TileEntity a_() {
+    @Override
+    protected TileEntity createTileEntity() {
         return new TileEntityMobSpawner();
     }
 
-    public int a(int i, Random random) {
+    @Override
+    public int getDropId(int i, Random random) {
         return 0;
     }
 
-    public int a(Random random) {
+    @Override
+    public int getDropCount(Random random) {
         return 0;
     }
 
-    public boolean c() {
+    @Override
+    public boolean isFullOpaque() {
         return false;
     }
 
-    public Box e(Level world, int i, int j, int k) {
+    @Override
+    public Box getCollisionShape(Level world, int i, int j, int k) {
         return null;
     }
 
-    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
+    @Override
+    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
         if (DebugMode.active) {
-            TileEntityMobSpawner obj = (TileEntityMobSpawner) world.b(i, j, k);
+            TileEntityMobSpawner obj = (TileEntityMobSpawner) world.getTileEntity(i, j, k);
             GuiMobSpawner.showUI(obj);
             return true;
         }
@@ -57,23 +63,24 @@ public class BlockMobSpawner extends TileWithEntity {
     }
 
     public void onTriggerActivated(Level world, int i, int j, int k) {
-        TileEntityMobSpawner obj = (TileEntityMobSpawner) world.b(i, j, k);
+        TileEntityMobSpawner obj = (TileEntityMobSpawner) world.getTileEntity(i, j, k);
         if (obj.spawnOnTrigger && !Tile.resetActive)
             obj.spawnMobs();
     }
 
     public void onTriggerDeactivated(Level world, int i, int j, int k) {
-        TileEntityMobSpawner obj = (TileEntityMobSpawner) world.b(i, j, k);
+        TileEntityMobSpawner obj = (TileEntityMobSpawner) world.getTileEntity(i, j, k);
         if (obj.spawnOnDetrigger && !Tile.resetActive)
             obj.spawnMobs();
     }
 
-    public boolean v_() {
+    @Override
+    public boolean method_1576() {
         return DebugMode.active;
     }
 
     public void reset(Level world, int i, int j, int k, boolean death) {
-        TileEntityMobSpawner obj = (TileEntityMobSpawner) world.b(i, j, k);
+        TileEntityMobSpawner obj = (TileEntityMobSpawner) world.getTileEntity(i, j, k);
         if (!death)
             obj.hasDroppedItem = false;
         obj.resetMobs();

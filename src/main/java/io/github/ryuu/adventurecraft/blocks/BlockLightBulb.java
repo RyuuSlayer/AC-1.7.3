@@ -15,11 +15,13 @@ public class BlockLightBulb extends Tile {
         super(i, j, Material.AIR);
     }
 
-    public boolean c() {
+    @Override
+    public boolean isFullOpaque() {
         return false;
     }
 
-    public Box e(Level world, int i, int j, int k) {
+    @Override
+    public Box getCollisionShape(Level world, int i, int j, int k) {
         return null;
     }
 
@@ -32,40 +34,45 @@ public class BlockLightBulb extends Tile {
     }
 
     public void onTriggerActivated(Level world, int i, int j, int k) {
-        int m = world.e(i, j, k);
-        world.b(i, j, k, 0, 0);
-        world.b(i, j, k, this.bn, m);
+        int m = world.getTileMeta(i, j, k);
+        world.method_201(i, j, k, 0, 0);
+        world.method_201(i, j, k, this.id, m);
     }
 
     public void onTriggerDeactivated(Level world, int i, int j, int k) {
-        int m = world.e(i, j, k);
-        world.b(i, j, k, 0, 0);
-        world.b(i, j, k, this.bn, m);
+        int m = world.getTileMeta(i, j, k);
+        world.method_201(i, j, k, 0, 0);
+        world.method_201(i, j, k, this.id, m);
     }
 
     public int getBlockLightValue(TileView iblockaccess, int i, int j, int k) {
-        if (!Minecraft.minecraftInstance.f.triggerManager.isActivated(i, j, k))
-            return iblockaccess.e(i, j, k);
+        if (!Minecraft.minecraftInstance.level.triggerManager.isActivated(i, j, k))
+            return iblockaccess.getTileMeta(i, j, k);
         return 0;
     }
 
-    public void e(Level world, int i, int j, int k, int l) {
-        world.d(i, j, k, 15);
+    @Override
+    public void onPlaced(Level world, int i, int j, int k, int l) {
+        world.setTileMeta(i, j, k, 15);
     }
 
-    public boolean v_() {
+    @Override
+    public boolean method_1576() {
         return DebugMode.active;
     }
 
-    public boolean d() {
+    @Override
+    public boolean isFullCube() {
         return false;
     }
 
-    public int b() {
+    @Override
+    public int method_1621() {
         return 1;
     }
 
-    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
+    @Override
+    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
         if (DebugMode.active)
             GuiLightBulb.showUI(world, i, j, k);
         return true;

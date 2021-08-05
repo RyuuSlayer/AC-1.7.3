@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.util.DebugMode;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
@@ -15,19 +16,23 @@ public class BlockSpawn extends Tile {
         super(i, j, Material.AIR);
     }
 
-    public int a(int i, Random random) {
+    @Override
+    public int getDropId(int i, Random random) {
         return 0;
     }
 
-    public int a(Random random) {
+    @Override
+    public int getDropCount(Random random) {
         return 0;
     }
 
-    public boolean c() {
+    @Override
+    public boolean isFullOpaque() {
         return false;
     }
 
-    public Box e(Level world, int i, int j, int k) {
+    @Override
+    public Box getCollisionShape(Level world, int i, int j, int k) {
         return null;
     }
 
@@ -35,14 +40,16 @@ public class BlockSpawn extends Tile {
         return DebugMode.active;
     }
 
-    public boolean v_() {
+    @Override
+    public boolean method_1576() {
         return DebugMode.active;
     }
 
-    public void a(Level world, int i, int j, int k, sn entity) {
+    @Override
+    public void onEntityCollision(Level world, int i, int j, int k, Entity entity) {
         if (entity instanceof Player) {
-            world.x.a(i, j, k);
-            world.setSpawnYaw(entity.aS);
+            world.properties.setSpawnPosition(i, j, k);
+            world.setSpawnYaw(entity.yaw);
         }
     }
 
@@ -51,6 +58,6 @@ public class BlockSpawn extends Tile {
     }
 
     public void onTriggerActivated(Level world, int i, int j, int k) {
-        world.x.a(i, j, k);
+        world.properties.setSpawnPosition(i, j, k);
     }
 }

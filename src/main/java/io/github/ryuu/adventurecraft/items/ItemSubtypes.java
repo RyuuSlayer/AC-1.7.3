@@ -1,20 +1,23 @@
 package io.github.ryuu.adventurecraft.items;
 
 import io.github.ryuu.adventurecraft.overrides.ck;
+import net.minecraft.item.PlaceableTileItem;
 import net.minecraft.tile.Tile;
 
-public class ItemSubtypes extends ck {
+public class ItemSubtypes extends PlaceableTileItem {
     public ItemSubtypes(int i) {
         super(i);
-        e(0);
-        a(true);
+        setDurability(0);
+        method_457(true);
     }
 
-    public int a(int i) {
-        return Tile.m[this.bf].a(0, i);
+    @Override
+    public int getTexturePosition(int i) {
+        return Tile.BY_ID[this.id].getTextureForSide(0, i);
     }
 
-    public int b(int i) {
+    @Override
+    public int method_470(int i) {
         return i;
     }
 }

@@ -17,15 +17,18 @@ public class BlockHealDamage extends TileWithEntity {
         super(i, j, Material.AIR);
     }
 
-    protected TileEntity a_() {
+    @Override
+    protected TileEntity createTileEntity() {
         return new TileEntityHealDamage();
     }
 
-    public boolean c() {
+    @Override
+    public boolean isFullOpaque() {
         return false;
     }
 
-    public Box e(Level world, int i, int j, int k) {
+    @Override
+    public Box getCollisionShape(Level world, int i, int j, int k) {
         return null;
     }
 
@@ -38,27 +41,29 @@ public class BlockHealDamage extends TileWithEntity {
     }
 
     public void onTriggerActivated(Level world, int i, int j, int k) {
-        TileEntityHealDamage tileEnt = (TileEntityHealDamage) world.b(i, j, k);
-        for (Object obj : world.d) {
+        TileEntityHealDamage tileEnt = (TileEntityHealDamage) world.getTileEntity(i, j, k);
+        for (Object obj : world.players) {
             Player p = (Player) obj;
             if (tileEnt.healDamage > 0) {
-                p.c(tileEnt.healDamage);
+                p.addHealth(tileEnt.healDamage);
                 continue;
             }
-            p.b(-tileEnt.healDamage);
+            p.addHealth(-tileEnt.healDamage);
         }
     }
 
     public void onTriggerDeactivated(Level world, int i, int j, int k) {
     }
 
-    public boolean v_() {
+    @Override
+    public boolean method_1576() {
         return DebugMode.active;
     }
 
-    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
-        if (DebugMode.active && entityplayer.G() != null && (entityplayer.G()).c == Items.cursor.bf) {
-            TileEntityHealDamage obj = (TileEntityHealDamage) world.b(i, j, k);
+    @Override
+    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
+        if (DebugMode.active && entityplayer.getHeldItem() != null && (entityplayer.getHeldItem()).itemId == Items.cursor.id) {
+            TileEntityHealDamage obj = (TileEntityHealDamage) world.getTileEntity(i, j, k);
             GuiHealDamage.showUI(world, obj);
             return true;
         }

@@ -18,15 +18,18 @@ public class BlockTimer extends TileWithEntity {
         super(i, j, Material.AIR);
     }
 
-    protected TileEntity a_() {
+    @Override
+    protected TileEntity createTileEntity() {
         return new TileEntityTimer();
     }
 
-    public boolean c() {
+    @Override
+    public boolean isFullOpaque() {
         return false;
     }
 
-    public Box e(Level world, int i, int j, int k) {
+    @Override
+    public Box getCollisionShape(Level world, int i, int j, int k) {
         return null;
     }
 
@@ -39,7 +42,7 @@ public class BlockTimer extends TileWithEntity {
     }
 
     public void setTriggerToSelection(Level world, int i, int j, int k) {
-        TileEntityMinMax obj = (TileEntityMinMax) world.b(i, j, k);
+        TileEntityMinMax obj = (TileEntityMinMax) world.getTileEntity(i, j, k);
         if (obj.minX == ItemCursor.minX && obj.minY == ItemCursor.minY && obj.minZ == ItemCursor.minZ && obj.maxX == ItemCursor.maxX && obj.maxY == ItemCursor.maxY && obj.maxZ == ItemCursor.maxZ)
             return;
         obj.minX = ItemCursor.minX;
@@ -51,25 +54,26 @@ public class BlockTimer extends TileWithEntity {
     }
 
     public void onTriggerActivated(Level world, int i, int j, int k) {
-        TileEntityTimer obj = (TileEntityTimer) world.b(i, j, k);
+        TileEntityTimer obj = (TileEntityTimer) world.getTileEntity(i, j, k);
         if (obj.canActivate && !obj.active)
             obj.startActive();
     }
 
-    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
+    @Override
+    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
         if (DebugMode.active) {
-            TileEntityTimer obj = (TileEntityTimer) world.b(i, j, k);
+            TileEntityTimer obj = (TileEntityTimer) world.getTileEntity(i, j, k);
             GuiTimer.showUI(world, i, j, k, obj);
         }
         return true;
     }
 
-    public boolean v_() {
+    public boolean method_1576() {
         return DebugMode.active;
     }
 
     public void reset(Level world, int i, int j, int k, boolean death) {
-        TileEntityTimer obj = (TileEntityTimer) world.b(i, j, k);
+        TileEntityTimer obj = (TileEntityTimer) world.getTileEntity(i, j, k);
         obj.active = false;
         obj.canActivate = true;
         obj.ticks = 0;

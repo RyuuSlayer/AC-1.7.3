@@ -16,15 +16,18 @@ public class BlockScript extends TileWithEntity {
         super(i, j, Material.AIR);
     }
 
-    protected TileEntity a_() {
+    @Override
+    protected TileEntity createTileEntity() {
         return new TileEntityScript();
     }
 
-    public boolean c() {
+    @Override
+    public boolean isFullOpaque() {
         return false;
     }
 
-    public Box e(Level world, int i, int j, int k) {
+    @Override
+    public Box getCollisionShape(Level world, int i, int j, int k) {
         return null;
     }
 
@@ -32,11 +35,13 @@ public class BlockScript extends TileWithEntity {
         return DebugMode.active;
     }
 
-    public int a(TileView iblockaccess, int i, int j, int k, int l) {
-        return super.a(iblockaccess, i, j, k, l);
+    @Override
+    public int method_1626(TileView iblockaccess, int i, int j, int k, int l) {
+        return super.method_1626(iblockaccess, i, j, k, l);
     }
 
-    public boolean v_() {
+    @Override
+    public boolean method_1576() {
         return DebugMode.active;
     }
 
@@ -45,22 +50,23 @@ public class BlockScript extends TileWithEntity {
     }
 
     public void onTriggerActivated(Level world, int i, int j, int k) {
-        TileEntityScript obj = (TileEntityScript) world.b(i, j, k);
+        TileEntityScript obj = (TileEntityScript) world.getTileEntity(i, j, k);
         if (!obj.onTriggerScriptFile.equals(""))
             world.scriptHandler.runScript(obj.onTriggerScriptFile, obj.scope);
         obj.isActivated = true;
     }
 
     public void onTriggerDeactivated(Level world, int i, int j, int k) {
-        TileEntityScript obj = (TileEntityScript) world.b(i, j, k);
+        TileEntityScript obj = (TileEntityScript) world.getTileEntity(i, j, k);
         if (!obj.onDetriggerScriptFile.equals(""))
             world.scriptHandler.runScript(obj.onDetriggerScriptFile, obj.scope);
         obj.isActivated = false;
     }
 
-    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
+    @Override
+    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
         if (DebugMode.active) {
-            TileEntityScript obj = (TileEntityScript) world.b(i, j, k);
+            TileEntityScript obj = (TileEntityScript) world.getTileEntity(i, j, k);
             GuiScript.showUI(obj);
         }
         return true;

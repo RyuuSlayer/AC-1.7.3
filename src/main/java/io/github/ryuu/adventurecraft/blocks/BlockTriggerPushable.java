@@ -18,17 +18,19 @@ public class BlockTriggerPushable extends BlockContainerColor {
         super(i, j, Material.STONE);
     }
 
-    protected TileEntity a_() {
+    @Override
+    protected TileEntity createTileEntity() {
         return new TileEntityTriggerPushable();
     }
 
     private boolean checkBlock(Level world, int i, int j, int k, int m) {
-        return (world.a(i, j, k) == Blocks.pushableBlock.bn && world.e(i, j, k) == m);
+        return (world.getTileId(i, j, k) == Blocks.pushableBlock.id && world.getTileMeta(i, j, k) == m);
     }
 
-    public void b(Level world, int i, int j, int k, int l) {
-        TileEntityTriggerPushable obj = (TileEntityTriggerPushable) world.b(i, j, k);
-        int metadata = world.e(i, j, k);
+    @Override
+    public void method_1609(Level world, int i, int j, int k, int l) {
+        TileEntityTriggerPushable obj = (TileEntityTriggerPushable) world.getTileEntity(i, j, k);
+        int metadata = world.getTileMeta(i, j, k);
         boolean hasNeighbor = checkBlock(world, i + 1, j, k, metadata);
         hasNeighbor |= checkBlock(world, i - 1, j, k, metadata);
         hasNeighbor |= checkBlock(world, i, j + 1, k, metadata);
@@ -50,8 +52,8 @@ public class BlockTriggerPushable extends BlockContainerColor {
         }
     }
 
-    public void setTriggerToSelection(fd world, int i, int j, int k) {
-        TileEntityMinMax obj = (TileEntityMinMax) world.b(i, j, k);
+    public void setTriggerToSelection(Level world, int i, int j, int k) {
+        TileEntityMinMax obj = (TileEntityMinMax) world.getTileEntity(i, j, k);
         obj.minX = ItemCursor.minX;
         obj.minY = ItemCursor.minY;
         obj.minZ = ItemCursor.minZ;
@@ -60,9 +62,10 @@ public class BlockTriggerPushable extends BlockContainerColor {
         obj.maxZ = ItemCursor.maxZ;
     }
 
-    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
-        if (DebugMode.active && entityplayer.G() != null && (entityplayer.G()).c == Items.cursor.bf) {
-            TileEntityTriggerPushable obj = (TileEntityTriggerPushable) world.b(i, j, k);
+    @Override
+    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
+        if (DebugMode.active && entityplayer.getHeldItem() != null && (entityplayer.getHeldItem()).itemId == Items.cursor.id) {
+            TileEntityTriggerPushable obj = (TileEntityTriggerPushable) world.getTileEntity(i, j, k);
             GuiTriggerPushable.showUI(obj);
             return true;
         }
@@ -71,6 +74,6 @@ public class BlockTriggerPushable extends BlockContainerColor {
 
     public void incrementColor(Level world, int i, int j, int k) {
         super.incrementColor(world, i, j, k);
-        b(world, i, j, k, 0);
+        method_1609(world, i, j, k, 0);
     }
 }

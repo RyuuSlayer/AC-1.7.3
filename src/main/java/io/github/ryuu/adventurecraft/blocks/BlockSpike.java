@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.blocks;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
@@ -10,24 +11,29 @@ public class BlockSpike extends Tile {
         super(i, 246, Material.METAL);
     }
 
-    public Box e(Level world, int i, int j, int k) {
+    @Override
+    public Box getCollisionShape(Level world, int i, int j, int k) {
         float f = 0.25F;
-        return eq.b((i + f), j, (k + f), ((i + 1) - f), ((j + 1) - f), ((k + 1) - f));
+        return Box.getOrCreate((i + f), j, (k + f), ((i + 1) - f), ((j + 1) - f), ((k + 1) - f));
     }
 
-    public boolean d() {
+    @Override
+    public boolean isFullCube() {
         return false;
     }
 
-    public boolean c() {
+    @Override
+    public boolean isFullOpaque() {
         return false;
     }
 
-    public int b() {
+    @Override
+    public int method_1621() {
         return 32;
     }
 
-    public void a(Level world, int i, int j, int k, sn entity) {
-        entity.a((sn) null, 10);
+    @Override
+    public void onEntityCollision(Level world, int i, int j, int k, Entity entity) {
+        entity.damage((Entity) null, 10);
     }
 }

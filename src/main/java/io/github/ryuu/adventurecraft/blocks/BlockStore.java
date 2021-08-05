@@ -16,35 +16,39 @@ public class BlockStore extends TileWithEntity {
         super(i, j, Material.GLASS);
     }
 
-    protected TileEntity a_() {
+    @Override
+    protected TileEntity createTileEntity() {
         return new TileEntityStore();
     }
 
-    public boolean c() {
+    @Override
+    public boolean isFullOpaque() {
         return false;
     }
 
-    public int b_() {
+    @Override
+    public int method_1619() {
         return 1;
     }
 
-    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
-        TileEntityStore store = (TileEntityStore) world.b(i, j, k);
+    @Override
+    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
+        TileEntityStore store = (TileEntityStore) world.getTileEntity(i, j, k);
         if (DebugMode.active) {
             GuiStoreDebug.showUI(store);
             return true;
         }
         if (store.buySupplyLeft != 0) {
-            if (store.sellItemID == 0 || entityplayer.c.consumeItemAmount(store.sellItemID, store.sellItemDamage, store.sellItemAmount)) {
+            if (store.sellItemID == 0 || entityplayer.inventory.consumeItemAmount(store.sellItemID, store.sellItemDamage, store.sellItemAmount)) {
                 if (store.buyItemID != 0)
-                    entityplayer.c.a(new ItemInstance(store.buyItemID, store.buyItemAmount, store.buyItemDamage));
+                    entityplayer.inventory.pickupItem(new ItemInstance(store.buyItemID, store.buyItemAmount, store.buyItemDamage));
                 store.buySupplyLeft--;
                 if (store.tradeTrigger != null) {
                     world.triggerManager.addArea(i, j, k, store.tradeTrigger);
                     world.triggerManager.removeArea(i, j, k);
                 }
             } else {
-                Minecraft.minecraftInstance.v.a("Don't have enough to trade.");
+                Minecraft.minecraftInstance.overlay.addChatMessage("Don't have enough to trade.");
             }
             return true;
         }
@@ -52,7 +56,7 @@ public class BlockStore extends TileWithEntity {
     }
 
     public void reset(Level world, int i, int j, int k, boolean death) {
-        TileEntityStore store = (TileEntityStore) world.b(i, j, k);
+        TileEntityStore store = (TileEntityStore) world.getTileEntity(i, j, k);
         store.buySupplyLeft = store.buySupply;
     }
 }

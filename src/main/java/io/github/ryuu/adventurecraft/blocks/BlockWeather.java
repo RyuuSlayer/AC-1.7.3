@@ -17,15 +17,18 @@ public class BlockWeather extends TileWithEntity {
         super(i, j, Material.AIR);
     }
 
-    protected TileEntity a_() {
+    @Override
+    protected TileEntity createTileEntity() {
         return new TileEntityWeather();
     }
 
-    public boolean c() {
+    @Override
+    public boolean isFullOpaque() {
         return false;
     }
 
-    public Box e(Level world, int i, int j, int k) {
+    @Override
+    public Box getCollisionShape(Level world, int i, int j, int k) {
         return null;
     }
 
@@ -38,34 +41,36 @@ public class BlockWeather extends TileWithEntity {
     }
 
     public void onTriggerActivated(Level world, int i, int j, int k) {
-        TileEntityWeather obj = (TileEntityWeather) world.b(i, j, k);
+        TileEntityWeather obj = (TileEntityWeather) world.getTileEntity(i, j, k);
         if (obj.changePrecipitate) {
-            world.x.b(obj.precipitate);
+            world.properties.setRaining(obj.precipitate);
             world.resetCoordOrder();
         }
         if (obj.changeTempOffset) {
-            world.x.tempOffset = obj.tempOffset;
+            world.properties.tempOffset = obj.tempOffset;
             world.resetCoordOrder();
         }
         if (obj.changeTimeOfDay)
             world.setTimeOfDay(obj.timeOfDay);
         if (obj.changeTimeRate)
-            world.x.setTimeRate(obj.timeRate);
+            world.properties.setTimeRate(obj.timeRate);
     }
 
     public void onTriggerDeactivated(Level world, int i, int j, int k) {
     }
 
-    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
-        if (DebugMode.active && entityplayer.G() != null && (entityplayer.G()).c == Items.cursor.bf) {
-            TileEntityWeather obj = (TileEntityWeather) world.b(i, j, k);
+    @Override
+    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
+        if (DebugMode.active && entityplayer.getHeldItem() != null && (entityplayer.getHeldItem()).itemId == Items.cursor.id) {
+            TileEntityWeather obj = (TileEntityWeather) world.getTileEntity(i, j, k);
             GuiWeather.showUI(world, obj);
             return true;
         }
         return false;
     }
 
-    public boolean v_() {
+    @Override
+    public boolean method_1576() {
         return DebugMode.active;
     }
 }

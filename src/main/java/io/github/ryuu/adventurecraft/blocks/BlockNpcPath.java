@@ -17,15 +17,18 @@ public class BlockNpcPath extends TileWithEntity {
         super(i, j, Material.STONE);
     }
 
-    protected TileEntity a_() {
+    @Override
+    protected TileEntity createTileEntity() {
         return new TileEntityNpcPath();
     }
 
-    public Box e(Level world, int i, int j, int k) {
+    @Override
+    public Box getCollisionShape(Level world, int i, int j, int k) {
         return null;
     }
 
-    public boolean c() {
+    @Override
+    public boolean isFullOpaque() {
         return false;
     }
 
@@ -33,7 +36,8 @@ public class BlockNpcPath extends TileWithEntity {
         return DebugMode.active;
     }
 
-    public boolean v_() {
+    @Override
+    public boolean method_1576() {
         return DebugMode.active;
     }
 
@@ -42,14 +46,15 @@ public class BlockNpcPath extends TileWithEntity {
     }
 
     public void onTriggerActivated(Level world, int i, int j, int k) {
-        TileEntityNpcPath obj = (TileEntityNpcPath) world.b(i, j, k);
+        TileEntityNpcPath obj = (TileEntityNpcPath) world.getTileEntity(i, j, k);
         if (obj != null)
             obj.pathEntity();
     }
 
-    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
-        if (DebugMode.active && entityplayer.G() != null && (entityplayer.G()).c == Items.cursor.bf) {
-            TileEntityNpcPath obj = (TileEntityNpcPath) world.b(i, j, k);
+    @Override
+    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
+        if (DebugMode.active && entityplayer.getHeldItem() != null && (entityplayer.getHeldItem()).itemId == Items.cursor.id) {
+            TileEntityNpcPath obj = (TileEntityNpcPath) world.getTileEntity(i, j, k);
             if (obj != null)
                 GuiNpcPath.showUI(obj);
             return true;

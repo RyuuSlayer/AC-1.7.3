@@ -17,15 +17,18 @@ public class BlockUrl extends TileWithEntity {
         super(i, j, Material.AIR);
     }
 
-    protected TileEntity a_() {
+    @Override
+    protected TileEntity createTileEntity() {
         return new TileEntityUrl();
     }
 
-    public boolean c() {
+    @Override
+    public boolean isFullOpaque() {
         return false;
     }
 
-    public Box e(Level world, int i, int j, int k) {
+    @Override
+    public Box getCollisionShape(Level world, int i, int j, int k) {
         return null;
     }
 
@@ -38,21 +41,23 @@ public class BlockUrl extends TileWithEntity {
     }
 
     public void onTriggerActivated(Level world, int i, int j, int k) {
-        TileEntityUrl obj = TileEntityUrl)world.b(i, j, k);
+        TileEntityUrl obj = (TileEntityUrl)world.getTileEntity(i, j, k);
         if (obj.url != null && !obj.url.equals(""))
             GuiUrlRequest.showUI(obj.url);
     }
 
-    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
+    @Override
+    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
         if (DebugMode.active) {
-            TileEntityUrl obj = (TileEntityUrl) world.b(i, j, k);
+            TileEntityUrl obj = (TileEntityUrl) world.getTileEntity(i, j, k);
             GuiUrl.showUI(world, obj);
             return true;
         }
         return false;
     }
 
-    public boolean v_() {
+    @Override
+    public boolean method_1576() {
         return DebugMode.active;
     }
 }

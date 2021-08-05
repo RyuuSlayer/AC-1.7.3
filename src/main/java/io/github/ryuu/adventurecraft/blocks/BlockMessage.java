@@ -17,15 +17,18 @@ public class BlockMessage extends TileWithEntity {
         super(i, j, Material.AIR);
     }
 
-    protected TileEntity a_() {
+    @Override
+    protected TileEntity createTileEntity() {
         return new TileEntityMessage();
     }
 
-    public boolean c() {
+    @Override
+    public boolean isFullOpaque() {
         return false;
     }
 
-    public Box e(Level world, int i, int j, int k) {
+    @Override
+    public Box getCollisionShape(Level world, int i, int j, int k) {
         return null;
     }
 
@@ -38,23 +41,24 @@ public class BlockMessage extends TileWithEntity {
     }
 
     public void onTriggerActivated(Level world, int i, int j, int k) {
-        TileEntityMessage obj = (TileEntityMessage) world.b(i, j, k);
+        TileEntityMessage obj = (TileEntityMessage) world.getTileEntity(i, j, k);
         if (!obj.message.equals(""))
-            Minecraft.minecraftInstance.v.a(obj.message);
+            Minecraft.minecraftInstance.overlay.addChatMessage(obj.message);
         if (!obj.sound.equals(""))
-            world.a(i + 0.5D, j + 0.5D, k + 0.5D, obj.sound, 1.0F, 1.0F);
+            world.playSound(i + 0.5D, j + 0.5D, k + 0.5D, obj.sound, 1.0F, 1.0F);
     }
 
-    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
+    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
         if (DebugMode.active) {
-            TileEntityMessage obj = (TileEntityMessage) world.b(i, j, k);
+            TileEntityMessage obj = (TileEntityMessage) world.getTileEntity(i, j, k);
             GuiMessage.showUI(world, obj);
             return true;
         }
         return false;
     }
 
-    public boolean v_() {
+    @Override
+    public boolean method_1576() {
         return DebugMode.active;
     }
 }

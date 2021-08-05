@@ -22,6 +22,7 @@ public class BlockFan extends Tile {
         this.fanOn = f;
     }
 
+    @Override
     public int getTextureForSide(int i, int j) {
         if (i == j)
             return this.tex;
@@ -129,6 +130,7 @@ public class BlockFan extends Tile {
         }
     }
 
+    @Override
     public void randomDisplayTick(Level world, int i, int j, int k, Random random) {
         if (this.fanOn)
             world.method_216(i, j, k, this.id, getTickrate());

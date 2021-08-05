@@ -21,23 +21,28 @@ public class BlockTriggerMemory extends TileWithEntity {
         super(i, j, Material.AIR);
     }
 
-    protected TileEntity a_() {
+    @Override
+    protected TileEntity createTileEntity() {
         return new TileEntityTriggerMemory();
     }
 
-    public int a(int i, Random random) {
+    @Override
+    public int getDropId(int i, Random random) {
         return 0;
     }
 
-    public int a(Random random) {
+    @Override
+    public int getDropCount(Random random) {
         return 0;
     }
 
-    public boolean c() {
+    @Override
+    public boolean isFullOpaque() {
         return false;
     }
 
-    public Box e(Level world, int i, int j, int k) {
+    @Override
+    public Box getCollisionShape(Level world, int i, int j, int k) {
         return null;
     }
 
@@ -45,7 +50,8 @@ public class BlockTriggerMemory extends TileWithEntity {
         return DebugMode.active;
     }
 
-    public boolean v_() {
+    @Override
+    public boolean method_1576() {
         return DebugMode.active;
     }
 
@@ -54,7 +60,7 @@ public class BlockTriggerMemory extends TileWithEntity {
     }
 
     public void onTriggerActivated(Level world, int i, int j, int k) {
-        TileEntityTriggerMemory obj = (TileEntityTriggerMemory) world.b(i, j, k);
+        TileEntityTriggerMemory obj = (TileEntityTriggerMemory) world.getTileEntity(i, j, k);
         if (!obj.isActivated && !obj.activateOnDetrigger) {
             obj.isActivated = true;
             triggerActivate(world, i, j, k);
@@ -62,7 +68,7 @@ public class BlockTriggerMemory extends TileWithEntity {
     }
 
     public void onTriggerDeactivated(Level world, int i, int j, int k) {
-        TileEntityTriggerMemory obj = (TileEntityTriggerMemory) world.b(i, j, k);
+        TileEntityTriggerMemory obj = (TileEntityTriggerMemory) world.getTileEntity(i, j, k);
         if (!obj.isActivated && obj.activateOnDetrigger) {
             obj.isActivated = true;
             triggerActivate(world, i, j, k);
@@ -70,7 +76,7 @@ public class BlockTriggerMemory extends TileWithEntity {
     }
 
     public void triggerActivate(Level world, int i, int j, int k) {
-        TileEntityTriggerMemory obj = (TileEntityTriggerMemory) world.b(i, j, k);
+        TileEntityTriggerMemory obj = (TileEntityTriggerMemory) world.getTileEntity(i, j, k);
         world.triggerManager.addArea(i, j, k, new TriggerArea(obj.minX, obj.minY, obj.minZ, obj.maxX, obj.maxY, obj.maxZ));
     }
 
@@ -78,41 +84,44 @@ public class BlockTriggerMemory extends TileWithEntity {
         world.triggerManager.removeArea(i, j, k);
     }
 
-    public void b(Level world, int i, int j, int k) {
-        TileEntityTriggerMemory obj = (TileEntityTriggerMemory) world.b(i, j, k);
+    @Override
+    public void onTileRemoved(Level world, int i, int j, int k) {
+        TileEntityTriggerMemory obj = (TileEntityTriggerMemory) world.getTileEntity(i, j, k);
         if (obj.isSet())
-            if (world.e(i, j, k) > 0) {
+            if (world.getTileMeta(i, j, k) > 0) {
                 onTriggerDeactivated(world, i, j, k);
             } else {
                 onTriggerActivated(world, i, j, k);
             }
-        super.b(world, i, j, k);
+        super.onTileRemoved(world, i, j, k);
     }
 
     public void setTriggerToSelection(Level world, int i, int j, int k) {
-        TileEntityTriggerMemory obj = (TileEntityTriggerMemory) world.b(i, j, k);
+        TileEntityTriggerMemory obj = (TileEntityTriggerMemory) world.getTileEntity(i, j, k);
         if (obj.minX == ItemCursor.minX && obj.minY == ItemCursor.minY && obj.minZ == ItemCursor.minZ && obj.maxX == ItemCursor.maxX && obj.maxY == ItemCursor.maxY && obj.maxZ == ItemCursor.maxZ)
             return;
         obj.set(ItemCursor.minX, ItemCursor.minY, ItemCursor.minZ, ItemCursor.maxX, ItemCursor.maxY, ItemCursor.maxZ);
     }
 
-    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
-        if (DebugMode.active && entityplayer.G() != null && (entityplayer.G()).c == Items.cursor.bf) {
-            TileEntityTriggerMemory obj = (TileEntityTriggerMemory) world.b(i, j, k);
+    @Override
+    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
+        if (DebugMode.active && entityplayer.getHeldItem() != null && (entityplayer.getHeldItem()).itemId == Items.cursor.id) {
+            TileEntityTriggerMemory obj = (TileEntityTriggerMemory) world.getTileEntity(i, j, k);
             GuiTriggerMemory.showUI(world, i, j, k, obj);
             return true;
         }
         return false;
     }
 
-    public void a(Level world, int i, int j, int k, Random random) {
-        TileEntityTriggerMemory obj = (TileEntityTriggerMemory) world.b(i, j, k);
+    @Override
+    public void onScheduledTick(Level world, int i, int j, int k, Random random) {
+        TileEntityTriggerMemory obj = (TileEntityTriggerMemory) world.getTileEntity(i, j, k);
         if (obj.isActivated)
             triggerActivate(world, i, j, k);
     }
 
     public void reset(Level world, int i, int j, int k, boolean death) {
-        TileEntityTriggerMemory obj = (TileEntityTriggerMemory) world.b(i, j, k);
+        TileEntityTriggerMemory obj = (TileEntityTriggerMemory) world.getTileEntity(i, j, k);
         if ((!death || obj.resetOnDeath) && obj.isActivated) {
             obj.isActivated = false;
             triggerDeactivate(world, i, j, k);

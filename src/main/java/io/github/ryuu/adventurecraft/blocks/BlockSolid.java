@@ -9,12 +9,14 @@ public class BlockSolid extends Tile implements IBlockColor {
         super(i, j, Material.STONE);
     }
 
-    public int a(int i, int j) {
-        return this.bm + j;
+    @Override
+    public int getTextureForSide(int i, int j) {
+        return this.tex + j;
     }
 
+    @Override
     public void incrementColor(Level world, int i, int j, int k) {
-        int metadata = world.e(i, j, k);
-        world.d(i, j, k, (metadata + 1) % subTypes[this.bn]);
+        int metadata = world.getTileMeta(i, j, k);
+        world.setTileMeta(i, j, k, (metadata + 1) % subTypes[this.id]);
     }
 }

@@ -8,35 +8,39 @@ public class BlockLadderSubtypes extends LadderTile implements IBlockColor {
         super(i, j);
     }
 
-    public int a(int i, int j) {
+    @Override
+    public int getTextureForSide(int i, int j) {
         j /= 4;
-        return this.bm + j;
+        return this.tex + j;
     }
 
-    public void e(Level world, int i, int j, int k, int l) {
-        int meta = world.e(i, j, k);
+    @Override
+    public void onPlaced(Level world, int i, int j, int k, int l) {
+        int meta = world.getTileMeta(i, j, k);
         int side = 0;
-        if (side == 0 && isLadderID(world.a(i, j - 1, k)))
-            side = world.e(i, j - 1, k) % 4 + 2;
-        if (side == 0 && isLadderID(world.a(i, j + 1, k)))
-            side = world.e(i, j + 1, k) % 4 + 2;
-        if ((side == 0 || l == 2) && world.g(i, j, k + 1))
+        if (side == 0 && isLadderID(world.getTileId(i, j - 1, k)))
+            side = world.getTileMeta(i, j - 1, k) % 4 + 2;
+        if (side == 0 && isLadderID(world.getTileId(i, j + 1, k)))
+            side = world.getTileMeta(i, j + 1, k) % 4 + 2;
+        if ((side == 0 || l == 2) && world.isFullOpaque(i, j, k + 1))
             side = 2;
-        if ((side == 0 || l == 3) && world.g(i, j, k - 1))
+        if ((side == 0 || l == 3) && world.isFullOpaque(i, j, k - 1))
             side = 3;
-        if ((side == 0 || l == 4) && world.g(i + 1, j, k))
+        if ((side == 0 || l == 4) && world.isFullOpaque(i + 1, j, k))
             side = 4;
-        if ((side == 0 || l == 5) && world.g(i - 1, j, k))
+        if ((side == 0 || l == 5) && world.isFullOpaque(i - 1, j, k))
             side = 5;
         meta += Math.max(side - 2, 0) % 4;
-        world.d(i, j, k, meta);
+        world.setTileMeta(i, j, k, meta);
     }
 
-    public void b(Level world, int i, int j, int k, int l) {
+    @Override
+    public void method_1609(Level world, int i, int j, int k, int l) {
     }
 
+    @Override
     public void incrementColor(Level world, int i, int j, int k) {
-        int metadata = world.e(i, j, k);
-        world.d(i, j, k, (metadata + 4) % 16);
+        int metadata = world.getTileMeta(i, j, k);
+        world.setTileMeta(i, j, k, (metadata + 4) % 16);
     }
 }
