@@ -11,11 +11,13 @@ import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import io.github.ryuu.adventurecraft.util.Version;
+import net.minecraft.client.GameStartupError;
 import org.lwjgl.Sys;
 import org.lwjgl.opengl.GL11;
 
-public class cb extends Panel {
-    public cb(mh unexpectedthrowable) {
+public class GameStartupErrorPanel extends Panel {
+    public GameStartupErrorPanel(GameStartupError unexpectedthrowable) {
         setBackground(new Color(3028036));
         setLayout(new BorderLayout());
         StringWriter stringwriter = new StringWriter();
@@ -26,7 +28,7 @@ public class cb extends Panel {
         try {
             s2 = s2 + "Generated " + (new SimpleDateFormat()).format(new Date()) + "\n";
             s2 = s2 + "\n";
-            s2 = s2 + AC_Version.version;
+            s2 = s2 + Version.version;
             s2 = s2 + "OS: " + System.getProperty("os.name") + " (" + System.getProperty("os.arch") + ") version " + System.getProperty("os.version") + "\n";
             s2 = s2 + "Java: " + System.getProperty("java.version") + ", " + System.getProperty("java.vendor") + "\n";
             s2 = s2 + "VM: " + System.getProperty("java.vm.name") + " (" + System.getProperty("java.vm.info") + "), " + System.getProperty("java.vm.vendor") + "\n";
@@ -75,10 +77,10 @@ public class cb extends Panel {
         s3 = s3 + "\n";
         TextArea textarea = new TextArea(s3, 0, 0, 1);
         textarea.setFont(new Font("Monospaced", 0, 12));
-        add((Component) new fy(), "North");
-        add((Component) new wv(80), "East");
-        add((Component) new wv(80), "West");
-        add((Component) new wv(100), "South");
+        add((Component) new LogoCanvas(), "North");
+        add((Component) new SquareCanvas(80), "East");
+        add((Component) new SquareCanvas(80), "West");
+        add((Component) new SquareCanvas(100), "South");
         add(textarea, "Center");
     }
 }

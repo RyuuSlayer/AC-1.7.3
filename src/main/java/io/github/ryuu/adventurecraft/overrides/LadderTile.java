@@ -4,8 +4,8 @@ import io.github.ryuu.adventurecraft.blocks.Blocks;
 
 import java.util.Random;
 
-public class dp extends Tile {
-    protected dp(int i, int j) {
+public class LadderTile extends Tile {
+    protected LadderTile(int i, int j) {
         super(i, j, ln.o);
     }
 

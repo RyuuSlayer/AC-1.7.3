@@ -426,7 +426,7 @@ public class px {
         a(f);
         ls entityliving = this.j.i;
         n renderglobal = this.j.g;
-        dn effectrenderer = this.j.j;
+        ParticleManager effectrenderer = this.j.j;
         double d = entityliving.bl + (entityliving.aM - entityliving.bl) * f;
         double d1 = entityliving.bm + (entityliving.aN - entityliving.bm) * f;
         double d2 = entityliving.bn + (entityliving.aO - entityliving.bn) * f;

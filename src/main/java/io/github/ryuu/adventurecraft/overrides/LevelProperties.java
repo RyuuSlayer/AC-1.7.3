@@ -7,7 +7,7 @@ import java.util.Map;
 import io.github.ryuu.adventurecraft.blocks.BlockEffect;
 import net.minecraft.client.Minecraft;
 
-public class ei {
+public class LevelProperties {
     private final long a;
 
     private int b;
@@ -116,7 +116,7 @@ public class ei {
 
     public boolean allowsInventoryCrafting;
 
-    public ei(nu nbttagcompound) {
+    public LevelProperties(nu nbttagcompound) {
         this.useImages = true;
         this.mapSize = 250.0D;
         this.waterLevel = 64;
@@ -198,7 +198,7 @@ public class ei {
         if (nbttagcompound.b("mobsBurn"))
             this.mobsBurn = nbttagcompound.m("mobsBurn");
         this.overlay = nbttagcompound.i("overlay");
-        this.replacementTextures = new HashMap<String, String>();
+        this.replacementTextures = new HashMap<>();
         if (nbttagcompound.b("textureReplacements"))
             this.replacementTag = nbttagcompound.k("textureReplacements");
         this.onNewSaveScript = nbttagcompound.i("onNewSaveScript");
@@ -234,7 +234,7 @@ public class ei {
         }
     }
 
-    public ei(long l, String s) {
+    public LevelProperties(long l, String s) {
         this.useImages = true;
         this.mapSize = 250.0D;
         this.waterLevel = 64;
@@ -275,7 +275,7 @@ public class ei {
         }
     }
 
-    public ei(ei worldinfo) {
+    public LevelProperties(LevelProperties worldinfo) {
         this.useImages = true;
         this.mapSize = 250.0D;
         this.waterLevel = 64;
@@ -319,7 +319,7 @@ public class ei {
         this.l = worldinfo.l;
         this.o = worldinfo.o;
         this.n = worldinfo.n;
-        this.replacementTextures = new HashMap<String, String>();
+        this.replacementTextures = new HashMap<>();
         this.brightness = new float[16];
         for (int i = 0; i < 16; i++)
             this.brightness[i] = worldinfo.brightness[i];

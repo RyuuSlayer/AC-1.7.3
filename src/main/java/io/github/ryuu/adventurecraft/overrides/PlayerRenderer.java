@@ -1,20 +1,23 @@
 package io.github.ryuu.adventurecraft.overrides;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.entity.LivingEntityRenderer;
+import net.minecraft.client.render.entity.model.BipedModel;
+import net.minecraft.client.render.entity.model.EntityModel;
 import org.lwjgl.opengl.GL11;
 
-public class ds extends gv {
-    private final fh a;
+public class PlayerRenderer extends LivingEntityRenderer {
+    private final BipedModel a;
 
-    private final fh g;
+    private final BipedModel g;
 
-    private final fh h;
+    private final BipedModel h;
 
-    public ds() {
-        super((ko) new fh(0.0F), 0.5F);
-        this.a = (fh) this.e;
-        this.g = new fh(1.0F);
-        this.h = new fh(0.5F);
+    public PlayerRenderer() {
+        super(new BipedModel(0.0F), 0.5F);
+        this.a = (BipedModel) this.e;
+        this.g = new BipedModel(1.0F);
+        this.h = new BipedModel(0.5F);
     }
 
     protected boolean a(gs entityplayer, int i, float f) {
@@ -23,8 +26,8 @@ public class ds extends gv {
             ItemType item = itemstack.a();
             if (item instanceof wa) {
                 wa itemarmor = (wa) item;
-                a("/armor/" + ds.i[itemarmor.bm] + "_" + ((i != 2) ? 1 : 2) + ".png");
-                fh modelbiped = (i != 2) ? this.g : this.h;
+                a("/armor/" + PlayerRenderer.i[itemarmor.bm] + "_" + ((i != 2) ? 1 : 2) + ".png");
+                BipedModel modelbiped = (i != 2) ? this.g : this.h;
                 modelbiped.a.h = (i == 0);
                 modelbiped.b.h = (i == 0);
                 modelbiped.c.h = (i == 1 || i == 2);
@@ -32,7 +35,7 @@ public class ds extends gv {
                 modelbiped.e.h = (i == 1);
                 modelbiped.f.h = (i == 2 || i == 3);
                 modelbiped.g.h = (i == 2 || i == 3);
-                a((ko) modelbiped);
+                a((EntityModel) modelbiped);
                 return true;
             }
         }

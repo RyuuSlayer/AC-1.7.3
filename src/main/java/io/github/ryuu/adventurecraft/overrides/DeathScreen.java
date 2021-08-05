@@ -2,7 +2,7 @@ package io.github.ryuu.adventurecraft.overrides;
 
 import org.lwjgl.opengl.GL11;
 
-public class ch extends Screen {
+public class DeathScreen extends Screen {
     public void b() {
         this.e.clear();
         this.e.add(new ke(1, this.c / 2 - 100, this.d / 4 + 72, "Respawn"));

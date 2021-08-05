@@ -1,9 +1,12 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import net.minecraft.tile.TranslucentTile;
+import net.minecraft.tile.material.Material;
+
 import java.util.Random;
 
-public class fk extends jp {
-    public fk(int i, int j, ln material, boolean flag) {
+public class GlassTile extends TranslucentTile {
+    public GlassTile(int i, int j, Material material, boolean flag) {
         super(i, j, material, flag);
     }
 

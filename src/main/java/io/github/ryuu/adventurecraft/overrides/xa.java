@@ -41,7 +41,7 @@ public abstract class xa {
         if (this.a.x.useImages)
             return (cl) new ChunkProviderHeightMapGenerate(this.a, this.a.s());
         yf c = new yf(this.a, this.a.s());
-        ei w = this.a.x;
+        LevelProperties w = this.a.x;
         c.mapSize = w.mapSize;
         c.waterLevel = w.waterLevel;
         c.fractureHorizontal = w.fractureHorizontal;

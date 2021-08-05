@@ -2,8 +2,9 @@ package io.github.ryuu.adventurecraft.overrides;
 
 import io.github.ryuu.adventurecraft.util.LightCache;
 import io.github.ryuu.adventurecraft.util.PlayerTorch;
+import net.minecraft.level.TileView;
 
-public class ew implements xp {
+public class ew implements TileView {
     private final int a;
 
     private final int b;

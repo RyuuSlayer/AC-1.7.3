@@ -498,7 +498,7 @@ public class Tile {
         l = (ct) new aj("sand", 1.0F, 1.0F);
         m = new Tile[256];
         r = new boolean[256];
-        u = (new eo(1, 215)).c(1.5F).b(10.0F).a(h).a("stone");
+        u = (new StoneTile(1, 215)).c(1.5F).b(10.0F).a(h).a("stone");
         v = (wp) (new wp(2)).c(0.6F).a(g).a("grass").setSubTypes(5);
         w = (new ot(3, 2)).c(0.5F).a(f).a("dirt");
         x = (new AC_BlockColor(4, 214, ln.e)).c(2.0F).b(10.0F).a(h).a("stonebrick");
@@ -517,7 +517,7 @@ public class Tile {
         K = (new vg(17)).c(2.0F).a(e).a("log").j();
         L = (bk) (new bk(18, 52)).c(0.2F).g(1).a(g).a("leaves").q().j();
         M = (new xf(19)).c(0.6F).a(g).a("sponge");
-        N = (new fk(20, 49, ln.p, false)).c(0.3F).a(j).a("glass");
+        N = (new GlassTile(20, 49, ln.p, false)).c(0.3F).a(j).a("glass");
         O = (new mt(21, 160)).c(3.0F).b(5.0F).a(h).a("oreLapis");
         P = (new Tile(22, 144, ln.e)).c(3.0F).b(5.0F).a(h).a("blockLapis");
         Q = (new xq(23)).c(3.5F).a(h).a("dispenser").j();
@@ -562,7 +562,7 @@ public class Tile {
         aD = (new tc(62, true)).c(3.5F).a(h).a(0.875F).a("furnace").j();
         aE = (new uj(63, yk.class, true)).c(1.0F).a(e).a("sign").q().j();
         aF = (new le(64, ln.d)).c(3.0F).a(e).a("doorWood").q().j();
-        aG = (new dp(65, 83)).c(0.4F).a(e).a("ladder").j();
+        aG = (new LadderTile(65, 83)).c(0.4F).a(e).a("ladder").j();
         aH = (new pc(66, 128, false)).c(0.7F).a(Tile.i).a("rail").j();
         aI = (new ss(67, x)).a("stairsStone").j();
         aJ = (new uj(68, yk.class, false)).c(1.0F).a(e).a("sign").q().j();

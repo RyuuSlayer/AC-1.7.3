@@ -666,7 +666,7 @@ public abstract class ls extends sn {
         int blockIDAbove = this.aI.a(i, j + 1, k);
         boolean v = (this.aI.e(i, j, k) % 3 == 0);
         boolean vAbove = (this.aI.e(i, j + 1, k) % 3 == 0);
-        return (dp.isLadderID(blockID) || dp.isLadderID(blockIDAbove) || (blockID == AC_Blocks.ropes1.bn && v) || (blockIDAbove == AC_Blocks.ropes1.bn && vAbove) || (blockID == AC_Blocks.ropes2.bn && v) || (blockIDAbove == AC_Blocks.ropes2.bn && vAbove) || (blockID == AC_Blocks.chains.bn && v) || (blockIDAbove == AC_Blocks.chains.bn && vAbove));
+        return (LadderTile.isLadderID(blockID) || LadderTile.isLadderID(blockIDAbove) || (blockID == AC_Blocks.ropes1.bn && v) || (blockIDAbove == AC_Blocks.ropes1.bn && vAbove) || (blockID == AC_Blocks.ropes2.bn && v) || (blockIDAbove == AC_Blocks.ropes2.bn && vAbove) || (blockID == AC_Blocks.chains.bn && v) || (blockIDAbove == AC_Blocks.chains.bn && vAbove));
     }
 
     public void b(nu nbttagcompound) {

@@ -6,7 +6,7 @@ import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
 
-public class dn {
+public class ParticleManager {
     protected Level a;
 
     private final List[] b = new List[6];
@@ -15,7 +15,7 @@ public class dn {
 
     private final Random d = new Random();
 
-    public dn(Level world, ji renderengine) {
+    public ParticleManager(Level world, ji renderengine) {
         if (world != null)
             this.a = world;
         this.c = renderengine;

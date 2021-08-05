@@ -87,7 +87,7 @@ public class DimensionFileChunkIO implements ChunkIO {
         world.r();
         File file = a(chunk.j, chunk.k);
         if (file.exists()) {
-            ei worldinfo = world.x();
+            LevelProperties worldinfo = world.x();
             worldinfo.b(worldinfo.g() - file.length());
         }
         try {
@@ -102,7 +102,7 @@ public class DimensionFileChunkIO implements ChunkIO {
             if (file.exists())
                 file.delete();
             file1.renameTo(file);
-            ei worldinfo1 = world.x();
+            LevelProperties worldinfo1 = world.x();
             worldinfo1.b(worldinfo1.g() + file.length());
         } catch (Exception exception) {
             exception.printStackTrace();

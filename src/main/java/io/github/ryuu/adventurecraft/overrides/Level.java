@@ -92,7 +92,7 @@ public class Level implements xp {
 
     protected final wt w;
 
-    public ei x;
+    public LevelProperties x;
 
     public boolean y;
 
@@ -150,7 +150,7 @@ public class Level implements xp {
         this.R = new ArrayList();
         this.B = false;
         this.w = isavehandler;
-        this.x = new ei(l, s);
+        this.x = new LevelProperties(l, s);
         this.t = worldprovider;
         this.z = new hc(isavehandler);
         worldprovider.a(this);
@@ -198,7 +198,7 @@ public class Level implements xp {
         this.B = false;
         this.I = world.I;
         this.w = world.w;
-        this.x = new ei(world.x);
+        this.x = new LevelProperties(world.x);
         this.z = new hc(this.w);
         this.t = worldprovider;
         worldprovider.a(this);
@@ -281,7 +281,7 @@ public class Level implements xp {
         }
         boolean flag = false;
         if (this.x == null) {
-            this.x = new ei(l, s);
+            this.x = new LevelProperties(l, s);
             flag = true;
         } else {
             this.x.a(s);
@@ -337,7 +337,7 @@ public class Level implements xp {
         loadTextureAnimations();
         TextureFanFX.loadImage();
         sd.loadImage();
-        cg.loadImage();
+        FlowingLavaTextureBinder.loadImage();
         FlowingLavaTextureBinder2.loadImage();
         hs.loadImage();
         vs.loadImage();
@@ -871,7 +871,7 @@ public class Level implements xp {
         int k1 = a(l, i1, j1);
         int i2 = e(l, i1, j1);
         Tile block = Tile.m[k1];
-        if ((!flag1 || block == null || block.e(this, l, i1, j1) != null) && k1 > 0 && block.a(i2, flag) && (collideWithClip || (k1 != AC_Blocks.clipBlock.bn && !dp.isLadderID(k1)))) {
+        if ((!flag1 || block == null || block.e(this, l, i1, j1) != null) && k1 > 0 && block.a(i2, flag) && (collideWithClip || (k1 != AC_Blocks.clipBlock.bn && !LadderTile.isLadderID(k1)))) {
             vf movingobjectposition = block.a(this, l, i1, j1, vec3d, vec3d1);
             if (movingobjectposition != null)
                 return movingobjectposition;
@@ -970,7 +970,7 @@ public class Level implements xp {
             Tile block1 = Tile.m[j2];
             if ((!flag1 || block1 == null || block1.e(this, l, i1, j1) != null) && j2 > 0 && block1.a(k2, flag) && block1.shouldRender(this, l, i1, j1)) {
                 vf movingobjectposition1 = block1.a(this, l, i1, j1, vec3d, vec3d1);
-                if (movingobjectposition1 != null && (collideWithClip || (block1.bn != Blocks.clipBlock.bn && !dp.isLadderID(block1.bn))))
+                if (movingobjectposition1 != null && (collideWithClip || (block1.bn != Blocks.clipBlock.bn && !LadderTile.isLadderID(block1.bn))))
                     return movingobjectposition1;
             }
         }
@@ -1064,7 +1064,7 @@ public class Level implements xp {
                 if (i(k1, 64, l1))
                     for (int i2 = k - 1; i2 < l; i2++) {
                         Tile block = Tile.m[a(k1, i2, l1)];
-                        if (block != null && (entity.collidesWithClipBlocks || (block.bn != Blocks.clipBlock.bn && !dp.isLadderID(block.bn))))
+                        if (block != null && (entity.collidesWithClipBlocks || (block.bn != Blocks.clipBlock.bn && !LadderTile.isLadderID(block.bn))))
                             block.a(this, k1, i2, l1, axisalignedbb, this.K);
                     }
             }
@@ -2241,7 +2241,7 @@ public class Level implements xp {
             Tile.m[j1].a(this, i, j, k, l, i1);
     }
 
-    public ei x() {
+    public LevelProperties x() {
         return this.x;
     }
 

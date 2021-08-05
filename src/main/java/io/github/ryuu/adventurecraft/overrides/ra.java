@@ -231,7 +231,7 @@ public class ra {
                 GL11.glRotatef(59.0F, 0.0F, 0.0F, 1.0F);
                 GL11.glRotatef(-65.0F * f13, 0.0F, 1.0F, 0.0F);
                 bw render1 = th.a.a((sn) this.a.h);
-                ds renderplayer1 = (ds) render1;
+                PlayerRenderer renderplayer1 = (PlayerRenderer) render1;
                 float f17 = 1.0F;
                 GL11.glScalef(f17, f17, f17);
                 renderplayer1.b();
@@ -304,7 +304,7 @@ public class ra {
                 GL11.glScalef(1.0F, 1.0F, 1.0F);
                 GL11.glTranslatef(5.6F, 0.0F, 0.0F);
                 bw render = th.a.a((sn) this.a.h);
-                ds renderplayer = (ds) render;
+                PlayerRenderer renderplayer = (PlayerRenderer) render;
                 renderplayer.b();
                 GL11.glBindTexture(3553, this.a.p.b("/mob/powerGlove.png"));
                 this.refBiped.m = 0.0F;
@@ -348,7 +348,7 @@ public class ra {
             GL11.glScalef(1.0F, 1.0F, 1.0F);
             GL11.glTranslatef(5.6F, 0.0F, 0.0F);
             bw render = th.a.a((sn) this.a.h);
-            ds renderplayer = (ds) render;
+            PlayerRenderer renderplayer = (PlayerRenderer) render;
             renderplayer.b();
             GL11.glPopMatrix();
         }

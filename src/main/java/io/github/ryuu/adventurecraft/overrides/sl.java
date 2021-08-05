@@ -160,7 +160,7 @@ public class sl extends sn {
             this.aV = this.aT = (float) (Math.atan2(this.aQ, f) * 180.0D / 3.1415927410125732D);
         }
         int i = this.aI.a(this.d, this.e, this.f);
-        if (i > 0 && i != AC_Blocks.clipBlock.bn && !dp.isLadderID(i)) {
+        if (i > 0 && i != AC_Blocks.clipBlock.bn && !LadderTile.isLadderID(i)) {
             Tile.m[i].a((xp) this.aI, this.d, this.e, this.f);
             eq axisalignedbb = Tile.m[i].e(this.aI, this.d, this.e, this.f);
             if (axisalignedbb != null && axisalignedbb.a(bt.b(this.aM, this.aN, this.aO)))

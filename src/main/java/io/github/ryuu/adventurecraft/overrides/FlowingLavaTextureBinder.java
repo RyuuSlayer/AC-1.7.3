@@ -2,9 +2,10 @@ package io.github.ryuu.adventurecraft.overrides;
 
 import java.awt.image.BufferedImage;
 
+import io.github.ryuu.adventurecraft.util.Vec2;
 import net.minecraft.client.Minecraft;
 
-public class cg extends TextureBinder {
+public class FlowingLavaTextureBinder extends TextureBinder {
     protected float[] g;
 
     protected float[] h;
@@ -21,7 +22,7 @@ public class cg extends TextureBinder {
 
     private static int width;
 
-    public cg() {
+    public FlowingLavaTextureBinder() {
         super(Tile.D.bm);
         this.g = new float[256];
         this.h = new float[256];

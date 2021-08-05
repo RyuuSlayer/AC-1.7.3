@@ -125,7 +125,7 @@ public class ClientPlayer extends gs {
     }
 
     public void b(sn entity, int i) {
-        this.b.j.a(new em(this.b.f, entity, this, -0.5F));
+        this.b.j.a(new EntityCollisionParticle(this.b.f, entity, this, -0.5F));
     }
 
     public int s() {

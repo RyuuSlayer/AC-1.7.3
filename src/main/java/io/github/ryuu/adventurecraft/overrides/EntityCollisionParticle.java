@@ -1,8 +1,9 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import net.minecraft.client.particle.Particle;
 import org.lwjgl.opengl.GL11;
 
-public class em extends xw {
+public class EntityCollisionParticle extends Particle {
     private final sn a;
 
     private final sn o;
@@ -13,7 +14,7 @@ public class em extends xw {
 
     private final float r;
 
-    public em(Level world, sn entity, sn entity1, float f) {
+    public EntityCollisionParticle(Level world, sn entity, sn entity1, float f) {
         super(world, entity.aM, entity.aN, entity.aO, entity.aP, entity.aQ, entity.aR);
         this.p = 0;
         this.q = 0;
