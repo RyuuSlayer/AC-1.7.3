@@ -11,6 +11,9 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.hit.HitType;
+import net.minecraft.util.maths.Box;
+import net.minecraft.util.maths.Vec3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -58,13 +61,13 @@ public class MapEditing {
         float winX = x;
         float winY = y;
         GLU.gluUnProject(winX, winY, 1.0F, modelview, projection, viewport, position);
-        bt pos = camera.e(time);
-        bt mouseLoc = pos.c((position.get(0) * 1024.0F), (position.get(1) * 1024.0F), (position.get(2) * 1024.0F));
+        Vec3f pos = camera.e(time);
+        Vec3f mouseLoc = pos.c((position.get(0) * 1024.0F), (position.get(1) * 1024.0F), (position.get(2) * 1024.0F));
         this.cursor = this.world.a(pos, mouseLoc);
     }
 
     public void paint() {
-        if (this.cursor != null && this.cursor.a == jg.a) {
+        if (this.cursor != null && this.cursor.a == HitType.a) {
             int x = this.cursor.b;
             int y = this.cursor.c;
             int z = this.cursor.d;
@@ -135,7 +138,7 @@ public class MapEditing {
             GL14.glBlendColor(1.0F, 1.0F, 1.0F, 0.4F);
             GL11.glEnable(3042);
             GL11.glBlendFunc(32771, 32772);
-            bt lookDir = camera.ac();
+            Vec3f lookDir = camera.ac();
             int xOffset = (int) (camera.aM + DebugMode.reachDistance * lookDir.a) - ItemCursor.minX;
             int yOffset = (int) (camera.aN + DebugMode.reachDistance * lookDir.b) - ItemCursor.minY;
             int zOffset = (int) (camera.aO + DebugMode.reachDistance * lookDir.c) - ItemCursor.minZ;
@@ -175,7 +178,7 @@ public class MapEditing {
         }
     }
 
-    private void drawBox(eq axisalignedbb) {
+    private void drawBox(Box axisalignedbb) {
         Tessellator tessellator = Tessellator.a;
         tessellator.a(3);
         tessellator.a(axisalignedbb.a, axisalignedbb.b, axisalignedbb.c);
@@ -204,7 +207,7 @@ public class MapEditing {
     }
 
     private void drawCursor(LivingEntity camera, float time) {
-        if (this.cursor != null && this.cursor.a == jg.a) {
+        if (this.cursor != null && this.cursor.a == HitType.a) {
             GL11.glEnable(3042);
             GL11.glBlendFunc(770, 771);
             GL11.glColor4f(0.0F, 0.0F, 0.0F, 0.4F);
@@ -218,7 +221,7 @@ public class MapEditing {
                 double d = camera.bl + (camera.aM - camera.bl) * time;
                 double d1 = camera.bm + (camera.aN - camera.bm) * time;
                 double d2 = camera.bn + (camera.aO - camera.bn) * time;
-                eq box = Tile.m[j].f(this.world, this.cursor.b, this.cursor.c, this.cursor.d).b(f1, f1, f1).c(-d, -d1, -d2);
+                Box box = Tile.m[j].f(this.world, this.cursor.b, this.cursor.c, this.cursor.d).b(f1, f1, f1).c(-d, -d1, -d2);
                 drawBox(box);
                 GL11.glColor4f(1.0F, 0.0F, 0.0F, 0.4F);
                 GL11.glLineWidth(4.0F);

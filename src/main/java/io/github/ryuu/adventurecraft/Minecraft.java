@@ -3,26 +3,20 @@ package io.github.ryuu.adventurecraft;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.gui.GuiMapSelect;
 import io.github.ryuu.adventurecraft.gui.GuiStore;
+import io.github.ryuu.adventurecraft.overrides.ItemType;
 import io.github.ryuu.adventurecraft.scripting.ScriptEntity;
 import io.github.ryuu.adventurecraft.scripting.ScriptItem;
 import io.github.ryuu.adventurecraft.scripting.ScriptVec3;
 import io.github.ryuu.adventurecraft.util.*;
-import br;
 import bt;
-import cg;
-import ch;
-import cl;
 import cv;
 import cx;
 import cz;
-import dc;
 import dk;
 import ep;
 import eq;
 import gc;
 import ge;
-import gh;
-import gm;
 import gt;
 import hj;
 import ht;
@@ -55,35 +49,42 @@ import kn;
 import kp;
 import kq;
 import kv;
-import kx;
 import lr;
-import ls;
 import n;
-import nb;
 import net.minecraft.client.*;
 import net.minecraft.client.colour.WaterColour;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.screen.DeathScreen;
 import net.minecraft.client.gui.screen.LevelSaveConflictScreen;
+import net.minecraft.client.gui.screen.SleepingChatScreen;
 import net.minecraft.client.gui.screen.TitleScreen;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.render.entity.model.BipedModel;
+import net.minecraft.client.sound.SoundHelper;
 import net.minecraft.client.util.ScreenScaler;
 import net.minecraft.client.util.Session;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.ClientPlayer;
+import net.minecraft.entity.player.MultiplayerClientPlayer;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
+import net.minecraft.level.chunk.ClientChunkCache;
 import net.minecraft.level.dimension.DimensionData;
+import net.minecraft.level.source.LevelSource;
 import net.minecraft.level.storage.LevelStorage;
 import net.minecraft.level.storage.McRegionLevelStorage;
 import net.minecraft.level.storage.SessionLockException;
 import net.minecraft.network.Connection;
+import net.minecraft.stat.StatManager;
 import net.minecraft.tile.Tile;
 import net.minecraft.util.ProgressListenerError;
 import net.minecraft.util.ProgressListenerImpl;
+import net.minecraft.util.Vec3i;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Controllers;
 import org.lwjgl.input.Keyboard;
@@ -98,21 +99,16 @@ import org.mozilla.javascript.ScriptableObject;
 import oz;
 import px;
 import sj;
-import tk;
 import ue;
 import uo;
 import uq;
 import ur;
 import vf;
-import vs;
-import vu;
 import vx;
 import vy;
 import x;
 import xa;
-import xi;
 import yb;
-import yo;
 
 public abstract class Minecraft implements Runnable {
     public Minecraft(Component component, Canvas canvas, MinecraftApplet minecraftapplet, int i, int j, boolean flag) {
@@ -128,13 +124,13 @@ public abstract class Minecraft implements Runnable {
         this.s = new ProgressListenerImpl(this);
         this.V = 0;
         this.W = 0;
-        this.u = new vu(this);
+        this.u = new ToastManager(this);
         this.w = false;
         this.x = new BipedModel(0.0F);
         this.y = null;
-        this.B = new yo();
-        this.ad = new vs();
-        this.ae = new cg();
+        this.B = new SoundHelper();
+        this.ad = new FlowingWaterTextureBinder2();
+        this.ae = new FlowingLavaTextureBinder();
         this.J = true;
         this.K = "";
         this.L = false;
@@ -217,7 +213,7 @@ public abstract class Minecraft implements Runnable {
         jh.a(this.p.a("/misc/foliagecolor.png"));
         this.t = new px(this);
         EntityRenderDispatcher.a.f = new HandItemRenderer(this);
-        this.I = new xi(this.k, this.Z);
+        this.I = new StatManager(this.k, this.Z);
         ep.f.a((gt) new kh(this));
         x();
         Keyboard.create();
@@ -375,7 +371,7 @@ public abstract class Minecraft implements Runnable {
 
     public void a(Screen guiscreen) {
         TitleScreen TitleScreen;
-        ch ch;
+        DeathScreen DeathScreen;
         if (this.r instanceof ce)
             return;
         if (this.r != null)
@@ -386,17 +382,17 @@ public abstract class Minecraft implements Runnable {
         if (guiscreen == null && this.f == null) {
             TitleScreen = new TitleScreen();
         } else if (TitleScreen == null && this.h.Y <= 0) {
-            ch = new ch();
+            DeathScreen = new DeathScreen();
         }
-        if (ch instanceof TitleScreen)
+        if (DeathScreen instanceof TitleScreen)
             this.v.b();
-        this.r = (Screen) ch;
-        if (ch != null) {
+        this.r = DeathScreen;
+        if (DeathScreen != null) {
             h();
             ScreenScaler scaledresolution = new ScreenScaler(this.z, this.d, this.e);
             int i = scaledresolution.a();
             int j = scaledresolution.b();
-            ch.a(this, i, j);
+            DeathScreen.a(this, i, j);
             this.w = false;
         } else {
             g();
@@ -496,7 +492,7 @@ public abstract class Minecraft implements Runnable {
                     c("Pre render");
                     cv.a = this.z.j;
                     if (!this.cameraActive) {
-                        this.B.a((ls) this.h, this.T.c);
+                        this.B.a((LivingEntity) this.h, this.T.c);
                     } else {
                         this.B.a(this.cutsceneCameraEntity, this.T.c);
                     }
@@ -737,13 +733,13 @@ public abstract class Minecraft implements Runnable {
             }
             int itemUseDelay = 5;
             if (itemUsing != null)
-                itemUseDelay = (gm.c[itemUsing.c]).itemUseDelay;
+                itemUseDelay = (ItemType.c[itemUsing.c]).itemUseDelay;
             if (i == 0) {
                 this.ag = this.V + itemUseDelay;
             } else {
                 this.rightMouseTicksRan = this.V + itemUseDelay;
             }
-            if (itemUsing != null && gm.c[itemUsing.c].mainActionLeftClick()) {
+            if (itemUsing != null && ItemType.c[itemUsing.c].mainActionLeftClick()) {
                 i = 0;
             } else {
                 i = 1;
@@ -805,8 +801,8 @@ public abstract class Minecraft implements Runnable {
             }
         }
         if (flag && i == 0)
-            if (itemUsing != null && gm.c[itemUsing.c] != null)
-                gm.c[itemUsing.c].onItemLeftClick(itemUsing, this.f, (Player) this.h);
+            if (itemUsing != null && ItemType.c[itemUsing.c] != null)
+                ItemType.c[itemUsing.c].onItemLeftClick(itemUsing, this.f, (Player) this.h);
         if (flag && i == 1)
             if (itemUsing != null && this.c.a((Player) this.h, this.f, itemUsing))
                 this.t.c.c();
@@ -946,9 +942,9 @@ public abstract class Minecraft implements Runnable {
         this.v.a();
         this.t.a(1.0F);
         if (this.h != null) {
-            cl ichunkprovider = this.f.w();
-            if (ichunkprovider instanceof kx) {
-                kx chunkproviderloadorgenerate = (kx) ichunkprovider;
+            LevelSource ichunkprovider = this.f.w();
+            if (ichunkprovider instanceof ClientChunkCache) {
+                ClientChunkCache chunkproviderloadorgenerate = (ClientChunkCache) ichunkprovider;
                 int j = in.d((int) this.h.aM) >> 4;
                 int i1 = in.d((int) this.h.aO) >> 4;
                 chunkproviderloadorgenerate.d(j, i1);
@@ -963,9 +959,9 @@ public abstract class Minecraft implements Runnable {
             if (this.h.Y <= 0) {
                 a((Screen) null);
             } else if (this.h.N() && this.f != null && this.f.B) {
-                a((Screen) new gh());
+                a(new SleepingChatScreen());
             }
-        } else if (this.r != null && this.r instanceof gh && !this.h.N()) {
+        } else if (this.r != null && this.r instanceof SleepingChatScreen && !this.h.N()) {
             a((Screen) null);
         }
         if (this.r != null && !this.r.disableInputGrabbing)
@@ -1141,7 +1137,7 @@ public abstract class Minecraft implements Runnable {
 
     private void C() {
         System.out.println("FORCING RELOAD!");
-        this.B = new yo();
+        this.B = new SoundHelper();
         this.B.a(this.z);
         this.U.a();
     }
@@ -1190,7 +1186,7 @@ public abstract class Minecraft implements Runnable {
     public void a(String s, String s1, long l) {
         String mapName = getMapUsed(s);
         if (in.a(mapName)) {
-            a((Screen) new GuiMapSelect(null, s));
+            a(new GuiMapSelect(null, s));
         } else {
             startWorld(s, s1, l, mapName);
         }
@@ -1293,7 +1289,7 @@ public abstract class Minecraft implements Runnable {
             this.c.a(world);
             if (!l()) {
                 if (entityplayer == null)
-                    this.h = (dc) world.a(dc.class);
+                    this.h = (ClientPlayer) world.a(ClientPlayer.class);
             } else if (this.h != null) {
                 this.h.t_();
                 if (world != null)
@@ -1302,10 +1298,10 @@ public abstract class Minecraft implements Runnable {
             if (!world.B)
                 d(s);
             if (this.h == null) {
-                this.h = (dc) this.c.b(world);
+                this.h = (ClientPlayer) this.c.b(world);
                 this.h.t_();
                 this.c.a((Player) this.h);
-                this.cutsceneCameraEntity = (ls) this.c.b(world);
+                this.cutsceneCameraEntity = (LivingEntity) this.c.b(world);
                 this.f.script.initPlayer();
             }
             this.h.a = (uo) new lr(this.z);
@@ -1316,9 +1312,9 @@ public abstract class Minecraft implements Runnable {
             this.c.b((Player) this.h);
             if (entityplayer != null)
                 world.e();
-            cl ichunkprovider = world.w();
-            if (ichunkprovider instanceof kx) {
-                kx chunkproviderloadorgenerate = (kx) ichunkprovider;
+            LevelSource ichunkprovider = world.w();
+            if (ichunkprovider instanceof ClientChunkCache) {
+                ClientChunkCache chunkproviderloadorgenerate = (ClientChunkCache) ichunkprovider;
                 int i = in.d((int) this.h.aM) >> 4;
                 int j = in.d((int) this.h.aO) >> 4;
                 chunkproviderloadorgenerate.d(i, j);
@@ -1326,7 +1322,7 @@ public abstract class Minecraft implements Runnable {
             world.a((Player) this.h);
             if (world.s)
                 world.a((yb) this.s);
-            this.i = (ls) this.h;
+            this.i = this.h;
         } else {
             this.h = null;
         }
@@ -1348,14 +1344,14 @@ public abstract class Minecraft implements Runnable {
         int i = 0;
         int j = c * 2 / 16 + 1;
         j *= j;
-        cl ichunkprovider = this.f.w();
-        br chunkcoordinates = this.f.u();
+        LevelSource ichunkprovider = this.f.w();
+        Vec3i chunkcoordinates = this.f.u();
         if (this.h != null) {
             chunkcoordinates.a = (int) this.h.aM;
             chunkcoordinates.c = (int) this.h.aO;
         }
-        if (ichunkprovider instanceof kx) {
-            kx chunkproviderloadorgenerate = (kx) ichunkprovider;
+        if (ichunkprovider instanceof ClientChunkCache) {
+            ClientChunkCache chunkproviderloadorgenerate = (ClientChunkCache) ichunkprovider;
             chunkproviderloadorgenerate.d(chunkcoordinates.a >> 4, chunkcoordinates.c >> 4);
         }
         for (int k = -c; k <= c; k += 16) {
@@ -1410,10 +1406,10 @@ public abstract class Minecraft implements Runnable {
     public void a(boolean flag, int i) {
         if (!this.f.B && !this.f.t.f())
             m();
-        br chunkcoordinates = this.f.u();
-        cl ichunkprovider = this.f.w();
-        if (ichunkprovider instanceof kx) {
-            kx chunkproviderloadorgenerate = (kx) ichunkprovider;
+        Vec3i chunkcoordinates = this.f.u();
+        LevelSource ichunkprovider = this.f.w();
+        if (ichunkprovider instanceof ClientChunkCache) {
+            ClientChunkCache chunkproviderloadorgenerate = (ClientChunkCache) ichunkprovider;
             chunkproviderloadorgenerate.d(chunkcoordinates.a >> 4, chunkcoordinates.c >> 4);
         }
         this.f.v();
@@ -1422,14 +1418,14 @@ public abstract class Minecraft implements Runnable {
             entID = this.h.aD;
             this.f.e((Entity) this.h);
         } else {
-            this.h = (dc) this.c.b(this.f);
+            this.h = (ClientPlayer) this.c.b(this.f);
             this.f.script.initPlayer();
         }
         this.g.resetForDeath();
-        br spawnCoords = this.f.u();
+        Vec3i spawnCoords = this.f.u();
         this.h.t_();
         this.h.c(spawnCoords.a + 0.5D, spawnCoords.b, spawnCoords.c + 0.5D, 0.0F, 0.0F);
-        this.i = (ls) this.h;
+        this.i = this.h;
         this.h.t_();
         this.c.a((Player) this.h);
         this.f.a((Player) this.h);
@@ -1475,9 +1471,9 @@ public abstract class Minecraft implements Runnable {
         thread.start();
     }
 
-    public nb s() {
-        if (this.h instanceof tk)
-            return ((tk) this.h).bN;
+    public ClientPlayNetworkHandler s() {
+        if (this.h instanceof MultiplayerClientPlayer)
+            return ((MultiplayerClientPlayer) this.h).bN;
         return null;
     }
 
@@ -1534,9 +1530,9 @@ public abstract class Minecraft implements Runnable {
 
     public n g;
 
-    public dc h;
+    public ClientPlayer h;
 
-    public ls i;
+    public LivingEntity i;
 
     public ParticleManager j;
 
@@ -1570,7 +1566,7 @@ public abstract class Minecraft implements Runnable {
 
     private final int Y;
 
-    public vu u;
+    public ToastManager u;
 
     public uq v;
 
@@ -1584,7 +1580,7 @@ public abstract class Minecraft implements Runnable {
 
     protected MinecraftApplet A;
 
-    public yo B;
+    public SoundHelper B;
 
     public vy C;
 
@@ -1602,15 +1598,15 @@ public abstract class Minecraft implements Runnable {
 
     public static long H = 0L;
 
-    public xi I;
+    public StatManager I;
 
     private String ab;
 
     private int ac;
 
-    private final vs ad;
+    private final FlowingWaterTextureBinder2 ad;
 
-    private final cg ae;
+    private final FlowingLavaTextureBinder ae;
 
     private static File af = null;
 
@@ -1656,7 +1652,7 @@ public abstract class Minecraft implements Runnable {
 
     public boolean cameraPause;
 
-    public ls cutsceneCameraEntity;
+    public LivingEntity cutsceneCameraEntity;
 
     public GuiStore storeGUI;
 

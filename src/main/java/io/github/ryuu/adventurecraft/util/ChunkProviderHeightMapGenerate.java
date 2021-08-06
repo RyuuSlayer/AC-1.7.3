@@ -1,12 +1,17 @@
 package io.github.ryuu.adventurecraft.util;
 
 import net.minecraft.level.Level;
+import net.minecraft.level.biome.Biome;
+import net.minecraft.level.chunk.Chunk;
+import net.minecraft.level.source.LevelSource;
+import net.minecraft.level.structure.Feature;
 import net.minecraft.tile.Tile;
+import net.minecraft.util.ProgressListener;
 import net.minecraft.util.noise.PerlinOctaveNoise;
 
 import java.util.Random;
 
-public class ChunkProviderHeightMapGenerate implements cl {
+public class ChunkProviderHeightMapGenerate implements LevelSource {
     private final Random rand;
 
     private final PerlinOctaveNoise field_912_k;
@@ -27,7 +32,7 @@ public class ChunkProviderHeightMapGenerate implements cl {
 
     private double[] stoneNoise;
 
-    private kd[] biomesForGeneration;
+    private Biome[] biomesForGeneration;
 
     double[] field_4185_d;
 
@@ -57,7 +62,7 @@ public class ChunkProviderHeightMapGenerate implements cl {
         this.mobSpawnerNoise = new PerlinOctaveNoise(this.rand, 8);
     }
 
-    public void generateTerrain(int i, int j, byte[] abyte0, kd[] amobspawnerbase, double[] ad) {
+    public void generateTerrain(int i, int j, byte[] abyte0, Biome[] amobspawnerbase, double[] ad) {
         byte byte0 = 4;
         for (int i1 = 0; i1 < byte0; i1++) {
             for (int j1 = 0; j1 < byte0; j1++) {
@@ -91,12 +96,12 @@ public class ChunkProviderHeightMapGenerate implements cl {
         }
     }
 
-    public void replaceBlocksForBiome(int i, int j, byte[] abyte0, kd[] amobspawnerbase) {
+    public void replaceBlocksForBiome(int i, int j, byte[] abyte0, Biome[] amobspawnerbase) {
         double d = 0.03125D;
         this.stoneNoise = this.field_908_o.a(this.stoneNoise, (i * 16), (j * 16), 0.0D, 16, 16, 1, d * 2.0D, d * 2.0D, d * 2.0D);
         for (int k = 0; k < 16; k++) {
             for (int l = 0; l < 16; l++) {
-                kd mobspawnerbase = amobspawnerbase[k + l * 16];
+                Biome mobspawnerbase = amobspawnerbase[k + l * 16];
                 int i1 = (int) (this.stoneNoise[k + l * 16] / 3.0D + 3.0D + this.rand.nextDouble() * 0.25D);
                 int j1 = -1;
                 byte byte1 = mobspawnerbase.p;
@@ -137,14 +142,14 @@ public class ChunkProviderHeightMapGenerate implements cl {
         }
     }
 
-    public lm c(int i, int j) {
+    public Chunk c(int i, int j) {
         return b(i, j);
     }
 
-    public lm b(int i, int j) {
+    public Chunk b(int i, int j) {
         this.rand.setSeed(i * 341873128712L + j * 132897987541L);
         byte[] abyte0 = new byte[32768];
-        lm chunk = new lm(this.worldObj, abyte0, i, j);
+        Chunk chunk = new Chunk(this.worldObj, abyte0, i, j);
         this.biomesForGeneration = this.worldObj.a().a(this.biomesForGeneration, i * 16, j * 16, 16, 16);
         double[] ad = (this.worldObj.a()).a;
         generateTerrain(i, j, abyte0, this.biomesForGeneration, ad);
@@ -237,11 +242,11 @@ public class ChunkProviderHeightMapGenerate implements cl {
         return true;
     }
 
-    public void a(cl ichunkprovider, int i, int j) {
+    public void a(LevelSource ichunkprovider, int i, int j) {
         gk.a = true;
         int k = i * 16;
         int l = j * 16;
-        kd mobspawnerbase = this.worldObj.a().a(k + 16, l + 16);
+        Biome mobspawnerbase = this.worldObj.a().a(k + 16, l + 16);
         this.rand.setSeed(this.worldObj.s());
         long l1 = this.rand.nextLong() / 2L * 2L + 1L;
         long l2 = this.rand.nextLong() / 2L * 2L + 1L;
@@ -252,25 +257,25 @@ public class ChunkProviderHeightMapGenerate implements cl {
         int l7 = 0;
         if (this.rand.nextInt(10) == 0)
             l7++;
-        if (mobspawnerbase == kd.d) {
+        if (mobspawnerbase == Biome.d) {
             l7 += k4 + 5;
-        } else if (mobspawnerbase == kd.a) {
+        } else if (mobspawnerbase == Biome.a) {
             l7 += k4 + 5;
-        } else if (mobspawnerbase == kd.c) {
+        } else if (mobspawnerbase == Biome.c) {
             l7 += k4 + 2;
-        } else if (mobspawnerbase == kd.g) {
+        } else if (mobspawnerbase == Biome.g) {
             l7 += k4 + 5;
-        } else if (mobspawnerbase == kd.h) {
+        } else if (mobspawnerbase == Biome.h) {
             l7 -= 20;
-        } else if (mobspawnerbase == kd.k) {
+        } else if (mobspawnerbase == Biome.k) {
             l7 -= 20;
-        } else if (mobspawnerbase == kd.i) {
+        } else if (mobspawnerbase == Biome.i) {
             l7 -= 20;
         }
         for (int i11 = 0; i11 < l7; i11++) {
             int k15 = k + this.rand.nextInt(16) + 8;
             int j18 = l + this.rand.nextInt(16) + 8;
-            pg worldgenerator = mobspawnerbase.a(this.rand);
+            Feature worldgenerator = mobspawnerbase.a(this.rand);
             worldgenerator.a(1.0D, 1.0D, 1.0D);
             worldgenerator.a(this.worldObj, this.rand, k15, this.worldObj.d(k15, j18), j18);
         }
@@ -299,7 +304,7 @@ public class ChunkProviderHeightMapGenerate implements cl {
             (new be(Tile.ah.bn)).a(this.worldObj, this.rand, i12, k16, j19);
         }
         int l12 = 0;
-        if (mobspawnerbase == kd.h)
+        if (mobspawnerbase == Biome.h)
             l12 += 10;
         for (int j17 = 0; j17 < l12; j17++) {
             int i20 = k + this.rand.nextInt(16) + 8;
@@ -322,7 +327,7 @@ public class ChunkProviderHeightMapGenerate implements cl {
         gk.a = false;
     }
 
-    public boolean a(boolean flag, yb iprogressupdate) {
+    public boolean a(boolean flag, ProgressListener iprogressupdate) {
         return true;
     }
 

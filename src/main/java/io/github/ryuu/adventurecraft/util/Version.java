@@ -5,9 +5,9 @@ import java.io.File;
 import java.io.FileReader;
 
 public class Version {
-    public static String version = "AdventureCraft - Minecraft Beta 1.7.3";
+    public static String version = "AdventureCraft Awakening";
 
-    public static String shortVersion = "AdventureCraft - Minecraft Beta 1.7.3";
+    public static String shortVersion = "AdventureCraft Awakening";
 
     private static void getVersion() {
         try {

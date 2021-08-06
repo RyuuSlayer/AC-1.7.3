@@ -5,8 +5,9 @@ import java.io.IOException;
 
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.TextureBinder;
 
-public class TextureFanFX extends aw {
+public class TextureFanFX extends TextureBinder {
     static int numFrames;
 
     int curFrame;
