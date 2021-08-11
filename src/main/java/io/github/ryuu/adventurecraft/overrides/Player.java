@@ -4,11 +4,28 @@ import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.PlayerTorch;
+import net.minecraft.achievement.Achievements;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.FurnaceEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.monster.Monster;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.level.Level;
+import net.minecraft.level.source.LevelSource;
+import net.minecraft.stat.Stat;
+import net.minecraft.stat.Stats;
+import net.minecraft.tile.BedTile;
+import net.minecraft.tile.entity.Sign;
+import net.minecraft.util.Vec3i;
+import net.minecraft.util.io.AbstractTag;
+import net.minecraft.util.io.DoubleTag;
+import net.minecraft.util.io.ListTag;
 
 import java.util.Iterator;
 import java.util.List;
 
-public abstract class gs extends ls {
+public abstract class Player extends LivingEntity {
     public ix c;
 
     public dw d;
@@ -47,7 +64,7 @@ public abstract class gs extends ls {
 
     protected boolean u;
 
-    public br v;
+    public Vec3i v;
 
     private int a;
 
@@ -57,9 +74,9 @@ public abstract class gs extends ls {
 
     public float y;
 
-    private br b;
+    private Vec3i b;
 
-    private br bN;
+    private Vec3i bN;
 
     public int z;
 
@@ -71,7 +88,7 @@ public abstract class gs extends ls {
 
     private int bO;
 
-    public lx D;
+    public DoubleTag D;
 
     public boolean isSwingingOffhand;
 
@@ -87,7 +104,7 @@ public abstract class gs extends ls {
 
     public String cloakTexture;
 
-    public gs(fd world) {
+    public Player(Level world) {
         super(world);
         this.c = new ix(this);
         this.f = 0;
@@ -101,7 +118,7 @@ public abstract class gs extends ls {
         this.d = (dw) new aa(this.c, !world.B);
         this.e = this.d;
         this.bf = 1.62F;
-        br chunkcoordinates = world.u();
+        Vec3i chunkcoordinates = world.u();
         c(chunkcoordinates.a + 0.5D, (chunkcoordinates.b + 1), chunkcoordinates.c + 0.5D, 0.0F, 0.0F);
         this.Y = 12;
         this.maxHealth = 12;
@@ -163,7 +180,7 @@ public abstract class gs extends ls {
         this.r += d * 0.25D;
         this.t += d2 * 0.25D;
         this.s += d1 * 0.25D;
-        a(jl.k, 1);
+        a(Stats.k, 1);
         if (this.aH == null)
             this.bN = null;
     }
@@ -246,16 +263,16 @@ public abstract class gs extends ls {
         this.i += (f - this.i) * 0.4F;
         this.ag += (f1 - this.ag) * 0.8F;
         if (this.Y > 0) {
-            List<sn> list = this.aI.b(this, this.aW.b(1.0D, 0.0D, 1.0D));
+            List<Entity> list = this.aI.b(this, this.aW.b(1.0D, 0.0D, 1.0D));
             if (list != null)
                 for (int j = 0; j < list.size(); j++) {
-                    sn entity = list.get(j);
+                    Entity entity = list.get(j);
                     if (!entity.be)
                         j(entity);
                 }
         }
-        iz mainItem = this.c.a[this.c.c];
-        iz offItem = this.c.a[this.c.offhandItem];
+        ItemInstance mainItem = this.c.a[this.c.c];
+        ItemInstance offItem = this.c.a[this.c.offhandItem];
         boolean litFromItem = (mainItem != null && ItemType.c[mainItem.c].isLighting(mainItem));
         int i = litFromItem | ((offItem != null && ItemType.c[offItem.c].isLighting(offItem)) ? 1 : 0);
         if (i != 0 || (mainItem != null && (mainItem.c == Tile.ar.bn || mainItem.c == Blocks.lights1.bn)) || (offItem != null && (offItem.c == Tile.ar.bn || offItem.c == Blocks.lights1.bn))) {
@@ -275,10 +292,10 @@ public abstract class gs extends ls {
         }
     }
 
-    private boolean handleLantern(iz i) {
+    private boolean handleLantern(ItemInstance i) {
         if (i == null)
             return false;
-        if (i.c != AC_Items.lantern.bf)
+        if (i.c != Items.lantern.bf)
             return false;
         if (i.i() < i.j()) {
             i.b(i.i() + 1);
@@ -294,7 +311,7 @@ public abstract class gs extends ls {
         return true;
     }
 
-    private void j(sn entity) {
+    private void j(Entity entity) {
         entity.b(this);
     }
 
@@ -302,13 +319,13 @@ public abstract class gs extends ls {
         return this.g;
     }
 
-    public void b(sn entity) {
+    public void b(Entity entity) {
         super.b(entity);
         b(0.2F, 0.2F);
         e(this.aM, this.aN, this.aO);
         this.aQ = 0.10000000149011612D;
         if (this.l.equals("Notch"))
-            a(new iz(ItemType.h, 1), true);
+            a(new ItemInstance(ItemType.h, 1), true);
         if (entity != null) {
             this.aP = (-in.b((this.ac + this.aS) * 3.141593F / 180.0F) * 0.1F);
             this.aR = (-in.a((this.ac + this.aS) * 3.141593F / 180.0F) * 0.1F);
@@ -316,15 +333,15 @@ public abstract class gs extends ls {
             this.aP = this.aR = 0.0D;
         }
         this.bf = 0.1F;
-        a(jl.y, 1);
+        a(Stats.y, 1);
     }
 
-    public void c(sn entity, int i) {
+    public void c(Entity entity, int i) {
         this.g += i;
-        if (entity instanceof gs) {
-            a(jl.A, 1);
+        if (entity instanceof Player) {
+            a(Stats.A, 1);
         } else {
-            a(jl.z, 1);
+            a(Stats.z, 1);
         }
     }
 
@@ -332,11 +349,11 @@ public abstract class gs extends ls {
         a(this.c.a(this.c.c, 1), false);
     }
 
-    public void a(iz itemstack) {
+    public void a(ItemInstance itemstack) {
         a(itemstack, false);
     }
 
-    public void a(iz itemstack, boolean flag) {
+    public void a(ItemInstance itemstack, boolean flag) {
         if (itemstack == null)
             return;
         hl entityitem = new hl(this.aI, this.aM, this.aN - 0.30000001192092896D + w(), this.aO, itemstack);
@@ -361,7 +378,7 @@ public abstract class gs extends ls {
             entityitem.aR += Math.sin(f3) * f1;
         }
         a(entityitem);
-        a(jl.v, 1);
+        a(Stats.v, 1);
     }
 
     protected void a(hl entityitem) {
@@ -383,17 +400,17 @@ public abstract class gs extends ls {
 
     public void a(nu nbttagcompound) {
         super.a(nbttagcompound);
-        sp nbttaglist = nbttagcompound.l("Inventory");
+        ListTag nbttaglist = nbttagcompound.l("Inventory");
         this.c.b(nbttaglist);
         this.m = nbttagcompound.e("Dimension");
         this.u = nbttagcompound.m("Sleeping");
         this.a = nbttagcompound.d("SleepTimer");
         if (this.u) {
-            this.v = new br(in.b(this.aM), in.b(this.aN), in.b(this.aO));
+            this.v = new Vec3i(in.b(this.aM), in.b(this.aN), in.b(this.aO));
             a(true, true, false);
         }
         if (nbttagcompound.b("SpawnX") && nbttagcompound.b("SpawnY") && nbttagcompound.b("SpawnZ"))
-            this.b = new br(nbttagcompound.e("SpawnX"), nbttagcompound.e("SpawnY"), nbttagcompound.e("SpawnZ"));
+            this.b = new Vec3i(nbttagcompound.e("SpawnX"), nbttagcompound.e("SpawnY"), nbttagcompound.e("SpawnZ"));
         this.numHeartPieces = nbttagcompound.e("NumHeartPieces");
         if (this.maxHealth < 12) {
             this.Y = this.Y * 12 / this.maxHealth;
@@ -403,7 +420,7 @@ public abstract class gs extends ls {
 
     public void b(nu nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.a("Inventory", (ij) this.c.a(new sp()));
+        nbttagcompound.a("Inventory", (AbstractTag) this.c.a(new ListTag()));
         nbttagcompound.a("Dimension", this.m);
         nbttagcompound.a("Sleeping", this.u);
         nbttagcompound.a("SleepTimer", (short) this.a);
@@ -415,7 +432,7 @@ public abstract class gs extends ls {
         nbttagcompound.a("NumHeartPieces", this.numHeartPieces);
     }
 
-    public void a(lw iinventory) {
+    public void a(Inventory iinventory) {
     }
 
     public void displayGUIPalette() {
@@ -424,7 +441,7 @@ public abstract class gs extends ls {
     public void a(int i, int j, int k) {
     }
 
-    public void b(sn entity, int i) {
+    public void b(Entity entity, int i) {
     }
 
     public float w() {
@@ -435,13 +452,13 @@ public abstract class gs extends ls {
         this.bf = 1.62F;
     }
 
-    public boolean a(sn entity, int i) {
+    public boolean a(Entity entity, int i) {
         this.av = 0;
         if (this.Y <= 0)
             return false;
         if (N())
             a(true, true, false);
-        if (entity instanceof gz || entity instanceof sl) {
+        if (entity instanceof Monster || entity instanceof sl) {
             if (this.aI.q == 0)
                 i = 0;
             if (this.aI.q == 1)
@@ -454,19 +471,19 @@ public abstract class gs extends ls {
         Object obj = entity;
         if (obj instanceof sl && ((sl) obj).c != null)
             obj = ((sl) obj).c;
-        if (obj instanceof ls)
-            a((ls) obj, false);
-        a(jl.x, i);
+        if (obj instanceof LivingEntity)
+            a((LivingEntity) obj, false);
+        a(Stats.damageDealt, i);
         return super.a(entity, i);
     }
 
-    public boolean attackEntityFromMulti(sn entity, int i) {
+    public boolean attackEntityFromMulti(Entity entity, int i) {
         this.av = 0;
         if (this.Y <= 0)
             return false;
         if (N())
             a(true, true, false);
-        if (entity instanceof gz || entity instanceof sl) {
+        if (entity instanceof Monster || entity instanceof sl) {
             if (this.aI.q == 0)
                 i = 0;
             if (this.aI.q == 1)
@@ -479,9 +496,9 @@ public abstract class gs extends ls {
         Object obj = entity;
         if (obj instanceof sl && ((sl) obj).c != null)
             obj = ((sl) obj).c;
-        if (obj instanceof ls)
-            a((ls) obj, false);
-        a(jl.x, i);
+        if (obj instanceof LivingEntity)
+            a((LivingEntity) obj, false);
+        a(Stats.damageTaken, i);
         return super.attackEntityFromMulti(entity, i);
     }
 
@@ -489,21 +506,21 @@ public abstract class gs extends ls {
         return false;
     }
 
-    protected void a(ls entityliving, boolean flag) {
+    protected void a(LivingEntity entityliving, boolean flag) {
         if (entityliving instanceof gb || entityliving instanceof Ghast)
             return;
-        if (entityliving instanceof gi) {
-            gi entitywolf = (gi) entityliving;
+        if (entityliving instanceof Wolf) {
+            Wolf entitywolf = (Wolf) entityliving;
             if (entitywolf.D() && this.l.equals(entitywolf.A()))
                 return;
         }
-        if (entityliving instanceof gs && !F())
+        if (entityliving instanceof Player && !F())
             return;
-        List list = this.aI.a(gi.class, eq.b(this.aM, this.aN, this.aO, this.aM + 1.0D, this.aN + 1.0D, this.aO + 1.0D).b(16.0D, 4.0D, 16.0D));
-        Iterator<sn> iterator = list.iterator();
+        List list = this.aI.a(Wolf.class, eq.b(this.aM, this.aN, this.aO, this.aM + 1.0D, this.aN + 1.0D, this.aO + 1.0D).b(16.0D, 4.0D, 16.0D));
+        Iterator<Entity> iterator = list.iterator();
         while (iterator.hasNext()) {
-            sn entity = iterator.next();
-            gi entitywolf1 = (gi) entity;
+            Entity entity = iterator.next();
+            Wolf entitywolf1 = (Wolf) entity;
             if (entitywolf1.D() && entitywolf1.G() == null && this.l.equals(entitywolf1.A()) && (!flag || !entitywolf1.B())) {
                 entitywolf1.b(false);
                 entitywolf1.c(entityliving);
@@ -521,21 +538,21 @@ public abstract class gs extends ls {
         super.b(i);
     }
 
-    public void a(sk tileentityfurnace) {
+    public void a(FurnaceEntity tileentityfurnace) {
     }
 
     public void a(Dispenser tileentitydispenser) {
     }
 
-    public void a(yk tileentitysign) {
+    public void a(Sign tileentitysign) {
     }
 
-    public void c(sn entity) {
+    public void c(Entity entity) {
         if (entity.a(this))
             return;
-        iz itemstack = G();
-        if (itemstack != null && entity instanceof ls) {
-            itemstack.a((ls) entity);
+        ItemInstance itemstack = G();
+        if (itemstack != null && entity instanceof LivingEntity) {
+            itemstack.a((LivingEntity) entity);
             if (itemstack.a == 0) {
                 itemstack.a(this);
                 H();
@@ -543,7 +560,7 @@ public abstract class gs extends ls {
         }
     }
 
-    public iz G() {
+    public ItemInstance G() {
         return this.c.b();
     }
 
@@ -576,24 +593,24 @@ public abstract class gs extends ls {
         return this.prevSwingProgressOffhand + f1 * f;
     }
 
-    public void d(sn entity) {
+    public void d(Entity entity) {
         int i = this.c.a(entity);
         if (i > 0) {
             if (this.aQ < 0.0D)
                 i++;
             entity.a(this, i);
-            iz itemstack = G();
-            if (itemstack != null && entity instanceof ls) {
-                itemstack.a((ls) entity, this);
+            ItemInstance itemstack = G();
+            if (itemstack != null && entity instanceof LivingEntity) {
+                itemstack.a((LivingEntity) entity, this);
                 if (itemstack.a == 0) {
                     itemstack.a(this);
                     H();
                 }
             }
-            if (entity instanceof ls) {
+            if (entity instanceof LivingEntity) {
                 if (entity.W())
-                    a((ls) entity, true);
-                a(jl.w, i);
+                    a((LivingEntity) entity, true);
+                a(Stats.damageDealt, i);
             }
         }
     }
@@ -603,7 +620,7 @@ public abstract class gs extends ls {
 
     public abstract void v();
 
-    public void b(iz itemstack) {
+    public void b(ItemInstance itemstack) {
     }
 
     public void K() {
@@ -614,8 +631,8 @@ public abstract class gs extends ls {
     }
 
     public boolean protectedByShield() {
-        iz curItem = this.c.b();
-        iz offItem = this.c.getOffhandItem();
+        ItemInstance curItem = this.c.b();
+        ItemInstance offItem = this.c.getOffhandItem();
         if ((curItem != null && curItem.c == Items.woodenShield.bf) || (offItem != null && offItem.c == Items.woodenShield.bf))
             return (getSwingOffhandProgress(1.0F) == 0.0F);
         return false;
@@ -640,7 +657,7 @@ public abstract class gs extends ls {
         this.bf = 0.2F;
         if (this.aI.i(i, j, k)) {
             int l = this.aI.e(i, j, k);
-            int i1 = ve.d(l);
+            int i1 = BedTile.d(l);
             float f = 0.5F;
             float f1 = 0.5F;
             switch (i1) {
@@ -664,7 +681,7 @@ public abstract class gs extends ls {
         }
         this.u = true;
         this.a = 0;
-        this.v = new br(i, j, k);
+        this.v = new Vec3i(i, j, k);
         this.aP = this.aR = this.aQ = 0.0D;
         if (!this.aI.B)
             this.aI.y();
@@ -693,13 +710,13 @@ public abstract class gs extends ls {
     public void a(boolean flag, boolean flag1, boolean flag2) {
         b(0.6F, 1.8F);
         E();
-        br chunkcoordinates = this.v;
-        br chunkcoordinates1 = this.v;
+        Vec3i chunkcoordinates = this.v;
+        Vec3i chunkcoordinates1 = this.v;
         if (chunkcoordinates != null && this.aI.a(chunkcoordinates.a, chunkcoordinates.b, chunkcoordinates.c) == Tile.T.bn) {
-            ve.a(this.aI, chunkcoordinates.a, chunkcoordinates.b, chunkcoordinates.c, false);
-            br chunkcoordinates2 = ve.f(this.aI, chunkcoordinates.a, chunkcoordinates.b, chunkcoordinates.c, 0);
+            BedTile.a(this.aI, chunkcoordinates.a, chunkcoordinates.b, chunkcoordinates.c, false);
+            Vec3i chunkcoordinates2 = BedTile.f(this.aI, chunkcoordinates.a, chunkcoordinates.b, chunkcoordinates.c, 0);
             if (chunkcoordinates2 == null)
-                chunkcoordinates2 = new br(chunkcoordinates.a, chunkcoordinates.b + 1, chunkcoordinates.c);
+                chunkcoordinates2 = new Vec3i(chunkcoordinates.a, chunkcoordinates.b + 1, chunkcoordinates.c);
             e((chunkcoordinates2.a + 0.5F), (chunkcoordinates2.b + this.bf + 0.1F), (chunkcoordinates2.c + 0.5F));
         }
         this.u = false;
@@ -718,22 +735,22 @@ public abstract class gs extends ls {
         return (this.aI.a(this.v.a, this.v.b, this.v.c) == Tile.T.bn);
     }
 
-    public static br a(fd world, br chunkcoordinates) {
-        cl ichunkprovider = world.w();
+    public static Vec3i a(Level world, Vec3i chunkcoordinates) {
+        LevelSource ichunkprovider = world.w();
         ichunkprovider.c(chunkcoordinates.a - 3 >> 4, chunkcoordinates.c - 3 >> 4);
         ichunkprovider.c(chunkcoordinates.a + 3 >> 4, chunkcoordinates.c - 3 >> 4);
         ichunkprovider.c(chunkcoordinates.a - 3 >> 4, chunkcoordinates.c + 3 >> 4);
         ichunkprovider.c(chunkcoordinates.a + 3 >> 4, chunkcoordinates.c + 3 >> 4);
         if (world.a(chunkcoordinates.a, chunkcoordinates.b, chunkcoordinates.c) != Tile.T.bn)
             return null;
-        br chunkcoordinates1 = ve.f(world, chunkcoordinates.a, chunkcoordinates.b, chunkcoordinates.c, 0);
+        Vec3i chunkcoordinates1 = BedTile.f(world, chunkcoordinates.a, chunkcoordinates.b, chunkcoordinates.c, 0);
         return chunkcoordinates1;
     }
 
     public float M() {
         if (this.v != null) {
             int i = this.aI.e(this.v.a, this.v.b, this.v.c);
-            int j = ve.d(i);
+            int j = BedTile.d(i);
             switch (j) {
                 case 0:
                     return 90.0F;
@@ -763,28 +780,28 @@ public abstract class gs extends ls {
     public void b(String s) {
     }
 
-    public br Q() {
+    public Vec3i Q() {
         return this.b;
     }
 
-    public void a(br chunkcoordinates) {
+    public void a(Vec3i chunkcoordinates) {
         if (chunkcoordinates != null) {
-            this.b = new br(chunkcoordinates);
+            this.b = new Vec3i(chunkcoordinates);
         } else {
             this.b = null;
         }
     }
 
-    public void a(vr statbase) {
+    public void a(Stat statbase) {
         a(statbase, 1);
     }
 
-    public void a(vr statbase, int i) {
+    public void a(Stat statbase, int i) {
     }
 
     protected void R() {
         super.R();
-        a(jl.u, 1);
+        a(Stats.jump, 1);
     }
 
     public void a_(float f, float f1) {
@@ -801,22 +818,22 @@ public abstract class gs extends ls {
         if (a(ln.g)) {
             int i = Math.round(in.a(d * d + d1 * d1 + d2 * d2) * 100.0F);
             if (i > 0)
-                a(jl.q, i);
+                a(Stats.diveOneCm, i);
         } else if (ag()) {
             int j = Math.round(in.a(d * d + d2 * d2) * 100.0F);
             if (j > 0)
-                a(jl.m, j);
+                a(Stats.swimOneCm, j);
         } else if (p()) {
             if (d1 > 0.0D)
-                a(jl.o, (int) Math.round(d1 * 100.0D));
+                a(Stats.climbOneCm, (int) Math.round(d1 * 100.0D));
         } else if (this.aX) {
             int k = Math.round(in.a(d * d + d2 * d2) * 100.0F);
             if (k > 0)
-                a(jl.l, k);
+                a(Stats.walkOneCm, k);
         } else {
             int l = Math.round(in.a(d * d + d2 * d2) * 100.0F);
             if (l > 25)
-                a(jl.p, l);
+                a(Stats.flyOneCm, l);
         }
     }
 
@@ -825,32 +842,32 @@ public abstract class gs extends ls {
             int i = Math.round(in.a(d * d + d1 * d1 + d2 * d2) * 100.0F);
             if (i > 0)
                 if (this.aH instanceof yl) {
-                    a(jl.r, i);
+                    a(Stats.minecartOneCm, i);
                     if (this.bN == null) {
-                        this.bN = new br(in.b(this.aM), in.b(this.aN), in.b(this.aO));
+                        this.bN = new Vec3i(in.b(this.aM), in.b(this.aN), in.b(this.aO));
                     } else if (this.bN.a(in.b(this.aM), in.b(this.aN), in.b(this.aO)) >= 1000.0D) {
-                        a((vr) ep.q, 1);
+                        a(Achievements.MINE_WOOD, 1);
                     }
                 } else if (this.aH instanceof fz) {
-                    a(jl.s, i);
+                    a(Stats.boatOneCm, i);
                 } else if (this.aH instanceof wh) {
-                    a(jl.t, i);
+                    a(Stats.pigOneCm, i);
                 }
         }
     }
 
     protected void b(float f) {
         if (f >= 2.0F)
-            a(jl.n, (int) Math.round(f * 100.0D));
+            a(Stats.fallOneCm, (int) Math.round(f * 100.0D));
         super.b(f);
     }
 
-    public void a(ls entityliving) {
-        if (entityliving instanceof gz)
-            a((vr) ep.s);
+    public void a(LivingEntity entityliving) {
+        if (entityliving instanceof Monster)
+            a(Achievements.KILL_ENEMY);
     }
 
-    public int c(iz itemstack) {
+    public int c(ItemInstance itemstack) {
         int i = super.c(itemstack);
         if (itemstack.c == ItemType.aP.bf && this.D != null)
             i = itemstack.b() + 16;
@@ -866,12 +883,12 @@ public abstract class gs extends ls {
     }
 
     public double getGravity() {
-        if ((AC_Items.hookshot.mainHookshot != null && AC_Items.hookshot.mainHookshot.attachedToSurface) || (AC_Items.hookshot.offHookshot != null && AC_Items.hookshot.offHookshot.attachedToSurface))
+        if ((Items.hookshot.mainHookshot != null && Items.hookshot.mainHookshot.attachedToSurface) || (Items.hookshot.offHookshot != null && Items.hookshot.offHookshot.attachedToSurface))
             return 0.0D;
         return super.getGravity();
     }
 
     public boolean usingUmbrella() {
-        return ((this.c.b() != null && (this.c.b()).c == AC_Items.umbrella.bf) || (this.c.getOffhandItem() != null && (this.c.getOffhandItem()).c == AC_Items.umbrella.bf));
+        return ((this.c.b() != null && (this.c.b()).c == Items.umbrella.bf) || (this.c.getOffhandItem() != null && (this.c.getOffhandItem()).c == Items.umbrella.bf));
     }
 }

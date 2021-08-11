@@ -1,15 +1,18 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.level.Level;
 import org.lwjgl.opengl.GL11;
 
-public class gl extends xw {
+public class FootstepParticle extends Particle {
     private int a;
 
     private int o;
 
     private final ji p;
 
-    public gl(ji renderengine, fd world, double d, double d1, double d2) {
+    public FootstepParticle(ji renderengine, Level world, double d, double d1, double d2) {
         super(world, d, d1, d2, 0.0D, 0.0D, 0.0D);
         this.a = 0;
         this.o = 0;
@@ -18,7 +21,7 @@ public class gl extends xw {
         this.o = 200;
     }
 
-    public void a(nw tessellator, float f, float f1, float f2, float f3, float f4, float f5) {
+    public void a(Tessellator tessellator, float f, float f1, float f2, float f3, float f4, float f5) {
         float f6 = (this.a + f) / this.o;
         f6 *= f6;
         float f7 = 2.0F - f6 * 2.0F;

@@ -1,9 +1,13 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import net.minecraft.entity.animal.Animal;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.food.FoodItem;
+
 import java.util.Iterator;
 import java.util.List;
 
-public class gi extends bg {
+public class Wolf extends Animal {
     private boolean a;
 
     private float b;
@@ -20,7 +24,7 @@ public class gi extends bg {
 
     public int attackStrength;
 
-    public gi(fd world) {
+    public Wolf(Level world) {
         super(world);
         this.a = false;
         this.O = "/mob/wolf.png";
@@ -131,12 +135,12 @@ public class gi extends bg {
             sn entity = Z();
             if (entity instanceof gs) {
                 gs entityplayer = (gs) entity;
-                iz itemstack = entityplayer.c.b();
+                ItemInstance itemstack = entityplayer.c.b();
                 if (itemstack != null)
                     if (!D() && itemstack.c == ItemType.aV.bf) {
                         this.a = true;
-                    } else if (D() && ItemType.c[itemstack.c] instanceof yw) {
-                        this.a = ((yw) ItemType.c[itemstack.c]).m();
+                    } else if (D() && ItemType.c[itemstack.c] instanceof FoodItem) {
+                        this.a = ((FoodItem) ItemType.c[itemstack.c]).m();
                     }
             }
         }
@@ -254,11 +258,11 @@ public class gi extends bg {
                 if (entity instanceof sl && ((sl) entity).c != null)
                     entity = ((sl) entity).c;
                 if (entity instanceof ls) {
-                    List list = this.aI.a(gi.class, eq.b(this.aM, this.aN, this.aO, this.aM + 1.0D, this.aN + 1.0D, this.aO + 1.0D).b(16.0D, 4.0D, 16.0D));
+                    List list = this.aI.a(Wolf.class, eq.b(this.aM, this.aN, this.aO, this.aM + 1.0D, this.aN + 1.0D, this.aO + 1.0D).b(16.0D, 4.0D, 16.0D));
                     Iterator<sn> iterator = list.iterator();
                     while (iterator.hasNext()) {
                         sn entity1 = iterator.next();
-                        gi entitywolf = (gi) entity1;
+                        Wolf entitywolf = (Wolf) entity1;
                         if (!entitywolf.D() && entitywolf.d == null) {
                             entitywolf.d = entity;
                             if (entity instanceof gs)
@@ -304,7 +308,7 @@ public class gi extends bg {
     }
 
     public boolean a(gs entityplayer) {
-        iz itemstack = entityplayer.c.b();
+        ItemInstance itemstack = entityplayer.c.b();
         if (!D()) {
             if (itemstack != null && itemstack.c == ItemType.aV.bf && !C()) {
                 itemstack.a--;
@@ -326,13 +330,13 @@ public class gi extends bg {
                 return true;
             }
         } else {
-            if (itemstack != null && ItemType.c[itemstack.c] instanceof yw) {
-                yw itemfood = (yw) ItemType.c[itemstack.c];
+            if (itemstack != null && ItemType.c[itemstack.c] instanceof FoodItem) {
+                FoodItem itemfood = (FoodItem) ItemType.c[itemstack.c];
                 if (itemfood.m() && this.bD.b(18) < 20) {
                     itemstack.a--;
                     if (itemstack.a <= 0)
                         entityplayer.c.a(entityplayer.c.c, null);
-                    c(((yw) ItemType.ao).l());
+                    c(((FoodItem) ItemType.ao).l());
                     return true;
                 }
             }

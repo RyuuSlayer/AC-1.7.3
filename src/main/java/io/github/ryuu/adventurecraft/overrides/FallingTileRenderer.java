@@ -1,11 +1,15 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import net.minecraft.client.render.entity.EntityRenderer;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.FallingTile;
+import net.minecraft.level.Level;
 import org.lwjgl.opengl.GL11;
 
-public class gn extends bw {
-    private final cv a = new cv();
+public class FallingTileRenderer extends EntityRenderer {
+    private final TileRenderer a = new TileRenderer);
 
-    public void a(ju entityfallingsand, double d, double d1, double d2, float f, float f1) {
+    public void a(FallingTile entityfallingsand, double d, double d1, double d2, float f, float f1) {
         int x = in.b(entityfallingsand.aM);
         int y = in.b(entityfallingsand.aN);
         int z = in.b(entityfallingsand.aO);
@@ -17,7 +21,7 @@ public class gn extends bw {
         } else {
             a(String.format("/terrain%d.png", new Object[]{Integer.valueOf(block.getTextureNum())}));
         }
-        fd world = entityfallingsand.k();
+        Level world = entityfallingsand.k();
         GL11.glDisable(2896);
         int b = world.a(x, y, z);
         int m = world.e(x, y, z);
@@ -28,7 +32,7 @@ public class gn extends bw {
         GL11.glPopMatrix();
     }
 
-    public void a(sn entity, double d, double d1, double d2, float f, float f1) {
-        a((ju) entity, d, d1, d2, f, f1);
+    public void a(Entity entity, double d, double d1, double d2, float f, float f1) {
+        a((FallingTile) entity, d, d1, d2, f, f1);
     }
 }
