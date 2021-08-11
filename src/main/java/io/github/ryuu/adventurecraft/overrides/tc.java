@@ -1,5 +1,7 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import net.minecraft.level.Level;
+
 import java.util.Random;
 
 public class tc extends rw {
@@ -18,12 +20,12 @@ public class tc extends rw {
         return Tile.aC.bn;
     }
 
-    public void c(fd world, int i, int j, int k) {
+    public void c(Level world, int i, int j, int k) {
         super.c(world, i, j, k);
         h(world, i, j, k);
     }
 
-    private void h(fd world, int i, int j, int k) {
+    private void h(Level world, int i, int j, int k) {
         if (world.B)
             return;
         int l = world.a(i, j, k - 1);
@@ -55,7 +57,7 @@ public class tc extends rw {
         return this.bm - 1;
     }
 
-    public void b(fd world, int i, int j, int k, Random random) {
+    public void b(Level world, int i, int j, int k, Random random) {
         if (!this.b)
             return;
         int l = world.e(i, j, k);
@@ -89,7 +91,7 @@ public class tc extends rw {
         return this.bm;
     }
 
-    public boolean a(fd world, int i, int j, int k, gs entityplayer) {
+    public boolean a(Level world, int i, int j, int k, gs entityplayer) {
         if (world.B)
             return true;
         sk tileentityfurnace = (sk) world.b(i, j, k);
@@ -97,9 +99,9 @@ public class tc extends rw {
         return true;
     }
 
-    public static void a(boolean flag, fd world, int i, int j, int k) {
+    public static void a(boolean flag, Level world, int i, int j, int k) {
         int l = world.e(i, j, k);
-        ow tileentity = world.b(i, j, k);
+        TileEntity tileentity = world.b(i, j, k);
         c = true;
         if (flag) {
             world.f(i, j, k, Tile.aD.bn);
@@ -113,11 +115,11 @@ public class tc extends rw {
         tileentity.j();
     }
 
-    protected ow a_() {
-        return (ow) new sk();
+    protected TileEntity a_() {
+        return (TileEntity) new sk();
     }
 
-    public void a(fd world, int i, int j, int k, ls entityliving) {
+    public void a(Level world, int i, int j, int k, ls entityliving) {
         int l = in.b((entityliving.aS * 4.0F / 360.0F) + 0.5D) & 0x3;
         if (l == 0)
             world.d(i, j, k, 2);
@@ -129,7 +131,7 @@ public class tc extends rw {
             world.d(i, j, k, 4);
     }
 
-    public void b(fd world, int i, int j, int k) {
+    public void b(Level world, int i, int j, int k) {
         if (!c) {
             sk tileentityfurnace = (sk) world.b(i, j, k);
             for (int l = 0; l < tileentityfurnace.a(); l++) {

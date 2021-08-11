@@ -1,6 +1,8 @@
 package io.github.ryuu.adventurecraft.overrides;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.level.Level;
 import org.lwjgl.opengl.GL11;
 
 public class hy extends je {
@@ -10,7 +12,7 @@ public class hy extends je {
         Tile block = Tile.m[tileentitypiston.a()];
         if (block != null && tileentitypiston.a(f) < 1.0F) {
             String textureName;
-            nw tessellator = nw.a;
+            Tessellator tessellator = Tessellator.a;
             int textureNum = block.getTextureNum();
             if (textureNum == 0) {
                 textureName = "/terrain.png";
@@ -47,11 +49,11 @@ public class hy extends je {
         }
     }
 
-    public void a(fd world) {
+    public void a(Level world) {
         this.b = new cv((xp) world);
     }
 
-    public void a(ow tileentity, double d, double d1, double d2, float f) {
+    public void a(TileEntity tileentity, double d, double d1, double d2, float f) {
         a((uk) tileentity, d, d1, d2, f);
     }
 }

@@ -135,8 +135,8 @@ public class DimensionFileChunkIO implements ChunkIO {
         }
         nbttagcompound.a("Entities", (ij) nbttaglist);
         sp nbttaglist1 = new sp();
-        for (Iterator<ow> iterator1 = chunk.l.values().iterator(); iterator1.hasNext(); nbttaglist1.a((ij) nbttagcompound2)) {
-            ow tileentity = iterator1.next();
+        for (Iterator<TileEntity> iterator1 = chunk.l.values().iterator(); iterator1.hasNext(); nbttaglist1.a((ij) nbttagcompound2)) {
+            TileEntity tileentity = iterator1.next();
             nu nbttagcompound2 = new nu();
             tileentity.b(nbttagcompound2);
         }
@@ -180,7 +180,7 @@ public class DimensionFileChunkIO implements ChunkIO {
         if (nbttaglist1 != null)
             for (int l = 0; l < nbttaglist1.c(); l++) {
                 nu nbttagcompound2 = (nu) nbttaglist1.a(l);
-                ow tileentity = ow.c(nbttagcompound2);
+                TileEntity tileentity = TileEntity.c(nbttagcompound2);
                 if (tileentity != null)
                     chunk.a(tileentity);
             }

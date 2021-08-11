@@ -41,7 +41,7 @@ public class ew implements TileView {
         return chunk.a(i & 0xF, j, k & 0xF);
     }
 
-    public ow b(int i, int j, int k) {
+    public TileEntity b(int i, int j, int k) {
         int l = (i >> 4) - this.a;
         int i1 = (k >> 4) - this.b;
         return this.c[l][i1].d(i & 0xF, j, k & 0xF);

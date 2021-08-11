@@ -15,13 +15,15 @@ import io.github.ryuu.adventurecraft.util.CutsceneCameraPoint;
 import io.github.ryuu.adventurecraft.util.IEntityPather;
 import io.github.ryuu.adventurecraft.util.PlayerTorch;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.level.Level;
 import org.lwjgl.opengl.ARBOcclusionQuery;
 import org.lwjgl.opengl.GL11;
 
 public class n implements pm {
     public List a;
 
-    private fd k;
+    private Level k;
 
     private final ji l;
 
@@ -147,7 +149,7 @@ public class n implements pm {
         g();
         GL11.glEndList();
         GL11.glPopMatrix();
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         this.z = this.y + 1;
         GL11.glNewList(this.z, 4864);
         byte byte1 = 64;
@@ -231,7 +233,7 @@ public class n implements pm {
         tessellator.a();
     }
 
-    public void a(fd world) {
+    public void a(Level world) {
         if (this.k != null)
             this.k.b(this);
         this.f = -9999.0D;
@@ -613,7 +615,7 @@ public class n implements pm {
             f3 = f7;
         }
         GL11.glColor3f(f1, f2, f3);
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         GL11.glDepthMask(false);
         GL11.glEnable(2912);
         GL11.glColor3f(f1, f2, f3);
@@ -725,7 +727,7 @@ public class n implements pm {
         }
         byte byte0 = 32;
         int i = 256 / byte0;
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         GL11.glBindTexture(3553, this.l.b("/environment/clouds.png"));
         GL11.glEnable(3042);
         GL11.glBlendFunc(770, 771);
@@ -1003,7 +1005,7 @@ public class n implements pm {
     }
 
     public void a(gs entityplayer, vf movingobjectposition, int i, iz itemstack, float f) {
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         GL11.glEnable(3042);
         GL11.glEnable(3008);
         GL11.glBlendFunc(770, 1);
@@ -1372,7 +1374,7 @@ public class n implements pm {
         }
     }
 
-    public void a(int i, int j, int k, ow tileentity) {
+    public void a(int i, int j, int k, TileEntity tileentity) {
     }
 
     public void f() {

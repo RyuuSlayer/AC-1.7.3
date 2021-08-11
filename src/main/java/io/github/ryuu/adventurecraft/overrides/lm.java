@@ -209,7 +209,7 @@ public class lm {
         if (this.d.undoStack.isRecording()) {
             int prevBlockID = a(i, j, k);
             int prevMetadata = b(i, j, k);
-            ow te = getChunkBlockTileEntityDontCreate(i, j, k);
+            TileEntity te = getChunkBlockTileEntityDontCreate(i, j, k);
             nu prevTag = null;
             if (te != null) {
                 prevTag = new nu();
@@ -258,7 +258,7 @@ public class lm {
         if (this.d.undoStack.isRecording()) {
             int prevBlockID = a(i, j, k);
             int prevMetadata = b(i, j, k);
-            ow te = getChunkBlockTileEntityDontCreate(i, j, k);
+            TileEntity te = getChunkBlockTileEntityDontCreate(i, j, k);
             nu prevTag = null;
             if (te != null) {
                 prevTag = new nu();
@@ -301,7 +301,7 @@ public class lm {
         if (this.d.undoStack.isRecording()) {
             int prevBlockID = a(i, j, k);
             int prevMetadata = b(i, j, k);
-            ow te = getChunkBlockTileEntityDontCreate(i, j, k);
+            TileEntity te = getChunkBlockTileEntityDontCreate(i, j, k);
             nu prevTag = null;
             if (te != null) {
                 prevTag = new nu();
@@ -380,16 +380,16 @@ public class lm {
         return (j >= (this.h[k << 4 | i] & 0xFF));
     }
 
-    public ow d(int i, int j, int k) {
+    public TileEntity d(int i, int j, int k) {
         wf chunkposition = new wf(i, j, k);
-        ow tileentity = (ow) this.l.get(chunkposition);
+        TileEntity tileentity = (TileEntity) this.l.get(chunkposition);
         if (tileentity == null) {
             int l = a(i, j, k);
             if (!Tile.p[l])
                 return null;
             rw blockcontainer = (rw) Tile.m[l];
             blockcontainer.c(this.d, this.j * 16 + i, j, this.k * 16 + k);
-            tileentity = (ow) this.l.get(chunkposition);
+            tileentity = (TileEntity) this.l.get(chunkposition);
         }
         if (tileentity != null && tileentity.g()) {
             this.l.remove(chunkposition);
@@ -398,13 +398,13 @@ public class lm {
         return tileentity;
     }
 
-    public ow getChunkBlockTileEntityDontCreate(int i, int j, int k) {
+    public TileEntity getChunkBlockTileEntityDontCreate(int i, int j, int k) {
         wf chunkposition = new wf(i, j, k);
-        ow tileentity = (ow) this.l.get(chunkposition);
+        TileEntity tileentity = (TileEntity) this.l.get(chunkposition);
         return tileentity;
     }
 
-    public void a(ow tileentity) {
+    public void a(TileEntity tileentity) {
         int i = tileentity.e - this.j * 16;
         int j = tileentity.f;
         int k = tileentity.g - this.k * 16;
@@ -413,7 +413,7 @@ public class lm {
             this.d.c.add(tileentity);
     }
 
-    public void a(int i, int j, int k, ow tileentity) {
+    public void a(int i, int j, int k, TileEntity tileentity) {
         wf chunkposition = new wf(i, j, k);
         tileentity.d = this.d;
         tileentity.e = this.j * 16 + i;
@@ -430,7 +430,7 @@ public class lm {
     public void e(int i, int j, int k) {
         wf chunkposition = new wf(i, j, k);
         if (this.c) {
-            ow tileentity = (ow) this.l.remove(chunkposition);
+            TileEntity tileentity = (TileEntity) this.l.remove(chunkposition);
             if (tileentity != null)
                 tileentity.i();
         }
@@ -446,8 +446,8 @@ public class lm {
 
     public void f() {
         this.c = false;
-        for (Iterator<ow> iterator = this.l.values().iterator(); iterator.hasNext(); tileentity.i()) {
-            ow tileentity = iterator.next();
+        for (Iterator<TileEntity> iterator = this.l.values().iterator(); iterator.hasNext(); tileentity.i()) {
+            TileEntity tileentity = iterator.next();
             tileentity.killedFromSaving = true;
         }
         for (int i = 0; i < this.m.length; i++)

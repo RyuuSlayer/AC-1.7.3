@@ -1,7 +1,10 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.level.Level;
 
 public class os extends ob {
     private int c;
@@ -29,7 +32,7 @@ public class os extends ob {
         this.i = 0;
     }
 
-    public void a(gs entityplayer) {
+    public void a(Player entityplayer) {
         entityplayer.aS = -180.0F;
     }
 
@@ -65,26 +68,26 @@ public class os extends ob {
             return false;
         int j1 = this.a.f.e(i, j, k);
         boolean flag = super.b(i, j, k, l);
-        iz itemstack = this.a.h.G();
+        ItemInstance itemstack = this.a.h.G();
         boolean flag1 = this.a.h.b(Tile.m[i1]);
         if (itemstack != null) {
-            itemstack.a(i1, i, j, k, (gs) this.a.h);
+            itemstack.a(i1, i, j, k, (Player) this.a.h);
             if (itemstack.a == 0) {
-                itemstack.a((gs) this.a.h);
+                itemstack.a((Player) this.a.h);
                 this.a.h.H();
             }
         }
         if (flag && flag1)
-            Tile.m[i1].a(this.a.f, (gs) this.a.h, i, j, k, j1);
+            Tile.m[i1].a(this.a.f, (Player) this.a.h, i, j, k, j1);
         return flag;
     }
 
     public void a(int i, int j, int k, int l) {
-        this.a.f.a((gs) this.a.h, i, j, k, l);
+        this.a.f.a((Player) this.a.h, i, j, k, l);
         int i1 = this.a.f.a(i, j, k);
         if (i1 > 0 && this.f == 0.0F)
-            Tile.m[i1].b(this.a.f, i, j, k, (gs) this.a.h);
-        if (DebugMode.active && i1 > 0 && Tile.m[i1].a((gs) this.a.h) >= 1.0F)
+            Tile.m[i1].b(this.a.f, i, j, k, (Player) this.a.h);
+        if (DebugMode.active && i1 > 0 && Tile.m[i1].a((Player) this.a.h) >= 1.0F)
             b(i, j, k, l);
     }
 
@@ -105,7 +108,7 @@ public class os extends ob {
             if (i1 == 0)
                 return;
             Tile block = Tile.m[i1];
-            this.f += block.a((gs) this.a.h);
+            this.f += block.a((Player) this.a.h);
             if (this.h % 4.0F == 0.0F && block != null)
                 this.a.B.b(block.by.d(), i + 0.5F, j + 0.5F, k + 0.5F, (block.by.b() + 1.0F) / 8.0F, block.by.c() * 0.5F);
             this.h++;
@@ -138,14 +141,14 @@ public class os extends ob {
     }
 
     public float b() {
-        if (this.a.h.G() != null && (this.a.h.G()).c == AC_Items.quill.bf)
+        if (this.a.h.G() != null && (this.a.h.G()).c == Items.quill.bf)
             return 500.0F;
-        if (AC_DebugMode.active)
-            return AC_DebugMode.reachDistance;
+        if (DebugMode.active)
+            return DebugMode.reachDistance;
         return 4.0F;
     }
 
-    public void a(fd world) {
+    public void a(Level world) {
         super.a(world);
     }
 

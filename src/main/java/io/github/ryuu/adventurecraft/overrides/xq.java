@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.overrides;
 import io.github.ryuu.adventurecraft.entities.EntityArrowBomb;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.DebugMode;
+import net.minecraft.level.Level;
 
 import java.util.Random;
 
@@ -23,12 +24,12 @@ public class xq extends rw {
         return uu.Q.bn;
     }
 
-    public void c(fd world, int i, int j, int k) {
+    public void c(Level world, int i, int j, int k) {
         super.c(world, i, j, k);
         h(world, i, j, k);
     }
 
-    private void h(fd world, int i, int j, int k) {
+    private void h(Level world, int i, int j, int k) {
         if (world.B)
             return;
         int l = world.a(i, j, k - 1);
@@ -68,7 +69,7 @@ public class xq extends rw {
         return this.bm;
     }
 
-    public boolean a(fd world, int i, int j, int k, gs entityplayer) {
+    public boolean a(Level world, int i, int j, int k, gs entityplayer) {
         if (!DebugMode.active)
             return false;
         if (world.B)
@@ -78,7 +79,7 @@ public class xq extends rw {
         return true;
     }
 
-    private void c(fd world, int i, int j, int k, Random random) {
+    private void c(Level world, int i, int j, int k, Random random) {
         int l = world.e(i, j, k);
         int i1 = 0;
         int j1 = 0;
@@ -136,7 +137,7 @@ public class xq extends rw {
         }
     }
 
-    public void b(fd world, int i, int j, int k, int l) {
+    public void b(Level world, int i, int j, int k, int l) {
         if (l > 0 && uu.m[l].f()) {
             boolean flag = (world.s(i, j, k) || world.s(i, j + 1, k));
             if (flag)
@@ -144,16 +145,16 @@ public class xq extends rw {
         }
     }
 
-    public void a(fd world, int i, int j, int k, Random random) {
+    public void a(Level world, int i, int j, int k, Random random) {
         if (world.s(i, j, k) || world.s(i, j + 1, k))
             c(world, i, j, k, random);
     }
 
-    protected ow a_() {
+    protected TileEntity a_() {
         return new Dispenser();
     }
 
-    public void a(fd world, int i, int j, int k, ls entityliving) {
+    public void a(Level world, int i, int j, int k, ls entityliving) {
         int l = in.b((entityliving.aS * 4.0F / 360.0F) + 0.5D) & 0x3;
         if (l == 0)
             world.d(i, j, k, 2);
@@ -165,7 +166,7 @@ public class xq extends rw {
             world.d(i, j, k, 4);
     }
 
-    public void b(fd world, int i, int j, int k) {
+    public void b(Level world, int i, int j, int k) {
         Dispenser tileentitydispenser = (Dispenser) world.b(i, j, k);
         for (int l = 0; l < tileentitydispenser.a(); l++) {
             iz itemstack = tileentitydispenser.f_(l);

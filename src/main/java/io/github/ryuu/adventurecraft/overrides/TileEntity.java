@@ -1,11 +1,15 @@
 package io.github.ryuu.adventurecraft.overrides;
 
 import io.github.ryuu.adventurecraft.entities.tile.*;
+import net.minecraft.entity.FurnaceEntity;
+import net.minecraft.level.Level;
+import net.minecraft.tile.entity.*;
+import net.minecraft.util.io.CompoundTag;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class ow {
+public class TileEntity {
     private static void a(Class<?> class1, String s) {
         if (b.containsKey(s))
             throw new IllegalArgumentException("Duplicate id: " + s);
@@ -13,20 +17,20 @@ public class ow {
         b.put(class1, s);
     }
 
-    public void a(nu nbttagcompound) {
-        this.e = nbttagcompound.e("x");
-        this.f = nbttagcompound.e("y");
-        this.g = nbttagcompound.e("z");
+    public void a(CompoundTag nbttagcompound) {
+        this.e = nbttagcompound.getInt("x");
+        this.f = nbttagcompound.getInt("y");
+        this.g = nbttagcompound.getInt("z");
     }
 
-    public void b(nu nbttagcompound) {
+    public void b(CompoundTag nbttagcompound) {
         String s = (String) b.get(getClass());
         if (s == null)
             throw new RuntimeException(getClass() + " is missing a mapping! This is a bug!");
-        nbttagcompound.a("id", s);
-        nbttagcompound.a("x", this.e);
-        nbttagcompound.a("y", this.f);
-        nbttagcompound.a("z", this.g);
+        nbttagcompound.put("id", s);
+        nbttagcompound.put("x", this.e);
+        nbttagcompound.put("y", this.f);
+        nbttagcompound.put("z", this.g);
     }
 
     protected String getClassName() {
@@ -36,10 +40,10 @@ public class ow {
     public void n_() {
     }
 
-    public static ow c(nu nbttagcompound) {
-        ow tileentity = null;
+    public static TileEntity c(CompoundTag nbttagcompound) {
+        TileEntity tileentity = null;
         try {
-            Class<ow> class1 = (Class) a.get(nbttagcompound.i("id"));
+            Class<TileEntity> class1 = (Class) a.get(nbttagcompound.i("id"));
             if (class1 != null)
                 tileentity = class1.newInstance();
         } catch (Exception exception) {
@@ -97,7 +101,7 @@ public class ow {
 
     private static final Map b = new HashMap<>();
 
-    public fd d;
+    public Level d;
 
     public int e;
 
@@ -110,14 +114,14 @@ public class ow {
     public boolean killedFromSaving = false;
 
     static {
-        a(sk.class, "Furnace");
-        a(js.class, "Chest");
-        a(eg.class, "RecordPlayer");
+        a(FurnaceEntity.class, "Furnace");
+        a(Chest.class, "Chest");
+        a(Jukebox.class, "RecordPlayer");
         a(Dispenser.class, "Trap");
-        a(yk.class, "Sign");
-        a(cy.class, "MobSpawner");
-        a(tn.class, "Note");
-        a(uk.class, "Piston");
+        a(Sign.class, "Sign");
+        a(MobSpawner.class, "MobSpawner");
+        a(Noteblock.class, "Note");
+        a(Piston.class, "Piston");
         a(TileEntityMobSpawner.class, "MobSpawnerNew");
         a(TileEntityTrigger.class, "Trigger");
         a(TileEntityTriggerInverter.class, "TriggerInverter");

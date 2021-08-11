@@ -5,10 +5,13 @@ import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.PlayerTorch;
 import net.minecraft.achievement.Achievements;
+import net.minecraft.container.Container;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.FurnaceEntity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.Monster;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
@@ -17,8 +20,11 @@ import net.minecraft.stat.Stat;
 import net.minecraft.stat.Stats;
 import net.minecraft.tile.BedTile;
 import net.minecraft.tile.entity.Sign;
+import net.minecraft.tile.material.Material;
+import net.minecraft.util.SleepStatus;
 import net.minecraft.util.Vec3i;
 import net.minecraft.util.io.AbstractTag;
+import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.io.DoubleTag;
 import net.minecraft.util.io.ListTag;
 
@@ -26,11 +32,11 @@ import java.util.Iterator;
 import java.util.List;
 
 public abstract class Player extends LivingEntity {
-    public ix c;
+    public PlayerInventory c;
 
-    public dw d;
+    public Container d;
 
-    public dw e;
+    public Container e;
 
     public byte f;
 
@@ -106,7 +112,7 @@ public abstract class Player extends LivingEntity {
 
     public Player(Level world) {
         super(world);
-        this.c = new ix(this);
+        this.c = new PlayerInventory(this);
         this.f = 0;
         this.g = 0;
         this.j = false;
@@ -115,7 +121,7 @@ public abstract class Player extends LivingEntity {
         this.A = false;
         this.bO = 0;
         this.D = null;
-        this.d = (dw) new aa(this.c, !world.B);
+        this.d = (Container) new PlayerContainer(this.c, !world.B);
         this.e = this.d;
         this.bf = 1.62F;
         Vec3i chunkcoordinates = world.u();
@@ -356,7 +362,7 @@ public abstract class Player extends LivingEntity {
     public void a(ItemInstance itemstack, boolean flag) {
         if (itemstack == null)
             return;
-        hl entityitem = new hl(this.aI, this.aM, this.aN - 0.30000001192092896D + w(), this.aO, itemstack);
+        ItemEntity entityitem = new ItemEntity(this.aI, this.aM, this.aN - 0.30000001192092896D + w(), this.aO, itemstack);
         entityitem.c = 40;
         float f = 0.1F;
         if (flag) {
@@ -381,13 +387,13 @@ public abstract class Player extends LivingEntity {
         a(Stats.v, 1);
     }
 
-    protected void a(hl entityitem) {
+    protected void a(ItemEntity entityitem) {
         this.aI.b(entityitem);
     }
 
     public float a(Tile block) {
         float f = this.c.a(block);
-        if (a(ln.g))
+        if (a(Material.WATER))
             f /= 5.0F;
         if (!this.aX)
             f /= 5.0F;
@@ -398,13 +404,13 @@ public abstract class Player extends LivingEntity {
         return this.c.b(block);
     }
 
-    public void a(nu nbttagcompound) {
+    public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
-        ListTag nbttaglist = nbttagcompound.l("Inventory");
+        ListTag nbttaglist = nbttagcompound.getListTag("Inventory");
         this.c.b(nbttaglist);
-        this.m = nbttagcompound.e("Dimension");
-        this.u = nbttagcompound.m("Sleeping");
-        this.a = nbttagcompound.d("SleepTimer");
+        this.m = nbttagcompound.getInt("Dimension");
+        this.u = nbttagcompound.getBoolean("Sleeping");
+        this.a = nbttagcompound.getShort("SleepTimer");
         if (this.u) {
             this.v = new Vec3i(in.b(this.aM), in.b(this.aN), in.b(this.aO));
             a(true, true, false);
@@ -418,7 +424,7 @@ public abstract class Player extends LivingEntity {
         }
     }
 
-    public void b(nu nbttagcompound) {
+    public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
         nbttagcompound.a("Inventory", (AbstractTag) this.c.a(new ListTag()));
         nbttagcompound.a("Dimension", this.m);
@@ -642,16 +648,16 @@ public abstract class Player extends LivingEntity {
         return (!this.u && super.L());
     }
 
-    public cw b(int i, int j, int k) {
+    public SleepStatus b(int i, int j, int k) {
         if (!this.aI.B) {
             if (N() || !W())
-                return cw.e;
+                return SleepStatus.e;
             if (this.aI.t.c)
-                return cw.b;
+                return SleepStatus.b;
             if (this.aI.f())
-                return cw.c;
+                return SleepStatus.c;
             if (Math.abs(this.aM - i) > 3.0D || Math.abs(this.aN - j) > 2.0D || Math.abs(this.aO - k) > 3.0D)
-                return cw.d;
+                return SleepStatus.d;
         }
         b(0.2F, 0.2F);
         this.bf = 0.2F;
@@ -685,7 +691,7 @@ public abstract class Player extends LivingEntity {
         this.aP = this.aR = this.aQ = 0.0D;
         if (!this.aI.B)
             this.aI.y();
-        return cw.a;
+        return SleepStatus.a;
     }
 
     private void e(int i) {

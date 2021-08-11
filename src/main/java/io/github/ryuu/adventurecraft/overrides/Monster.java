@@ -1,9 +1,15 @@
 package io.github.ryuu.adventurecraft.overrides;
 
-public class gz extends ii implements ff {
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.MonsterEntityType;
+import net.minecraft.entity.WalkingEntity;
+import net.minecraft.level.Level;
+import net.minecraft.util.io.CompoundTag;
+
+public class Monster extends WalkingEntity implements MonsterEntityType {
     public int c;
 
-    public gz(fd world) {
+    public Monster(Level world) {
         super(world);
         this.c = 2;
         this.Y = 20;
@@ -22,14 +28,14 @@ public class gz extends ii implements ff {
             K();
     }
 
-    protected sn g_() {
-        gs entityplayer = this.aI.a(this, 16.0D);
+    protected Entity g_() {
+        Player entityplayer = this.aI.a(this, 16.0D);
         if (entityplayer != null && e(entityplayer))
             return entityplayer;
         return null;
     }
 
-    public boolean a(sn entity, int i) {
+    public boolean a(Entity entity, int i) {
         this.timeBeforeForget = 40;
         if (super.a(entity, i)) {
             if (this.aG == entity || this.aH == entity)
@@ -41,7 +47,7 @@ public class gz extends ii implements ff {
         return false;
     }
 
-    public boolean attackEntityFromMulti(sn entity, int i) {
+    public boolean attackEntityFromMulti(Entity entity, int i) {
         this.timeBeforeForget = 40;
         if (super.attackEntityFromMulti(entity, i)) {
             if (this.aG == entity || this.aH == entity)
@@ -53,7 +59,7 @@ public class gz extends ii implements ff {
         return false;
     }
 
-    protected void a(sn entity, float f) {
+    protected void a(Entity entity, float f) {
         if (this.ae <= 0 && f < 2.0F && entity.aW.e > this.aW.b && entity.aW.b < this.aW.e) {
             this.ae = 20;
             entity.a(this, this.c);
@@ -64,11 +70,11 @@ public class gz extends ii implements ff {
         return 0.5F - this.aI.c(i, j, k);
     }
 
-    public void b(nu nbttagcompound) {
+    public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
     }
 
-    public void a(nu nbttagcompound) {
+    public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
     }
 

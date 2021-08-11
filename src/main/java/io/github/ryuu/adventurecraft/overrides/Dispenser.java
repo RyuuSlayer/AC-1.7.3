@@ -2,7 +2,7 @@ package io.github.ryuu.adventurecraft.overrides;
 
 import java.util.Random;
 
-public class Dispenser extends ow implements lw {
+public class Dispenser extends TileEntity implements lw {
     private iz[] a = new iz[9];
 
     private final Random b = new Random();

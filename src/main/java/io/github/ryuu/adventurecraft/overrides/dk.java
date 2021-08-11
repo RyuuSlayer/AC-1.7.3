@@ -115,7 +115,7 @@ public class dk {
                                             D.b(-this.c, -this.d, -this.e);
                                         }
                                         if (i2 == 0 && Tile.p[i3]) {
-                                            ow tileentity = chunkcache.b(l2, j2, k2);
+                                            TileEntity tileentity = chunkcache.b(l2, j2, k2);
                                             if (ll.a.a(tileentity))
                                                 this.B.add(tileentity);
                                         }

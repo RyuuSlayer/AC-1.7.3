@@ -1307,9 +1307,9 @@ public class Level implements xp {
             continue;
         }
         this.L = true;
-        Iterator<ow> iterator = this.c.iterator();
+        Iterator<TileEntity> iterator = this.c.iterator();
         while (iterator.hasNext()) {
-            ow tileentity = iterator.next();
+            TileEntity tileentity = iterator.next();
             if (!tileentity.g())
                 tileentity.n_();
             if (tileentity.g()) {
@@ -1323,9 +1323,9 @@ public class Level implements xp {
         }
         this.L = false;
         if (!this.G.isEmpty()) {
-            Iterator<ow> iterator1 = this.G.iterator();
+            Iterator<TileEntity> iterator1 = this.G.iterator();
             while (iterator1.hasNext()) {
-                ow tileentity1 = iterator1.next();
+                TileEntity tileentity1 = iterator1.next();
                 if (!tileentity1.g()) {
                     if (!this.c.contains(tileentity1))
                         this.c.add(tileentity1);
@@ -1603,21 +1603,21 @@ public class Level implements xp {
         return this.v.c();
     }
 
-    public ow b(int i, int j, int k) {
+    public TileEntity b(int i, int j, int k) {
         lm chunk = c(i >> 4, k >> 4);
         if (chunk != null)
             return chunk.d(i & 0xF, j, k & 0xF);
         return null;
     }
 
-    public ow getBlockTileEntityDontCreate(int i, int j, int k) {
+    public TileEntity getBlockTileEntityDontCreate(int i, int j, int k) {
         lm chunk = c(i >> 4, k >> 4);
         if (chunk != null)
             return chunk.getChunkBlockTileEntityDontCreate(i & 0xF, j, k & 0xF);
         return null;
     }
 
-    public void a(int i, int j, int k, ow tileentity) {
+    public void a(int i, int j, int k, TileEntity tileentity) {
         if (!tileentity.g()) {
             p(i, j, k);
             if (this.L) {
@@ -1635,7 +1635,7 @@ public class Level implements xp {
     }
 
     public void p(int i, int j, int k) {
-        ow tileentity = getBlockTileEntityDontCreate(i, j, k);
+        TileEntity tileentity = getBlockTileEntityDontCreate(i, j, k);
         if (tileentity != null && this.L) {
             tileentity.i();
         } else {
@@ -1956,7 +1956,7 @@ public class Level implements xp {
         return this.b;
     }
 
-    public void b(int i, int j, int k, ow tileentity) {
+    public void b(int i, int j, int k, TileEntity tileentity) {
         if (i(i, j, k))
             b(i, k).g();
         for (int l = 0; l < this.u.size(); l++)

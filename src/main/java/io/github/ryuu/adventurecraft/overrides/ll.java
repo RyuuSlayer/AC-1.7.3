@@ -5,13 +5,14 @@ import java.util.Iterator;
 import java.util.Map;
 
 import io.github.ryuu.adventurecraft.entities.tile.*;
+import net.minecraft.level.Level;
 import org.lwjgl.opengl.GL11;
 
 public class ll {
     private final Map m;
 
     private ll() {
-        this.m = new HashMap<Object, Object>();
+        this.m = new HashMap<>();
         this.m.put(yk.class, new po());
         this.m.put(cy.class, new ag());
         this.m.put(uk.class, new hy());
@@ -27,26 +28,26 @@ public class ll {
             je tileentityspecialrenderer = iterator.next();
     }
 
-    public je a(Class<ow> class1) {
+    public je a(Class<TileEntity> class1) {
         je tileentityspecialrenderer = (je) this.m.get(class1);
-        if (tileentityspecialrenderer == null && class1 != ow.class) {
+        if (tileentityspecialrenderer == null && class1 != TileEntity.class) {
             tileentityspecialrenderer = a(class1.getSuperclass());
             this.m.put(class1, tileentityspecialrenderer);
         }
         return tileentityspecialrenderer;
     }
 
-    public boolean a(ow tileentity) {
+    public boolean a(TileEntity tileentity) {
         return (b(tileentity) != null);
     }
 
-    public je b(ow tileentity) {
+    public je b(TileEntity tileentity) {
         if (tileentity == null)
             return null;
         return a(tileentity.getClass());
     }
 
-    public void a(fd world, ji renderengine, sj fontrenderer, ls entityliving, float f) {
+    public void a(Level world, ji renderengine, sj fontrenderer, ls entityliving, float f) {
         if (this.f != world)
             a(world);
         this.e = renderengine;
@@ -59,7 +60,7 @@ public class ll {
         this.l = entityliving.bn + (entityliving.aO - entityliving.bn) * f;
     }
 
-    public void a(ow tileentity, float f) {
+    public void a(TileEntity tileentity, float f) {
         if (tileentity.a(this.j, this.k, this.l) < 4096.0D) {
             float f1 = this.f.c(tileentity.e, tileentity.f, tileentity.g);
             GL11.glColor3f(f1, f1, f1);
@@ -67,13 +68,13 @@ public class ll {
         }
     }
 
-    public void a(ow tileentity, double d, double d1, double d2, float f) {
+    public void a(TileEntity tileentity, double d, double d1, double d2, float f) {
         je tileentityspecialrenderer = b(tileentity);
         if (tileentityspecialrenderer != null)
             tileentityspecialrenderer.a(tileentity, d, d1, d2, f);
     }
 
-    public void a(fd world) {
+    public void a(Level world) {
         this.f = world;
         Iterator<je> iterator = this.m.values().iterator();
         while (iterator.hasNext()) {
@@ -99,7 +100,7 @@ public class ll {
 
     public ji e;
 
-    public fd f;
+    public Level f;
 
     public ls g;
 
