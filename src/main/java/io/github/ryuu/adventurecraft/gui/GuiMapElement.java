@@ -142,12 +142,12 @@ public class GuiMapElement extends ScriptUIContainer {
         this.voted = mouseX / 13 + 1;
         SwingUtilities.invokeLater(new Runnable() { // TODO: validate if this is the correct code (should be)
             public void run() {
-                try{
+                try {
                     URL url = new URL(String.format("http://www.adventurecraft.org/cgi-bin/vote.py?mapID=%d&rating=%d", GuiMapElement.this.mapID, GuiMapElement.this.voted));
-                    URLConnection urlconnection=url.openConnection();
+                    URLConnection urlconnection = url.openConnection();
                     urlconnection.connect();
                     urlconnection.getInputStream();
-                }catch(Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

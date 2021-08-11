@@ -54,7 +54,7 @@ public class BlockStairMulti extends Tile implements IBlockColor {
     public boolean method_1618(TileView iblockaccess, int i, int j, int k, int l) {
         return super.method_1618(iblockaccess, i, j, k, l);
     }
-    
+
     @Override
     public void intersectsInLevel(Level world, int i, int j, int k, Box axisalignedbb, ArrayList arraylist) {
         int l = world.getTileMeta(i, j, k) & 0x3;

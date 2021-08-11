@@ -17,7 +17,7 @@ public class GuiTriggerPushable extends Screen {
     @Override
     public void tick() {
     }
-    
+
     @Override
     public void init() {
         this.buttons.add(new OptionButton(0, 4, 40, "Use Current Selection"));

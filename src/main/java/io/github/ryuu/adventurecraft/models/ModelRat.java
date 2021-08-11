@@ -59,7 +59,7 @@ public class ModelRat extends EntityModel {
         this.leftEar.yaw = this.theHead.yaw;
         this.rightEar.pitch = this.theHead.pitch;
         this.rightEar.yaw = this.theHead.yaw;
-        this.snout.pitch= this.theHead.pitch;
+        this.snout.pitch = this.theHead.pitch;
         this.snout.yaw = this.theHead.yaw;
         this.tail.yaw = -this.theHead.yaw;
     }

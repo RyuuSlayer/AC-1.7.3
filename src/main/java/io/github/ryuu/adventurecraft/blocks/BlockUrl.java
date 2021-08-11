@@ -41,7 +41,7 @@ public class BlockUrl extends TileWithEntity {
     }
 
     public void onTriggerActivated(Level world, int i, int j, int k) {
-        TileEntityUrl obj = (TileEntityUrl)world.getTileEntity(i, j, k);
+        TileEntityUrl obj = (TileEntityUrl) world.getTileEntity(i, j, k);
         if (obj.url != null && !obj.url.equals(""))
             GuiUrlRequest.showUI(obj.url);
     }

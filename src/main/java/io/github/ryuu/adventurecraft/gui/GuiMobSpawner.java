@@ -21,7 +21,7 @@ public class GuiMobSpawner extends Screen {
     @Override
     public void tick() {
     }
-    
+
     @Override
     public void init() {
         this.buttons.clear();

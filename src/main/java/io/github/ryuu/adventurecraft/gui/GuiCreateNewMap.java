@@ -195,7 +195,7 @@ public class GuiCreateNewMap extends Screen {
         this.textboxMapName.method_1877(c, i);
         this.textboxSeed.method_1877(c, i);
         if (c == '\r')
-            buttonClicked((Button)this.buttons.get(0));
+            buttonClicked((Button) this.buttons.get(0));
         ((Button) this.buttons.get(0)).active = (this.textboxMapName.method_1876().length() > 0);
     }
 
