@@ -7,7 +7,7 @@ public class ScriptEntityLivingScript extends ScriptEntityLiving {
     EntityLivingScript entityLivingScript;
 
     ScriptEntityLivingScript(EntityLivingScript e) {
-        super((LivingEntity) e);
+        super(e);
         this.entityLivingScript = e;
     }
 

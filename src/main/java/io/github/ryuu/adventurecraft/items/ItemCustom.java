@@ -91,7 +91,7 @@ public class ItemCustom extends ItemType {
         return itemstack;
     }
 
-    static ArrayList<Integer> loadedItemIDs = new ArrayList<Integer>();
+    static ArrayList<Integer> loadedItemIDs = new ArrayList<>();
 
     static void loadItems(File itemFolder) {
         for (Integer i : loadedItemIDs)

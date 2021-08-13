@@ -88,7 +88,7 @@ public class EntityBomb extends ItemEntity {
                     Double distSq = Double.valueOf(x * x + (y * y) + (z * z));
                     if (distSq.doubleValue() <= 9.0D) {
                         int blockID = worldObj.a(coordX + x, coordY + y, coordZ + z);
-                        if (Tile.m[blockID] instanceof BlockBombable)
+                        if (Tile.BY_ID[blockID] instanceof BlockBombable)
                             worldObj.f(coordX + x, coordY + y, coordZ + z, 0);
                     }
                 }

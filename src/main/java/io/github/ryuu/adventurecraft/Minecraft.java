@@ -7,7 +7,6 @@ import io.github.ryuu.adventurecraft.overrides.ItemType;
 import io.github.ryuu.adventurecraft.scripting.ScriptEntity;
 import io.github.ryuu.adventurecraft.scripting.ScriptItem;
 import io.github.ryuu.adventurecraft.scripting.ScriptVec3;
-import io.github.ryuu.adventurecraft.util.*;
 import bt;
 import cv;
 import cx;
@@ -40,9 +39,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import io.github.ryuu.adventurecraft.util.*;
 import jg;
 import jh;
-import ji;
 import kh;
 import kj;
 import kn;
@@ -54,17 +53,16 @@ import n;
 import net.minecraft.client.*;
 import net.minecraft.client.colour.WaterColour;
 import net.minecraft.client.gui.Screen;
-import net.minecraft.client.gui.screen.DeathScreen;
-import net.minecraft.client.gui.screen.LevelSaveConflictScreen;
-import net.minecraft.client.gui.screen.SleepingChatScreen;
-import net.minecraft.client.gui.screen.TitleScreen;
+import net.minecraft.client.gui.screen.*;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.render.entity.model.BipedModel;
 import net.minecraft.client.sound.SoundHelper;
+import net.minecraft.client.texture.TextureManager;
 import net.minecraft.client.util.ScreenScaler;
+import net.minecraft.client.util.ScreenshotManager;
 import net.minecraft.client.util.Session;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -96,9 +94,6 @@ import org.lwjgl.util.glu.GLU;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
 import org.mozilla.javascript.ScriptableObject;
-import oz;
-import px;
-import sj;
 import ue;
 import uo;
 import uq;
@@ -206,12 +201,12 @@ public abstract class Minecraft implements Runnable {
         this.z = new kv(this, this.Z);
         this.D = new ik(this, this.Z);
         this.mapList = new MapList(this.Z);
-        this.p = new ji(this.D, this.z);
-        this.q = new sj(this.z, "/font/default.png", this.p);
+        this.p = new TextureManager(this.D, this.z);
+        this.q = new TextRenderer(this.z, "/font/default.png", this.p);
         WaterColour.a(this.p.a("/misc/watercolor.png"));
         ia.a(this.p.a("/misc/grasscolor.png"));
         jh.a(this.p.a("/misc/foliagecolor.png"));
-        this.t = new px(this);
+        this.t = new GameRenderer(this);
         EntityRenderDispatcher.a.f = new HandItemRenderer(this);
         this.I = new StatManager(this.k, this.Z);
         ep.f.a((gt) new kh(this));
@@ -591,7 +586,7 @@ public abstract class Minecraft implements Runnable {
         if (Keyboard.isKeyDown(60)) {
             if (!this.L) {
                 this.L = true;
-                this.v.a(hj.a(af, this.d, this.e));
+                this.v.a(ScreenshotManager.takeScreenshot(af, this.d, this.e));
             }
         } else {
             this.L = false;
@@ -696,7 +691,7 @@ public abstract class Minecraft implements Runnable {
     public void i() {
         if (this.r != null)
             return;
-        a((Screen) new oz());
+        a(new PauseScreen());
     }
 
     private void a(int i, boolean flag) {
@@ -1546,15 +1541,15 @@ public abstract class Minecraft implements Runnable {
 
     public volatile boolean o;
 
-    public ji p;
+    public TextureManager p;
 
-    public sj q;
+    public TextRenderer q;
 
     public Screen r;
 
     public ProgressListenerImpl s;
 
-    public px t;
+    public GameRenderer t;
 
     public cz U;
 

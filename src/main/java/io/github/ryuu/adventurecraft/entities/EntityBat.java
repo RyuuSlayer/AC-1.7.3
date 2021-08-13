@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.entities;
 
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.FlyingEntity;
 import net.minecraft.entity.MonsterEntityType;
 import net.minecraft.level.Level;
@@ -17,7 +18,7 @@ public class EntityBat extends FlyingEntity implements MonsterEntityType {
 
     public double waypointZ;
 
-    private sn targetedEntity;
+    private Entity targetedEntity;
 
     private int aggroCooldown;
 

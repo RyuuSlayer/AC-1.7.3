@@ -7,6 +7,7 @@ import net.minecraft.entity.EntityRegistry;
 import net.minecraft.level.Level;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.hit.HitType;
+import net.minecraft.util.maths.Vec3f;
 
 public class ScriptWorld {
     Level worldObj;
@@ -97,7 +98,7 @@ public class ScriptWorld {
 
     public Object[] rayTrace(double startX, double startY, double startZ, double endX, double endY, double endZ) {
         Object[] results = new Object[3];
-        HitResult hit = UtilBullet.rayTrace(this.worldObj, null, bt.b(startX, startY, startZ), bt.b(endX, endY, endZ));
+        HitResult hit = UtilBullet.rayTrace(this.worldObj, null, Vec3f.from(startX, startY, startZ), Vec3f.from(endX, endY, endZ));
         if (hit != null) {
             results[0] = new ScriptVec3(hit.f.a, hit.f.b, hit.f.c);
             if (hit.a == HitType.a) {

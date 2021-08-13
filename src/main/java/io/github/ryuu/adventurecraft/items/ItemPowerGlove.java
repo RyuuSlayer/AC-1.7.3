@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.items;
 
 import io.github.ryuu.adventurecraft.blocks.Blocks;
+import net.minecraft.entity.FallingTile;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
@@ -27,18 +28,18 @@ public class ItemPowerGlove extends ItemType {
         } else {
             return false;
         }
-        if (world.a(i, j, k) != Blocks.pushableBlock.bn)
+        if (world.a(i, j, k) != Blocks.pushableBlock.id)
             return false;
         if (Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157)) {
             xOffset *= -1;
             zOffset *= -1;
         }
         int nextBlockID = world.a(i + xOffset, j, k + zOffset);
-        if (Tile.m[nextBlockID] == null || (Tile.m[nextBlockID]).bA.d() || nextBlockID == Tile.as.bn) {
+        if (Tile.BY_ID[nextBlockID] == null || (Tile.BY_ID[nextBlockID]).material.d() || nextBlockID == Tile.as.id) {
             int blockID = world.a(i, j, k);
             int metadata = world.e(i, j, k);
             world.b(i, j, k, 0, 0);
-            ju e = new ju(world, i + 0.5D, j + 0.5D, k + 0.5D, blockID);
+            FallingTile e = new FallingTile(world, i + 0.5D, j + 0.5D, k + 0.5D, blockID);
             e.aP = 0.3D * xOffset;
             e.aR = 0.3D * zOffset;
             e.metadata = metadata;

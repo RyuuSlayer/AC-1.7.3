@@ -7,11 +7,19 @@ import io.github.ryuu.adventurecraft.gui.GuiWorldConfig;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.InventoryDebug;
 import io.github.ryuu.adventurecraft.util.JScriptInfo;
+import net.minecraft.achievement.Achievement;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.PlayerKeypressManager;
+import net.minecraft.client.gui.screen.EditSignScreen;
+import net.minecraft.client.util.Session;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.FurnaceEntity;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.stat.Stat;
+import net.minecraft.tile.entity.Sign;
 
-public class ClientPlayer extends gs {
-    public uo a;
+public class ClientPlayer extends Player {
+    public PlayerKeypressManager a;
 
     protected Minecraft b;
 
@@ -21,7 +29,7 @@ public class ClientPlayer extends gs {
 
     private final cu bP;
 
-    public ClientPlayer(Minecraft minecraft, Level world, gr session, int i) {
+    public ClientPlayer(Minecraft minecraft, Level world, Session session, int i) {
         super(world);
         this.bN = new cu();
         this.bO = new cu();
@@ -98,11 +106,11 @@ public class ClientPlayer extends gs {
         this.b.a(null);
     }
 
-    public void a(yk tileentitysign) {
-        this.b.a((Screen) new yc(tileentitysign));
+    public void a(Sign tileentitysign) {
+        this.b.a((Screen) new EditSignScreen(tileentitysign));
     }
 
-    public void a(lw iinventory) {
+    public void a(Inventory iinventory) {
         this.b.a((Screen) new hp(this.c, iinventory));
     }
 
@@ -116,7 +124,7 @@ public class ClientPlayer extends gs {
         this.b.a((Screen) new oo(this.c, this.aI, i, j, k));
     }
 
-    public void a(sk tileentityfurnace) {
+    public void a(FurnaceEntity tileentityfurnace) {
         this.b.a((Screen) new ov(this.c, tileentityfurnace));
     }
 
@@ -151,7 +159,7 @@ public class ClientPlayer extends gs {
         } else if (s.equals("/removemobs")) {
             for (Entity obj : this.aI.b) {
                 sn e = (sn) obj;
-                if (e instanceof ls && !(e instanceof gs))
+                if (e instanceof ls && !(e instanceof Player))
                     e.be = true;
             }
         } else if (s.equals("/noclip")) {
@@ -268,11 +276,11 @@ public class ClientPlayer extends gs {
         this.b.v.c(s);
     }
 
-    public void a(vr statbase, int i) {
+    public void a(Stat statbase, int i) {
         if (statbase == null)
             return;
         if (statbase.d()) {
-            ny achievement = (ny) statbase;
+            Achievement achievement = (Achievement) statbase;
             if (achievement.c == null || this.b.I.a(achievement.c)) {
                 if (!this.b.I.a(achievement))
                     this.b.u.a(achievement);
