@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.entities;
 
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.UtilBullet;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.Skeleton;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
@@ -16,7 +17,7 @@ public class EntitySkeletonRifle extends Skeleton {
         this.heldItem = new ItemInstance(Items.rifle, 1);
     }
 
-    protected void a(sn entity, float f) {
+    protected void a(Entity entity, float f) {
         if (f < 15.0D && this.bs.nextBoolean()) {
             a(entity, 30.0F, 30.0F);
             if (this.ae == 0) {

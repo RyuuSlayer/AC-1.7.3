@@ -24,17 +24,17 @@ public class TileEntityStore extends TileEntity {
 
     public TriggerArea tradeTrigger;
 
-    public void a(nu nbttagcompound) {
+    public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
-        this.buyItemID = nbttagcompound.e("buyItemID");
-        this.buyItemAmount = nbttagcompound.e("buyItemAmount");
-        this.buyItemDamage = nbttagcompound.e("buyItemDamage");
-        this.buySupply = nbttagcompound.e("buySupply");
-        this.buySupplyLeft = nbttagcompound.e("buySupplyLeft");
-        this.sellItemID = nbttagcompound.e("sellItemID");
-        this.sellItemAmount = nbttagcompound.e("sellItemAmount");
-        this.sellItemDamage = nbttagcompound.e("sellItemDamage");
-        if (nbttagcompound.b("tradeTrigger")) {
+        this.buyItemID = nbttagcompound.getInt("buyItemID");
+        this.buyItemAmount = nbttagcompound.getInt("buyItemAmount");
+        this.buyItemDamage = nbttagcompound.getInt("buyItemDamage");
+        this.buySupply = nbttagcompound.getInt("buySupply");
+        this.buySupplyLeft = nbttagcompound.getInt("buySupplyLeft");
+        this.sellItemID = nbttagcompound.getInt("sellItemID");
+        this.sellItemAmount = nbttagcompound.getInt("sellItemAmount");
+        this.sellItemDamage = nbttagcompound.getInt("sellItemDamage");
+        if (nbttagcompound.containsKey("tradeTrigger")) {
             this.tradeTrigger = TriggerArea.getFromTagCompound(nbttagcompound.k("tradeTrigger"));
         } else {
             this.tradeTrigger = null;
@@ -43,15 +43,15 @@ public class TileEntityStore extends TileEntity {
 
     public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.a("buyItemID", this.buyItemID);
-        nbttagcompound.a("buyItemAmount", this.buyItemAmount);
-        nbttagcompound.a("buyItemDamage", this.buyItemDamage);
-        nbttagcompound.a("buySupply", this.buySupply);
-        nbttagcompound.a("buySupplyLeft", this.buySupplyLeft);
-        nbttagcompound.a("sellItemID", this.sellItemID);
-        nbttagcompound.a("sellItemAmount", this.sellItemAmount);
-        nbttagcompound.a("sellItemDamage", this.sellItemDamage);
+        nbttagcompound.put("buyItemID", this.buyItemID);
+        nbttagcompound.put("buyItemAmount", this.buyItemAmount);
+        nbttagcompound.put("buyItemDamage", this.buyItemDamage);
+        nbttagcompound.put("buySupply", this.buySupply);
+        nbttagcompound.put("buySupplyLeft", this.buySupplyLeft);
+        nbttagcompound.put("sellItemID", this.sellItemID);
+        nbttagcompound.put("sellItemAmount", this.sellItemAmount);
+        nbttagcompound.put("sellItemDamage", this.sellItemDamage);
         if (this.tradeTrigger != null)
-            nbttagcompound.a("tradeTrigger", this.tradeTrigger.getTagCompound());
+            nbttagcompound.put("tradeTrigger", this.tradeTrigger.getTagCompound());
     }
 }

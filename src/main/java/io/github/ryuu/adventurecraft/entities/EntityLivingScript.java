@@ -12,6 +12,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.util.io.CompoundTag;
+import net.minecraft.util.maths.Vec3f;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
@@ -145,33 +146,33 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
     public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
         if (this.descriptionName != null && !this.descriptionName.equals(""))
-            nbttagcompound.a("descriptionName", this.descriptionName);
+            nbttagcompound.put("descriptionName", this.descriptionName);
         if (!this.onCreated.equals(""))
-            nbttagcompound.a("onCreated", this.onCreated);
+            nbttagcompound.put("onCreated", this.onCreated);
         if (!this.onUpdate.equals(""))
-            nbttagcompound.a("onUpdate", this.onUpdate);
+            nbttagcompound.put("onUpdate", this.onUpdate);
         if (!this.onPathReached.equals(""))
-            nbttagcompound.a("onPathReached", this.onPathReached);
+            nbttagcompound.put("onPathReached", this.onPathReached);
         if (!this.onAttacked.equals(""))
-            nbttagcompound.a("onAttacked", this.onAttacked);
+            nbttagcompound.put("onAttacked", this.onAttacked);
         if (!this.onDeath.equals(""))
-            nbttagcompound.a("onDeath", this.onDeath);
+            nbttagcompound.put("onDeath", this.onDeath);
         if (!this.onInteraction.equals(""))
-            nbttagcompound.a("onInteraction", this.onInteraction);
-        if (nbttagcompound.b("scope"))
+            nbttagcompound.put("onInteraction", this.onInteraction);
+        if (nbttagcompound.containsKey("scope"))
             ScopeTag.loadScopeFromTag(this.scope, nbttagcompound.k("scope"));
     }
 
     public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
-        this.initDescTo = nbttagcompound.i("descriptionName");
-        this.onCreated = nbttagcompound.i("onCreated");
-        this.onUpdate = nbttagcompound.i("onUpdate");
-        this.onPathReached = nbttagcompound.i("onPathReached");
-        this.onAttacked = nbttagcompound.i("onAttacked");
-        this.onDeath = nbttagcompound.i("onDeath");
-        this.onInteraction = nbttagcompound.i("onInteraction");
-        nbttagcompound.a("scope", ScopeTag.getTagFromScope(this.scope));
+        this.initDescTo = nbttagcompound.getString("descriptionName");
+        this.onCreated = nbttagcompound.getString("onCreated");
+        this.onUpdate = nbttagcompound.getString("onUpdate");
+        this.onPathReached = nbttagcompound.getString("onPathReached");
+        this.onAttacked = nbttagcompound.getString("onAttacked");
+        this.onDeath = nbttagcompound.getString("onDeath");
+        this.onInteraction = nbttagcompound.getString("onInteraction");
+        nbttagcompound.put("scope", ScopeTag.getTagFromScope(this.scope));
     }
 
     public void runCreatedScript() {
@@ -256,7 +257,7 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
             }
             if (this.path == null)
                 return;
-            bt vec3d = this.path.a(this);
+            Vec3f vec3d = this.path.a(this);
             this.ax = 0.0F;
             this.az = false;
             double dist = vec3d.d(this.aM, vec3d.b, this.aO);

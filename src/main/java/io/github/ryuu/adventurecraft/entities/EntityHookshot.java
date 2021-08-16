@@ -2,15 +2,20 @@ package io.github.ryuu.adventurecraft.entities;
 
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.items.Items;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.io.CompoundTag;
+import net.minecraft.util.maths.Vec3f;
 
 import java.util.List;
 
-public class EntityHookshot extends sn {
+public class EntityHookshot extends Entity {
     int timeBeforeTurnAround;
 
     boolean turningAround;
@@ -19,9 +24,9 @@ public class EntityHookshot extends sn {
 
     public boolean mainHand;
 
-    ls returnsTo;
+    LivingEntity returnsTo;
 
-    sn entityGrabbed;
+    Entity entityGrabbed;
 
     ItemInstance item;
 
@@ -33,7 +38,7 @@ public class EntityHookshot extends sn {
         this.collidesWithClipBlocks = false;
     }
 
-    public EntityHookshot(Level world, ls entity, boolean main, ItemInstance i) {
+    public EntityHookshot(Level world, LivingEntity entity, boolean main, ItemInstance i) {
         this(world);
         this.mainHand = main;
         c(entity.aS, entity.aT);
@@ -67,7 +72,7 @@ public class EntityHookshot extends sn {
     }
 
     public void w_() {
-        if (this.item != null && this.returnsTo instanceof gs) {
+        if (this.item != null && this.returnsTo instanceof Player) {
             Player player = (Player) this.returnsTo;
             if (this.mainHand && this.item != player.c.b())
                 Items.hookshot.releaseHookshot(this);
@@ -85,9 +90,9 @@ public class EntityHookshot extends sn {
             double prevVelZ = this.aR;
             b(this.aP, this.aQ, this.aR);
             if (this.aP != prevVelX || this.aQ != prevVelY || this.aR != prevVelZ) {
-                bt pos1 = bt.a(this.aJ, this.aK, this.aL);
-                bt pos2 = bt.a(this.aJ + 10.0D * prevVelX, this.aK + 10.0D * prevVelY, this.aL + 10.0D * prevVelZ);
-                vf hit = this.aI.a(pos1, pos2);
+                Vec3f pos1 = Vec3f.a(this.aJ, this.aK, this.aL);
+                Vec3f pos2 = Vec3f.a(this.aJ + 10.0D * prevVelX, this.aK + 10.0D * prevVelY, this.aL + 10.0D * prevVelZ);
+                HitResult hit = this.aI.a(pos1, pos2);
                 if (hit != null && hit.a == jg.a) {
                     int blockID = this.aI.a(hit.b, hit.c, hit.d);
                     if (blockID == Tile.K.bn || blockID == Tile.y.bn || blockID == Blocks.woodBlocks.bn || blockID == Blocks.halfSteps3.bn) {
@@ -131,11 +136,11 @@ public class EntityHookshot extends sn {
             K();
         }
         if (!this.turningAround) {
-            List<sn> entitiesWithin = this.aI.b(this, this.aW.b(0.5D, 0.5D, 0.5D));
+            List<Entity> entitiesWithin = this.aI.b(this, this.aW.b(0.5D, 0.5D, 0.5D));
             for (int i = 0; i < entitiesWithin.size(); i++) {
-                sn e = entitiesWithin.get(i);
-                boolean isItem = e instanceof hl;
-                if (isItem || (e instanceof ls && e != this.returnsTo)) {
+                Entity e = entitiesWithin.get(i);
+                boolean isItem = e instanceof ItemEntity;
+                if (isItem || (e instanceof LivingEntity && e != this.returnsTo)) {
                     if (isItem) {
                         this.aI.a(this, "damage.fallsmall", 1.0F, 1.2F / (this.bs.nextFloat() * 0.2F + 0.9F));
                     } else {
@@ -163,7 +168,7 @@ public class EntityHookshot extends sn {
     public void b(Player entityplayer) {
     }
 
-    public boolean a(sn entity, int i) {
+    public boolean a(Entity entity, int i) {
         return false;
     }
 

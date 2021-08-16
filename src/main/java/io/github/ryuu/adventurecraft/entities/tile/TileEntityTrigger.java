@@ -21,11 +21,11 @@ public class TileEntityTrigger extends TileEntityMinMax {
 
     public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
-        this.resetOnTrigger = nbttagcompound.m("ResetOnTrigger");
+        this.resetOnTrigger = nbttagcompound.getBoolean("ResetOnTrigger");
     }
 
     public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.a("ResetOnTrigger", this.resetOnTrigger);
+        nbttagcompound.put("ResetOnTrigger", this.resetOnTrigger);
     }
 }

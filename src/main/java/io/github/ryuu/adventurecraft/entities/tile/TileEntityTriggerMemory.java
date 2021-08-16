@@ -26,15 +26,15 @@ public class TileEntityTriggerMemory extends TileEntityMinMax {
 
     public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
-        this.isActivated = nbttagcompound.m("IsActivated");
-        this.activateOnDetrigger = nbttagcompound.m("ActivateOnDetrigger");
-        this.resetOnDeath = nbttagcompound.m("ResetOnDeath");
+        this.isActivated = nbttagcompound.getBoolean("IsActivated");
+        this.activateOnDetrigger = nbttagcompound.getBoolean("ActivateOnDetrigger");
+        this.resetOnDeath = nbttagcompound.getBoolean("ResetOnDeath");
     }
 
     public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.a("IsActivated", this.isActivated);
-        nbttagcompound.a("ActivateOnDetrigger", this.activateOnDetrigger);
-        nbttagcompound.a("ResetOnDeath", this.resetOnDeath);
+        nbttagcompound.put("IsActivated", this.isActivated);
+        nbttagcompound.put("ActivateOnDetrigger", this.activateOnDetrigger);
+        nbttagcompound.put("ResetOnDeath", this.resetOnDeath);
     }
 }

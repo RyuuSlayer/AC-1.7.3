@@ -12,15 +12,15 @@ public class TileEntityTeleport extends TileEntity {
 
     public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
-        this.x = nbttagcompound.e("teleportX");
-        this.y = nbttagcompound.e("teleportY");
-        this.z = nbttagcompound.e("teleportZ");
+        this.x = nbttagcompound.getInt("teleportX");
+        this.y = nbttagcompound.getInt("teleportY");
+        this.z = nbttagcompound.getInt("teleportZ");
     }
 
     public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.a("teleportX", this.x);
-        nbttagcompound.a("teleportY", this.y);
-        nbttagcompound.a("teleportZ", this.z);
+        nbttagcompound.put("teleportX", this.x);
+        nbttagcompound.put("teleportY", this.y);
+        nbttagcompound.put("teleportZ", this.z);
     }
 }

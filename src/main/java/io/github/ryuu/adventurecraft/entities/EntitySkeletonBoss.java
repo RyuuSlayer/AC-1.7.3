@@ -1,8 +1,11 @@
 package io.github.ryuu.adventurecraft.entities;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.monster.Skeleton;
+import net.minecraft.entity.projectile.Arrow;
 import net.minecraft.level.Level;
 
-public class EntitySkeletonBoss extends fr {
+public class EntitySkeletonBoss extends Skeleton {
     public EntitySkeletonBoss(Level world) {
         super(world);
         b(this.bg * 2.5F, this.bh * 2.5F);
@@ -17,13 +20,13 @@ public class EntitySkeletonBoss extends fr {
                 a(null, 1);
     }
 
-    protected void a(sn entity, float f) {
+    protected void a(Entity entity, float f) {
         if (f < 20.0F) {
             double d = entity.aM - this.aM;
             double d1 = entity.aO - this.aO;
             if (this.ae == 0) {
                 for (int i = 0; i < 5; i++) {
-                    sl entityarrow = new sl(this.aI, this, this.c);
+                    Arrow entityarrow = new Arrow(this.aI, this, this.c);
                     entityarrow.aN += 1.399999976158142D;
                     double d2 = entity.aN - 0.20000000298023224D - entityarrow.aN;
                     float f1 = in.a(d * d + d1 * d1) * 0.2F;
@@ -43,7 +46,7 @@ public class EntitySkeletonBoss extends fr {
         return 0;
     }
 
-    public boolean a(sn entity, int i) {
+    public boolean a(Entity entity, int i) {
         if (entity != null)
             return false;
         return super.a(entity, i);

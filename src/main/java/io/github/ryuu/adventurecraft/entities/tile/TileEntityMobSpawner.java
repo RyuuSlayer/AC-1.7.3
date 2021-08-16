@@ -7,12 +7,18 @@ import java.util.Random;
 import io.github.ryuu.adventurecraft.entities.EntityLivingScript;
 import io.github.ryuu.adventurecraft.entities.EntitySkeletonSword;
 import io.github.ryuu.adventurecraft.items.ItemCursor;
+import io.github.ryuu.adventurecraft.overrides.ItemType;
+import io.github.ryuu.adventurecraft.overrides.Tile;
 import io.github.ryuu.adventurecraft.scripting.ScopeTag;
 import io.github.ryuu.adventurecraft.scripting.ScriptEntity;
 import io.github.ryuu.adventurecraft.util.Coord;
 import io.github.ryuu.adventurecraft.util.TriggerArea;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.*;
+import net.minecraft.entity.animal.Wolf;
+import net.minecraft.entity.monster.Skeleton;
+import net.minecraft.entity.monster.Slime;
+import net.minecraft.item.ItemInstance;
 import net.minecraft.util.io.CompoundTag;
 import org.mozilla.javascript.Scriptable;
 
@@ -88,8 +94,8 @@ public class TileEntityMobSpawner extends TileEntityScript {
 
     public int getNumAlive() {
         int numAlive = 0;
-        for (sn ent : this.spawnedEntities) {
-            if (!ent.be) {
+        for (Entity ent : this.spawnedEntities) {
+            if (!ent.removed) {
                 numAlive++;
                 continue;
             }
@@ -100,8 +106,8 @@ public class TileEntityMobSpawner extends TileEntityScript {
     }
 
     public void resetMobs() {
-        for (sn ent : this.spawnedEntities) {
-            if (!ent.be)
+        for (Entity ent : this.spawnedEntities) {
+            if (!ent.removed)
                 ent.K();
         }
         this.spawnedEntities.clear();
@@ -109,7 +115,7 @@ public class TileEntityMobSpawner extends TileEntityScript {
         deactivateTriggers();
     }
 
-    private boolean canSpawn(sn entity) {
+    private boolean canSpawn(Entity entity) {
         return (this.d.a(entity.aW) && this.d.a(entity, entity.aW).size() == 0 && !this.d.b(entity.aW));
     }
 
@@ -133,29 +139,29 @@ public class TileEntityMobSpawner extends TileEntityScript {
             } else if (spawnEntityID.endsWith("(Scripted)")) {
                 spawnEntityID = "Script";
             }
-            sn entity = jc.a(spawnEntityID, this.d);
+            Entity entity = EntityRegistry.getId(spawnEntityID, this.d);
             if (entity == null)
                 return;
             if (spawnEntityID.equalsIgnoreCase("FallingSand")) {
-                if (this.spawnID < 256 && uu.m[this.spawnID] != null) {
-                    ((ju) entity).a = this.spawnID;
-                    ((ju) entity).metadata = this.spawnMeta;
+                if (this.spawnID < 256 && Tile.m[this.spawnID] != null) {
+                    ((FallingTile) entity).tile = this.spawnID;
+                    ((FallingTile) entity).metadata = this.spawnMeta;
                 } else {
                     return;
                 }
             } else if (spawnEntityID.equalsIgnoreCase("Item")) {
-                if (gm.c[this.spawnID] != null) {
-                    ((hl) entity).a = new iz(this.spawnID, 1, this.spawnMeta);
+                if (ItemType.c[this.spawnID] != null) {
+                    ((ItemEntity) entity).item = new ItemInstance(this.spawnID, 1, this.spawnMeta);
                 } else {
                     return;
                 }
             } else if (this.entityID.startsWith("Slime") && this.entityID.length() > 6) {
                 int size = Integer.parseInt(this.entityID.split(":")[1].trim());
-                ((uw) entity).e(size);
+                ((Slime) entity).setSize(size);
             } else if (this.entityID.equalsIgnoreCase("Minecart Chest")) {
-                ((yl) entity).d = 1;
+                ((Minecart) entity).type = 1;
             } else if (this.entityID.equalsIgnoreCase("Minecart Furnace")) {
-                ((yl) entity).d = 2;
+                ((Minecart) entity).type = 2;
             }
             if (this.maxSpawnVec.y == this.minSpawnVec.y) {
                 posY = (this.f + this.maxSpawnVec.y);
@@ -173,37 +179,37 @@ public class TileEntityMobSpawner extends TileEntityScript {
             if (canSpawn(entity)) {
                 this.d.b(entity);
                 if (this.entityID.equalsIgnoreCase("Spider Skeleton")) {
-                    sn rider = new fr(this.d);
+                    Entity rider = new Skeleton(this.d);
                     rider.c(posX, posY, posZ, rot, 0.0F);
                     this.d.b(rider);
                     rider.i(entity);
                     this.spawnedEntities.add(rider);
                     this.entitiesLeft.add(rider);
                 } else if (this.entityID.equalsIgnoreCase("Spider Skeleton Sword")) {
-                    sn rider = new EntitySkeletonSword(this.d);
+                    Entity rider = new EntitySkeletonSword(this.d);
                     rider.c(posX, posY, posZ, rot, 0.0F);
                     this.d.b(rider);
                     rider.i(entity);
                     this.spawnedEntities.add(rider);
                     this.entitiesLeft.add(rider);
                 } else if (this.entityID.equalsIgnoreCase("Wolf (Angry)")) {
-                    gi w = (gi) entity;
-                    w.c(true);
+                    Wolf w = (Wolf) entity;
+                    w.setAngry(true);
                 } else if (this.entityID.equalsIgnoreCase("Wolf (Tame)")) {
-                    gi w = (gi) entity;
-                    w.d(true);
+                    Wolf w = (Wolf) entity;
+                    w.setHasOwner(true);
                     w.a((dh) null);
                     w.Y = 20;
                     w.a(Minecraft.minecraftInstance.h.l);
                     w.a(true);
-                    this.d.a((sn) w, (byte) 7);
+                    this.d.a((Entity) w, (byte) 7);
                 }
                 if (this.entityID.endsWith("(Scripted)")) {
                     EntityLivingScript els = (EntityLivingScript) entity;
                     els.setEntityDescription(this.entityID.replace(" (Scripted)", ""));
                 }
-                if (entity instanceof ls)
-                    ((ls) entity).V();
+                if (entity instanceof LivingEntity)
+                    ((LivingEntity) entity).V();
                 this.spawnedEntities.add(entity);
                 this.entitiesLeft.add(entity);
                 if (this.spawnedEntities.size() >= this.spawnNumber)
@@ -227,7 +233,7 @@ public class TileEntityMobSpawner extends TileEntityScript {
                 for (int i = 0; i < num; i++) {
                     int entID = this.delayLoadData.e(String.format("entID_%d", new Object[]{Integer.valueOf(i)}));
                     for (Entity obj : this.d.b) {
-                        sn e = (sn) obj;
+                        Entity e = obj;
                         if (e.aD == entID) {
                             this.spawnedEntities.add(e);
                             if (e.W())
@@ -253,8 +259,8 @@ public class TileEntityMobSpawner extends TileEntityScript {
                 this.entitiesLeft.clear();
                 this.delay = this.respawnDelay;
                 if (this.dropItem > 0 && !this.hasDroppedItem) {
-                    hl entityitem = new hl(this.d, this.e + 0.5D, this.f + 0.5D, this.g + 0.5D, new iz(this.dropItem, 1, 0));
-                    entityitem.c = 10;
+                    ItemEntity entityitem = new ItemEntity(this.d, this.e + 0.5D, this.f + 0.5D, this.g + 0.5D, new ItemInstance(this.dropItem, 1, 0));
+                    entityitem.pickupDelay = 10;
                     this.d.b(entityitem);
                     for (int j = 0; j < 20; j++) {
                         double d = this.rand.nextGaussian() * 0.02D;
@@ -334,77 +340,77 @@ public class TileEntityMobSpawner extends TileEntityScript {
 
     public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
-        this.entityID = nbttagcompound.i("EntityId");
-        this.delay = nbttagcompound.d("Delay");
-        this.respawnDelay = nbttagcompound.e("RespawnDelay");
-        this.spawnNumber = nbttagcompound.e("SpawnNumber");
-        this.spawnOnTrigger = nbttagcompound.m("SpawnOnTrigger");
-        this.spawnOnDetrigger = nbttagcompound.m("SpawnOnDetrigger");
-        this.dropItem = nbttagcompound.e("DropItem");
-        this.hasDroppedItem = nbttagcompound.m("HasDroppedItem");
-        this.spawnID = nbttagcompound.e("SpawnID");
+        this.entityID = nbttagcompound.getString("EntityId");
+        this.delay = nbttagcompound.getShort("Delay");
+        this.respawnDelay = nbttagcompound.getInt("RespawnDelay");
+        this.spawnNumber = nbttagcompound.getInt("SpawnNumber");
+        this.spawnOnTrigger = nbttagcompound.getBoolean("SpawnOnTrigger");
+        this.spawnOnDetrigger = nbttagcompound.getBoolean("SpawnOnDetrigger");
+        this.dropItem = nbttagcompound.getInt("DropItem");
+        this.hasDroppedItem = nbttagcompound.getBoolean("HasDroppedItem");
+        this.spawnID = nbttagcompound.getInt("SpawnID");
         for (int i = 0; i < 8; i++) {
-            (this.minVec[i]).x = nbttagcompound.e("minX".concat(Integer.toString(i)));
-            (this.minVec[i]).y = nbttagcompound.e("minY".concat(Integer.toString(i)));
-            (this.minVec[i]).z = nbttagcompound.e("minZ".concat(Integer.toString(i)));
-            (this.maxVec[i]).x = nbttagcompound.e("maxX".concat(Integer.toString(i)));
-            (this.maxVec[i]).y = nbttagcompound.e("maxY".concat(Integer.toString(i)));
-            (this.maxVec[i]).z = nbttagcompound.e("maxZ".concat(Integer.toString(i)));
+            (this.minVec[i]).x = nbttagcompound.getInt("minX".concat(Integer.toString(i)));
+            (this.minVec[i]).y = nbttagcompound.getInt("minY".concat(Integer.toString(i)));
+            (this.minVec[i]).z = nbttagcompound.getInt("minZ".concat(Integer.toString(i)));
+            (this.maxVec[i]).x = nbttagcompound.getInt("maxX".concat(Integer.toString(i)));
+            (this.maxVec[i]).y = nbttagcompound.getInt("maxY".concat(Integer.toString(i)));
+            (this.maxVec[i]).z = nbttagcompound.getInt("maxZ".concat(Integer.toString(i)));
         }
-        this.minSpawnVec.x = nbttagcompound.e("minSpawnX");
-        this.minSpawnVec.y = nbttagcompound.e("minSpawnY");
-        this.minSpawnVec.z = nbttagcompound.e("minSpawnZ");
-        this.maxSpawnVec.x = nbttagcompound.e("maxSpawnX");
-        this.maxSpawnVec.y = nbttagcompound.e("maxSpawnY");
-        this.maxSpawnVec.z = nbttagcompound.e("maxSpawnZ");
-        if (nbttagcompound.b("numEntities") && nbttagcompound.d("numEntities") > 0) {
+        this.minSpawnVec.x = nbttagcompound.getInt("minSpawnX");
+        this.minSpawnVec.y = nbttagcompound.getInt("minSpawnY");
+        this.minSpawnVec.z = nbttagcompound.getInt("minSpawnZ");
+        this.maxSpawnVec.x = nbttagcompound.getInt("maxSpawnX");
+        this.maxSpawnVec.y = nbttagcompound.getInt("maxSpawnY");
+        this.maxSpawnVec.z = nbttagcompound.getInt("maxSpawnZ");
+        if (nbttagcompound.containsKey("numEntities") && nbttagcompound.getShort("numEntities") > 0) {
             this.ticksBeforeLoad = 20;
             this.delayLoadData = nbttagcompound;
         }
-        if (nbttagcompound.b("scope"))
-            ScopeTag.loadScopeFromTag(this.scope, nbttagcompound.k("scope"));
+        if (nbttagcompound.containsKey("scope"))
+            ScopeTag.loadScopeFromTag(this.scope, nbttagcompound.getCompoundTag("scope"));
     }
 
     public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.a("EntityId", this.entityID);
-        nbttagcompound.a("Delay", (short) this.delay);
-        nbttagcompound.a("RespawnDelay", this.respawnDelay);
-        nbttagcompound.a("SpawnNumber", this.spawnNumber);
-        nbttagcompound.a("SpawnOnTrigger", this.spawnOnTrigger);
-        nbttagcompound.a("SpawnOnDetrigger", this.spawnOnDetrigger);
-        nbttagcompound.a("SpawnID", this.spawnID);
-        nbttagcompound.a("DropItem", this.dropItem);
-        nbttagcompound.a("HasDroppedItem", this.hasDroppedItem);
+        nbttagcompound.put("EntityId", this.entityID);
+        nbttagcompound.put("Delay", (short) this.delay);
+        nbttagcompound.put("RespawnDelay", this.respawnDelay);
+        nbttagcompound.put("SpawnNumber", this.spawnNumber);
+        nbttagcompound.put("SpawnOnTrigger", this.spawnOnTrigger);
+        nbttagcompound.put("SpawnOnDetrigger", this.spawnOnDetrigger);
+        nbttagcompound.put("SpawnID", this.spawnID);
+        nbttagcompound.put("DropItem", this.dropItem);
+        nbttagcompound.put("HasDroppedItem", this.hasDroppedItem);
         int i;
         for (i = 0; i < 8; i++) {
-            nbttagcompound.a("minX".concat(Integer.toString(i)), (this.minVec[i]).x);
-            nbttagcompound.a("minY".concat(Integer.toString(i)), (this.minVec[i]).y);
-            nbttagcompound.a("minZ".concat(Integer.toString(i)), (this.minVec[i]).z);
-            nbttagcompound.a("maxX".concat(Integer.toString(i)), (this.maxVec[i]).x);
-            nbttagcompound.a("maxY".concat(Integer.toString(i)), (this.maxVec[i]).y);
-            nbttagcompound.a("maxZ".concat(Integer.toString(i)), (this.maxVec[i]).z);
+            nbttagcompound.put("minX".concat(Integer.toString(i)), (this.minVec[i]).x);
+            nbttagcompound.put("minY".concat(Integer.toString(i)), (this.minVec[i]).y);
+            nbttagcompound.put("minZ".concat(Integer.toString(i)), (this.minVec[i]).z);
+            nbttagcompound.put("maxX".concat(Integer.toString(i)), (this.maxVec[i]).x);
+            nbttagcompound.put("maxY".concat(Integer.toString(i)), (this.maxVec[i]).y);
+            nbttagcompound.put("maxZ".concat(Integer.toString(i)), (this.maxVec[i]).z);
         }
-        nbttagcompound.a("minSpawnX", this.minSpawnVec.x);
-        nbttagcompound.a("minSpawnY", this.minSpawnVec.y);
-        nbttagcompound.a("minSpawnZ", this.minSpawnVec.z);
-        nbttagcompound.a("maxSpawnX", this.maxSpawnVec.x);
-        nbttagcompound.a("maxSpawnY", this.maxSpawnVec.y);
-        nbttagcompound.a("maxSpawnZ", this.maxSpawnVec.z);
-        nbttagcompound.a("numEntities", (short) this.spawnedEntities.size());
+        nbttagcompound.put("minSpawnX", this.minSpawnVec.x);
+        nbttagcompound.put("minSpawnY", this.minSpawnVec.y);
+        nbttagcompound.put("minSpawnZ", this.minSpawnVec.z);
+        nbttagcompound.put("maxSpawnX", this.maxSpawnVec.x);
+        nbttagcompound.put("maxSpawnY", this.maxSpawnVec.y);
+        nbttagcompound.put("maxSpawnZ", this.maxSpawnVec.z);
+        nbttagcompound.put("numEntities", (short) this.spawnedEntities.size());
         i = 0;
-        for (sn e : this.spawnedEntities) {
-            nbttagcompound.a(String.format("entID_%d", new Object[]{Integer.valueOf(i)}), e.aD);
+        for (Entity e : this.spawnedEntities) {
+            nbttagcompound.put(String.format("entID_%d", new Object[]{Integer.valueOf(i)}), e.aD);
             i++;
         }
-        nbttagcompound.a("scope", ScopeTag.getTagFromScope(this.scope));
+        nbttagcompound.put("scope", ScopeTag.getTagFromScope(this.scope));
     }
 
     private void executeScript(String scriptName) {
         if (!scriptName.equals("")) {
             int i = 0;
             ScriptEntity[] scriptSpawnedEntities = new ScriptEntity[this.entitiesLeft.size()];
-            for (sn e : this.entitiesLeft)
+            for (Entity e : this.entitiesLeft)
                 scriptSpawnedEntities[i++] = ScriptEntity.getEntityClass(e);
             this.d.script.addObject("spawnedEntities", scriptSpawnedEntities);
             this.d.scriptHandler.runScript(scriptName, this.scope);

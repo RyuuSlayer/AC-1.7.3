@@ -1,8 +1,12 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
 import io.github.ryuu.adventurecraft.util.DebugMode;
+import net.minecraft.client.render.entity.ItemRenderer;
 import net.minecraft.client.render.entity.tile.TileEntityRenderer;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.item.ItemInstance;
 import net.minecraft.tile.Tile;
+import net.minecraft.tile.entity.TileEntity;
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityStoreRenderer extends TileEntityRenderer {
@@ -32,7 +36,7 @@ public class TileEntityStoreRenderer extends TileEntityRenderer {
             for (int i = store.tradeTrigger.minX; i <= store.tradeTrigger.maxX; i++) {
                 for (int j = store.tradeTrigger.minY; j <= store.tradeTrigger.maxY; j++) {
                     for (int k = store.tradeTrigger.minZ; k <= store.tradeTrigger.maxZ; k++) {
-                        Tile block = Tile.m[store.d.a(i, j, k)];
+                        Tile block = Tile.BY_ID[store.d.a(i, j, k)];
                         if (block != null && block.canBeTriggered()) {
                             GL11.glColor3f(0.0F, 0.0F, 0.0F);
                             GL11.glVertex3f(0.0F, 0.0F, 0.0F);
@@ -51,15 +55,15 @@ public class TileEntityStoreRenderer extends TileEntityRenderer {
         }
     }
 
-    public void a(ow tileentity, double d, double d1, double d2, float f) {
+    public void a(TileEntity tileentity, double d, double d1, double d2, float f) {
         renderTileEntityStore((TileEntityStore) tileentity, d, d1, d2, f);
     }
 
-    static iz item = new iz(0, 0, 0);
+    static ItemInstance item = new ItemInstance(0, 0, 0);
 
-    static hl eItem = new hl(null, 0.0D, 0.0D, 0.0D, item);
+    static ItemEntity eItem = new ItemEntity(null, 0.0D, 0.0D, 0.0D, item);
 
-    static bb renderItem = new bb();
+    static ItemRenderer renderItem = new ItemRenderer();
 
     static {
         renderItem.scale = 1.5F;

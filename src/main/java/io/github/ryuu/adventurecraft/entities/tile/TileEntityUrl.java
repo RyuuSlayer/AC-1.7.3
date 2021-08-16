@@ -8,12 +8,12 @@ public class TileEntityUrl extends TileEntity {
 
     public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
-        this.url = nbttagcompound.i("url");
+        this.url = nbttagcompound.getString("url");
     }
 
     public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
         if (this.url != null && !this.url.equals(""))
-            nbttagcompound.a("url", this.url);
+            nbttagcompound.put("url", this.url);
     }
 }

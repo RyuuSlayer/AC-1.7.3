@@ -1,10 +1,12 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
 import io.github.ryuu.adventurecraft.util.DebugMode;
+import net.minecraft.client.render.entity.tile.TileEntityRenderer;
 import net.minecraft.tile.Tile;
+import net.minecraft.tile.entity.TileEntity;
 import org.lwjgl.opengl.GL11;
 
-public class TileEntityMinMaxRenderer extends je {
+public class TileEntityMinMaxRenderer extends TileEntityRenderer {
     float r;
 
     float g;
@@ -50,7 +52,7 @@ public class TileEntityMinMaxRenderer extends je {
         }
     }
 
-    public void a(ow tileentity, double d, double d1, double d2, float f) {
+    public void a(TileEntity tileentity, double d, double d1, double d2, float f) {
         render((TileEntityMinMax) tileentity, d, d1, d2, f);
     }
 }

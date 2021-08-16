@@ -2,6 +2,8 @@ package io.github.ryuu.adventurecraft.entities;
 
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.UtilBullet;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.monster.Zombie;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
@@ -17,7 +19,7 @@ public class EntityZombiePistol extends Zombie {
         this.c = 6;
     }
 
-    protected void a(sn entity, float f) {
+    protected void a(Entity entity, float f) {
         if (this.ae == 0 && this.bs.nextBoolean() && this.bs.nextBoolean()) {
             a(entity, 45.0F, 90.0F);
             this.ammo--;
@@ -51,7 +53,7 @@ public class EntityZombiePistol extends Zombie {
     protected void q() {
         int i = this.bs.nextInt(3) + 1;
         for (int j = 0; j < i; j++) {
-            hl item = b(j(), 1);
+            ItemEntity item = b(j(), 1);
             item.a.a = 5;
         }
     }

@@ -5,6 +5,7 @@ import io.github.ryuu.adventurecraft.util.Coord;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.client.render.entity.tile.TileEntityRenderer;
 import net.minecraft.tile.Tile;
+import net.minecraft.tile.entity.TileEntity;
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityMobSpawnerRenderer extends TileEntityRenderer {
@@ -45,7 +46,7 @@ public class TileEntityMobSpawnerRenderer extends TileEntityRenderer {
         }
     }
 
-    public void a(ow tileentity, double d, double d1, double d2, float f) {
+    public void a(TileEntity tileentity, double d, double d1, double d2, float f) {
         render((TileEntityMobSpawner) tileentity, d, d1, d2, f);
     }
 }

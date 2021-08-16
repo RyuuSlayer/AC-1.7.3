@@ -126,12 +126,12 @@ public class EntityBomb extends ItemEntity {
 
     public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.a("Fuse", (byte) this.fuse);
+        nbttagcompound.put("Fuse", (byte) this.fuse);
     }
 
     public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
-        this.fuse = nbttagcompound.c("Fuse");
+        this.fuse = nbttagcompound.getByte("Fuse");
     }
 
     public void b(Player entityplayer) {

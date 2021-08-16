@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.entities;
 
 import io.github.ryuu.adventurecraft.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.util.io.CompoundTag;
@@ -28,7 +29,7 @@ public class EntityNPC extends EntityLivingScript {
 
     dh pathToPoint;
 
-    sn entityToTrack;
+    Entity entityToTrack;
 
     private boolean ranOnCreate;
 
@@ -62,7 +63,7 @@ public class EntityNPC extends EntityLivingScript {
         if (this.entityToTrack != null)
             if (!this.entityToTrack.W()) {
                 this.entityToTrack = null;
-            } else if (this.entityToTrack.f((sn) this) > 16.0F || !e(this.entityToTrack)) {
+            } else if (this.entityToTrack.f((Entity) this) > 16.0F || !e(this.entityToTrack)) {
                 this.entityToTrack = null;
             }
         if (this.entityToTrack != null) {
@@ -88,8 +89,8 @@ public class EntityNPC extends EntityLivingScript {
         }
     }
 
-    protected sn findPlayerToTrack() {
-        Player entityplayer = this.aI.a((sn) this, 16.0D);
+    protected Entity findPlayerToTrack() {
+        Player entityplayer = this.aI.a((Entity) this, 16.0D);
         if (entityplayer != null && e(entityplayer))
             return entityplayer;
         return null;
@@ -99,7 +100,7 @@ public class EntityNPC extends EntityLivingScript {
         return false;
     }
 
-    public void h(sn entity) {
+    public void h(Entity entity) {
         System.out.println("collision");
     }
 
@@ -109,33 +110,33 @@ public class EntityNPC extends EntityLivingScript {
 
     public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.a("npcName", this.npcName);
-        nbttagcompound.a("chatMsg", this.chatMsg);
-        nbttagcompound.a("texture", this.O);
-        nbttagcompound.a("spawnX", this.spawnX);
-        nbttagcompound.a("spawnY", this.spawnY);
-        nbttagcompound.a("spawnZ", this.spawnZ);
-        nbttagcompound.a("pathToHome", this.pathToHome);
-        nbttagcompound.a("trackPlayer", this.trackPlayer);
-        nbttagcompound.a("isAttackable", this.isAttackable);
+        nbttagcompound.put("npcName", this.npcName);
+        nbttagcompound.put("chatMsg", this.chatMsg);
+        nbttagcompound.put("texture", this.O);
+        nbttagcompound.put("spawnX", this.spawnX);
+        nbttagcompound.put("spawnY", this.spawnY);
+        nbttagcompound.put("spawnZ", this.spawnZ);
+        nbttagcompound.put("pathToHome", this.pathToHome);
+        nbttagcompound.put("trackPlayer", this.trackPlayer);
+        nbttagcompound.put("isAttackable", this.isAttackable);
     }
 
     public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
-        this.npcName = nbttagcompound.i("npcName");
-        this.chatMsg = nbttagcompound.i("chatMsg");
-        this.O = nbttagcompound.i("texture");
-        if (nbttagcompound.b("spawnX")) {
-            this.spawnX = nbttagcompound.h("spawnX");
-            this.spawnY = nbttagcompound.h("spawnY");
-            this.spawnZ = nbttagcompound.h("spawnZ");
+        this.npcName = nbttagcompound.getString("npcName");
+        this.chatMsg = nbttagcompound.getString("chatMsg");
+        this.O = nbttagcompound.getString("texture");
+        if (nbttagcompound.containsKey("spawnX")) {
+            this.spawnX = nbttagcompound.getDouble("spawnX");
+            this.spawnY = nbttagcompound.getDouble("spawnY");
+            this.spawnZ = nbttagcompound.getDouble("spawnZ");
         }
-        if (nbttagcompound.b("pathToHome"))
-            this.pathToHome = nbttagcompound.m("pathToHome");
-        if (nbttagcompound.b("trackPlayer"))
-            this.trackPlayer = nbttagcompound.m("trackPlayer");
-        if (nbttagcompound.b("isAttackable"))
-            this.isAttackable = nbttagcompound.m("isAttackable");
+        if (nbttagcompound.containsKey("pathToHome"))
+            this.pathToHome = nbttagcompound.getBoolean("pathToHome");
+        if (nbttagcompound.containsKey("trackPlayer"))
+            this.trackPlayer = nbttagcompound.getBoolean("trackPlayer");
+        if (nbttagcompound.containsKey("isAttackable"))
+            this.isAttackable = nbttagcompound.getBoolean("isAttackable");
     }
 
     public boolean a(Player entityplayer) {
@@ -147,13 +148,13 @@ public class EntityNPC extends EntityLivingScript {
         return false;
     }
 
-    public boolean a(sn entity, int i) {
+    public boolean a(Entity entity, int i) {
         if (this.isAttackable)
             return super.a(entity, i);
         return false;
     }
 
-    public boolean attackEntityFromMulti(sn entity, int i) {
+    public boolean attackEntityFromMulti(Entity entity, int i) {
         if (this.isAttackable)
             return super.attackEntityFromMulti(entity, i);
         return false;

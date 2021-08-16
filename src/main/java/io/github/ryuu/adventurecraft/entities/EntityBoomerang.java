@@ -4,13 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 import net.minecraft.util.io.CompoundTag;
 
-public class EntityBoomerang extends sn {
+public class EntityBoomerang extends Entity {
     double bounceFactor;
 
     float prevBoomerangRotation;
@@ -21,7 +23,7 @@ public class EntityBoomerang extends sn {
 
     boolean turningAround;
 
-    sn returnsTo;
+    Entity returnsTo;
 
     List<Entity> itemsPickedUp;
 
@@ -45,7 +47,7 @@ public class EntityBoomerang extends sn {
         this.collidesWithClipBlocks = false;
     }
 
-    public EntityBoomerang(Level world, sn entity, ItemInstance b) {
+    public EntityBoomerang(Level world, Entity entity, ItemInstance b) {
         this(world);
         this.item = b;
         c(entity.aS, entity.aT);
@@ -116,12 +118,12 @@ public class EntityBoomerang extends sn {
         this.boomerangRotation += 36.0F;
         while (this.boomerangRotation > 360.0F)
             this.boomerangRotation -= 360.0F;
-        List<sn> entitiesWithin = this.aI.b(this, this.aW.b(0.5D, 0.5D, 0.5D));
+        List<Entity> entitiesWithin = this.aI.b(this, this.aW.b(0.5D, 0.5D, 0.5D));
         for (int i = 0; i < entitiesWithin.size(); i++) {
-            sn e = entitiesWithin.get(i);
-            if (e instanceof hl) {
+            Entity e = entitiesWithin.get(i);
+            if (e instanceof ItemEntity) {
                 this.itemsPickedUp.add(e);
-            } else if (e instanceof ls && e != this.returnsTo) {
+            } else if (e instanceof LivingEntity && e != this.returnsTo) {
                 e.stunned = 20;
                 e.aJ = e.aM;
                 e.aK = e.aN;
@@ -130,7 +132,7 @@ public class EntityBoomerang extends sn {
                 e.aV = e.aT;
             }
         }
-        for (sn e : this.itemsPickedUp) {
+        for (Entity e : this.itemsPickedUp) {
             if (!e.be)
                 e.e(this.aM, this.aN, this.aO);
         }
@@ -142,9 +144,9 @@ public class EntityBoomerang extends sn {
             this.chunkY = curChunkY;
             this.chunkZ = curChunkZ;
             int blockID = this.aI.a(this.chunkX, this.chunkY, this.chunkZ);
-            if (blockID == uu.aK.bn)
-                if (this.returnsTo instanceof gs)
-                    Tile.aK.a(this.aI, this.chunkX, this.chunkY, this.chunkZ, (gs) this.returnsTo);
+            if (blockID == Tile.aK.bn)
+                if (this.returnsTo instanceof Player)
+                    Tile.aK.a(this.aI, this.chunkX, this.chunkY, this.chunkZ, (Player) this.returnsTo);
         }
     }
 
@@ -170,7 +172,7 @@ public class EntityBoomerang extends sn {
     public void b(Player entityplayer) {
     }
 
-    public boolean a(sn entity, int i) {
+    public boolean a(Entity entity, int i) {
         return false;
     }
 

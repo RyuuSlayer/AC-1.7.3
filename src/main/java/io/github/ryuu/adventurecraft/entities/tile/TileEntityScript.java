@@ -37,24 +37,24 @@ public class TileEntityScript extends TileEntity {
 
     public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
-        this.onTriggerScriptFile = nbttagcompound.i("onTriggerScriptFile");
-        this.onDetriggerScriptFile = nbttagcompound.i("onDetriggerScriptFile");
-        this.onUpdateScriptFile = nbttagcompound.i("onUpdateScriptFile");
-        this.isActivated = nbttagcompound.m("isActivated");
-        if (nbttagcompound.b("scope"))
-            ScopeTag.loadScopeFromTag(this.scope, nbttagcompound.k("scope"));
+        this.onTriggerScriptFile = nbttagcompound.getString("onTriggerScriptFile");
+        this.onDetriggerScriptFile = nbttagcompound.getString("onDetriggerScriptFile");
+        this.onUpdateScriptFile = nbttagcompound.getString("onUpdateScriptFile");
+        this.isActivated = nbttagcompound.getBoolean("isActivated");
+        if (nbttagcompound.containsKey("scope"))
+            ScopeTag.loadScopeFromTag(this.scope, nbttagcompound.getCompoundTag("scope"));
     }
 
     public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
         if (!this.onTriggerScriptFile.isEmpty())
-            nbttagcompound.a("onTriggerScriptFile", this.onTriggerScriptFile);
+            nbttagcompound.put("onTriggerScriptFile", this.onTriggerScriptFile);
         if (!this.onDetriggerScriptFile.isEmpty())
-            nbttagcompound.a("onDetriggerScriptFile", this.onDetriggerScriptFile);
+            nbttagcompound.put("onDetriggerScriptFile", this.onDetriggerScriptFile);
         if (!this.onUpdateScriptFile.isEmpty())
-            nbttagcompound.a("onUpdateScriptFile", this.onUpdateScriptFile);
-        nbttagcompound.a("isActivated", this.isActivated);
-        nbttagcompound.a("scope", ScopeTag.getTagFromScope(this.scope));
+            nbttagcompound.put("onUpdateScriptFile", this.onUpdateScriptFile);
+        nbttagcompound.put("isActivated", this.isActivated);
+        nbttagcompound.put("scope", ScopeTag.getTagFromScope(this.scope));
     }
 
     public boolean inited = false;

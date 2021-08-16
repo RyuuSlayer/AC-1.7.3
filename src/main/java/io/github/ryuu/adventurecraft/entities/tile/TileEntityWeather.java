@@ -26,29 +26,29 @@ public class TileEntityWeather extends TileEntity {
 
     public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
-        this.changePrecipitate = nbttagcompound.m("changePrecipitate");
-        this.precipitate = nbttagcompound.m("precipitate");
-        this.changeTempOffset = nbttagcompound.m("changeTempOffset");
-        this.tempOffset = nbttagcompound.h("tempOffset");
-        this.changeTimeOfDay = nbttagcompound.m("changeTimeOfDay");
-        this.timeOfDay = nbttagcompound.e("timeOfDay");
-        this.changeTimeRate = nbttagcompound.m("changeTimeRate");
-        this.timeRate = nbttagcompound.g("timeRate");
-        this.changeThundering = nbttagcompound.m("changeThundering");
-        this.thundering = nbttagcompound.m("thundering");
+        this.changePrecipitate = nbttagcompound.getBoolean("changePrecipitate");
+        this.precipitate = nbttagcompound.getBoolean("precipitate");
+        this.changeTempOffset = nbttagcompound.getBoolean("changeTempOffset");
+        this.tempOffset = nbttagcompound.getDouble("tempOffset");
+        this.changeTimeOfDay = nbttagcompound.getBoolean("changeTimeOfDay");
+        this.timeOfDay = nbttagcompound.getInt("timeOfDay");
+        this.changeTimeRate = nbttagcompound.getBoolean("changeTimeRate");
+        this.timeRate = nbttagcompound.getFloat("timeRate");
+        this.changeThundering = nbttagcompound.getBoolean("changeThundering");
+        this.thundering = nbttagcompound.getBoolean("thundering");
     }
 
     public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.a("changePrecipitate", this.changePrecipitate);
-        nbttagcompound.a("precipitate", this.precipitate);
-        nbttagcompound.a("changeTempOffset", this.changeTempOffset);
-        nbttagcompound.a("tempOffset", this.tempOffset);
-        nbttagcompound.a("changeTimeOfDay", this.changeTimeOfDay);
-        nbttagcompound.a("timeOfDay", this.timeOfDay);
-        nbttagcompound.a("changeTimeRate", this.changeTimeRate);
-        nbttagcompound.a("timeRate", this.timeRate);
-        nbttagcompound.a("changeThundering", this.changeThundering);
-        nbttagcompound.a("thundering", this.thundering);
+        nbttagcompound.put("changePrecipitate", this.changePrecipitate);
+        nbttagcompound.put("precipitate", this.precipitate);
+        nbttagcompound.put("changeTempOffset", this.changeTempOffset);
+        nbttagcompound.put("tempOffset", this.tempOffset);
+        nbttagcompound.put("changeTimeOfDay", this.changeTimeOfDay);
+        nbttagcompound.put("timeOfDay", this.timeOfDay);
+        nbttagcompound.put("changeTimeRate", this.changeTimeRate);
+        nbttagcompound.put("timeRate", this.timeRate);
+        nbttagcompound.put("changeThundering", this.changeThundering);
+        nbttagcompound.put("thundering", this.thundering);
     }
 }

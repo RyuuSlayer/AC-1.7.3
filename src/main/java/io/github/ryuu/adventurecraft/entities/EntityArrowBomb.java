@@ -48,12 +48,12 @@ public class EntityArrowBomb extends Arrow {
 
     public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.a("fuse", (byte) this.fuse);
+        nbttagcompound.put("fuse", (byte) this.fuse);
     }
 
     public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
-        this.fuse = nbttagcompound.c("fuse") & 0xFF;
+        this.fuse = nbttagcompound.getByte("fuse") & 0xFF;
     }
 
     public void b(Player entityplayer) {

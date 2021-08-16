@@ -8,11 +8,11 @@ public class TileEntityHealDamage extends TileEntity {
 
     public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
-        this.healDamage = nbttagcompound.e("healDamage");
+        this.healDamage = nbttagcompound.getInt("healDamage");
     }
 
     public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.a("healDamage", this.healDamage);
+        nbttagcompound.put("healDamage", this.healDamage);
     }
 }

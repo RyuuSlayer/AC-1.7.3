@@ -10,14 +10,14 @@ public class TileEntityMessage extends TileEntity {
 
     public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
-        this.message = nbttagcompound.i("message");
-        this.sound = nbttagcompound.i("sound");
+        this.message = nbttagcompound.getString("message");
+        this.sound = nbttagcompound.getString("sound");
     }
 
     public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
         if (this.message != null && !this.message.equals(""))
-            nbttagcompound.a("message", this.message);
-        nbttagcompound.a("sound", this.sound);
+            nbttagcompound.put("message", this.message);
+        nbttagcompound.put("sound", this.sound);
     }
 }

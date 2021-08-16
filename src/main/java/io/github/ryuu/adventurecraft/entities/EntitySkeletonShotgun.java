@@ -1,20 +1,22 @@
 package io.github.ryuu.adventurecraft.entities;
 
 import io.github.ryuu.adventurecraft.items.Items;
+import io.github.ryuu.adventurecraft.overrides.Skeleton;
 import io.github.ryuu.adventurecraft.util.UtilBullet;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
 
 import java.util.Random;
 
-public class EntitySkeletonShotgun extends fr {
+public class EntitySkeletonShotgun extends Skeleton {
     public EntitySkeletonShotgun(Level world) {
         super(world);
         this.c = 2;
         this.heldItem = new ItemInstance(Items.shotgun, 1);
     }
 
-    protected void a(sn entity, float f) {
+    protected void a(Entity entity, float f) {
         if (f < 10.0D && bs.nextBoolean()) {
             a(entity, 30.0F, 30.0F);
             if (this.ae == 0) {

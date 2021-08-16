@@ -11,13 +11,13 @@ public class TileEntityRedstoneTrigger extends TileEntityMinMax {
 
     public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
-        this.resetOnTrigger = nbttagcompound.m("ResetOnTrigger");
-        this.isActivated = nbttagcompound.m("IsActivated");
+        this.resetOnTrigger = nbttagcompound.getBoolean("ResetOnTrigger");
+        this.isActivated = nbttagcompound.getBoolean("IsActivated");
     }
 
     public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.a("ResetOnTrigger", this.resetOnTrigger);
-        nbttagcompound.a("IsActivated", this.isActivated);
+        nbttagcompound.put("ResetOnTrigger", this.resetOnTrigger);
+        nbttagcompound.put("IsActivated", this.isActivated);
     }
 }

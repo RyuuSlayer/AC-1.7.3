@@ -57,25 +57,25 @@ public class TileEntityTimer extends TileEntityMinMax {
 
     public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
-        this.resetOnTrigger = nbttagcompound.m("resetOnTrigger");
-        this.timeActive = nbttagcompound.e("timeActive");
-        this.timeDeactive = nbttagcompound.e("timeDeactive");
-        this.timeDelay = nbttagcompound.e("timeDelay");
-        this.ticks = nbttagcompound.e("ticks");
-        this.ticksDelay = nbttagcompound.e("ticksDelay");
-        this.active = nbttagcompound.m("active");
-        this.canActivate = nbttagcompound.m("canActivate");
+        this.resetOnTrigger = nbttagcompound.getBoolean("resetOnTrigger");
+        this.timeActive = nbttagcompound.getInt("timeActive");
+        this.timeDeactive = nbttagcompound.getInt("timeDeactive");
+        this.timeDelay = nbttagcompound.getInt("timeDelay");
+        this.ticks = nbttagcompound.getInt("ticks");
+        this.ticksDelay = nbttagcompound.getInt("ticksDelay");
+        this.active = nbttagcompound.getBoolean("active");
+        this.canActivate = nbttagcompound.getBoolean("canActivate");
     }
 
     public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.a("resetOnTrigger", this.resetOnTrigger);
-        nbttagcompound.a("timeActive", this.timeActive);
-        nbttagcompound.a("timeDeactive", this.timeDeactive);
-        nbttagcompound.a("timeDelay", this.timeDelay);
-        nbttagcompound.a("ticks", this.ticks);
-        nbttagcompound.a("ticksDelay", this.ticksDelay);
-        nbttagcompound.a("active", this.active);
-        nbttagcompound.a("canActivate", this.canActivate);
+        nbttagcompound.put("resetOnTrigger", this.resetOnTrigger);
+        nbttagcompound.put("timeActive", this.timeActive);
+        nbttagcompound.put("timeDeactive", this.timeDeactive);
+        nbttagcompound.put("timeDelay", this.timeDelay);
+        nbttagcompound.put("ticks", this.ticks);
+        nbttagcompound.put("ticksDelay", this.ticksDelay);
+        nbttagcompound.put("active", this.active);
+        nbttagcompound.put("canActivate", this.canActivate);
     }
 }

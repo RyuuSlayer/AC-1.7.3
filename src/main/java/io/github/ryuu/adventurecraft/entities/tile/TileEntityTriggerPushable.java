@@ -9,13 +9,13 @@ public class TileEntityTriggerPushable extends TileEntityMinMax {
 
     public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
-        this.resetOnTrigger = nbttagcompound.m("ResetOnTrigger");
-        this.activated = nbttagcompound.m("activated");
+        this.resetOnTrigger = nbttagcompound.getBoolean("ResetOnTrigger");
+        this.activated = nbttagcompound.getBoolean("activated");
     }
 
     public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.a("ResetOnTrigger", this.resetOnTrigger);
-        nbttagcompound.a("activated", this.activated);
+        nbttagcompound.put("ResetOnTrigger", this.resetOnTrigger);
+        nbttagcompound.put("activated", this.activated);
     }
 }
