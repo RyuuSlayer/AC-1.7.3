@@ -12,6 +12,7 @@ import io.github.ryuu.adventurecraft.scripting.ScriptModel;
 import io.github.ryuu.adventurecraft.util.*;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.class_366;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.FlowingLavaTextureBinder2;
 import net.minecraft.entity.Entity;
@@ -129,7 +130,7 @@ public class MixinLevel implements TileView {
         return this.dimension.biomeSource;
     }
 
-    public Level(DimensionData isavehandler, String s, xa worldprovider, long l) {
+    public Level(DimensionData isavehandler, String s, Dimension worldprovider, long l) {
         this.h = 1013904223;
         this.fogColorOverridden = false;
         this.fogDensityOverridden = false;
@@ -167,7 +168,7 @@ public class MixinLevel implements TileView {
         this.w = isavehandler;
         this.x = new LevelProperties(l, s);
         this.t = worldprovider;
-        this.z = new hc(isavehandler);
+        this.z = new LevelData(isavehandler);
         worldprovider.a(this);
         this.v = b();
         k();
@@ -176,7 +177,7 @@ public class MixinLevel implements TileView {
         this.script = new Script(this);
     }
 
-    public Level(Level world, xa worldprovider) {
+    public Level(Level world, Dimension worldprovider) {
         this.h = 1013904223;
         this.fogColorOverridden = false;
         this.fogDensityOverridden = false;
@@ -214,7 +215,7 @@ public class MixinLevel implements TileView {
         this.I = world.I;
         this.w = world.w;
         this.x = new LevelProperties(world.x);
-        this.z = new hc(this.w);
+        this.z = new LevelData(this.w);
         this.t = worldprovider;
         worldprovider.a(this);
         this.v = b();
@@ -232,7 +233,7 @@ public class MixinLevel implements TileView {
         this(levelName, isavehandler, s, l, null);
     }
 
-    public Level(String levelName, DimensionData isavehandler, String s, long l, xa worldprovider) {
+    public Level(String levelName, DimensionData isavehandler, String s, long l, Dimension worldprovider) {
         this.h = 1013904223;
         this.fogColorOverridden = false;
         this.fogDensityOverridden = false;
@@ -275,10 +276,10 @@ public class MixinLevel implements TileView {
         this.B = false;
         this.w = isavehandler;
         if (isavehandler != null) {
-            this.z = new hc(isavehandler);
+            this.z = new LevelData(isavehandler);
             this.x = isavehandler.c();
         } else {
-            this.z = new hc(this.mapHandler);
+            this.z = new LevelData(this.mapHandler);
         }
         if (this.x == null) {
             this.newSave = true;
@@ -290,9 +291,9 @@ public class MixinLevel implements TileView {
         if (worldprovider != null) {
             this.t = worldprovider;
         } else if (this.x != null && this.x.i() == -1) {
-            this.t = xa.a(-1);
+            this.t = Dimension.a(-1);
         } else {
-            this.t = xa.a(0);
+            this.t = Dimension.a(0);
         }
         boolean flag = false;
         if (this.x == null) {
@@ -336,76 +337,6 @@ public class MixinLevel implements TileView {
         ItemCustom.loadItems(new File(levelFile, "items"));
         this.undoStack = new UndoStack();
         TileEntityNpcPath.lastEntity = null;
-    }
-
-    public void loadMapTextures() {
-        Minecraft.minecraftInstance.p.b();
-        for (Object obj : Minecraft.minecraftInstance.p.b.entrySet()) {
-            Map.Entry entry = (Map.Entry) obj;
-            String texName = (String) entry.getKey();
-            int texID = ((Integer) entry.getValue()).intValue();
-            try {
-                Minecraft.minecraftInstance.p.loadTexture(texID, texName);
-            } catch (IllegalArgumentException ignoreNulls) {
-            }
-        }
-        loadTextureAnimations();
-        TextureFanFX.loadImage();
-        sd.loadImage();
-        FlowingLavaTextureBinder.loadImage();
-        FlowingLavaTextureBinder2.loadImage();
-        hs.loadImage();
-        vs.loadImage();
-        oh.loadImage();
-        ia.loadGrass("/misc/grasscolor.png");
-        jh.loadFoliage("/misc/foliagecolor.png");
-        this.x.loadTextureReplacements(this);
-    }
-
-    private void loadTextureAnimations() {
-        Minecraft.minecraftInstance.p.clearTextureAnimations();
-        File animationFile = new File(this.levelDir, "animations.txt");
-        if (animationFile.exists())
-            try {
-                BufferedReader reader = new BufferedReader(new FileReader(animationFile));
-                try {
-                    while (reader.ready()) {
-                        String line = reader.readLine();
-                        String[] parts = line.split(",", 7);
-                        if (parts.length == 7)
-                            try {
-                                String texName = parts[1].trim();
-                                String animTex = parts[2].trim();
-                                int x = Integer.parseInt(parts[3].trim());
-                                int y = Integer.parseInt(parts[4].trim());
-                                int w = Integer.parseInt(parts[5].trim());
-                                int h = Integer.parseInt(parts[6].trim());
-                                TextureAnimated t = new TextureAnimated(texName, animTex, x, y, w, h);
-                                Minecraft.minecraftInstance.p.registerTextureAnimation(parts[0].trim(), t);
-                            } catch (Exception e) {
-                            }
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } catch (FileNotFoundException e1) {
-                e1.printStackTrace();
-            }
-    }
-
-    public BufferedImage loadMapTexture(String texName) {
-        File terrainTexture = new File(this.levelDir, texName);
-        if (terrainTexture.exists())
-            try {
-                BufferedImage bufferedimage = ImageIO.read(terrainTexture);
-                return bufferedimage;
-            } catch (Exception exception) {
-            }
-        return null;
-    }
-
-    public void updateChunkProvider() {
-        this.v = b();
     }
 
     protected LevelSource b() {
@@ -571,17 +502,6 @@ public class MixinLevel implements TileView {
             return false;
         Chunk chunk = c(i >> 4, k >> 4);
         return chunk.a(i & 0xF, j, k & 0xF, l, i1);
-    }
-
-    public boolean setBlockAndMetadataTemp(int i, int j, int k, int l, int i1) {
-        if (i < -32000000 || k < -32000000 || i >= 32000000 || k > 32000000)
-            return false;
-        if (j < 0)
-            return false;
-        if (j >= 128)
-            return false;
-        Chunk chunk = c(i >> 4, k >> 4);
-        return chunk.setBlockIDWithMetadataTemp(i & 0xF, j, k & 0xF, l, i1);
     }
 
     public boolean c(int i, int j, int k, int l) {
@@ -821,24 +741,6 @@ public class MixinLevel implements TileView {
             ((LevelListener) this.u.get(i1)).a(i, j, k);
     }
 
-    public float getLightValue(int i, int j, int k) {
-        int lightValue = n(i, j, k);
-        float torchLight = PlayerTorch.getTorchLight(this, i, j, k);
-        if (lightValue < torchLight)
-            return Math.min(torchLight, 15.0F);
-        return lightValue;
-    }
-
-    private float getBrightnessLevel(float lightValue) {
-        int floorValue = (int) Math.floor(lightValue);
-        if (floorValue != lightValue) {
-            int ceilValue = (int) Math.ceil(lightValue);
-            float lerpValue = lightValue - floorValue;
-            return (1.0F - lerpValue) * this.t.f[floorValue] + lerpValue * this.t.f[ceilValue];
-        }
-        return this.t.f[floorValue];
-    }
-
     public float a(int i, int j, int k, int l) {
         float lightValue = getLightValue(i, j, k);
         if (lightValue < l)
@@ -849,11 +751,6 @@ public class MixinLevel implements TileView {
     public float c(int i, int j, int k) {
         float lightValue = getLightValue(i, j, k);
         return getBrightnessLevel(lightValue);
-    }
-
-    public float getDayLight() {
-        int lightValue = 15 - this.f;
-        return this.t.f[lightValue];
     }
 
     public boolean f() {
@@ -1153,11 +1050,6 @@ public class MixinLevel implements TileView {
                 this.E.add(nextticklistentry);
             }
         }
-    }
-
-    public void cancelBlockUpdate(int i, int j, int k, int l) {
-        qy nextticklistentry = new qy(i, j, k, l);
-        this.F.remove(nextticklistentry);
     }
 
     public void g() {
@@ -1505,13 +1397,6 @@ public class MixinLevel implements TileView {
         return null;
     }
 
-    public TileEntity getBlockTileEntityDontCreate(int i, int j, int k) {
-        Chunk chunk = c(i >> 4, k >> 4);
-        if (chunk != null)
-            return chunk.getChunkBlockTileEntityDontCreate(i & 0xF, j, k & 0xF);
-        return null;
-    }
-
     public void a(int i, int j, int k, TileEntity tileentity) {
         if (!tileentity.g()) {
             p(i, j, k);
@@ -1702,36 +1587,6 @@ public class MixinLevel implements TileView {
         this.x.b(false);
         this.x.e(0);
         this.x.a(false);
-    }
-
-    private void DoSnowModUpdate() {
-        if (this.B)
-            return;
-        int cw = 0;
-        if (this.coordOrder == null)
-            initCoordOrder();
-        for (int i = 0; i < this.d.size(); i++) {
-            Player entityplayer = this.d.get(i);
-            int pcx = in.b(entityplayer.aM / 16.0D);
-            int pcz = in.b(entityplayer.aO / 16.0D);
-            int radius = 9;
-            for (int cx = -radius; cx <= radius; cx++) {
-                for (int cz = -radius; cz <= radius; cz++) {
-                    long iteration = (cx + cz * 2) + t();
-                    if (iteration % 14L == 0L)
-                        if (f(cx + pcx, cz + pcz)) {
-                            iteration /= 14L;
-                            int chunkX = cx + pcx;
-                            int chunkZ = cz + pcz;
-                            iteration += (chunkX * chunkX * 3121 + chunkX * 45238971 + chunkZ * chunkZ * 418711 + chunkZ * 13761);
-                            iteration = Math.abs(iteration);
-                            int x = chunkX * 16 + this.coordOrder[(int) (iteration % 256L)] % 16;
-                            int z = chunkZ * 16 + this.coordOrder[(int) (iteration % 256L)] / 16;
-                            SnowModUpdate(x, z);
-                        }
-                }
-            }
-        }
     }
 
     protected void n() {
@@ -2268,6 +2123,10 @@ public class MixinLevel implements TileView {
         this.undoStack.redo(this);
     }
 
+    public void updateChunkProvider() {
+        this.v = b();
+    }
+
     public void loadSoundOverrides() {
         Minecraft.minecraftInstance.U.a();
         File soundDir = new File(this.levelDir, "soundOverrides");
@@ -2562,6 +2421,148 @@ public class MixinLevel implements TileView {
             if (Tile.n[l6])
                 Tile.m[l6].a(this, k4 + coordX, j6, k5 + coordZ, this.r);
             j2++;
+        }
+    }
+
+    public TileEntity getBlockTileEntityDontCreate(int i, int j, int k) {
+        Chunk chunk = c(i >> 4, k >> 4);
+        if (chunk != null)
+            return chunk.getChunkBlockTileEntityDontCreate(i & 0xF, j, k & 0xF);
+        return null;
+    }
+
+    public float getDayLight() {
+        int lightValue = 15 - this.f;
+        return this.t.f[lightValue];
+    }
+
+    public void loadMapTextures() {
+        Minecraft.minecraftInstance.p.b();
+        for (Object obj : Minecraft.minecraftInstance.p.b.entrySet()) {
+            Map.Entry entry = (Map.Entry) obj;
+            String texName = (String) entry.getKey();
+            int texID = ((Integer) entry.getValue()).intValue();
+            try {
+                Minecraft.minecraftInstance.p.loadTexture(texID, texName);
+            } catch (IllegalArgumentException ignoreNulls) {
+            }
+        }
+        loadTextureAnimations();
+        TextureFanFX.loadImage();
+        sd.loadImage();
+        FlowingLavaTextureBinder.loadImage();
+        FlowingLavaTextureBinder2.loadImage();
+        hs.loadImage();
+        vs.loadImage();
+        oh.loadImage();
+        ia.loadGrass("/misc/grasscolor.png");
+        jh.loadFoliage("/misc/foliagecolor.png");
+        this.x.loadTextureReplacements(this);
+    }
+
+    private void loadTextureAnimations() {
+        Minecraft.minecraftInstance.p.clearTextureAnimations();
+        File animationFile = new File(this.levelDir, "animations.txt");
+        if (animationFile.exists())
+            try {
+                BufferedReader reader = new BufferedReader(new FileReader(animationFile));
+                try {
+                    while (reader.ready()) {
+                        String line = reader.readLine();
+                        String[] parts = line.split(",", 7);
+                        if (parts.length == 7)
+                            try {
+                                String texName = parts[1].trim();
+                                String animTex = parts[2].trim();
+                                int x = Integer.parseInt(parts[3].trim());
+                                int y = Integer.parseInt(parts[4].trim());
+                                int w = Integer.parseInt(parts[5].trim());
+                                int h = Integer.parseInt(parts[6].trim());
+                                TextureAnimated t = new TextureAnimated(texName, animTex, x, y, w, h);
+                                Minecraft.minecraftInstance.p.registerTextureAnimation(parts[0].trim(), t);
+                            } catch (Exception e) {
+                            }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } catch (FileNotFoundException e1) {
+                e1.printStackTrace();
+            }
+    }
+
+    public BufferedImage loadMapTexture(String texName) {
+        File terrainTexture = new File(this.levelDir, texName);
+        if (terrainTexture.exists())
+            try {
+                BufferedImage bufferedimage = ImageIO.read(terrainTexture);
+                return bufferedimage;
+            } catch (Exception exception) {
+            }
+        return null;
+    }
+
+    public void cancelBlockUpdate(int i, int j, int k, int l) {
+        class_366 nextticklistentry = new class_366(i, j, k, l);
+        this.F.remove(nextticklistentry);
+    }
+
+    public float getLightValue(int i, int j, int k) {
+        int lightValue = n(i, j, k);
+        float torchLight = PlayerTorch.getTorchLight(this, i, j, k);
+        if (lightValue < torchLight)
+            return Math.min(torchLight, 15.0F);
+        return lightValue;
+    }
+
+    private float getBrightnessLevel(float lightValue) {
+        int floorValue = (int) Math.floor(lightValue);
+        if (floorValue != lightValue) {
+            int ceilValue = (int) Math.ceil(lightValue);
+            float lerpValue = lightValue - floorValue;
+            return (1.0F - lerpValue) * this.t.f[floorValue] + lerpValue * this.t.f[ceilValue];
+        }
+        return this.t.f[floorValue];
+    }
+
+    public boolean setBlockAndMetadataTemp(int i, int j, int k, int l, int i1) {
+        if (i < -32000000 || k < -32000000 || i >= 32000000 || k > 32000000)
+            return false;
+        if (j < 0)
+            return false;
+        if (j >= 128)
+            return false;
+        Chunk chunk = c(i >> 4, k >> 4);
+        return chunk.setBlockIDWithMetadataTemp(i & 0xF, j, k & 0xF, l, i1);
+    }
+
+    private void DoSnowModUpdate() {
+        if (this.B)
+            return;
+        int cw = 0;
+        if (this.coordOrder == null)
+            initCoordOrder();
+        for (int i = 0; i < this.d.size(); i++) {
+            Player entityplayer = this.d.get(i);
+            int pcx = in.b(entityplayer.aM / 16.0D);
+            int pcz = in.b(entityplayer.aO / 16.0D);
+            int radius = 9;
+            for (int cx = -radius; cx <= radius; cx++) {
+                for (int cz = -radius; cz <= radius; cz++) {
+                    long iteration = (cx + cz * 2) + t();
+                    if (iteration % 14L == 0L)
+                        if (f(cx + pcx, cz + pcz)) {
+                            iteration /= 14L;
+                            int chunkX = cx + pcx;
+                            int chunkZ = cz + pcz;
+                            iteration += (chunkX * chunkX * 3121 + chunkX * 45238971 + chunkZ * chunkZ * 418711 + chunkZ * 13761);
+                            iteration = Math.abs(iteration);
+                            int x = chunkX * 16 + this.coordOrder[(int) (iteration % 256L)] % 16;
+                            int z = chunkZ * 16 + this.coordOrder[(int) (iteration % 256L)] / 16;
+                            SnowModUpdate(x, z);
+                        }
+                }
+            }
         }
     }
 }
