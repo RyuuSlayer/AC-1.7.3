@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import io.github.ryuu.adventurecraft.mixin.Level;
 import org.lwjgl.opengl.GL11;
 
 public class ParticleManager {

@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import io.github.ryuu.adventurecraft.mixin.Level;
 import io.github.ryuu.adventurecraft.util.LightCache;
 import io.github.ryuu.adventurecraft.util.PlayerTorch;
 import net.minecraft.level.TileView;

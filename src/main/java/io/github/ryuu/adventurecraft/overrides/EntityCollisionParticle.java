@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import io.github.ryuu.adventurecraft.mixin.Level;
 import net.minecraft.client.particle.Particle;
 import org.lwjgl.opengl.GL11;
 

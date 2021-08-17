@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import io.github.ryuu.adventurecraft.mixin.Level;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.maths.Box;

@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import io.github.ryuu.adventurecraft.mixin.Level;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 
 public class ck extends ItemType {

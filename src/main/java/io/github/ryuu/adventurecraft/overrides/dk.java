@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import io.github.ryuu.adventurecraft.mixin.Level;
 import io.github.ryuu.adventurecraft.util.CoordBlock;
 import io.github.ryuu.adventurecraft.util.LightCache;
 import net.minecraft.client.Minecraft;

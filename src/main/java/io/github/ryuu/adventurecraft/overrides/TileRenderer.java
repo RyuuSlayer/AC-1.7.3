@@ -4,6 +4,7 @@ import java.util.Random;
 
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityTree;
+import io.github.ryuu.adventurecraft.mixin.Level;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.level.TileView;

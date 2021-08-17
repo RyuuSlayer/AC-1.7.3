@@ -1,5 +1,7 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import net.minecraft.level.biome.Biome;
+
 import java.util.Random;
 
 public class g extends Biome {

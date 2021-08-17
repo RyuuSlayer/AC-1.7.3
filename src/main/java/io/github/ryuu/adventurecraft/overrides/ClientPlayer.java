@@ -4,6 +4,7 @@ import io.github.ryuu.adventurecraft.gui.GuiMapEditHUD;
 import io.github.ryuu.adventurecraft.gui.GuiPalette;
 import io.github.ryuu.adventurecraft.gui.GuiScriptStats;
 import io.github.ryuu.adventurecraft.gui.GuiWorldConfig;
+import io.github.ryuu.adventurecraft.mixin.Level;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.InventoryDebug;
 import io.github.ryuu.adventurecraft.util.JScriptInfo;

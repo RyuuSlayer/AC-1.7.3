@@ -1,20 +1,17 @@
-package io.github.ryuu.adventurecraft.overrides;
+package io.github.ryuu.adventurecraft.mixin;
 
+import net.minecraft.client.gui.Screen;
+import net.minecraft.client.gui.screen.DeathScreen;
+import net.minecraft.client.gui.widgets.Button;
 import org.lwjgl.opengl.GL11;
+import org.spongepowered.asm.mixin.Mixin;
 
-public class DeathScreen extends Screen {
-    public void b() {
-        this.e.clear();
-        this.e.add(new ke(1, this.c / 2 - 100, this.d / 4 + 72, "Respawn"));
-        this.e.add(new ke(2, this.c / 2 - 100, this.d / 4 + 96, "Title menu"));
-        if (this.b.k == null)
-            ((ke) this.e.get(1)).g = false;
-    }
+@Mixin(DeathScreen.class)
+public class MixinDeathScreen extends Screen {
 
-    protected void a(char c, int i) {
-    }
+    //TODO: This code was already commented out by Cryect in the AdventureCraft source.
 
-    protected void a(ke guibutton) {
+    protected void a(Button guibutton) {
         // Byte code:
         //   0: aload_1
         //   1: getfield f : I
@@ -62,16 +59,18 @@ public class DeathScreen extends Screen {
         //   0	64	1	guibutton	Lke;
     }
 
-    public void a(int i, int j, float f) {
-        a(0, 0, this.c, this.d, 1615855616, -1602211792);
+    //TODO: Mixin here.
+
+    public void render(int i, int j, float f) {
+        this.fillGradient(0, 0, this.width, this.height, 1615855616, -1602211792);
         GL11.glPushMatrix();
         GL11.glScalef(2.0F, 2.0F, 2.0F);
-        a(this.g, "Game over!", this.c / 2 / 2, 30, 16777215);
+        this.drawTextWithShadowCentred(this.textManager, "Game over!", this.width / 2 / 2, 30, 16777215);
         GL11.glPopMatrix();
-        super.a(i, j, f);
-    }
 
-    public boolean c() {
-        return false;
+        //TODO: Vanilla class has the following line: this.drawTextWithShadowCentred(this.textManager, "Score: &e" + this.minecraft.player.method_481(), this.width / 2, 100, 16777215);
+        //TODO: We probably have to mixin that this line doesn't exist. Friendly Person on cursed-fabric discord said we have to use a redirect: https://fabricmc.net/wiki/tutorial:mixin_redirectors
+
+        super.render(i, j, f);
     }
 }

@@ -9,7 +9,7 @@ db = GameStartupErrorPanel
 cp = Ghast
 ck = | PlaceableTileItem or Recipe
 cg = FlowingLavaTextureBinder
-ch = DeathScreen
+Requires Mixin => ch = DeathScreen
 cv = TileRenderer
 cz = ResourceDownloadThread
 da = Screen
@@ -20,7 +20,7 @@ ds = PlayerRenderer
 ei = LevelProperties
 em = EntityCollisionParticle
 eo = StoneTile
-fd = Level
+Requires Mixin => fd = Level
 fk = GlassTile
 fr = Skeleton
 gb = Creeper
@@ -35,7 +35,7 @@ if = FlowingLavaTextureBinder2
 iz = ItemInstance
 in = MathsHelper
 ji = TextureManager
-kd = Biome
+No Mixin required => kd = Biome
 ke = Button
 ls = LivingEntity
 lw = Inventory

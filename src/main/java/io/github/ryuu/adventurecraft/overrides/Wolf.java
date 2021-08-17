@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import io.github.ryuu.adventurecraft.mixin.Level;
 import net.minecraft.entity.animal.Animal;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.food.FoodItem;

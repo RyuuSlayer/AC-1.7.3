@@ -1,37 +1,52 @@
-package io.github.ryuu.adventurecraft.overrides;
-
-import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-import java.util.TreeSet;
-import javax.imageio.ImageIO;
+package io.github.ryuu.adventurecraft.mixin;
 
 import io.github.ryuu.adventurecraft.blocks.BlockStairMulti;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityNpcPath;
 import io.github.ryuu.adventurecraft.items.ItemCustom;
+import io.github.ryuu.adventurecraft.overrides.*;
 import io.github.ryuu.adventurecraft.scripting.EntityDescriptions;
 import io.github.ryuu.adventurecraft.scripting.ScopeTag;
 import io.github.ryuu.adventurecraft.scripting.Script;
 import io.github.ryuu.adventurecraft.scripting.ScriptModel;
 import io.github.ryuu.adventurecraft.util.*;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.FlowingLavaTextureBinder2;
 import net.minecraft.entity.Entity;
+import net.minecraft.level.Level;
+import net.minecraft.level.LevelData;
+import net.minecraft.level.LevelListener;
+import net.minecraft.level.TileView;
+import net.minecraft.level.chunk.Chunk;
+import net.minecraft.level.chunk.ChunkIO;
+import net.minecraft.level.dimension.Dimension;
+import net.minecraft.level.dimension.DimensionData;
+import net.minecraft.level.gen.BiomeSource;
+import net.minecraft.level.source.LevelSource;
+import net.minecraft.tile.material.Material;
+import net.minecraft.util.ProgressListener;
+import net.minecraft.util.Vec3i;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.maths.Box;
+import net.minecraft.util.maths.MathsHelper;
+import net.minecraft.util.maths.Vec3f;
 import org.mozilla.javascript.Scriptable;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
-public class Level implements xp {
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.util.*;
+
+//TODO: Decompile so we can compare with vanilla class and tell what is actual AC code before mixin.
+//TODO: Actual Mixins are at the bottom of the file.
+
+@Mixin(Level.class)
+public class MixinLevel implements TileView {
     public boolean a;
 
     private final List C;
@@ -80,25 +95,25 @@ public class Level implements xp {
 
     public int q;
 
-    public Random r;
+    public Random rand = new Random();
 
-    public boolean s;
+    public boolean generating = false;
 
-    public final xa t;
+    public final Dimension dimension;
 
-    protected List u;
+    protected List listeners = new ArrayList();
 
-    protected cl v;
+    protected LevelSource cache;
 
-    protected final wt w;
+    protected final DimensionData dimensionData;
 
-    public LevelProperties x;
+    public LevelProperties properties;
 
-    public boolean y;
+    public boolean forceLoadChunks;
 
-    private boolean J;
+    private boolean allPlayersSleeping;
 
-    public hc z;
+    public LevelData data;
 
     private final ArrayList K;
 
@@ -110,11 +125,11 @@ public class Level implements xp {
 
     private boolean O;
 
-    public xv a() {
-        return this.t.b;
+    public BiomeSource getBiomeSource() {
+        return this.dimension.biomeSource;
     }
 
-    public Level(wt isavehandler, String s, xa worldprovider, long l) {
+    public Level(DimensionData isavehandler, String s, xa worldprovider, long l) {
         this.h = 1013904223;
         this.fogColorOverridden = false;
         this.fogDensityOverridden = false;
@@ -209,15 +224,15 @@ public class Level implements xp {
         this.script = new Script(this);
     }
 
-    public Level(wt isavehandler, String s, long l) {
+    public Level(DimensionData isavehandler, String s, long l) {
         this(null, isavehandler, s, l, null);
     }
 
-    public Level(String levelName, wt isavehandler, String s, long l) {
+    public Level(String levelName, DimensionData isavehandler, String s, long l) {
         this(levelName, isavehandler, s, l, null);
     }
 
-    public Level(String levelName, wt isavehandler, String s, long l, xa worldprovider) {
+    public Level(String levelName, DimensionData isavehandler, String s, long l, xa worldprovider) {
         this.h = 1013904223;
         this.fogColorOverridden = false;
         this.fogDensityOverridden = false;
@@ -228,11 +243,11 @@ public class Level implements xp {
         File mapDir = new File(mcDir, "../maps");
         File levelFile = new File(mapDir, levelName);
         nh.a().loadMapTranslation(levelFile);
-        this.mapHandler = (wt) new mx(mapDir, levelName, false);
+        this.mapHandler = (DimensionData) new mx(mapDir, levelName, false);
         this.levelDir = levelFile;
         this.a = false;
         this.C = new ArrayList();
-        this.b = new ArrayList<Entity>();
+        this.b = new ArrayList<>();
         this.D = new ArrayList();
         this.E = new TreeSet();
         this.F = new HashSet();
@@ -393,16 +408,16 @@ public class Level implements xp {
         this.v = b();
     }
 
-    protected cl b() {
+    protected LevelSource b() {
         MapChunkLoader mapChunkLoader;
         if (this.w == null) {
-            bf ichunkloader = this.mapHandler.a(this.t);
+            ChunkIO ichunkloader = this.mapHandler.a(this.t);
         } else {
-            bf ichunkloader = this.w.a(this.t);
+            ChunkIO ichunkloader = this.w.a(this.t);
             if (this.mapHandler != null)
                 mapChunkLoader = new MapChunkLoader(this.mapHandler.a(this.t), ichunkloader);
         }
-        return new kx(this, (bf) mapChunkLoader, this.t.b());
+        return new kx(this, (ChunkIO) mapChunkLoader, this.t.b());
     }
 
     protected void c() {
@@ -443,7 +458,7 @@ public class Level implements xp {
     public void e() {
     }
 
-    public void a(gs entityplayer) {
+    public void a(Player entityplayer) {
         try {
             nu nbttagcompound = this.x.h();
             if (nbttagcompound != null) {
@@ -462,7 +477,7 @@ public class Level implements xp {
         }
     }
 
-    public void a(boolean flag, yb iprogressupdate) {
+    public void a(boolean flag, ProgressListener iprogressupdate) {
         if (!this.v.b())
             return;
         if (iprogressupdate != null)
@@ -539,11 +554,11 @@ public class Level implements xp {
         return this.v.a(i, j);
     }
 
-    public lm b(int i, int j) {
+    public Chunk b(int i, int j) {
         return c(i >> 4, j >> 4);
     }
 
-    public lm c(int i, int j) {
+    public Chunk c(int i, int j) {
         return this.v.b(i, j);
     }
 
@@ -554,7 +569,7 @@ public class Level implements xp {
             return false;
         if (j >= 128)
             return false;
-        lm chunk = c(i >> 4, k >> 4);
+        Chunk chunk = c(i >> 4, k >> 4);
         return chunk.a(i & 0xF, j, k & 0xF, l, i1);
     }
 
@@ -565,7 +580,7 @@ public class Level implements xp {
             return false;
         if (j >= 128)
             return false;
-        lm chunk = c(i >> 4, k >> 4);
+        Chunk chunk = c(i >> 4, k >> 4);
         return chunk.setBlockIDWithMetadataTemp(i & 0xF, j, k & 0xF, l, i1);
     }
 
@@ -576,14 +591,14 @@ public class Level implements xp {
             return false;
         if (j >= 128)
             return false;
-        lm chunk = c(i >> 4, k >> 4);
+        Chunk chunk = c(i >> 4, k >> 4);
         return chunk.a(i & 0xF, j, k & 0xF, l);
     }
 
-    public ln f(int i, int j, int k) {
+    public Material f(int i, int j, int k) {
         int l = a(i, j, k);
         if (l == 0)
-            return ln.a;
+            return Material.a;
         return (Tile.m[l]).bA;
     }
 
@@ -594,7 +609,7 @@ public class Level implements xp {
             return 0;
         if (j >= 128)
             return 0;
-        lm chunk = c(i >> 4, k >> 4);
+        Chunk chunk = c(i >> 4, k >> 4);
         i &= 0xF;
         k &= 0xF;
         return chunk.b(i, j, k);
@@ -618,7 +633,7 @@ public class Level implements xp {
             return false;
         if (j >= 128)
             return false;
-        lm chunk = c(i >> 4, k >> 4);
+        Chunk chunk = c(i >> 4, k >> 4);
         i &= 0xF;
         k &= 0xF;
         chunk.b(i, j, k, l);
@@ -643,7 +658,7 @@ public class Level implements xp {
 
     public void j(int i, int j, int k) {
         for (int l = 0; l < this.u.size(); l++)
-            ((pm) this.u.get(l)).a(i, j, k);
+            ((LevelListener) this.u.get(l)).a(i, j, k);
     }
 
     protected void g(int i, int j, int k, int l) {
@@ -662,12 +677,12 @@ public class Level implements xp {
 
     public void k(int i, int j, int k) {
         for (int l = 0; l < this.u.size(); l++)
-            ((pm) this.u.get(l)).b(i, j, k, i, j, k);
+            ((LevelListener) this.u.get(l)).b(i, j, k, i, j, k);
     }
 
     public void b(int i, int j, int k, int l, int i1, int j1) {
         for (int k1 = 0; k1 < this.u.size(); k1++)
-            ((pm) this.u.get(k1)).b(i, j, k, l, i1, j1);
+            ((LevelListener) this.u.get(k1)).b(i, j, k, l, i1, j1);
     }
 
     public void i(int i, int j, int k, int l) {
@@ -729,7 +744,7 @@ public class Level implements xp {
             return 0;
         if (j >= 128)
             j = 127;
-        lm chunk = c(i >> 4, k >> 4);
+        Chunk chunk = c(i >> 4, k >> 4);
         i &= 0xF;
         k &= 0xF;
         return chunk.c(i, j, k, this.f);
@@ -744,7 +759,7 @@ public class Level implements xp {
             return true;
         if (!f(i >> 4, k >> 4))
             return false;
-        lm chunk = c(i >> 4, k >> 4);
+        Chunk chunk = c(i >> 4, k >> 4);
         i &= 0xF;
         k &= 0xF;
         return chunk.c(i, j, k);
@@ -755,7 +770,7 @@ public class Level implements xp {
             return 0;
         if (!f(i >> 4, j >> 4))
             return 0;
-        lm chunk = c(i >> 4, j >> 4);
+        Chunk chunk = c(i >> 4, j >> 4);
         return chunk.b(i & 0xF, j & 0xF);
     }
 
@@ -787,7 +802,7 @@ public class Level implements xp {
         int i1 = k >> 4;
         if (!f(l, i1))
             return 0;
-        lm chunk = c(l, i1);
+        Chunk chunk = c(l, i1);
         return chunk.a(enumskyblock, i & 0xF, j, k & 0xF);
     }
 
@@ -800,10 +815,10 @@ public class Level implements xp {
             return;
         if (!f(i >> 4, k >> 4))
             return;
-        lm chunk = c(i >> 4, k >> 4);
+        Chunk chunk = c(i >> 4, k >> 4);
         chunk.a(enumskyblock, i & 0xF, j, k & 0xF, l);
         for (int i1 = 0; i1 < this.u.size(); i1++)
-            ((pm) this.u.get(i1)).a(i, j, k);
+            ((LevelListener) this.u.get(i1)).a(i, j, k);
     }
 
     public float getLightValue(int i, int j, int k) {
@@ -845,170 +860,50 @@ public class Level implements xp {
         return (this.f < 4);
     }
 
-    public vf a(bt vec3d, bt vec3d1) {
+    public HitResult a(Vec3f vec3d, Vec3f vec3d1) {
         return a(vec3d, vec3d1, false, false);
     }
 
-    public vf a(bt vec3d, bt vec3d1, boolean flag) {
+    public HitResult a(Vec3f vec3d, Vec3f vec3d1, boolean flag) {
         return a(vec3d, vec3d1, flag, false);
     }
 
-    public vf a(bt vec3d, bt vec3d1, boolean flag, boolean flag1) {
+    public HitResult a(Vec3f vec3d, Vec3f vec3d1, boolean flag, boolean flag1) {
         return rayTraceBlocks2(vec3d, vec3d1, flag, flag1, true);
     }
 
-    public vf rayTraceBlocks2(bt vec3d, bt vec3d1, boolean flag, boolean flag1, boolean collideWithClip) {
-        if (Double.isNaN(vec3d.a) || Double.isNaN(vec3d.b) || Double.isNaN(vec3d.c))
-            return null;
-        if (Double.isNaN(vec3d1.a) || Double.isNaN(vec3d1.b) || Double.isNaN(vec3d1.c))
-            return null;
-        int i = in.b(vec3d1.a);
-        int j = in.b(vec3d1.b);
-        int k = in.b(vec3d1.c);
-        int l = in.b(vec3d.a);
-        int i1 = in.b(vec3d.b);
-        int j1 = in.b(vec3d.c);
-        int k1 = a(l, i1, j1);
-        int i2 = e(l, i1, j1);
-        Tile block = Tile.m[k1];
-        if ((!flag1 || block == null || block.e(this, l, i1, j1) != null) && k1 > 0 && block.a(i2, flag) && (collideWithClip || (k1 != AC_Blocks.clipBlock.bn && !LadderTile.isLadderID(k1)))) {
-            vf movingobjectposition = block.a(this, l, i1, j1, vec3d, vec3d1);
-            if (movingobjectposition != null)
-                return movingobjectposition;
-        }
-        for (int l1 = 200; l1-- >= 0; ) {
-            if (Double.isNaN(vec3d.a) || Double.isNaN(vec3d.b) || Double.isNaN(vec3d.c))
-                return null;
-            if (l == i && i1 == j && j1 == k)
-                return null;
-            boolean flag2 = true;
-            boolean flag3 = true;
-            boolean flag4 = true;
-            double d = 999.0D;
-            double d1 = 999.0D;
-            double d2 = 999.0D;
-            if (i > l) {
-                d = l + 1.0D;
-            } else if (i < l) {
-                d = l + 0.0D;
-            } else {
-                flag2 = false;
-            }
-            if (j > i1) {
-                d1 = i1 + 1.0D;
-            } else if (j < i1) {
-                d1 = i1 + 0.0D;
-            } else {
-                flag3 = false;
-            }
-            if (k > j1) {
-                d2 = j1 + 1.0D;
-            } else if (k < j1) {
-                d2 = j1 + 0.0D;
-            } else {
-                flag4 = false;
-            }
-            double d3 = 999.0D;
-            double d4 = 999.0D;
-            double d5 = 999.0D;
-            double d6 = vec3d1.a - vec3d.a;
-            double d7 = vec3d1.b - vec3d.b;
-            double d8 = vec3d1.c - vec3d.c;
-            if (flag2)
-                d3 = (d - vec3d.a) / d6;
-            if (flag3)
-                d4 = (d1 - vec3d.b) / d7;
-            if (flag4)
-                d5 = (d2 - vec3d.c) / d8;
-            byte byte0 = 0;
-            if (d3 < d4 && d3 < d5) {
-                if (i > l) {
-                    byte0 = 4;
-                } else {
-                    byte0 = 5;
-                }
-                vec3d.a = d;
-                vec3d.b += d7 * d3;
-                vec3d.c += d8 * d3;
-            } else if (d4 < d5) {
-                if (j > i1) {
-                    byte0 = 0;
-                } else {
-                    byte0 = 1;
-                }
-                vec3d.a += d6 * d4;
-                vec3d.b = d1;
-                vec3d.c += d8 * d4;
-            } else {
-                if (k > j1) {
-                    byte0 = 2;
-                } else {
-                    byte0 = 3;
-                }
-                vec3d.a += d6 * d5;
-                vec3d.b += d7 * d5;
-                vec3d.c = d2;
-            }
-            bt vec3d2 = bt.b(vec3d.a, vec3d.b, vec3d.c);
-            l = (int) (vec3d2.a = in.b(vec3d.a));
-            if (byte0 == 5) {
-                l--;
-                vec3d2.a++;
-            }
-            i1 = (int) (vec3d2.b = in.b(vec3d.b));
-            if (byte0 == 1) {
-                i1--;
-                vec3d2.b++;
-            }
-            j1 = (int) (vec3d2.c = in.b(vec3d.c));
-            if (byte0 == 3) {
-                j1--;
-                vec3d2.c++;
-            }
-            int j2 = a(l, i1, j1);
-            int k2 = e(l, i1, j1);
-            Tile block1 = Tile.m[j2];
-            if ((!flag1 || block1 == null || block1.e(this, l, i1, j1) != null) && j2 > 0 && block1.a(k2, flag) && block1.shouldRender(this, l, i1, j1)) {
-                vf movingobjectposition1 = block1.a(this, l, i1, j1, vec3d, vec3d1);
-                if (movingobjectposition1 != null && (collideWithClip || (block1.bn != Blocks.clipBlock.bn && !LadderTile.isLadderID(block1.bn))))
-                    return movingobjectposition1;
-            }
-        }
-        return null;
-    }
-
-    public void a(sn entity, String s, float f, float f1) {
+    public void a(Entity entity, String s, float f, float f1) {
         for (int i = 0; i < this.u.size(); i++)
-            ((pm) this.u.get(i)).a(s, entity.aM, entity.aN - entity.bf, entity.aO, f, f1);
+            ((LevelListener) this.u.get(i)).a(s, entity.aM, entity.aN - entity.bf, entity.aO, f, f1);
     }
 
     public void a(double d, double d1, double d2, String s, float f, float f1) {
         for (int i = 0; i < this.u.size(); i++)
-            ((pm) this.u.get(i)).a(s, d, d1, d2, f, f1);
+            ((LevelListener) this.u.get(i)).a(s, d, d1, d2, f, f1);
     }
 
     public void a(String s, int i, int j, int k) {
         for (int l = 0; l < this.u.size(); l++)
-            ((pm) this.u.get(l)).a(s, i, j, k);
+            ((LevelListener) this.u.get(l)).a(s, i, j, k);
     }
 
     public void a(String s, double d, double d1, double d2, double d3, double d4, double d5) {
         for (int i = 0; i < this.u.size(); i++)
-            ((pm) this.u.get(i)).a(s, d, d1, d2, d3, d4, d5);
+            ((LevelListener) this.u.get(i)).a(s, d, d1, d2, d3, d4, d5);
     }
 
-    public boolean a(sn entity) {
+    public boolean a(Entity entity) {
         this.e.add(entity);
         return true;
     }
 
-    public boolean b(sn entity) {
+    public boolean b(Entity entity) {
         int i = in.b(entity.aM / 16.0D);
         int j = in.b(entity.aO / 16.0D);
-        boolean flag = entity instanceof gs;
+        boolean flag = entity instanceof Player;
         if (flag || f(i, j)) {
-            if (entity instanceof gs) {
-                gs entityplayer = (gs) entity;
+            if (entity instanceof Player) {
+                Player entityplayer = (Player) entity;
                 this.d.add(entityplayer);
                 y();
             }
@@ -1021,37 +916,37 @@ public class Level implements xp {
         return false;
     }
 
-    protected void c(sn entity) {
+    protected void c(Entity entity) {
         for (int i = 0; i < this.u.size(); i++)
-            ((pm) this.u.get(i)).a(entity);
+            ((LevelListener) this.u.get(i)).a(entity);
     }
 
-    protected void d(sn entity) {
+    protected void d(Entity entity) {
         for (int i = 0; i < this.u.size(); i++)
-            ((pm) this.u.get(i)).b(entity);
+            ((LevelListener) this.u.get(i)).b(entity);
     }
 
-    public void e(sn entity) {
+    public void e(Entity entity) {
         if (entity.aG != null)
             entity.aG.i(null);
         if (entity.aH != null)
             entity.i(null);
         entity.K();
-        if (entity instanceof gs) {
+        if (entity instanceof Player) {
             this.d.remove(entity);
             y();
         }
     }
 
-    public void a(pm iworldaccess) {
+    public void a(LevelListener iworldaccess) {
         this.u.add(iworldaccess);
     }
 
-    public void b(pm iworldaccess) {
+    public void b(LevelListener iworldaccess) {
         this.u.remove(iworldaccess);
     }
 
-    public List a(sn entity, eq axisalignedbb) {
+    public List a(Entity entity, Box axisalignedbb) {
         this.K.clear();
         int i = in.b(axisalignedbb.a);
         int j = in.b(axisalignedbb.d + 1.0D);
@@ -1070,9 +965,9 @@ public class Level implements xp {
             }
         }
         double d = 0.25D;
-        List<sn> list = b(entity, axisalignedbb.b(d, d, d));
+        List<Entity> list = b(entity, axisalignedbb.b(d, d, d));
         for (int j2 = 0; j2 < list.size(); j2++) {
-            eq axisalignedbb1 = list.get(j2).f();
+            Box axisalignedbb1 = list.get(j2).f();
             if (axisalignedbb1 != null && axisalignedbb1.a(axisalignedbb))
                 this.K.add(axisalignedbb1);
             axisalignedbb1 = entity.a(list.get(j2));
@@ -1096,7 +991,7 @@ public class Level implements xp {
         return (int) (f2 * 11.0F);
     }
 
-    public bt a(sn entity, float f) {
+    public Vec3f a(Entity entity, float f) {
         float f1 = b(f);
         float f2 = in.b(f1 * 3.141593F * 2.0F) * 2.0F + 0.5F;
         if (f2 < 0.0F)
@@ -1138,14 +1033,14 @@ public class Level implements xp {
             f5 = f5 * (1.0F - f12) + 0.8F * f12;
             f6 = f6 * (1.0F - f12) + 1.0F * f12;
         }
-        return bt.b(f4, f5, f6);
+        return Vec3f.b(f4, f5, f6);
     }
 
     public float b(float f) {
         return this.t.a(this.x.getTimeOfDay(), f * this.x.getTimeRate());
     }
 
-    public bt c(float f) {
+    public Vec3f c(float f) {
         float f1 = b(f);
         float f2 = in.b(f1 * 3.141593F * 2.0F) * 2.0F + 0.5F;
         if (f2 < 0.0F)
@@ -1174,12 +1069,12 @@ public class Level implements xp {
             f4 = f4 * f11 + f10 * (1.0F - f11);
             f5 = f5 * f11 + f10 * (1.0F - f11);
         }
-        return bt.b(f3, f4, f5);
+        return Vec3f.b(f3, f4, f5);
     }
 
-    public bt d(float f) {
+    public Vec3f d(float f) {
         float f1 = b(f);
-        bt returnColor = this.t.b(f1, f);
+        Vec3f returnColor = this.t.b(f1, f);
         if (this.x.overrideFogColor)
             if (this.fogColorOverridden) {
                 returnColor.a = this.x.fogR;
@@ -1212,14 +1107,14 @@ public class Level implements xp {
     }
 
     public int e(int i, int j) {
-        lm chunk = b(i, j);
+        Chunk chunk = b(i, j);
         int k;
         for (k = 127; f(i, k, j).c() && k > 0; k--) ;
         i &= 0xF;
         j &= 0xF;
         while (k > 0) {
             int l = chunk.a(i, k, j);
-            ln material = (l != 0) ? (Tile.m[l]).bA : ln.a;
+            Material material = (l != 0) ? (Tile.m[l]).bA : Material.a;
             if (!material.c() && !material.d()) {
                 k--;
                 continue;
@@ -1267,14 +1162,14 @@ public class Level implements xp {
 
     public void g() {
         for (int i = 0; i < this.e.size(); i++) {
-            sn entity = this.e.get(i);
+            Entity entity = this.e.get(i);
             entity.w_();
             if (entity.be)
                 this.e.remove(i--);
         }
         this.b.removeAll(this.D);
         for (int j = 0; j < this.D.size(); j++) {
-            sn entity1 = this.D.get(j);
+            Entity entity1 = this.D.get(j);
             int i1 = entity1.bG;
             int k1 = entity1.bI;
             if (entity1.bF && f(i1, k1))
@@ -1284,7 +1179,7 @@ public class Level implements xp {
             d(this.D.get(k));
         this.D.clear();
         for (int l = 0; l < this.b.size(); l++) {
-            sn entity2 = (sn) this.b.get(l);
+            Entity entity2 = this.b.get(l);
             if (entity2.aH != null) {
                 if (!entity2.aH.be && entity2.aH.aG == entity2)
                     continue;
@@ -1292,9 +1187,9 @@ public class Level implements xp {
                 entity2.aH = null;
             }
             if (!entity2.be && (!Minecraft.minecraftInstance.cameraActive || !Minecraft.minecraftInstance.cameraPause))
-                if (!DebugMode.active || entity2 instanceof gs) {
+                if (!DebugMode.active || entity2 instanceof Player) {
                     f(entity2);
-                    eq.b();
+                    Box.b();
                 }
             if (entity2.be) {
                 int j1 = entity2.bG;
@@ -1315,7 +1210,7 @@ public class Level implements xp {
             if (tileentity.g()) {
                 iterator.remove();
                 if (!tileentity.killedFromSaving) {
-                    lm chunk = c(tileentity.e >> 4, tileentity.g >> 4);
+                    Chunk chunk = c(tileentity.e >> 4, tileentity.g >> 4);
                     if (chunk != null)
                         chunk.e(tileentity.e & 0xF, tileentity.f, tileentity.g & 0xF);
                 }
@@ -1329,7 +1224,7 @@ public class Level implements xp {
                 if (!tileentity1.g()) {
                     if (!this.c.contains(tileentity1))
                         this.c.add(tileentity1);
-                    lm chunk1 = c(tileentity1.e >> 4, tileentity1.g >> 4);
+                    Chunk chunk1 = c(tileentity1.e >> 4, tileentity1.g >> 4);
                     if (chunk1 != null)
                         chunk1.a(tileentity1.e & 0xF, tileentity1.f, tileentity1.g & 0xF, tileentity1);
                     j(tileentity1.e, tileentity1.f, tileentity1.g);
@@ -1347,11 +1242,11 @@ public class Level implements xp {
         }
     }
 
-    public void f(sn entity) {
+    public void f(Entity entity) {
         a(entity, true);
     }
 
-    public void a(sn entity, boolean flag) {
+    public void a(Entity entity, boolean flag) {
         int i = in.b(entity.aM);
         int j = in.b(entity.aO);
         byte byte0 = 32;
@@ -1402,17 +1297,17 @@ public class Level implements xp {
             }
     }
 
-    public boolean a(eq axisalignedbb) {
-        List<sn> list = b(null, axisalignedbb);
+    public boolean a(Box axisalignedbb) {
+        List<Entity> list = b(null, axisalignedbb);
         for (int i = 0; i < list.size(); i++) {
-            sn entity = list.get(i);
+            Entity entity = list.get(i);
             if (!entity.be && entity.aF)
                 return false;
         }
         return true;
     }
 
-    public boolean b(eq axisalignedbb) {
+    public boolean b(Box axisalignedbb) {
         int i = in.b(axisalignedbb.a);
         int j = in.b(axisalignedbb.d + 1.0D);
         int k = in.b(axisalignedbb.b);
@@ -1437,7 +1332,7 @@ public class Level implements xp {
         return false;
     }
 
-    public boolean c(eq axisalignedbb) {
+    public boolean c(Box axisalignedbb) {
         int i = in.b(axisalignedbb.a);
         int j = in.b(axisalignedbb.d + 1.0D);
         int k = in.b(axisalignedbb.b);
@@ -1457,7 +1352,7 @@ public class Level implements xp {
         return false;
     }
 
-    public boolean a(eq axisalignedbb, ln material, sn entity) {
+    public boolean a(Box axisalignedbb, Material material, Entity entity) {
         int i = in.b(axisalignedbb.a);
         int j = in.b(axisalignedbb.d + 1.0D);
         int k = in.b(axisalignedbb.b);
@@ -1467,7 +1362,7 @@ public class Level implements xp {
         if (!a(i, k, i1, j, l, j1))
             return false;
         boolean flag = false;
-        bt vec3d = bt.b(0.0D, 0.0D, 0.0D);
+        Vec3f vec3d = Vec3f.b(0.0D, 0.0D, 0.0D);
         for (int k1 = i; k1 < j; k1++) {
             for (int l1 = k; l1 < l; l1++) {
                 for (int i2 = i1; i2 < j1; i2++) {
@@ -1492,7 +1387,7 @@ public class Level implements xp {
         return flag;
     }
 
-    public boolean a(eq axisalignedbb, ln material) {
+    public boolean a(Box axisalignedbb, Material material) {
         int i = in.b(axisalignedbb.a);
         int j = in.b(axisalignedbb.d + 1.0D);
         int k = in.b(axisalignedbb.b);
@@ -1511,7 +1406,7 @@ public class Level implements xp {
         return false;
     }
 
-    public boolean b(eq axisalignedbb, ln material) {
+    public boolean b(Box axisalignedbb, Material material) {
         int i = in.b(axisalignedbb.a);
         int j = in.b(axisalignedbb.d + 1.0D);
         int k = in.b(axisalignedbb.b);
@@ -1536,11 +1431,11 @@ public class Level implements xp {
         return false;
     }
 
-    public qx a(sn entity, double d, double d1, double d2, float f) {
+    public qx a(Entity entity, double d, double d1, double d2, float f) {
         return a(entity, d, d1, d2, f, false);
     }
 
-    public qx a(sn entity, double d, double d1, double d2, float f, boolean flag) {
+    public qx a(Entity entity, double d, double d1, double d2, float f, boolean flag) {
         qx explosion = new qx(this, entity, d, d1, d2, f);
         explosion.a = flag;
         explosion.a();
@@ -1548,7 +1443,7 @@ public class Level implements xp {
         return explosion;
     }
 
-    public float a(bt vec3d, eq axisalignedbb) {
+    public float a(Vec3f vec3d, Box axisalignedbb) {
         double d = 1.0D / ((axisalignedbb.d - axisalignedbb.a) * 2.0D + 1.0D);
         double d1 = 1.0D / ((axisalignedbb.e - axisalignedbb.b) * 2.0D + 1.0D);
         double d2 = 1.0D / ((axisalignedbb.f - axisalignedbb.c) * 2.0D + 1.0D);
@@ -1563,7 +1458,7 @@ public class Level implements xp {
                     double d3 = axisalignedbb.a + (axisalignedbb.d - axisalignedbb.a) * f;
                     double d4 = axisalignedbb.b + (axisalignedbb.e - axisalignedbb.b) * f1;
                     double d5 = axisalignedbb.c + (axisalignedbb.f - axisalignedbb.c) * f2;
-                    if (a(bt.b(d3, d4, d5), vec3d) == null)
+                    if (a(Vec3f.b(d3, d4, d5), vec3d) == null)
                         i++;
                     j++;
                 }
@@ -1572,7 +1467,7 @@ public class Level implements xp {
         return i / j;
     }
 
-    public void a(gs entityplayer, int i, int j, int k, int l) {
+    public void a(Player entityplayer, int i, int j, int k, int l) {
         if (l == 0)
             j--;
         if (l == 1)
@@ -1591,7 +1486,7 @@ public class Level implements xp {
         }
     }
 
-    public sn a(Class class1) {
+    public Entity a(Class class1) {
         return null;
     }
 
@@ -1604,14 +1499,14 @@ public class Level implements xp {
     }
 
     public TileEntity b(int i, int j, int k) {
-        lm chunk = c(i >> 4, k >> 4);
+        Chunk chunk = c(i >> 4, k >> 4);
         if (chunk != null)
             return chunk.d(i & 0xF, j, k & 0xF);
         return null;
     }
 
     public TileEntity getBlockTileEntityDontCreate(int i, int j, int k) {
-        lm chunk = c(i >> 4, k >> 4);
+        Chunk chunk = c(i >> 4, k >> 4);
         if (chunk != null)
             return chunk.getChunkBlockTileEntityDontCreate(i & 0xF, j, k & 0xF);
         return null;
@@ -1627,7 +1522,7 @@ public class Level implements xp {
                 this.G.add(tileentity);
             } else {
                 this.c.add(tileentity);
-                lm chunk = c(i >> 4, k >> 4);
+                Chunk chunk = c(i >> 4, k >> 4);
                 if (chunk != null)
                     chunk.a(i & 0xF, j, k & 0xF, tileentity);
             }
@@ -1641,7 +1536,7 @@ public class Level implements xp {
         } else {
             if (tileentity != null)
                 this.c.remove(tileentity);
-            lm chunk = c(i >> 4, k >> 4);
+            Chunk chunk = c(i >> 4, k >> 4);
             if (chunk != null)
                 chunk.e(i & 0xF, j, k & 0xF);
         }
@@ -1661,7 +1556,7 @@ public class Level implements xp {
         return (block.bA.h() && block.d());
     }
 
-    public void a(yb iprogressupdate) {
+    public void a(ProgressListener iprogressupdate) {
         a(true, iprogressupdate);
     }
 
@@ -1753,7 +1648,7 @@ public class Level implements xp {
         if (i != this.f) {
             this.f = i;
             for (int j = 0; j < this.u.size(); j++)
-                ((pm) this.u.get(j)).e();
+                ((LevelListener) this.u.get(j)).e();
         }
         long l1 = this.x.f() + 1L;
         if (l1 % this.p == 0L)
@@ -1816,7 +1711,7 @@ public class Level implements xp {
         if (this.coordOrder == null)
             initCoordOrder();
         for (int i = 0; i < this.d.size(); i++) {
-            gs entityplayer = this.d.get(i);
+            Player entityplayer = this.d.get(i);
             int pcx = in.b(entityplayer.aM / 16.0D);
             int pcz = in.b(entityplayer.aO / 16.0D);
             int radius = 9;
@@ -1841,7 +1736,7 @@ public class Level implements xp {
 
     protected void n() {
         for (int i = 0; i < this.d.size(); i++) {
-            gs entityplayer = this.d.get(i);
+            Player entityplayer = this.d.get(i);
             int j = in.b(entityplayer.aM / 16.0D);
             int l = in.b(entityplayer.aO / 16.0D);
             byte byte0 = 9;
@@ -1855,7 +1750,7 @@ public class Level implements xp {
     }
 
     protected void updateChunk(int chunkX, int chunkZ) {
-        lm chunk = c(chunkX, chunkZ);
+        Chunk chunk = c(chunkX, chunkZ);
         if (chunk.lastUpdated == t())
             return;
         int coordX = chunkX * 16;
@@ -1868,7 +1763,7 @@ public class Level implements xp {
             int i4 = coordZ + (l1 >> 8 & 0xF);
             int i5 = e(i3, i4);
             if (t(i3, i5, i4)) {
-                a((sn) new c(this, i3, i5, i4));
+                a((Entity) new c(this, i3, i5, i4));
                 this.m = 2;
             }
         }
@@ -1901,7 +1796,7 @@ public class Level implements xp {
                     int k = a(nextticklistentry.a, nextticklistentry.b, nextticklistentry.c);
                     if (k == nextticklistentry.d && k > 0) {
                         Tile.m[k].a(this, nextticklistentry.a, nextticklistentry.b, nextticklistentry.c, this.r);
-                        eq.b();
+                        Box.b();
                     }
                 }
             }
@@ -1922,7 +1817,7 @@ public class Level implements xp {
         }
     }
 
-    public List b(sn entity, eq axisalignedbb) {
+    public List b(Entity entity, Box axisalignedbb) {
         this.R.clear();
         int i = in.b((axisalignedbb.a - 2.0D) / 16.0D);
         int j = in.b((axisalignedbb.d + 2.0D) / 16.0D);
@@ -1937,7 +1832,7 @@ public class Level implements xp {
         return this.R;
     }
 
-    public List a(Class class1, eq axisalignedbb) {
+    public List a(Class class1, Box axisalignedbb) {
         int i = in.b((axisalignedbb.a - 2.0D) / 16.0D);
         int j = in.b((axisalignedbb.d + 2.0D) / 16.0D);
         int k = in.b((axisalignedbb.c - 2.0D) / 16.0D);
@@ -1960,13 +1855,13 @@ public class Level implements xp {
         if (i(i, j, k))
             b(i, k).g();
         for (int l = 0; l < this.u.size(); l++)
-            ((pm) this.u.get(l)).a(i, j, k, tileentity);
+            ((LevelListener) this.u.get(l)).a(i, j, k, tileentity);
     }
 
     public int b(Class class1) {
         int i = 0;
         for (int j = 0; j < this.b.size(); j++) {
-            sn entity = (sn) this.b.get(j);
+            Entity entity = (Entity) this.b.get(j);
             if (class1.isAssignableFrom(entity.getClass()))
                 i++;
         }
@@ -1976,7 +1871,7 @@ public class Level implements xp {
     public void a(List<? extends Entity> list) {
         this.b.addAll(list);
         for (int i = 0; i < list.size(); i++)
-            c((sn) list.get(i));
+            c((Entity) list.get(i));
     }
 
     public void b(List list) {
@@ -1991,7 +1886,7 @@ public class Level implements xp {
         int j1 = a(j, k, l);
         Tile block = Tile.m[j1];
         Tile block1 = Tile.m[i];
-        eq axisalignedbb = block1.e(this, j, k, l);
+        Box axisalignedbb = block1.e(this, j, k, l);
         if (flag)
             axisalignedbb = null;
         if (axisalignedbb != null && !a(axisalignedbb))
@@ -2001,7 +1896,7 @@ public class Level implements xp {
         return (i > 0 && block == null && block1.a(this, j, k, l, i1));
     }
 
-    public dh a(sn entity, sn entity1, float f) {
+    public dh a(Entity entity, Entity entity1, float f) {
         int i = in.b(entity.aM);
         int j = in.b(entity.aN);
         int k = in.b(entity.aO);
@@ -2013,10 +1908,10 @@ public class Level implements xp {
         int i2 = j + l;
         int j2 = k + l;
         ew chunkcache = new ew(this, i1, j1, k1, l1, i2, j2);
-        return (new fw((xp) chunkcache)).a(entity, entity1, f);
+        return (new fw((TileView) chunkcache)).a(entity, entity1, f);
     }
 
-    public dh a(sn entity, int i, int j, int k, float f) {
+    public dh a(Entity entity, int i, int j, int k, float f) {
         int l = in.b(entity.aM);
         int i1 = in.b(entity.aN);
         int j1 = in.b(entity.aO);
@@ -2028,7 +1923,7 @@ public class Level implements xp {
         int l2 = i1 + k1;
         int i3 = j1 + k1;
         ew chunkcache = new ew(this, l1, i2, j2, k2, l2, i3);
-        return (new fw((xp) chunkcache)).a(entity, i, j, k, f);
+        return (new fw((TileView) chunkcache)).a(entity, i, j, k, f);
     }
 
     public boolean j(int i, int j, int k, int l) {
@@ -2075,15 +1970,15 @@ public class Level implements xp {
         return k(i + 1, j, k, 5);
     }
 
-    public gs a(sn entity, double d) {
+    public Player a(Entity entity, double d) {
         return a(entity.aM, entity.aN, entity.aO, d);
     }
 
-    public gs a(double d, double d1, double d2, double d3) {
+    public Player a(double d, double d1, double d2, double d3) {
         double d4 = -1.0D;
-        gs entityplayer = null;
+        Player entityplayer = null;
         for (int i = 0; i < this.d.size(); i++) {
-            gs entityplayer1 = this.d.get(i);
+            Player entityplayer1 = this.d.get(i);
             double d5 = entityplayer1.g(d, d1, d2);
             if ((d3 < 0.0D || d5 < d3 * d3) && (d4 == -1.0D || d5 < d4)) {
                 d4 = d5;
@@ -2093,9 +1988,9 @@ public class Level implements xp {
         return entityplayer;
     }
 
-    public gs a(String s) {
+    public Player a(String s) {
         for (int i = 0; i < this.d.size(); i++) {
-            if (s.equals(((gs) this.d.get(i)).l))
+            if (s.equals(((Player) this.d.get(i)).l))
                 return this.d.get(i);
         }
         return null;
@@ -2164,92 +2059,107 @@ public class Level implements xp {
         return this.x.f();
     }
 
-    public br u() {
-        return new br(this.x.c(), this.x.d(), this.x.e());
+    public Vec3i u() {
+        return new Vec3i(this.x.c(), this.x.d(), this.x.e());
     }
 
-    public void a(br chunkcoordinates) {
+    public void a(Vec3i chunkcoordinates) {
         this.x.a(chunkcoordinates.a, chunkcoordinates.b, chunkcoordinates.c);
     }
 
-    public float getSpawnYaw() {
-        return this.x.spawnYaw;
-    }
+    //TODO: Unchanged Vanilla Code.
 
-    public void setSpawnYaw(float y) {
-        this.x.spawnYaw = y;
-    }
+    // @Environment(EnvType.CLIENT)
+    // public void method_287(Entity arg) {
+    //     int var2 = MathsHelper.floor(arg.x / 16.0D);
+    //     int var3 = MathsHelper.floor(arg.z / 16.0D);
+    //     int var4 = 2;
+    //
+    //     for(int var5 = var2 - var4; var5 <= var2 + var4; ++var5) {
+    //         for(int var6 = var3 - var4; var6 <= var3 + var4; ++var6) {
+    //             this.getChunkFromCache(var5, var6);
+    //         }
+    //     }
+    //
+    //     if (!this.entities.contains(arg)) {
+    //         this.entities.add(arg);
+    //     }
+    //
+    // }
 
-    public void g(sn entity) {
-        int i = in.b(entity.aM / 16.0D);
-        int j = in.b(entity.aO / 16.0D);
-        byte byte0 = 2;
-        for (int k = i - byte0; k <= i + byte0; k++) {
-            for (int l = j - byte0; l <= j + byte0; l++)
-                c(k, l);
-        }
-        if (!this.b.contains(entity))
-            this.b.add(entity);
-    }
+    // public boolean method_171(net.minecraft.entity.player.Player arg, int i, int j, int k) {
+    //     return true;
+    // }
+    //
+    // public void method_185(Entity arg, byte b) {
+    // }
 
-    public boolean a(gs entityplayer, int i, int j, int k) {
-        return true;
-    }
+    // @Environment(EnvType.CLIENT)
+    // public void method_295() {
+    //     this.entities.removeAll(this.field_182);
+    //
+    //     for(int var1 = 0; var1 < this.field_182.size(); ++var1) {
+    //         Entity var2 = (Entity)this.field_182.get(var1);
+    //         int var3 = var2.chunkX;
+    //         int var4 = var2.chunkZ;
+    //         if (var2.shouldTick && this.isChunkLoaded(var3, var4)) {
+    //             this.getChunkFromCache(var3, var4).removeEntity(var2);
+    //         }
+    //     }
+    //
+    //     for(int var5 = 0; var5 < this.field_182.size(); ++var5) {
+    //         this.onEntityRemoved((Entity)this.field_182.get(var5));
+    //     }
+    //
+    //     this.field_182.clear();
+    //
+    //     for(int var6 = 0; var6 < this.entities.size(); ++var6) {
+    //         Entity var7 = (Entity)this.entities.get(var6);
+    //         if (var7.vehicle != null) {
+    //             if (!var7.vehicle.removed && var7.vehicle.passenger == var7) {
+    //                 continue;
+    //             }
+    //
+    //             var7.vehicle.passenger = null;
+    //             var7.vehicle = null;
+    //         }
+    //
+    //         if (var7.removed) {
+    //             int var8 = var7.chunkX;
+    //             int var9 = var7.chunkZ;
+    //             if (var7.shouldTick && this.isChunkLoaded(var8, var9)) {
+    //                 this.getChunkFromCache(var8, var9).removeEntity(var7);
+    //             }
+    //
+    //             this.entities.remove(var6--);
+    //             this.onEntityRemoved(var7);
+    //         }
+    //     }
+    //
+    // }
 
-    public void a(sn entity, byte byte0) {
-    }
+    // public LevelSource getLevelSource() {
+    //     return this.cache;
+    // }
 
-    public void v() {
-        this.b.removeAll(this.D);
-        for (int i = 0; i < this.D.size(); i++) {
-            sn entity = this.D.get(i);
-            int l = entity.bG;
-            int j1 = entity.bI;
-            if (entity.bF && f(l, j1))
-                c(l, j1).b(entity);
-        }
-        for (int j = 0; j < this.D.size(); j++)
-            d(this.D.get(j));
-        this.D.clear();
-        for (int k = 0; k < this.b.size(); k++) {
-            sn entity1 = (sn) this.b.get(k);
-            if (entity1.aH != null) {
-                if (!entity1.aH.be && entity1.aH.aG == entity1)
-                    continue;
-                entity1.aH.aG = null;
-                entity1.aH = null;
-            }
-            if (entity1.be) {
-                int i1 = entity1.bG;
-                int k1 = entity1.bI;
-                if (entity1.bF && f(i1, k1))
-                    c(i1, k1).b(entity1);
-                this.b.remove(k--);
-                d(entity1);
-            }
-            continue;
-        }
-    }
+    // public void method_224(int i, int j, int k, int i1, int i2) {
+    //     int var6 = this.getTileId(i, j, k);
+    //     if (var6 > 0) {
+    //         Tile.BY_ID[var6].onTileAction(this, i, j, k, i1, i2);
+    //     }
+    //
+    // }
 
-    public cl w() {
-        return this.v;
-    }
+    // public net.minecraft.level.LevelProperties getProperties() {
+    //     return this.properties;
+    // }
 
-    public void d(int i, int j, int k, int l, int i1) {
-        int j1 = a(i, j, k);
-        if (j1 > 0)
-            Tile.m[j1].a(this, i, j, k, l, i1);
-    }
-
-    public LevelProperties x() {
-        return this.x;
-    }
 
     public void y() {
         this.J = !this.d.isEmpty();
-        Iterator<gs> iterator = this.d.iterator();
+        Iterator<Player> iterator = this.d.iterator();
         while (iterator.hasNext()) {
-            gs entityplayer = iterator.next();
+            Player entityplayer = iterator.next();
             if (entityplayer.N())
                 continue;
             this.J = false;
@@ -2259,9 +2169,9 @@ public class Level implements xp {
 
     protected void z() {
         this.J = false;
-        Iterator<gs> iterator = this.d.iterator();
+        Iterator<Player> iterator = this.d.iterator();
         while (iterator.hasNext()) {
-            gs entityplayer = iterator.next();
+            Player entityplayer = iterator.next();
             if (entityplayer.N())
                 entityplayer.a(false, false, true);
         }
@@ -2270,8 +2180,8 @@ public class Level implements xp {
 
     public boolean A() {
         if (this.J && !this.B) {
-            for (Iterator<gs> iterator = this.d.iterator(); iterator.hasNext(); ) {
-                gs entityplayer = iterator.next();
+            for (Iterator<Player> iterator = this.d.iterator(); iterator.hasNext(); ) {
+                Player entityplayer = iterator.next();
                 if (!entityplayer.O())
                     return false;
             }
@@ -2308,7 +2218,7 @@ public class Level implements xp {
             return false;
         if (e(i, k) > j)
             return false;
-        Biome biomegenbase = a().a(i, k);
+        MixinBiome biomegenbase = a().a(i, k);
         if (biomegenbase.c())
             return false;
         return biomegenbase.d();
@@ -2330,43 +2240,138 @@ public class Level implements xp {
         a(null, i, j, k, l, i1);
     }
 
-    public void a(gs entityplayer, int i, int j, int k, int l, int i1) {
+    public void a(Player entityplayer, int i, int j, int k, int l, int i1) {
         for (int j1 = 0; j1 < this.u.size(); j1++)
-            ((pm) this.u.get(j1)).a(entityplayer, i, j, k, l, i1);
+            ((LevelListener) this.u.get(j1)).a(entityplayer, i, j, k, l, i1);
     }
 
-    public double getTemperatureValue(int x, int z) {
-        if (x < -32000000 || z < -32000000 || x >= 32000000 || z > 32000000)
-            return 0.0D;
-        return c(x >> 4, z >> 4).getTemperatureValue(x & 0xF, z & 0xF) + this.x.tempOffset;
+    static int A = 0;
+
+    private int Q;
+
+    private final List R;
+
+    public boolean B;
+
+    //////////////////////////////////////////////////
+    //////////////////////////////////////////////////
+    //////////////////////////////////////////////////
+    //////////////////////////////////////////////////
+    //////////////////////////////////////////////////
+    //////////////////////////////////////////////////
+    //////////////////////////////////////////////////
+    //////////////////////////////////////////////////
+    //////////////////////////////////////////////////
+    //////////////////////////////////////////////////
+    //////////////////////////////////////////////////
+    //////////////////////////////////////////////////
+
+    //TODO: Actual Mixins go here.
+
+    @Shadow public File levelDir;
+    @Shadow boolean firstTick;
+    @Shadow public UndoStack undoStack;
+    @Shadow public JScriptHandler scriptHandler;
+    @Shadow protected final DimensionData mapHandler;
+    @Shadow boolean newSave;
+    @Shadow public Scriptable scope;
+    @Shadow public boolean fogDensityOverridden;
+    @Shadow public boolean fogColorOverridden;
+    @Shadow public MusicScripts musicScripts;
+    @Shadow public Script script;
+    @Shadow public TriggerManager triggerManager;
+    @Shadow public String[] soundList;
+    @Shadow public String[] musicList;
+    @Shadow private int[] coordOrder;
+
+    public float getSpawnYaw() {
+        return this.x.spawnYaw;
     }
 
-    public void setTemperatureValue(int x, int z, double temp) {
-        if (x < -32000000 || z < -32000000 || x >= 32000000 || z > 32000000)
-            return;
-        lm c = c(x >> 4, z >> 4);
-        if (c.getTemperatureValue(x & 0xF, z & 0xF) == temp)
-            return;
-        c.setTemperatureValue(x & 0xF, z & 0xF, temp);
+    public void setSpawnYaw(float y) {
+        this.x.spawnYaw = y;
     }
 
-    public void resetCoordOrder() {
-        this.coordOrder = null;
+    public void undo() {
+        this.undoStack.undo(this);
     }
 
-    private void initCoordOrder() {
-        Random r = new Random();
-        r.setSeed(t());
-        this.coordOrder = new int[256];
-        int i;
-        for (i = 0; i < 256; i++)
-            this.coordOrder[i] = i;
-        for (i = 0; i < 255; i++) {
-            int j = r.nextInt(256 - i);
-            int t = this.coordOrder[i];
-            this.coordOrder[i] = this.coordOrder[i + j];
-            this.coordOrder[i + j] = t;
+    public void redo() {
+        this.undoStack.redo(this);
+    }
+
+    public void loadSoundOverrides() {
+        Minecraft.minecraftInstance.U.a();
+        File soundDir = new File(this.levelDir, "soundOverrides");
+        if (soundDir.exists())
+            Minecraft.minecraftInstance.U.a(soundDir, "");
+    }
+
+    public Entity getEntityByID(int entityID) {
+        for (Entity e : this.b) {
+            if (e.id == entityID)
+                return e;
         }
+        return null;
+    }
+
+    public void loadBrightness() {
+        for (int i = 0; i < 16; i++)
+            this.t.f[i] = this.x.brightness[i];
+    }
+
+    public void loadMapSounds() {
+        File soundDir = new File(this.levelDir, "sound");
+        if (soundDir.exists() && soundDir.isDirectory()) {
+            int soundCount = 0;
+            File[] soundFiles = soundDir.listFiles();
+            for (File soundFile : soundFiles) {
+                if (soundFile.isFile() && soundFile.getName().endsWith(".ogg")) {
+                    String streamName = String.format("sound/%s", soundFile.getName().toLowerCase());
+                    Minecraft.minecraftInstance.B.a(streamName, soundFile);
+                    soundCount++;
+                }
+            }
+            this.soundList = new String[soundCount];
+            soundCount = 0;
+            for (File soundFile : soundFiles) {
+                if (soundFile.isFile() && soundFile.getName().endsWith(".ogg")) {
+                    String streamName = String.format("sound.%s", soundFile.getName().toLowerCase().replace(".ogg", ""));
+                    this.soundList[soundCount] = streamName;
+                    soundCount++;
+                }
+            }
+        } else {
+            this.soundList = new String[0];
+        }
+    }
+
+    public void loadMapMusic() {
+        File musicDir = new File(this.levelDir, "music");
+        if (musicDir.exists() && musicDir.isDirectory()) {
+            int musicCount = 0;
+            File[] musicFiles = musicDir.listFiles();
+            for (File musicFile : musicFiles) {
+                if (musicFile.isFile() && musicFile.getName().endsWith(".ogg")) {
+                    String streamName = String.format("music/%s", musicFile.getName().toLowerCase());
+                    Minecraft.minecraftInstance.B.b(streamName, musicFile);
+                    musicCount++;
+                }
+            }
+            this.musicList = new String[musicCount];
+            musicCount = 0;
+            for (File musicFile : musicFiles) {
+                if (musicFile.isFile() && musicFile.getName().endsWith(".ogg")) {
+                    String streamName = String.format("music.%s", musicFile.getName().toLowerCase().replace(".ogg", ""));
+                    this.musicList[musicCount] = streamName;
+                    musicCount++;
+                }
+            }
+        } else {
+            this.musicList = new String[0];
+        }
+        if (!this.x.playingMusic.equals(""))
+            Minecraft.minecraftInstance.B.playMusicFromStreaming(this.x.playingMusic, 0, 0);
     }
 
     public boolean SnowModUpdate(int x, int z) {
@@ -2406,123 +2411,157 @@ public class Level implements xp {
         return false;
     }
 
-    public void loadMapMusic() {
-        File musicDir = new File(this.levelDir, "music");
-        if (musicDir.exists() && musicDir.isDirectory()) {
-            int musicCount = 0;
-            File[] musicFiles = musicDir.listFiles();
-            for (File musicFile : musicFiles) {
-                if (musicFile.isFile() && musicFile.getName().endsWith(".ogg")) {
-                    String streamName = String.format("music/%s", musicFile.getName().toLowerCase());
-                    Minecraft.minecraftInstance.B.b(streamName, musicFile);
-                    musicCount++;
-                }
-            }
-            this.musicList = new String[musicCount];
-            musicCount = 0;
-            for (File musicFile : musicFiles) {
-                if (musicFile.isFile() && musicFile.getName().endsWith(".ogg")) {
-                    String streamName = String.format("music.%s", musicFile.getName().toLowerCase().replace(".ogg", ""));
-                    this.musicList[musicCount] = streamName;
-                    musicCount++;
-                }
-            }
-        } else {
-            this.musicList = new String[0];
-        }
-        if (!this.x.playingMusic.equals(""))
-            Minecraft.minecraftInstance.B.playMusicFromStreaming(this.x.playingMusic, 0, 0);
+    public void resetCoordOrder() {
+        this.coordOrder = null;
     }
 
-    public void loadMapSounds() {
-        File soundDir = new File(this.levelDir, "sound");
-        if (soundDir.exists() && soundDir.isDirectory()) {
-            int soundCount = 0;
-            File[] soundFiles = soundDir.listFiles();
-            for (File soundFile : soundFiles) {
-                if (soundFile.isFile() && soundFile.getName().endsWith(".ogg")) {
-                    String streamName = String.format("sound/%s", soundFile.getName().toLowerCase());
-                    Minecraft.minecraftInstance.B.a(streamName, soundFile);
-                    soundCount++;
-                }
-            }
-            this.soundList = new String[soundCount];
-            soundCount = 0;
-            for (File soundFile : soundFiles) {
-                if (soundFile.isFile() && soundFile.getName().endsWith(".ogg")) {
-                    String streamName = String.format("sound.%s", soundFile.getName().toLowerCase().replace(".ogg", ""));
-                    this.soundList[soundCount] = streamName;
-                    soundCount++;
-                }
-            }
-        } else {
-            this.soundList = new String[0];
+    private void initCoordOrder() {
+        Random r = new Random();
+        r.setSeed(t());
+        this.coordOrder = new int[256];
+        int i;
+        for (i = 0; i < 256; i++)
+            this.coordOrder[i] = i;
+        for (i = 0; i < 255; i++) {
+            int j = r.nextInt(256 - i);
+            int t = this.coordOrder[i];
+            this.coordOrder[i] = this.coordOrder[i + j];
+            this.coordOrder[i + j] = t;
         }
     }
 
-    public void loadSoundOverrides() {
-        Minecraft.minecraftInstance.U.a();
-        File soundDir = new File(this.levelDir, "soundOverrides");
-        if (soundDir.exists())
-            Minecraft.minecraftInstance.U.a(soundDir, "");
+    public double getTemperatureValue(int x, int z) {
+        if (x < -32000000 || z < -32000000 || x >= 32000000 || z > 32000000)
+            return 0.0D;
+        return c(x >> 4, z >> 4).getTemperatureValue(x & 0xF, z & 0xF) + this.x.tempOffset;
     }
 
-    public void loadBrightness() {
-        for (int i = 0; i < 16; i++)
-            this.t.f[i] = this.x.brightness[i];
+    public void setTemperatureValue(int x, int z, double temp) {
+        if (x < -32000000 || z < -32000000 || x >= 32000000 || z > 32000000)
+            return;
+        Chunk c = c(x >> 4, z >> 4);
+        if (c.getTemperatureValue(x & 0xF, z & 0xF) == temp)
+            return;
+        c.setTemperatureValue(x & 0xF, z & 0xF, temp);
     }
 
-    public void undo() {
-        this.undoStack.undo(this);
-    }
-
-    public void redo() {
-        this.undoStack.redo(this);
-    }
-
-    public sn getEntityByID(int entityID) {
-        for (sn e : this.b) {
-            if (e.aD == entityID)
-                return e;
+    public HitResult rayTraceBlocks2(Vec3f vec3d, Vec3f vec3d1, boolean flag, boolean flag1, boolean collideWithClip) {
+        if (Double.isNaN(vec3d.a) || Double.isNaN(vec3d.b) || Double.isNaN(vec3d.c))
+            return null;
+        if (Double.isNaN(vec3d1.a) || Double.isNaN(vec3d1.b) || Double.isNaN(vec3d1.c))
+            return null;
+        int i = in.b(vec3d1.a);
+        int j = in.b(vec3d1.b);
+        int k = in.b(vec3d1.c);
+        int l = in.b(vec3d.a);
+        int i1 = in.b(vec3d.b);
+        int j1 = in.b(vec3d.c);
+        int k1 = a(l, i1, j1);
+        int i2 = e(l, i1, j1);
+        Tile block = Tile.m[k1];
+        if ((!flag1 || block == null || block.e(this, l, i1, j1) != null) && k1 > 0 && block.a(i2, flag) && (collideWithClip || (k1 != Blocks.clipBlock.bn && !LadderTile.isLadderID(k1)))) {
+            HitResult movingobjectposition = block.a(this, l, i1, j1, vec3d, vec3d1);
+            if (movingobjectposition != null)
+                return movingobjectposition;
+        }
+        for (int l1 = 200; l1-- >= 0; ) {
+            if (Double.isNaN(vec3d.a) || Double.isNaN(vec3d.b) || Double.isNaN(vec3d.c))
+                return null;
+            if (l == i && i1 == j && j1 == k)
+                return null;
+            boolean flag2 = true;
+            boolean flag3 = true;
+            boolean flag4 = true;
+            double d = 999.0D;
+            double d1 = 999.0D;
+            double d2 = 999.0D;
+            if (i > l) {
+                d = l + 1.0D;
+            } else if (i < l) {
+                d = l + 0.0D;
+            } else {
+                flag2 = false;
+            }
+            if (j > i1) {
+                d1 = i1 + 1.0D;
+            } else if (j < i1) {
+                d1 = i1 + 0.0D;
+            } else {
+                flag3 = false;
+            }
+            if (k > j1) {
+                d2 = j1 + 1.0D;
+            } else if (k < j1) {
+                d2 = j1 + 0.0D;
+            } else {
+                flag4 = false;
+            }
+            double d3 = 999.0D;
+            double d4 = 999.0D;
+            double d5 = 999.0D;
+            double d6 = vec3d1.a - vec3d.a;
+            double d7 = vec3d1.b - vec3d.b;
+            double d8 = vec3d1.c - vec3d.c;
+            if (flag2)
+                d3 = (d - vec3d.a) / d6;
+            if (flag3)
+                d4 = (d1 - vec3d.b) / d7;
+            if (flag4)
+                d5 = (d2 - vec3d.c) / d8;
+            byte byte0 = 0;
+            if (d3 < d4 && d3 < d5) {
+                if (i > l) {
+                    byte0 = 4;
+                } else {
+                    byte0 = 5;
+                }
+                vec3d.a = d;
+                vec3d.b += d7 * d3;
+                vec3d.c += d8 * d3;
+            } else if (d4 < d5) {
+                if (j > i1) {
+                    byte0 = 0;
+                } else {
+                    byte0 = 1;
+                }
+                vec3d.a += d6 * d4;
+                vec3d.b = d1;
+                vec3d.c += d8 * d4;
+            } else {
+                if (k > j1) {
+                    byte0 = 2;
+                } else {
+                    byte0 = 3;
+                }
+                vec3d.a += d6 * d5;
+                vec3d.b += d7 * d5;
+                vec3d.c = d2;
+            }
+            Vec3f vec3d2 = Vec3f.b(vec3d.a, vec3d.b, vec3d.c);
+            l = (int) (vec3d2.a = in.b(vec3d.a));
+            if (byte0 == 5) {
+                l--;
+                vec3d2.a++;
+            }
+            i1 = (int) (vec3d2.b = in.b(vec3d.b));
+            if (byte0 == 1) {
+                i1--;
+                vec3d2.b++;
+            }
+            j1 = (int) (vec3d2.c = in.b(vec3d.c));
+            if (byte0 == 3) {
+                j1--;
+                vec3d2.c++;
+            }
+            int j2 = a(l, i1, j1);
+            int k2 = e(l, i1, j1);
+            Tile block1 = Tile.m[j2];
+            if ((!flag1 || block1 == null || block1.e(this, l, i1, j1) != null) && j2 > 0 && block1.a(k2, flag) && block1.shouldRender(this, l, i1, j1)) {
+                HitResult movingobjectposition1 = block1.a(this, l, i1, j1, vec3d, vec3d1);
+                if (movingobjectposition1 != null && (collideWithClip || (block1.bn != Blocks.clipBlock.bn && !LadderTile.isLadderID(block1.bn))))
+                    return movingobjectposition1;
+            }
         }
         return null;
     }
-
-    static int A = 0;
-
-    private int Q;
-
-    private final List R;
-
-    public boolean B;
-
-    public File levelDir;
-
-    private int[] coordOrder;
-
-    public String[] musicList;
-
-    public String[] soundList;
-
-    protected final wt mapHandler;
-
-    public TriggerManager triggerManager;
-
-    public Script script;
-
-    public JScriptHandler scriptHandler;
-
-    public MusicScripts musicScripts;
-
-    public boolean fogColorOverridden;
-
-    public boolean fogDensityOverridden;
-
-    public Scriptable scope;
-
-    boolean firstTick;
-
-    boolean newSave;
-
-    public UndoStack undoStack;
 }

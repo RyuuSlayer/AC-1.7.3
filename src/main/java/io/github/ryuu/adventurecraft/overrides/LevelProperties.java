@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.github.ryuu.adventurecraft.blocks.BlockEffect;
+import io.github.ryuu.adventurecraft.mixin.Level;
 import net.minecraft.client.Minecraft;
 
 public class LevelProperties {

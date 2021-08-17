@@ -5,7 +5,9 @@
   "mixins": [
   ],
   "client": [
-    "ExampleMixin"
+    "MixinBiome",
+    "MixinDeathScreen",
+    "MixinLevel"
   ],
   "injectors": {
     "defaultRequire": 1
