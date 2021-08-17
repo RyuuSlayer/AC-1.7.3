@@ -1749,38 +1749,6 @@ public class MixinLevel implements TileView {
             this.Q--;
     }
 
-    protected void updateChunk(int chunkX, int chunkZ) {
-        Chunk chunk = c(chunkX, chunkZ);
-        if (chunk.lastUpdated == t())
-            return;
-        int coordX = chunkX * 16;
-        int coordZ = chunkZ * 16;
-        chunk.lastUpdated = t();
-        if (this.r.nextInt(100000) == 0 && C() && B()) {
-            this.g = this.g * 3 + 1013904223;
-            int l1 = this.g >> 2;
-            int i3 = coordX + (l1 & 0xF);
-            int i4 = coordZ + (l1 >> 8 & 0xF);
-            int i5 = e(i3, i4);
-            if (t(i3, i5, i4)) {
-                a((Entity) new c(this, i3, i5, i4));
-                this.m = 2;
-            }
-        }
-        int j2 = 0;
-        while (j2 < 80) {
-            this.g = this.g * 3 + 1013904223;
-            int k3 = this.g >> 2;
-            int k4 = k3 & 0xF;
-            int k5 = k3 >> 8 & 0xF;
-            int j6 = k3 >> 16 & 0x7F;
-            int l6 = chunk.b[k4 << 11 | k5 << 7 | j6] & 0xFF;
-            if (Tile.n[l6])
-                Tile.m[l6].a(this, k4 + coordX, j6, k5 + coordZ, this.r);
-            j2++;
-        }
-    }
-
     public boolean a(boolean flag) {
         int i = this.E.size();
         if (i > 1000)
@@ -2563,5 +2531,37 @@ public class MixinLevel implements TileView {
             }
         }
         return null;
+    }
+
+    protected void updateChunk(int chunkX, int chunkZ) {
+        Chunk chunk = c(chunkX, chunkZ);
+        if (chunk.lastUpdated == t())
+            return;
+        int coordX = chunkX * 16;
+        int coordZ = chunkZ * 16;
+        chunk.lastUpdated = t();
+        if (this.r.nextInt(100000) == 0 && C() && B()) {
+            this.g = this.g * 3 + 1013904223;
+            int l1 = this.g >> 2;
+            int i3 = coordX + (l1 & 0xF);
+            int i4 = coordZ + (l1 >> 8 & 0xF);
+            int i5 = e(i3, i4);
+            if (t(i3, i5, i4)) {
+                a((Entity) new c(this, i3, i5, i4));
+                this.m = 2;
+            }
+        }
+        int j2 = 0;
+        while (j2 < 80) {
+            this.g = this.g * 3 + 1013904223;
+            int k3 = this.g >> 2;
+            int k4 = k3 & 0xF;
+            int k5 = k3 >> 8 & 0xF;
+            int j6 = k3 >> 16 & 0x7F;
+            int l6 = chunk.b[k4 << 11 | k5 << 7 | j6] & 0xFF;
+            if (Tile.n[l6])
+                Tile.m[l6].a(this, k4 + coordX, j6, k5 + coordZ, this.r);
+            j2++;
+        }
     }
 }
