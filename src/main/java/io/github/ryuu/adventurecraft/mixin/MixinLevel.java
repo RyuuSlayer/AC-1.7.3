@@ -24,12 +24,14 @@ import net.minecraft.level.chunk.Chunk;
 import net.minecraft.level.chunk.ChunkIO;
 import net.minecraft.level.dimension.Dimension;
 import net.minecraft.level.dimension.DimensionData;
+import net.minecraft.level.dimension.McRegionDimensionFile;
 import net.minecraft.level.gen.BiomeSource;
 import net.minecraft.level.source.LevelSource;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.ProgressListener;
 import net.minecraft.util.Vec3i;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.MathsHelper;
 import net.minecraft.util.maths.Vec3f;
@@ -47,91 +49,63 @@ import java.util.*;
 //TODO: Actual Mixins are at the bottom of the file.
 
 @Mixin(Level.class)
-public class MixinLevel implements TileView {
-    public boolean a;
+public class MixinLevel extends Level implements TileView {
 
-    private final List C;
+    //TODO: Unchanged Vanilla Code.
 
-    public List<Entity> b;
+    // public boolean field_197 = false;
+    // private List field_181 = new ArrayList();
+    // public List entities = new ArrayList();
+    // private List field_182 = new ArrayList();
+    // private TreeSet field_183 = new TreeSet();
+    // private Set field_184 = new HashSet();
+    // public List tileEntities = new ArrayList();
+    // private List field_185 = new ArrayList();
+    // public List players = new ArrayList();
+    // public List field_201 = new ArrayList();
+    // private long field_186 = 16777215L;
+    // public int field_202 = 0;
+    // protected int field_203 = (new Random()).nextInt();
+    // protected final int unusedIncrement = 1013904223;
+    // protected float prevRainGradient;
+    // protected float rainGradient;
+    // protected float prevThunderGradient;
+    // protected int field_209 = 0;
+    // public int field_210 = 0;
+    // public boolean field_211 = false;
+    // private long time = System.currentTimeMillis();
+    // protected int field_212 = 40;
+    // public int difficulty;
+    // public Random rand = new Random();
+    // public boolean generating = false;
+    // public final Dimension dimension;
+    // protected List listeners = new ArrayList();
+    // protected LevelSource cache;
+    // protected final DimensionData dimensionData;
+    // public LevelProperties properties;
+    // public boolean forceLoadChunks;
+    // private boolean allPlayersSleeping;
+    // public LevelData data;
+    // private ArrayList field_189 = new ArrayList();
+    // private boolean field_190;
+    // private int field_191 = 0;
+    // private boolean field_192 = true;
+    // private boolean field_193 = true;
 
-    private final List D;
+    //TODO: These seemed to be missing but are in the Vanilla class. Might have to removed using mixin.
+    static int field_179 = 0;
+    private Set field_194 = new HashSet();
+    private int field_195 = this.rand.nextInt(12000);
+    private List field_196 = new ArrayList();
+    public boolean isClient = false;
+    //
 
-    private final TreeSet E;
-
-    private final Set F;
-
-    public List c;
-
-    private final List G;
-
-    public List d;
-
-    public List e;
-
-    private final long H;
-
-    public int f;
-
-    protected int g;
-
-    protected final int h = 1013904223;
-
-    protected float i;
-
-    protected float j;
-
-    protected float k;
-
-    protected float l;
-
-    protected int m;
-
-    public int n;
-
-    public boolean o;
-
-    private long I;
-
-    protected int p;
-
-    public int q;
-
-    public Random rand = new Random();
-
-    public boolean generating = false;
-
-    public final Dimension dimension;
-
-    protected List listeners = new ArrayList();
-
-    protected LevelSource cache;
-
-    protected final DimensionData dimensionData;
-
-    public LevelProperties properties;
-
-    public boolean forceLoadChunks;
-
-    private boolean allPlayersSleeping;
-
-    public LevelData data;
-
-    private final ArrayList K;
-
-    private boolean L;
-
-    private int M;
-
-    private boolean N;
-
-    private boolean O;
-
-    public BiomeSource getBiomeSource() {
-        return this.dimension.biomeSource;
-    }
+    // public BiomeSource getBiomeSource() {
+    //     return this.dimension.biomeSource;
+    // }
 
     public Level(DimensionData isavehandler, String s, Dimension worldprovider, long l) {
-        this.h = 1013904223;
+        this.unusedIncrement = 1013904223;
         this.fogColorOverridden = false;
         this.fogDensityOverridden = false;
         this.firstTick = true;
@@ -244,7 +218,7 @@ public class MixinLevel implements TileView {
         File mapDir = new File(mcDir, "../maps");
         File levelFile = new File(mapDir, levelName);
         nh.a().loadMapTranslation(levelFile);
-        this.mapHandler = (DimensionData) new mx(mapDir, levelName, false);
+        this.mapHandler = new McRegionDimensionFile(mapDir, levelName, false);
         this.levelDir = levelFile;
         this.a = false;
         this.C = new ArrayList();
@@ -374,12 +348,6 @@ public class MixinLevel implements TileView {
         this.x.c(j);
     }
 
-    public int getFirstUncoveredBlockY(int i, int j) {
-        int k;
-        for (k = 127; d(i, k, j) && k > 0; k--) ;
-        return k;
-    }
-
     public int a(int i, int j) {
         int k;
         for (k = 127; d(i, k, j) && k > 0; k--) ;
@@ -391,7 +359,7 @@ public class MixinLevel implements TileView {
 
     public void a(Player entityplayer) {
         try {
-            nu nbttagcompound = this.x.h();
+            CompoundTag nbttagcompound = this.x.h();
             if (nbttagcompound != null) {
                 entityplayer.e(nbttagcompound);
                 this.x.a(null);
@@ -771,7 +739,7 @@ public class MixinLevel implements TileView {
 
     public void a(Entity entity, String s, float f, float f1) {
         for (int i = 0; i < this.u.size(); i++)
-            ((LevelListener) this.u.get(i)).a(s, entity.aM, entity.aN - entity.bf, entity.aO, f, f1);
+            ((LevelListener) this.u.get(i)).a(s, entity.x, entity.y - entity.standingEyeHeight, entity.z, f, f1);
     }
 
     public void a(double d, double d1, double d2, String s, float f, float f1) {
@@ -983,24 +951,6 @@ public class MixinLevel implements TileView {
                 returnColor.c = (1.0F - f) * returnColor.c + (f * this.x.fogB);
             }
         return returnColor;
-    }
-
-    public float getFogStart(float start, float f) {
-        if (this.x.overrideFogDensity) {
-            if (this.fogDensityOverridden)
-                return this.x.fogStart;
-            return f * this.x.fogStart + (1.0F - f) * start;
-        }
-        return start;
-    }
-
-    public float getFogEnd(float end, float f) {
-        if (this.x.overrideFogDensity) {
-            if (this.fogDensityOverridden)
-                return this.x.fogEnd;
-            return f * this.x.fogEnd + (1.0F - f) * end;
-        }
-        return end;
     }
 
     public int e(int i, int j) {
@@ -2399,27 +2349,27 @@ public class MixinLevel implements TileView {
         int coordX = chunkX * 16;
         int coordZ = chunkZ * 16;
         chunk.lastUpdated = t();
-        if (this.r.nextInt(100000) == 0 && C() && B()) {
-            this.g = this.g * 3 + 1013904223;
-            int l1 = this.g >> 2;
+        if (this.rand.nextInt(100000) == 0 && C() && B()) {
+            this.field_203 = this.field_203 * 3 + 1013904223;
+            int l1 = this.field_203 >> 2;
             int i3 = coordX + (l1 & 0xF);
             int i4 = coordZ + (l1 >> 8 & 0xF);
             int i5 = e(i3, i4);
             if (t(i3, i5, i4)) {
                 a((Entity) new c(this, i3, i5, i4));
-                this.m = 2;
+                this.field_209 = 2;
             }
         }
         int j2 = 0;
         while (j2 < 80) {
-            this.g = this.g * 3 + 1013904223;
-            int k3 = this.g >> 2;
+            this.field_203 = this.field_203 * 3 + 1013904223;
+            int k3 = this.field_203 >> 2;
             int k4 = k3 & 0xF;
             int k5 = k3 >> 8 & 0xF;
             int j6 = k3 >> 16 & 0x7F;
             int l6 = chunk.b[k4 << 11 | k5 << 7 | j6] & 0xFF;
             if (Tile.n[l6])
-                Tile.m[l6].a(this, k4 + coordX, j6, k5 + coordZ, this.r);
+                Tile.m[l6].a(this, k4 + coordX, j6, k5 + coordZ, this.rand);
             j2++;
         }
     }
@@ -2504,7 +2454,7 @@ public class MixinLevel implements TileView {
 
     public void cancelBlockUpdate(int i, int j, int k, int l) {
         class_366 nextticklistentry = new class_366(i, j, k, l);
-        this.F.remove(nextticklistentry);
+        this.field_184.remove(nextticklistentry);
     }
 
     public float getLightValue(int i, int j, int k) {
@@ -2542,7 +2492,7 @@ public class MixinLevel implements TileView {
         int cw = 0;
         if (this.coordOrder == null)
             initCoordOrder();
-        for (int i = 0; i < this.d.size(); i++) {
+        for (int i = 0; i < this.players.size(); i++) {
             Player entityplayer = this.d.get(i);
             int pcx = in.b(entityplayer.aM / 16.0D);
             int pcz = in.b(entityplayer.aO / 16.0D);
@@ -2564,5 +2514,29 @@ public class MixinLevel implements TileView {
                 }
             }
         }
+    }
+
+    public int getFirstUncoveredBlockY(int i, int j) {
+        int k;
+        for (k = 127; d(i, k, j) && k > 0; k--) ;
+        return k;
+    }
+
+    public float getFogStart(float start, float f) {
+        if (this.properties.overrideFogDensity) {
+            if (this.fogDensityOverridden)
+                return this.properties.fogStart;
+            return f * this.properties.fogStart + (1.0F - f) * start;
+        }
+        return start;
+    }
+
+    public float getFogEnd(float end, float f) {
+        if (this.properties.overrideFogDensity) {
+            if (this.fogDensityOverridden)
+                return this.properties.fogEnd;
+            return f * this.properties.fogEnd + (1.0F - f) * end;
+        }
+        return end;
     }
 }
