@@ -6,6 +6,7 @@
   ],
   "client": [
     "MixinBiome",
+    "MixinClientPlayer",
     "MixinDeathScreen",
     "MixinLevel"
   ],

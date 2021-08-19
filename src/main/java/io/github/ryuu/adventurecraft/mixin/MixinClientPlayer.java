@@ -1,10 +1,11 @@
-package io.github.ryuu.adventurecraft.overrides;
+package io.github.ryuu.adventurecraft.mixin;
 
 import io.github.ryuu.adventurecraft.gui.GuiMapEditHUD;
 import io.github.ryuu.adventurecraft.gui.GuiPalette;
 import io.github.ryuu.adventurecraft.gui.GuiScriptStats;
 import io.github.ryuu.adventurecraft.gui.GuiWorldConfig;
 import io.github.ryuu.adventurecraft.mixin.Level;
+import io.github.ryuu.adventurecraft.overrides.*;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.InventoryDebug;
 import io.github.ryuu.adventurecraft.util.JScriptInfo;
@@ -12,29 +13,38 @@ import net.minecraft.achievement.Achievement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.PlayerKeypressManager;
 import net.minecraft.client.gui.screen.EditSignScreen;
+import net.minecraft.client.gui.screen.container.CraftingScreen;
+import net.minecraft.client.gui.screen.container.DispenserScreen;
+import net.minecraft.client.gui.screen.container.DoubleChestScreen;
+import net.minecraft.client.gui.screen.container.FurnaceScreen;
+import net.minecraft.client.particle.EntityCollisionParticle;
 import net.minecraft.client.util.Session;
+import net.minecraft.client.util.Smoother;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.FurnaceEntity;
+import net.minecraft.entity.player.ClientPlayer;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.level.Level;
 import net.minecraft.stat.Stat;
+import net.minecraft.tile.entity.Dispenser;
 import net.minecraft.tile.entity.Sign;
+import net.minecraft.util.io.CompoundTag;
+import net.minecraft.util.maths.MathsHelper;
+import org.spongepowered.asm.mixin.Mixin;
 
-public class ClientPlayer extends Player {
-    public PlayerKeypressManager a;
+@Mixin(ClientPlayer.class)
+public class MixinClientPlayer extends Player {
+    // public PlayerKeypressManager a;
+    // protected Minecraft b;
+    // private Smoother field_163 = new Smoother();
+    // private Smoother field_164 = new Smoother();
+    // private Smoother field_165 = new Smoother();
 
-    protected Minecraft b;
-
-    private final cu bN;
-
-    private final cu bO;
-
-    private final cu bP;
-
-    public ClientPlayer(Minecraft minecraft, Level world, Session session, int i) {
+    public MixinClientPlayer(Minecraft minecraft, Level world, Session session, int i) {
         super(world);
-        this.bN = new cu();
-        this.bO = new cu();
-        this.bP = new cu();
+        this.bN = new Smoother();
+        this.bO = new Smoother();
+        this.bP = new Smoother();
         this.b = minecraft;
         this.m = i;
         this.l = world.x.playerName;
@@ -83,37 +93,37 @@ public class ClientPlayer extends Player {
         super.o();
     }
 
-    public void o_() {
-        this.a.a();
-    }
+    // public void method_140() {
+    //     this.keypressManager.resetKeys();
+    // }
 
-    public void a(int i, boolean flag) {
-        if (this.aI.script.keyboard.processPlayerKeyPress(i, flag))
-            this.a.a(i, flag);
-    }
+    // public void method_136(int i, boolean flag) {
+    //     this.keypressManager.onKeyPressed(i, (boolean)flag);
+    // }
 
-    public void b(nu nbttagcompound) {
-        super.b(nbttagcompound);
-        nbttagcompound.a("Score", this.g);
-    }
+    // public void writeCustomDataToTag(CompoundTag arg) {
+    //     super.writeCustomDataToTag(arg);
+    //     arg.put("Score", this.score);
+    // }
 
-    public void a(nu nbttagcompound) {
-        super.a(nbttagcompound);
-        this.g = nbttagcompound.e("Score");
-    }
+    // public void readCustomDataFromTag(CompoundTag arg) {
+    //     super.readCustomDataFromTag(arg);
+    //     this.score = arg.getInt("Score");
+    // }
 
-    public void r() {
-        super.r();
-        this.b.a(null);
-    }
+    // public void closeContainer() {
+    //     super.closeContainer();
+    //     this.minecraft.openScreen((net.minecraft.client.gui.Screen)null);
+    // }
 
-    public void a(Sign tileentitysign) {
-        this.b.a((Screen) new EditSignScreen(tileentitysign));
-    }
+    // public void openSignScreen(Sign arg) {
+    //     this.minecraft.openScreen(new EditSignScreen(arg));
+    // }
+    // public void openChestScreen(Inventory arg) {
+    //     this.minecraft.openScreen(new DoubleChestScreen(this.inventory, arg));
+    // }
 
-    public void a(Inventory iinventory) {
-        this.b.a((Screen) new hp(this.c, iinventory));
-    }
+    //TODO: Mixin AC class.
 
     public void displayGUIPalette() {
         InventoryDebug palette = new InventoryDebug("Palette", 54);
@@ -121,25 +131,36 @@ public class ClientPlayer extends Player {
         this.b.a((Screen) new GuiPalette(this.c, palette));
     }
 
-    public void a(int i, int j, int k) {
-        this.b.a((Screen) new oo(this.c, this.aI, i, j, k));
+    // public void openCraftingScreen(int i, int j, int k)
+    //     this.minecraft.openScreen(new CraftingScreen(this.inventory, this.level, i, j, k))
+    // }
+
+    //  public void openFurnaceScreen(FurnaceEntity arg) {
+    //      this.minecraft.openScreen(new FurnaceScreen(this.inventory, arg));
+    //  }
+
+    //  public void openDispenserScreen(Dispenser arg) {
+    //      this.minecraft.openScreen(new DispenserScreen(this.inventory, arg));
+    //  }
+
+    //  public void onEntityCollision(Entity arg, int i) {
+    //      this.minecraft.particleManager.addParticle(new EntityCollisionParticle(this.minecraft.level, arg, this, -0.5F));
+    //  }
+
+    // public int method_141() {
+    //     return this.inventory.method_687();
+    // }
+
+    //TODO: These two were missing in the AC class but are in Vanilla.
+
+    ////////////////////////////////
+    public void sendChatMessage(String string) {
     }
 
-    public void a(FurnaceEntity tileentityfurnace) {
-        this.b.a((Screen) new ov(this.c, tileentityfurnace));
+    public boolean method_1373() {
+        return this.keypressManager.sneak && !this.sleeping;
     }
-
-    public void a(Dispenser tileentitydispenser) {
-        this.b.a((Screen) new gq(this.c, tileentitydispenser));
-    }
-
-    public void b(sn entity, int i) {
-        this.b.j.a(new EntityCollisionParticle(this.b.f, entity, this, -0.5F));
-    }
-
-    public int s() {
-        return this.c.f();
-    }
+    ////////////////////////////////
 
     public void a(String s) {
         String orig = s;
@@ -159,7 +180,7 @@ public class ClientPlayer extends Player {
             DebugMode.levelEditing = !DebugMode.levelEditing;
         } else if (s.equals("/removemobs")) {
             for (Entity obj : this.aI.b) {
-                sn e = (sn) obj;
+                Entity e = obj;
                 if (e instanceof ls && !(e instanceof Player))
                     e.be = true;
             }
@@ -247,35 +268,38 @@ public class ClientPlayer extends Player {
         }
     }
 
-    public boolean t() {
-        return (this.a.e && !this.u);
-    }
+    // public boolean method_1373() {
+    //     return this.keypressManager.sneak && !this.sleeping;
+    // }
 
-    public void d_(int i) {
-        int j = this.Y - i;
-        if (j <= 0) {
-            this.Y = i;
-            if (j < 0)
-                this.by = this.E / 2;
-        } else {
-            this.au = j;
-            this.Z = this.Y;
-            this.by = this.E;
-            b(j);
-            this.aa = this.ab = 10;
-        }
-    }
+    // public void updateHealth(int i) {
+    //     int var2 = this.health - i;
+    //     if (var2 <= 0) {
+    //         this.health = i;
+    //         if (var2 < 0) {
+    //             this.field_1613 = this.field_1009 / 2;
+    //         }
+    //     } else {
+    //         this.field_1058 = var2;
+    //         this.field_1037 = this.health;
+    //         this.field_1613 = this.field_1009;
+    //         this.applyDamage(var2);
+    //         this.hurtTime = this.field_1039 = 10;
+    //     }
+    // }
 
-    public void p_() {
-        this.b.a(false, 0);
-    }
+    // public void respawn() {
+    //     this.minecraft.respawn(false, 0);
+    // }
 
-    public void v() {
-    }
+    // public void method_494() {
+    // }
 
-    public void b(String s) {
-        this.b.v.c(s);
-    }
+    // public void sendTranslatedMessage(String string) {
+    //     this.minecraft.overlay.method_1953(string);
+    // }
+
+    //TODO: This one seems different than Vanilla, not sure if its because of decompilation or AC changes.
 
     public void a(Stat statbase, int i) {
         if (statbase == null)
@@ -292,49 +316,61 @@ public class ClientPlayer extends Player {
         }
     }
 
-    private boolean d(int i, int j, int k) {
-        return this.aI.h(i, j, k);
-    }
+    // private boolean method_138(int i, int j, int k) {
+    //     return this.level.canSuffocate(i, j, k);
+    // }
 
-    protected boolean c(double d, double d1, double d2) {
-        int i = in.b(d);
-        int j = in.b(d1);
-        int k = in.b(d2);
-        double d3 = d - i;
-        double d4 = d2 - k;
-        if (d(i, j, k) || d(i, j + 1, k)) {
-            boolean flag = (!d(i - 1, j, k) && !d(i - 1, j + 1, k));
-            boolean flag1 = (!d(i + 1, j, k) && !d(i + 1, j + 1, k));
-            boolean flag2 = (!d(i, j, k - 1) && !d(i, j + 1, k - 1));
-            boolean flag3 = (!d(i, j, k + 1) && !d(i, j + 1, k + 1));
-            byte byte0 = -1;
-            double d5 = 9999.0D;
-            if (flag && d3 < d5) {
-                d5 = d3;
-                byte0 = 0;
-            }
-            if (flag1 && 1.0D - d3 < d5) {
-                d5 = 1.0D - d3;
-                byte0 = 1;
-            }
-            if (flag2 && d4 < d5) {
-                d5 = d4;
-                byte0 = 4;
-            }
-            if (flag3 && 1.0D - d4 < d5) {
-                double d6 = 1.0D - d4;
-                byte0 = 5;
-            }
-            float f = 0.1F;
-            if (byte0 == 0)
-                this.aP = -f;
-            if (byte0 == 1)
-                this.aP = f;
-            if (byte0 == 4)
-                this.aR = -f;
-            if (byte0 == 5)
-                this.aR = f;
-        }
-        return false;
-    }
+    // protected boolean method_1372(double d, double d1, double d2) {
+    //     int var7 = MathsHelper.floor(d);
+    //     int var8 = MathsHelper.floor(d1);
+    //     int var9 = MathsHelper.floor(d2);
+    //     double var10 = d - (double)var7;
+    //     double var12 = d2 - (double)var9;
+    //     if (this.method_138(var7, var8, var9) || this.method_138(var7, var8 + 1, var9)) {
+    //         int var14 = !this.method_138(var7 - 1, var8, var9) && !this.method_138(var7 - 1, var8 + 1, var9) ? 1 : 0;
+    //         int var15 = !this.method_138(var7 + 1, var8, var9) && !this.method_138(var7 + 1, var8 + 1, var9) ? 1 : 0;
+    //         int var16 = !this.method_138(var7, var8, var9 - 1) && !this.method_138(var7, var8 + 1, var9 - 1) ? 1 : 0;
+    //         int var17 = !this.method_138(var7, var8, var9 + 1) && !this.method_138(var7, var8 + 1, var9 + 1) ? 1 : 0;
+    //         int var18 = -1;
+    //         double var19 = 9999.0D;
+    //         if (var14 != 0 && var10 < var19) {
+    //             var19 = var10;
+    //             var18 = 0;
+    //         }
+    //
+    //         if (var15 != 0 && 1.0D - var10 < var19) {
+    //             var19 = 1.0D - var10;
+    //             var18 = 1;
+    //         }
+    //
+    //         if (var16 != 0 && var12 < var19) {
+    //             var19 = var12;
+    //             var18 = 4;
+    //         }
+    //
+    //         if (var17 != 0 && 1.0D - var12 < var19) {
+    //             var19 = 1.0D - var12;
+    //             var18 = 5;
+    //         }
+    //
+    //         float var21 = 0.1F;
+    //         if (var18 == 0) {
+    //             this.velocityX = (double)(-var21);
+    //         }
+    //
+    //         if (var18 == 1) {
+    //             this.velocityX = (double)var21;
+    //         }
+    //
+    //         if (var18 == 4) {
+    //             this.velocityZ = (double)(-var21);
+    //         }
+    //
+    //         if (var18 == 5) {
+    //             this.velocityZ = (double)var21;
+    //         }
+    //     }
+    //
+    //     return false;
+    // }
 }
