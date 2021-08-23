@@ -1,14 +1,18 @@
 package io.github.ryuu.adventurecraft.mixin;
 
-import java.util.Random;
-
-import io.github.ryuu.adventurecraft.overrides.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
+import net.minecraft.tile.Tile;
 import org.mozilla.javascript.Scriptable;
+import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
+@Mixin(ItemType.class)
 public class MixinItemType {
     protected MixinItemType(int i) {
         this.itemUseDelay = 5;
@@ -98,11 +102,11 @@ public class MixinItemType {
         return (this.a > 0 && !this.bj);
     }
 
-    public boolean a(ItemInstance itemstack, ls entityliving, ls entityliving1) {
+    public boolean a(ItemInstance itemstack, LivingEntity entityliving, LivingEntity entityliving1) {
         return false;
     }
 
-    public boolean a(ItemInstance itemstack, int i, int j, int k, int l, ls entityliving) {
+    public boolean a(ItemInstance itemstack, int i, int j, int k, int l, LivingEntity entityliving) {
         return false;
     }
 
@@ -114,7 +118,7 @@ public class MixinItemType {
         return false;
     }
 
-    public void a(ItemInstance itemstack, ls entityliving) {
+    public void a(ItemInstance itemstack, LivingEntity entityliving) {
     }
 
     public MixinItemType h() {

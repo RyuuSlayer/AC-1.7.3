@@ -1,23 +1,30 @@
-package io.github.ryuu.adventurecraft.overrides;
+package io.github.ryuu.adventurecraft.mixin;
 
 import java.util.Random;
 
 import io.github.ryuu.adventurecraft.items.IItemReload;
+import io.github.ryuu.adventurecraft.overrides.*;
 import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.TextRenderer;
 import net.minecraft.client.render.entity.EntityRenderer;
+import net.minecraft.client.render.entity.ItemRenderer;
+import net.minecraft.client.texture.TextureManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import org.lwjgl.opengl.GL11;
+import org.spongepowered.asm.mixin.Mixin;
 
-public class ItemRenderer extends EntityRenderer {
+@Mixin(ItemRenderer.class)
+public class MixinItemRenderer extends EntityRenderer {
     private final TileRenderer e = new TileRenderer();
 
     private final Random f = new Random();
 
     public boolean a = true;
 
-    public void a(hl entityitem, double d, double d1, double d2, float f, float f1) {
+    public void a(ItemEntity entityitem, double d, double d1, double d2, float f, float f1) {
         this.f.setSeed(187L);
         ItemInstance itemstack = entityitem.a;
         GL11.glPushMatrix();
@@ -107,7 +114,7 @@ public class ItemRenderer extends EntityRenderer {
         GL11.glPopMatrix();
     }
 
-    public void a(sj fontrenderer, ji renderengine, int i, int j, int k, int l, int i1) {
+    public void a(TextRenderer fontrenderer, TextureManager renderengine, int i, int j, int k, int l, int i1) {
         if (i < 256 && TileRenderer.a(Tile.m[i].b())) {
             int textureNum = Tile.m[i].getTextureNum();
             if (textureNum == 0) {
@@ -158,13 +165,13 @@ public class ItemRenderer extends EntityRenderer {
         GL11.glEnable(2884);
     }
 
-    public void a(sj fontrenderer, ji renderengine, ItemInstance itemstack, int i, int j) {
+    public void a(TextRenderer fontrenderer, TextureManager renderengine, ItemInstance itemstack, int i, int j) {
         if (itemstack == null || ItemType.c[itemstack.c] == null)
             return;
         a(fontrenderer, renderengine, itemstack.c, itemstack.i(), itemstack.b(), i, j);
     }
 
-    public void b(sj fontrenderer, ji renderengine, ItemInstance itemstack, int i, int j) {
+    public void b(TextRenderer fontrenderer, TextureManager renderengine, ItemInstance itemstack, int i, int j) {
         if (itemstack == null || ItemType.c[itemstack.c] == null)
             return;
         if (itemstack.a > 1) {
@@ -225,7 +232,7 @@ public class ItemRenderer extends EntityRenderer {
     }
 
     public void a(Entity entity, double d, double d1, double d2, float f, float f1) {
-        a((hl) entity, d, d1, d2, f, f1);
+        a((ItemEntity) entity, d, d1, d2, f, f1);
     }
 
     public float scale = 1.0F;

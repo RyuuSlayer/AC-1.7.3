@@ -8,6 +8,8 @@
     "MixinBiome",
     "MixinClientPlayer",
     "MixinDeathScreen",
+    "MixinItemInstance",
+    "MixinItemRenderer",
     "MixinItemType",
     "MixinLevel"
   ],

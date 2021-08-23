@@ -1,14 +1,19 @@
-package io.github.ryuu.adventurecraft.overrides;
+package io.github.ryuu.adventurecraft.mixin;
 
 import io.github.ryuu.adventurecraft.items.Items;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
+import net.minecraft.stat.Stats;
+import net.minecraft.tile.Tile;
 import net.minecraft.util.io.CompoundTag;
+import org.spongepowered.asm.mixin.Mixin;
 
-public final class ItemInstance {
+@Mixin(ItemInstance.class)
+public final class MixinItemInstance {
     public int a;
 
     public int b;
@@ -23,31 +28,31 @@ public final class ItemInstance {
 
     public boolean justReloaded;
 
-    public ItemInstance(Tile block) {
+    public MixinItemInstance(Tile block) {
         this(block, 1);
     }
 
-    public ItemInstance(Tile block, int i) {
+    public MixinItemInstance(Tile block, int i) {
         this(block.bn, i, 0);
     }
 
-    public ItemInstance(Tile block, int i, int j) {
+    public MixinItemInstance(Tile block, int i, int j) {
         this(block.bn, i, j);
     }
 
-    public ItemInstance(ItemType item) {
+    public MixinItemInstance(ItemType item) {
         this(item.bf, 1, 0);
     }
 
-    public ItemInstance(ItemType item, int i) {
+    public MixinItemInstance(ItemType item, int i) {
         this(item.bf, i, 0);
     }
 
-    public ItemInstance(ItemType item, int i, int j) {
+    public MixinItemInstance(ItemType item, int i, int j) {
         this(item.bf, i, j);
     }
 
-    public ItemInstance(int i, int j, int k) {
+    public MixinItemInstance(int i, int j, int k) {
         this.isReloading = false;
         this.justReloaded = false;
         this.a = 0;
@@ -56,7 +61,7 @@ public final class ItemInstance {
         this.d = k;
     }
 
-    public ItemInstance(CompoundTag nbttagcompound) {
+    public MixinItemInstance(CompoundTag nbttagcompound) {
         this.isReloading = false;
         this.justReloaded = false;
         this.a = 0;
@@ -79,7 +84,7 @@ public final class ItemInstance {
     public boolean a(Player entityplayer, Level world, int i, int j, int k, int l) {
         boolean flag = a().a(this, entityplayer, world, i, j, k, l);
         if (flag)
-            entityplayer.a(jl.E[this.c], 1);
+            entityplayer.a(Stats.useItem[this.c], 1);
         return flag;
     }
 
@@ -95,7 +100,7 @@ public final class ItemInstance {
         return a().a(this, world, entityplayer);
     }
 
-    public nu a(CompoundTag nbttagcompound) {
+    public CompoundTag a(CompoundTag nbttagcompound) {
         nbttagcompound.put("id", (short) this.c);
         nbttagcompound.put("Count", this.a);
         nbttagcompound.put("Damage", (short) this.d);
@@ -103,9 +108,9 @@ public final class ItemInstance {
     }
 
     public void b(CompoundTag nbttagcompound) {
-        this.c = nbttagcompound.d("id");
-        this.a = nbttagcompound.e("Count");
-        this.d = nbttagcompound.d("Damage");
+        this.c = nbttagcompound.getShort("id");
+        this.a = nbttagcompound.getInt("Count");
+        this.d = nbttagcompound.getShort("Damage");
         if (this.c == Items.boomerang.bf)
             this.d = 0;
     }
@@ -146,13 +151,13 @@ public final class ItemInstance {
         return ItemType.c[this.c].f();
     }
 
-    public void a(int i, sn entity) {
+    public void a(int i, Entity entity) {
         if (!e())
             return;
         this.d += i;
         if (this.d > j()) {
             if (entity instanceof Player)
-                ((Player) entity).a(jl.F[this.c], 1);
+                ((Player) entity).a(Stats.breakItem[this.c], 1);
             this.a--;
             if (this.a < 0)
                 this.a = 0;
@@ -161,15 +166,15 @@ public final class ItemInstance {
     }
 
     public void a(LivingEntity entityliving, Player entityplayer) {
-        boolean flag = ItemType.c[this.c].a(this, entityliving, entityplayer);
+        boolean flag = ItemType.byId[this.c].a(this, entityliving, entityplayer);
         if (flag)
-            entityplayer.a(jl.E[this.c], 1);
+            entityplayer.a(Stats.useItem[this.c], 1);
     }
 
     public void a(int i, int j, int k, int l, Player entityplayer) {
         boolean flag = ItemType.c[this.c].a(this, i, j, k, l, entityplayer);
         if (flag)
-            entityplayer.a(jl.E[this.c], 1);
+            entityplayer.a(Stats.useItem[this.c], 1);
     }
 
     public int a(Entity entity) {
@@ -223,14 +228,14 @@ public final class ItemInstance {
         return this.a + "x" + ItemType.c[this.c].a() + "@" + this.d;
     }
 
-    public void a(Level world, sn entity, int i, boolean flag) {
+    public void a(Level world, Entity entity, int i, boolean flag) {
         if (this.b > 0)
             this.b--;
         ItemType.c[this.c].a(this, world, entity, i, flag);
     }
 
     public void b(Level world, Player entityplayer) {
-        entityplayer.a(jl.D[this.c], this.a);
+        entityplayer.a(Stats.field_809[this.c], this.a);
         ItemType.c[this.c].b(this, world, entityplayer);
     }
 
