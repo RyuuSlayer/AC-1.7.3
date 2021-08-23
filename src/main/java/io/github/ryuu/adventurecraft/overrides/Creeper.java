@@ -1,6 +1,8 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.Monster;
+import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 import net.minecraft.util.io.CompoundTag;
 
@@ -78,7 +80,7 @@ public class Creeper extends Monster {
             b(ItemType.bd.bf + this.bs.nextInt(2), 1);
     }
 
-    protected void a(sn entity, float f) {
+    protected void a(Entity entity, float f) {
         if (this.aI.B)
             return;
         int i = v();

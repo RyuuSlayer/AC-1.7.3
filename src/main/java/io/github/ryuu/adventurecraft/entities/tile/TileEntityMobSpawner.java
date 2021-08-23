@@ -7,7 +7,6 @@ import java.util.Random;
 import io.github.ryuu.adventurecraft.entities.EntityLivingScript;
 import io.github.ryuu.adventurecraft.entities.EntitySkeletonSword;
 import io.github.ryuu.adventurecraft.items.ItemCursor;
-import io.github.ryuu.adventurecraft.overrides.ItemType;
 import io.github.ryuu.adventurecraft.overrides.Tile;
 import io.github.ryuu.adventurecraft.scripting.ScopeTag;
 import io.github.ryuu.adventurecraft.scripting.ScriptEntity;
@@ -19,6 +18,7 @@ import net.minecraft.entity.animal.Wolf;
 import net.minecraft.entity.monster.Skeleton;
 import net.minecraft.entity.monster.Slime;
 import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
 import net.minecraft.util.io.CompoundTag;
 import org.mozilla.javascript.Scriptable;
 

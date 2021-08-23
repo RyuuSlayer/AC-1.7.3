@@ -5,6 +5,9 @@ import java.util.Random;
 import io.github.ryuu.adventurecraft.items.IItemReload;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.entity.EntityRenderer;
+import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
 import org.lwjgl.opengl.GL11;
 
 public class ItemRenderer extends EntityRenderer {
@@ -16,7 +19,7 @@ public class ItemRenderer extends EntityRenderer {
 
     public void a(hl entityitem, double d, double d1, double d2, float f, float f1) {
         this.f.setSeed(187L);
-        iz itemstack = entityitem.a;
+        ItemInstance itemstack = entityitem.a;
         GL11.glPushMatrix();
         float f2 = in.a((entityitem.b + f1) / 10.0F + entityitem.d) * 0.1F + 0.1F;
         float f3 = ((entityitem.b + f1) / 20.0F + entityitem.d) * 57.29578F;
@@ -155,13 +158,13 @@ public class ItemRenderer extends EntityRenderer {
         GL11.glEnable(2884);
     }
 
-    public void a(sj fontrenderer, ji renderengine, iz itemstack, int i, int j) {
+    public void a(sj fontrenderer, ji renderengine, ItemInstance itemstack, int i, int j) {
         if (itemstack == null || ItemType.c[itemstack.c] == null)
             return;
         a(fontrenderer, renderengine, itemstack.c, itemstack.i(), itemstack.b(), i, j);
     }
 
-    public void b(sj fontrenderer, ji renderengine, iz itemstack, int i, int j) {
+    public void b(sj fontrenderer, ji renderengine, ItemInstance itemstack, int i, int j) {
         if (itemstack == null || ItemType.c[itemstack.c] == null)
             return;
         if (itemstack.a > 1) {
@@ -221,7 +224,7 @@ public class ItemRenderer extends EntityRenderer {
         tessellator.a();
     }
 
-    public void a(sn entity, double d, double d1, double d2, float f, float f1) {
+    public void a(Entity entity, double d, double d1, double d2, float f, float f1) {
         a((hl) entity, d, d1, d2, f, f1);
     }
 

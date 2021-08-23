@@ -1,8 +1,12 @@
 package io.github.ryuu.adventurecraft.overrides;
 
-import io.github.ryuu.adventurecraft.mixin.Level;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.Vec3f;
 
@@ -208,16 +212,16 @@ public class by extends Entity {
         e(this.aM, this.aN, this.aO);
     }
 
-    public void b(nu nbttagcompound) {
-        nbttagcompound.a("xTile", (short) this.b);
-        nbttagcompound.a("yTile", (short) this.c);
-        nbttagcompound.a("zTile", (short) this.d);
-        nbttagcompound.a("inTile", (byte) this.e);
-        nbttagcompound.a("shake", (byte) this.a);
-        nbttagcompound.a("inGround", (byte) (this.f ? 1 : 0));
+    public void b(CompoundTag nbttagcompound) {
+        nbttagcompound.put("xTile", (short) this.b);
+        nbttagcompound.put("yTile", (short) this.c);
+        nbttagcompound.put("zTile", (short) this.d);
+        nbttagcompound.put("inTile", (byte) this.e);
+        nbttagcompound.put("shake", (byte) this.a);
+        nbttagcompound.put("inGround", (byte) (this.f ? 1 : 0));
     }
 
-    public void a(nu nbttagcompound) {
+    public void a(CompoundTag nbttagcompound) {
         this.b = nbttagcompound.d("xTile");
         this.c = nbttagcompound.d("yTile");
         this.d = nbttagcompound.d("zTile");
@@ -226,8 +230,8 @@ public class by extends Entity {
         this.f = (nbttagcompound.c("inGround") == 1);
     }
 
-    public void b(gs entityplayer) {
-        if (this.f && this.g == entityplayer && this.a <= 0 && entityplayer.c.a(new iz(ItemType.j, 1))) {
+    public void b(Player entityplayer) {
+        if (this.f && this.g == entityplayer && this.a <= 0 && entityplayer.c.a(new ItemInstance(ItemType.j, 1))) {
             this.aI.a(this, "random.pop", 0.2F, ((this.bs.nextFloat() - this.bs.nextFloat()) * 0.7F + 1.0F) * 2.0F);
             entityplayer.b(this, 1);
             K();

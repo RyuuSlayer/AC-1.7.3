@@ -2,7 +2,10 @@ package io.github.ryuu.adventurecraft.overrides;
 
 import io.github.ryuu.adventurecraft.entities.EntityArrowBomb;
 import io.github.ryuu.adventurecraft.items.Items;
+import io.github.ryuu.adventurecraft.mixin.MixinItemType;
 import io.github.ryuu.adventurecraft.util.DebugMode;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
 
 import java.util.Random;
@@ -69,7 +72,7 @@ public class xq extends rw {
         return this.bm;
     }
 
-    public boolean a(Level world, int i, int j, int k, gs entityplayer) {
+    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
         if (!DebugMode.active)
             return false;
         if (world.B)
@@ -93,25 +96,25 @@ public class xq extends rw {
             i1 = -1;
         }
         Dispenser tileentitydispenser = (Dispenser) world.b(i, j, k);
-        iz itemstack = tileentitydispenser.b();
+        ItemInstance itemstack = tileentitydispenser.b();
         double d = i + i1 * 0.6D + 0.5D;
         double d1 = j + 0.5D;
         double d2 = k + j1 * 0.6D + 0.5D;
         if (itemstack == null) {
             world.e(1001, i, j, k, 0);
         } else {
-            if (itemstack.c == ItemType.j.bf) {
+            if (itemstack.c == MixinItemType.j.bf) {
                 sl entityarrow = new sl(world, d, d1, d2);
                 entityarrow.a(i1, 0.10000000149011612D, j1, 1.1F, 6.0F);
                 entityarrow.a = true;
                 world.b((sn) entityarrow);
                 world.e(1002, i, j, k, 0);
-            } else if (itemstack.c == ItemType.aN.bf) {
+            } else if (itemstack.c == MixinItemType.aN.bf) {
                 vv entityegg = new vv(world, d, d1, d2);
                 entityegg.a(i1, 0.10000000149011612D, j1, 1.1F, 6.0F);
                 world.b((sn) entityegg);
                 world.e(1002, i, j, k, 0);
-            } else if (itemstack.c == ItemType.aB.bf) {
+            } else if (itemstack.c == MixinItemType.aB.bf) {
                 by entitysnowball = new by(world, d, d1, d2);
                 entitysnowball.a(i1, 0.10000000149011612D, j1, 1.1F, 6.0F);
                 world.b((sn) entitysnowball);
@@ -169,7 +172,7 @@ public class xq extends rw {
     public void b(Level world, int i, int j, int k) {
         Dispenser tileentitydispenser = (Dispenser) world.b(i, j, k);
         for (int l = 0; l < tileentitydispenser.a(); l++) {
-            iz itemstack = tileentitydispenser.f_(l);
+            ItemInstance itemstack = tileentitydispenser.f_(l);
             if (itemstack != null) {
                 float f = this.a.nextFloat() * 0.8F + 0.1F;
                 float f1 = this.a.nextFloat() * 0.8F + 0.1F;

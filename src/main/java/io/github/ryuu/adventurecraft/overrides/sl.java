@@ -1,5 +1,12 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import io.github.ryuu.adventurecraft.blocks.Blocks;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
+import net.minecraft.util.io.CompoundTag;
+
 import java.util.List;
 
 public class sl extends sn {
@@ -27,7 +34,7 @@ public class sl extends sn {
 
     private final int attackStrength;
 
-    public sl(fd world) {
+    public sl(Level world) {
         super(world);
         this.d = -1;
         this.e = -1;
@@ -42,7 +49,7 @@ public class sl extends sn {
         this.attackStrength = 2;
     }
 
-    public sl(fd world, double d, double d1, double d2) {
+    public sl(Level world, double d, double d1, double d2) {
         super(world);
         this.d = -1;
         this.e = -1;
@@ -59,7 +66,7 @@ public class sl extends sn {
         this.attackStrength = 2;
     }
 
-    public sl(fd world, ls entityliving) {
+    public sl(Level world, ls entityliving) {
         super(world);
         this.d = -1;
         this.e = -1;
@@ -71,7 +78,7 @@ public class sl extends sn {
         this.b = 0;
         this.k = 0;
         this.c = entityliving;
-        this.a = entityliving instanceof gs;
+        this.a = entityliving instanceof Player;
         b(0.5F, 0.5F);
         c(entityliving.aM, entityliving.aN + entityliving.w(), entityliving.aO, entityliving.aS, entityliving.aT);
         this.aM -= (in.b(this.aS / 180.0F * 3.141593F) * 0.16F);
@@ -86,7 +93,7 @@ public class sl extends sn {
         this.attackStrength = 2;
     }
 
-    public sl(fd world, ls entityliving, int damage) {
+    public sl(Level world, ls entityliving, int damage) {
         super(world);
         this.d = -1;
         this.e = -1;
@@ -98,7 +105,7 @@ public class sl extends sn {
         this.b = 0;
         this.k = 0;
         this.c = entityliving;
-        this.a = entityliving instanceof gs;
+        this.a = entityliving instanceof Player;
         b(0.5F, 0.5F);
         c(entityliving.aM, entityliving.aN + entityliving.w(), entityliving.aO, entityliving.aS, entityliving.aT);
         this.aM -= (in.b(this.aS / 180.0F * 3.141593F) * 0.16F);
@@ -160,7 +167,7 @@ public class sl extends sn {
             this.aV = this.aT = (float) (Math.atan2(this.aQ, f) * 180.0D / 3.1415927410125732D);
         }
         int i = this.aI.a(this.d, this.e, this.f);
-        if (i > 0 && i != AC_Blocks.clipBlock.bn && !LadderTile.isLadderID(i)) {
+        if (i > 0 && i != Blocks.clipBlock.bn && !LadderTile.isLadderID(i)) {
             Tile.m[i].a((xp) this.aI, this.d, this.e, this.f);
             eq axisalignedbb = Tile.m[i].e(this.aI, this.d, this.e, this.f);
             if (axisalignedbb != null && axisalignedbb.a(bt.b(this.aM, this.aN, this.aO)))
@@ -278,18 +285,18 @@ public class sl extends sn {
         }
     }
 
-    public void b(nu nbttagcompound) {
-        nbttagcompound.a("xTile", (short) this.d);
-        nbttagcompound.a("yTile", (short) this.e);
-        nbttagcompound.a("zTile", (short) this.f);
-        nbttagcompound.a("inTile", (byte) this.g);
-        nbttagcompound.a("inData", (byte) this.h);
-        nbttagcompound.a("shake", (byte) this.b);
-        nbttagcompound.a("inGround", (byte) (this.i ? 1 : 0));
-        nbttagcompound.a("player", this.a);
+    public void b(CompoundTag nbttagcompound) {
+        nbttagcompound.put("xTile", (short) this.d);
+        nbttagcompound.put("yTile", (short) this.e);
+        nbttagcompound.put("zTile", (short) this.f);
+        nbttagcompound.put("inTile", (byte) this.g);
+        nbttagcompound.put("inData", (byte) this.h);
+        nbttagcompound.put("shake", (byte) this.b);
+        nbttagcompound.put("inGround", (byte) (this.i ? 1 : 0));
+        nbttagcompound.put("player", this.a);
     }
 
-    public void a(nu nbttagcompound) {
+    public void a(CompoundTag nbttagcompound) {
         this.d = nbttagcompound.d("xTile");
         this.e = nbttagcompound.d("yTile");
         this.f = nbttagcompound.d("zTile");
@@ -300,10 +307,10 @@ public class sl extends sn {
         this.a = nbttagcompound.m("player");
     }
 
-    public void b(gs entityplayer) {
+    public void b(Player entityplayer) {
         if (this.aI.B)
             return;
-        if (this.i && this.a && this.b <= 0 && entityplayer.c.a(new iz(ItemType.j, 1))) {
+        if (this.i && this.a && this.b <= 0 && entityplayer.c.a(new ItemInstance(ItemType.j, 1))) {
             this.aI.a(this, "random.pop", 0.2F, ((this.bs.nextFloat() - this.bs.nextFloat()) * 0.7F + 1.0F) * 2.0F);
             entityplayer.b(this, 1);
             K();

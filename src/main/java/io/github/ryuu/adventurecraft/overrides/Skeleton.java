@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.overrides;
 
-import net.minecraft.entity.monster.Monster;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 import net.minecraft.util.io.CompoundTag;
 
@@ -8,7 +9,7 @@ public class Skeleton extends Monster {
     public Skeleton(Level world) {
         super(world);
         this.O = "/mob/skeleton.png";
-        this.heldItem = new iz(ItemType.i, 1);
+        this.heldItem = new ItemInstance(ItemType.i, 1);
     }
 
     protected String g() {

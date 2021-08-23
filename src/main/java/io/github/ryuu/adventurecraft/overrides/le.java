@@ -1,5 +1,9 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
+
 import java.util.Random;
 
 public class le extends Tile {
@@ -39,12 +43,12 @@ public class le extends Tile {
         return 7;
     }
 
-    public eq f(fd world, int i, int j, int k) {
+    public eq f(Level world, int i, int j, int k) {
         a((xp) world, i, j, k);
         return super.f(world, i, j, k);
     }
 
-    public eq e(fd world, int i, int j, int k) {
+    public eq e(Level world, int i, int j, int k) {
         a((xp) world, i, j, k);
         return super.e(world, i, j, k);
     }
@@ -66,11 +70,11 @@ public class le extends Tile {
             a(0.0F, 0.0F, 0.0F, f, 1.0F, 1.0F);
     }
 
-    public void b(fd world, int i, int j, int k, gs entityplayer) {
+    public void b(Level world, int i, int j, int k, Player entityplayer) {
         a(world, i, j, k, entityplayer);
     }
 
-    public boolean a(fd world, int i, int j, int k, gs entityplayer) {
+    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
         if (this.bA == ln.f)
             return true;
         int l = world.e(i, j, k);
@@ -87,7 +91,7 @@ public class le extends Tile {
         return true;
     }
 
-    public void a(fd world, int i, int j, int k, boolean flag) {
+    public void a(Level world, int i, int j, int k, boolean flag) {
         int l = world.e(i, j, k);
         if ((l & 0x8) != 0) {
             if (world.a(i, j - 1, k) == this.bn)
@@ -104,7 +108,7 @@ public class le extends Tile {
         world.a(null, 1003, i, j, k, 0);
     }
 
-    public void b(fd world, int i, int j, int k, int l) {
+    public void b(Level world, int i, int j, int k, int l) {
         int i1 = world.e(i, j, k);
         if ((i1 & 0x8) != 0) {
             if (world.a(i, j - 1, k) != this.bn)
@@ -141,7 +145,7 @@ public class le extends Tile {
         return ItemType.at.bf;
     }
 
-    public vf a(fd world, int i, int j, int k, bt vec3d, bt vec3d1) {
+    public vf a(Level world, int i, int j, int k, bt vec3d, bt vec3d1) {
         a((xp) world, i, j, k);
         int m = world.e(i, j, k);
         if (this.bA == ln.f && (m & 0x8) == 8)
@@ -203,7 +207,7 @@ public class le extends Tile {
         return i & 0x3;
     }
 
-    public boolean a(fd world, int i, int j, int k) {
+    public boolean a(Level world, int i, int j, int k) {
         if (j >= 127)
             return false;
         return (world.h(i, j - 1, k) && super.a(world, i, j, k) && super.a(world, i, j + 1, k));

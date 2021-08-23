@@ -1,5 +1,12 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
+import net.minecraft.util.io.CompoundTag;
+
 import java.util.List;
 
 public class ya extends uz {
@@ -7,7 +14,7 @@ public class ya extends uz {
 
     private int b;
 
-    public ya(fd world) {
+    public ya(Level world) {
         super(world);
         this.a = 0;
         this.b = 0;
@@ -15,7 +22,7 @@ public class ya extends uz {
         this.aB = 0.5F;
         this.c = 5;
         this.bC = true;
-        this.heldItem = new iz(ItemType.E, 1);
+        this.heldItem = new ItemInstance(ItemType.E, 1);
     }
 
     public void w_() {
@@ -29,12 +36,12 @@ public class ya extends uz {
         return (this.aI.q > 0 && this.aI.a(this.aW) && this.aI.a((sn) this, this.aW).size() == 0 && !this.aI.b(this.aW));
     }
 
-    public void b(nu nbttagcompound) {
+    public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
         nbttagcompound.a("Anger", (short) this.a);
     }
 
-    public void a(nu nbttagcompound) {
+    public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
         this.a = nbttagcompound.d("Anger");
     }
@@ -50,10 +57,10 @@ public class ya extends uz {
     }
 
     public boolean a(sn entity, int i) {
-        if (entity instanceof gs) {
-            List<sn> list = this.aI.b((sn) this, this.aW.b(32.0D, 32.0D, 32.0D));
+        if (entity instanceof Player) {
+            List<Entity> list = this.aI.b((Entity) this, this.aW.b(32.0D, 32.0D, 32.0D));
             for (int j = 0; j < list.size(); j++) {
-                sn entity1 = list.get(j);
+                Entity entity1 = list.get(j);
                 if (entity1 instanceof ya) {
                     ya entitypigzombie = (ya) entity1;
                     entitypigzombie.d(entity);

@@ -3,8 +3,14 @@ package io.github.ryuu.adventurecraft.overrides;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
+import net.minecraft.util.io.CompoundTag;
 
-public class lx extends sn {
+public class lx extends Entity {
     private int d;
 
     private int e;
@@ -45,7 +51,7 @@ public class lx extends sn {
 
     private double t;
 
-    public lx(fd world) {
+    public lx(Level world) {
         super(world);
         this.d = -1;
         this.e = -1;
@@ -60,13 +66,13 @@ public class lx extends sn {
         this.bM = true;
     }
 
-    public lx(fd world, double d, double d1, double d2) {
+    public lx(Level world, double d, double d1, double d2) {
         this(world);
         e(d, d1, d2);
         this.bM = true;
     }
 
-    public lx(fd world, gs entityplayer) {
+    public lx(Level world, Player entityplayer) {
         super(world);
         this.d = -1;
         this.e = -1;
@@ -143,7 +149,7 @@ public class lx extends sn {
 
     public void w_() {
         if (this.b == null) {
-            this.b = (gs) Minecraft.minecraftInstance.h;
+            this.b = (Player) Minecraft.minecraftInstance.h;
             Minecraft.minecraftInstance.h.D = this;
         }
         super.w_();
@@ -162,7 +168,7 @@ public class lx extends sn {
             return;
         }
         if (!this.aI.B) {
-            iz itemstack = this.b.G();
+            ItemInstance itemstack = this.b.G();
             if (this.b.be || !this.b.W() || itemstack == null || itemstack.a() != ItemType.aP || g(this.b) > 1024.0D) {
                 K();
                 this.b.D = null;
@@ -294,16 +300,16 @@ public class lx extends sn {
         e(this.aM, this.aN, this.aO);
     }
 
-    public void b(nu nbttagcompound) {
-        nbttagcompound.a("xTile", (short) this.d);
-        nbttagcompound.a("yTile", (short) this.e);
-        nbttagcompound.a("zTile", (short) this.f);
-        nbttagcompound.a("inTile", (byte) this.g);
-        nbttagcompound.a("shake", (byte) this.a);
-        nbttagcompound.a("inGround", (byte) (this.h ? 1 : 0));
+    public void b(CompoundTag nbttagcompound) {
+        nbttagcompound.put("xTile", (short) this.d);
+        nbttagcompound.put("yTile", (short) this.e);
+        nbttagcompound.put("zTile", (short) this.f);
+        nbttagcompound.put("inTile", (byte) this.g);
+        nbttagcompound.put("shake", (byte) this.a);
+        nbttagcompound.put("inGround", (byte) (this.h ? 1 : 0));
     }
 
-    public void a(nu nbttagcompound) {
+    public void a(CompoundTag nbttagcompound) {
         this.d = nbttagcompound.d("xTile");
         this.e = nbttagcompound.d("yTile");
         this.f = nbttagcompound.d("zTile");

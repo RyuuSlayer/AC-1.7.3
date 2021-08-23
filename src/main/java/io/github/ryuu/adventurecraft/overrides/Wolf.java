@@ -1,9 +1,13 @@
 package io.github.ryuu.adventurecraft.overrides;
 
-import io.github.ryuu.adventurecraft.mixin.Level;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.animal.Animal;
+import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
 import net.minecraft.item.food.FoodItem;
+import net.minecraft.level.Level;
+import net.minecraft.util.io.CompoundTag;
 
 import java.util.Iterator;
 import java.util.List;
@@ -54,18 +58,18 @@ public class Wolf extends Animal {
         return super.q_();
     }
 
-    public void b(nu nbttagcompound) {
+    public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.a("Angry", C());
-        nbttagcompound.a("Sitting", B());
+        nbttagcompound.put("Angry", C());
+        nbttagcompound.put("Sitting", B());
         if (A() == null) {
-            nbttagcompound.a("Owner", "");
+            nbttagcompound.put("Owner", "");
         } else {
-            nbttagcompound.a("Owner", A());
+            nbttagcompound.put("Owner", A());
         }
     }
 
-    public void a(nu nbttagcompound) {
+    public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
         c(nbttagcompound.m("Angry"));
         b(nbttagcompound.m("Sitting"));
@@ -110,7 +114,7 @@ public class Wolf extends Animal {
     protected void f_() {
         super.f_();
         if (!this.e && !F() && D() && this.aH == null) {
-            gs entityplayer = this.aI.a(A());
+            Player entityplayer = this.aI.a(A());
             if (entityplayer != null) {
                 float f = entityplayer.f((sn) this);
                 if (f > 5.0F)
@@ -119,7 +123,7 @@ public class Wolf extends Animal {
                 b(true);
             }
         } else if (this.d == null && !F() && !D() && this.aI.r.nextInt(100) == 0) {
-            List<sn> list = this.aI.a(dl.class, eq.b(this.aM, this.aN, this.aO, this.aM + 1.0D, this.aN + 1.0D, this.aO + 1.0D).b(16.0D, 4.0D, 16.0D));
+            List<Entity> list = this.aI.a(dl.class, eq.b(this.aM, this.aN, this.aO, this.aM + 1.0D, this.aN + 1.0D, this.aO + 1.0D).b(16.0D, 4.0D, 16.0D));
             if (!list.isEmpty())
                 c(list.get(this.aI.r.nextInt(list.size())));
         }
@@ -134,8 +138,8 @@ public class Wolf extends Animal {
         this.a = false;
         if (Y() && !F() && !C()) {
             sn entity = Z();
-            if (entity instanceof gs) {
-                gs entityplayer = (gs) entity;
+            if (entity instanceof Player) {
+                Player entityplayer = (Player) entity;
                 ItemInstance itemstack = entityplayer.c.b();
                 if (itemstack != null)
                     if (!D() && itemstack.c == ItemType.aV.bf) {
@@ -170,7 +174,7 @@ public class Wolf extends Animal {
             this.i = 0.0F;
         } else if ((this.f || this.g) && this.g) {
             if (this.h == 0.0F)
-                this.aI.a((sn) this, "mob.wolf.shake", k(), (this.bs.nextFloat() - this.bs.nextFloat()) * 0.2F + 1.0F);
+                this.aI.a((Entity) this, "mob.wolf.shake", k(), (this.bs.nextFloat() - this.bs.nextFloat()) * 0.2F + 1.0F);
             this.i = this.h;
             this.h += 0.05F;
             if (this.i >= 2.0F) {
@@ -246,13 +250,13 @@ public class Wolf extends Animal {
         return (B() || this.g);
     }
 
-    public boolean a(sn entity, int i) {
+    public boolean a(Entity entity, int i) {
         b(false);
-        if (entity != null && !(entity instanceof gs) && !(entity instanceof sl))
+        if (entity != null && !(entity instanceof Player) && !(entity instanceof sl))
             i = (i + 1) / 2;
         if (super.a(entity, i)) {
             if (!D() && !C()) {
-                if (entity instanceof gs) {
+                if (entity instanceof Player) {
                     c(true);
                     this.d = entity;
                 }
@@ -266,13 +270,13 @@ public class Wolf extends Animal {
                         Wolf entitywolf = (Wolf) entity1;
                         if (!entitywolf.D() && entitywolf.d == null) {
                             entitywolf.d = entity;
-                            if (entity instanceof gs)
+                            if (entity instanceof Player)
                                 entitywolf.c(true);
                         }
                     }
                 }
             } else if (entity != this && entity != null) {
-                if (D() && entity instanceof gs && ((gs) entity).l.equalsIgnoreCase(A()))
+                if (D() && entity instanceof Player && ((Player) entity).l.equalsIgnoreCase(A()))
                     return true;
                 this.d = entity;
             }
@@ -304,11 +308,11 @@ public class Wolf extends Animal {
                 byte0 = 4;
             if (this.attackStrength != -1)
                 byte0 = this.attackStrength;
-            entity.a((sn) this, byte0);
+            entity.a((Entity) this, byte0);
         }
     }
 
-    public boolean a(gs entityplayer) {
+    public boolean a(Player entityplayer) {
         ItemInstance itemstack = entityplayer.c.b();
         if (!D()) {
             if (itemstack != null && itemstack.c == ItemType.aV.bf && !C()) {

@@ -1,6 +1,8 @@
 package io.github.ryuu.adventurecraft.overrides;
 
-import io.github.ryuu.adventurecraft.mixin.Level;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
 
 import java.util.Random;
 
@@ -68,10 +70,10 @@ public class bk extends nr {
         return Tile.z.bn;
     }
 
-    public void a(Level world, gs entityplayer, int i, int j, int k, int l) {
+    public void a(Level world, Player entityplayer, int i, int j, int k, int l) {
         if (!world.B && entityplayer.G() != null && (entityplayer.G()).c == ItemType.bc.bf) {
             entityplayer.a(jl.C[this.bn], 1);
-            a(world, i, j, k, new iz(Tile.L.bn, 1, l & 0x3));
+            a(world, i, j, k, new ItemInstance(Tile.L.bn, 1, l & 0x3));
         } else {
             super.a(world, entityplayer, i, j, k, l);
         }

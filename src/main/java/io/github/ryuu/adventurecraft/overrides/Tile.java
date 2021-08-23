@@ -2,7 +2,10 @@ package io.github.ryuu.adventurecraft.overrides;
 
 import io.github.ryuu.adventurecraft.blocks.BlockColor;
 import io.github.ryuu.adventurecraft.items.ItemSubtypes;
-import io.github.ryuu.adventurecraft.mixin.Level;
+import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
 import net.minecraft.stat.Stats;
 import net.minecraft.tile.*;
@@ -229,14 +232,14 @@ public class Tile {
     public void a(Level world, int i, int j, int k, int l, float f) {
     }
 
-    protected void a(Level world, int i, int j, int k, iz itemstack) {
+    protected void a(Level world, int i, int j, int k, ItemInstance itemstack) {
     }
 
     protected int b_(int i) {
         return 0;
     }
 
-    public float a(sn entity) {
+    public float a(Entity entity) {
         return this.bp / 5.0F;
     }
 

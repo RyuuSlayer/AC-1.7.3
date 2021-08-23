@@ -1,5 +1,11 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
+import net.minecraft.util.io.CompoundTag;
+
 public class uw extends ls implements ff {
     public float a;
 
@@ -9,7 +15,7 @@ public class uw extends ls implements ff {
 
     public int attackStrength;
 
-    public uw(fd world) {
+    public uw(Level world) {
         super(world);
         this.c = 0;
         this.O = "/mob/slime.png";
@@ -36,12 +42,12 @@ public class uw extends ls implements ff {
         return this.bD.a(16);
     }
 
-    public void b(nu nbttagcompound) {
+    public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.a("Size", v() - 1);
+        nbttagcompound.put("Size", v() - 1);
     }
 
-    public void a(nu nbttagcompound) {
+    public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
         e(nbttagcompound.e("Size") + 1);
     }
@@ -68,7 +74,7 @@ public class uw extends ls implements ff {
 
     protected void f_() {
         X();
-        gs entityplayer = this.aI.a((sn) this, 16.0D);
+        Player entityplayer = this.aI.a((sn) this, 16.0D);
         if (entityplayer != null)
             a(entityplayer, 10.0F, 20.0F);
         if (this.aX && this.c-- <= 0) {
@@ -77,7 +83,7 @@ public class uw extends ls implements ff {
                 this.c /= 3;
             this.az = true;
             if (v() > 1)
-                this.aI.a((sn) this, "mob.slime", k(), ((this.bs.nextFloat() - this.bs.nextFloat()) * 0.2F + 1.0F) * 0.8F);
+                this.aI.a((Entity) this, "mob.slime", k(), ((this.bs.nextFloat() - this.bs.nextFloat()) * 0.2F + 1.0F) * 0.8F);
             this.a = 1.0F;
             this.aw = 1.0F - this.bs.nextFloat() * 2.0F;
             this.ax = (1 * v());
@@ -95,7 +101,7 @@ public class uw extends ls implements ff {
         super.K();
     }
 
-    public void b(gs entityplayer) {
+    public void b(Player entityplayer) {
         int i = v();
         int j = i;
         if (this.attackStrength != -1)

@@ -1,7 +1,10 @@
 package io.github.ryuu.adventurecraft.overrides;
 
-import io.github.ryuu.adventurecraft.mixin.Level;
 import io.github.ryuu.adventurecraft.util.DebugMode;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
 
 public class ck extends ItemType {
     private final int a;
@@ -12,7 +15,7 @@ public class ck extends ItemType {
         c(Tile.m[i + 256].a(2));
     }
 
-    public boolean a(iz itemstack, gs entityplayer, Level world, int i, int j, int k, int l) {
+    public boolean a(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
         if (!DebugMode.active)
             return false;
         if (world.a(i, j, k) == Tile.aT.bn) {
@@ -48,7 +51,7 @@ public class ck extends ItemType {
         return false;
     }
 
-    public String a(iz itemstack) {
+    public String a(ItemInstance itemstack) {
         return Tile.m[this.a].o();
     }
 

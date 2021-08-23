@@ -12,8 +12,10 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.Monster;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.projectile.Arrow;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 import net.minecraft.level.source.LevelSource;
 import net.minecraft.stat.Stat;
@@ -426,14 +428,14 @@ public abstract class Player extends LivingEntity {
 
     public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.a("Inventory", (AbstractTag) this.c.a(new ListTag()));
-        nbttagcompound.a("Dimension", this.m);
-        nbttagcompound.a("Sleeping", this.u);
-        nbttagcompound.a("SleepTimer", (short) this.a);
+        nbttagcompound.put("Inventory", (AbstractTag) this.c.a(new ListTag()));
+        nbttagcompound.put("Dimension", this.m);
+        nbttagcompound.put("Sleeping", this.u);
+        nbttagcompound.put("SleepTimer", (short) this.a);
         if (this.b != null) {
-            nbttagcompound.a("SpawnX", this.b.a);
-            nbttagcompound.a("SpawnY", this.b.b);
-            nbttagcompound.a("SpawnZ", this.b.c);
+            nbttagcompound.put("SpawnX", this.b.a);
+            nbttagcompound.put("SpawnY", this.b.b);
+            nbttagcompound.put("SpawnZ", this.b.c);
         }
         nbttagcompound.a("NumHeartPieces", this.numHeartPieces);
     }
@@ -464,7 +466,7 @@ public abstract class Player extends LivingEntity {
             return false;
         if (N())
             a(true, true, false);
-        if (entity instanceof Monster || entity instanceof sl) {
+        if (entity instanceof Monster || entity instanceof Arrow) {
             if (this.aI.q == 0)
                 i = 0;
             if (this.aI.q == 1)
@@ -475,8 +477,8 @@ public abstract class Player extends LivingEntity {
         if (i == 0)
             return false;
         Object obj = entity;
-        if (obj instanceof sl && ((sl) obj).c != null)
-            obj = ((sl) obj).c;
+        if (obj instanceof Arrow && ((Arrow) obj).c != null)
+            obj = ((Arrow) obj).c;
         if (obj instanceof LivingEntity)
             a((LivingEntity) obj, false);
         a(Stats.damageDealt, i);
@@ -489,7 +491,7 @@ public abstract class Player extends LivingEntity {
             return false;
         if (N())
             a(true, true, false);
-        if (entity instanceof Monster || entity instanceof sl) {
+        if (entity instanceof Monster || entity instanceof Arrow) {
             if (this.aI.q == 0)
                 i = 0;
             if (this.aI.q == 1)
@@ -500,8 +502,8 @@ public abstract class Player extends LivingEntity {
         if (i == 0)
             return false;
         Object obj = entity;
-        if (obj instanceof sl && ((sl) obj).c != null)
-            obj = ((sl) obj).c;
+        if (obj instanceof Arrow && ((Arrow) obj).c != null)
+            obj = ((Arrow) obj).c;
         if (obj instanceof LivingEntity)
             a((LivingEntity) obj, false);
         a(Stats.damageTaken, i);

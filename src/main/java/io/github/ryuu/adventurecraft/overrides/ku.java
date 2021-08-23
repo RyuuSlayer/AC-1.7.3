@@ -6,6 +6,7 @@ import javax.imageio.ImageIO;
 
 import io.github.ryuu.adventurecraft.util.Vec2;
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemType;
 
 public class ku extends TextureBinder {
     private final Minecraft g;

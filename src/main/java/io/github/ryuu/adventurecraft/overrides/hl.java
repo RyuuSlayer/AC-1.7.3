@@ -1,7 +1,14 @@
 package io.github.ryuu.adventurecraft.overrides;
 
-public class hl extends sn {
-    public iz a;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
+import net.minecraft.util.io.CompoundTag;
+
+public class hl extends Entity {
+    public ItemInstance a;
 
     private int e;
 
@@ -13,7 +20,7 @@ public class hl extends sn {
 
     public float d;
 
-    public hl(fd world, double d, double d1, double d2, iz itemstack) {
+    public hl(Level world, double d, double d1, double d2, ItemInstance itemstack) {
         super(world);
         this.b = 0;
         this.f = 5;
@@ -34,7 +41,7 @@ public class hl extends sn {
         return false;
     }
 
-    public hl(fd world) {
+    public hl(Level world) {
         super(world);
         this.b = 0;
         this.f = 5;
@@ -85,10 +92,10 @@ public class hl extends sn {
     }
 
     protected void a(int i) {
-        a((sn) null, i);
+        a(null, i);
     }
 
-    public boolean a(sn entity, int i) {
+    public boolean a(Entity entity, int i) {
         ai();
         this.f -= i;
         if (this.f <= 0)
@@ -96,20 +103,20 @@ public class hl extends sn {
         return false;
     }
 
-    public void b(nu nbttagcompound) {
-        nbttagcompound.a("Health", (short) (byte) this.f);
-        nbttagcompound.a("Age", (short) this.b);
-        nbttagcompound.a("Item", this.a.a(new nu()));
+    public void b(CompoundTag nbttagcompound) {
+        nbttagcompound.put("Health", (short) (byte) this.f);
+        nbttagcompound.put("Age", (short) this.b);
+        nbttagcompound.put("Item", this.a.a(new nu()));
     }
 
-    public void a(nu nbttagcompound) {
+    public void a(CompoundTag nbttagcompound) {
         this.f = nbttagcompound.d("Health") & 0xFF;
         this.b = nbttagcompound.d("Age");
-        nu nbttagcompound1 = nbttagcompound.k("Item");
-        this.a = new iz(nbttagcompound1);
+        CompoundTag nbttagcompound1 = nbttagcompound.k("Item");
+        this.a = new ItemInstance(nbttagcompound1);
     }
 
-    public void b(gs entityplayer) {
+    public void b(Player entityplayer) {
         if (this.aI.B)
             return;
         int i = this.a.a;

@@ -1,8 +1,10 @@
 package io.github.ryuu.adventurecraft.overrides;
 
-import io.github.ryuu.adventurecraft.mixin.Level;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.FlyingEntity;
 import net.minecraft.entity.MonsterEntityType;
+import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
 
 public class Ghast extends FlyingEntity implements MonsterEntityType {
     public int a;
@@ -13,7 +15,7 @@ public class Ghast extends FlyingEntity implements MonsterEntityType {
 
     public double d;
 
-    private sn g;
+    private Entity g;
 
     private int h;
 

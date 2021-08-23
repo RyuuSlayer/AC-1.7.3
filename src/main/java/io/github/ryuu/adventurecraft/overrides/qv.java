@@ -1,9 +1,15 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
+import net.minecraft.util.io.CompoundTag;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class qv extends sn {
+public class qv extends Entity {
     private final int f;
 
     public int a;
@@ -16,7 +22,7 @@ public class qv extends sn {
 
     public iq e;
 
-    public qv(fd world) {
+    public qv(Level world) {
         super(world);
         this.f = 0;
         this.a = 0;
@@ -24,7 +30,7 @@ public class qv extends sn {
         b(0.5F, 0.5F);
     }
 
-    public qv(fd world, int i, int j, int k, int l) {
+    public qv(Level world, int i, int j, int k, int l) {
         this(world);
         this.b = i;
         this.c = j;
@@ -44,7 +50,7 @@ public class qv extends sn {
         b(l);
     }
 
-    public qv(fd world, int i, int j, int k, int l, String s) {
+    public qv(Level world, int i, int j, int k, int l, String s) {
         this(world);
         this.b = i;
         this.c = j;
@@ -156,24 +162,24 @@ public class qv extends sn {
         return true;
     }
 
-    public boolean a(sn entity, int i) {
+    public boolean a(Entity entity, int i) {
         if (!this.be && !this.aI.B) {
             K();
             ai();
-            this.aI.b((sn) new hl(this.aI, this.aM, this.aN, this.aO, new iz(ItemType.aq)));
+            this.aI.b((sn) new hl(this.aI, this.aM, this.aN, this.aO, new ItemInstance(ItemType.aq)));
         }
         return true;
     }
 
-    public void b(nu nbttagcompound) {
-        nbttagcompound.a("Dir", (byte) this.a);
-        nbttagcompound.a("Motive", this.e.A);
-        nbttagcompound.a("TileX", this.b);
-        nbttagcompound.a("TileY", this.c);
-        nbttagcompound.a("TileZ", this.d);
+    public void b(CompoundTag nbttagcompound) {
+        nbttagcompound.put("Dir", (byte) this.a);
+        nbttagcompound.put("Motive", this.e.A);
+        nbttagcompound.put("TileX", this.b);
+        nbttagcompound.put("TileY", this.c);
+        nbttagcompound.put("TileZ", this.d);
     }
 
-    public void a(nu nbttagcompound) {
+    public void a(CompoundTag nbttagcompound) {
         this.a = nbttagcompound.c("Dir");
         this.b = nbttagcompound.e("TileX");
         this.c = nbttagcompound.e("TileY");
@@ -194,14 +200,14 @@ public class qv extends sn {
     public void b(double d, double d1, double d2) {
         if (!this.aI.B && d * d + d1 * d1 + d2 * d2 > 0.0D) {
             K();
-            this.aI.b((sn) new hl(this.aI, this.aM, this.aN, this.aO, new iz(ItemType.aq)));
+            this.aI.b((sn) new hl(this.aI, this.aM, this.aN, this.aO, new ItemInstance(ItemType.aq)));
         }
     }
 
     public void d(double d, double d1, double d2) {
         if (!this.aI.B && d * d + d1 * d1 + d2 * d2 > 0.0D) {
             K();
-            this.aI.b((sn) new hl(this.aI, this.aM, this.aN, this.aO, new iz(ItemType.aq)));
+            this.aI.b((sn) new hl(this.aI, this.aM, this.aN, this.aO, new ItemInstance(ItemType.aq)));
         }
     }
 }

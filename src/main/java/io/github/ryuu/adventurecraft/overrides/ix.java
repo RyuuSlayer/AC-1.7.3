@@ -2,17 +2,22 @@ package io.github.ryuu.adventurecraft.overrides;
 
 import io.github.ryuu.adventurecraft.items.IItemReload;
 import io.github.ryuu.adventurecraft.items.Items;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
+import net.minecraft.util.io.CompoundTag;
 
 public class ix implements lw {
-    public iz[] a;
+    public ItemInstance[] a;
 
-    public iz[] b;
+    public ItemInstance[] b;
 
     public int c;
 
-    public gs d;
+    public Player d;
 
-    private iz f;
+    private ItemInstance f;
 
     public boolean e;
 
@@ -20,9 +25,9 @@ public class ix implements lw {
 
     public int[] consumeInventory;
 
-    public ix(gs entityplayer) {
-        this.a = new iz[36];
-        this.b = new iz[4];
+    public ix(Player entityplayer) {
+        this.a = new ItemInstance[36];
+        this.b = new ItemInstance[4];
         this.c = 0;
         this.e = false;
         this.d = entityplayer;
@@ -30,13 +35,13 @@ public class ix implements lw {
         this.consumeInventory = new int[36];
     }
 
-    public iz b() {
+    public ItemInstance b() {
         if (this.c < 9 && this.c >= 0)
             return this.a[this.c];
         return null;
     }
 
-    public iz getOffhandItem() {
+    public ItemInstance getOffhandItem() {
         return this.a[this.offhandItem];
     }
 
@@ -54,7 +59,7 @@ public class ix implements lw {
         return -1;
     }
 
-    private int d(iz itemstack) {
+    private int d(ItemInstance itemstack) {
         for (int i = 0; i < this.a.length; i++) {
             if (this.a[i] != null && (this.a[i]).c == itemstack.c && this.a[i].d() && (this.a[i]).a < this.a[i].c() && (this.a[i]).a < d() && (!this.a[i].f() || this.a[i].i() == itemstack.i()))
                 return i;
@@ -90,7 +95,7 @@ public class ix implements lw {
             this.offhandItem = prevCurrentItem;
     }
 
-    private int e(iz itemstack) {
+    private int e(ItemInstance itemstack) {
         int i = itemstack.c;
         int j = itemstack.a;
         int k = d(itemstack);
@@ -99,7 +104,7 @@ public class ix implements lw {
         if (k < 0)
             return j;
         if (this.a[k] == null) {
-            this.a[k] = new iz(i, 0, itemstack.i());
+            this.a[k] = new ItemInstance(i, 0, itemstack.i());
             ItemType.c[i].onAddToSlot(this.d, k, itemstack.i());
         }
         int l = j;
@@ -118,7 +123,7 @@ public class ix implements lw {
     public void e() {
         for (int i = 0; i < this.a.length; i++) {
             if (this.a[i] != null) {
-                iz itemStack = this.a[i];
+                ItemInstance itemStack = this.a[i];
                 itemStack.a(this.d.aI, this.d, i, (this.c == i));
                 if (itemStack.timeLeft > 0)
                     itemStack.timeLeft--;
@@ -144,7 +149,7 @@ public class ix implements lw {
         return true;
     }
 
-    public boolean a(iz itemstack) {
+    public boolean a(ItemInstance itemstack) {
         if (itemstack.c == Items.heart.bf) {
             itemstack.a = 0;
             this.d.c(4);
@@ -182,21 +187,21 @@ public class ix implements lw {
         return false;
     }
 
-    public iz a(int i, int j) {
+    public ItemInstance a(int i, int j) {
         int slotID = i;
-        iz[] aitemstack = this.a;
+        ItemInstance[] aitemstack = this.a;
         if (i >= this.a.length) {
             aitemstack = this.b;
             i -= this.a.length;
         }
         if (aitemstack[i] != null) {
             if ((aitemstack[i]).a <= j) {
-                iz itemstack = aitemstack[i];
+                ItemInstance itemstack = aitemstack[i];
                 aitemstack[i] = null;
                 ItemType.c[itemstack.c].onRemovedFromSlot(this.d, slotID, itemstack.i());
                 return itemstack;
             }
-            iz itemstack1 = aitemstack[i].a(j);
+            ItemInstance itemstack1 = aitemstack[i].a(j);
             if ((aitemstack[i]).a == 0) {
                 aitemstack[i] = null;
                 ItemType.c[itemstack1.c].onRemovedFromSlot(this.d, slotID, itemstack1.i());
@@ -206,14 +211,14 @@ public class ix implements lw {
         return null;
     }
 
-    public void a(int i, iz itemstack) {
+    public void a(int i, ItemInstance itemstack) {
         int slotNumber = i;
-        iz[] aitemstack = this.a;
+        ItemInstance[] aitemstack = this.a;
         if (i >= aitemstack.length) {
             i -= aitemstack.length;
             aitemstack = this.b;
         }
-        iz prevItem = aitemstack[i];
+        ItemInstance prevItem = aitemstack[i];
         aitemstack[i] = itemstack;
         if (prevItem != null)
             ItemType.c[prevItem.c].onRemovedFromSlot(this.d, slotNumber, prevItem.i());
@@ -231,16 +236,16 @@ public class ix implements lw {
     public sp a(sp nbttaglist) {
         for (int i = 0; i < this.a.length; i++) {
             if (this.a[i] != null) {
-                nu nbttagcompound = new nu();
-                nbttagcompound.a("Slot", (byte) i);
+                CompoundTag nbttagcompound = new CompoundTag();
+                nbttagcompound.put("Slot", (byte) i);
                 this.a[i].a(nbttagcompound);
                 nbttaglist.a(nbttagcompound);
             }
         }
         for (int j = 0; j < this.b.length; j++) {
             if (this.b[j] != null) {
-                nu nbttagcompound1 = new nu();
-                nbttagcompound1.a("Slot", (byte) (j + 100));
+                CompoundTag nbttagcompound1 = new CompoundTag();
+                nbttagcompound1.put("Slot", (byte) (j + 100));
                 this.b[j].a(nbttagcompound1);
                 nbttaglist.a(nbttagcompound1);
             }
@@ -249,12 +254,12 @@ public class ix implements lw {
     }
 
     public void b(sp nbttaglist) {
-        this.a = new iz[36];
-        this.b = new iz[4];
+        this.a = new ItemInstance[36];
+        this.b = new ItemInstance[4];
         for (int i = 0; i < nbttaglist.c(); i++) {
-            nu nbttagcompound = (nu) nbttaglist.a(i);
+            CompoundTag nbttagcompound = (CompoundTag) nbttaglist.a(i);
             int j = nbttagcompound.c("Slot") & 0xFF;
-            iz itemstack = new iz(nbttagcompound);
+            ItemInstance itemstack = new ItemInstance(nbttagcompound);
             if (itemstack.a() != null) {
                 if (j >= 0 && j < this.a.length)
                     this.a[j] = itemstack;
@@ -268,8 +273,8 @@ public class ix implements lw {
         return this.a.length + 4;
     }
 
-    public iz f_(int i) {
-        iz[] aitemstack = this.a;
+    public ItemInstance f_(int i) {
+        ItemInstance[] aitemstack = this.a;
         if (i >= aitemstack.length) {
             i -= aitemstack.length;
             aitemstack = this.b;
@@ -285,8 +290,8 @@ public class ix implements lw {
         return 64;
     }
 
-    public int a(sn entity) {
-        iz itemstack = f_(this.c);
+    public int a(Entity entity) {
+        ItemInstance itemstack = f_(this.c);
         if (itemstack != null)
             return itemstack.a(entity);
         return 1;
@@ -295,13 +300,13 @@ public class ix implements lw {
     public boolean b(Tile block) {
         if (block.bA.i())
             return true;
-        iz itemstack = f_(this.c);
+        ItemInstance itemstack = f_(this.c);
         if (itemstack != null)
             return itemstack.b(block);
         return false;
     }
 
-    public iz d(int i) {
+    public ItemInstance d(int i) {
         return this.b[i];
     }
 
@@ -342,7 +347,7 @@ public class ix implements lw {
     public void g() {
         for (int i = 0; i < this.a.length; i++) {
             if (this.a[i] != null) {
-                iz prevItem = this.a[i];
+                ItemInstance prevItem = this.a[i];
                 this.d.a(this.a[i], true);
                 this.a[i] = null;
                 ItemType.c[prevItem.c].onRemovedFromSlot(this.d, i, prevItem.i());
@@ -350,7 +355,7 @@ public class ix implements lw {
         }
         for (int j = 0; j < this.b.length; j++) {
             if (this.b[j] != null) {
-                iz prevItem = this.b[j];
+                ItemInstance prevItem = this.b[j];
                 this.d.a(this.b[j], true);
                 this.b[j] = null;
                 ItemType.c[prevItem.c].onRemovedFromSlot(this.d, j + this.a.length, prevItem.i());
@@ -362,22 +367,22 @@ public class ix implements lw {
         this.e = true;
     }
 
-    public void b(iz itemstack) {
+    public void b(ItemInstance itemstack) {
         this.f = itemstack;
         this.d.b(itemstack);
     }
 
-    public iz i() {
+    public ItemInstance i() {
         return this.f;
     }
 
-    public boolean a_(gs entityplayer) {
+    public boolean a_(Player entityplayer) {
         if (this.d.be)
             return false;
         return (entityplayer.g(this.d) <= 64.0D);
     }
 
-    public boolean c(iz itemstack) {
+    public boolean c(ItemInstance itemstack) {
         for (int i = 0; i < this.b.length; i++) {
             if (this.b[i] != null && this.b[i].c(itemstack))
                 return true;

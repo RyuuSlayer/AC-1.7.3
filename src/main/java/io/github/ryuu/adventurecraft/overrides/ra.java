@@ -1,13 +1,17 @@
 package io.github.ryuu.adventurecraft.overrides;
 
 import io.github.ryuu.adventurecraft.items.Items;
+import io.github.ryuu.adventurecraft.util.Vec2;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
 import org.lwjgl.opengl.GL11;
 
 public class ra {
     private final Minecraft a;
 
-    private iz b;
+    private ItemInstance b;
 
     private float c;
 
@@ -45,7 +49,7 @@ public class ra {
         this.refBiped = new fh(0.0F);
     }
 
-    public void a(ls entityliving, iz itemstack) {
+    public void a(ls entityliving, ItemInstance itemstack) {
         GL11.glPushMatrix();
         if (itemstack.c < 256 && cv.a(Tile.m[itemstack.c].b())) {
             int textureNum = Tile.m[itemstack.c].getTextureNum();
@@ -71,7 +75,7 @@ public class ra {
             int height = texResolution.y / 16;
             float halfPixelW = 0.5F / texResolution.x;
             float halfPixelH = 0.5F / texResolution.x;
-            nw tessellator = nw.a;
+            Tessellator tessellator = Tessellator.a;
             int i = entityliving.c(itemstack);
             float f = ((i % 16 * 16) + 0.0F) / 256.0F;
             float f1 = ((i % 16 * 16) + 15.99F) / 256.0F;
@@ -161,7 +165,7 @@ public class ra {
 
     public void renderMuzzleFlash() {
         u.a();
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         float pixelSize = 0.0625F;
         float bX = 0.8125F;
         float tX = 1.3125F;
@@ -187,14 +191,14 @@ public class ra {
     public void renderItemInFirstPerson(float f, float swingProgress, float otherHand) {
         float f1 = this.d + (this.c - this.d) * f;
         dc entityplayersp = this.a.h;
-        float f2 = ((gs) entityplayersp).aV + (((gs) entityplayersp).aT - ((gs) entityplayersp).aV) * f;
+        float f2 = ((Player) entityplayersp).aV + (((Player) entityplayersp).aT - ((Player) entityplayersp).aV) * f;
         GL11.glPushMatrix();
         GL11.glRotatef(f2, 1.0F, 0.0F, 0.0F);
-        GL11.glRotatef(((gs) entityplayersp).aU + (((gs) entityplayersp).aS - ((gs) entityplayersp).aU) * f, 0.0F, 1.0F, 0.0F);
+        GL11.glRotatef(((Player) entityplayersp).aU + (((Player) entityplayersp).aS - ((Player) entityplayersp).aU) * f, 0.0F, 1.0F, 0.0F);
         u.b();
         GL11.glPopMatrix();
-        iz itemstack = this.b;
-        float f3 = this.a.f.c(in.b(((gs) entityplayersp).aM), in.b(((gs) entityplayersp).aN), in.b(((gs) entityplayersp).aO));
+        ItemInstance itemstack = this.b;
+        float f3 = this.a.f.c(in.b(((Player) entityplayersp).aM), in.b(((Player) entityplayersp).aN), in.b(((Player) entityplayersp).aO));
         if (itemstack != null && ItemType.c[itemstack.c] != null) {
             int i = ItemType.c[itemstack.c].f(itemstack.i());
             float f7 = (i >> 16 & 0xFF) / 255.0F;
@@ -251,7 +255,7 @@ public class ra {
             f13 = 0.015625F;
             GL11.glScalef(f13, f13, f13);
             this.a.p.b(this.a.p.b("/misc/mapbg.png"));
-            nw tessellator = nw.a;
+            Tessellator tessellator = Tessellator.a;
             GL11.glNormal3f(0.0F, 0.0F, -1.0F);
             tessellator.b();
             byte byte0 = 7;
@@ -359,9 +363,9 @@ public class ra {
     public void renderShield(float f, float swingProgress, float otherHand) {
         float f1 = this.d + (this.c - this.d) * f;
         dc entityplayersp = this.a.h;
-        float f2 = this.a.f.c(in.b(((gs) entityplayersp).aM), in.b(((gs) entityplayersp).aN), in.b(((gs) entityplayersp).aO));
+        float f2 = this.a.f.c(in.b(((Player) entityplayersp).aM), in.b(((Player) entityplayersp).aN), in.b(((Player) entityplayersp).aO));
         GL11.glColor4f(f2, f2, f2, 1.0F);
-        iz itemstack = new iz(AC_Items.woodenShield);
+        ItemInstance itemstack = new ItemInstance(Items.woodenShield);
         GL11.glPushMatrix();
         float f3 = 0.8F;
         if (otherHand == 0.0F) {
@@ -426,7 +430,7 @@ public class ra {
     private void a(float f, int i) {
         if (this.a.h.bq)
             return;
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         float f1 = this.a.i.a(f);
         f1 = 0.1F;
         GL11.glColor4f(f1, f1, f1, 0.5F);
@@ -514,9 +518,9 @@ public class ra {
     public void a() {
         this.d = this.c;
         dc entityplayersp = this.a.h;
-        iz itemstack = ((gs) entityplayersp).c.b();
-        iz itemstack1 = itemstack;
-        boolean flag = (this.g == ((gs) entityplayersp).c.c && itemstack1 == this.b);
+        ItemInstance itemstack = ((Player) entityplayersp).c.b();
+        ItemInstance itemstack1 = itemstack;
+        boolean flag = (this.g == ((Player) entityplayersp).c.c && itemstack1 == this.b);
         if (this.b == null && itemstack1 == null)
             flag = true;
         if (itemstack1 != null && this.b != null && itemstack1 != this.b && itemstack1.c == this.b.c && itemstack1.i() == this.b.i()) {
@@ -533,7 +537,7 @@ public class ra {
         this.c += f2;
         if (this.c < 0.1F) {
             this.b = itemstack1;
-            this.g = ((gs) entityplayersp).c.c;
+            this.g = ((Player) entityplayersp).c.c;
         }
     }
 

@@ -1,9 +1,13 @@
 package io.github.ryuu.adventurecraft.overrides;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.model.BipedModel;
 import net.minecraft.client.render.entity.model.EntityModel;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
 import org.lwjgl.opengl.GL11;
 
 public class PlayerRenderer extends LivingEntityRenderer {
@@ -20,8 +24,8 @@ public class PlayerRenderer extends LivingEntityRenderer {
         this.h = new BipedModel(0.5F);
     }
 
-    protected boolean a(gs entityplayer, int i, float f) {
-        iz itemstack = entityplayer.c.d(3 - i);
+    protected boolean a(Player entityplayer, int i, float f) {
+        ItemInstance itemstack = entityplayer.c.d(3 - i);
         if (itemstack != null) {
             ItemType item = itemstack.a();
             if (item instanceof wa) {
@@ -42,8 +46,8 @@ public class PlayerRenderer extends LivingEntityRenderer {
         return false;
     }
 
-    public void a(gs entityplayer, double d, double d1, double d2, float f, float f1) {
-        iz itemstack = entityplayer.c.b();
+    public void a(Player entityplayer, double d, double d1, double d2, float f, float f1) {
+        ItemInstance itemstack = entityplayer.c.b();
         this.a.k = (itemstack != null);
         this.a.l = entityplayer.t();
         double d3 = d1 - entityplayer.bf;
@@ -54,7 +58,7 @@ public class PlayerRenderer extends LivingEntityRenderer {
         this.a.k = false;
     }
 
-    protected void a(gs entityplayer, double d, double d1, double d2) {
+    protected void a(Player entityplayer, double d, double d1, double d2) {
         if (Minecraft.t() && entityplayer != this.b.h) {
             float f = 1.6F;
             float f1 = 0.01666667F * f;
@@ -81,7 +85,7 @@ public class PlayerRenderer extends LivingEntityRenderer {
                     GL11.glDepthMask(false);
                     GL11.glEnable(3042);
                     GL11.glBlendFunc(770, 771);
-                    nw tessellator = nw.a;
+                    Tessellator tessellator = Tessellator.a;
                     GL11.glDisable(3553);
                     tessellator.b();
                     int i = fontrenderer.a(s) / 2;
@@ -103,8 +107,8 @@ public class PlayerRenderer extends LivingEntityRenderer {
         }
     }
 
-    protected void a(gs entityplayer, float f) {
-        iz itemstack = entityplayer.c.d(3);
+    protected void a(Player entityplayer, float f) {
+        ItemInstance itemstack = entityplayer.c.d(3);
         if (itemstack != null && (itemstack.a()).bf < 256) {
             GL11.glPushMatrix();
             this.a.a.c(0.0625F);
@@ -164,13 +168,13 @@ public class PlayerRenderer extends LivingEntityRenderer {
             this.a.b(0.0625F);
             GL11.glPopMatrix();
         }
-        iz itemstack1 = entityplayer.c.b();
+        ItemInstance itemstack1 = entityplayer.c.b();
         if (itemstack1 != null) {
             GL11.glPushMatrix();
             this.a.d.c(0.0625F);
             GL11.glTranslatef(-0.0625F, 0.4375F, 0.0625F);
             if (entityplayer.D != null)
-                itemstack1 = new iz(ItemType.B);
+                itemstack1 = new ItemInstance(ItemType.B);
             if (itemstack1.c < 256 && cv.a(Tile.m[itemstack1.c].b())) {
                 float f3 = 0.5F;
                 GL11.glTranslatef(0.0F, 0.1875F, -0.3125F);
@@ -201,7 +205,7 @@ public class PlayerRenderer extends LivingEntityRenderer {
         }
     }
 
-    protected void b(gs entityplayer, float f) {
+    protected void b(Player entityplayer, float f) {
         float f1 = 0.9375F;
         GL11.glScalef(f1, f1, f1);
     }
@@ -212,7 +216,7 @@ public class PlayerRenderer extends LivingEntityRenderer {
         this.a.d.a(0.0625F);
     }
 
-    protected void b(gs entityplayer, double d, double d1, double d2) {
+    protected void b(Player entityplayer, double d, double d1, double d2) {
         if (entityplayer.W() && entityplayer.N()) {
             super.b(entityplayer, d + entityplayer.w, d1 + entityplayer.x, d2 + entityplayer.y);
         } else {
@@ -220,7 +224,7 @@ public class PlayerRenderer extends LivingEntityRenderer {
         }
     }
 
-    protected void a(gs entityplayer, float f, float f1, float f2) {
+    protected void a(Player entityplayer, float f, float f1, float f2) {
         if (entityplayer.W() && entityplayer.N()) {
             GL11.glRotatef(entityplayer.M(), 0.0F, 1.0F, 0.0F);
             GL11.glRotatef(a(entityplayer), 0.0F, 0.0F, 1.0F);
@@ -231,35 +235,35 @@ public class PlayerRenderer extends LivingEntityRenderer {
     }
 
     protected void a(ls entityliving, double d, double d1, double d2) {
-        a((gs) entityliving, d, d1, d2);
+        a((Player) entityliving, d, d1, d2);
     }
 
     protected void a(ls entityliving, float f) {
-        b((gs) entityliving, f);
+        b((Player) entityliving, f);
     }
 
     protected boolean a(ls entityliving, int i, float f) {
-        return a((gs) entityliving, i, f);
+        return a((Player) entityliving, i, f);
     }
 
     protected void b(ls entityliving, float f) {
-        a((gs) entityliving, f);
+        a((Player) entityliving, f);
     }
 
     protected void a(ls entityliving, float f, float f1, float f2) {
-        a((gs) entityliving, f, f1, f2);
+        a((Player) entityliving, f, f1, f2);
     }
 
     protected void b(ls entityliving, double d, double d1, double d2) {
-        b((gs) entityliving, d, d1, d2);
+        b((Player) entityliving, d, d1, d2);
     }
 
     public void a(ls entityliving, double d, double d1, double d2, float f, float f1) {
-        a((gs) entityliving, d, d1, d2, f, f1);
+        a((Player) entityliving, d, d1, d2, f, f1);
     }
 
     public void a(sn entity, double d, double d1, double d2, float f, float f1) {
-        a((gs) entity, d, d1, d2, f, f1);
+        a((Player) entity, d, d1, d2, f, f1);
     }
 
     private static final String[] i = new String[]{"cloth", "chain", "iron", "diamond", "gold"};

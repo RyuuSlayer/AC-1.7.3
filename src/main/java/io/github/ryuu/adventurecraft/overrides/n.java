@@ -16,6 +16,11 @@ import io.github.ryuu.adventurecraft.util.IEntityPather;
 import io.github.ryuu.adventurecraft.util.PlayerTorch;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.Tessellator;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 import org.lwjgl.opengl.ARBOcclusionQuery;
 import org.lwjgl.opengl.GL11;
@@ -188,7 +193,7 @@ public class n implements pm {
 
     private void g() {
         Random random = new Random(10842L);
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         tessellator.b();
         for (int i = 0; i < 1500; i++) {
             double d = (random.nextFloat() * 2.0F - 1.0F);
@@ -296,7 +301,7 @@ public class n implements pm {
             }
         }
         if (this.k != null) {
-            ls entityliving = this.t.i;
+            LivingEntity entityliving = this.t.i;
             if (entityliving != null) {
                 b(in.b(entityliving.aM), in.b(entityliving.aN), in.b(entityliving.aO));
                 Arrays.sort(this.n, new jo((sn) entityliving));
@@ -315,7 +320,7 @@ public class n implements pm {
         this.J = 0;
         this.K = 0;
         this.L = 0;
-        ls entityliving = this.t.i;
+        LivingEntity entityliving = this.t.i;
         th.b = entityliving.bl + (entityliving.aM - entityliving.bl) * f;
         th.c = entityliving.bm + (entityliving.aN - entityliving.bm) * f;
         th.d = entityliving.bn + (entityliving.aO - entityliving.bn) * f;
@@ -414,7 +419,7 @@ public class n implements pm {
         }
     }
 
-    public int a(ls entityliving, int i, double d) {
+    public int a(LivingEntity entityliving, int i, double d) {
         for (int j = 0; j < 10; j++) {
             this.R = (this.R + 1) % this.o.length;
             dk worldrenderer = this.o[this.R];
@@ -565,7 +570,7 @@ public class n implements pm {
                 }
             }
         }
-        ls entityliving = this.t.i;
+        LivingEntity entityliving = this.t.i;
         double d1 = entityliving.bl + (entityliving.aM - entityliving.bl) * d;
         double d2 = entityliving.bm + (entityliving.aN - entityliving.bm) * d;
         double d3 = entityliving.bn + (entityliving.aO - entityliving.bn) * d;
@@ -776,7 +781,7 @@ public class n implements pm {
     public void c(float f) {
         GL11.glDisable(2884);
         float f1 = (float) (this.t.i.bm + (this.t.i.aN - this.t.i.bm) * f);
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         float f2 = 12.0F;
         float f3 = 4.0F;
         double d = (this.t.i.aJ + (this.t.i.aM - this.t.i.aJ) * f + ((this.x + f) * 0.03F)) / f2;
@@ -894,7 +899,7 @@ public class n implements pm {
         GL11.glEnable(2884);
     }
 
-    public boolean a(ls entityliving, boolean flag) {
+    public boolean a(LivingEntity entityliving, boolean flag) {
         boolean flag1 = false;
         if (flag1) {
             Collections.sort(this.m, (Comparator<?>) new md(entityliving));
@@ -951,7 +956,7 @@ public class n implements pm {
             i1++;
             arraylist.add(worldrenderer1);
             this.m.set(j1, null);
-            if (AC_PlayerTorch.isTorchActive()) {
+            if (PlayerTorch.isTorchActive()) {
                 if (i1 >= 3 || avgTime > 40000000L)
                     break;
                 if (i1 >= 2 && avgTime > 16666666L)
@@ -1004,7 +1009,7 @@ public class n implements pm {
         return (l == i1 + l1);
     }
 
-    public void a(gs entityplayer, vf movingobjectposition, int i, iz itemstack, float f) {
+    public void a(Player entityplayer, vf movingobjectposition, int i, ItemInstance itemstack, float f) {
         Tessellator tessellator = Tessellator.a;
         GL11.glEnable(3042);
         GL11.glEnable(3008);
@@ -1067,7 +1072,7 @@ public class n implements pm {
         GL11.glDisable(3008);
     }
 
-    public void b(gs entityplayer, vf movingobjectposition, int i, iz itemstack, float f) {
+    public void b(Player entityplayer, vf movingobjectposition, int i, ItemInstance itemstack, float f) {
         if (i == 0 && movingobjectposition.a == jg.a) {
             GL11.glEnable(3042);
             GL11.glBlendFunc(770, 771);
@@ -1090,7 +1095,7 @@ public class n implements pm {
         }
     }
 
-    public void drawCursorSelection(ls entityplayer, iz itemstack, float f) {
+    public void drawCursorSelection(LivingEntity entityplayer, ItemInstance itemstack, float f) {
         if (ItemCursor.bothSet && itemstack != null && itemstack.c >= Items.cursor.bf && itemstack.c <= Items.cursor.bf + 20) {
             GL11.glEnable(3042);
             GL11.glBlendFunc(770, 771);
@@ -1106,7 +1111,7 @@ public class n implements pm {
             double offX = entityplayer.bl + (entityplayer.aM - entityplayer.bl) * f;
             double offY = entityplayer.bm + (entityplayer.aN - entityplayer.bm) * f;
             double offZ = entityplayer.bn + (entityplayer.aO - entityplayer.bn) * f;
-            nw tessellator = nw.a;
+            Tessellator tessellator = Tessellator.a;
             for (int x = minX; x <= maxX; x++) {
                 tessellator.a(3);
                 tessellator.a(x - offX, minY - offY, minZ - offZ);
@@ -1140,7 +1145,7 @@ public class n implements pm {
         }
     }
 
-    public void drawEntityPath(sn e, ls entityplayer, float f) {
+    public void drawEntityPath(Entity e, LivingEntity entityplayer, float f) {
         if (e instanceof IEntityPather) {
             IEntityPather ent = (IEntityPather) e;
             dh path = ent.getCurrentPath();
@@ -1148,7 +1153,7 @@ public class n implements pm {
             double offY = entityplayer.bm + (entityplayer.aN - entityplayer.bm) * f;
             double offZ = entityplayer.bn + (entityplayer.aO - entityplayer.bn) * f;
             if (path != null) {
-                nw tessellator = nw.a;
+                Tessellator tessellator = Tessellator.a;
                 tessellator.a(3);
                 GL11.glEnable(3042);
                 GL11.glBlendFunc(770, 771);
@@ -1172,13 +1177,13 @@ public class n implements pm {
         }
     }
 
-    public void drawEntityFOV(ls e, ls entityplayer, float f) {
+    public void drawEntityFOV(LivingEntity e, LivingEntity entityplayer, float f) {
         if (e == entityplayer)
             return;
         double offX = entityplayer.bl + (entityplayer.aM - entityplayer.bl) * f;
         double offY = entityplayer.bm + (entityplayer.aN - entityplayer.bm) * f;
         double offZ = entityplayer.bn + (entityplayer.aO - entityplayer.bn) * f;
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         tessellator.a(3);
         GL11.glEnable(3042);
         GL11.glBlendFunc(770, 771);
@@ -1204,7 +1209,7 @@ public class n implements pm {
     }
 
     private void a(eq axisalignedbb) {
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         tessellator.a(3);
         tessellator.a(axisalignedbb.a, axisalignedbb.b, axisalignedbb.c);
         tessellator.a(axisalignedbb.d, axisalignedbb.b, axisalignedbb.c);
@@ -1329,11 +1334,11 @@ public class n implements pm {
         } else if (s.equals("reddust")) {
             im im = new im(this.k, d, d1, d2, (float) d3, (float) d4, (float) d5);
         } else if (s.equals("snowballpoof")) {
-            pb pb = new pb(this.k, d, d1, d2, ItemType.aB);
+            pb pb = new pb(this.k, d, d1, d2, MixinItemType.aB);
         } else if (s.equals("snowshovel")) {
             mu mu = new mu(this.k, d, d1, d2, d3, d4, d5);
         } else if (s.equals("slime")) {
-            pb pb = new pb(this.k, d, d1, d2, ItemType.aK);
+            pb pb = new pb(this.k, d, d1, d2, MixinItemType.aK);
         } else if (s.equals("heart")) {
             kc = new kc(this.k, d, d1, d2, d3, d4, d5);
         }
@@ -1381,7 +1386,7 @@ public class n implements pm {
         ge.b(this.s);
     }
 
-    public void a(gs entityplayer, int i, int j, int k, int l, int i1) {
+    public void a(Player entityplayer, int i, int j, int k, int l, int i1) {
         int j1, k1;
         double d, d1, d2;
         int l1, i2;
