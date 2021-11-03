@@ -1,11 +1,13 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import io.github.ryuu.adventurecraft.blocks.BlockStairMulti;
 import io.github.ryuu.adventurecraft.mixin.Level;
 import io.github.ryuu.adventurecraft.util.LightCache;
 import io.github.ryuu.adventurecraft.util.PlayerTorch;
+import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
 
-public class ew implements TileView {
+public class WorldPopulationRegion implements TileView {
     private final int a;
 
     private final int b;
@@ -14,7 +16,7 @@ public class ew implements TileView {
 
     private final Level d;
 
-    public ew(Level world, int i, int j, int k, int l, int i1, int j1) {
+    public WorldPopulationRegion(Level world, int i, int j, int k, int l, int i1, int j1) {
         this.d = world;
         this.a = i >> 4;
         this.b = k >> 4;
@@ -97,7 +99,7 @@ public class ew implements TileView {
             return 15;
         if (flag) {
             int l = a(i, j, k);
-            if (l != 0 && (l == Tile.al.bn || l == Tile.aB.bn || l == Tile.au.bn || l == Tile.aI.bn || Tile.m[l] instanceof AC_BlockStairMulti)) {
+            if (l != 0 && (l == Tile.al.bn || l == Tile.aB.bn || l == Tile.au.bn || l == Tile.aI.bn || Tile.m[l] instanceof BlockStairMulti)) {
                 int k1 = a(i, j + 1, k, false);
                 int i2 = a(i + 1, j, k, false);
                 int j2 = a(i - 1, j, k, false);

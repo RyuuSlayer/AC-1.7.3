@@ -5,8 +5,8 @@ import io.github.ryuu.adventurecraft.util.TerrainImage;
 
 import java.util.Random;
 
-public abstract class rp extends Tile {
-    protected rp(int i, ln material) {
+public abstract class FluidTile extends Tile {
+    protected FluidTile(int i, ln material) {
         super(i, ((material != ln.h) ? 12 : 14) * 16 + 13, material);
         float f = 0.0F;
         float f1 = 0.0F;

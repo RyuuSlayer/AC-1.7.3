@@ -3234,7 +3234,7 @@ public class TileRenderer {
 
     public boolean p(Tile block, int i, int j, int k) {
         Tessellator tessellator = Tessellator.a;
-        le blockdoor = (le) block;
+        DoorTile blockdoor = (DoorTile) block;
         boolean flag = false;
         float f = 0.5F;
         float f1 = 1.0F;

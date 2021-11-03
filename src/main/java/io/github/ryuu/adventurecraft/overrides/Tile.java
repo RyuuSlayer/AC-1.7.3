@@ -571,14 +571,14 @@ public class Tile {
         aC = (new tc(61, false)).c(3.5F).a(h).a("furnace").j();
         aD = (new tc(62, true)).c(3.5F).a(h).a(0.875F).a("furnace").j();
         aE = (new uj(63, yk.class, true)).c(1.0F).a(e).a("sign").q().j();
-        aF = (new le(64, Material.d)).c(3.0F).a(e).a("doorWood").q().j();
+        aF = (new DoorTile(64, Material.d)).c(3.0F).a(e).a("doorWood").q().j();
         aG = (new LadderTile(65, 83)).c(0.4F).a(e).a("ladder").j();
         aH = (new pc(66, 128, false)).c(0.7F).a(Tile.i).a("rail").j();
         aI = (new ss(67, x)).a("stairsStone").j();
         aJ = (new uj(68, yk.class, false)).c(1.0F).a(e).a("sign").q().j();
         aK = (new xr(69, 96)).c(0.5F).a(e).a("lever").j();
         aL = (new bv(70, u.bm, rt.b, Material.e)).c(0.5F).a(h).a("pressurePlate").j();
-        aM = (new le(71, Material.f)).c(5.0F).a(Tile.i).a("doorIron").q().j();
+        aM = (new DoorTile(71, Material.f)).c(5.0F).a(Tile.i).a("doorIron").q().j();
         aN = (new bv(72, y.bm, rt.a, Material.d)).c(0.5F).a(e).a("pressurePlate").j();
         aO = (new bs(73, 51, false)).c(3.0F).b(5.0F).a(h).a("oreRedstone").j();
         aP = (new bs(74, 51, true)).a(0.625F).c(3.0F).b(5.0F).a(h).a("oreRedstone").j();

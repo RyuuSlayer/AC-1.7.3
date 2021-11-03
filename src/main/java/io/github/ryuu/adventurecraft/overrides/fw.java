@@ -144,7 +144,7 @@ public class fw {
                     if (k1 > 0)
                         if (k1 == Tile.aM.bn || k1 == Tile.aF.bn) {
                             int l1 = this.a.e(l, i1, j1);
-                            if (!le.f(l1))
+                            if (!DoorTile.f(l1))
                                 return 0;
                         } else {
                             ln material = (Tile.m[k1]).bA;
