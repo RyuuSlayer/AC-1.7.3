@@ -37,7 +37,7 @@ public class ScriptWorld {
     }
 
     public float getLightValue(int x, int y, int z) {
-        return this.worldObj.getLightLevel(x, y, z);
+        return this.worldObj.getLightValue(x, y, z);
     }
 
     public void triggerBlock(int blockX, int blockY, int blockZ) {
