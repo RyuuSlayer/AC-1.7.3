@@ -4,6 +4,7 @@ import net.minecraft.level.Level;
 import net.minecraft.level.biome.Biome;
 import net.minecraft.level.chunk.Chunk;
 import net.minecraft.level.source.LevelSource;
+import net.minecraft.level.structure.CactusPatch;
 import net.minecraft.level.structure.Feature;
 import net.minecraft.tile.Tile;
 import net.minecraft.util.ProgressListener;
@@ -125,7 +126,7 @@ public class ChunkProviderHeightMapGenerate implements LevelSource {
                                 }
                             }
                             if (k1 < waterHeight && byte1 == 0)
-                                byte1 = (byte) Tile.B.bn;
+                                byte1 = (byte) Tile.FLOWING_WATER.id;
                             j1 = i1;
                             if (k1 >= waterHeight - 1) {
                                 abyte0[l1] = byte1;
@@ -150,7 +151,7 @@ public class ChunkProviderHeightMapGenerate implements LevelSource {
         this.rand.setSeed(i * 341873128712L + j * 132897987541L);
         byte[] abyte0 = new byte[32768];
         Chunk chunk = new Chunk(this.worldObj, abyte0, i, j);
-        this.biomesForGeneration = this.worldObj.a().a(this.biomesForGeneration, i * 16, j * 16, 16, 16);
+        this.biomesForGeneration = this.worldObj.getBiomeSource().getBiomes(this.biomesForGeneration, i * 16, j * 16, 16, 16);
         double[] ad = (this.worldObj.a()).a;
         generateTerrain(i, j, abyte0, this.biomesForGeneration, ad);
         replaceBlocksForBiome(i, j, abyte0, this.biomesForGeneration);
@@ -257,19 +258,19 @@ public class ChunkProviderHeightMapGenerate implements LevelSource {
         int l7 = 0;
         if (this.rand.nextInt(10) == 0)
             l7++;
-        if (mobspawnerbase == Biome.d) {
+        if (mobspawnerbase == Biome.FOREST) {
             l7 += k4 + 5;
-        } else if (mobspawnerbase == Biome.a) {
+        } else if (mobspawnerbase == Biome.RAINFOREST) {
             l7 += k4 + 5;
-        } else if (mobspawnerbase == Biome.c) {
+        } else if (mobspawnerbase == Biome.SEASONAL_FOREST) {
             l7 += k4 + 2;
-        } else if (mobspawnerbase == Biome.g) {
+        } else if (mobspawnerbase == Biome.TAIGA) {
             l7 += k4 + 5;
-        } else if (mobspawnerbase == Biome.h) {
+        } else if (mobspawnerbase == Biome.DESERT) {
             l7 -= 20;
-        } else if (mobspawnerbase == Biome.k) {
+        } else if (mobspawnerbase == Biome.TUNDRA) {
             l7 -= 20;
-        } else if (mobspawnerbase == Biome.i) {
+        } else if (mobspawnerbase == Biome.PLAINS) {
             l7 -= 20;
         }
         for (int i11 = 0; i11 < l7; i11++) {
@@ -283,34 +284,34 @@ public class ChunkProviderHeightMapGenerate implements LevelSource {
             int l15 = k + this.rand.nextInt(16) + 8;
             int k18 = this.rand.nextInt(128);
             int i21 = l + this.rand.nextInt(16) + 8;
-            (new be(Tile.ae.bn)).a(this.worldObj, this.rand, l15, k18, i21);
+            (new be(Tile.DANDELION.id)).a(this.worldObj, this.rand, l15, k18, i21);
         }
         if (this.rand.nextInt(2) == 0) {
             int k11 = k + this.rand.nextInt(16) + 8;
             int i16 = this.rand.nextInt(128);
             int l18 = l + this.rand.nextInt(16) + 8;
-            (new be(Tile.af.bn)).a(this.worldObj, this.rand, k11, i16, l18);
+            (new be(Tile.ROSE.id)).a(this.worldObj, this.rand, k11, i16, l18);
         }
         if (this.rand.nextInt(4) == 0) {
             int l11 = k + this.rand.nextInt(16) + 8;
             int j16 = this.rand.nextInt(128);
             int i19 = l + this.rand.nextInt(16) + 8;
-            (new be(Tile.ag.bn)).a(this.worldObj, this.rand, l11, j16, i19);
+            (new be(Tile.BROWN_MUSHROOM.id)).a(this.worldObj, this.rand, l11, j16, i19);
         }
         if (this.rand.nextInt(8) == 0) {
             int i12 = k + this.rand.nextInt(16) + 8;
             int k16 = this.rand.nextInt(128);
             int j19 = l + this.rand.nextInt(16) + 8;
-            (new be(Tile.ah.bn)).a(this.worldObj, this.rand, i12, k16, j19);
+            (new be(Tile.RED_MUSHROOM.id)).a(this.worldObj, this.rand, i12, k16, j19);
         }
         int l12 = 0;
-        if (mobspawnerbase == Biome.h)
+        if (mobspawnerbase == Biome.DESERT)
             l12 += 10;
         for (int j17 = 0; j17 < l12; j17++) {
             int i20 = k + this.rand.nextInt(16) + 8;
             int k21 = this.rand.nextInt(128);
             int k22 = l + this.rand.nextInt(16) + 8;
-            (new fx()).a(this.worldObj, this.rand, i20, k21, k22);
+            (new CactusPatch()).a(this.worldObj, this.rand, i20, k21, k22);
         }
         this.generatedTemperatures = this.worldObj.a().a(this.generatedTemperatures, k + 8, l + 8, 16, 16);
         for (int i18 = k + 8; i18 < k + 8 + 16; i18++) {
@@ -321,7 +322,7 @@ public class ChunkProviderHeightMapGenerate implements LevelSource {
                 double d1 = this.generatedTemperatures[j22 * 16 + j23];
                 this.worldObj.setTemperatureValue(i18, l20, d1);
                 if (d1 < 0.5D && k23 > 0 && k23 < 128 && this.worldObj.d(i18, k23, l20) && this.worldObj.f(i18, k23 - 1, l20).c() && this.worldObj.f(i18, k23 - 1, l20) != ln.s)
-                    this.worldObj.f(i18, k23, l20, Tile.aT.bn);
+                    this.worldObj.f(i18, k23, l20, Tile.SNOW.id);
             }
         }
         gk.a = false;

@@ -7,6 +7,7 @@ import io.github.ryuu.adventurecraft.entities.EntityCamera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.src.Vec3D;
 import org.lwjgl.opengl.GL11;
 
@@ -65,7 +66,7 @@ public class CutsceneCamera {
         }
     }
 
-    public void drawLines(ls entityplayer, float f) {
+    public void drawLines(LivingEntity entityplayer, float f) {
         double offX = entityplayer.bl + (entityplayer.aM - entityplayer.bl) * f;
         double offY = entityplayer.bm + (entityplayer.aN - entityplayer.bm) * f;
         double offZ = entityplayer.bn + (entityplayer.aO - entityplayer.bn) * f;
