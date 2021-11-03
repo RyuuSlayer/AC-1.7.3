@@ -1,9 +1,11 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import net.minecraft.level.Level;
+
 public class qm extends xw {
     private final Tile a;
 
-    public qm(fd world, double d, double d1, double d2, double d3, double d4, double d5, Tile block, int i, int j) {
+    public qm(Level world, double d, double d1, double d2, double d3, double d4, double d5, Tile block, int i, int j) {
         super(world, d, d1, d2, d3, d4, d5);
         this.a = block;
         this.b = block.a(i, j);

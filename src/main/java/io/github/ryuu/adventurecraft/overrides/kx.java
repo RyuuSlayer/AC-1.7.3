@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.overrides;
 import java.io.IOException;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.level.Level;
 
 public class kx implements cl {
     private final lm c;
@@ -13,7 +14,7 @@ public class kx implements cl {
 
     private lm[] f;
 
-    private final fd g;
+    private final Level g;
 
     int a;
 
@@ -31,7 +32,7 @@ public class kx implements cl {
 
     int chunksWide;
 
-    public kx(fd world, bf ichunkloader, cl ichunkprovider) {
+    public kx(Level world, bf ichunkloader, cl ichunkprovider) {
         this.isVeryFar = (Minecraft.minecraftInstance.z.e != 0);
         updateVeryFar();
         this.a = -999999999;

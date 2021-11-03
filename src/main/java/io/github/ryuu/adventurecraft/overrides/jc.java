@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.overrides;
 
 import io.github.ryuu.adventurecraft.entities.*;
+import net.minecraft.level.Level;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,24 +14,24 @@ public class jc {
         d.put(class1, Integer.valueOf(i));
     }
 
-    public static Entity a(String s, fd world) {
+    public static Entity a(String s, Level world) {
         Entity entity = null;
         try {
             Class<Entity> class1 = (Class) a.get(s);
             if (class1 != null)
-                entity = class1.getConstructor(new Class[]{fd.class}).newInstance(new Object[]{world});
+                entity = class1.getConstructor(new Class[]{Level.class}).newInstance(new Object[]{world});
         } catch (Exception exception) {
             exception.printStackTrace();
         }
         return entity;
     }
 
-    public static Entity a(nu nbttagcompound, fd world) {
+    public static Entity a(nu nbttagcompound, Level world) {
         Entity entity = null;
         try {
             Class<Entity> class1 = (Class) a.get(nbttagcompound.i("id"));
             if (class1 != null)
-                entity = class1.getConstructor(new Class[]{fd.class}).newInstance(new Object[]{world});
+                entity = class1.getConstructor(new Class[]{Level.class}).newInstance(new Object[]{world});
         } catch (Exception exception) {
             exception.printStackTrace();
         }
@@ -42,12 +43,12 @@ public class jc {
         return entity;
     }
 
-    public static Entity a(int i, fd world) {
+    public static Entity a(int i, Level world) {
         Entity entity = null;
         try {
             Class<Entity> class1 = (Class) c.get(Integer.valueOf(i));
             if (class1 != null)
-                entity = class1.getConstructor(new Class[]{fd.class}).newInstance(new Object[]{world});
+                entity = class1.getConstructor(new Class[]{Level.class}).newInstance(new Object[]{world});
         } catch (Exception exception) {
             exception.printStackTrace();
         }

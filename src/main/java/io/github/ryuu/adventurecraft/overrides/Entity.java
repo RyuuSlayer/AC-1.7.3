@@ -1,12 +1,13 @@
 package io.github.ryuu.adventurecraft.overrides;
 
 import io.github.ryuu.adventurecraft.blocks.Blocks;
+import net.minecraft.level.Level;
 
 import java.util.List;
 import java.util.Random;
 
 public abstract class Entity {
-    public Entity(fd world) {
+    public Entity(Level world) {
         this.aW = eq.a(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
         this.collidesWithClipBlocks = true;
         this.moveYawOffset = 0.0F;
@@ -493,7 +494,7 @@ public abstract class Entity {
         return this.bE;
     }
 
-    public void a(fd world) {
+    public void a(Level world) {
         this.aI = world;
     }
 
@@ -972,7 +973,7 @@ public abstract class Entity {
 
     public Entity aH;
 
-    public fd aI;
+    public Level aI;
 
     public double aJ;
 

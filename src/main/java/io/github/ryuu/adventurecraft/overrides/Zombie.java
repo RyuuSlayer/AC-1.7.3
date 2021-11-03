@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.overrides;
 
 import net.minecraft.entity.monster.Monster;
+import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 
 public class Zombie extends Monster {

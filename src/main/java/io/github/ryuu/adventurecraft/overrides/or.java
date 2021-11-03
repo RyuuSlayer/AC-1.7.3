@@ -1,5 +1,7 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import net.minecraft.level.Level;
+
 import java.util.Random;
 
 public class or extends Tile {
@@ -8,15 +10,15 @@ public class or extends Tile {
         b(true);
     }
 
-    public void a(fd world, int i, int j, int k, Random random) {
+    public void a(Level world, int i, int j, int k, Random random) {
     }
 
-    public eq e(fd world, int i, int j, int k) {
+    public eq e(Level world, int i, int j, int k) {
         float f = 0.0625F;
         return eq.b((i + f), j, (k + f), ((i + 1) - f), ((j + 1) - f), ((k + 1) - f));
     }
 
-    public eq f(fd world, int i, int j, int k) {
+    public eq f(Level world, int i, int j, int k) {
         float f = 0.0625F;
         return eq.b((i + f), j, (k + f), ((i + 1) - f), (j + 1), ((k + 1) - f));
     }
@@ -41,20 +43,20 @@ public class or extends Tile {
         return 13;
     }
 
-    public boolean a(fd world, int i, int j, int k) {
+    public boolean a(Level world, int i, int j, int k) {
         if (!super.a(world, i, j, k))
             return false;
         return g(world, i, j, k);
     }
 
-    public void b(fd world, int i, int j, int k, int l) {
+    public void b(Level world, int i, int j, int k, int l) {
         if (!g(world, i, j, k)) {
             g(world, i, j, k, world.e(i, j, k));
             world.f(i, j, k, 0);
         }
     }
 
-    public boolean g(fd world, int i, int j, int k) {
+    public boolean g(Level world, int i, int j, int k) {
         if (world.f(i - 1, j, k).a())
             return false;
         if (world.f(i + 1, j, k).a())
@@ -67,7 +69,7 @@ public class or extends Tile {
         return (l == Tile.aW.bn || l == Tile.F.bn);
     }
 
-    public void a(fd world, int i, int j, int k, Entity entity) {
+    public void a(Level world, int i, int j, int k, Entity entity) {
         entity.a((Entity) null, 1);
     }
 }

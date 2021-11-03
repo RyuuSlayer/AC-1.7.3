@@ -1,5 +1,7 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import net.minecraft.level.Level;
+
 public class st {
     public final eb a;
 
@@ -25,7 +27,7 @@ public class st {
         this.g = j1;
     }
 
-    public void a(fd world) {
+    public void a(Level world) {
         int i = this.e - this.b + 1;
         int j = this.f - this.c + 1;
         int k = this.g - this.d + 1;

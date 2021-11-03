@@ -1,5 +1,7 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import net.minecraft.level.Level;
+
 public class ju extends Entity {
     public int a;
 
@@ -11,7 +13,7 @@ public class ju extends Entity {
 
     public double startZ;
 
-    public ju(fd world) {
+    public ju(Level world) {
         super(world);
         this.b = 0;
         b(0.98F, 0.98F);
@@ -19,7 +21,7 @@ public class ju extends Entity {
         this.bf = this.bh / 2.0F;
     }
 
-    public ju(fd world, double d, double d1, double d2, int i) {
+    public ju(Level world, double d, double d1, double d2, int i) {
         super(world);
         this.b = 0;
         this.a = i;
@@ -110,7 +112,7 @@ public class ju extends Entity {
         return 0.0F;
     }
 
-    public fd k() {
+    public Level k() {
         return this.aI;
     }
 }

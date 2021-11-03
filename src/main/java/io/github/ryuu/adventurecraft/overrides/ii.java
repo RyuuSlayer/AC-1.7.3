@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.overrides;
 
 import io.github.ryuu.adventurecraft.util.IEntityPather;
+import net.minecraft.level.Level;
 
 public class ii extends ls implements IEntityPather {
     private dh a;
@@ -15,7 +16,7 @@ public class ii extends ls implements IEntityPather {
 
     public boolean canPathRandomly;
 
-    public ii(fd world) {
+    public ii(Level world) {
         super(world);
         this.canForgetTargetRandomly = true;
         this.timeBeforeForget = 0;

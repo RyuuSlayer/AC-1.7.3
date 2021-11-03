@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.overrides;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.level.Level;
 
 public class ob {
     protected final Minecraft a;
@@ -18,7 +19,7 @@ public class ob {
         this.a = minecraft;
     }
 
-    public void a(fd world) {
+    public void a(Level world) {
     }
 
     public void a(int i, int j, int k, int l) {
@@ -27,7 +28,7 @@ public class ob {
     }
 
     public boolean b(int i, int j, int k, int l) {
-        fd world = this.a.f;
+        Level world = this.a.f;
         Tile block = Tile.m[world.a(i, j, k)];
         world.e(2001, i, j, k, block.bn + world.e(i, j, k) * 256);
         int i1 = world.e(i, j, k);
@@ -50,7 +51,7 @@ public class ob {
         return 5.0F;
     }
 
-    public boolean a(gs entityplayer, fd world, iz itemstack) {
+    public boolean a(gs entityplayer, Level world, iz itemstack) {
         int i = itemstack.a;
         iz itemstack1 = itemstack.a(world, entityplayer);
         if (itemstack1 != itemstack || (itemstack1 != null && itemstack1.a != i)) {
@@ -75,7 +76,7 @@ public class ob {
     public void b(gs entityplayer) {
     }
 
-    public boolean a(gs entityplayer, fd world, iz itemstack, int i, int j, int k, int l) {
+    public boolean a(gs entityplayer, Level world, iz itemstack, int i, int j, int k, int l) {
         int i1 = world.a(i, j, k);
         if (i1 > 0 && Tile.m[i1].a(world, i, j, k, entityplayer))
             return true;
@@ -84,7 +85,7 @@ public class ob {
         return itemstack.a(entityplayer, world, i, j, k, l);
     }
 
-    public gs b(fd world) {
+    public gs b(Level world) {
         return (gs) new dc(this.a, world, this.a.k, world.t.g);
     }
 
