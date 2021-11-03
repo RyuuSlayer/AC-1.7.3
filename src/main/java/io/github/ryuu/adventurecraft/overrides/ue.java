@@ -1,8 +1,9 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import net.minecraft.client.gui.screen.container.ContainerScreen;
 import org.lwjgl.opengl.GL11;
 
-public class ue extends id {
+public class ue extends ContainerScreen {
     private float l;
 
     private float m;

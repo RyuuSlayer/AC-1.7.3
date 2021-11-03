@@ -6,8 +6,8 @@ import net.minecraft.level.Level;
 
 import java.util.Random;
 
-public class le extends Tile {
-    protected le(int i, ln material) {
+public class DoorTile extends Tile {
+    protected DoorTile(int i, ln material) {
         super(i, material);
         this.bm = 97;
         if (material == ln.f)

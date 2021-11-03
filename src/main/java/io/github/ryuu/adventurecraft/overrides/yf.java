@@ -1,5 +1,7 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import net.minecraft.level.Level;
+
 import java.util.Random;
 
 public class yf implements cl {
@@ -21,7 +23,7 @@ public class yf implements cl {
 
     public uf c;
 
-    private final fd p;
+    private final Level p;
 
     private double[] q;
 
@@ -69,7 +71,7 @@ public class yf implements cl {
 
     public double volatilityWeight2;
 
-    public yf(fd world, long l) {
+    public yf(Level world, long l) {
         this.mapSize = 250.0D;
         this.waterLevel = 64;
         this.fractureHorizontal = 1.0D;

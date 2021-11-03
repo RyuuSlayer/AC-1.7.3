@@ -2,11 +2,12 @@ package io.github.ryuu.adventurecraft.overrides;
 
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.TerrainImage;
+import net.minecraft.level.Level;
 
 import java.util.Random;
 
-public abstract class rp extends Tile {
-    protected rp(int i, ln material) {
+public abstract class FluidTile extends Tile {
+    protected FluidTile(int i, ln material) {
         super(i, ((material != ln.h) ? 12 : 14) * 16 + 13, material);
         float f = 0.0F;
         float f1 = 0.0F;
@@ -33,7 +34,7 @@ public abstract class rp extends Tile {
         return this.bm + 1;
     }
 
-    protected int h(fd world, int i, int j, int k) {
+    protected int h(Level world, int i, int j, int k) {
         if (world.f(i, j, k) != this.bA)
             return -1;
         return world.e(i, j, k);
@@ -86,7 +87,7 @@ public abstract class rp extends Tile {
         return super.b(iblockaccess, i, j, k, l);
     }
 
-    public eq e(fd world, int i, int j, int k) {
+    public eq e(Level world, int i, int j, int k) {
         return null;
     }
 
@@ -154,7 +155,7 @@ public abstract class rp extends Tile {
         return vec3d;
     }
 
-    public void a(fd world, int i, int j, int k, Entity entity, bt vec3d) {
+    public void a(Level world, int i, int j, int k, Entity entity, bt vec3d) {
         bt vec3d1 = e((xp) world, i, j, k);
         vec3d.a += vec3d1.a;
         vec3d.b += vec3d1.b;
@@ -173,7 +174,7 @@ public abstract class rp extends Tile {
         return (f <= f1) ? f1 : f;
     }
 
-    public void a(fd world, int i, int j, int k, Random random) {
+    public void a(Level world, int i, int j, int k, Random random) {
         super.a(world, i, j, k, random);
     }
 
@@ -181,7 +182,7 @@ public abstract class rp extends Tile {
         return (this.bA != ln.g) ? 0 : 1;
     }
 
-    public void b(fd world, int i, int j, int k, Random random) {
+    public void b(Level world, int i, int j, int k, Random random) {
         if (this.bA == ln.g && random.nextInt(64) == 0) {
             int l = world.e(i, j, k);
             if (l > 0 && l < 8)
@@ -206,15 +207,15 @@ public abstract class rp extends Tile {
         return Math.atan2(vec3d.c, vec3d.a) - 1.5707963267948966D;
     }
 
-    public void c(fd world, int i, int j, int k) {
+    public void c(Level world, int i, int j, int k) {
         j(world, i, j, k);
     }
 
-    public void b(fd world, int i, int j, int k, int l) {
+    public void b(Level world, int i, int j, int k, int l) {
         j(world, i, j, k);
     }
 
-    private void j(fd world, int i, int j, int k) {
+    private void j(Level world, int i, int j, int k) {
         if (world.a(i, j, k) != this.bn)
             return;
         if (this.bA == ln.h) {
@@ -239,7 +240,7 @@ public abstract class rp extends Tile {
         }
     }
 
-    protected void i(fd world, int i, int j, int k) {
+    protected void i(Level world, int i, int j, int k) {
         world.a((i + 0.5F), (j + 0.5F), (k + 0.5F), "random.fizz", 0.5F, 2.6F + (world.r.nextFloat() - world.r.nextFloat()) * 0.8F);
         for (int l = 0; l < 8; l++)
             world.a("largesmoke", i + Math.random(), j + 1.2D, k + Math.random(), 0.0D, 0.0D, 0.0D);

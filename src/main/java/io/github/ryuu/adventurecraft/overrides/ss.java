@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.overrides;
 
 import io.github.ryuu.adventurecraft.blocks.BlockColor;
+import net.minecraft.level.Level;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -23,7 +24,7 @@ public class ss extends BlockColor {
         a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
     }
 
-    public eq e(fd world, int i, int j, int k) {
+    public eq e(Level world, int i, int j, int k) {
         return super.e(world, i, j, k);
     }
 
@@ -43,7 +44,7 @@ public class ss extends BlockColor {
         return super.b(iblockaccess, i, j, k, l);
     }
 
-    public void a(fd world, int i, int j, int k, eq axisalignedbb, ArrayList arraylist) {
+    public void a(Level world, int i, int j, int k, eq axisalignedbb, ArrayList arraylist) {
         int l = world.e(i, j, k) & 0x3;
         a(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
         super.a(world, i, j, k, axisalignedbb, arraylist);
@@ -155,15 +156,15 @@ public class ss extends BlockColor {
         a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
     }
 
-    public void b(fd world, int i, int j, int k, Random random) {
+    public void b(Level world, int i, int j, int k, Random random) {
         this.a.b(world, i, j, k, random);
     }
 
-    public void b(fd world, int i, int j, int k, gs entityplayer) {
+    public void b(Level world, int i, int j, int k, gs entityplayer) {
         this.a.b(world, i, j, k, entityplayer);
     }
 
-    public void c(fd world, int i, int j, int k, int l) {
+    public void c(Level world, int i, int j, int k, int l) {
         this.a.c(world, i, j, k, l);
     }
 
@@ -203,11 +204,11 @@ public class ss extends BlockColor {
         return this.a.e();
     }
 
-    public eq f(fd world, int i, int j, int k) {
+    public eq f(Level world, int i, int j, int k) {
         return this.a.f(world, i, j, k);
     }
 
-    public void a(fd world, int i, int j, int k, Entity entity, bt vec3d) {
+    public void a(Level world, int i, int j, int k, Entity entity, bt vec3d) {
         this.a.a(world, i, j, k, entity, vec3d);
     }
 
@@ -219,44 +220,44 @@ public class ss extends BlockColor {
         return this.a.a(i, flag);
     }
 
-    public boolean a(fd world, int i, int j, int k) {
+    public boolean a(Level world, int i, int j, int k) {
         return this.a.a(world, i, j, k);
     }
 
-    public void c(fd world, int i, int j, int k) {
+    public void c(Level world, int i, int j, int k) {
         b(world, i, j, k, 0);
         this.a.c(world, i, j, k);
     }
 
-    public void b(fd world, int i, int j, int k) {
+    public void b(Level world, int i, int j, int k) {
         this.a.b(world, i, j, k);
     }
 
-    public void a(fd world, int i, int j, int k, int l, float f) {
+    public void a(Level world, int i, int j, int k, int l, float f) {
         this.a.a(world, i, j, k, l, f);
     }
 
-    public void g(fd world, int i, int j, int k, int l) {
+    public void g(Level world, int i, int j, int k, int l) {
         this.a.g(world, i, j, k, l);
     }
 
-    public void b(fd world, int i, int j, int k, Entity entity) {
+    public void b(Level world, int i, int j, int k, Entity entity) {
         this.a.b(world, i, j, k, entity);
     }
 
-    public void a(fd world, int i, int j, int k, Random random) {
+    public void a(Level world, int i, int j, int k, Random random) {
         this.a.a(world, i, j, k, random);
     }
 
-    public boolean a(fd world, int i, int j, int k, gs entityplayer) {
+    public boolean a(Level world, int i, int j, int k, gs entityplayer) {
         return this.a.a(world, i, j, k, entityplayer);
     }
 
-    public void d(fd world, int i, int j, int k) {
+    public void d(Level world, int i, int j, int k) {
         this.a.d(world, i, j, k);
     }
 
-    public void a(fd world, int i, int j, int k, ls entityliving) {
+    public void a(Level world, int i, int j, int k, ls entityliving) {
         int l = in.b((entityliving.aS * 4.0F / 360.0F) + 0.5D) & 0x3;
         if (l == 0)
             world.d(i, j, k, 2);
@@ -272,7 +273,7 @@ public class ss extends BlockColor {
         return iblockaccess.e(i, j, k) >> 2;
     }
 
-    protected void setColorMetaData(fd world, int i, int j, int k, int color) {
+    protected void setColorMetaData(Level world, int i, int j, int k, int color) {
         world.d(i, j, k, world.e(i, j, k) & 0x3 | color << 2);
     }
 }

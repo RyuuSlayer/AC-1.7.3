@@ -1,24 +1,24 @@
 package io.github.ryuu.adventurecraft.overrides;
 
-public class tz {
+public class class_552 {
     public ib[] a;
 
     public int b;
 
     private final boolean c;
 
-    public tz(ib[] apositiontexturevertex) {
+    public class_552(ib[] apositiontexturevertex) {
         this.b = 0;
         this.c = false;
         this.a = apositiontexturevertex;
         this.b = apositiontexturevertex.length;
     }
 
-    public tz(ib[] apositiontexturevertex, int i, int j, int k, int l) {
+    public class_552(ib[] apositiontexturevertex, int i, int j, int k, int l) {
         this(apositiontexturevertex, i, j, k, l, 64, 32);
     }
 
-    public tz(ib[] apositiontexturevertex, int i, int j, int k, int l, int tw, int th) {
+    public class_552(ib[] apositiontexturevertex, int i, int j, int k, int l, int tw, int th) {
         this(apositiontexturevertex);
         float f = 0.0015625F;
         float f1 = 0.003125F;

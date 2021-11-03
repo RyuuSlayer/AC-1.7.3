@@ -1,5 +1,8 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import io.github.ryuu.adventurecraft.util.TerrainImage;
+import net.minecraft.level.Level;
+
 import java.util.Random;
 
 public class xv {
@@ -17,12 +20,12 @@ public class xv {
 
     public kd[] d;
 
-    private fd worldObj;
+    private Level worldObj;
 
     protected xv() {
     }
 
-    public xv(fd world) {
+    public xv(Level world) {
         this.e = new ug(new Random(world.s() * 9871L), 4);
         this.f = new ug(new Random(world.s() * 39811L), 4);
         this.g = new ug(new Random(world.s() * 543321L), 2);

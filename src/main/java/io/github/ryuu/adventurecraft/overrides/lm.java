@@ -1,5 +1,7 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import net.minecraft.level.Level;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -14,7 +16,7 @@ public class lm {
 
     public boolean c;
 
-    public fd d;
+    public Level d;
 
     public wi e;
 
@@ -48,7 +50,7 @@ public class lm {
 
     public long lastUpdated;
 
-    public lm(fd world, int i, int j, boolean createHeightMap) {
+    public lm(Level world, int i, int j, boolean createHeightMap) {
         this.l = new HashMap<Object, Object>();
         this.m = new List[8];
         this.n = false;
@@ -64,11 +66,11 @@ public class lm {
             this.m[k] = new ArrayList();
     }
 
-    public lm(fd world, int i, int j) {
+    public lm(Level world, int i, int j) {
         this(world, i, j, true);
     }
 
-    public lm(fd world, byte[] abyte0, int i, int j) {
+    public lm(Level world, byte[] abyte0, int i, int j) {
         this(world, i, j);
         this.b = abyte0;
         this.e = new wi(abyte0.length);
