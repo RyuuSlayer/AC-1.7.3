@@ -21,15 +21,15 @@ public class fw {
         this.a = iblockaccess;
     }
 
-    public dh a(sn entity, sn entity1, float f) {
+    public dh a(Entity entity, Entity entity1, float f) {
         return a(entity, entity1.aM, entity1.aW.b, entity1.aO, f);
     }
 
-    public dh a(sn entity, int i, int j, int k, float f) {
+    public dh a(Entity entity, int i, int j, int k, float f) {
         return a(entity, (i + 0.5F), (j + 0.5F), (k + 0.5F), f);
     }
 
-    private dh a(sn entity, double d3, double d1, double d2, float f) {
+    private dh a(Entity entity, double d3, double d1, double d2, float f) {
         this.b.a();
         this.c.a();
         d pathpoint = a(in.b(entity.aW.a), in.b(entity.aW.b), in.b(entity.aW.c));
@@ -40,7 +40,7 @@ public class fw {
         return pathentity;
     }
 
-    private dh a(sn entity, d pathpoint, d pathpoint1, d pathpoint2, float f) {
+    private dh a(Entity entity, d pathpoint, d pathpoint1, d pathpoint2, float f) {
         pathpoint.e = 0.0F;
         pathpoint.f = pathpoint.a(pathpoint1);
         pathpoint.g = pathpoint.f;
@@ -78,7 +78,7 @@ public class fw {
         return a(pathpoint, pathpoint3);
     }
 
-    private int b(sn entity, d pathpoint, d pathpoint1, d pathpoint2, float f) {
+    private int b(Entity entity, d pathpoint, d pathpoint1, d pathpoint2, float f) {
         int i = 0;
         int j = 0;
         if (a(entity, pathpoint.a, pathpoint.b + 1, pathpoint.c, pathpoint1) == 1)
@@ -98,7 +98,7 @@ public class fw {
         return i;
     }
 
-    private d a(sn entity, int i, int j, int k, d pathpoint, int l) {
+    private d a(Entity entity, int i, int j, int k, d pathpoint, int l) {
         d pathpoint1 = null;
         if (a(entity, i, j, k, pathpoint) == 1)
             pathpoint1 = a(i, j, k);
@@ -131,7 +131,7 @@ public class fw {
         return pathpoint;
     }
 
-    private int a(sn entity, int i, int j, int k, d pathpoint) {
+    private int a(Entity entity, int i, int j, int k, d pathpoint) {
         for (int l = i; l < i + pathpoint.a; l++) {
             for (int i1 = j; i1 < j + pathpoint.b; i1++) {
                 for (int j1 = k; j1 < k + pathpoint.c; j1++) {
@@ -217,7 +217,7 @@ public class fw {
                         if (dZ < 0)
                             sign = -1;
                         for (int zOffset = 1; zOffset < Math.abs(dZ); zOffset++) {
-                            if (a((sn) null, prevPoint.a + (int) xOffset, prevPoint.b, prevPoint.c + zOffset * sign, clearSize) != 1 || a((sn) null, prevPoint.a + (int) xOffset, prevPoint.b - 1, prevPoint.c + zOffset * sign, clearSize) == 1 || a((sn) null, prevPoint.a + (int) xOffset + 1, prevPoint.b, prevPoint.c + zOffset * sign, clearSize) != 1 || a((sn) null, prevPoint.a + (int) xOffset + 1, prevPoint.b - 1, prevPoint.c + zOffset * sign, clearSize) == 1 || a((sn) null, prevPoint.a + (int) xOffset - 1, prevPoint.b, prevPoint.c + zOffset * sign, clearSize) != 1 || a((sn) null, prevPoint.a + (int) xOffset - 1, prevPoint.b - 1, prevPoint.c + zOffset * sign, clearSize) == 1) {
+                            if (a((Entity) null, prevPoint.a + (int) xOffset, prevPoint.b, prevPoint.c + zOffset * sign, clearSize) != 1 || a((Entity) null, prevPoint.a + (int) xOffset, prevPoint.b - 1, prevPoint.c + zOffset * sign, clearSize) == 1 || a((Entity) null, prevPoint.a + (int) xOffset + 1, prevPoint.b, prevPoint.c + zOffset * sign, clearSize) != 1 || a((Entity) null, prevPoint.a + (int) xOffset + 1, prevPoint.b - 1, prevPoint.c + zOffset * sign, clearSize) == 1 || a((Entity) null, prevPoint.a + (int) xOffset - 1, prevPoint.b, prevPoint.c + zOffset * sign, clearSize) != 1 || a((Entity) null, prevPoint.a + (int) xOffset - 1, prevPoint.b - 1, prevPoint.c + zOffset * sign, clearSize) == 1) {
                                 points.add(potentialPoint);
                                 points.add(point);
                                 addRestThePoints = true;
@@ -232,7 +232,7 @@ public class fw {
                         if (dX < 0)
                             sign = -1;
                         for (int xOffset = 1; xOffset < Math.abs(dX); xOffset++) {
-                            if (a((sn) null, prevPoint.a + xOffset * sign, prevPoint.b, prevPoint.c + (int) zOffset, clearSize) != 1 || a((sn) null, prevPoint.a + xOffset * sign, prevPoint.b - 1, prevPoint.c + (int) zOffset, clearSize) == 1 || a((sn) null, prevPoint.a + xOffset * sign, prevPoint.b, prevPoint.c + (int) zOffset + 1, clearSize) != 1 || a((sn) null, prevPoint.a + xOffset * sign, prevPoint.b - 1, prevPoint.c + (int) zOffset + 1, clearSize) == 1 || a((sn) null, prevPoint.a + xOffset * sign, prevPoint.b, prevPoint.c + (int) zOffset - 1, clearSize) != 1 || a((sn) null, prevPoint.a + xOffset * sign, prevPoint.b - 1, prevPoint.c + (int) zOffset - 1, clearSize) == 1) {
+                            if (a((Entity) null, prevPoint.a + xOffset * sign, prevPoint.b, prevPoint.c + (int) zOffset, clearSize) != 1 || a((Entity) null, prevPoint.a + xOffset * sign, prevPoint.b - 1, prevPoint.c + (int) zOffset, clearSize) == 1 || a((Entity) null, prevPoint.a + xOffset * sign, prevPoint.b, prevPoint.c + (int) zOffset + 1, clearSize) != 1 || a((Entity) null, prevPoint.a + xOffset * sign, prevPoint.b - 1, prevPoint.c + (int) zOffset + 1, clearSize) == 1 || a((Entity) null, prevPoint.a + xOffset * sign, prevPoint.b, prevPoint.c + (int) zOffset - 1, clearSize) != 1 || a((Entity) null, prevPoint.a + xOffset * sign, prevPoint.b - 1, prevPoint.c + (int) zOffset - 1, clearSize) == 1) {
                                 prevPoint = potentialPoint;
                                 points.add(potentialPoint);
                                 points.add(point);

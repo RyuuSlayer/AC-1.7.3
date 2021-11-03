@@ -150,7 +150,7 @@ public class tc extends rw {
                         entityitem.aP = ((float) this.a.nextGaussian() * f3);
                         entityitem.aQ = ((float) this.a.nextGaussian() * f3 + 0.2F);
                         entityitem.aR = ((float) this.a.nextGaussian() * f3);
-                        world.b((sn) entityitem);
+                        world.b((Entity) entityitem);
                     }
                 }
             }

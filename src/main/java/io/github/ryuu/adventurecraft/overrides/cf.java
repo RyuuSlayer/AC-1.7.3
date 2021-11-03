@@ -1,10 +1,12 @@
 package io.github.ryuu.adventurecraft.overrides;
 
 import io.github.ryuu.adventurecraft.mixin.Level;
+import net.minecraft.entity.Entity;
+import net.minecraft.level.Level;
 
 import java.util.List;
 
-public class cf extends sn {
+public class cf extends Entity {
     private int f;
 
     private int g;
@@ -153,11 +155,11 @@ public class cf extends sn {
         vec3d1 = bt.b(this.aM + this.aP, this.aN + this.aQ, this.aO + this.aR);
         if (movingobjectposition != null)
             vec3d1 = bt.b(movingobjectposition.f.a, movingobjectposition.f.b, movingobjectposition.f.c);
-        sn entity = null;
-        List<sn> list = this.aI.b(this, this.aW.a(this.aP, this.aQ, this.aR).b(1.0D, 1.0D, 1.0D));
+        Entity entity = null;
+        List<Entity> list = this.aI.b(this, this.aW.a(this.aP, this.aQ, this.aR).b(1.0D, 1.0D, 1.0D));
         double d = 0.0D;
         for (int j = 0; j < list.size(); j++) {
-            sn entity1 = list.get(j);
+            Entity entity1 = list.get(j);
             if (entity1.h_() && (entity1 != this.b || this.l >= 25)) {
                 float f2 = 0.3F;
                 eq axisalignedbb = entity1.aW.b(f2, f2, f2);
@@ -177,7 +179,7 @@ public class cf extends sn {
             if (!this.aI.B) {
                 if (movingobjectposition.g != null)
                     if (!movingobjectposition.g.a(this.b, 0)) ;
-                this.aI.a((sn) null, this.aM, this.aN, this.aO, this.radius, true);
+                this.aI.a((Entity) null, this.aM, this.aN, this.aO, this.radius, true);
             }
             K();
         }
@@ -237,7 +239,7 @@ public class cf extends sn {
         return 1.0F;
     }
 
-    public boolean a(sn entity, int i) {
+    public boolean a(Entity entity, int i) {
         ai();
         if (entity != null) {
             bt vec3d = entity.ac();

@@ -58,7 +58,7 @@ public class ue extends id {
         this.b.h.bE = 1.0F;
         GL11.glTranslatef(0.0F, this.b.h.bf, 0.0F);
         th.a.i = 180.0F;
-        th.a.a((sn) this.b.h, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
+        th.a.a((Entity) this.b.h, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
         this.b.h.bE = 0.0F;
         this.b.h.H = f2;
         this.b.h.aS = f3;

@@ -1,6 +1,5 @@
 package io.github.ryuu.adventurecraft.overrides;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
@@ -9,7 +8,7 @@ import net.minecraft.util.io.CompoundTag;
 import java.util.ArrayList;
 import java.util.List;
 
-public class qv extends Entity {
+public class qv extends net.minecraft.entity.Entity {
     private final int f;
 
     public int a;
@@ -162,11 +161,11 @@ public class qv extends Entity {
         return true;
     }
 
-    public boolean a(Entity entity, int i) {
+    public boolean a(net.minecraft.entity.Entity entity, int i) {
         if (!this.be && !this.aI.B) {
             K();
             ai();
-            this.aI.b((sn) new hl(this.aI, this.aM, this.aN, this.aO, new ItemInstance(ItemType.aq)));
+            this.aI.b((Entity) new hl(this.aI, this.aM, this.aN, this.aO, new ItemInstance(ItemType.aq)));
         }
         return true;
     }
@@ -200,14 +199,14 @@ public class qv extends Entity {
     public void b(double d, double d1, double d2) {
         if (!this.aI.B && d * d + d1 * d1 + d2 * d2 > 0.0D) {
             K();
-            this.aI.b((sn) new hl(this.aI, this.aM, this.aN, this.aO, new ItemInstance(ItemType.aq)));
+            this.aI.b((Entity) new hl(this.aI, this.aM, this.aN, this.aO, new ItemInstance(ItemType.aq)));
         }
     }
 
     public void d(double d, double d1, double d2) {
         if (!this.aI.B && d * d + d1 * d1 + d2 * d2 > 0.0D) {
             K();
-            this.aI.b((sn) new hl(this.aI, this.aM, this.aN, this.aO, new ItemInstance(ItemType.aq)));
+            this.aI.b((Entity) new hl(this.aI, this.aM, this.aN, this.aO, new ItemInstance(ItemType.aq)));
         }
     }
 }

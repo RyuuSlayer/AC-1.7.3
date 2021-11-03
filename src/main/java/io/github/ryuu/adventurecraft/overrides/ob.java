@@ -88,11 +88,11 @@ public class ob {
         return (gs) new dc(this.a, world, this.a.k, world.t.g);
     }
 
-    public void a(gs entityplayer, sn entity) {
+    public void a(gs entityplayer, Entity entity) {
         entityplayer.c(entity);
     }
 
-    public void b(gs entityplayer, sn entity) {
+    public void b(gs entityplayer, Entity entity) {
         entityplayer.d(entity);
     }
 

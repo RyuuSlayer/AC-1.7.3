@@ -12,7 +12,7 @@ import net.minecraft.util.maths.Vec3f;
 
 import java.util.List;
 
-public class by extends Entity {
+public class ThrownSnowball extends Entity {
     private int b;
 
     private int c;
@@ -31,7 +31,7 @@ public class by extends Entity {
 
     private int i;
 
-    public by(Level world) {
+    public ThrownSnowball(Level world) {
         super(world);
         this.b = -1;
         this.c = -1;

@@ -1,17 +1,19 @@
 package io.github.ryuu.adventurecraft.overrides;
 
 import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
+import net.minecraft.tile.FancyTile;
 
 import java.util.Random;
 
-public class bk extends nr {
+public class PlaceableTileItem extends FancyTile {
     private final int c;
 
     int[] a;
 
-    protected bk(int i, int j) {
+    protected PlaceableTileItem(int i, int j) {
         super(i, j, ln.i, false);
         this.c = j;
         b(true);
@@ -98,7 +100,7 @@ public class bk extends nr {
         this.bm = this.c + (flag ? 0 : 1);
     }
 
-    public void b(Level world, int i, int j, int k, sn entity) {
+    public void b(Level world, int i, int j, int k, Entity entity) {
         super.b(world, i, j, k, entity);
     }
 }

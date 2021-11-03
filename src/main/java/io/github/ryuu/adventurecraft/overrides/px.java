@@ -94,10 +94,10 @@ public class px {
         bt vec3d2 = vec3d.c(vec3d1.a * d, vec3d1.b * d, vec3d1.c * d);
         this.m = null;
         float f1 = 1.0F;
-        List<sn> list = this.j.f.b((sn) this.j.i, this.j.i.aW.a(vec3d1.a * d, vec3d1.b * d, vec3d1.c * d).b(f1, f1, f1));
+        List<Entity> list = this.j.f.b((Entity) this.j.i, this.j.i.aW.a(vec3d1.a * d, vec3d1.b * d, vec3d1.c * d).b(f1, f1, f1));
         double d2 = 0.0D;
         for (int i = 0; i < list.size(); i++) {
-            sn entity = list.get(i);
+            Entity entity = list.get(i);
             if (entity.h_()) {
                 float f2 = entity.m_();
                 eq axisalignedbb = entity.aW.b(f2, f2, f2);
@@ -543,12 +543,12 @@ public class px {
                 this.j.activeCutsceneCamera.drawLines(entityliving, f);
             if (DebugMode.active || DebugMode.renderPaths)
                 for (Object obj : this.j.f.b) {
-                    sn e = (sn) obj;
+                    Entity e = (Entity) obj;
                     renderglobal.drawEntityPath(e, entityliving, f);
                 }
             if (DebugMode.active || DebugMode.renderFov)
                 for (Object obj : this.j.f.b) {
-                    sn e = (sn) obj;
+                    Entity e = (Entity) obj;
                     if (e instanceof ls)
                         renderglobal.drawEntityFOV((ls) e, entityliving, f);
                 }
@@ -746,7 +746,7 @@ public class px {
         ls entityliving = this.j.i;
         float f1 = 1.0F / (5 - this.j.z.e);
         f1 = 1.0F - (float) Math.pow(f1, 0.25D);
-        bt vec3d = world.a((sn) this.j.i, f);
+        bt vec3d = world.a((Entity) this.j.i, f);
         float f2 = (float) vec3d.a;
         float f3 = (float) vec3d.b;
         float f4 = (float) vec3d.c;
@@ -885,7 +885,7 @@ public class px {
 
     private int l;
 
-    private sn m;
+    private Entity m;
 
     private final cu n;
 

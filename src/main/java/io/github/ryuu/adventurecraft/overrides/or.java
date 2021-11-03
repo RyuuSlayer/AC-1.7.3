@@ -67,7 +67,7 @@ public class or extends Tile {
         return (l == Tile.aW.bn || l == Tile.F.bn);
     }
 
-    public void a(fd world, int i, int j, int k, sn entity) {
-        entity.a((sn) null, 1);
+    public void a(fd world, int i, int j, int k, Entity entity) {
+        entity.a((Entity) null, 1);
     }
 }

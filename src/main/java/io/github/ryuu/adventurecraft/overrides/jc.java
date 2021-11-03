@@ -13,10 +13,10 @@ public class jc {
         d.put(class1, Integer.valueOf(i));
     }
 
-    public static sn a(String s, fd world) {
-        sn entity = null;
+    public static Entity a(String s, fd world) {
+        Entity entity = null;
         try {
-            Class<sn> class1 = (Class) a.get(s);
+            Class<Entity> class1 = (Class) a.get(s);
             if (class1 != null)
                 entity = class1.getConstructor(new Class[]{fd.class}).newInstance(new Object[]{world});
         } catch (Exception exception) {
@@ -25,10 +25,10 @@ public class jc {
         return entity;
     }
 
-    public static sn a(nu nbttagcompound, fd world) {
-        sn entity = null;
+    public static Entity a(nu nbttagcompound, fd world) {
+        Entity entity = null;
         try {
-            Class<sn> class1 = (Class) a.get(nbttagcompound.i("id"));
+            Class<Entity> class1 = (Class) a.get(nbttagcompound.i("id"));
             if (class1 != null)
                 entity = class1.getConstructor(new Class[]{fd.class}).newInstance(new Object[]{world});
         } catch (Exception exception) {
@@ -42,10 +42,10 @@ public class jc {
         return entity;
     }
 
-    public static sn a(int i, fd world) {
-        sn entity = null;
+    public static Entity a(int i, fd world) {
+        Entity entity = null;
         try {
-            Class<sn> class1 = (Class) c.get(Integer.valueOf(i));
+            Class<Entity> class1 = (Class) c.get(Integer.valueOf(i));
             if (class1 != null)
                 entity = class1.getConstructor(new Class[]{fd.class}).newInstance(new Object[]{world});
         } catch (Exception exception) {
@@ -56,15 +56,15 @@ public class jc {
         return entity;
     }
 
-    public static int a(sn entity) {
+    public static int a(Entity entity) {
         return ((Integer) d.get(entity.getClass())).intValue();
     }
 
-    public static String b(sn entity) {
+    public static String b(Entity entity) {
         return (String) b.get(entity.getClass());
     }
 
-    public static String getEntityStringClimbing(sn entity) {
+    public static String getEntityStringClimbing(Entity entity) {
         String returning = null;
         Class<?> obj = entity.getClass();
         while (returning == null && obj != null) {

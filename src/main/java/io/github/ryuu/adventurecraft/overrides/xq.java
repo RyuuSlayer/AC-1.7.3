@@ -107,22 +107,22 @@ public class xq extends rw {
                 sl entityarrow = new sl(world, d, d1, d2);
                 entityarrow.a(i1, 0.10000000149011612D, j1, 1.1F, 6.0F);
                 entityarrow.a = true;
-                world.b((sn) entityarrow);
+                world.b((Entity) entityarrow);
                 world.e(1002, i, j, k, 0);
             } else if (itemstack.c == MixinItemType.aN.bf) {
                 vv entityegg = new vv(world, d, d1, d2);
                 entityegg.a(i1, 0.10000000149011612D, j1, 1.1F, 6.0F);
-                world.b((sn) entityegg);
+                world.b((Entity) entityegg);
                 world.e(1002, i, j, k, 0);
             } else if (itemstack.c == MixinItemType.aB.bf) {
                 by entitysnowball = new by(world, d, d1, d2);
                 entitysnowball.a(i1, 0.10000000149011612D, j1, 1.1F, 6.0F);
-                world.b((sn) entitysnowball);
+                world.b((Entity) entitysnowball);
                 world.e(1002, i, j, k, 0);
             } else if (itemstack.c == Items.bombArow.bf) {
                 EntityArrowBomb aC_EntityArrowBomb = new EntityArrowBomb(world, d, d1, d2);
                 aC_EntityArrowBomb.a(i1, 0.10000000149011612D, j1, 1.1F, 6.0F);
-                world.b((sn) aC_EntityArrowBomb);
+                world.b((Entity) aC_EntityArrowBomb);
                 world.e(1002, i, j, k, 0);
             } else {
                 hl entityitem = new hl(world, d, d1 - 0.3D, d2, itemstack);
@@ -133,7 +133,7 @@ public class xq extends rw {
                 entityitem.aP += random.nextGaussian() * 0.007499999832361937D * 6.0D;
                 entityitem.aQ += random.nextGaussian() * 0.007499999832361937D * 6.0D;
                 entityitem.aR += random.nextGaussian() * 0.007499999832361937D * 6.0D;
-                world.b((sn) entityitem);
+                world.b((Entity) entityitem);
                 world.e(1000, i, j, k, 0);
             }
             world.e(2000, i, j, k, i1 + 1 + (j1 + 1) * 3);
@@ -187,7 +187,7 @@ public class xq extends rw {
                     entityitem.aP = ((float) this.a.nextGaussian() * f3);
                     entityitem.aQ = ((float) this.a.nextGaussian() * f3 + 0.2F);
                     entityitem.aR = ((float) this.a.nextGaussian() * f3);
-                    world.b((sn) entityitem);
+                    world.b((Entity) entityitem);
                 }
             }
         }

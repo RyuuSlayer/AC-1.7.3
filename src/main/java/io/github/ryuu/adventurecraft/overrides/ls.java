@@ -2,7 +2,7 @@ package io.github.ryuu.adventurecraft.overrides;
 
 import java.util.List;
 
-public abstract class ls extends sn {
+public abstract class ls extends Entity {
     public int E;
 
     public float F;
@@ -107,7 +107,7 @@ public abstract class ls extends sn {
 
     public float aB;
 
-    public sn b;
+    public Entity b;
 
     protected int aC;
 
@@ -203,7 +203,7 @@ public abstract class ls extends sn {
     protected void b() {
     }
 
-    public boolean e(sn entity) {
+    public boolean e(Entity entity) {
         double angleOffset = -180.0D * Math.atan2(entity.aM - this.aM, entity.aO - this.aO) / Math.PI;
         double diffAngle = angleOffset - this.aS;
         while (diffAngle < -180.0D)
@@ -384,7 +384,7 @@ public abstract class ls extends sn {
         this.by = this.E / 2;
     }
 
-    public boolean a(sn entity, int i) {
+    public boolean a(Entity entity, int i) {
         if (this.aI.B)
             return false;
         this.av = 0;
@@ -432,7 +432,7 @@ public abstract class ls extends sn {
         return true;
     }
 
-    public boolean attackEntityFromMulti(sn entity, int i) {
+    public boolean attackEntityFromMulti(Entity entity, int i) {
         if (this.aI.B)
             return false;
         this.av = 0;
@@ -505,7 +505,7 @@ public abstract class ls extends sn {
         return "random.hurt";
     }
 
-    public void a(sn entity, int i, double d, double d1) {
+    public void a(Entity entity, int i, double d, double d1) {
         float f = in.a(d * d + d1 * d1);
         float f1 = 0.4F;
         this.aP /= 2.0D;
@@ -518,7 +518,7 @@ public abstract class ls extends sn {
             this.aQ = 0.4000000059604645D;
     }
 
-    public void b(sn entity) {
+    public void b(Entity entity) {
         if (this.T >= 0 && entity != null)
             entity.c(this, this.T);
         if (entity != null)
@@ -529,7 +529,7 @@ public abstract class ls extends sn {
             if (entity != null && entity instanceof ls && ((ls) entity).Y < ((ls) entity).maxHealth)
                 if (this.bs.nextInt(3) != 0) {
                     hl hl = new hl(this.aI, this.aM, this.aN, this.aO, new iz(AC_Items.heart.bf, 1, 0));
-                    this.aI.b((sn) hl);
+                    this.aI.b((Entity) hl);
                 }
         }
         this.aI.a(this, (byte) 3);
@@ -799,10 +799,10 @@ public abstract class ls extends sn {
         this.ax *= 0.98F;
         this.ay *= 0.9F;
         a_(this.aw, this.ax);
-        List<sn> list = this.aI.b(this, this.aW.b(0.20000000298023224D, 0.0D, 0.20000000298023224D));
+        List<Entity> list = this.aI.b(this, this.aW.b(0.20000000298023224D, 0.0D, 0.20000000298023224D));
         if (list != null && list.size() > 0)
             for (int i = 0; i < list.size(); i++) {
-                sn entity = list.get(i);
+                Entity entity = list.get(i);
                 if (entity.i_())
                     entity.h(this);
             }
@@ -883,7 +883,7 @@ public abstract class ls extends sn {
         return 40;
     }
 
-    public void a(sn entity, float f, float f1) {
+    public void a(Entity entity, float f, float f1) {
         double d1, d = entity.aM - this.aM;
         double d2 = entity.aO - this.aO;
         if (entity instanceof ls) {
@@ -903,7 +903,7 @@ public abstract class ls extends sn {
         return (this.b != null);
     }
 
-    public sn Z() {
+    public Entity Z() {
         return this.b;
     }
 
@@ -992,7 +992,7 @@ public abstract class ls extends sn {
         } else if (byte0 == 3) {
             this.aI.a(this, i(), k(), (this.bs.nextFloat() - this.bs.nextFloat()) * 0.2F + 1.0F);
             this.Y = 0;
-            b((sn) null);
+            b((Entity) null);
         } else {
             super.a(byte0);
         }

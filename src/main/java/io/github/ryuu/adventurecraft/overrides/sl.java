@@ -9,7 +9,7 @@ import net.minecraft.util.io.CompoundTag;
 
 import java.util.List;
 
-public class sl extends sn {
+public class sl extends Entity {
     public int d;
 
     public int e;
@@ -200,11 +200,11 @@ public class sl extends sn {
         vec3d1 = bt.b(this.aM + this.aP, this.aN + this.aQ, this.aO + this.aR);
         if (movingobjectposition != null)
             vec3d1 = bt.b(movingobjectposition.f.a, movingobjectposition.f.b, movingobjectposition.f.c);
-        sn entity = null;
-        List<sn> list = this.aI.b(this, this.aW.a(this.aP, this.aQ, this.aR).b(1.0D, 1.0D, 1.0D));
+        Entity entity = null;
+        List<Entity> list = this.aI.b(this, this.aW.a(this.aP, this.aQ, this.aR).b(1.0D, 1.0D, 1.0D));
         double d = 0.0D;
         for (int l = 0; l < list.size(); l++) {
-            sn entity1 = list.get(l);
+            Entity entity1 = list.get(l);
             if (entity1.h_() && (entity1 != this.c || this.k >= 5)) {
                 float f4 = 0.3F;
                 eq axisalignedbb1 = entity1.aW.b(f4, f4, f4);
@@ -272,7 +272,7 @@ public class sl extends sn {
         if (movingobjectposition.g instanceof ls && ((ls) movingobjectposition.g).protectedByShield(this.aJ, this.aK, this.aL)) {
             this.aI.a(this, "random.drr", 1.0F, 1.2F / (this.bs.nextFloat() * 0.2F + 0.9F));
             K();
-        } else if (movingobjectposition.g.a((sn) this.c, this.attackStrength)) {
+        } else if (movingobjectposition.g.a((Entity) this.c, this.attackStrength)) {
             this.aI.a(this, "random.drr", 1.0F, 1.2F / (this.bs.nextFloat() * 0.2F + 0.9F));
             K();
         } else {

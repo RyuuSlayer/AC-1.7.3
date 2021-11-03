@@ -162,7 +162,7 @@ public class dk {
         CoordBlock.resetPool();
     }
 
-    public float a(sn entity) {
+    public float a(Entity entity) {
         float f = (float) (entity.aM - this.q);
         float f1 = (float) (entity.aN - this.r);
         float f2 = (float) (entity.aO - this.s);

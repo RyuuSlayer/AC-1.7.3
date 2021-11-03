@@ -5,8 +5,8 @@ import io.github.ryuu.adventurecraft.blocks.Blocks;
 import java.util.List;
 import java.util.Random;
 
-public abstract class sn {
-    public sn(fd world) {
+public abstract class Entity {
+    public Entity(fd world) {
         this.aW = eq.a(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
         this.collidesWithClipBlocks = true;
         this.moveYawOffset = 0.0F;
@@ -56,8 +56,8 @@ public abstract class sn {
     }
 
     public boolean equals(Object obj) {
-        if (obj instanceof sn)
-            return (((sn) obj).aD == this.aD);
+        if (obj instanceof Entity)
+            return (((Entity) obj).aD == this.aD);
         return false;
     }
 
@@ -161,7 +161,7 @@ public abstract class sn {
                     this.bv = 0;
             } else {
                 if (this.bv % 20 == 0)
-                    a((sn) null, 1);
+                    a((Entity) null, 1);
                 this.bv--;
             }
         }
@@ -178,7 +178,7 @@ public abstract class sn {
 
     protected void ae() {
         if (!this.bC) {
-            a((sn) null, 4);
+            a((Entity) null, 4);
             this.bv = 600;
         }
     }
@@ -421,7 +421,7 @@ public abstract class sn {
 
     protected void a(int i) {
         if (!this.bC)
-            a((sn) null, i);
+            a((Entity) null, i);
     }
 
     protected void b(float f) {
@@ -522,7 +522,7 @@ public abstract class sn {
         e(this.aM, this.aN, this.aO);
     }
 
-    public float f(sn entity) {
+    public float f(Entity entity) {
         float f = (float) (this.aM - entity.aM);
         float f1 = (float) (this.aN - entity.aN);
         float f2 = (float) (this.aO - entity.aO);
@@ -543,7 +543,7 @@ public abstract class sn {
         return in.a(d3 * d3 + d4 * d4 + d5 * d5);
     }
 
-    public double g(sn entity) {
+    public double g(Entity entity) {
         double d = this.aM - entity.aM;
         double d1 = this.aN - entity.aN;
         double d2 = this.aO - entity.aO;
@@ -553,7 +553,7 @@ public abstract class sn {
     public void b(gs entityplayer) {
     }
 
-    public void h(sn entity) {
+    public void h(Entity entity) {
         if (entity.aG == this || entity.aH == this)
             return;
         double d = entity.aM - this.aM;
@@ -591,12 +591,12 @@ public abstract class sn {
         this.bb = true;
     }
 
-    public boolean a(sn entity, int i) {
+    public boolean a(Entity entity, int i) {
         ai();
         return false;
     }
 
-    public boolean attackEntityFromMulti(sn entity, int i) {
+    public boolean attackEntityFromMulti(Entity entity, int i) {
         return a(entity, i);
     }
 
@@ -608,7 +608,7 @@ public abstract class sn {
         return false;
     }
 
-    public void c(sn entity, int i) {
+    public void c(Entity entity, int i) {
     }
 
     public boolean a(bt vec3d) {
@@ -721,7 +721,7 @@ public abstract class sn {
     public hl a(iz itemstack, float f) {
         hl entityitem = new hl(this.aI, this.aM, this.aN + f, this.aO, itemstack);
         entityitem.c = 10;
-        this.aI.b((sn) entityitem);
+        this.aI.b((Entity) entityitem);
         return entityitem;
     }
 
@@ -747,7 +747,7 @@ public abstract class sn {
         return false;
     }
 
-    public eq a(sn entity) {
+    public eq a(Entity entity) {
         return null;
     }
 
@@ -798,7 +798,7 @@ public abstract class sn {
         return this.bh * 0.75D;
     }
 
-    public void i(sn entity) {
+    public void i(Entity entity) {
         this.d = 0.0D;
         this.e = 0.0D;
         if (entity == null) {
@@ -968,9 +968,9 @@ public abstract class sn {
 
     public boolean aF;
 
-    public sn aG;
+    public Entity aG;
 
-    public sn aH;
+    public Entity aH;
 
     public fd aI;
 

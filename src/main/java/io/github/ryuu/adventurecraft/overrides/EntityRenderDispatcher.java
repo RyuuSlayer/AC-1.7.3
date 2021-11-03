@@ -9,12 +9,14 @@ import io.github.ryuu.adventurecraft.models.ModelBat;
 import io.github.ryuu.adventurecraft.models.ModelCamera;
 import io.github.ryuu.adventurecraft.models.ModelRat;
 import io.github.ryuu.adventurecraft.rendering.*;
+import net.minecraft.client.render.entity.ItemRenderer;
+import net.minecraft.item.ItemType;
 import org.lwjgl.opengl.GL11;
 
-public class th {
+public class EntityRenderDispatcher {
     private final Map o;
 
-    private th() {
+    private EntityRenderDispatcher() {
         this.o = new HashMap<>();
         this.o.put(cn.class, new yx());
         this.o.put(wh.class, new me((ko) new eh(), (ko) new eh(0.5F), 0.7F));
@@ -32,7 +34,7 @@ public class th {
         this.o.put(Ghast.class, new pq());
         this.o.put(xt.class, new es((ko) new wn(), 0.7F));
         this.o.put(ls.class, new gv((ko) new fh(), 0.5F));
-        this.o.put(sn.class, new mb());
+        this.o.put(Entity.class, new mb());
         this.o.put(qv.class, new dy());
         this.o.put(sl.class, new mc());
         this.o.put(by.class, new dg(ItemType.aB.a(0)));
@@ -57,16 +59,16 @@ public class th {
             bw render = iterator.next();
     }
 
-    public bw a(Class<sn> class1) {
+    public bw a(Class<Entity> class1) {
         bw render = (bw) this.o.get(class1);
-        if (render == null && class1 != sn.class) {
+        if (render == null && class1 != Entity.class) {
             render = a(class1.getSuperclass());
             this.o.put(class1, render);
         }
         return render;
     }
 
-    public bw a(sn entity) {
+    public bw a(Entity entity) {
         return a(entity.getClass());
     }
 
@@ -93,7 +95,7 @@ public class th {
         this.n = entityliving.bn + (entityliving.aO - entityliving.bn) * f;
     }
 
-    public void a(sn entity, float f) {
+    public void a(Entity entity, float f) {
         double d = entity.bl + (entity.aM - entity.bl) * f;
         double d1 = entity.bm + (entity.aN - entity.bm) * f;
         double d2 = entity.bn + (entity.aO - entity.bn) * f;
@@ -103,7 +105,7 @@ public class th {
         a(entity, d - b, d1 - c, d2 - th.d, f1, f);
     }
 
-    public void a(sn entity, double d, double d1, double d2, float f, float f1) {
+    public void a(Entity entity, double d, double d1, double d2, float f, float f1) {
         bw render = a(entity);
         if (render != null) {
             render.a(entity, d, d1, d2, f, f1);

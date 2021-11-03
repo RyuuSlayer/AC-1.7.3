@@ -343,7 +343,7 @@ public class lm {
         return i1;
     }
 
-    public void a(sn entity) {
+    public void a(Entity entity) {
         if (!(entity instanceof gs))
             this.q = true;
         int i = in.b(entity.aM / 16.0D);
@@ -364,11 +364,11 @@ public class lm {
         this.m[k].add(entity);
     }
 
-    public void b(sn entity) {
+    public void b(Entity entity) {
         a(entity, entity.bH);
     }
 
-    public void a(sn entity, int i) {
+    public void a(Entity entity, int i) {
         if (i < 0)
             i = 0;
         if (i >= this.m.length)
@@ -458,7 +458,7 @@ public class lm {
         this.o = true;
     }
 
-    public void a(sn entity, eq axisalignedbb, List<sn> list) {
+    public void a(Entity entity, eq axisalignedbb, List<Entity> list) {
         int i = in.b((axisalignedbb.b - 2.0D) / 16.0D);
         int j = in.b((axisalignedbb.e + 2.0D) / 16.0D);
         if (i < 0)
@@ -466,16 +466,16 @@ public class lm {
         if (j >= this.m.length)
             j = this.m.length - 1;
         for (int k = i; k <= j; k++) {
-            List<sn> list1 = this.m[k];
+            List<Entity> list1 = this.m[k];
             for (int l = 0; l < list1.size(); l++) {
-                sn entity1 = list1.get(l);
+                Entity entity1 = list1.get(l);
                 if (entity1 != entity && entity1.aW.a(axisalignedbb))
                     list.add(entity1);
             }
         }
     }
 
-    public void a(Class class1, eq axisalignedbb, List<sn> list) {
+    public void a(Class class1, eq axisalignedbb, List<Entity> list) {
         int i = in.b((axisalignedbb.b - 2.0D) / 16.0D);
         int j = in.b((axisalignedbb.e + 2.0D) / 16.0D);
         if (i < 0)
@@ -483,9 +483,9 @@ public class lm {
         if (j >= this.m.length)
             j = this.m.length - 1;
         for (int k = i; k <= j; k++) {
-            List<sn> list1 = this.m[k];
+            List<Entity> list1 = this.m[k];
             for (int l = 0; l < list1.size(); l++) {
-                sn entity = list1.get(l);
+                Entity entity = list1.get(l);
                 if (class1.isAssignableFrom(entity.getClass()) && entity.aW.a(axisalignedbb))
                     list.add(entity);
             }

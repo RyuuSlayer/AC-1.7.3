@@ -3,14 +3,13 @@ package io.github.ryuu.adventurecraft.overrides;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 import net.minecraft.util.io.CompoundTag;
 
-public class lx extends Entity {
+public class lx extends net.minecraft.entity.Entity {
     private int d;
 
     private int e;
@@ -31,7 +30,7 @@ public class lx extends Entity {
 
     private int k;
 
-    public sn c;
+    public Entity c;
 
     private int l;
 
@@ -211,11 +210,11 @@ public class lx extends Entity {
         vec3d1 = bt.b(this.aM + this.aP, this.aN + this.aQ, this.aO + this.aR);
         if (movingobjectposition != null)
             vec3d1 = bt.b(movingobjectposition.f.a, movingobjectposition.f.b, movingobjectposition.f.c);
-        sn entity = null;
-        List<sn> list = this.aI.b(this, this.aW.a(this.aP, this.aQ, this.aR).b(1.0D, 1.0D, 1.0D));
+        Entity entity = null;
+        List<Entity> list = this.aI.b(this, this.aW.a(this.aP, this.aQ, this.aR).b(1.0D, 1.0D, 1.0D));
         double d3 = 0.0D;
         for (int j = 0; j < list.size(); j++) {
-            sn entity1 = list.get(j);
+            Entity entity1 = list.get(j);
             if (entity1.h_() && (entity1 != this.b || this.j >= 5)) {
                 float f2 = 0.3F;
                 eq axisalignedbb = entity1.aW.b(f2, f2, f2);
@@ -233,7 +232,7 @@ public class lx extends Entity {
             movingobjectposition = new vf(entity);
         if (movingobjectposition != null)
             if (movingobjectposition.g != null) {
-                if (movingobjectposition.g.a((sn) this.b, 0))
+                if (movingobjectposition.g.a((Entity) this.b, 0))
                     this.c = movingobjectposition.g;
             } else {
                 this.h = true;
@@ -344,7 +343,7 @@ public class lx extends Entity {
             entityitem.aP = d1 * d9;
             entityitem.aQ = d3 * d9 + in.a(d7) * 0.08D;
             entityitem.aR = d5 * d9;
-            this.aI.b((sn) entityitem);
+            this.aI.b((Entity) entityitem);
             this.b.a(jl.B, 1);
             byte0 = 1;
         }

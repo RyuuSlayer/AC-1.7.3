@@ -2,7 +2,6 @@ package io.github.ryuu.adventurecraft.overrides;
 
 import io.github.ryuu.adventurecraft.entities.EntityArrowBomb;
 import io.github.ryuu.adventurecraft.items.Items;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.entity.projectile.Arrow;
@@ -21,12 +20,12 @@ public class qz extends ItemType {
         ItemInstance offItem = entityplayer.c.getOffhandItem();
         if ((curItem != null && curItem.c == Items.bombArow.bf) || (offItem != null && offItem.c == Items.bombArow.bf)) {
             if (entityplayer.c.c(Items.bombArow.bf)) {
-                world.a((Entity) entityplayer, "random.bow", 1.0F, 1.0F / (b.nextFloat() * 0.4F + 0.8F));
+                world.a((net.minecraft.entity.Entity) entityplayer, "random.bow", 1.0F, 1.0F / (b.nextFloat() * 0.4F + 0.8F));
                 if (!world.B)
-                    world.b((sn) new EntityArrowBomb(world, (LivingEntity) entityplayer));
+                    world.b((Entity) new EntityArrowBomb(world, (LivingEntity) entityplayer));
             }
         } else if (entityplayer.c.c(ItemType.j.bf)) {
-            world.a((Entity) entityplayer, "random.bow", 1.0F, 1.0F / (b.nextFloat() * 0.4F + 0.8F));
+            world.a((net.minecraft.entity.Entity) entityplayer, "random.bow", 1.0F, 1.0F / (b.nextFloat() * 0.4F + 0.8F));
             if (!world.B)
                 world.b(new Arrow(world, entityplayer));
         }

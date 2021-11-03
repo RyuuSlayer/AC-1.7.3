@@ -262,7 +262,7 @@ public class PlayerRenderer extends LivingEntityRenderer {
         a((Player) entityliving, d, d1, d2, f, f1);
     }
 
-    public void a(sn entity, double d, double d1, double d2, float f, float f1) {
+    public void a(Entity entity, double d, double d1, double d2, float f, float f1) {
         a((Player) entity, d, d1, d2, f, f1);
     }
 

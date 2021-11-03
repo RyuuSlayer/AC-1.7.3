@@ -33,7 +33,7 @@ public class Skeleton extends Monster {
         super.o();
     }
 
-    protected void a(sn entity, float f) {
+    protected void a(Entity entity, float f) {
         if (f < 10.0F) {
             double d = entity.aM - this.aM;
             double d1 = entity.aO - this.aO;

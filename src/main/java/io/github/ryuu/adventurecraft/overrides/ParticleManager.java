@@ -43,10 +43,10 @@ public class ParticleManager {
     }
 
     public List getEffectsWithinAABB(eq axisalignedbb) {
-        ArrayList<sn> arraylist = new ArrayList();
+        ArrayList<Entity> arraylist = new ArrayList();
         for (int i = 0; i < 6; i++) {
             for (Object obj : this.b[i]) {
-                sn p = (sn) obj;
+                Entity p = (Entity) obj;
                 if (axisalignedbb.a <= p.aM && axisalignedbb.d >= p.aM && axisalignedbb.b <= p.aN && axisalignedbb.e >= p.aN && axisalignedbb.c <= p.aO && axisalignedbb.f >= p.aO)
                     arraylist.add(p);
             }
@@ -54,7 +54,7 @@ public class ParticleManager {
         return arraylist;
     }
 
-    public void a(sn entity, float f) {
+    public void a(Entity entity, float f) {
         float f1 = in.b(entity.aS * 3.141593F / 180.0F);
         float f2 = in.a(entity.aS * 3.141593F / 180.0F);
         float f3 = -f2 * in.a(entity.aT * 3.141593F / 180.0F);
@@ -88,7 +88,7 @@ public class ParticleManager {
         }
     }
 
-    public void b(sn entity, float f) {
+    public void b(Entity entity, float f) {
         byte byte0 = 5;
         if (this.b[byte0].size() == 0)
             return;

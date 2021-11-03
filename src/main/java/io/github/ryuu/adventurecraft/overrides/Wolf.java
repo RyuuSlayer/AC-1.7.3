@@ -1,6 +1,5 @@
 package io.github.ryuu.adventurecraft.overrides;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.animal.Animal;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
@@ -116,14 +115,14 @@ public class Wolf extends Animal {
         if (!this.e && !F() && D() && this.aH == null) {
             Player entityplayer = this.aI.a(A());
             if (entityplayer != null) {
-                float f = entityplayer.f((sn) this);
+                float f = entityplayer.f((Entity) this);
                 if (f > 5.0F)
                     c(entityplayer, f);
             } else if (!ag()) {
                 b(true);
             }
         } else if (this.d == null && !F() && !D() && this.aI.r.nextInt(100) == 0) {
-            List<Entity> list = this.aI.a(dl.class, eq.b(this.aM, this.aN, this.aO, this.aM + 1.0D, this.aN + 1.0D, this.aO + 1.0D).b(16.0D, 4.0D, 16.0D));
+            List<net.minecraft.entity.Entity> list = this.aI.a(dl.class, eq.b(this.aM, this.aN, this.aO, this.aM + 1.0D, this.aN + 1.0D, this.aO + 1.0D).b(16.0D, 4.0D, 16.0D));
             if (!list.isEmpty())
                 c(list.get(this.aI.r.nextInt(list.size())));
         }
@@ -137,7 +136,7 @@ public class Wolf extends Animal {
         super.o();
         this.a = false;
         if (Y() && !F() && !C()) {
-            sn entity = Z();
+            Entity entity = Z();
             if (entity instanceof Player) {
                 Player entityplayer = (Player) entity;
                 ItemInstance itemstack = entityplayer.c.b();
@@ -153,7 +152,7 @@ public class Wolf extends Animal {
             this.g = true;
             this.h = 0.0F;
             this.i = 0.0F;
-            this.aI.a((sn) this, (byte) 8);
+            this.aI.a((Entity) this, (byte) 8);
         }
     }
 
@@ -174,7 +173,7 @@ public class Wolf extends Animal {
             this.i = 0.0F;
         } else if ((this.f || this.g) && this.g) {
             if (this.h == 0.0F)
-                this.aI.a((Entity) this, "mob.wolf.shake", k(), (this.bs.nextFloat() - this.bs.nextFloat()) * 0.2F + 1.0F);
+                this.aI.a((net.minecraft.entity.Entity) this, "mob.wolf.shake", k(), (this.bs.nextFloat() - this.bs.nextFloat()) * 0.2F + 1.0F);
             this.i = this.h;
             this.h += 0.05F;
             if (this.i >= 2.0F) {
@@ -227,8 +226,8 @@ public class Wolf extends Animal {
         return super.x();
     }
 
-    private void c(sn entity, float f) {
-        dh pathentity = this.aI.a((sn) this, entity, 16.0F);
+    private void c(Entity entity, float f) {
+        dh pathentity = this.aI.a((Entity) this, entity, 16.0F);
         if (pathentity == null && f > 12.0F) {
             int i = in.b(entity.aM) - 2;
             int j = in.b(entity.aO) - 2;
@@ -250,7 +249,7 @@ public class Wolf extends Animal {
         return (B() || this.g);
     }
 
-    public boolean a(Entity entity, int i) {
+    public boolean a(net.minecraft.entity.Entity entity, int i) {
         b(false);
         if (entity != null && !(entity instanceof Player) && !(entity instanceof sl))
             i = (i + 1) / 2;
@@ -264,9 +263,9 @@ public class Wolf extends Animal {
                     entity = ((sl) entity).c;
                 if (entity instanceof ls) {
                     List list = this.aI.a(Wolf.class, eq.b(this.aM, this.aN, this.aO, this.aM + 1.0D, this.aN + 1.0D, this.aO + 1.0D).b(16.0D, 4.0D, 16.0D));
-                    Iterator<sn> iterator = list.iterator();
+                    Iterator<Entity> iterator = list.iterator();
                     while (iterator.hasNext()) {
-                        sn entity1 = iterator.next();
+                        Entity entity1 = iterator.next();
                         Wolf entitywolf = (Wolf) entity1;
                         if (!entitywolf.D() && entitywolf.d == null) {
                             entitywolf.d = entity;
@@ -285,13 +284,13 @@ public class Wolf extends Animal {
         return false;
     }
 
-    protected sn g_() {
+    protected Entity g_() {
         if (C())
-            return this.aI.a((sn) this, 16.0D);
+            return this.aI.a((Entity) this, 16.0D);
         return null;
     }
 
-    protected void a(sn entity, float f) {
+    protected void a(Entity entity, float f) {
         if (f > 2.0F && f < 6.0F && this.bs.nextInt(10) == 0) {
             if (this.aX) {
                 double d = entity.aM - this.aM;
@@ -308,7 +307,7 @@ public class Wolf extends Animal {
                 byte0 = 4;
             if (this.attackStrength != -1)
                 byte0 = this.attackStrength;
-            entity.a((Entity) this, byte0);
+            entity.a((net.minecraft.entity.Entity) this, byte0);
         }
     }
 
@@ -327,10 +326,10 @@ public class Wolf extends Animal {
                         this.Y = 20;
                         a(entityplayer.l);
                         a(true);
-                        this.aI.a((sn) this, (byte) 7);
+                        this.aI.a((Entity) this, (byte) 7);
                     } else {
                         a(false);
-                        this.aI.a((sn) this, (byte) 6);
+                        this.aI.a((Entity) this, (byte) 6);
                     }
                 return true;
             }

@@ -1,6 +1,5 @@
 package io.github.ryuu.adventurecraft.overrides;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.Monster;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
@@ -34,7 +33,7 @@ public class Creeper extends Monster {
         this.bD.b(17, Byte.valueOf((byte) (nbttagcompound.m("powered") ? 1 : 0)));
     }
 
-    protected void b(sn entity, float f) {
+    protected void b(Entity entity, float f) {
         if (this.aI.B)
             return;
         if (this.a > 0) {
@@ -74,13 +73,13 @@ public class Creeper extends Monster {
         return "mob.creeperdeath";
     }
 
-    public void b(sn entity) {
+    public void b(Entity entity) {
         super.b(entity);
         if (entity instanceof fr)
             b(ItemType.bd.bf + this.bs.nextInt(2), 1);
     }
 
-    protected void a(Entity entity, float f) {
+    protected void a(net.minecraft.entity.Entity entity, float f) {
         if (this.aI.B)
             return;
         int i = v();

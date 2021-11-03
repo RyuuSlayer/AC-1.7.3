@@ -1,6 +1,5 @@
 package io.github.ryuu.adventurecraft.overrides;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
@@ -9,7 +8,7 @@ import net.minecraft.util.io.CompoundTag;
 
 import java.util.List;
 
-public class vv extends Entity {
+public class vv extends net.minecraft.entity.Entity {
     private int b;
 
     private int c;
@@ -153,11 +152,11 @@ public class vv extends Entity {
         if (movingobjectposition != null)
             vec3d1 = bt.b(movingobjectposition.f.a, movingobjectposition.f.b, movingobjectposition.f.c);
         if (!this.aI.B) {
-            sn entity = null;
-            List<sn> list = this.aI.b(this, this.aW.a(this.aP, this.aQ, this.aR).b(1.0D, 1.0D, 1.0D));
+            Entity entity = null;
+            List<Entity> list = this.aI.b(this, this.aW.a(this.aP, this.aQ, this.aR).b(1.0D, 1.0D, 1.0D));
             double d = 0.0D;
             for (int i1 = 0; i1 < list.size(); i1++) {
-                sn entity1 = list.get(i1);
+                Entity entity1 = list.get(i1);
                 if (entity1.h_() && (entity1 != this.g || this.i >= 5)) {
                     float f4 = 0.3F;
                     eq axisalignedbb = entity1.aW.b(f4, f4, f4);
@@ -176,7 +175,7 @@ public class vv extends Entity {
         }
         if (movingobjectposition != null) {
             if (movingobjectposition.g != null)
-                if (!movingobjectposition.g.a((sn) this.g, 0)) ;
+                if (!movingobjectposition.g.a((Entity) this.g, 0)) ;
             if (!this.aI.B && this.bs.nextInt(8) == 0) {
                 byte byte0 = 1;
                 if (this.bs.nextInt(32) == 0)
@@ -184,7 +183,7 @@ public class vv extends Entity {
                 for (int k = 0; k < byte0; k++) {
                     ww entitychicken = new ww(this.aI);
                     entitychicken.c(this.aM, this.aN, this.aO, this.aS, 0.0F);
-                    this.aI.b((sn) entitychicken);
+                    this.aI.b((Entity) entitychicken);
                 }
             }
             for (int j = 0; j < 8; j++)

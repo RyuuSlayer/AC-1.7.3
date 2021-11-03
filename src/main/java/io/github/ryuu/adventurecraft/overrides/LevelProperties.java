@@ -167,7 +167,7 @@ public class LevelProperties {
         this.tempOffset = nbttagcompound.h("TemperatureOffset");
         if (nbttagcompound.b("IsPrecipitating"))
             this.l = nbttagcompound.m("IsPrecipitating");
-        sn.a = nbttagcompound.e("nextEntityID");
+        Entity.a = nbttagcompound.e("nextEntityID");
         if (nbttagcompound.b("useImages")) {
             this.useImages = nbttagcompound.m("useImages");
             this.mapSize = nbttagcompound.h("mapSize");
@@ -363,7 +363,7 @@ public class LevelProperties {
         if (nbttagcompound1 != null)
             nbttagcompound.a("Player", nbttagcompound1);
         nbttagcompound.a("TemperatureOffset", this.tempOffset);
-        nbttagcompound.a("nextEntityID", sn.a);
+        nbttagcompound.a("nextEntityID", Entity.a);
         nbttagcompound.a("useImages", this.useImages);
         nbttagcompound.a("mapSize", this.mapSize);
         nbttagcompound.a("waterLevel", (short) this.waterLevel);

@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.overrides;
 
-public class ju extends sn {
+public class ju extends Entity {
     public int a;
 
     public int metadata;

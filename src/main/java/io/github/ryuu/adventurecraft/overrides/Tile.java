@@ -2,7 +2,6 @@ package io.github.ryuu.adventurecraft.overrides;
 
 import io.github.ryuu.adventurecraft.blocks.BlockColor;
 import io.github.ryuu.adventurecraft.items.ItemSubtypes;
-import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
@@ -239,7 +238,7 @@ public class Tile {
         return 0;
     }
 
-    public float a(Entity entity) {
+    public float a(net.minecraft.entity.Entity entity) {
         return this.bp / 5.0F;
     }
 
@@ -334,7 +333,7 @@ public class Tile {
         return false;
     }
 
-    public void b(Level world, int i, int j, int k, sn entity) {
+    public void b(Level world, int i, int j, int k, Entity entity) {
     }
 
     public void e(Level world, int i, int j, int k, int l) {
@@ -343,7 +342,7 @@ public class Tile {
     public void b(Level world, int i, int j, int k, Player entityplayer) {
     }
 
-    public void a(Level world, int i, int j, int k, sn entity, bt vec3d) {
+    public void a(Level world, int i, int j, int k, Entity entity, bt vec3d) {
     }
 
     public void a(TileView iblockaccess, int i, int j, int k) {
@@ -365,7 +364,7 @@ public class Tile {
         return false;
     }
 
-    public void a(Level world, int i, int j, int k, sn entity) {
+    public void a(Level world, int i, int j, int k, Entity entity) {
     }
 
     public boolean d(Level world, int i, int j, int k, int l) {

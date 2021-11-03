@@ -5,7 +5,7 @@ import io.github.ryuu.adventurecraft.util.IEntityPather;
 public class ii extends ls implements IEntityPather {
     private dh a;
 
-    protected sn d;
+    protected Entity d;
 
     protected boolean e;
 
@@ -137,17 +137,17 @@ public class ii extends ls implements IEntityPather {
             this.a = this.aI.a(this, i, j, k, 10.0F);
     }
 
-    protected void a(sn entity, float f) {
+    protected void a(Entity entity, float f) {
     }
 
-    protected void b(sn entity, float f) {
+    protected void b(Entity entity, float f) {
     }
 
     protected float a(int i, int j, int k) {
         return 0.0F;
     }
 
-    protected sn g_() {
+    protected Entity g_() {
         return null;
     }
 
@@ -166,11 +166,11 @@ public class ii extends ls implements IEntityPather {
         this.a = pathentity;
     }
 
-    public sn G() {
+    public Entity G() {
         return this.d;
     }
 
-    public void c(sn entity) {
+    public void c(Entity entity) {
         this.d = entity;
     }
 

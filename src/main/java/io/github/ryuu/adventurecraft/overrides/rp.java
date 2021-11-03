@@ -154,7 +154,7 @@ public abstract class rp extends Tile {
         return vec3d;
     }
 
-    public void a(fd world, int i, int j, int k, sn entity, bt vec3d) {
+    public void a(fd world, int i, int j, int k, Entity entity, bt vec3d) {
         bt vec3d1 = e((xp) world, i, j, k);
         vec3d.a += vec3d1.a;
         vec3d.b += vec3d1.b;

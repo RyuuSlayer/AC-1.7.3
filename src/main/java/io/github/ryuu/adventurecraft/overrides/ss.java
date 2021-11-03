@@ -171,7 +171,7 @@ public class ss extends BlockColor {
         return this.a.d(iblockaccess, i, j, k);
     }
 
-    public float a(sn entity) {
+    public float a(Entity entity) {
         return this.a.a(entity);
     }
 
@@ -207,7 +207,7 @@ public class ss extends BlockColor {
         return this.a.f(world, i, j, k);
     }
 
-    public void a(fd world, int i, int j, int k, sn entity, bt vec3d) {
+    public void a(fd world, int i, int j, int k, Entity entity, bt vec3d) {
         this.a.a(world, i, j, k, entity, vec3d);
     }
 
@@ -240,7 +240,7 @@ public class ss extends BlockColor {
         this.a.g(world, i, j, k, l);
     }
 
-    public void b(fd world, int i, int j, int k, sn entity) {
+    public void b(fd world, int i, int j, int k, Entity entity) {
         this.a.b(world, i, j, k, entity);
     }
 

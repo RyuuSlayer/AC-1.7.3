@@ -5,9 +5,9 @@ import net.minecraft.client.particle.Particle;
 import org.lwjgl.opengl.GL11;
 
 public class EntityCollisionParticle extends Particle {
-    private final sn a;
+    private final Entity a;
 
-    private final sn o;
+    private final Entity o;
 
     private int p;
 
@@ -15,7 +15,7 @@ public class EntityCollisionParticle extends Particle {
 
     private final float r;
 
-    public EntityCollisionParticle(Level world, sn entity, sn entity1, float f) {
+    public EntityCollisionParticle(Level world, Entity entity, Entity entity1, float f) {
         super(world, entity.aM, entity.aN, entity.aO, entity.aP, entity.aQ, entity.aR);
         this.p = 0;
         this.q = 0;

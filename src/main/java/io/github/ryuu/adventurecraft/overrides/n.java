@@ -16,7 +16,6 @@ import io.github.ryuu.adventurecraft.util.IEntityPather;
 import io.github.ryuu.adventurecraft.util.PlayerTorch;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.Tessellator;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
@@ -304,7 +303,7 @@ public class n implements pm {
             LivingEntity entityliving = this.t.i;
             if (entityliving != null) {
                 b(in.b(entityliving.aM), in.b(entityliving.aN), in.b(entityliving.aO));
-                Arrays.sort(this.n, new jo((sn) entityliving));
+                Arrays.sort(this.n, new jo((Entity) entityliving));
             }
         }
         this.I = 2;
@@ -327,16 +326,16 @@ public class n implements pm {
         ll.b = entityliving.bl + (entityliving.aM - entityliving.bl) * f;
         ll.c = entityliving.bm + (entityliving.aN - entityliving.bm) * f;
         ll.d = entityliving.bn + (entityliving.aO - entityliving.bn) * f;
-        List<sn> list = this.k.o();
+        List<Entity> list = this.k.o();
         this.J = list.size();
         for (int i = 0; i < this.k.e.size(); i++) {
-            sn entity = this.k.e.get(i);
+            Entity entity = this.k.e.get(i);
             this.K++;
             if (entity.a(vec3d))
                 th.a.a(entity, f);
         }
         for (int j = 0; j < list.size(); j++) {
-            sn entity1 = list.get(j);
+            Entity entity1 = list.get(j);
             if (entity1.a(vec3d) && (entity1.bM || icamera.a(entity1.aW)) && (entity1 != this.t.i || this.t.z.A || this.t.i.N())) {
                 int l = in.b(entity1.aN);
                 if (l < 0)
@@ -448,7 +447,7 @@ public class n implements pm {
             this.g = entityliving.aN;
             this.h = entityliving.aO;
             b(in.b(entityliving.aM), in.b(entityliving.aN), in.b(entityliving.aO));
-            Arrays.sort(this.n, new jo((sn) entityliving));
+            Arrays.sort(this.n, new jo((Entity) entityliving));
         }
         u.a();
         int k = 0;
@@ -607,7 +606,7 @@ public class n implements pm {
         if (this.t.f.t.c)
             return;
         GL11.glDisable(3553);
-        bt vec3d = this.k.a((sn) this.t.i, f);
+        bt vec3d = this.k.a((Entity) this.t.i, f);
         float f1 = (float) vec3d.a;
         float f2 = (float) vec3d.b;
         float f3 = (float) vec3d.c;
@@ -1145,7 +1144,7 @@ public class n implements pm {
         }
     }
 
-    public void drawEntityPath(Entity e, LivingEntity entityplayer, float f) {
+    public void drawEntityPath(net.minecraft.entity.Entity e, LivingEntity entityplayer, float f) {
         if (e instanceof IEntityPather) {
             IEntityPather ent = (IEntityPather) e;
             dh path = ent.getCurrentPath();
@@ -1347,7 +1346,7 @@ public class n implements pm {
         return (xw) kc;
     }
 
-    public void a(sn entity) {
+    public void a(Entity entity) {
         entity.u_();
         if (entity.bA != null)
             this.l.a(entity.bA, (nf) new rr());
@@ -1355,7 +1354,7 @@ public class n implements pm {
             this.l.a(entity.bB, (nf) new rr());
     }
 
-    public void b(sn entity) {
+    public void b(Entity entity) {
         if (entity.bA != null)
             this.l.c(entity.bA);
         if (entity.bB != null)
