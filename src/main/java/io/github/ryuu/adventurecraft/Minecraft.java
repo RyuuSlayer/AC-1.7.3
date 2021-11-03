@@ -8,7 +8,7 @@ import io.github.ryuu.adventurecraft.scripting.ScriptItem;
 import io.github.ryuu.adventurecraft.scripting.ScriptVec3;
 import bt;
 import cv;
-import cx;
+import net.minecraft.client.util.OcclusionQueryTester;
 import cz;
 import dk;
 import ep;
@@ -46,8 +46,8 @@ import kj;
 import kn;
 import kp;
 import kq;
-import kv;
-import lr;
+import net.minecraft.client.options.GameOptions;
+import net.minecraft.client.MovementManager;
 import n;
 import net.minecraft.client.*;
 import net.minecraft.client.colour.WaterColour;
@@ -60,6 +60,7 @@ import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.render.entity.model.BipedModel;
 import net.minecraft.client.sound.SoundHelper;
 import net.minecraft.client.texture.TextureManager;
+import net.minecraft.client.util.OcclusionQueryTester;
 import net.minecraft.client.util.ScreenScaler;
 import net.minecraft.client.util.ScreenshotManager;
 import net.minecraft.client.util.Session;
@@ -79,6 +80,7 @@ import net.minecraft.level.storage.McRegionLevelStorage;
 import net.minecraft.level.storage.SessionLockException;
 import net.minecraft.network.Connection;
 import net.minecraft.stat.StatManager;
+import net.minecraft.tile.StoneTile;
 import net.minecraft.tile.Tile;
 import net.minecraft.util.ProgressListenerError;
 import net.minecraft.util.ProgressListenerImpl;
@@ -94,8 +96,8 @@ import org.lwjgl.util.glu.GLU;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
 import org.mozilla.javascript.ScriptableObject;
-import ue;
-import uo;
+import net.minecraft.client.gui.screen.container.PlayerInventoryScreen;
+import net.minecraft.client.PlayerKeypressManager;
 import uq;
 import ur;
 import vf;
@@ -103,7 +105,7 @@ import vx;
 import vy;
 import x;
 import xa;
-import yb;
+import vb;
 
 public abstract class Minecraft implements Runnable {
     public Minecraft(Component component, Canvas canvas, MinecraftApplet minecraftapplet, int i, int j, boolean flag) {
@@ -198,7 +200,7 @@ public abstract class Minecraft implements Runnable {
         }
         this.Z = b();
         this.aa = new McRegionLevelStorage(new File(this.Z, "saves"));
-        this.z = new kv(this, this.Z);
+        this.z = new GameOptions(this, this.Z);
         this.D = new ik(this, this.Z);
         this.mapList = new MapList(this.Z);
         this.p = new TextureManager(this.D, this.z);
@@ -232,7 +234,7 @@ public abstract class Minecraft implements Runnable {
         GL11.glLoadIdentity();
         GL11.glMatrixMode(5888);
         c("Startup");
-        this.S = new cx();
+        this.S = new OcclusionQueryTester();
         this.B.a(this.z);
         this.p.a((TextureBinder) this.ae);
         this.p.a((TextureBinder) this.ad);
@@ -1299,7 +1301,7 @@ public abstract class Minecraft implements Runnable {
                 this.cutsceneCameraEntity = (LivingEntity) this.c.b(world);
                 this.f.script.initPlayer();
             }
-            this.h.a = (uo) new lr(this.z);
+            this.h.a = (PlayerKeypressManager) new MovementManager(this.z);
             if (this.g != null)
                 this.g.a(world);
             if (this.j != null)
@@ -1378,7 +1380,7 @@ public abstract class Minecraft implements Runnable {
         }
     }
 
-    public cx n() {
+    public OcclusionQueryTester n() {
         return this.S;
     }
 
@@ -1424,7 +1426,7 @@ public abstract class Minecraft implements Runnable {
         this.h.t_();
         this.c.a((Player) this.h);
         this.f.a((Player) this.h);
-        this.h.a = (uo) new lr(this.z);
+        this.h.a = (PlayerKeypressManager) new MovementManager(this.z);
         this.h.aD = entID;
         this.h.v();
         this.h.c(this.f.getSpawnYaw(), 0.0F);
@@ -1517,7 +1519,7 @@ public abstract class Minecraft implements Runnable {
 
     public int e;
 
-    private cx S;
+    private OcclusionQueryTester S;
 
     private final Timer T;
 
@@ -1571,7 +1573,7 @@ public abstract class Minecraft implements Runnable {
 
     public vf y;
 
-    public kv z;
+    public GameOptions z;
 
     protected MinecraftApplet A;
 
