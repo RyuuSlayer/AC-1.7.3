@@ -11,6 +11,7 @@ import io.github.ryuu.adventurecraft.models.ModelRat;
 import io.github.ryuu.adventurecraft.rendering.*;
 import net.minecraft.client.render.entity.ItemRenderer;
 import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
 import org.lwjgl.opengl.GL11;
 
 public class EntityRenderDispatcher {
@@ -72,7 +73,7 @@ public class EntityRenderDispatcher {
         return a(entity.getClass());
     }
 
-    public void a(fd world, ji renderengine, sj fontrenderer, ls entityliving, kv gamesettings, float f) {
+    public void a(Level world, ji renderengine, sj fontrenderer, ls entityliving, kv gamesettings, float f) {
         this.g = world;
         this.e = renderengine;
         this.k = gamesettings;
@@ -113,7 +114,7 @@ public class EntityRenderDispatcher {
         }
     }
 
-    public void a(fd world) {
+    public void a(Level world) {
         this.g = world;
     }
 
@@ -142,7 +143,7 @@ public class EntityRenderDispatcher {
 
     public ra f;
 
-    public fd g;
+    public Level g;
 
     public ls h;
 

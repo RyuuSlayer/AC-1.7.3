@@ -1,5 +1,7 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import net.minecraft.util.maths.Vec3f;
+
 public class dh {
     public d[] b;
 
@@ -32,11 +34,11 @@ public class dh {
         return null;
     }
 
-    public bt a(Entity entity) {
+    public Vec3f a(Entity entity) {
         double d3 = (this.b[this.c]).a + (int) (entity.bg + 1.0F) * 0.5D;
         double d1 = (this.b[this.c]).b;
         double d2 = (this.b[this.c]).c + (int) (entity.bg + 1.0F) * 0.5D;
-        return bt.b(d3, d1, d2);
+        return Vec3f.b(d3, d1, d2);
     }
 
     public boolean needNewPath(Entity entity) {

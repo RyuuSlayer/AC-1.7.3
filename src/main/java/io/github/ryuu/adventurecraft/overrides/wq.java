@@ -1,9 +1,11 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import net.minecraft.level.Level;
+
 public class wq extends ls {
     public int attackStrength;
 
-    public wq(fd world) {
+    public wq(Level world) {
         super(world);
         this.attackStrength = 1;
     }

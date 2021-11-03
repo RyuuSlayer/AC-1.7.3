@@ -11,6 +11,7 @@ import io.github.ryuu.adventurecraft.util.CutsceneCameraPoint;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.MapEditing;
 import net.minecraft.client.Minecraft;
+import net.minecraft.level.Level;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
@@ -580,7 +581,7 @@ public class px {
             return;
         this.J.setSeed(this.l * 312987231L);
         ls entityliving = this.j.i;
-        fd world = this.j.f;
+        Level world = this.j.f;
         int i = in.b(entityliving.aM);
         int j = in.b(entityliving.aN);
         int k = in.b(entityliving.aO);
@@ -625,7 +626,7 @@ public class px {
         if (f1 <= 0.0F)
             return;
         ls entityliving = this.j.i;
-        fd world = this.j.f;
+        Level world = this.j.f;
         int i = in.b(entityliving.aM);
         int j = in.b(entityliving.aN);
         int k = in.b(entityliving.aO);
@@ -742,7 +743,7 @@ public class px {
     }
 
     private void h(float f) {
-        fd world = this.j.f;
+        Level world = this.j.f;
         ls entityliving = this.j.i;
         float f1 = 1.0F / (5 - this.j.z.e);
         f1 = 1.0F - (float) Math.pow(f1, 0.25D);
@@ -849,7 +850,7 @@ public class px {
                 f9 = f18;
             }
         } else {
-            fd world = this.j.f;
+            Level world = this.j.f;
             GL11.glFogi(2917, 9729);
             GL11.glFogf(2915, world.getFogStart(this.k * 0.25F, f));
             GL11.glFogf(2916, world.getFogEnd(this.k, f));

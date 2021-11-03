@@ -1,13 +1,15 @@
 package io.github.ryuu.adventurecraft.overrides;
 
 import io.github.ryuu.adventurecraft.util.DebugMode;
+import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
 
 public class ie extends ItemType {
     public ie(int i) {
         super(i);
     }
 
-    public boolean a(iz itemstack, gs entityplayer, fd world, int i, int j, int k, int l) {
+    public boolean a(iz itemstack, gs entityplayer, Level world, int i, int j, int k, int l) {
         if (world.a(i, j, k) != Tile.aT.bn) {
             if (l == 0)
                 j--;

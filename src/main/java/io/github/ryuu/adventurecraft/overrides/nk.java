@@ -1,5 +1,7 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import net.minecraft.level.Level;
+
 import java.util.Random;
 
 public class nk extends jp {
@@ -17,7 +19,7 @@ public class nk extends jp {
         return super.b(iblockaccess, i, j, k, 1 - l);
     }
 
-    public void a(fd world, gs entityplayer, int i, int j, int k, int l) {
+    public void a(Level world, gs entityplayer, int i, int j, int k, int l) {
         super.a(world, entityplayer, i, j, k, l);
         ln material = world.f(i, j - 1, k);
         if (material.c() || material.d())
@@ -28,7 +30,7 @@ public class nk extends jp {
         return 0;
     }
 
-    public void a(fd world, int i, int j, int k, Random random) {
+    public void a(Level world, int i, int j, int k, Random random) {
         if (!world.x.iceMelts)
             return;
         if (world.a(eb.b, i, j, k) > 11 - Tile.q[this.bn]) {

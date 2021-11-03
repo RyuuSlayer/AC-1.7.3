@@ -8,7 +8,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.src.Vec3D;
 import org.lwjgl.opengl.GL11;
 
 public class CutsceneCamera {

@@ -1,9 +1,10 @@
 package io.github.ryuu.adventurecraft.overrides;
 
 import io.github.ryuu.adventurecraft.util.ChunkProviderHeightMapGenerate;
+import net.minecraft.level.Level;
 
 public abstract class xa {
-    public fd a;
+    public Level a;
 
     public xv b;
 
@@ -19,7 +20,7 @@ public abstract class xa {
 
     private final float[] h = new float[4];
 
-    public final void a(fd world) {
+    public final void a(Level world) {
         this.a = world;
         a();
         e();

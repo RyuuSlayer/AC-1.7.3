@@ -4,6 +4,7 @@ import java.util.Random;
 
 import io.github.ryuu.adventurecraft.blocks.IBlockColor;
 import net.minecraft.client.Minecraft;
+import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 
 public class wp extends Tile implements IBlockColor {
@@ -39,7 +40,7 @@ public class wp extends Tile implements IBlockColor {
         return ia.a(d, d1);
     }
 
-    public void a(fd world, int i, int j, int k, Random random) {
+    public void a(Level world, int i, int j, int k, Random random) {
         if (world.B)
             return;
         if (world.n(i, j + 1, k) < 4 && Tile.q[world.a(i, j + 1, k)] > 2) {
@@ -71,7 +72,7 @@ public class wp extends Tile implements IBlockColor {
         return super.b();
     }
 
-    public void incrementColor(fd world, int i, int j, int k) {
+    public void incrementColor(Level world, int i, int j, int k) {
         int metadata = world.e(i, j, k);
         world.d(i, j, k, (metadata + 1) % subTypes[this.bn]);
     }

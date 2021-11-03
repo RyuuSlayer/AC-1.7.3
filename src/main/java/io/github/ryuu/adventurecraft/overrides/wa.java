@@ -1,5 +1,7 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import net.minecraft.item.ItemType;
+
 public class wa extends ItemType {
     public wa(int i, int j, int k, int l) {
         super(i);

@@ -1,5 +1,8 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import io.github.ryuu.adventurecraft.util.DebugMode;
+import net.minecraft.level.Level;
+
 import java.util.Random;
 
 public class yq extends uu {
@@ -31,7 +34,7 @@ public class yq extends uu {
         this.b[i] = k;
     }
 
-    public eq e(fd world, int i, int j, int k) {
+    public eq e(Level world, int i, int j, int k) {
         return null;
     }
 
@@ -55,8 +58,8 @@ public class yq extends uu {
         return 40;
     }
 
-    public void a(fd world, int i, int j, int k, Random random) {
-        if (AC_DebugMode.active)
+    public void a(Level world, int i, int j, int k, Random random) {
+        if (DebugMode.active)
             return;
         boolean flag = (world.a(i, j - 1, k) == uu.bc.bn);
         if (!a(world, i, j, k))
@@ -107,7 +110,7 @@ public class yq extends uu {
         }
     }
 
-    private void a(fd world, int i, int j, int k, int l, Random random, int i1) {
+    private void a(Level world, int i, int j, int k, int l, Random random, int i1) {
         int j1 = this.b[world.a(i, j, k)];
         if (random.nextInt(l) < j1) {
             boolean flag = (world.a(i, j, k) == uu.an.bn);
@@ -124,7 +127,7 @@ public class yq extends uu {
         }
     }
 
-    private boolean h(fd world, int i, int j, int k) {
+    private boolean h(Level world, int i, int j, int k) {
         if (c((xp) world, i + 1, j, k))
             return true;
         if (c((xp) world, i - 1, j, k))
@@ -138,7 +141,7 @@ public class yq extends uu {
         return c((xp) world, i, j, k + 1);
     }
 
-    private int i(fd world, int i, int j, int k) {
+    private int i(Level world, int i, int j, int k) {
         int l = 0;
         if (!world.d(i, j, k))
             return 0;
@@ -159,25 +162,25 @@ public class yq extends uu {
         return (this.a[iblockaccess.a(i, j, k)] > 0);
     }
 
-    public int f(fd world, int i, int j, int k, int l) {
+    public int f(Level world, int i, int j, int k, int l) {
         int i1 = this.a[world.a(i, j, k)];
         if (i1 > l)
             return i1;
         return l;
     }
 
-    public boolean a(fd world, int i, int j, int k) {
+    public boolean a(Level world, int i, int j, int k) {
         return (world.h(i, j - 1, k) || h(world, i, j, k));
     }
 
-    public void b(fd world, int i, int j, int k, int l) {
+    public void b(Level world, int i, int j, int k, int l) {
         if (!world.h(i, j - 1, k) && !h(world, i, j, k)) {
             world.f(i, j, k, 0);
             return;
         }
     }
 
-    public void c(fd world, int i, int j, int k) {
+    public void c(Level world, int i, int j, int k) {
         if (world.a(i, j - 1, k) == uu.aq.bn && uu.bf.a_(world, i, j, k))
             return;
         if (!world.h(i, j - 1, k) && !h(world, i, j, k)) {
@@ -187,7 +190,7 @@ public class yq extends uu {
         world.c(i, j, k, this.bn, e());
     }
 
-    public void b(fd world, int i, int j, int k, Random random) {
+    public void b(Level world, int i, int j, int k, Random random) {
         if (random.nextInt(24) == 0)
             world.a((i + 0.5F), (j + 0.5F), (k + 0.5F), "fire.fire", 1.0F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F);
         if (world.h(i, j - 1, k) || uu.as.c((xp) world, i, j - 1, k)) {

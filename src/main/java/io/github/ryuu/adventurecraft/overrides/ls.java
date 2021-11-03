@@ -1,5 +1,7 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import net.minecraft.level.Level;
+
 import java.util.List;
 
 public abstract class ls extends Entity {
@@ -147,7 +149,7 @@ public abstract class ls extends Entity {
 
     public int randomLookRateVariation;
 
-    public ls(fd world) {
+    public ls(Level world) {
         super(world);
         this.timesCanJumpInAir = 0;
         this.jumpsLeft = 0;
