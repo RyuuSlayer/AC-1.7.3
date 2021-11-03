@@ -60,7 +60,6 @@ import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.render.entity.model.BipedModel;
 import net.minecraft.client.sound.SoundHelper;
 import net.minecraft.client.texture.TextureManager;
-import net.minecraft.client.util.OcclusionQueryTester;
 import net.minecraft.client.util.ScreenScaler;
 import net.minecraft.client.util.ScreenshotManager;
 import net.minecraft.client.util.Session;
@@ -80,7 +79,6 @@ import net.minecraft.level.storage.McRegionLevelStorage;
 import net.minecraft.level.storage.SessionLockException;
 import net.minecraft.network.Connection;
 import net.minecraft.stat.StatManager;
-import net.minecraft.tile.StoneTile;
 import net.minecraft.tile.Tile;
 import net.minecraft.util.ProgressListenerError;
 import net.minecraft.util.ProgressListenerImpl;
@@ -105,7 +103,7 @@ import vx;
 import vy;
 import x;
 import xa;
-import vb;
+import yb;
 
 public abstract class Minecraft implements Runnable {
     public Minecraft(Component component, Canvas canvas, MinecraftApplet minecraftapplet, int i, int j, boolean flag) {
