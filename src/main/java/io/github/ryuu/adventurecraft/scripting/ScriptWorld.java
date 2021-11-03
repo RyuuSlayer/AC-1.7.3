@@ -17,27 +17,27 @@ public class ScriptWorld {
     }
 
     public int getBlockID(int x, int y, int z) {
-        return this.worldObj.a(x, y, z);
+        return this.worldObj.getTileId(x, y, z);
     }
 
     public void setBlockID(int x, int y, int z, int id) {
-        this.worldObj.f(x, y, z, id);
+        this.worldObj.setTile(x, y, z, id);
     }
 
     public int getMetadata(int x, int y, int z) {
-        return this.worldObj.e(x, y, z);
+        return this.worldObj.getTileMeta(x, y, z);
     }
 
     public void setMetadata(int x, int y, int z, int m) {
-        this.worldObj.d(x, y, z, m);
+        this.worldObj.setTileMeta(x, y, z, m);
     }
 
     public void setBlockIDAndMetadata(int x, int y, int z, int id, int m) {
-        this.worldObj.b(x, y, z, id, m);
+        this.worldObj.setTileWithMetadata(x, y, z, id, m);
     }
 
     public float getLightValue(int x, int y, int z) {
-        return this.worldObj.getLightValue(x, y, z);
+        return this.worldObj.getLightLevel(x, y, z);
     }
 
     public void triggerBlock(int blockX, int blockY, int blockZ) {
@@ -66,10 +66,10 @@ public class ScriptWorld {
     }
 
     public ScriptEntity spawnEntity(String entityType, double x, double y, double z) {
-        Entity e = EntityRegistry.a(entityType, this.worldObj);
+        Entity e = EntityRegistry.create(entityType, this.worldObj);
         if (e != null) {
-            e.e(x, y, z);
-            this.worldObj.g(e);
+            e.setPosition(x, y, z);
+            this.worldObj.spawnEntity(e);
         }
         return ScriptEntity.getEntityClass(e);
     }
@@ -84,10 +84,10 @@ public class ScriptWorld {
 
     public Object[] rayTraceBlocks(double startX, double startY, double startZ, double endX, double endY, double endZ) {
         Object[] results = new Object[2];
-        HitResult hit = UtilBullet.rayTraceBlocks(this.worldObj, bt.b(startX, startY, startZ), bt.b(endX, endY, endZ));
+        HitResult hit = UtilBullet.rayTraceBlocks(this.worldObj, Vec3f.from(startX, startY, startZ), Vec3f.from(endX, endY, endZ));
         if (hit != null) {
-            results[0] = new ScriptVec3(hit.f.a, hit.f.b, hit.f.c);
-            results[1] = new ScriptVec3(hit.b, hit.c, hit.d);
+            results[0] = new ScriptVec3(hit.field_1988.x, hit.field_1988.y, hit.field_1988.z);
+            results[1] = new ScriptVec3(hit.x, hit.y, hit.z);
         }
         return results;
     }
@@ -100,11 +100,11 @@ public class ScriptWorld {
         Object[] results = new Object[3];
         HitResult hit = UtilBullet.rayTrace(this.worldObj, null, Vec3f.from(startX, startY, startZ), Vec3f.from(endX, endY, endZ));
         if (hit != null) {
-            results[0] = new ScriptVec3(hit.f.a, hit.f.b, hit.f.c);
-            if (hit.a == HitType.a) {
-                results[1] = new ScriptVec3(hit.b, hit.c, hit.d);
+            results[0] = new ScriptVec3(hit.field_1988.x, hit.field_1988.y, hit.field_1988.z);
+            if (hit.type == HitType.a) {
+                results[1] = new ScriptVec3(hit.x, hit.y, hit.z);
             } else {
-                results[2] = ScriptEntity.getEntityClass(hit.g);
+                results[2] = ScriptEntity.getEntityClass(hit.field_1989);
             }
         }
         return results;
