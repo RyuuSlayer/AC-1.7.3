@@ -247,7 +247,7 @@ public class ScriptEntity {
 
     public void setWidth(float w) {
         this.entity.width = w;
-        this.entity.e(this.entity.x, this.entity.y, this.entity.z);
+        this.entity.setPosition(this.entity.x, this.entity.y, this.entity.z);
     }
 
     public void setIsFlying(boolean b) {

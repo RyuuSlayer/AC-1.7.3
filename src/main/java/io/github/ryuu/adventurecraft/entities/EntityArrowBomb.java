@@ -27,32 +27,32 @@ public class EntityArrowBomb extends Arrow {
     }
 
     public void w_() {
-        super.w_();
+        super.tick();
         this.fuse--;
         if (this.fuse == 0) {
-            EntityBomb.explode(this, this.c, this.aI, this.aM, this.aN, this.aO);
-            K();
+            EntityBomb.explode(this, this.c, this.level, this.x, this.y, this.z); // c is probably field_1576 but not 100% sure
+            remove();
         } else {
-            this.aI.a("smoke", this.aM, this.aN, this.aO, 0.0D, 0.0D, 0.0D);
+            this.level.addParticle("smoke", this.x, this.y, this.z, 0.0D, 0.0D, 0.0D);
         }
     }
 
     public void handleHitEntity(HitResult movingobjectposition) {
-        this.aP *= -0.10000000149011612D;
-        this.aQ *= -0.10000000149011612D;
-        this.aR *= -0.10000000149011612D;
-        this.aS += 180.0F;
-        this.aU += 180.0F;
+        this.velocityX *= -0.10000000149011612D;
+        this.velocityY *= -0.10000000149011612D;
+        this.velocityZ *= -0.10000000149011612D;
+        this.yaw += 180.0F;
+        this.prevYaw += 180.0F;
         this.k = 0;
     }
 
     public void b(CompoundTag nbttagcompound) {
-        super.b(nbttagcompound);
+        super.writeCustomDataToTag(nbttagcompound);
         nbttagcompound.put("fuse", (byte) this.fuse);
     }
 
     public void a(CompoundTag nbttagcompound) {
-        super.a(nbttagcompound);
+        super.fromTag(nbttagcompound);
         this.fuse = nbttagcompound.getByte("fuse") & 0xFF;
     }
 
@@ -60,9 +60,9 @@ public class EntityArrowBomb extends Arrow {
     }
 
     public boolean a(Entity entity, int i) {
-        if (!this.be) {
-            ai();
-            EntityBomb.explode(this, this.c, this.aI, this.aM, this.aN, this.aO);
+        if (!this.removed) {
+            method_1336();
+            EntityBomb.explode(this, this.c, this.level, this.x, this.y, this.z); // c is probably field_1576 but not 100% sure
         }
         return false;
     }
