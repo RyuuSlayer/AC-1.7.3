@@ -1,11 +1,12 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.level.Level;
 
-public class wq extends ls {
+public class FlyingEntity extends LivingEntity {
     public int attackStrength;
 
-    public wq(Level world) {
+    public FlyingEntity(Level world) {
         super(world);
         this.attackStrength = 1;
     }

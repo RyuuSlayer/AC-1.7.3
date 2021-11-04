@@ -11,11 +11,13 @@ import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.TerrainImage;
 import io.github.ryuu.adventurecraft.util.Version;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.entity.ItemRenderer;
 import org.lwjgl.opengl.GL11;
 
-public class uq extends ub {
-    public uq(Minecraft minecraft) {
+public class Overlay extends DrawableHelper {
+    public Overlay(Minecraft minecraft) {
         this.hudEnabled = true;
         this.e = new ArrayList();
         this.f = new Random();

@@ -1,11 +1,13 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MonsterEntityType;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 import net.minecraft.util.io.CompoundTag;
 
-public class uw extends ls implements ff {
+public class Slime extends LivingEntity implements MonsterEntityType {
     public float a;
 
     public float b;
@@ -14,7 +16,7 @@ public class uw extends ls implements ff {
 
     public int attackStrength;
 
-    public uw(Level world) {
+    public Slime(Level world) {
         super(world);
         this.c = 0;
         this.O = "/mob/slime.png";

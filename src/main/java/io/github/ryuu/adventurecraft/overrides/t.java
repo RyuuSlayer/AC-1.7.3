@@ -1,4 +1,6 @@
 package io.github.ryuu.adventurecraft.overrides;
 
-public class t extends kd {
+import net.minecraft.level.biome.Biome;
+
+public class t extends Biome {
 }

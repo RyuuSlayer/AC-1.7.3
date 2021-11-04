@@ -3,12 +3,12 @@ package io.github.ryuu.adventurecraft.overrides;
 import net.minecraft.client.gui.screen.container.ContainerScreen;
 import org.lwjgl.opengl.GL11;
 
-public class ue extends ContainerScreen {
+public class PlayerInventoryScreen extends ContainerScreen {
     private float l;
 
     private float m;
 
-    public ue(gs entityplayer) {
+    public PlayerInventoryScreen(gs entityplayer) {
         super(entityplayer.d);
         this.f = true;
         entityplayer.a((vr) ep.f, 1);

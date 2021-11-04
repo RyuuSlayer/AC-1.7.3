@@ -7,8 +7,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 
-public class wp extends Tile implements IBlockColor {
-    protected wp(int i) {
+public class GrassTile extends Tile implements IBlockColor {
+    protected GrassTile(int i) {
         super(i, ln.b);
         this.bm = 3;
         b(true);

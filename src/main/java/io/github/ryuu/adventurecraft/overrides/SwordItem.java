@@ -5,10 +5,10 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 
-public class qd extends ItemType {
+public class SwordItem extends ItemType {
     private final int a;
 
-    public qd(int i, bu enumtoolmaterial) {
+    public SwordItem(int i, bu enumtoolmaterial) {
         super(i);
         this.bg = 1;
         e(enumtoolmaterial.a());

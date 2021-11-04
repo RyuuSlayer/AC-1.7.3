@@ -29,7 +29,7 @@ public class EntityRenderDispatcher {
         this.o.put(fr.class, new v((fh) new lc(), 0.5F));
         this.o.put(EntitySkeletonBoss.class, new RenderBipedScaled((fh) new lc(), 0.5F, 2.5F));
         this.o.put(Zombie.class, new v((fh) new ej(), 0.5F));
-        this.o.put(uw.class, new mj((ko) new no(16), (ko) new no(0), 0.25F));
+        this.o.put(Slime.class, new mj((ko) new no(16), (ko) new no(0), 0.25F));
         this.o.put(gs.class, new PlayerRenderer());
         this.o.put(nt.class, new yg((ko) new ej(), 0.5F, 6.0F));
         this.o.put(Ghast.class, new pq());

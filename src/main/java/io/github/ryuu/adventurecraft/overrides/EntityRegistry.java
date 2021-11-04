@@ -96,7 +96,7 @@ public class EntityRegistry {
         a(cn.class, "Spider", 52);
         a(nt.class, "Giant", 53);
         a(Zombie.class, "Zombie", 54);
-        a(uw.class, "Slime", 55);
+        a(Slime.class, "Slime", 55);
         a(Ghast.class, "Ghast", 56);
         a(ZombiePigman.class, "PigZombie", 57);
         a(wh.class, "Pig", 90);

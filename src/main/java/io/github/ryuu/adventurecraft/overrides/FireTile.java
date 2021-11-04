@@ -2,15 +2,16 @@ package io.github.ryuu.adventurecraft.overrides;
 
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
 
 import java.util.Random;
 
-public class yq extends uu {
+public class FireTile extends Tile {
     private final int[] a;
 
     private final int[] b;
 
-    protected yq(int i, int j) {
+    protected FireTile(int i, int j) {
         super(i, j, ln.m);
         this.a = new int[256];
         this.b = new int[256];
@@ -18,15 +19,15 @@ public class yq extends uu {
     }
 
     public void k() {
-        a(uu.y.bn, 5, 20);
-        a(uu.ba.bn, 5, 20);
-        a(uu.au.bn, 5, 20);
-        a(uu.K.bn, 5, 5);
-        a(uu.L.bn, 30, 60);
-        a(uu.ao.bn, 30, 20);
-        a(uu.an.bn, 15, 100);
-        a(uu.Y.bn, 60, 100);
-        a(uu.ac.bn, 30, 60);
+        a(Tile.y.bn, 5, 20);
+        a(Tile.ba.bn, 5, 20);
+        a(Tile.au.bn, 5, 20);
+        a(Tile.K.bn, 5, 5);
+        a(Tile.L.bn, 30, 60);
+        a(Tile.ao.bn, 30, 20);
+        a(Tile.an.bn, 15, 100);
+        a(Tile.Y.bn, 60, 100);
+        a(Tile.ac.bn, 30, 60);
     }
 
     private void a(int i, int j, int k) {
@@ -61,7 +62,7 @@ public class yq extends uu {
     public void a(Level world, int i, int j, int k, Random random) {
         if (DebugMode.active)
             return;
-        boolean flag = (world.a(i, j - 1, k) == uu.bc.bn);
+        boolean flag = (world.a(i, j - 1, k) == Tile.bc.bn);
         if (!a(world, i, j, k))
             world.f(i, j, k, 0);
         if (!flag && world.C() && (world.t(i, j, k) || world.t(i - 1, j, k) || world.t(i + 1, j, k) || world.t(i, j, k - 1) || world.t(i, j, k + 1))) {
@@ -77,7 +78,7 @@ public class yq extends uu {
                 world.f(i, j, k, 0);
             return;
         }
-        if (!flag && !c((xp) world, i, j - 1, k) && l == 15 && random.nextInt(4) == 0) {
+        if (!flag && !c((TileView) world, i, j - 1, k) && l == 15 && random.nextInt(4) == 0) {
             world.f(i, j, k, 0);
             return;
         }
@@ -113,7 +114,7 @@ public class yq extends uu {
     private void a(Level world, int i, int j, int k, int l, Random random, int i1) {
         int j1 = this.b[world.a(i, j, k)];
         if (random.nextInt(l) < j1) {
-            boolean flag = (world.a(i, j, k) == uu.an.bn);
+            boolean flag = (world.a(i, j, k) == Tile.an.bn);
             if (random.nextInt(i1 + 10) < 5 && !world.t(i, j, k)) {
                 int k1 = i1 + random.nextInt(5) / 4;
                 if (k1 > 15)
@@ -123,22 +124,22 @@ public class yq extends uu {
                 world.f(i, j, k, 0);
             }
             if (flag)
-                uu.an.c(world, i, j, k, 1);
+                Tile.an.c(world, i, j, k, 1);
         }
     }
 
     private boolean h(Level world, int i, int j, int k) {
-        if (c((xp) world, i + 1, j, k))
+        if (c((TileView) world, i + 1, j, k))
             return true;
-        if (c((xp) world, i - 1, j, k))
+        if (c((TileView) world, i - 1, j, k))
             return true;
-        if (c((xp) world, i, j - 1, k))
+        if (c((TileView) world, i, j - 1, k))
             return true;
-        if (c((xp) world, i, j + 1, k))
+        if (c((TileView) world, i, j + 1, k))
             return true;
-        if (c((xp) world, i, j, k - 1))
+        if (c((TileView) world, i, j, k - 1))
             return true;
-        return c((xp) world, i, j, k + 1);
+        return c((TileView) world, i, j, k + 1);
     }
 
     private int i(Level world, int i, int j, int k) {
@@ -158,7 +159,7 @@ public class yq extends uu {
         return false;
     }
 
-    public boolean c(xp iblockaccess, int i, int j, int k) {
+    public boolean c(TileView iblockaccess, int i, int j, int k) {
         return (this.a[iblockaccess.a(i, j, k)] > 0);
     }
 
@@ -181,7 +182,7 @@ public class yq extends uu {
     }
 
     public void c(Level world, int i, int j, int k) {
-        if (world.a(i, j - 1, k) == uu.aq.bn && uu.bf.a_(world, i, j, k))
+        if (world.a(i, j - 1, k) == Tile.aq.bn && Tile.bf.a_(world, i, j, k))
             return;
         if (!world.h(i, j - 1, k) && !h(world, i, j, k)) {
             world.f(i, j, k, 0);
@@ -193,7 +194,7 @@ public class yq extends uu {
     public void b(Level world, int i, int j, int k, Random random) {
         if (random.nextInt(24) == 0)
             world.a((i + 0.5F), (j + 0.5F), (k + 0.5F), "fire.fire", 1.0F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F);
-        if (world.h(i, j - 1, k) || uu.as.c((xp) world, i, j - 1, k)) {
+        if (world.h(i, j - 1, k) || Tile.as.c((TileView) world, i, j - 1, k)) {
             for (int l = 0; l < 3; l++) {
                 float f = i + random.nextFloat();
                 float f6 = j + random.nextFloat() * 0.5F + 0.5F;
@@ -201,35 +202,35 @@ public class yq extends uu {
                 world.a("largesmoke", f, f6, f12, 0.0D, 0.0D, 0.0D);
             }
         } else {
-            if (uu.as.c((xp) world, i - 1, j, k))
+            if (Tile.as.c((TileView) world, i - 1, j, k))
                 for (int i1 = 0; i1 < 2; i1++) {
                     float f1 = i + random.nextFloat() * 0.1F;
                     float f7 = j + random.nextFloat();
                     float f13 = k + random.nextFloat();
                     world.a("largesmoke", f1, f7, f13, 0.0D, 0.0D, 0.0D);
                 }
-            if (uu.as.c((xp) world, i + 1, j, k))
+            if (Tile.as.c((TileView) world, i + 1, j, k))
                 for (int j1 = 0; j1 < 2; j1++) {
                     float f2 = (i + 1) - random.nextFloat() * 0.1F;
                     float f8 = j + random.nextFloat();
                     float f14 = k + random.nextFloat();
                     world.a("largesmoke", f2, f8, f14, 0.0D, 0.0D, 0.0D);
                 }
-            if (uu.as.c((xp) world, i, j, k - 1))
+            if (Tile.as.c((TileView) world, i, j, k - 1))
                 for (int k1 = 0; k1 < 2; k1++) {
                     float f3 = i + random.nextFloat();
                     float f9 = j + random.nextFloat();
                     float f15 = k + random.nextFloat() * 0.1F;
                     world.a("largesmoke", f3, f9, f15, 0.0D, 0.0D, 0.0D);
                 }
-            if (uu.as.c((xp) world, i, j, k + 1))
+            if (Tile.as.c((TileView) world, i, j, k + 1))
                 for (int l1 = 0; l1 < 2; l1++) {
                     float f4 = i + random.nextFloat();
                     float f10 = j + random.nextFloat();
                     float f16 = (k + 1) - random.nextFloat() * 0.1F;
                     world.a("largesmoke", f4, f10, f16, 0.0D, 0.0D, 0.0D);
                 }
-            if (uu.as.c((xp) world, i, j + 1, k))
+            if (Tile.as.c((TileView) world, i, j + 1, k))
                 for (int i2 = 0; i2 < 2; i2++) {
                     float f5 = i + random.nextFloat();
                     float f11 = (j + 1) - random.nextFloat() * 0.1F;
