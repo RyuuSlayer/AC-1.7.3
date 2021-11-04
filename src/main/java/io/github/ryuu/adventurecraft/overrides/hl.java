@@ -106,7 +106,7 @@ public class hl extends Entity {
     public void b(CompoundTag nbttagcompound) {
         nbttagcompound.put("Health", (short) (byte) this.f);
         nbttagcompound.put("Age", (short) this.b);
-        nbttagcompound.put("Item", this.a.a(new nu()));
+        nbttagcompound.put("Item", this.a.a(new CompoundTag()));
     }
 
     public void a(CompoundTag nbttagcompound) {

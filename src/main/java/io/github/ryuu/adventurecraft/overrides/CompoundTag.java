@@ -11,7 +11,7 @@ import java.util.Set;
 
 import net.minecraft.src.NBTBase;
 
-public class nu extends ij {
+public class CompoundTag extends ij {
     private final Map<String, NBTBase> a = new HashMap<String, NBTBase>();
 
     void a(DataOutput dataoutput) throws IOException {
@@ -82,7 +82,7 @@ public class nu extends ij {
         this.a.put(s, (new hn(abyte0)).a(s));
     }
 
-    public void a(String s, nu nbttagcompound) {
+    public void a(String s, CompoundTag nbttagcompound) {
         this.a.put(s, nbttagcompound.a(s));
     }
 
@@ -154,10 +154,10 @@ public class nu extends ij {
         return ((hn) this.a.get(s)).a;
     }
 
-    public nu k(String s) {
+    public CompoundTag k(String s) {
         if (!this.a.containsKey(s))
-            return new nu();
-        return (nu) this.a.get(s);
+            return new CompoundTag();
+        return (CompoundTag) this.a.get(s);
     }
 
     public sp l(String s) {

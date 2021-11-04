@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.overrides;
 
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import net.minecraft.level.Level;
+import net.minecraft.util.io.CompoundTag;
 
 import java.util.List;
 import java.util.Random;
@@ -630,7 +631,7 @@ public abstract class Entity {
         return null;
     }
 
-    public boolean c(nu nbttagcompound) {
+    public boolean c(CompoundTag nbttagcompound) {
         String s = aj();
         if (this.be || s == null)
             return false;
@@ -639,7 +640,7 @@ public abstract class Entity {
         return true;
     }
 
-    public void d(nu nbttagcompound) {
+    public void d(CompoundTag nbttagcompound) {
         nbttagcompound.a("Pos", (ij) a(new double[]{this.aM, this.aN + this.bo, this.aO}));
         nbttagcompound.a("Motion", (ij) a(new double[]{this.aP, this.aQ, this.aR}));
         nbttagcompound.a("Rotation", (ij) a(new float[]{this.aS, this.aT}));
@@ -650,7 +651,7 @@ public abstract class Entity {
         b(nbttagcompound);
     }
 
-    public void e(nu nbttagcompound) {
+    public void e(CompoundTag nbttagcompound) {
         sp nbttaglist = nbttagcompound.l("Pos");
         sp nbttaglist1 = nbttagcompound.l("Motion");
         sp nbttaglist2 = nbttagcompound.l("Rotation");
@@ -681,9 +682,9 @@ public abstract class Entity {
         return jc.b(this);
     }
 
-    protected abstract void a(nu paramnu);
+    protected abstract void a(CompoundTag paramnu);
 
-    protected abstract void b(nu paramnu);
+    protected abstract void b(CompoundTag paramnu);
 
     protected sp a(double[] ad) {
         sp nbttaglist = new sp();

@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.overrides;
 
 import net.minecraft.level.Level;
+import net.minecraft.util.io.CompoundTag;
 
 import java.util.List;
 
@@ -671,7 +672,7 @@ public abstract class ls extends Entity {
         return (LadderTile.isLadderID(blockID) || LadderTile.isLadderID(blockIDAbove) || (blockID == AC_Blocks.ropes1.bn && v) || (blockIDAbove == AC_Blocks.ropes1.bn && vAbove) || (blockID == AC_Blocks.ropes2.bn && v) || (blockIDAbove == AC_Blocks.ropes2.bn && vAbove) || (blockID == AC_Blocks.chains.bn && v) || (blockIDAbove == AC_Blocks.chains.bn && vAbove));
     }
 
-    public void b(nu nbttagcompound) {
+    public void b(CompoundTag nbttagcompound) {
         nbttagcompound.a("Health", (short) this.Y);
         nbttagcompound.a("MaxHealth", (short) this.maxHealth);
         nbttagcompound.a("HurtTime", (short) this.aa);
@@ -687,7 +688,7 @@ public abstract class ls extends Entity {
         nbttagcompound.a("randomLookRateVariation", this.randomLookRateVariation);
     }
 
-    public void a(nu nbttagcompound) {
+    public void a(CompoundTag nbttagcompound) {
         this.Y = nbttagcompound.d("Health");
         if (!nbttagcompound.b("Health"))
             this.Y = 10;

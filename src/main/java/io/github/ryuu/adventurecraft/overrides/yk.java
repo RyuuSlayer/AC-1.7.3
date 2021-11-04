@@ -7,7 +7,7 @@ public class yk extends TileEntity {
 
     private boolean c = true;
 
-    public void b(nu nbttagcompound) {
+    public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
         nbttagcompound.a("Text1", this.a[0]);
         nbttagcompound.a("Text2", this.a[1]);
@@ -15,7 +15,7 @@ public class yk extends TileEntity {
         nbttagcompound.a("Text4", this.a[3]);
     }
 
-    public void a(nu nbttagcompound) {
+    public void a(CompoundTag nbttagcompound) {
         this.c = false;
         super.a(nbttagcompound);
         for (int i = 0; i < 4; i++) {

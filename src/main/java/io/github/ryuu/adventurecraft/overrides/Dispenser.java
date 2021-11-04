@@ -1,5 +1,7 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import net.minecraft.util.io.CompoundTag;
+
 import java.util.Random;
 
 public class Dispenser extends TileEntity implements lw {
@@ -60,24 +62,24 @@ public class Dispenser extends TileEntity implements lw {
         return "Trap";
     }
 
-    public void a(nu nbttagcompound) {
+    public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
         sp nbttaglist = nbttagcompound.l("Items");
         this.a = new iz[a()];
         for (int i = 0; i < nbttaglist.c(); i++) {
-            nu nbttagcompound1 = (nu) nbttaglist.a(i);
+            CompoundTag nbttagcompound1 = (CompoundTag) nbttaglist.a(i);
             int j = nbttagcompound1.c("Slot") & 0xFF;
             if (j >= 0 && j < this.a.length)
                 this.a[j] = new iz(nbttagcompound1);
         }
     }
 
-    public void b(nu nbttagcompound) {
+    public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
         sp nbttaglist = new sp();
         for (int i = 0; i < this.a.length; i++) {
             if (this.a[i] != null) {
-                nu nbttagcompound1 = new nu();
+                CompoundTag nbttagcompound1 = new CompoundTag();
                 nbttagcompound1.a("Slot", (byte) i);
                 this.a[i].a(nbttagcompound1);
                 nbttaglist.a(nbttagcompound1);

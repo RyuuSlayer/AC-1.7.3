@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.overrides;
 
 import net.minecraft.level.Level;
+import net.minecraft.util.io.CompoundTag;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -212,9 +213,9 @@ public class lm {
             int prevBlockID = a(i, j, k);
             int prevMetadata = b(i, j, k);
             TileEntity te = getChunkBlockTileEntityDontCreate(i, j, k);
-            nu prevTag = null;
+            CompoundTag prevTag = null;
             if (te != null) {
-                prevTag = new nu();
+                prevTag = new CompoundTag();
                 te.b(prevTag);
             }
             this.d.undoStack.recordChange(i + (this.j << 4), j, k + (this.k << 4), prevBlockID, prevMetadata, prevTag, l, i1, null);
@@ -261,9 +262,9 @@ public class lm {
             int prevBlockID = a(i, j, k);
             int prevMetadata = b(i, j, k);
             TileEntity te = getChunkBlockTileEntityDontCreate(i, j, k);
-            nu prevTag = null;
+            CompoundTag prevTag = null;
             if (te != null) {
-                prevTag = new nu();
+                prevTag = new CompoundTag();
                 te.b(prevTag);
             }
             this.d.undoStack.recordChange(i + (this.j << 4), j, k + (this.k << 4), prevBlockID, prevMetadata, prevTag, l, 0, null);
@@ -304,9 +305,9 @@ public class lm {
             int prevBlockID = a(i, j, k);
             int prevMetadata = b(i, j, k);
             TileEntity te = getChunkBlockTileEntityDontCreate(i, j, k);
-            nu prevTag = null;
+            CompoundTag prevTag = null;
             if (te != null) {
-                prevTag = new nu();
+                prevTag = new CompoundTag();
                 te.b(prevTag);
             }
             this.d.undoStack.recordChange(i + (this.j << 4), j, k + (this.k << 4), prevBlockID, prevMetadata, prevTag, prevBlockID, l, null);

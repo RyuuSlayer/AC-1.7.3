@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.overrides;
 
 import io.github.ryuu.adventurecraft.util.IEntityPather;
 import net.minecraft.level.Level;
+import net.minecraft.util.io.CompoundTag;
 
 public class ii extends ls implements IEntityPather {
     private dh a;
@@ -179,13 +180,13 @@ public class ii extends ls implements IEntityPather {
         return this.a;
     }
 
-    public void b(nu nbttagcompound) {
+    public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
         nbttagcompound.a("canPathRandomly", this.canPathRandomly);
         nbttagcompound.a("canForgetTargetRandomly", this.canForgetTargetRandomly);
     }
 
-    public void a(nu nbttagcompound) {
+    public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
         if (nbttagcompound.b("canPathRandomly"))
             this.canPathRandomly = nbttagcompound.m("canPathRandomly");

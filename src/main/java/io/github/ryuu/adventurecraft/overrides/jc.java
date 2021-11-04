@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.overrides;
 
 import io.github.ryuu.adventurecraft.entities.*;
 import net.minecraft.level.Level;
+import net.minecraft.util.io.CompoundTag;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +27,7 @@ public class jc {
         return entity;
     }
 
-    public static Entity a(nu nbttagcompound, Level world) {
+    public static Entity a(CompoundTag nbttagcompound, Level world) {
         Entity entity = null;
         try {
             Class<Entity> class1 = (Class) a.get(nbttagcompound.i("id"));

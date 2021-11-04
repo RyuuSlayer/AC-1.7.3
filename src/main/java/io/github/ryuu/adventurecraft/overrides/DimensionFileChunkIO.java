@@ -93,8 +93,8 @@ public class DimensionFileChunkIO implements ChunkIO {
         try {
             File file1 = new File(this.a, "tmp_chunk.dat");
             FileOutputStream fileoutputstream = new FileOutputStream(file1);
-            nu nbttagcompound = new nu();
-            nu nbttagcompound1 = new nu();
+            CompoundTag nbttagcompound = new CompoundTag();
+            CompoundTag nbttagcompound1 = new CompoundTag();
             nbttagcompound.a("Level", (ij) nbttagcompound1);
             a(chunk, world, nbttagcompound1);
             as.a(nbttagcompound, fileoutputstream);
@@ -109,7 +109,7 @@ public class DimensionFileChunkIO implements ChunkIO {
         }
     }
 
-    public static void a(lm chunk, Level world, nu nbttagcompound) {
+    public static void a(lm chunk, Level world, CompoundTag nbttagcompound) {
         world.r();
         nbttagcompound.a("xPos", chunk.j);
         nbttagcompound.a("zPos", chunk.k);
@@ -128,7 +128,7 @@ public class DimensionFileChunkIO implements ChunkIO {
             while (iterator.hasNext()) {
                 Entity entity = (Entity) iterator.next();
                 chunk.q = true;
-                CompoundTag nbttagcompound1 = new nu();
+                CompoundTag nbttagcompound1 = new CompoundTag();
                 if (entity.c(nbttagcompound1))
                     nbttaglist.a((ij) nbttagcompound1);
             }
@@ -137,13 +137,13 @@ public class DimensionFileChunkIO implements ChunkIO {
         sp nbttaglist1 = new sp();
         for (Iterator<TileEntity> iterator1 = chunk.l.values().iterator(); iterator1.hasNext(); nbttaglist1.a((ij) nbttagcompound2)) {
             TileEntity tileentity = iterator1.next();
-            nu nbttagcompound2 = new nu();
+            CompoundTag nbttagcompound2 = new CompoundTag();
             tileentity.b(nbttagcompound2);
         }
         nbttagcompound.a("TileEntities", (ij) nbttaglist1);
     }
 
-    public static lm a(Level world, nu nbttagcompound) {
+    public static lm a(Level world, CompoundTag nbttagcompound) {
         int i = nbttagcompound.e("xPos");
         int j = nbttagcompound.e("zPos");
         lm chunk = new lm(world, i, j, false);
@@ -170,7 +170,7 @@ public class DimensionFileChunkIO implements ChunkIO {
         sp nbttaglist = nbttagcompound.l("Entities");
         if (nbttaglist != null)
             for (int k = 0; k < nbttaglist.c(); k++) {
-                nu nbttagcompound1 = (nu) nbttaglist.a(k);
+                CompoundTag nbttagcompound1 = (CompoundTag) nbttaglist.a(k);
                 Entity entity = jc.a(nbttagcompound1, world);
                 chunk.q = true;
                 if (entity != null)
@@ -179,7 +179,7 @@ public class DimensionFileChunkIO implements ChunkIO {
         sp nbttaglist1 = nbttagcompound.l("TileEntities");
         if (nbttaglist1 != null)
             for (int l = 0; l < nbttaglist1.c(); l++) {
-                nu nbttagcompound2 = (nu) nbttaglist1.a(l);
+                CompoundTag nbttagcompound2 = (CompoundTag) nbttaglist1.a(l);
                 TileEntity tileentity = TileEntity.c(nbttagcompound2);
                 if (tileentity != null)
                     chunk.a(tileentity);

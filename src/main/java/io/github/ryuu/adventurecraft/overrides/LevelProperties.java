@@ -7,6 +7,7 @@ import java.util.Map;
 import io.github.ryuu.adventurecraft.blocks.BlockEffect;
 import io.github.ryuu.adventurecraft.mixin.Level;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.io.CompoundTag;
 
 public class LevelProperties {
     private final long a;
@@ -23,7 +24,7 @@ public class LevelProperties {
 
     private long g;
 
-    private nu h;
+    private CompoundTag h;
 
     private int i;
 
@@ -65,7 +66,7 @@ public class LevelProperties {
 
     public boolean iceMelts;
 
-    public nu triggerData;
+    public CompoundTag triggerData;
 
     float timeOfDay;
 
@@ -91,7 +92,7 @@ public class LevelProperties {
 
     public String overlay;
 
-    nu replacementTag;
+    CompoundTag replacementTag;
 
     public HashMap<String, String> replacementTextures;
 
@@ -107,17 +108,17 @@ public class LevelProperties {
 
     public float spawnYaw;
 
-    public nu globalScope;
+    public CompoundTag globalScope;
 
-    public nu worldScope;
+    public CompoundTag worldScope;
 
-    public nu musicScope;
+    public CompoundTag musicScope;
 
     public boolean originallyFromAC;
 
     public boolean allowsInventoryCrafting;
 
-    public LevelProperties(nu nbttagcompound) {
+    public LevelProperties(CompoundTag nbttagcompound) {
         this.useImages = true;
         this.mapSize = 250.0D;
         this.waterLevel = 64;
@@ -326,27 +327,27 @@ public class LevelProperties {
             this.brightness[i] = worldinfo.brightness[i];
     }
 
-    public nu a() {
-        nu nbttagcompound = new nu();
+    public CompoundTag a() {
+        CompoundTag nbttagcompound = new CompoundTag();
         a(nbttagcompound, this.h);
         return nbttagcompound;
     }
 
-    public nu a(List<gs> list) {
-        nu nbttagcompound = new nu();
+    public CompoundTag a(List<gs> list) {
+        CompoundTag nbttagcompound = new CompoundTag();
         gs entityplayer = null;
-        nu nbttagcompound1 = null;
+        CompoundTag nbttagcompound1 = null;
         if (list.size() > 0)
             entityplayer = list.get(0);
         if (entityplayer != null) {
-            nbttagcompound1 = new nu();
+            nbttagcompound1 = new CompoundTag();
             entityplayer.d(nbttagcompound1);
         }
         a(nbttagcompound, nbttagcompound1);
         return nbttagcompound;
     }
 
-    private void a(nu nbttagcompound, nu nbttagcompound1) {
+    private void a(CompoundTag nbttagcompound, CompoundTag nbttagcompound1) {
         nbttagcompound.a("RandomSeed", this.a);
         nbttagcompound.a("SpawnX", this.b);
         nbttagcompound.a("SpawnY", this.c);
@@ -460,7 +461,7 @@ public class LevelProperties {
         return this.g;
     }
 
-    public nu h() {
+    public CompoundTag h() {
         return this.h;
     }
 
@@ -488,7 +489,7 @@ public class LevelProperties {
         this.g = l;
     }
 
-    public void a(nu nbttagcompound) {
+    public void a(CompoundTag nbttagcompound) {
         this.h = nbttagcompound;
     }
 
@@ -562,9 +563,9 @@ public class LevelProperties {
         this.replacementTextures.clear();
     }
 
-    nu getTextureReplacementTags() {
+    CompoundTag getTextureReplacementTags() {
         int i = 0;
-        nu t = new nu();
+        CompoundTag t = new CompoundTag();
         for (Map.Entry<String, String> e : this.replacementTextures.entrySet())
             t.a(e.getKey(), e.getValue());
         return t;

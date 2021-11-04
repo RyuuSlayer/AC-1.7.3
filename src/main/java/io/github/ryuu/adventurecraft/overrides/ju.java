@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.overrides;
 
 import net.minecraft.level.Level;
+import net.minecraft.util.io.CompoundTag;
 
 public class ju extends Entity {
     public int a;
@@ -97,12 +98,12 @@ public class ju extends Entity {
         }
     }
 
-    protected void b(nu nbttagcompound) {
+    protected void b(CompoundTag nbttagcompound) {
         nbttagcompound.a("Tile", (byte) this.a);
         nbttagcompound.a("EntityID", this.aD);
     }
 
-    protected void a(nu nbttagcompound) {
+    protected void a(CompoundTag nbttagcompound) {
         this.a = nbttagcompound.c("Tile") & 0xFF;
         if (nbttagcompound.b("EntityID"))
             this.aD = nbttagcompound.e("EntityID");

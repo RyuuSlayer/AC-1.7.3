@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.overrides;
 import io.github.ryuu.adventurecraft.mixin.Level;
 import net.minecraft.entity.Entity;
 import net.minecraft.level.Level;
+import net.minecraft.util.io.CompoundTag;
 
 import java.util.List;
 
@@ -213,7 +214,7 @@ public class cf extends Entity {
         e(this.aM, this.aN, this.aO);
     }
 
-    public void b(nu nbttagcompound) {
+    public void b(CompoundTag nbttagcompound) {
         nbttagcompound.a("xTile", (short) this.f);
         nbttagcompound.a("yTile", (short) this.g);
         nbttagcompound.a("zTile", (short) this.h);
@@ -222,7 +223,7 @@ public class cf extends Entity {
         nbttagcompound.a("inGround", (byte) (this.j ? 1 : 0));
     }
 
-    public void a(nu nbttagcompound) {
+    public void a(CompoundTag nbttagcompound) {
         this.f = nbttagcompound.d("xTile");
         this.g = nbttagcompound.d("yTile");
         this.h = nbttagcompound.d("zTile");
