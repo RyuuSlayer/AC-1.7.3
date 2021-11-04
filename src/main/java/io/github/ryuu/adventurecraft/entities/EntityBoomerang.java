@@ -163,10 +163,10 @@ public class EntityBoomerang extends Entity {
         this.pitch = -57.29578F * (float) Math.atan2(this.velocityY, xzLength);
     }
 
-    protected void b(CompoundTag nbttagcompound) {
+    protected void writeCustomDataToTag(CompoundTag nbttagcompound) {
     }
 
-    public void a(CompoundTag nbttagcompound) {
+    public void readCustomDataFromTag(CompoundTag nbttagcompound) {
         K();
     }
 
@@ -177,6 +177,6 @@ public class EntityBoomerang extends Entity {
         return false;
     }
 
-    protected void b() {
+    protected void initDataTracker() {
     }
 }
