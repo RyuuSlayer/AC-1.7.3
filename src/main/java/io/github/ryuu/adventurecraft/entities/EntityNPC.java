@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.entities;
 
 import io.github.ryuu.adventurecraft.Minecraft;
+import net.minecraft.class_61;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
@@ -27,7 +28,7 @@ public class EntityNPC extends EntityLivingScript {
 
     int ticksTillNewPath;
 
-    dh pathToPoint;
+    class_61 pathToPoint;
 
     Entity entityToTrack;
 
@@ -42,7 +43,7 @@ public class EntityNPC extends EntityLivingScript {
         this.ticksTillNewPath = 0;
         this.pathToPoint = null;
         this.ranOnCreate = false;
-        this.O = "/mob/char.png";
+        this.texture = "/mob/char.png";
         this.npcName = "New NPC";
         this.chatMsg = "Hello!";
     }
@@ -61,37 +62,37 @@ public class EntityNPC extends EntityLivingScript {
         if (this.trackPlayer && this.entityToTrack == null)
             this.entityToTrack = findPlayerToTrack();
         if (this.entityToTrack != null)
-            if (!this.entityToTrack.W()) {
+            if (!this.entityToTrack.isAlive()) {
                 this.entityToTrack = null;
-            } else if (this.entityToTrack.f((Entity) this) > 16.0F || !e(this.entityToTrack)) {
+            } else if (this.entityToTrack.distanceTo(this) > 16.0F || !method_928(this.entityToTrack)) {
                 this.entityToTrack = null;
             }
         if (this.entityToTrack != null) {
-            double d4 = this.entityToTrack.aM - this.aM;
-            double d5 = this.entityToTrack.aO - this.aO;
+            double d4 = this.entityToTrack.x - this.x;
+            double d5 = this.entityToTrack.z - this.z;
             float desiredYaw = (float) (Math.atan2(d5, d4) * 180.0D / 3.1415927410125732D) - 90.0F;
-            float delta = desiredYaw - this.aS;
+            float delta = desiredYaw - this.yaw;
             while (delta < -180.0F)
                 delta += 360.0F;
             while (delta > 180.0F)
                 delta -= 360.0F;
             delta = Math.max(Math.min(delta, 10.0F), -10.0F);
-            this.aS += delta;
+            this.yaw += delta;
         }
     }
 
     protected void f_() {
         if (!this.initialSpot) {
             this.initialSpot = true;
-            this.spawnX = this.aM;
-            this.spawnY = this.aN;
-            this.spawnZ = this.aO;
+            this.spawnX = this.x;
+            this.spawnY = this.y;
+            this.spawnZ = this.z;
         }
     }
 
     protected Entity findPlayerToTrack() {
-        Player entityplayer = this.aI.a((Entity) this, 16.0D);
-        if (entityplayer != null && e(entityplayer))
+        Player entityplayer = this.level.getClosestPlayerTo(this, 16.0D);
+        if (entityplayer != null && method_928(entityplayer))
             return entityplayer;
         return null;
     }
@@ -112,7 +113,7 @@ public class EntityNPC extends EntityLivingScript {
         super.b(nbttagcompound);
         nbttagcompound.put("npcName", this.npcName);
         nbttagcompound.put("chatMsg", this.chatMsg);
-        nbttagcompound.put("texture", this.O);
+        nbttagcompound.put("texture", this.texture);
         nbttagcompound.put("spawnX", this.spawnX);
         nbttagcompound.put("spawnY", this.spawnY);
         nbttagcompound.put("spawnZ", this.spawnZ);
@@ -125,7 +126,7 @@ public class EntityNPC extends EntityLivingScript {
         super.a(nbttagcompound);
         this.npcName = nbttagcompound.getString("npcName");
         this.chatMsg = nbttagcompound.getString("chatMsg");
-        this.O = nbttagcompound.getString("texture");
+        this.texture = nbttagcompound.getString("texture");
         if (nbttagcompound.containsKey("spawnX")) {
             this.spawnX = nbttagcompound.getDouble("spawnX");
             this.spawnY = nbttagcompound.getDouble("spawnY");

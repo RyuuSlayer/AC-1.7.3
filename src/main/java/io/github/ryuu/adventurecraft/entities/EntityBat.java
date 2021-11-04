@@ -58,7 +58,7 @@ public class EntityBat extends FlyingEntity implements MonsterEntityType {
         double d = this.waypointX - this.x;
         double d1 = this.waypointY - this.y;
         double d2 = this.waypointZ - this.z;
-        double d3 = MathsHelper.a(d * d + d1 * d1 + d2 * d2);
+        double d3 = MathsHelper.sqrt(d * d + d1 * d1 + d2 * d2);
         if (d3 < 1.0D || d3 > 60.0D || this.bs.nextInt(20) == 0)
             if (this.targetedEntity == null || this.bs.nextInt(3) == 0) {
                 this.movingToTarget = false;

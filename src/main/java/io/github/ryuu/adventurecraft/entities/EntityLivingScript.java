@@ -7,11 +7,13 @@ import io.github.ryuu.adventurecraft.scripting.ScriptEntity;
 import io.github.ryuu.adventurecraft.scripting.ScriptEntityDescription;
 import io.github.ryuu.adventurecraft.util.CoordBlock;
 import io.github.ryuu.adventurecraft.util.IEntityPather;
+import net.minecraft.class_61;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.util.io.CompoundTag;
+import net.minecraft.util.maths.MathsHelper;
 import net.minecraft.util.maths.Vec3f;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
@@ -40,7 +42,7 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
 
     public String onInteraction;
 
-    private dh path;
+    private class_61 path;
 
     private Entity pathToEntity;
 
@@ -81,7 +83,7 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
         ScriptEntityDescription description = EntityDescriptions.getDescription(descName);
         if (description != null) {
             if (setHealth) {
-                this.Y = description.health;
+                this.health = description.health;
                 this.maxHealth = description.health;
                 this.onCreated = description.onCreated;
                 this.onUpdate = description.onUpdate;
@@ -90,10 +92,10 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
                 this.onDeath = description.onDeath;
                 this.onInteraction = description.onInteraction;
             }
-            this.bg = description.width;
-            this.bh = description.height;
-            this.O = description.texture;
-            this.aB = description.moveSpeed;
+            this.width = description.width;
+            this.height = description.height;
+            this.texture = description.texture;
+            this.movementSpeed = description.moveSpeed;
             runCreatedScript();
         }
     }
@@ -107,11 +109,11 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
                 setEntityDescription(this.initDescTo, false);
             this.initDescTo = null;
         }
-        this.prevWidth = this.bg;
-        this.prevHeight = this.bh;
+        this.prevWidth = this.width;
+        this.prevHeight = this.height;
         continuePathing();
         runUpdateScript();
-        super.w_();
+        super.tick();
     }
 
     public boolean a(Entity entity, int i) {
@@ -120,7 +122,7 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
         wrappedOut = Context.javaToJS(new Integer(i), this.scope);
         ScriptableObject.putProperty(this.scope, "attackingDamage", wrappedOut);
         if (runOnAttackedScript())
-            return super.a(entity, i);
+            return super.damage(entity, i);
         return false;
     }
 
@@ -135,7 +137,7 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
     }
 
     public void K() {
-        super.K();
+        super.remove();
         runDeathScript();
     }
 
@@ -177,22 +179,22 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
 
     public void runCreatedScript() {
         if (!this.onCreated.equals(""))
-            this.aI.scriptHandler.runScript(this.onCreated, this.scope);
+            this.level.scriptHandler.runScript(this.onCreated, this.scope);
     }
 
     private void runUpdateScript() {
         if (!this.onUpdate.equals(""))
-            this.aI.scriptHandler.runScript(this.onUpdate, this.scope);
+            this.level.scriptHandler.runScript(this.onUpdate, this.scope);
     }
 
     private void runPathCompletedScript() {
         if (!this.onPathReached.equals(""))
-            this.aI.scriptHandler.runScript(this.onPathReached, this.scope);
+            this.level.scriptHandler.runScript(this.onPathReached, this.scope);
     }
 
     private boolean runOnAttackedScript() {
         if (!this.onAttacked.equals("")) {
-            Object obj = this.aI.scriptHandler.runScript(this.onAttacked, this.scope);
+            Object obj = this.level.scriptHandler.runScript(this.onAttacked, this.scope);
             if (obj == null || !(obj instanceof Boolean))
                 return true;
             return ((Boolean) obj).booleanValue();
@@ -202,12 +204,12 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
 
     private void runDeathScript() {
         if (!this.onDeath.equals(""))
-            this.aI.scriptHandler.runScript(this.onDeath, this.scope);
+            this.level.scriptHandler.runScript(this.onDeath, this.scope);
     }
 
     private boolean runOnInteractionScript() {
         if (!this.onInteraction.equals("")) {
-            Object obj = this.aI.scriptHandler.runScript(this.onInteraction, this.scope);
+            Object obj = this.level.scriptHandler.runScript(this.onInteraction, this.scope);
             if (obj == null || !(obj instanceof Boolean))
                 return true;
             return ((Boolean) obj).booleanValue();
@@ -222,8 +224,8 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
     public void pathToEntity(Entity p) {
         this.pathToEntity = p;
         this.pathToVec = null;
-        this.path = this.aI.a(this, this.pathToEntity, this.maxPathDistance.floatValue());
-        this.nextPathIn = this.aI.r.nextInt(40) + 60;
+        this.path = this.level.method_192(this, this.pathToEntity, this.maxPathDistance.floatValue());
+        this.nextPathIn = this.level.rand.nextInt(40) + 60;
         this.prevDistToPoint = 999999.0D;
         this.triggerOnPath = null;
     }
@@ -231,8 +233,8 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
     public void pathToPosition(int x, int y, int z) {
         this.pathToEntity = null;
         this.pathToVec = new CoordBlock(x, y, z);
-        this.path = this.aI.a(this, x, y, z, this.maxPathDistance.floatValue());
-        this.nextPathIn = this.aI.r.nextInt(40) + 60;
+        this.path = this.level.method_189(this, x, y, z, this.maxPathDistance.floatValue());
+        this.nextPathIn = this.level.rand.nextInt(40) + 60;
         this.prevDistToPoint = 999999.0D;
         this.triggerOnPath = null;
     }
@@ -248,25 +250,25 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
         if (isPathing()) {
             if (this.path == null || (--this.nextPathIn <= 0 && this.pathToEntity != null && this.path.needNewPath(this.pathToEntity))) {
                 if (this.pathToEntity != null) {
-                    this.path = this.aI.a(this, this.pathToEntity, this.maxPathDistance.floatValue());
+                    this.path = this.level.method_192(this, this.pathToEntity, this.maxPathDistance.floatValue());
                 } else if (this.pathToVec != null) {
-                    this.path = this.aI.a(this, this.pathToVec.x, this.pathToVec.y, this.pathToVec.z, this.maxPathDistance.floatValue());
+                    this.path = this.level.method_189(this, this.pathToVec.x, this.pathToVec.y, this.pathToVec.z, this.maxPathDistance.floatValue());
                 }
-                this.nextPathIn = this.aI.r.nextInt(40) + 10;
+                this.nextPathIn = this.level.rand.nextInt(40) + 10;
                 this.prevDistToPoint = 999999.0D;
             }
             if (this.path == null)
                 return;
-            Vec3f vec3d = this.path.a(this);
-            this.ax = 0.0F;
-            this.az = false;
-            double dist = vec3d.d(this.aM, vec3d.b, this.aO);
+            Vec3f vec3d = this.path.method_2041(this);
+            this.parallelMovement = 0.0F;
+            this.jumping = false;
+            double dist = vec3d.method_1303(this.x, vec3d.y, this.z);
             if (dist >= this.prevDistToPoint && this.nextPathIn > 5)
-                this.nextPathIn = this.aI.r.nextInt(5) + 1;
+                this.nextPathIn = this.level.rand.nextInt(5) + 1;
             this.prevDistToPoint = dist;
-            for (double d = this.bg * 1.1D; vec3d != null && vec3d.d(this.aM, vec3d.b, this.aO) < d * d; ) {
-                this.path.a();
-                if (this.path.b()) {
+            for (double d = this.width * 1.1D; vec3d != null && vec3d.method_1303(this.x, vec3d.y, this.z) < d * d; ) {
+                this.path.method_2040();
+                if (this.path.method_2042()) {
                     vec3d = null;
                     this.path = null;
                     runPathCompletedScript();
@@ -274,30 +276,30 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
                         this.triggerOnPath.pathFinished();
                     return;
                 }
-                vec3d = this.path.a(this);
+                vec3d = this.path.method_2041(this);
                 this.prevDistToPoint = 999999.0D;
             }
             if (vec3d != null) {
-                double dX = vec3d.a - this.aM;
-                double dZ = vec3d.c - this.aO;
-                double dY = vec3d.b - in.b(this.aW.b + 0.5D);
+                double dX = vec3d.x - this.x;
+                double dZ = vec3d.z - this.z;
+                double dY = vec3d.y - MathsHelper.floor(this.boundingBox.minY + 0.5D);
                 float yawDir = (float) (Math.atan2(dZ, dX) * 180.0D / 3.1415927410125732D) - 90.0F;
-                float yawDelta = yawDir - this.aS;
-                this.ax = this.aB;
+                float yawDelta = yawDir - this.yaw;
+                this.parallelMovement = this.movementSpeed;
                 for (; yawDelta < -180.0F; yawDelta += 360.0F) ;
                 for (; yawDelta >= 180.0F; yawDelta -= 360.0F) ;
                 if (yawDelta > 30.0F)
                     yawDelta = 30.0F;
                 if (yawDelta < -30.0F)
                     yawDelta = -30.0F;
-                this.aS += yawDelta;
+                this.yaw += yawDelta;
                 if (dY > 0.0D)
-                    this.az = true;
+                    this.jumping = true;
             }
         }
     }
 
-    public dh getCurrentPath() {
+    public class_61 getCurrentPath() {
         return this.path;
     }
 }

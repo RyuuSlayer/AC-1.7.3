@@ -52,11 +52,11 @@ public class EntityBoomerang extends Entity {
         this(world);
         this.item = b;
         setRotation(entity.yaw, entity.pitch);
-        double xHeading = -MathsHelper.a(entity.yaw * 3.141593F / 180.0F);
-        double zHeading = MathsHelper.b(entity.yaw * 3.141593F / 180.0F);
-        this.velocityX = 0.5D * xHeading * MathsHelper.b(entity.pitch / 180.0F * 3.141593F);
-        this.velocityY = -0.5D * MathsHelper.a(entity.pitch / 180.0F * 3.141593F);
-        this.velocityZ = 0.5D * zHeading * MathsHelper.b(entity.pitch / 180.0F * 3.141593F);
+        double xHeading = -MathsHelper.sin(entity.yaw * 3.141593F / 180.0F);
+        double zHeading = MathsHelper.cos(entity.yaw * 3.141593F / 180.0F);
+        this.velocityX = 0.5D * xHeading * MathsHelper.cos(entity.pitch / 180.0F * 3.141593F);
+        this.velocityY = -0.5D * MathsHelper.sin(entity.pitch / 180.0F * 3.141593F);
+        this.velocityZ = 0.5D * zHeading * MathsHelper.cos(entity.pitch / 180.0F * 3.141593F);
         setPosition(entity.x, entity.y, entity.z);
         this.prevX = this.x;
         this.prevY = this.y;
@@ -152,7 +152,7 @@ public class EntityBoomerang extends Entity {
     }
 
     public void K() {
-        super.K();
+        super.remove();
         if (this.item != null)
             this.item.setDamage(0);
     }
