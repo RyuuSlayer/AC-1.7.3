@@ -26,11 +26,12 @@ public class EntityArrowBomb extends Arrow {
         this.fuse = 45;
     }
 
-    public void w_() {
+    @Override
+    public void tick() {
         super.tick();
         this.fuse--;
         if (this.fuse == 0) {
-            EntityBomb.explode(this, this.c, this.level, this.x, this.y, this.z); // c is probably field_1576 but not 100% sure
+            EntityBomb.explode(this, this.field_1576, this.level, this.x, this.y, this.z);
             remove();
         } else {
             this.level.addParticle("smoke", this.x, this.y, this.z, 0.0D, 0.0D, 0.0D);
@@ -43,26 +44,30 @@ public class EntityArrowBomb extends Arrow {
         this.velocityZ *= -0.10000000149011612D;
         this.yaw += 180.0F;
         this.prevYaw += 180.0F;
-        this.k = 0;
+        this.field_1584 = 0;
     }
 
-    public void b(CompoundTag nbttagcompound) {
+    @Override
+    public void writeCustomDataToTag(CompoundTag nbttagcompound) {
         super.writeCustomDataToTag(nbttagcompound);
         nbttagcompound.put("fuse", (byte) this.fuse);
     }
 
-    public void a(CompoundTag nbttagcompound) {
-        super.fromTag(nbttagcompound);
+    @Override
+    public void readCustomDataFromTag(CompoundTag nbttagcompound) {
+        super.readCustomDataFromTag(nbttagcompound);
         this.fuse = nbttagcompound.getByte("fuse") & 0xFF;
     }
 
-    public void b(Player entityplayer) {
+    @Override
+    public void onPlayerCollision(Player entityplayer) {
     }
 
-    public boolean a(Entity entity, int i) {
+    @Override
+    public boolean damage(Entity entity, int i) {
         if (!this.removed) {
             method_1336();
-            EntityBomb.explode(this, this.c, this.level, this.x, this.y, this.z); // c is probably field_1576 but not 100% sure
+            EntityBomb.explode(this, this.field_1576, this.level, this.x, this.y, this.z);
         }
         return false;
     }

@@ -13,7 +13,8 @@ public class EntityAirFX extends Particle {
         this.velocityX = this.velocityY = this.velocityZ = 0.0D;
     }
 
-    public int c_() {
+    @Override
+    public int method_2003() {
         return 0;
     }
 }

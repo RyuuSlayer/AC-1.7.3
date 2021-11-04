@@ -100,10 +100,12 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
         }
     }
 
-    protected void f_() {
+    @Override
+    protected void tickHandSwing() {
     }
 
-    public void w_() {
+    @Override
+    public void tick() {
         if (this.initDescTo != null) {
             if (!this.initDescTo.equals(""))
                 setEntityDescription(this.initDescTo, false);
@@ -116,7 +118,8 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
         super.tick();
     }
 
-    public boolean a(Entity entity, int i) {
+    @Override
+    public boolean damage(Entity entity, int i) {
         Object wrappedOut = Context.javaToJS(ScriptEntity.getEntityClass(entity), this.scope);
         ScriptableObject.putProperty(this.scope, "attackingEntity", wrappedOut);
         wrappedOut = Context.javaToJS(new Integer(i), this.scope);
@@ -126,6 +129,7 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
         return false;
     }
 
+    @Override // TODO: put in mixin
     public boolean attackEntityFromMulti(Entity entity, int i) {
         Object wrappedOut = Context.javaToJS(ScriptEntity.getEntityClass(entity), this.scope);
         ScriptableObject.putProperty(this.scope, "attackingEntity", wrappedOut);
@@ -136,17 +140,20 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
         return false;
     }
 
-    public void K() {
+    @Override
+    public void remove() {
         super.remove();
         runDeathScript();
     }
 
-    public boolean a(Player entityplayer) {
+    @Override
+    public boolean interact(Player entityplayer) {
         return runOnInteractionScript();
     }
 
-    public void b(CompoundTag nbttagcompound) {
-        super.b(nbttagcompound);
+    @Override
+    public void writeCustomDataToTag(CompoundTag nbttagcompound) {
+        super.writeCustomDataToTag(nbttagcompound);
         if (this.descriptionName != null && !this.descriptionName.equals(""))
             nbttagcompound.put("descriptionName", this.descriptionName);
         if (!this.onCreated.equals(""))
@@ -165,8 +172,9 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
             ScopeTag.loadScopeFromTag(this.scope, nbttagcompound.k("scope"));
     }
 
-    public void a(CompoundTag nbttagcompound) {
-        super.a(nbttagcompound);
+    @Override
+    public void readCustomDataFromTag(CompoundTag nbttagcompound) {
+        super.readCustomDataFromTag(nbttagcompound);
         this.initDescTo = nbttagcompound.getString("descriptionName");
         this.onCreated = nbttagcompound.getString("onCreated");
         this.onUpdate = nbttagcompound.getString("onUpdate");
@@ -299,6 +307,7 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
         }
     }
 
+    @Override
     public class_61 getCurrentPath() {
         return this.path;
     }

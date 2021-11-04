@@ -19,6 +19,7 @@ public class EntityBomb extends ItemEntity {
 
     private static final double BOMB_RANGE = 5.0D;
 
+    // TODO: utilize this constant
     private static final double BOMB_DESTROY_RANGE = 3.0D;
 
     private static final int BOMB_FUSE = 45;
@@ -31,7 +32,7 @@ public class EntityBomb extends ItemEntity {
         super(world);
         setSize(0.5F, 0.5F);
         this.item = new ItemInstance(Items.bomb);
-        this.fuse = 45;
+        this.fuse = BOMB_FUSE;
     }
 
     public EntityBomb(Level world, Entity entity) {
@@ -47,12 +48,13 @@ public class EntityBomb extends ItemEntity {
         this.prevZ = this.z;
     }
 
-    public void w_() {
+    @Override
+    public void tick() {
         super.tick();
-        if (this.fuse == 45)
+        if (this.fuse == BOMB_FUSE)
             this.level.playSound(this, "random.fuse", 1.0F, 1.0F);
         this.fuse--;
-        double fuseDuration = this.fuse / 45.0D;
+        double fuseDuration = this.fuse / (double)BOMB_FUSE;
         double fuseOffset = 0.2D * fuseDuration;
         if (this.fuse == 0) {
             explode(this, this.parentEntity, this.level, this.x, this.y, this.z);
@@ -66,17 +68,26 @@ public class EntityBomb extends ItemEntity {
     public static void explode(Entity exploding, Entity parentEntity, Level worldObj, double posX, double posY, double posZ) {
         exploding.remove();
         worldObj.playSound(posX, posY, posZ, "random.explode", 4.0F, 1.0F);
-        List<Entity> list = worldObj.getEntities(exploding, Box.create(Math.floor(posX - 5.0D), Math.floor(posY - 5.0D), Math.floor(posZ - 5.0D), Math.ceil(posX + 5.0D), Math.ceil(posY + 5.0D), Math.ceil(posZ + 5.0D)));
+        List<Entity> list = worldObj.getEntities(
+            exploding,
+            Box.create(
+                Math.floor(posX - BOMB_RANGE),
+                Math.floor(posY - BOMB_RANGE),
+                Math.floor(posZ - BOMB_RANGE),
+                Math.ceil(posX + BOMB_RANGE),
+                Math.ceil(posY + BOMB_RANGE),
+                Math.ceil(posZ + BOMB_RANGE)));
+
         for (int i = 0; i < list.size(); i++) {
             Entity entity = list.get(i);
             double dist = entity.method_1350(posX, posY, posZ);
-            if (dist < 5.0D) {
-                dist = (5.0D - dist) / 5.0D;
+            if (dist < BOMB_RANGE) {
+                dist = (BOMB_RANGE - dist) / BOMB_RANGE;
                 double dX = entity.x - posX;
                 double dY = entity.y - posY;
                 double dZ = entity.z - posZ;
-                entity.d(dist * dX, dist * dY, dist * dZ);
-                entity.damage(parentEntity, (int) Math.ceil(dist * 20.0D));
+                entity.method_1322(dist * dX, dist * dY, dist * dZ);
+                entity.damage(parentEntity, (int) Math.ceil(dist * BOMB_DAMAGE));
             }
         }
         int coordX = (int) posX;
@@ -85,8 +96,8 @@ public class EntityBomb extends ItemEntity {
         for (int x = -3; x <= 3; x++) {
             for (int y = -3; y <= 3; y++) {
                 for (int z = -3; z <= 3; z++) {
-                    Double distSq = Double.valueOf(x * x + (y * y) + (z * z));
-                    if (distSq.doubleValue() <= 9.0D) {
+                    double distSq = x * x + (y * y) + (z * z);
+                    if (distSq <= 9.0D) {
                         int blockID = worldObj.getTileId(coordX + x, coordY + y, coordZ + z);
                         if (Tile.BY_ID[blockID] instanceof BlockBombable)
                             worldObj.setTile(coordX + x, coordY + y, coordZ + z, 0);
@@ -95,28 +106,29 @@ public class EntityBomb extends ItemEntity {
             }
         }
         Random rand = new Random();
-        rand.setSeed(worldObj.h());
+        rand.setSeed(worldObj.getSeed());
         for (int j = -3; j <= 3; j++) {
             for (int y = -3; y <= 3; y++) {
                 for (int z = -3; z <= 3; z++) {
-                    Double distSq = Double.valueOf(j * j + (y * y) + (z * z));
-                    if (rand.nextInt(3) == 0 && distSq.doubleValue() <= 9.0D) {
-                        Double velX = Double.valueOf(j);
-                        Double velY = Double.valueOf(y);
-                        Double velZ = Double.valueOf(z);
-                        Double dist = Double.valueOf(Math.sqrt(distSq.doubleValue()) * (0.75D + 0.5D * rand.nextDouble()) * 1.5D / 3.0D);
-                        velX = Double.valueOf(velX.doubleValue() / dist.doubleValue());
-                        velY = Double.valueOf(velY.doubleValue() / dist.doubleValue());
-                        velZ = Double.valueOf(velZ.doubleValue() / dist.doubleValue());
-                        worldObj.addParticle("explode", posX, posY, posZ, velX.doubleValue(), velY.doubleValue(), velZ.doubleValue());
-                        worldObj.addParticle("smoke", posX, posY, posZ, velX.doubleValue(), velY.doubleValue(), velZ.doubleValue());
+                    double distSq = j * j + (y * y) + (z * z);
+                    if (rand.nextInt(3) == 0 && distSq <= 9.0D) {
+                        double velX = j;
+                        double velY = y;
+                        double velZ = z;
+                        double dist = Math.sqrt(distSq) * (0.75D + 0.5D * rand.nextDouble()) * 1.5D / 3.0D;
+                        velX = velX / dist;
+                        velY = velY / dist;
+                        velZ = velZ / dist;
+                        worldObj.addParticle("explode", posX, posY, posZ, velX, velY, velZ);
+                        worldObj.addParticle("smoke", posX, posY, posZ, velX, velY, velZ);
                     }
                 }
             }
         }
     }
 
-    public boolean a(Entity entity, int i) {
+    @Override
+    public boolean damage(Entity entity, int i) {
         if (!this.removed) {
             method_1336();
             explode(this, this.parentEntity, this.level, this.x, this.y, this.z);
@@ -124,16 +136,19 @@ public class EntityBomb extends ItemEntity {
         return false;
     }
 
-    public void b(CompoundTag nbttagcompound) {
+    @Override
+    public void writeCustomDataToTag(CompoundTag nbttagcompound) {
         super.writeCustomDataToTag(nbttagcompound);
         nbttagcompound.put("Fuse", (byte) this.fuse);
     }
 
-    public void a(CompoundTag nbttagcompound) {
+    @Override
+    public void readCustomDataFromTag(CompoundTag nbttagcompound) {
         super.readCustomDataFromTag(nbttagcompound);
         this.fuse = nbttagcompound.getByte("Fuse");
     }
 
-    public void b(Player entityplayer) {
+    @Override
+    public void onPlayerCollision(Player entityplayer) {
     }
 }

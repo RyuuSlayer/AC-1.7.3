@@ -48,17 +48,19 @@ public class EntityNPC extends EntityLivingScript {
         this.chatMsg = "Hello!";
     }
 
-    protected void b() {
+    @Override
+    protected void initDataTracker() {
     }
 
-    public void w_() {
+    @Override
+    public void tick() {
         if (!this.ranOnCreate) {
             this.ranOnCreate = true;
             runCreatedScript();
         }
-        if (this.pathToHome && !isPathing() && g(this.spawnX, this.spawnY, this.spawnZ) > 4.0D)
+        if (this.pathToHome && !isPathing() && squaredDistanceTo(this.spawnX, this.spawnY, this.spawnZ) > 4.0D)
             pathToPosition((int) this.spawnX, (int) this.spawnY, (int) this.spawnZ);
-        super.w_();
+        super.tick();
         if (this.trackPlayer && this.entityToTrack == null)
             this.entityToTrack = findPlayerToTrack();
         if (this.entityToTrack != null)
@@ -81,7 +83,8 @@ public class EntityNPC extends EntityLivingScript {
         }
     }
 
-    protected void f_() {
+    @Override
+    protected void tickHandSwing() {
         if (!this.initialSpot) {
             this.initialSpot = true;
             this.spawnX = this.x;
@@ -97,11 +100,13 @@ public class EntityNPC extends EntityLivingScript {
         return null;
     }
 
-    public boolean i_() {
+    @Override
+    public boolean method_1380() {
         return false;
     }
 
-    public void h(Entity entity) {
+    @Override
+    public void method_1353(Entity entity) {
         System.out.println("collision");
     }
 
@@ -109,8 +114,9 @@ public class EntityNPC extends EntityLivingScript {
         return (this.entityToTrack != null);
     }
 
-    public void b(CompoundTag nbttagcompound) {
-        super.b(nbttagcompound);
+    @Override
+    public void writeCustomDataToTag(CompoundTag nbttagcompound) {
+        super.writeCustomDataToTag(nbttagcompound);
         nbttagcompound.put("npcName", this.npcName);
         nbttagcompound.put("chatMsg", this.chatMsg);
         nbttagcompound.put("texture", this.texture);
@@ -122,8 +128,9 @@ public class EntityNPC extends EntityLivingScript {
         nbttagcompound.put("isAttackable", this.isAttackable);
     }
 
-    public void a(CompoundTag nbttagcompound) {
-        super.a(nbttagcompound);
+    @Override
+    public void readCustomDataFromTag(CompoundTag nbttagcompound) {
+        super.readCustomDataFromTag(nbttagcompound);
         this.npcName = nbttagcompound.getString("npcName");
         this.chatMsg = nbttagcompound.getString("chatMsg");
         this.texture = nbttagcompound.getString("texture");
@@ -140,18 +147,20 @@ public class EntityNPC extends EntityLivingScript {
             this.isAttackable = nbttagcompound.getBoolean("isAttackable");
     }
 
-    public boolean a(Player entityplayer) {
-        if (super.a(entityplayer)) {
+    @Override
+    public boolean interact(Player entityplayer) {
+        if (super.interact(entityplayer)) {
             if (this.chatMsg != null && !this.chatMsg.equals(""))
-                Minecraft.minecraftInstance.v.a(String.format("<%s> %s", new Object[]{this.npcName, this.chatMsg}));
+                Minecraft.minecraftInstance.overlay.addChatMessage(String.format("<%s> %s", this.npcName, this.chatMsg));
             return true;
         }
         return false;
     }
 
-    public boolean a(Entity entity, int i) {
+    @Override
+    public boolean damage(Entity entity, int i) {
         if (this.isAttackable)
-            return super.a(entity, i);
+            return super.damage(entity, i);
         return false;
     }
 

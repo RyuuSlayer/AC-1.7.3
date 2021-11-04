@@ -69,7 +69,8 @@ public class EntityBoomerang extends Entity {
         this.chunkZ = (int) Math.floor(this.z);
     }
 
-    public void w_() {
+    @Override
+    public void tick() {
         this.prevX = this.x;
         this.prevY = this.y;
         this.prevZ = this.z;
@@ -106,20 +107,20 @@ public class EntityBoomerang extends Entity {
             double deltaZ = this.returnsTo.z - this.z;
             double length = Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
             if (length < 1.5D)
-                K();
+                remove();
             this.velocityX = 0.5D * deltaX / length;
             this.velocityZ = 0.5D * deltaY / length;
             this.velocityY = 0.5D * deltaZ / length;
             setPosition(this.x + this.velocityX, this.y + this.velocityY, this.z + this.velocityZ);
         } else {
-            K();
+            remove();
         }
         determineRotation();
         this.prevBoomerangRotation = this.boomerangRotation;
         this.boomerangRotation += 36.0F;
         while (this.boomerangRotation > 360.0F)
             this.boomerangRotation -= 360.0F;
-        List<Entity> entitiesWithin = this.level.getEntities(this, this.boundingBox.b(0.5D, 0.5D, 0.5D));
+        List<Entity> entitiesWithin = this.level.getEntities(this, this.boundingBox.expand(0.5D, 0.5D, 0.5D));
         for (int i = 0; i < entitiesWithin.size(); i++) {
             Entity e = entitiesWithin.get(i);
             if (e instanceof ItemEntity) {
@@ -135,7 +136,7 @@ public class EntityBoomerang extends Entity {
         }
         for (Entity e : this.itemsPickedUp) {
             if (!e.removed)
-                e.e(this.x, this.y, this.z);
+                e.setPosition(this.x, this.y, this.z);
         }
         int curChunkX = (int) Math.floor(this.x);
         int curChunkY = (int) Math.floor(this.y);
@@ -151,7 +152,8 @@ public class EntityBoomerang extends Entity {
         }
     }
 
-    public void K() {
+    @Override
+    public void remove() {
         super.remove();
         if (this.item != null)
             this.item.setDamage(0);
@@ -163,20 +165,25 @@ public class EntityBoomerang extends Entity {
         this.pitch = -57.29578F * (float) Math.atan2(this.velocityY, xzLength);
     }
 
+    @Override
     protected void writeCustomDataToTag(CompoundTag nbttagcompound) {
     }
 
+    @Override
     public void readCustomDataFromTag(CompoundTag nbttagcompound) {
-        K();
+        remove();
     }
 
-    public void b(Player entityplayer) {
+    @Override
+    public void onPlayerCollision(Player entityplayer) {
     }
 
-    public boolean a(Entity entity, int i) {
+    @Override
+    public boolean damage(Entity entity, int i) {
         return false;
     }
 
+    @Override
     protected void initDataTracker() {
     }
 }

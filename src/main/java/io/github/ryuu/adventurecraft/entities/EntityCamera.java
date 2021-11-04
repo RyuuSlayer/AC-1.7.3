@@ -21,6 +21,7 @@ public class EntityCamera extends LivingEntity {
         this.type = ty;
     }
 
+    @Override
     protected void initDataTracker() {
     }
 
@@ -29,29 +30,37 @@ public class EntityCamera extends LivingEntity {
         Minecraft.minecraftInstance.activeCutsceneCamera.loadCameraEntities();
     }
 
+    @Override
     public void readCustomDataFromTag(CompoundTag nbttagcompound) {
     }
 
+    @Override
     public void writeCustomDataToTag(CompoundTag nbttagcompound) {
     }
 
+    @Override
     public void baseTick() {
     }
 
+    @Override
     public void updateDespawnCounter() {
     }
 
+    @Override
     public void tick() {
     }
 
+    @Override
     public boolean method_1356() {
         return true;
     }
 
+    @Override
     public boolean method_1380() {
         return false;
     }
 
+    @Override
     public boolean interact(Player entityplayer) {
         GuiCamera.showUI(this);
         return true;

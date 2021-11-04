@@ -73,7 +73,8 @@ public class EntityHookshot extends Entity {
         this.prevPitch = this.pitch = (float) (Math.atan2(-this.velocityY, f3) * 180.0D / 3.1415927410125732D);
     }
 
-    public void w_() {
+    @Override
+    public void tick() {
         if (this.item != null && this.returnsTo instanceof Player) {
             Player player = (Player) this.returnsTo;
             if (this.mainHand && this.item != player.inventory.getHeldItem())
@@ -95,7 +96,7 @@ public class EntityHookshot extends Entity {
                 Vec3f pos1 = Vec3f.method_1293(this.prevX, this.prevY, this.prevZ);
                 Vec3f pos2 = Vec3f.method_1293(this.prevX + 10.0D * prevVelX, this.prevY + 10.0D * prevVelY, this.prevZ + 10.0D * prevVelZ);
                 HitResult hit = this.level.raycast(pos1, pos2);
-                if (hit != null && hit.type == HitType.a) {
+                if (hit != null && hit.type == HitType.TILE) { // TODO: this HitType had some strange mapping
                     int blockID = this.level.getTileId(hit.x, hit.y, hit.z);
                     if (blockID == Tile.LOG.id || blockID == Tile.WOOD.id || blockID == Blocks.woodBlocks.id || blockID == Blocks.halfSteps3.id) {
                         this.attachedToSurface = true;
@@ -111,7 +112,7 @@ public class EntityHookshot extends Entity {
             }
         } else if (this.returnsTo != null) {
             if (this.returnsTo.removed) {
-                K();
+                remove();
                 return;
             }
             double deltaX = this.returnsTo.x - this.x;
@@ -126,19 +127,19 @@ public class EntityHookshot extends Entity {
                     this.returnsTo.method_1322(-0.15D * this.velocityX, -0.15D * this.velocityY, -0.15D * this.velocityZ);
                     this.returnsTo.fallDistance = 0.0F;
                 } else {
-                    this.returnsTo.a(0.0D, 0.0D, 0.0D);
+                    this.returnsTo.setVelocity(0.0D, 0.0D, 0.0D);
                 }
             } else {
                 if (length <= 1.2D)
-                    K();
+                    remove();
                 setPosition(this.x + this.velocityX, this.y + this.velocityY, this.z + this.velocityZ);
                 setHeadingReverse();
             }
         } else {
-            K();
+            remove();
         }
         if (!this.turningAround) {
-            List<Entity> entitiesWithin = this.level.getEntities(this, this.boundingBox.b(0.5D, 0.5D, 0.5D));
+            List<Entity> entitiesWithin = this.level.getEntities(this, this.boundingBox.expand(0.5D, 0.5D, 0.5D));
             for (int i = 0; i < entitiesWithin.size(); i++) {
                 Entity e = entitiesWithin.get(i);
                 boolean isItem = e instanceof ItemEntity;
@@ -160,24 +161,30 @@ public class EntityHookshot extends Entity {
         }
     }
 
-    protected void b(CompoundTag nbttagcompound) {
+    @Override
+    protected void writeCustomDataToTag(CompoundTag nbttagcompound) {
     }
 
-    public void a(CompoundTag nbttagcompound) {
-        K();
+    @Override
+    public void readCustomDataFromTag(CompoundTag nbttagcompound) {
+        remove();
     }
 
-    public void b(Player entityplayer) {
+    @Override
+    public void onPlayerCollision(Player entityplayer) {
     }
 
-    public boolean a(Entity entity, int i) {
+    @Override
+    public boolean damage(Entity entity, int i) {
         return false;
     }
 
-    protected void b() {
+    @Override
+    protected void initDataTracker() {
     }
 
-    public void K() {
+    @Override
+    public void remove() {
         if (this.item != null)
             this.item.setDamage(0);
         super.remove();

@@ -43,15 +43,16 @@ public class EntityBat extends FlyingEntity implements MonsterEntityType {
         this.maxHealth = 5;
     }
 
-    protected void f_() {
-        if (this.level.q == 0) // maybe difficulty
-            K(); // maybe remove
+    @Override
+    protected void tickHandSwing() {
+        if (this.level.difficulty == 0) // maybe difficulty
+            remove(); // maybe remove
         if (this.targetedEntity != null && this.targetedEntity.removed) {
             this.targetedEntity = null;
             this.movingToTarget = false;
         }
         if (this.targetedEntity == null || this.aggroCooldown-- <= 0) {
-            this.targetedEntity = this.level.a(this, 100.0D);
+            this.targetedEntity = this.level.getClosestPlayerTo(this, 100.0D);
             if (this.targetedEntity != null)
                 this.aggroCooldown = 20;
         }
@@ -88,7 +89,7 @@ public class EntityBat extends FlyingEntity implements MonsterEntityType {
             double d5 = this.targetedEntity.x - this.x;
             double d7 = this.targetedEntity.z - this.z;
             this.field_1012 = -((float) Math.atan2(d5, d7)) * 180.0F / 3.141593F;
-            if (this.movingToTarget && this.targetedEntity.g(this) < 2.25D) {
+            if (this.movingToTarget && this.targetedEntity.method_1352(this) < 2.25D) {
                 this.velocityX = 0.0D;
                 this.velocityY = 0.0D;
                 this.velocityZ = 0.0D;
@@ -108,28 +109,32 @@ public class EntityBat extends FlyingEntity implements MonsterEntityType {
         double d4 = (this.waypointX - this.x) / d3;
         double d5 = (this.waypointY - this.y) / d3;
         double d6 = (this.waypointZ - this.z) / d3;
-        Box axisalignedbb = this.boundingBox.d();
+        Box axisalignedbb = this.boundingBox.method_92();
         for (int i = 1; i < d3; i++) {
-            axisalignedbb.d(d4, d5, d6);
+            axisalignedbb.method_102(d4, d5, d6);
             if (this.level.getEntities(this, axisalignedbb).size() > 0)
                 return false;
         }
         return true;
     }
 
-    protected float k() {
+    @Override
+    protected float getSoundVolume() {
         return 0.6F;
     }
 
-    protected String g() {
+    @Override
+    protected String getAmbientSound() {
         return "mob.bat.ambient";
     }
 
-    protected String j_() {
+    @Override
+    protected String getHurtSound() {
         return "mob.bat.pain";
     }
 
-    protected String i() {
+    @Override
+    protected String getDeathSound() {
         return "mob.bat.death";
     }
 }
