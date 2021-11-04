@@ -33,12 +33,12 @@ public class TileEntityMinMaxRenderer extends TileEntityRenderer {
             for (int i = minMax.minX; i <= minMax.maxX; i++) {
                 for (int j = minMax.minY; j <= minMax.maxY; j++) {
                     for (int k = minMax.minZ; k <= minMax.maxZ; k++) {
-                        Tile block = net.minecraft.tile.Tile.m[minMax.d.a(i, j, k)];
+                        Tile block = net.minecraft.tile.Tile.BY_ID[minMax.level.getTileId(i, j, k)];
                         if (block != null && block.canBeTriggered()) {
                             GL11.glColor3f(0.0F, 0.0F, 0.0F);
                             GL11.glVertex3f(0.0F, 0.0F, 0.0F);
                             GL11.glColor3f(this.r, this.g, this.b);
-                            GL11.glVertex3f((i - minMax.e), (j - minMax.f), (k - minMax.g));
+                            GL11.glVertex3f((i - minMax.x), (j - minMax.y), (k - minMax.z));
                         }
                     }
                 }
@@ -52,7 +52,8 @@ public class TileEntityMinMaxRenderer extends TileEntityRenderer {
         }
     }
 
-    public void a(TileEntity tileentity, double d, double d1, double d2, float f) {
+    @Override
+    public void render(TileEntity tileentity, double d, double d1, double d2, float f) {
         render((TileEntityMinMax) tileentity, d, d1, d2, f);
     }
 }

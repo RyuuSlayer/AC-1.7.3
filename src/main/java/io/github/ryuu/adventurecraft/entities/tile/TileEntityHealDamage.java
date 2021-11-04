@@ -6,13 +6,15 @@ import net.minecraft.util.io.CompoundTag;
 public class TileEntityHealDamage extends TileEntity {
     public int healDamage;
 
-    public void a(CompoundTag nbttagcompound) {
-        super.a(nbttagcompound);
+    @Override
+    public void readIdentifyingData(CompoundTag nbttagcompound) {
+        super.readIdentifyingData(nbttagcompound);
         this.healDamage = nbttagcompound.getInt("healDamage");
     }
 
-    public void b(CompoundTag nbttagcompound) {
-        super.b(nbttagcompound);
+    @Override
+    public void writeIdentifyingData(CompoundTag nbttagcompound) {
+        super.writeIdentifyingData(nbttagcompound);
         nbttagcompound.put("healDamage", this.healDamage);
     }
 }

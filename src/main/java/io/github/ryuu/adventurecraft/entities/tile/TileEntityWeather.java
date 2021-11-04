@@ -24,8 +24,9 @@ public class TileEntityWeather extends TileEntity {
 
     public boolean changeThundering;
 
-    public void a(CompoundTag nbttagcompound) {
-        super.a(nbttagcompound);
+    @Override
+    public void readIdentifyingData(CompoundTag nbttagcompound) {
+        super.readIdentifyingData(nbttagcompound);
         this.changePrecipitate = nbttagcompound.getBoolean("changePrecipitate");
         this.precipitate = nbttagcompound.getBoolean("precipitate");
         this.changeTempOffset = nbttagcompound.getBoolean("changeTempOffset");
@@ -38,8 +39,9 @@ public class TileEntityWeather extends TileEntity {
         this.thundering = nbttagcompound.getBoolean("thundering");
     }
 
-    public void b(CompoundTag nbttagcompound) {
-        super.b(nbttagcompound);
+    @Override
+    public void writeIdentifyingData(CompoundTag nbttagcompound) {
+        super.writeIdentifyingData(nbttagcompound);
         nbttagcompound.put("changePrecipitate", this.changePrecipitate);
         nbttagcompound.put("precipitate", this.precipitate);
         nbttagcompound.put("changeTempOffset", this.changeTempOffset);

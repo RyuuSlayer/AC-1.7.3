@@ -8,15 +8,17 @@ public class TileEntityMusic extends TileEntity {
 
     public int fadeIn = 500;
 
-    public void a(CompoundTag nbttagcompound) {
-        super.a(nbttagcompound);
+    @Override
+    public void readIdentifyingData(CompoundTag nbttagcompound) {
+        super.readIdentifyingData(nbttagcompound);
         this.musicName = nbttagcompound.getString("musicName");
         this.fadeOut = nbttagcompound.getInt("fadeOut");
         this.fadeIn = nbttagcompound.getInt("fadeIn");
     }
 
-    public void b(CompoundTag nbttagcompound) {
-        super.b(nbttagcompound);
+    @Override
+    public void writeIdentifyingData(CompoundTag nbttagcompound) {
+        super.writeIdentifyingData(nbttagcompound);
         if (this.musicName != null && !this.musicName.equals(""))
             nbttagcompound.put("musicName", this.musicName);
         nbttagcompound.put("fadeOut", this.fadeOut);

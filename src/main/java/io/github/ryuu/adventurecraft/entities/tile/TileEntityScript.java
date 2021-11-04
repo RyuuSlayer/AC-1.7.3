@@ -17,26 +17,28 @@ public class TileEntityScript extends TileEntity {
 
     public Scriptable scope = Minecraft.minecraftInstance.f.script.getNewScope();
 
-    public void n_() {
+    @Override
+    public void tick() {
         if (!this.inited) {
             this.inited = true;
-            Object wrappedOut = Context.javaToJS(new Integer(this.e), this.scope);
+            Object wrappedOut = Context.javaToJS(this.x, this.scope);
             ScriptableObject.putProperty(this.scope, "xCoord", wrappedOut);
-            wrappedOut = Context.javaToJS(new Integer(this.f), this.scope);
+            wrappedOut = Context.javaToJS(this.y, this.scope);
             ScriptableObject.putProperty(this.scope, "yCoord", wrappedOut);
-            wrappedOut = Context.javaToJS(new Integer(this.g), this.scope);
+            wrappedOut = Context.javaToJS(this.z, this.scope);
             ScriptableObject.putProperty(this.scope, "zCoord", wrappedOut);
         }
         if (this.checkTrigger) {
-            this.isActivated = this.d.triggerManager.isActivated(this.e, this.f, this.g);
+            this.isActivated = this.level.triggerManager.isActivated(this.x, this.y, this.z);
             this.checkTrigger = false;
         }
         if (this.isActivated && !this.onUpdateScriptFile.equals(""))
-            this.d.scriptHandler.runScript(this.onUpdateScriptFile, this.scope);
+            this.level.scriptHandler.runScript(this.onUpdateScriptFile, this.scope);
     }
 
-    public void a(CompoundTag nbttagcompound) {
-        super.a(nbttagcompound);
+    @Override
+    public void readIdentifyingData(CompoundTag nbttagcompound) {
+        super.readIdentifyingData(nbttagcompound);
         this.onTriggerScriptFile = nbttagcompound.getString("onTriggerScriptFile");
         this.onDetriggerScriptFile = nbttagcompound.getString("onDetriggerScriptFile");
         this.onUpdateScriptFile = nbttagcompound.getString("onUpdateScriptFile");
@@ -45,8 +47,9 @@ public class TileEntityScript extends TileEntity {
             ScopeTag.loadScopeFromTag(this.scope, nbttagcompound.getCompoundTag("scope"));
     }
 
-    public void b(CompoundTag nbttagcompound) {
-        super.b(nbttagcompound);
+    @Override
+    public void writeIdentifyingData(CompoundTag nbttagcompound) {
+        super.writeIdentifyingData(nbttagcompound);
         if (!this.onTriggerScriptFile.isEmpty())
             nbttagcompound.put("onTriggerScriptFile", this.onTriggerScriptFile);
         if (!this.onDetriggerScriptFile.isEmpty())
@@ -63,5 +66,5 @@ public class TileEntityScript extends TileEntity {
 
     public boolean isActivated = false;
 
-    boolean loaded = false;
+    public boolean loaded = false;
 }

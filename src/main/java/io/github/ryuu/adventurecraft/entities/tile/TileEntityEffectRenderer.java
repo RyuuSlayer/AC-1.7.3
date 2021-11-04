@@ -52,7 +52,8 @@ public class TileEntityEffectRenderer extends TileEntityRenderer {
         }
     }
 
-    public void a(TileEntity tileentity, double d, double d1, double d2, float f) {
+    @Override
+    public void render(TileEntity tileentity, double d, double d1, double d2, float f) {
         render((TileEntityEffect) tileentity, d, d1, d2, f);
     }
 }

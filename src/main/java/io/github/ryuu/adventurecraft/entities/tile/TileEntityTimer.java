@@ -27,14 +27,15 @@ public class TileEntityTimer extends TileEntityMinMax {
         this.ticksDelay = this.timeDelay + 1;
     }
 
-    public void n_() {
+    @Override
+    public void tick() {
         if (this.ticksDelay > 0) {
             this.ticksDelay--;
             if (this.ticksDelay == 0) {
                 if (!this.resetOnTrigger) {
-                    this.d.triggerManager.addArea(this.e, this.f, this.g, new TriggerArea(this.minX, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ));
+                    this.level.triggerManager.addArea(this.x, this.y, this.z, new TriggerArea(this.minX, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ));
                 } else {
-                    Tile.resetArea(this.d, this.minX, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ);
+                    Tile.resetArea(this.level, this.minX, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ);
                 }
             } else {
                 return;
@@ -46,7 +47,7 @@ public class TileEntityTimer extends TileEntityMinMax {
                 this.canActivate = false;
                 this.ticks = this.timeDeactive;
                 if (!this.resetOnTrigger)
-                    this.d.triggerManager.removeArea(this.e, this.f, this.g);
+                    this.levle.triggerManager.removeArea(this.x, this.y, this.z);
             } else {
                 this.canActivate = true;
             }
@@ -55,8 +56,9 @@ public class TileEntityTimer extends TileEntityMinMax {
         }
     }
 
-    public void a(CompoundTag nbttagcompound) {
-        super.a(nbttagcompound);
+    @Override
+    public void readIdentifyingData(CompoundTag nbttagcompound) {
+        super.readIdentifyingData(nbttagcompound);
         this.resetOnTrigger = nbttagcompound.getBoolean("resetOnTrigger");
         this.timeActive = nbttagcompound.getInt("timeActive");
         this.timeDeactive = nbttagcompound.getInt("timeDeactive");
@@ -67,8 +69,9 @@ public class TileEntityTimer extends TileEntityMinMax {
         this.canActivate = nbttagcompound.getBoolean("canActivate");
     }
 
-    public void b(CompoundTag nbttagcompound) {
-        super.b(nbttagcompound);
+    @Override
+    public void writeIdentifyingData(CompoundTag nbttagcompound) {
+        super.writeIdentifyingData(nbttagcompound);
         nbttagcompound.put("resetOnTrigger", this.resetOnTrigger);
         nbttagcompound.put("timeActive", this.timeActive);
         nbttagcompound.put("timeDeactive", this.timeDeactive);

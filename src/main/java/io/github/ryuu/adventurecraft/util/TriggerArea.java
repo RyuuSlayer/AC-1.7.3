@@ -3,17 +3,17 @@ package io.github.ryuu.adventurecraft.util;
 import net.minecraft.util.io.CompoundTag;
 
 public class TriggerArea {
-    int minX;
+    public int minX;
 
-    int minY;
+    public int minY;
 
-    int minZ;
+    public int minZ;
 
-    int maxX;
+    public int maxX;
 
-    int maxY;
+    public int maxY;
 
-    int maxZ;
+    public int maxZ;
 
     public TriggerArea(int xMin, int yMin, int zMin, int xMax, int yMax, int zMax) {
         this.minX = xMin;
@@ -24,7 +24,7 @@ public class TriggerArea {
         this.maxZ = zMax;
     }
 
-    boolean isPointInside(int x, int y, int z) {
+    public boolean isPointInside(int x, int y, int z) {
         if (x < this.minX || x > this.maxX)
             return false;
         if (y < this.minY || y > this.maxY)
@@ -32,24 +32,24 @@ public class TriggerArea {
         return (this.minZ <= z && z <= this.maxZ);
     }
 
-    CompoundTag getTagCompound() {
+    public CompoundTag getTagCompound() {
         CompoundTag t = new CompoundTag();
-        t.a("minX", this.minX);
-        t.a("minY", this.minY);
-        t.a("minZ", this.minZ);
-        t.a("maxX", this.maxX);
-        t.a("maxY", this.maxY);
-        t.a("maxZ", this.maxZ);
+        t.put("minX", this.minX);
+        t.put("minY", this.minY);
+        t.put("minZ", this.minZ);
+        t.put("maxX", this.maxX);
+        t.put("maxY", this.maxY);
+        t.put("maxZ", this.maxZ);
         return t;
     }
 
-    static TriggerArea getFromTagCompound(CompoundTag tag) {
-        int minX = tag.e("minX");
-        int minY = tag.e("minY");
-        int minZ = tag.e("minZ");
-        int maxX = tag.e("maxX");
-        int maxY = tag.e("maxY");
-        int maxZ = tag.e("maxZ");
+    public static TriggerArea getFromTagCompound(CompoundTag tag) {
+        int minX = tag.getInt("minX");
+        int minY = tag.getInt("minY");
+        int minZ = tag.getInt("minZ");
+        int maxX = tag.getInt("maxX");
+        int maxY = tag.getInt("maxY");
+        int maxZ = tag.getInt("maxZ");
         return new TriggerArea(minX, minY, minZ, maxX, maxY, maxZ);
     }
 }

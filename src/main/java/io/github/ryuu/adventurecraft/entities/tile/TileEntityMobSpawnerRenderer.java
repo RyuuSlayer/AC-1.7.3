@@ -1,6 +1,5 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
-import io.github.ryuu.adventurecraft.entities.tile.TileEntityMobSpawner;
 import io.github.ryuu.adventurecraft.util.Coord;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.client.render.entity.tile.TileEntityRenderer;
@@ -26,12 +25,12 @@ public class TileEntityMobSpawnerRenderer extends TileEntityRenderer {
                 for (int i = min.x; i <= max.x; i++) {
                     for (int j = min.y; j <= max.y; j++) {
                         for (int k = min.z; k <= max.z; k++) {
-                            Tile b = Tile.m[mobSpawner.d.a(i, j, k)];
+                            Tile b = Tile.BY_ID[mobSpawner.level.getTileId(i, j, k)];
                             if (b != null && b.canBeTriggered()) {
                                 GL11.glColor3f(0.0F, 0.0F, 0.0F);
                                 GL11.glVertex3f(0.0F, 0.0F, 0.0F);
                                 GL11.glColor3f(0.105F, 0.329F, 0.486F);
-                                GL11.glVertex3f((i - mobSpawner.e), (j - mobSpawner.f), (k - mobSpawner.g));
+                                GL11.glVertex3f((i - mobSpawner.x), (j - mobSpawner.y), (k - mobSpawner.z));
                             }
                         }
                     }
@@ -46,7 +45,8 @@ public class TileEntityMobSpawnerRenderer extends TileEntityRenderer {
         }
     }
 
-    public void a(TileEntity tileentity, double d, double d1, double d2, float f) {
+    @Override
+    public void render(TileEntity tileentity, double d, double d1, double d2, float f) {
         render((TileEntityMobSpawner) tileentity, d, d1, d2, f);
     }
 }

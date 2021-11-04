@@ -4,13 +4,15 @@ import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.io.CompoundTag;
 
 public class TileEntityTree extends TileEntity {
-    public void a(CompoundTag nbttagcompound) {
-        super.a(nbttagcompound);
+    @Override
+    public void readIdentifyingData(CompoundTag nbttagcompound) {
+        super.readIdentifyingData(nbttagcompound);
         this.size = nbttagcompound.getFloat("size");
     }
 
-    public void b(CompoundTag nbttagcompound) {
-        super.b(nbttagcompound);
+    @Override
+    public void writeIdentifyingData(CompoundTag nbttagcompound) {
+        super.writeIdentifyingData(nbttagcompound);
         nbttagcompound.put("size", this.size);
     }
 

@@ -28,6 +28,7 @@ public class TileEntityCamera extends TileEntity {
             tgt.addCameraPoint(p.time, p.posX, p.posY, p.posZ, p.rotYaw, p.rotPitch, p.cameraBlendType);
     }
 
+    @Override
     public void readIdentifyingData(CompoundTag nbttagcompound) {
         super.readIdentifyingData(nbttagcompound);
         int numPoints = nbttagcompound.getInt("numPoints");
@@ -40,6 +41,7 @@ public class TileEntityCamera extends TileEntity {
             this.pauseGame = nbttagcompound.getBoolean("pauseGame");
     }
 
+    @Override
     public void writeIdentifyingData(CompoundTag nbttagcompound) {
         super.writeIdentifyingData(nbttagcompound);
         int numPoints = 0;

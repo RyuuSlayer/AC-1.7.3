@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.items.ItemCursor;
 import net.minecraft.client.Minecraft;
+import net.minecraft.level.chunk.Chunk;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.io.CompoundTag;
 
@@ -37,21 +38,21 @@ public class TileEntityStorage extends TileEntityMinMax {
         for (int x = this.minX; x <= this.maxX; x++) {
             for (int z = this.minZ; z <= this.maxZ; z++) {
                 for (int y = this.minY; y <= this.maxY; y++) {
-                    int blockID = this.d.a(x, y, z);
-                    int metadata = this.d.e(x, y, z);
-                    this.blockIDs[offset] = (byte) lm.translate128(blockID);
+                    int blockID = this.level.getTileId(x, y, z);
+                    int metadata = this.level.getTileMeta(x, y, z);
+                    this.blockIDs[offset] = (byte) Chunk.translate128(blockID);
                     this.metadatas[offset] = (byte) metadata;
-                    TileEntity te = this.d.b(x, y, z);
+                    TileEntity te = this.level.getTileEntity(x, y, z);
                     if (te != null) {
                         CompoundTag tag = new CompoundTag();
-                        te.b(tag);
+                        te.writeIdentifyingData(tag);
                         this.tileEntities.add(tag);
                     }
                     offset++;
                 }
             }
         }
-        this.d.b(this.e, this.g).g();
+        this.level.getChunk(this.x, this.z).method_885();
     }
 
     public void loadCurrentArea() {
@@ -61,24 +62,25 @@ public class TileEntityStorage extends TileEntityMinMax {
         for (int x = this.minX; x <= this.maxX; x++) {
             for (int z = this.minZ; z <= this.maxZ; z++) {
                 for (int y = this.minY; y <= this.maxY; y++) {
-                    int prevBlockID = this.d.a(x, y, z);
-                    this.d.cancelBlockUpdate(x, y, z, prevBlockID);
-                    int blockID = lm.translate256(this.blockIDs[offset]);
+                    int prevBlockID = this.level.getTileId(x, y, z);
+                    this.level.cancelBlockUpdate(x, y, z, prevBlockID);
+                    int blockID = Chunk.translate256(this.blockIDs[offset]);
                     int metadata = this.metadatas[offset];
-                    this.d.b(x, y, z, blockID, metadata);
-                    this.d.p(x, y, z);
+                    this.level.method_201(x, y, z, blockID, metadata);
+                    this.level.removeTileEntity(x, y, z);
                     offset++;
                 }
             }
         }
         for (CompoundTag tag : this.tileEntities) {
-            TileEntity te = TileEntity.c(tag);
-            this.d.a(te.x, te.y, te.z, te);
+            TileEntity te = TileEntity.method_1068(tag);
+            this.level.setTileEntity(te.x, te.y, te.z, te);
         }
     }
 
-    public void a(CompoundTag nbttagcompound) {
-        super.a(nbttagcompound);
+    @Override
+    public void readIdentifyingData(CompoundTag nbttagcompound) {
+        super.readIdentifyingData(nbttagcompound);
         if (nbttagcompound.containsKey("blockIDs"))
             this.blockIDs = nbttagcompound.getByteArray("blockIDs");
         if (nbttagcompound.containsKey("metadatas"))
@@ -87,7 +89,7 @@ public class TileEntityStorage extends TileEntityMinMax {
             this.tileEntities.clear();
             int numTiles = nbttagcompound.getInt("numTiles");
             for (int i = 0; i < numTiles; i++) {
-                this.tileEntities.add(nbttagcompound.getCompoundTag(String.format("tile%d", new Object[]{Integer.valueOf(i)})));
+                this.tileEntities.add(nbttagcompound.getCompoundTag(String.format("tile%d", i)));
             }
         }
         if (!nbttagcompound.containsKey("acVersion"))
@@ -95,8 +97,9 @@ public class TileEntityStorage extends TileEntityMinMax {
                 Blocks.convertACVersion(this.blockIDs);
     }
 
-    public void b(CompoundTag nbttagcompound) {
-        super.b(nbttagcompound);
+    @Override
+    public void writeIdentifyingData(CompoundTag nbttagcompound) {
+        super.writeIdentifyingData(nbttagcompound);
         if (this.blockIDs != null)
             nbttagcompound.put("blockIDs", this.blockIDs);
         if (this.metadatas != null)
@@ -104,7 +107,7 @@ public class TileEntityStorage extends TileEntityMinMax {
         if (!this.tileEntities.isEmpty()) {
             int i = 0;
             for (CompoundTag tag : this.tileEntities) {
-                nbttagcompound.put(String.format("tile%d", new Object[]{Integer.valueOf(i)}), tag);
+                nbttagcompound.put(String.format("tile%d", i), tag);
                 i++;
             }
             nbttagcompound.put("numTiles", i);

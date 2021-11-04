@@ -13,7 +13,7 @@ public class TileEntityTriggerMemory extends TileEntityMinMax {
     public void set(int x1, int y1, int z1, int x2, int y2, int z2) {
         if (isSet())
             if (this.isActivated)
-                Blocks.triggerMemory.triggerDeactivate(this.d, this.e, this.f, this.g);
+                Blocks.triggerMemory.triggerDeactivate(this.level, this.x, this.y, this.z);
         this.minX = x1;
         this.minY = y1;
         this.minZ = z1;
@@ -21,18 +21,20 @@ public class TileEntityTriggerMemory extends TileEntityMinMax {
         this.maxY = y2;
         this.maxZ = z2;
         if (this.isActivated)
-            Blocks.triggerMemory.triggerActivate(this.d, this.e, this.f, this.g);
+            Blocks.triggerMemory.triggerActivate(this.level, this.x, this.y, this.z);
     }
 
-    public void a(CompoundTag nbttagcompound) {
-        super.a(nbttagcompound);
+    @Override
+    public void readIdentifyingData(CompoundTag nbttagcompound) {
+        super.readIdentifyingData(nbttagcompound);
         this.isActivated = nbttagcompound.getBoolean("IsActivated");
         this.activateOnDetrigger = nbttagcompound.getBoolean("ActivateOnDetrigger");
         this.resetOnDeath = nbttagcompound.getBoolean("ResetOnDeath");
     }
 
-    public void b(CompoundTag nbttagcompound) {
-        super.b(nbttagcompound);
+    @Override
+    public void writeIdentifyingData(CompoundTag nbttagcompound) {
+        super.writeIdentifyingData(nbttagcompound);
         nbttagcompound.put("IsActivated", this.isActivated);
         nbttagcompound.put("ActivateOnDetrigger", this.activateOnDetrigger);
         nbttagcompound.put("ResetOnDeath", this.resetOnDeath);

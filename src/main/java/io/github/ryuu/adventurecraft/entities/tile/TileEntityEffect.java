@@ -6,8 +6,9 @@ import net.minecraft.util.io.CompoundTag;
 import java.util.Random;
 
 public class TileEntityEffect extends TileEntity {
-    public void a(CompoundTag nbttagcompound) {
-        super.a(nbttagcompound);
+    @Override
+    public void readIdentifyingData(CompoundTag nbttagcompound) {
+        super.readIdentifyingData(nbttagcompound);
         this.particleType = nbttagcompound.getString("particleType");
         this.particlesPerSpawn = nbttagcompound.getInt("particlesPerSpawn");
         this.ticksBetweenParticles = nbttagcompound.getInt("ticksBetweenParticles");
@@ -38,8 +39,9 @@ public class TileEntityEffect extends TileEntity {
         this.textureReplacement = nbttagcompound.getString("textureReplacement");
     }
 
-    public void b(CompoundTag nbttagcompound) {
-        super.b(nbttagcompound);
+    @Override
+    public void writeIdentifyingData(CompoundTag nbttagcompound) {
+        super.writeIdentifyingData(nbttagcompound);
         if (!this.particleType.equals(""))
             nbttagcompound.put("particleType", this.particleType);
         nbttagcompound.put("particlesPerSpawn", this.particlesPerSpawn);
@@ -71,9 +73,9 @@ public class TileEntityEffect extends TileEntity {
         nbttagcompound.put("textureReplacement", this.textureReplacement);
     }
 
-    public void n_() {
+    public void tick() {
         if (this.checkTrigger) {
-            this.isActivated = this.d.triggerManager.isActivated(this.e, this.f, this.g);
+            this.isActivated = this.level.triggerManager.isActivated(this.x, this.y, this.z);
             this.checkTrigger = false;
         }
         if (this.isActivated)
@@ -81,7 +83,14 @@ public class TileEntityEffect extends TileEntity {
                 this.ticksBeforeParticle--;
             } else {
                 for (int i = 0; i < this.particlesPerSpawn; i++) {
-                    this.d.a(this.particleType, this.e + 0.5D + this.randX * (2.0D * rand.nextDouble() - 1.0D) + this.offsetX, this.f + 0.5D + this.randY * (2.0D * rand.nextDouble() - 1.0D) + this.offsetY, this.g + 0.5D + this.randZ * (2.0D * rand.nextDouble() - 1.0D) + this.offsetZ, this.floatArg1 + this.floatRand1 * (2.0D * rand.nextDouble() - 1.0D), this.floatArg2 + this.floatRand2 * (2.0D * rand.nextDouble() - 1.0D), this.floatArg3 + this.floatRand3 * (2.0D * rand.nextDouble() - 1.0D));
+                    this.level.addParticle(
+                            this.particleType,
+                            this.x + 0.5D + this.randX * (2.0D * rand.nextDouble() - 1.0D) + this.offsetX,
+                            this.y + 0.5D + this.randY * (2.0D * rand.nextDouble() - 1.0D) + this.offsetY,
+                            this.z + 0.5D + this.randZ * (2.0D * rand.nextDouble() - 1.0D) + this.offsetZ,
+                            this.floatArg1 + this.floatRand1 * (2.0D * rand.nextDouble() - 1.0D),
+                            this.floatArg2 + this.floatRand2 * (2.0D * rand.nextDouble() - 1.0D),
+                            this.floatArg3 + this.floatRand3 * (2.0D * rand.nextDouble() - 1.0D));
                     this.ticksBeforeParticle = this.ticksBetweenParticles;
                 }
             }

@@ -6,7 +6,7 @@ import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.io.CompoundTag;
 
 public class TileEntityStore extends TileEntity {
-    public int buyItemID = Items.bomb.bf;
+    public int buyItemID = Items.bomb.id;
 
     public int buyItemAmount = 3;
 
@@ -16,7 +16,7 @@ public class TileEntityStore extends TileEntity {
 
     public int buySupplyLeft = 1;
 
-    public int sellItemID = Items.shotgun.bf;
+    public int sellItemID = Items.shotgun.id;
 
     public int sellItemAmount = 1;
 
@@ -24,8 +24,9 @@ public class TileEntityStore extends TileEntity {
 
     public TriggerArea tradeTrigger;
 
-    public void a(CompoundTag nbttagcompound) {
-        super.a(nbttagcompound);
+    @Override
+    public void readIdentifyingData(CompoundTag nbttagcompound) {
+        super.readIdentifyingData(nbttagcompound);
         this.buyItemID = nbttagcompound.getInt("buyItemID");
         this.buyItemAmount = nbttagcompound.getInt("buyItemAmount");
         this.buyItemDamage = nbttagcompound.getInt("buyItemDamage");
@@ -35,14 +36,15 @@ public class TileEntityStore extends TileEntity {
         this.sellItemAmount = nbttagcompound.getInt("sellItemAmount");
         this.sellItemDamage = nbttagcompound.getInt("sellItemDamage");
         if (nbttagcompound.containsKey("tradeTrigger")) {
-            this.tradeTrigger = TriggerArea.getFromTagCompound(nbttagcompound.k("tradeTrigger"));
+            this.tradeTrigger = TriggerArea.getFromTagCompound(nbttagcompound.getCompoundTag("tradeTrigger"));
         } else {
             this.tradeTrigger = null;
         }
     }
 
-    public void b(CompoundTag nbttagcompound) {
-        super.b(nbttagcompound);
+    @Override
+    public void writeIdentifyingData(CompoundTag nbttagcompound) {
+        super.writeIdentifyingData(nbttagcompound);
         nbttagcompound.put("buyItemID", this.buyItemID);
         nbttagcompound.put("buyItemAmount", this.buyItemAmount);
         nbttagcompound.put("buyItemDamage", this.buyItemDamage);

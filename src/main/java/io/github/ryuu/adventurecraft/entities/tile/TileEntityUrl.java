@@ -6,13 +6,15 @@ import net.minecraft.util.io.CompoundTag;
 public class TileEntityUrl extends TileEntity {
     public String url = "";
 
-    public void a(CompoundTag nbttagcompound) {
-        super.a(nbttagcompound);
+    @Override
+    public void readIdentifyingData(CompoundTag nbttagcompound) {
+        super.readIdentifyingData(nbttagcompound);
         this.url = nbttagcompound.getString("url");
     }
 
-    public void b(CompoundTag nbttagcompound) {
-        super.b(nbttagcompound);
+    @Override
+    public void writeIdentifyingData(CompoundTag nbttagcompound) {
+        super.writeIdentifyingData(nbttagcompound);
         if (this.url != null && !this.url.equals(""))
             nbttagcompound.put("url", this.url);
     }

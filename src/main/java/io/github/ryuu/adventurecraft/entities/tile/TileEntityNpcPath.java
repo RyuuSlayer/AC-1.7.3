@@ -51,7 +51,7 @@ public class TileEntityNpcPath extends TileEntityMinMax {
         }
     }
 
-    void pathFinished() {
+    public void pathFinished() {
         if (isSet()) {
             this.level.triggerManager.addArea(this.x, this.y, this.z, new TriggerArea(this.minX, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ));
             this.level.triggerManager.removeArea(this.x, this.y, this.z);
