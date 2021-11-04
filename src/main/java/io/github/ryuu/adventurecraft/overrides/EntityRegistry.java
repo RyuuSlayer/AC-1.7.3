@@ -88,7 +88,7 @@ public class EntityRegistry {
         a(Arrow.class, "Arrow", 10);
         a(by.class, "Snowball", 11);
         a(ItemEntity.class, "Item", 1);
-        a(qv.class, "Painting", 9);
+        a(Painting.class, "Painting", 9);
         a(LivingEntity.class, "Mob", 48);
         a(gz.class, "Monster", 49);
         a(gb.class, "Creeper", 50);
@@ -106,10 +106,10 @@ public class EntityRegistry {
         a(xt.class, "Squid", 94);
         a(gi.class, "Wolf", 95);
         a(qw.class, "PrimedTnt", 20);
-        a(ju.class, "FallingSand", 21);
+        a(FallingTile.class, "FallingSand", 21);
         a(yl.class, "Minecart", 40);
         a(fz.class, "Boat", 41);
-        a(vv.class, "Egg", 12);
+        a(ThrownEgg.class, "Egg", 12);
         a(Snowball.class, "Fireball", 13);
         a(lx.class, "FishingRod", 14);
         a(EntitySkeletonSword.class, "SkeletonSword", 58);

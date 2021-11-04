@@ -115,7 +115,7 @@ public class SelectWorldScreen extends da {
         if (this.l)
             return;
         this.l = true;
-        this.b.c = (ob) new os(this.b);
+        this.b.c = (ob) new class_520(this.b);
         String s = c(i);
         if (s == null)
             s = "World" + i;

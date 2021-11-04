@@ -3,7 +3,7 @@ package io.github.ryuu.adventurecraft.overrides;
 import net.minecraft.level.Level;
 import net.minecraft.util.io.CompoundTag;
 
-public class ju extends Entity {
+public class FallingTile extends Entity {
     public int a;
 
     public int metadata;
@@ -14,7 +14,7 @@ public class ju extends Entity {
 
     public double startZ;
 
-    public ju(Level world) {
+    public FallingTile(Level world) {
         super(world);
         this.b = 0;
         b(0.98F, 0.98F);
@@ -22,7 +22,7 @@ public class ju extends Entity {
         this.bf = this.bh / 2.0F;
     }
 
-    public ju(Level world, double d, double d1, double d2, int i) {
+    public FallingTile(Level world, double d, double d1, double d2, int i) {
         super(world);
         this.b = 0;
         this.a = i;

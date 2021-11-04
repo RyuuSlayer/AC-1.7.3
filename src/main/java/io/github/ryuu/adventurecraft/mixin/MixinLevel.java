@@ -1396,7 +1396,7 @@ public class MixinLevel extends Level implements TileView {
         this.M++;
         try {
             int i = 500;
-            for (; this.C.size() > 0; ((st) this.C.remove(this.C.size() - 1)).a(this)) {
+            for (; this.C.size() > 0; ((LightCalculator) this.C.remove(this.C.size() - 1)).a(this)) {
                 if (--i <= 0) {
                     boolean flag = true;
                     return flag;
@@ -1432,12 +1432,12 @@ public class MixinLevel extends Level implements TileView {
                 if (j2 > i2)
                     j2 = i2;
                 for (int l2 = 0; l2 < j2; l2++) {
-                    st metadatachunkblock = this.C.get(this.C.size() - l2 - 1);
+                    LightCalculator metadatachunkblock = this.C.get(this.C.size() - l2 - 1);
                     if (metadatachunkblock.a == enumskyblock && metadatachunkblock.a(i, j, k, l, i1, j1))
                         return;
                 }
             }
-            this.C.add(new st(enumskyblock, i, j, k, l, i1, j1));
+            this.C.add(new LightCalculator(enumskyblock, i, j, k, l, i1, j1));
             int k2 = 1000000;
             if (this.C.size() > 1000000) {
                 System.out.println("More than " + k2 + " updates, aborting lighting updates");
@@ -2414,7 +2414,7 @@ public class MixinLevel extends Level implements TileView {
         FlowingLavaTextureBinder2.loadImage();
         PortalTextureBinder.loadImage();
         FlowingWaterTextureBinder2.loadImage();
-        oh.loadImage();
+        FlowingWaterTextureBinder.loadImage();
         GrassColour.loadGrass("/misc/grasscolor.png");
         FoliageColour.loadFoliage("/misc/foliagecolor.png");
         this.x.loadTextureReplacements(this);

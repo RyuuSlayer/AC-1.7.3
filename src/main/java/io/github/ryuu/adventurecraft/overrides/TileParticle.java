@@ -1,12 +1,13 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import net.minecraft.client.particle.Particle;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.level.Level;
 
-public class qm extends xw {
+public class TileParticle extends Particle {
     private final Tile a;
 
-    public qm(Level world, double d, double d1, double d2, double d3, double d4, double d5, Tile block, int i, int j) {
+    public TileParticle(Level world, double d, double d1, double d2, double d3, double d4, double d5, Tile block, int i, int j) {
         super(world, d, d1, d2, d3, d4, d5);
         this.a = block;
         this.b = block.a(i, j);
@@ -15,7 +16,7 @@ public class qm extends xw {
         this.g /= 2.0F;
     }
 
-    public qm a(int i, int j, int k) {
+    public TileParticle a(int i, int j, int k) {
         if (this.a == Tile.v)
             return this;
         int l = this.a.b((xp) this.aI, i, j, k);
@@ -42,7 +43,7 @@ public class qm extends xw {
         float f10 = 0.1F * this.g;
         float f11 = (float) (this.aJ + (this.aM - this.aJ) * f - l);
         float f12 = (float) (this.aK + (this.aN - this.aK) * f - m);
-        float f13 = (float) (this.aL + (this.aO - this.aL) * f - n);
+        float f13 = (float) (this.aL + (this.aO - this.aL) * f - WorldRenderer);
         float f14 = a(f);
         tessellator.a(f14 * this.i, f14 * this.j, f14 * this.k);
         tessellator.a((f11 - f1 * f10 - f4 * f10), (f12 - f2 * f10), (f13 - f3 * f10 - f5 * f10), f6, f9);

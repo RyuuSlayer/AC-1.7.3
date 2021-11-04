@@ -146,7 +146,7 @@ public class WorldPopulationRegion implements TileView {
         return (Tile.m[l]).bA;
     }
 
-    public xv a() {
+    public BiomeSource a() {
         return this.d.a();
     }
 

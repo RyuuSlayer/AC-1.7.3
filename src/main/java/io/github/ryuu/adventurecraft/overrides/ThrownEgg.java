@@ -8,7 +8,7 @@ import net.minecraft.util.io.CompoundTag;
 
 import java.util.List;
 
-public class vv extends Entity {
+public class ThrownEgg extends Entity {
     private int b;
 
     private int c;
@@ -27,7 +27,7 @@ public class vv extends Entity {
 
     private int i;
 
-    public vv(Level world) {
+    public ThrownEgg(Level world) {
         super(world);
         this.b = -1;
         this.c = -1;
@@ -49,7 +49,7 @@ public class vv extends Entity {
         return (d < d1 * d1);
     }
 
-    public vv(Level world, LivingEntity entityliving) {
+    public ThrownEgg(Level world, LivingEntity entityliving) {
         super(world);
         this.b = -1;
         this.c = -1;
@@ -73,7 +73,7 @@ public class vv extends Entity {
         a(this.aP, this.aQ, this.aR, 1.5F, 1.0F);
     }
 
-    public vv(Level world, double d, double d1, double d2) {
+    public ThrownEgg(Level world, double d, double d1, double d2) {
         super(world);
         this.b = -1;
         this.c = -1;

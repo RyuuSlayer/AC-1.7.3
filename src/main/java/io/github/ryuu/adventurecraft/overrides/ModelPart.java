@@ -4,7 +4,7 @@ import net.minecraft.class_290;
 import net.minecraft.client.render.Tessellator;
 import org.lwjgl.opengl.GL11;
 
-public class ps {
+public class ModelPart {
     private class_290[] j;
 
     private class_552[] k;
@@ -39,11 +39,11 @@ public class ps {
 
     private final int tHeight;
 
-    public ps(int i, int j) {
+    public ModelPart(int i, int j) {
         this(i, j, 64, 32);
     }
 
-    public ps(int i, int j, int w, int h) {
+    public ModelPart(int i, int j, int w, int h) {
         this.n = false;
         this.o = 0;
         this.g = false;

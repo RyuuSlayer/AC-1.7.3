@@ -44,7 +44,7 @@ public class EntityCollisionParticle extends Particle {
         float f7 = this.aI.c(i, j, k);
         d6 -= l;
         d7 -= m;
-        d8 -= n;
+        d8 -= WorldRenderer;
         GL11.glColor4f(f7, f7, f7, 1.0F);
         th.a.a(this.a, (float) d6, (float) d7, (float) d8, this.a.aS, f);
     }

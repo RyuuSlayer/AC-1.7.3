@@ -10,10 +10,10 @@ import net.minecraft.level.Level;
 
 import java.util.Random;
 
-public class xq extends rw {
+public class DispenserTile extends rw {
     private final Random a;
 
-    protected xq(int i) {
+    protected DispenserTile(int i) {
         super(i, ln.e);
         this.a = new Random();
         this.bm = 45;
@@ -110,7 +110,7 @@ public class xq extends rw {
                 world.b((Entity) entityarrow);
                 world.e(1002, i, j, k, 0);
             } else if (itemstack.c == MixinItemType.aN.bf) {
-                vv entityegg = new vv(world, d, d1, d2);
+                ThrownEgg entityegg = new ThrownEgg(world, d, d1, d2);
                 entityegg.a(i1, 0.10000000149011612D, j1, 1.1F, 6.0F);
                 world.b((Entity) entityegg);
                 world.e(1002, i, j, k, 0);

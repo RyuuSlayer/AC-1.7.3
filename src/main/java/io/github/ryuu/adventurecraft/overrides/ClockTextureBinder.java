@@ -8,7 +8,7 @@ import io.github.ryuu.adventurecraft.util.Vec2;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemType;
 
-public class ku extends TextureBinder {
+public class ClockTextureBinder extends TextureBinder {
     private final Minecraft g;
 
     private final int[] h;
@@ -19,7 +19,7 @@ public class ku extends TextureBinder {
 
     private double k;
 
-    public ku(Minecraft minecraft) {
+    public ClockTextureBinder(Minecraft minecraft) {
         super(ItemType.aQ.a(0));
         this.h = new int[256];
         this.i = new int[256];

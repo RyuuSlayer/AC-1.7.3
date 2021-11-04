@@ -6,10 +6,10 @@ import net.minecraft.level.Level;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class ss extends BlockColor {
+public class StairsTile extends BlockColor {
     private final Tile a;
 
-    protected ss(int i, Tile block) {
+    protected StairsTile(int i, Tile block) {
         super(i, block.bm, block.bA);
         this.a = block;
         c(block.bo);

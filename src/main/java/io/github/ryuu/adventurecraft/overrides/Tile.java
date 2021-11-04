@@ -515,9 +515,9 @@ public class Tile {
         y = (new Tile(5, 4, Material.d)).c(2.0F).b(5.0F).a(e).a("wood").j();
         z = (new SaplingTile(6, 15)).c(0.0F).a(g).a("sapling").j();
         A = (new Tile(7, 17, Material.e)).l().b(6000000.0F).a(h).a("bedrock").q();
-        B = (new om(8, Material.g)).c(0.5F).g(3).a("water").q().j();
+        B = (new FlowingFluidTile(8, Material.g)).c(0.5F).g(3).a("water").q().j();
         C = (new nx(9, Material.g)).c(0.5F).g(3).a("water").q().j();
-        D = (new om(10, Material.h)).c(0.5F).a(1.0F).g(255).a("lava").q().j();
+        D = (new FlowingFluidTile(10, Material.h)).c(0.5F).a(1.0F).g(255).a("lava").q().j();
         E = (new nx(11, Material.h)).c(0.5F).a(1.0F).g(255).a("lava").q().j();
         F = (new gk(12, 18)).c(0.5F).a(l).a("sand").setSubTypes(4);
         G = (new ne(13, 19)).c(0.6F).a(f).a("gravel");
@@ -530,7 +530,7 @@ public class Tile {
         N = (new GlassTile(20, 49, Material.p, false)).c(0.3F).a(j).a("glass");
         O = (new mt(21, 160)).c(3.0F).b(5.0F).a(h).a("oreLapis");
         P = (new Tile(22, 144, Material.e)).c(3.0F).b(5.0F).a(h).a("blockLapis");
-        Q = (new xq(23)).c(3.5F).a(h).a("dispenser").j();
+        Q = (new DispenserTile(23)).c(3.5F).a(h).a("dispenser").j();
         R = (new rd(24)).a(h).c(0.8F).a("sandStone");
         S = (new pt(25)).c(0.8F).a("musicBlock").j();
         T = (new ve(26)).c(0.2F).a("bed").q().j();
@@ -560,7 +560,7 @@ public class Tile {
         ar = (new vm(50, 80)).c(0.0F).a(0.9375F).a(e).a("torch").j();
         as = (FireTile) (new FireTile(51, 31)).c(0.0F).a(1.0F).a(e).a("fire").q().j();
         at = (new dd(52, 65)).c(5.0F).a(Tile.i).a("mobSpawner").q();
-        au = (new ss(53, y)).a("stairsWood").j();
+        au = (new StairsTile(53, y)).a("stairsWood").j();
         av = (new e(54)).c(2.5F).a(e).a("chest").j();
         aw = (new sm(55, 164)).c(0.0F).a(d).a("redstoneDust").q().j();
         ax = (new mt(56, 50)).c(3.0F).b(5.0F).a(h).a("oreDiamond");
@@ -570,12 +570,12 @@ public class Tile {
         aB = (new vl(60)).c(0.6F).a(f).a("farmland");
         aC = (new FurnaceTile(61, false)).c(3.5F).a(h).a("furnace").j();
         aD = (new FurnaceTile(62, true)).c(3.5F).a(h).a(0.875F).a("furnace").j();
-        aE = (new uj(63, yk.class, true)).c(1.0F).a(e).a("sign").q().j();
+        aE = (new uj(63, Sign.class, true)).c(1.0F).a(e).a("sign").q().j();
         aF = (new DoorTile(64, Material.d)).c(3.0F).a(e).a("doorWood").q().j();
         aG = (new LadderTile(65, 83)).c(0.4F).a(e).a("ladder").j();
         aH = (new pc(66, 128, false)).c(0.7F).a(Tile.i).a("rail").j();
-        aI = (new ss(67, x)).a("stairsStone").j();
-        aJ = (new uj(68, yk.class, false)).c(1.0F).a(e).a("sign").q().j();
+        aI = (new StairsTile(67, x)).a("stairsStone").j();
+        aJ = (new uj(68, Sign.class, false)).c(1.0F).a(e).a("sign").q().j();
         aK = (new xr(69, 96)).c(0.5F).a(e).a("lever").j();
         aL = (new bv(70, u.bm, rt.b, Material.e)).c(0.5F).a(h).a("pressurePlate").j();
         aM = (new DoorTile(71, Material.f)).c(5.0F).a(Tile.i).a("doorIron").q().j();

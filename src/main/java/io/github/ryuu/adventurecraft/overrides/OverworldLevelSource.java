@@ -4,7 +4,7 @@ import net.minecraft.level.Level;
 
 import java.util.Random;
 
-public class yf implements cl {
+public class OverworldLevelSource implements cl {
     private final Random j;
 
     private final uf k;
@@ -71,7 +71,7 @@ public class yf implements cl {
 
     public double volatilityWeight2;
 
-    public yf(Level world, long l) {
+    public OverworldLevelSource(Level world, long l) {
         this.mapSize = 250.0D;
         this.waterLevel = 64;
         this.fractureHorizontal = 1.0D;

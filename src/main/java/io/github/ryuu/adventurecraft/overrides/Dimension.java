@@ -3,10 +3,10 @@ package io.github.ryuu.adventurecraft.overrides;
 import io.github.ryuu.adventurecraft.util.ChunkProviderHeightMapGenerate;
 import net.minecraft.level.Level;
 
-public abstract class xa {
+public abstract class Dimension {
     public Level a;
 
-    public xv b;
+    public BiomeSource b;
 
     public boolean c = false;
 
@@ -35,13 +35,13 @@ public abstract class xa {
     }
 
     protected void a() {
-        this.b = new xv(this.a);
+        this.b = new BiomeSource(this.a);
     }
 
     public cl b() {
         if (this.a.x.useImages)
             return (cl) new ChunkProviderHeightMapGenerate(this.a, this.a.s());
-        yf c = new yf(this.a, this.a.s());
+        OverworldLevelSource c = new OverworldLevelSource(this.a, this.a.s());
         LevelProperties w = this.a.x;
         c.mapSize = w.mapSize;
         c.waterLevel = w.waterLevel;
@@ -110,13 +110,13 @@ public abstract class xa {
         return true;
     }
 
-    public static xa a(int i) {
+    public static Dimension a(int i) {
         if (i == -1)
-            return (xa) new wd();
+            return (Dimension) new wd();
         if (i == 0)
-            return (xa) new rh();
+            return (Dimension) new rh();
         if (i == 1)
-            return (xa) new ay();
+            return (Dimension) new ay();
         return null;
     }
 

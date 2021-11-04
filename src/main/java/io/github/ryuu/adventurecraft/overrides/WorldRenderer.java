@@ -21,15 +21,16 @@ import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
+import net.minecraft.level.LevelListener;
 import org.lwjgl.opengl.ARBOcclusionQuery;
 import org.lwjgl.opengl.GL11;
 
-public class n implements pm {
+public class WorldRenderer implements LevelListener {
     public List a;
 
     private Level k;
 
-    private final ji l;
+    private final TextureManager l;
 
     private final List m;
 
@@ -117,7 +118,7 @@ public class n implements pm {
 
     int j;
 
-    public n(Minecraft minecraft, ji renderengine) {
+    public WorldRenderer(Minecraft minecraft, TextureManager renderengine) {
         this.T = new tg[]{new tg(), new tg(), new tg(), new tg()};
         this.a = new ArrayList();
         this.m = new ArrayList();

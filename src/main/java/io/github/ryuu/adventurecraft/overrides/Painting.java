@@ -8,7 +8,7 @@ import net.minecraft.util.io.CompoundTag;
 import java.util.ArrayList;
 import java.util.List;
 
-public class qv extends net.minecraft.entity.Entity {
+public class Painting extends Entity {
     private final int f;
 
     public int a;
@@ -21,7 +21,7 @@ public class qv extends net.minecraft.entity.Entity {
 
     public iq e;
 
-    public qv(Level world) {
+    public Painting(Level world) {
         super(world);
         this.f = 0;
         this.a = 0;
@@ -29,7 +29,7 @@ public class qv extends net.minecraft.entity.Entity {
         b(0.5F, 0.5F);
     }
 
-    public qv(Level world, int i, int j, int k, int l) {
+    public Painting(Level world, int i, int j, int k, int l) {
         this(world);
         this.b = i;
         this.c = j;
@@ -49,7 +49,7 @@ public class qv extends net.minecraft.entity.Entity {
         b(l);
     }
 
-    public qv(Level world, int i, int j, int k, int l, String s) {
+    public Painting(Level world, int i, int j, int k, int l, String s) {
         this(world);
         this.b = i;
         this.c = j;
@@ -151,7 +151,7 @@ public class qv extends net.minecraft.entity.Entity {
         }
         List list = this.aI.b(this, this.aW);
         for (int l1 = 0; l1 < list.size(); l1++) {
-            if (list.get(l1) instanceof qv)
+            if (list.get(l1) instanceof Painting)
                 return false;
         }
         return true;

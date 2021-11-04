@@ -5,14 +5,14 @@ import net.minecraft.level.Level;
 
 import java.util.Random;
 
-public class om extends rp {
+public class FlowingFluidTile extends FluidTile {
     int a;
 
     boolean[] b;
 
     int[] c;
 
-    protected om(int i, ln material) {
+    protected FlowingFluidTile(int i, ln material) {
         super(i, material);
         this.a = 0;
         this.b = new boolean[4];

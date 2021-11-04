@@ -3,9 +3,10 @@ package io.github.ryuu.adventurecraft.overrides;
 import java.awt.image.BufferedImage;
 
 import io.github.ryuu.adventurecraft.util.TerrainImage;
+import io.github.ryuu.adventurecraft.util.Vec2;
 import net.minecraft.client.Minecraft;
 
-public class oh extends TextureBinder {
+public class FlowingWaterTextureBinder extends TextureBinder {
     protected float[] g;
 
     protected float[] h;
@@ -24,7 +25,7 @@ public class oh extends TextureBinder {
 
     private static int width;
 
-    public oh() {
+    public FlowingWaterTextureBinder() {
         super(Tile.B.bm + 1);
         this.g = new float[256];
         this.h = new float[256];

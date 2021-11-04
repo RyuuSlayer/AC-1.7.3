@@ -14,7 +14,7 @@ public class TileEntityRenderDispatcher {
 
     private TileEntityRenderDispatcher() {
         this.m = new HashMap<>();
-        this.m.put(yk.class, new po());
+        this.m.put(Sign.class, new po());
         this.m.put(cy.class, new ag());
         this.m.put(uk.class, new PistonRenderer());
         this.m.put(TileEntityTrigger.class, new TileEntityMinMaxRenderer(1.0F, 0.5882F, 0.0F));
@@ -48,7 +48,7 @@ public class TileEntityRenderDispatcher {
         return a(tileentity.getClass());
     }
 
-    public void a(Level world, ji renderengine, TextRenderer fontrenderer, LivingEntity entityliving, float f) {
+    public void a(Level world, TextureManager renderengine, TextRenderer fontrenderer, LivingEntity entityliving, float f) {
         if (this.f != world)
             a(world);
         this.e = renderengine;
@@ -99,7 +99,7 @@ public class TileEntityRenderDispatcher {
 
     public static double d;
 
-    public ji e;
+    public TextureManager e;
 
     public Level f;
 

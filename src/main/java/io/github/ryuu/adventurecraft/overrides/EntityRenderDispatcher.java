@@ -36,14 +36,14 @@ public class EntityRenderDispatcher {
         this.o.put(xt.class, new es((ko) new wn(), 0.7F));
         this.o.put(LivingEntity.class, new gv((ko) new fh(), 0.5F));
         this.o.put(Entity.class, new mb());
-        this.o.put(qv.class, new dy());
+        this.o.put(Painting.class, new dy());
         this.o.put(Arrow.class, new mc());
         this.o.put(by.class, new dg(ItemType.aB.a(0)));
-        this.o.put(vv.class, new dg(ItemType.aN.a(0)));
+        this.o.put(ThrownEgg.class, new dg(ItemType.aN.a(0)));
         this.o.put(Snowball.class, new kl());
         this.o.put(ItemEntity.class, new ItemRenderer());
         this.o.put(qw.class, new on());
-        this.o.put(ju.class, new gn());
+        this.o.put(FallingTile.class, new gn());
         this.o.put(yl.class, new tb());
         this.o.put(fz.class, new fe());
         this.o.put(lx.class, new pl());
@@ -73,7 +73,7 @@ public class EntityRenderDispatcher {
         return a(entity.getClass());
     }
 
-    public void a(Level world, ji renderengine, TextRenderer fontrenderer, LivingEntity entityliving, GameOptions gamesettings, float f) {
+    public void a(Level world, TextureManager renderengine, TextRenderer fontrenderer, LivingEntity entityliving, GameOptions gamesettings, float f) {
         this.g = world;
         this.e = renderengine;
         this.k = gamesettings;
@@ -139,7 +139,7 @@ public class EntityRenderDispatcher {
 
     public static double d;
 
-    public ji e;
+    public TextureManager e;
 
     public HandItemRenderer f;
 

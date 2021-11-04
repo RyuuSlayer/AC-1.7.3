@@ -10,7 +10,7 @@ import paulscode.sound.codecs.CodecJOrbis;
 import paulscode.sound.codecs.CodecWav;
 import paulscode.sound.libraries.LibraryLWJGLOpenAL;
 
-public class yo {
+public class SoundHelper {
     private final hr b = new hr();
 
     private final hr c = new hr();

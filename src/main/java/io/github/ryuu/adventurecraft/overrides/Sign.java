@@ -2,7 +2,7 @@ package io.github.ryuu.adventurecraft.overrides;
 
 import io.github.ryuu.adventurecraft.util.MusicPlayer;
 
-public class yk extends TileEntity {
+public class Sign extends TileEntity {
     public int b = -1;
 
     private boolean c = true;

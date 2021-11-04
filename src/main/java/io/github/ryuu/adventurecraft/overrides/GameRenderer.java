@@ -427,7 +427,7 @@ public class GameRenderer {
         }
         a(f);
         LivingEntity entityliving = this.j.i;
-        n renderglobal = this.j.g;
+        WorldRenderer renderglobal = this.j.g;
         ParticleManager effectrenderer = this.j.j;
         double d = entityliving.bl + (entityliving.aM - entityliving.bl) * f;
         double d1 = entityliving.bm + (entityliving.aN - entityliving.bm) * f;

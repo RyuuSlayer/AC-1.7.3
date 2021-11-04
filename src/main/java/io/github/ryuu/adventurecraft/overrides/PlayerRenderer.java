@@ -28,8 +28,8 @@ public class PlayerRenderer extends LivingEntityRenderer {
         ItemInstance itemstack = entityplayer.c.d(3 - i);
         if (itemstack != null) {
             ItemType item = itemstack.a();
-            if (item instanceof wa) {
-                wa itemarmor = (wa) item;
+            if (item instanceof ArmourItem) {
+                ArmourItem itemarmor = (ArmourItem) item;
                 a("/armor/" + PlayerRenderer.i[itemarmor.bm] + "_" + ((i != 2) ? 1 : 2) + ".png");
                 BipedModel modelbiped = (i != 2) ? this.g : this.h;
                 modelbiped.a.h = (i == 0);

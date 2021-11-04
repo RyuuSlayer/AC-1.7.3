@@ -10,9 +10,9 @@ public class FootstepParticle extends Particle {
 
     private int o;
 
-    private final ji p;
+    private final TextureManager p;
 
-    public FootstepParticle(ji renderengine, Level world, double d, double d1, double d2) {
+    public FootstepParticle(TextureManager renderengine, Level world, double d, double d1, double d2) {
         super(world, d, d1, d2, 0.0D, 0.0D, 0.0D);
         this.a = 0;
         this.o = 0;
@@ -32,7 +32,7 @@ public class FootstepParticle extends Particle {
         float f8 = 0.125F;
         float f9 = (float) (this.aM - l);
         float f10 = (float) (this.aN - m);
-        float f11 = (float) (this.aO - n);
+        float f11 = (float) (this.aO - WorldRenderer);
         float f12 = this.aI.c(MathsHelper.b(this.aM), MathsHelper.b(this.aN), MathsHelper.b(this.aO));
         this.p.b(this.p.b("/misc/footprint.png"));
         GL11.glEnable(3042);

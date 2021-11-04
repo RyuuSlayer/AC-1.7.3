@@ -27,9 +27,9 @@ public class HandItemRenderer {
 
     private boolean itemRotate;
 
-    public ps powerGlove;
+    public ModelPart powerGlove;
 
-    public ps powerGloveRuby;
+    public ModelPart powerGloveRuby;
 
     private final fh refBiped;
 
@@ -42,10 +42,10 @@ public class HandItemRenderer {
         this.a = minecraft;
         this.f = new iy(minecraft.q, minecraft.z, minecraft.p);
         this.itemRotate = true;
-        this.powerGlove = new ps(0, 0);
+        this.powerGlove = new ModelPart(0, 0);
         this.powerGlove.a(-3.5F, 4.5F, -2.5F, 5, 7, 5, 0.0F);
         this.powerGlove.a(-5.0F, 2.0F, 0.0F);
-        this.powerGloveRuby = new ps(0, 0);
+        this.powerGloveRuby = new ModelPart(0, 0);
         this.powerGloveRuby.a(-4.0F, 7.5F, -0.5F, 1, 1, 1, 0.0F);
         this.powerGloveRuby.a(-5.0F, 2.0F, 0.0F);
         this.refBiped = new fh(0.0F);

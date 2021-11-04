@@ -13,11 +13,11 @@ public class ParticleManager {
 
     private final List[] b = new List[6];
 
-    private final ji c;
+    private final TextureManager c;
 
     private final Random d = new Random();
 
-    public ParticleManager(Level world, ji renderengine) {
+    public ParticleManager(Level world, TextureManager renderengine) {
         if (world != null)
             this.a = world;
         this.c = renderengine;
@@ -118,7 +118,7 @@ public class ParticleManager {
                     double d1 = j + (l1 + 0.5D) / j1;
                     double d2 = k + (i2 + 0.5D) / j1;
                     int j2 = this.d.nextInt(6);
-                    a((new qm(this.a, d, d1, d2, d - i - 0.5D, d1 - j - 0.5D, d2 - k - 0.5D, block, j2, i1)).a(i, j, k));
+                    a((new TileParticle(this.a, d, d1, d2, d - i - 0.5D, d1 - j - 0.5D, d2 - k - 0.5D, block, j2, i1)).a(i, j, k));
                 }
             }
         }
@@ -145,7 +145,7 @@ public class ParticleManager {
             d = i + block.bs - f;
         if (l == 5)
             d = i + block.bv + f;
-        a((new qm(this.a, d, d1, d2, 0.0D, 0.0D, 0.0D, block, l, this.a.e(i, j, k))).a(i, j, k).c(0.2F).d(0.6F));
+        a((new TileParticle(this.a, d, d1, d2, 0.0D, 0.0D, 0.0D, block, l, this.a.e(i, j, k))).a(i, j, k).c(0.2F).d(0.6F));
     }
 
     public String b() {

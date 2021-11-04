@@ -20,8 +20,8 @@ import io.github.ryuu.adventurecraft.util.Vec2;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.opengl.GL11;
 
-public class ji {
-    public ji(ik texturepacklist, GameOptions gamesettings) {
+public class TextureManager {
+    public TextureManager(ik texturepacklist, GameOptions gamesettings) {
         this.b = new HashMap<>();
         this.c = new HashMap<>();
         this.d = new HashMap<>();

@@ -2,7 +2,7 @@ package io.github.ryuu.adventurecraft.overrides;
 
 import net.minecraft.level.Level;
 
-public class st {
+public class LightCalculator {
     public final eb a;
 
     public int b;
@@ -17,7 +17,7 @@ public class st {
 
     public int g;
 
-    public st(eb enumskyblock, int i, int j, int k, int l, int i1, int j1) {
+    public LightCalculator(eb enumskyblock, int i, int j, int k, int l, int i1, int j1) {
         this.a = enumskyblock;
         this.b = i;
         this.c = j;

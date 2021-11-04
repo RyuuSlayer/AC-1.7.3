@@ -317,13 +317,13 @@ public class PlayerInventory implements Inventory {
         int j = 0;
         int k = 0;
         for (int l = 0; l < this.b.length; l++) {
-            if (this.b[l] != null && this.b[l].a() instanceof wa) {
+            if (this.b[l] != null && this.b[l].a() instanceof ArmourItem) {
                 int i1 = this.b[l].j();
                 int j1 = this.b[l].h();
                 int k1 = i1 - j1;
                 j += k1;
                 k += i1;
-                i += ((wa) this.b[l].a()).bl;
+                i += ((ArmourItem) this.b[l].a()).bl;
             }
         }
         if (k == 0)
@@ -333,7 +333,7 @@ public class PlayerInventory implements Inventory {
 
     public void e(int i) {
         for (int j = 0; j < this.b.length; j++) {
-            if (this.b[j] != null && this.b[j].a() instanceof wa) {
+            if (this.b[j] != null && this.b[j].a() instanceof ArmourItem) {
                 this.b[j].a(i, this.d);
                 if ((this.b[j]).a == 0) {
                     int prevItemID = (this.b[j]).c;

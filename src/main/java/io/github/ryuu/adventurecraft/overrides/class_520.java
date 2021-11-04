@@ -5,8 +5,9 @@ import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
+import net.minecraft.level.chunk.ChunkSubData;
 
-public class os extends ob {
+public class class_520 extends ChunkSubData {
     private int c;
 
     private int d;
@@ -21,7 +22,7 @@ public class os extends ob {
 
     private int i;
 
-    public os(Minecraft minecraft) {
+    public class_520(Minecraft minecraft) {
         super(minecraft);
         this.c = -1;
         this.d = -1;
