@@ -8,10 +8,11 @@ import java.io.PrintWriter;
 
 import io.github.ryuu.adventurecraft.mixin.MixinTranslationStorage;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.options.KeyBinding;
 import org.lwjgl.input.Keyboard;
 
-public class kv {
-    public kv(Minecraft minecraft, File file) {
+public class GameOptions {
+    public GameOptions(Minecraft minecraft, File file) {
         this.a = 1.0F;
         this.b = 1.0F;
         this.c = 0.5F;
@@ -24,17 +25,17 @@ public class kv {
         this.j = true;
         this.k = true;
         this.l = "Default";
-        this.m = new qb("key.forward", 17);
-        this.n = new qb("key.left", 30);
-        this.o = new qb("key.back", 31);
-        this.p = new qb("key.right", 32);
-        this.q = new qb("key.jump", 57);
-        this.r = new qb("key.inventory", 18);
-        this.s = new qb("key.drop", 16);
-        this.t = new qb("key.chat", 20);
-        this.u = new qb("key.fog", 33);
-        this.v = new qb("key.sneak", 42);
-        this.w = new qb[]{this.m, this.n, this.o, this.p, this.q, this.v, this.s, this.r, this.t, this.u};
+        this.m = new KeyBinding("key.forward", 17);
+        this.n = new KeyBinding("key.left", 30);
+        this.o = new KeyBinding("key.back", 31);
+        this.p = new KeyBinding("key.right", 32);
+        this.q = new KeyBinding("key.jump", 57);
+        this.r = new KeyBinding("key.inventory", 18);
+        this.s = new KeyBinding("key.drop", 16);
+        this.t = new KeyBinding("key.chat", 20);
+        this.u = new KeyBinding("key.fog", 33);
+        this.v = new KeyBinding("key.sneak", 42);
+        this.w = new KeyBinding[]{this.m, this.n, this.o, this.p, this.q, this.v, this.s, this.r, this.t, this.u};
         this.y = 2;
         this.z = false;
         this.A = false;
@@ -53,7 +54,7 @@ public class kv {
         a();
     }
 
-    public kv() {
+    public GameOptions() {
         this.a = 1.0F;
         this.b = 1.0F;
         this.c = 0.5F;
@@ -66,17 +67,17 @@ public class kv {
         this.j = true;
         this.k = true;
         this.l = "Default";
-        this.m = new qb("key.forward", 17);
-        this.n = new qb("key.left", 30);
-        this.o = new qb("key.back", 31);
-        this.p = new qb("key.right", 32);
-        this.q = new qb("key.jump", 57);
-        this.r = new qb("key.inventory", 18);
-        this.s = new qb("key.drop", 16);
-        this.t = new qb("key.chat", 20);
-        this.u = new qb("key.fog", 33);
-        this.v = new qb("key.sneak", 42);
-        this.w = new qb[]{this.m, this.n, this.o, this.p, this.q, this.v, this.s, this.r, this.t, this.u};
+        this.m = new KeyBinding("key.forward", 17);
+        this.n = new KeyBinding("key.left", 30);
+        this.o = new KeyBinding("key.back", 31);
+        this.p = new KeyBinding("key.right", 32);
+        this.q = new KeyBinding("key.jump", 57);
+        this.r = new KeyBinding("key.inventory", 18);
+        this.s = new KeyBinding("key.drop", 16);
+        this.t = new KeyBinding("key.chat", 20);
+        this.u = new KeyBinding("key.fog", 33);
+        this.v = new KeyBinding("key.sneak", 42);
+        this.w = new KeyBinding[]{this.m, this.n, this.o, this.p, this.q, this.v, this.s, this.r, this.t, this.u};
         this.y = 2;
         this.z = false;
         this.A = false;
@@ -358,27 +359,27 @@ public class kv {
 
     public String l;
 
-    public qb m;
+    public KeyBinding m;
 
-    public qb n;
+    public KeyBinding n;
 
-    public qb o;
+    public KeyBinding o;
 
-    public qb p;
+    public KeyBinding p;
 
-    public qb q;
+    public KeyBinding q;
 
-    public qb r;
+    public KeyBinding r;
 
-    public qb s;
+    public KeyBinding s;
 
-    public qb t;
+    public KeyBinding t;
 
-    public qb u;
+    public KeyBinding u;
 
-    public qb v;
+    public KeyBinding v;
 
-    public qb[] w;
+    public KeyBinding[] w;
 
     protected Minecraft x;
 

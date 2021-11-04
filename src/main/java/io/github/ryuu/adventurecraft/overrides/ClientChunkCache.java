@@ -4,13 +4,16 @@ import java.io.IOException;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.level.Level;
+import net.minecraft.level.chunk.ChunkIO;
+import net.minecraft.level.source.LevelSource;
+import net.minecraft.util.ProgressListener;
 
-public class kx implements cl {
+public class ClientChunkCache implements LevelSource {
     private final Chunk c;
 
-    private final cl d;
+    private final LevelSource d;
 
-    private final bf e;
+    private final ChunkIO e;
 
     private Chunk[] f;
 
@@ -32,7 +35,7 @@ public class kx implements cl {
 
     int chunksWide;
 
-    public kx(Level world, bf ichunkloader, cl ichunkprovider) {
+    public ClientChunkCache(Level world, ChunkIO ichunkloader, LevelSource ichunkprovider) {
         this.isVeryFar = (Minecraft.minecraftInstance.z.e != 0);
         updateVeryFar();
         this.a = -999999999;
@@ -174,7 +177,7 @@ public class kx implements cl {
         }
     }
 
-    public void a(cl ichunkprovider, int i, int j) {
+    public void a(LevelSource ichunkprovider, int i, int j) {
         Chunk chunk = b(i, j);
         if (!chunk.n) {
             chunk.n = true;
@@ -187,7 +190,7 @@ public class kx implements cl {
         }
     }
 
-    public boolean a(boolean flag, yb iprogressupdate) {
+    public boolean a(boolean flag, ProgressListener iprogressupdate) {
         int i = 0;
         int j = 0;
         if (iprogressupdate != null)

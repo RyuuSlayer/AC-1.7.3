@@ -8,12 +8,12 @@ import net.minecraft.util.io.CompoundTag;
 
 import java.util.List;
 
-public class ya extends uz {
+public class ZombiePigman extends Zombie {
     private int a;
 
     private int b;
 
-    public ya(Level world) {
+    public ZombiePigman(Level world) {
         super(world);
         this.a = 0;
         this.b = 0;
@@ -60,8 +60,8 @@ public class ya extends uz {
             List<net.minecraft.entity.Entity> list = this.aI.b((net.minecraft.entity.Entity) this, this.aW.b(32.0D, 32.0D, 32.0D));
             for (int j = 0; j < list.size(); j++) {
                 net.minecraft.entity.Entity entity1 = list.get(j);
-                if (entity1 instanceof ya) {
-                    ya entitypigzombie = (ya) entity1;
+                if (entity1 instanceof ZombiePigman) {
+                    ZombiePigman entitypigzombie = (ZombiePigman) entity1;
                     entitypigzombie.d(entity);
                 }
             }

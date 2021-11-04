@@ -433,8 +433,8 @@ public class GameRenderer {
         double d1 = entityliving.bm + (entityliving.aN - entityliving.bm) * f;
         double d2 = entityliving.bn + (entityliving.aO - entityliving.bn) * f;
         cl ichunkprovider = this.j.f.w();
-        if (ichunkprovider instanceof kx) {
-            kx chunkproviderloadorgenerate = (kx) ichunkprovider;
+        if (ichunkprovider instanceof ClientChunkCache) {
+            ClientChunkCache chunkproviderloadorgenerate = (ClientChunkCache) ichunkprovider;
             int j = MathsHelper.d((int) d) >> 4;
             int k = MathsHelper.d((int) d2) >> 4;
             chunkproviderloadorgenerate.d(j, k);

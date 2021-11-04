@@ -21,7 +21,7 @@ import net.minecraft.client.Minecraft;
 import org.lwjgl.opengl.GL11;
 
 public class ji {
-    public ji(ik texturepacklist, kv gamesettings) {
+    public ji(ik texturepacklist, GameOptions gamesettings) {
         this.b = new HashMap<>();
         this.c = new HashMap<>();
         this.d = new HashMap<>();
@@ -556,7 +556,7 @@ public class ji {
 
     private final Map h;
 
-    private final kv i;
+    private final GameOptions i;
 
     private boolean j;
 

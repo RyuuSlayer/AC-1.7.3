@@ -9,8 +9,8 @@ import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 
-public class qz extends ItemType {
-    public qz(int i) {
+public class BowItem extends ItemType {
+    public BowItem(int i) {
         super(i);
         this.bg = 1;
     }

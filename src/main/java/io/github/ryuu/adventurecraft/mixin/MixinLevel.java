@@ -317,7 +317,7 @@ public class MixinLevel extends Level implements TileView {
             if (this.mapHandler != null)
                 mapChunkLoader = new MapChunkLoader(this.mapHandler.a(this.t), ichunkloader);
         }
-        return new kx(this, (ChunkIO) mapChunkLoader, this.t.b());
+        return new ClientChunkCache(this, (ChunkIO) mapChunkLoader, this.t.b());
     }
 
     protected void c() {
@@ -359,8 +359,8 @@ public class MixinLevel extends Level implements TileView {
                 entityplayer.e(nbttagcompound);
                 this.x.a(null);
             }
-            if (this.v instanceof kx) {
-                kx chunkproviderloadorgenerate = (kx) this.v;
+            if (this.v instanceof ClientChunkCache) {
+                ClientChunkCache chunkproviderloadorgenerate = (ClientChunkCache) this.v;
                 int i = MathsHelper.d((int) entityplayer.aM) >> 4;
                 int j = MathsHelper.d((int) entityplayer.aO) >> 4;
                 chunkproviderloadorgenerate.d(i, j);

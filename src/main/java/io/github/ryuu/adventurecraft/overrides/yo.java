@@ -23,7 +23,7 @@ public class yo {
 
     private final int i = this.h.nextInt(12000);
 
-    public void a(kv gamesettings) {
+    public void a(GameOptions gamesettings) {
         this.c.b = false;
         this.f = gamesettings;
         if (!g && (gamesettings == null || gamesettings.b != 0.0F || gamesettings.a != 0.0F))
@@ -194,7 +194,7 @@ public class yo {
 
     private static SoundSystem a;
 
-    private kv f;
+    private GameOptions f;
 
     private String currentSoundName;
 }

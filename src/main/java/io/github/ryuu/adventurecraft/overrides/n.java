@@ -426,7 +426,7 @@ public class n implements pm {
                 this.m.add(worldrenderer);
         }
         if (this.t.z.e != this.H) {
-            ((kx) this.k.v).updateVeryFar();
+            ((ClientChunkCache) this.k.v).updateVeryFar();
             a();
         }
         if (i == 0) {

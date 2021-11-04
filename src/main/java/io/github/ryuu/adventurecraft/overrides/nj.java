@@ -7,9 +7,9 @@ public class nj extends da {
 
     protected String a;
 
-    private final kv j;
+    private final GameOptions j;
 
-    public nj(da guiscreen, kv gamesettings) {
+    public nj(da guiscreen, GameOptions gamesettings) {
         this.a = "Video Settings";
         this.i = guiscreen;
         this.j = gamesettings;

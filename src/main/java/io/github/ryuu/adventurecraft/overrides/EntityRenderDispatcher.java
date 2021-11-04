@@ -73,7 +73,7 @@ public class EntityRenderDispatcher {
         return a(entity.getClass());
     }
 
-    public void a(Level world, ji renderengine, TextRenderer fontrenderer, ls entityliving, kv gamesettings, float f) {
+    public void a(Level world, ji renderengine, TextRenderer fontrenderer, ls entityliving, GameOptions gamesettings, float f) {
         this.g = world;
         this.e = renderengine;
         this.k = gamesettings;
@@ -151,7 +151,7 @@ public class EntityRenderDispatcher {
 
     public float j;
 
-    public kv k;
+    public GameOptions k;
 
     public double l;
 

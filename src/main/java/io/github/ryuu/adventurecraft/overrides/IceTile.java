@@ -1,11 +1,12 @@
 package io.github.ryuu.adventurecraft.overrides;
 
 import net.minecraft.level.Level;
+import net.minecraft.tile.TranslucentTile;
 
 import java.util.Random;
 
-public class nk extends jp {
-    public nk(int i, int j) {
+public class IceTile extends TranslucentTile {
+    public IceTile(int i, int j) {
         super(i, j, ln.s, false);
         this.bB = 0.98F;
         b(true);

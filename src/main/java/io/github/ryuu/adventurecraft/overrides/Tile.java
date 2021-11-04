@@ -586,7 +586,7 @@ public class Tile {
         aR = (new db(76, 99, true)).c(0.0F).a(0.5F).a(e).a("notGate").j();
         aS = (new oi(77, u.bm)).c(0.5F).a(h).a("button").j();
         aT = (new jr(78, 66)).c(0.1F).a(k).a("snow");
-        aU = (new nk(79, 67)).c(0.5F).g(3).a(j).a("ice");
+        aU = (new IceTile(79, 67)).c(0.5F).g(3).a(j).a("ice");
         aV = (new ac(80, 66)).c(0.2F).a(k).a("snow");
         aW = (new CactusTile(81, 70)).c(0.4F).a(k).a("cactus");
         aX = (new rz(82, 72)).c(0.6F).a(f).a("clay");
