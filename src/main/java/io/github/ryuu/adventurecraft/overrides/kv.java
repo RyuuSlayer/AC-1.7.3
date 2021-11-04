@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 
+import io.github.ryuu.adventurecraft.mixin.MixinTranslationStorage;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Keyboard;
 
@@ -90,7 +91,7 @@ public class kv {
     }
 
     public String a(int i) {
-        nh stringtranslate = nh.a();
+        MixinTranslationStorage stringtranslate = MixinTranslationStorage.a();
         return stringtranslate.a((this.w[i]).a);
     }
 
@@ -188,7 +189,7 @@ public class kv {
     }
 
     public String c(ht enumoptions) {
-        nh stringtranslate = nh.a();
+        MixinTranslationStorage stringtranslate = MixinTranslationStorage.a();
         String s = stringtranslate.a(enumoptions.d()) + ": ";
         if (enumoptions.a()) {
             float f = a(enumoptions);

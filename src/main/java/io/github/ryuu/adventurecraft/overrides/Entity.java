@@ -712,16 +712,16 @@ public abstract class Entity {
         return this.bh / 2.0F;
     }
 
-    public hl b(int i, int j) {
+    public ItemEntity b(int i, int j) {
         return a(i, j, 0.0F);
     }
 
-    public hl a(int i, int j, float f) {
+    public ItemEntity a(int i, int j, float f) {
         return a(new iz(i, j, 0), f);
     }
 
-    public hl a(iz itemstack, float f) {
-        hl entityitem = new hl(this.aI, this.aM, this.aN + f, this.aO, itemstack);
+    public ItemEntity a(iz itemstack, float f) {
+        ItemEntity entityitem = new ItemEntity(this.aI, this.aM, this.aN + f, this.aO, itemstack);
         entityitem.c = 10;
         this.aI.b((Entity) entityitem);
         return entityitem;

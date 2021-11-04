@@ -125,7 +125,7 @@ public class xq extends rw {
                 world.b((Entity) aC_EntityArrowBomb);
                 world.e(1002, i, j, k, 0);
             } else {
-                hl entityitem = new hl(world, d, d1 - 0.3D, d2, itemstack);
+                ItemEntity entityitem = new ItemEntity(world, d, d1 - 0.3D, d2, itemstack);
                 double d3 = random.nextDouble() * 0.1D + 0.2D;
                 entityitem.aP = i1 * d3;
                 entityitem.aQ = 0.20000000298023224D;
@@ -182,7 +182,7 @@ public class xq extends rw {
                     if (i1 > itemstack.a)
                         i1 = itemstack.a;
                     itemstack.a -= i1;
-                    hl entityitem = new hl(world, (i + f), (j + f1), (k + f2), new iz(itemstack.c, i1, itemstack.i()));
+                    ItemEntity entityitem = new ItemEntity(world, (i + f), (j + f1), (k + f2), new iz(itemstack.c, i1, itemstack.i()));
                     float f3 = 0.05F;
                     entityitem.aP = ((float) this.a.nextGaussian() * f3);
                     entityitem.aQ = ((float) this.a.nextGaussian() * f3 + 0.2F);

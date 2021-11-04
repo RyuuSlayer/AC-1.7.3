@@ -212,7 +212,7 @@ public class MixinLevel extends Level implements TileView {
         File mcDir = Minecraft.b();
         File mapDir = new File(mcDir, "../maps");
         File levelFile = new File(mapDir, levelName);
-        nh.a().loadMapTranslation(levelFile);
+        MixinTranslationStorage.a().loadMapTranslation(levelFile);
         this.mapHandler = new McRegionDimensionFile(mapDir, levelName, false);
         this.levelDir = levelFile;
         this.a = false;

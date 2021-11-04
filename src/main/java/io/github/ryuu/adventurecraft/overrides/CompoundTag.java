@@ -10,20 +10,21 @@ import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.src.NBTBase;
+import net.minecraft.util.io.*;
 
-public class CompoundTag extends ij {
+public class CompoundTag extends AbstractTag {
     private final Map<String, NBTBase> a = new HashMap<String, NBTBase>();
 
     void a(DataOutput dataoutput) throws IOException {
-        for (Iterator<ij> iterator = this.a.values().iterator(); iterator.hasNext(); ij.a(nbtbase, dataoutput))
-            ij nbtbase = iterator.next();
+        for (Iterator<AbstractTag> iterator = this.a.values().iterator(); iterator.hasNext(); AbstractTag.a(nbtbase, dataoutput))
+            AbstractTag nbtbase = iterator.next();
         dataoutput.writeByte(0);
     }
 
     void a(DataInput datainput) throws IOException {
         this.a.clear();
-        ij nbtbase;
-        for (; (nbtbase = ij.b(datainput)).a() != 0; this.a.put(nbtbase.b(), nbtbase)) ;
+        AbstractTag nbtbase;
+        for (; (nbtbase = AbstractTag.b(datainput)).a() != 0; this.a.put(nbtbase.b(), nbtbase)) ;
     }
 
     public Collection c() {
@@ -34,19 +35,19 @@ public class CompoundTag extends ij {
         return 10;
     }
 
-    public void a(String s, ij nbtbase) {
+    public void a(String s, AbstractTag nbtbase) {
         this.a.put(s, nbtbase.a(s));
     }
 
     public void a(String s, byte byte0) {
-        this.a.put(s, (new qp(byte0)).a(s));
+        this.a.put(s, (new ByteTag(byte0)).a(s));
     }
 
     public void a(String s, short word0) {
         if ((byte) word0 == word0) {
             a(s, (byte) word0);
         } else {
-            this.a.put(s, (new ul(word0)).a(s));
+            this.a.put(s, (new ShortTag(word0)).a(s));
         }
     }
 
@@ -54,7 +55,7 @@ public class CompoundTag extends ij {
         if ((short) i == i) {
             a(s, (short) i);
         } else {
-            this.a.put(s, (new pp(i)).a(s));
+            this.a.put(s, (new IntTag(i)).a(s));
         }
     }
 
@@ -62,24 +63,24 @@ public class CompoundTag extends ij {
         if ((int) l == l) {
             a(s, (int) l);
         } else {
-            this.a.put(s, (new mi(l)).a(s));
+            this.a.put(s, (new LongTag(l)).a(s));
         }
     }
 
     public void a(String s, float f) {
-        this.a.put(s, (new p(f)).a(s));
+        this.a.put(s, (new FloatTag(f)).a(s));
     }
 
     public void a(String s, double d) {
-        this.a.put(s, (new sz(d)).a(s));
+        this.a.put(s, (new DoubleTag(d)).a(s));
     }
 
     public void a(String s, String s1) {
-        this.a.put(s, (new xb(s1)).a(s));
+        this.a.put(s, (new StringTag(s1)).a(s));
     }
 
     public void a(String s, byte[] abyte0) {
-        this.a.put(s, (new hn(abyte0)).a(s));
+        this.a.put(s, (new ByteArrayTag(abyte0)).a(s));
     }
 
     public void a(String s, CompoundTag nbttagcompound) {
@@ -97,14 +98,14 @@ public class CompoundTag extends ij {
     public byte c(String s) {
         if (!this.a.containsKey(s))
             return 0;
-        return ((qp) this.a.get(s)).a;
+        return ((ByteTag) this.a.get(s)).a;
     }
 
     public short d(String s) {
         if (!this.a.containsKey(s))
             return 0;
         try {
-            return ((ul) this.a.get(s)).a;
+            return ((ShortTag) this.a.get(s)).a;
         } catch (ClassCastException e) {
             return c(s);
         }
@@ -114,7 +115,7 @@ public class CompoundTag extends ij {
         if (!this.a.containsKey(s))
             return 0;
         try {
-            return ((pp) this.a.get(s)).a;
+            return ((IntTag) this.a.get(s)).a;
         } catch (ClassCastException e) {
             return d(s);
         }
@@ -124,7 +125,7 @@ public class CompoundTag extends ij {
         if (!this.a.containsKey(s))
             return 0L;
         try {
-            return ((mi) this.a.get(s)).a;
+            return ((LongTag) this.a.get(s)).a;
         } catch (ClassCastException e) {
             return e(s);
         }
@@ -133,25 +134,25 @@ public class CompoundTag extends ij {
     public float g(String s) {
         if (!this.a.containsKey(s))
             return 0.0F;
-        return ((p) this.a.get(s)).a;
+        return ((FloatTag) this.a.get(s)).a;
     }
 
     public double h(String s) {
         if (!this.a.containsKey(s))
             return 0.0D;
-        return ((sz) this.a.get(s)).a;
+        return ((DoubleTag) this.a.get(s)).a;
     }
 
     public String i(String s) {
         if (!this.a.containsKey(s))
             return "";
-        return ((xb) this.a.get(s)).a;
+        return ((StringTag) this.a.get(s)).a;
     }
 
     public byte[] j(String s) {
         if (!this.a.containsKey(s))
             return new byte[0];
-        return ((hn) this.a.get(s)).a;
+        return ((ByteArrayTag) this.a.get(s)).a;
     }
 
     public CompoundTag k(String s) {
@@ -160,10 +161,10 @@ public class CompoundTag extends ij {
         return (CompoundTag) this.a.get(s);
     }
 
-    public sp l(String s) {
+    public ListTag l(String s) {
         if (!this.a.containsKey(s))
-            return new sp();
-        return (sp) this.a.get(s);
+            return new ListTag();
+        return (ListTag) this.a.get(s);
     }
 
     public boolean m(String s) {

@@ -7,7 +7,7 @@ import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 import net.minecraft.util.io.CompoundTag;
 
-public class hl extends Entity {
+public class ItemEntity extends Entity {
     public ItemInstance a;
 
     private int e;
@@ -20,7 +20,7 @@ public class hl extends Entity {
 
     public float d;
 
-    public hl(Level world, double d, double d1, double d2, ItemInstance itemstack) {
+    public ItemEntity(Level world, double d, double d1, double d2, ItemInstance itemstack) {
         super(world);
         this.b = 0;
         this.f = 5;
@@ -41,7 +41,7 @@ public class hl extends Entity {
         return false;
     }
 
-    public hl(Level world) {
+    public ItemEntity(Level world) {
         super(world);
         this.b = 0;
         this.f = 5;

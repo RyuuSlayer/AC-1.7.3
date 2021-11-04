@@ -3,9 +3,11 @@ package io.github.ryuu.adventurecraft.overrides;
 import net.minecraft.client.Minecraft;
 import net.minecraft.container.slot.CraftingResultSlot;
 import net.minecraft.container.slot.Slot;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.CraftingResultInventory;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.item.ItemInstance;
 import net.minecraft.item.tool.ToolItem;
 
 public class PlayerContainer extends ToolItem {
@@ -15,11 +17,11 @@ public class PlayerContainer extends ToolItem {
 
     public boolean c;
 
-    public PlayerContainer(ix inventoryplayer) {
+    public PlayerContainer(PlayerInventory inventoryplayer) {
         this(inventoryplayer, true);
     }
 
-    public PlayerContainer(ix inventoryplayer, boolean flag) {
+    public PlayerContainer(PlayerInventory inventoryplayer, boolean flag) {
         this.a = new CraftingInventory(this, 2, 2);
         this.b = (Inventory) new CraftingResultInventory();
         this.c = false;
@@ -48,10 +50,10 @@ public class PlayerContainer extends ToolItem {
         this.b.a(0, hk.a().a(this.a));
     }
 
-    public void a(gs entityplayer) {
+    public void a(Player entityplayer) {
         super.a(entityplayer);
         for (int i = 0; i < 4; i++) {
-            iz itemstack = this.a.f_(i);
+            ItemInstance itemstack = this.a.f_(i);
             if (itemstack != null) {
                 entityplayer.a(itemstack);
                 this.a.a(i, null);
@@ -59,15 +61,15 @@ public class PlayerContainer extends ToolItem {
         }
     }
 
-    public boolean b(gs entityplayer) {
+    public boolean b(Player entityplayer) {
         return true;
     }
 
-    public iz a(int i) {
-        iz itemstack = null;
+    public ItemInstance a(int i) {
+        ItemInstance itemstack = null;
         Slot slot = this.e.get(i);
         if (slot != null && slot.b()) {
-            iz itemstack1 = slot.a();
+            ItemInstance itemstack1 = slot.a();
             itemstack = itemstack1.k();
             if (i == 0) {
                 a(itemstack1, 9, 45, true);

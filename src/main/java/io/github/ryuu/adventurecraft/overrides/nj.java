@@ -1,5 +1,7 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import io.github.ryuu.adventurecraft.mixin.MixinTranslationStorage;
+
 public class nj extends da {
     private final da i;
 
@@ -14,7 +16,7 @@ public class nj extends da {
     }
 
     public void b() {
-        nh stringtranslate = nh.a();
+        MixinTranslationStorage stringtranslate = MixinTranslationStorage.a();
         this.a = stringtranslate.a("options.videoTitle");
         int i = 0;
         ht[] aenumoptions = l;

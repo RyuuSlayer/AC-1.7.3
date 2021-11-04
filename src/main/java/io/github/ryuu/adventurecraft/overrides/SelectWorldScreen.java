@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.overrides;
 
 import io.github.ryuu.adventurecraft.gui.GuiMapSelect;
+import io.github.ryuu.adventurecraft.mixin.MixinTranslationStorage;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -42,7 +43,7 @@ public class SelectWorldScreen extends da {
     }
 
     public void b() {
-        nh stringtranslate = nh.a();
+        MixinTranslationStorage stringtranslate = MixinTranslationStorage.a();
         this.i = stringtranslate.a("selectWorld.title");
         this.p = stringtranslate.a("selectWorld.world");
         this.q = stringtranslate.a("selectWorld.conversion");
@@ -66,14 +67,14 @@ public class SelectWorldScreen extends da {
     protected String d(int i) {
         String s = ((vb) this.n.get(i)).b();
         if (s == null || in.a(s)) {
-            nh stringtranslate = nh.a();
+            MixinTranslationStorage stringtranslate = MixinTranslationStorage.a();
             s = stringtranslate.a("selectWorld.world") + " " + (i + 1);
         }
         return s;
     }
 
     public void k() {
-        nh stringtranslate = nh.a();
+        MixinTranslationStorage stringtranslate = MixinTranslationStorage.a();
         this.e.add(this.t = new ke(1, this.c / 2 - 152, this.d - 28, 100, 20, "Load Save"));
         this.e.add(this.u = new ke(2, this.c / 2 - 50, this.d - 28, 100, 20, stringtranslate.a("selectWorld.delete")));
         this.e.add(new ke(0, this.c / 2 + 52, this.d - 28, 100, 20, stringtranslate.a("gui.cancel")));
@@ -88,7 +89,7 @@ public class SelectWorldScreen extends da {
             String s = d(this.m);
             if (s != null) {
                 this.r = true;
-                nh stringtranslate = nh.a();
+                MixinTranslationStorage stringtranslate = MixinTranslationStorage.a();
                 String s1 = stringtranslate.a("selectWorld.deleteQuestion");
                 String s2 = "'" + s + "' " + stringtranslate.a("selectWorld.deleteWarning");
                 String s3 = stringtranslate.a("selectWorld.deleteButton");

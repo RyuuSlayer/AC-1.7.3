@@ -10,6 +10,7 @@ import java.util.Random;
 
 import io.github.ryuu.adventurecraft.gui.GuiMapDownload;
 import io.github.ryuu.adventurecraft.gui.GuiMapSelect;
+import io.github.ryuu.adventurecraft.mixin.MixinTranslationStorage;
 import io.github.ryuu.adventurecraft.scripting.ScriptModel;
 import io.github.ryuu.adventurecraft.util.Version;
 import net.minecraft.client.Minecraft;
@@ -57,7 +58,7 @@ public class fu extends da {
             this.j = "Happy new year!";
         }
         this.j = "A Minecraft Total Conversion!";
-        nh stringtranslate = nh.a();
+        MixinTranslationStorage stringtranslate = MixinTranslationStorage.a();
         int i = this.d / 4 + 48;
         this.e.add(new ke(6, this.c / 2 - 100, i, "New Save"));
         this.e.add(new ke(1, this.c / 2 - 100, i + 22, "Load Save"));

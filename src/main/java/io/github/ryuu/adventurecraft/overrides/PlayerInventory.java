@@ -4,11 +4,13 @@ import io.github.ryuu.adventurecraft.items.IItemReload;
 import io.github.ryuu.adventurecraft.items.Items;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.Player;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.util.io.CompoundTag;
+import net.minecraft.util.io.ListTag;
 
-public class ix implements lw {
+public class PlayerInventory implements Inventory {
     public ItemInstance[] a;
 
     public ItemInstance[] b;
@@ -25,7 +27,7 @@ public class ix implements lw {
 
     public int[] consumeInventory;
 
-    public ix(Player entityplayer) {
+    public PlayerInventory(Player entityplayer) {
         this.a = new ItemInstance[36];
         this.b = new ItemInstance[4];
         this.c = 0;
@@ -233,7 +235,7 @@ public class ix implements lw {
         return f;
     }
 
-    public sp a(sp nbttaglist) {
+    public ListTag a(ListTag nbttaglist) {
         for (int i = 0; i < this.a.length; i++) {
             if (this.a[i] != null) {
                 CompoundTag nbttagcompound = new CompoundTag();
@@ -253,7 +255,7 @@ public class ix implements lw {
         return nbttaglist;
     }
 
-    public void b(sp nbttaglist) {
+    public void b(ListTag nbttaglist) {
         this.a = new ItemInstance[36];
         this.b = new ItemInstance[4];
         for (int i = 0; i < nbttaglist.c(); i++) {

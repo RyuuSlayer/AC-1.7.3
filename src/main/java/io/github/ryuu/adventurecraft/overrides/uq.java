@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import io.github.ryuu.adventurecraft.mixin.MixinTranslationStorage;
 import io.github.ryuu.adventurecraft.scripting.ScriptUIContainer;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.TerrainImage;
@@ -48,7 +49,7 @@ public class uq extends ub {
         if (this.hudEnabled) {
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             GL11.glBindTexture(3553, this.g.p.b("/gui/gui.png"));
-            ix inventoryplayer = this.g.h.c;
+            PlayerInventory inventoryplayer = this.g.h.c;
             this.k = -90.0F;
             b(scaledWidth / 2 - 91, scaledHeight - 22, 0, 0, 182, 22);
             b(scaledWidth / 2 - 91 - 1 + inventoryplayer.offhandItem * 20, scaledHeight - 22 - 1, 24, 22, 48, 22);
@@ -395,7 +396,7 @@ public class uq extends ub {
     }
 
     public void c(String s) {
-        nh stringtranslate = nh.a();
+        MixinTranslationStorage stringtranslate = MixinTranslationStorage.a();
         String s1 = stringtranslate.a(s);
         a(s1);
     }

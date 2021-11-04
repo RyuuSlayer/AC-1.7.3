@@ -68,7 +68,7 @@ public class Skeleton extends Monster {
         if (j() != 0) {
             int m = this.bs.nextInt(3) + 1;
             for (int j = 0; j < m; j++) {
-                hl item = b(j(), 1);
+                ItemEntity item = b(j(), 1);
                 if (j() != ItemType.j.bf)
                     item.a.a = 3;
             }

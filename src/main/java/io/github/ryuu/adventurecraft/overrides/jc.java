@@ -87,7 +87,7 @@ public class jc {
     static {
         a(sl.class, "Arrow", 10);
         a(by.class, "Snowball", 11);
-        a(hl.class, "Item", 1);
+        a(ItemEntity.class, "Item", 1);
         a(qv.class, "Painting", 9);
         a(ls.class, "Mob", 48);
         a(gz.class, "Monster", 49);

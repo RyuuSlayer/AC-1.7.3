@@ -531,8 +531,8 @@ public abstract class ls extends Entity {
             q();
             if (entity != null && entity instanceof ls && ((ls) entity).Y < ((ls) entity).maxHealth)
                 if (this.bs.nextInt(3) != 0) {
-                    hl hl = new hl(this.aI, this.aM, this.aN, this.aO, new iz(AC_Items.heart.bf, 1, 0));
-                    this.aI.b((Entity) hl);
+                    ItemEntity ItemEntity = new ItemEntity(this.aI, this.aM, this.aN, this.aO, new iz(AC_Items.heart.bf, 1, 0));
+                    this.aI.b((Entity) ItemEntity);
                 }
         }
         this.aI.a(this, (byte) 3);

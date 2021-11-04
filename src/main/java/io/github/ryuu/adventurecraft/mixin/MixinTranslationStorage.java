@@ -1,4 +1,4 @@
-package io.github.ryuu.adventurecraft.overrides;
+package io.github.ryuu.adventurecraft.mixin;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -6,13 +6,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class nh {
+public class MixinTranslationStorage {
     private final Properties b = new Properties();
 
-    private nh() {
+    private MixinTranslationStorage() {
         try {
-            this.b.load(nh.class.getResourceAsStream("/lang/en_US.lang"));
-            this.b.load(nh.class.getResourceAsStream("/lang/stats_US.lang"));
+            this.b.load(MixinTranslationStorage.class.getResourceAsStream("/lang/en_US.lang"));
+            this.b.load(MixinTranslationStorage.class.getResourceAsStream("/lang/stats_US.lang"));
         } catch (IOException ioexception) {
             ioexception.printStackTrace();
         }
@@ -20,7 +20,7 @@ public class nh {
 
     public void loadMapTranslation(File levelDir) {
         try {
-            this.b.load(nh.class.getResourceAsStream("/lang/en_US.lang"));
+            this.b.load(MixinTranslationStorage.class.getResourceAsStream("/lang/en_US.lang"));
         } catch (IOException ioexception) {
         }
         try {
@@ -33,7 +33,7 @@ public class nh {
         }
     }
 
-    public static nh a() {
+    public static MixinTranslationStorage a() {
         return a;
     }
 
@@ -56,5 +56,5 @@ public class nh {
         return t;
     }
 
-    private static final nh a = new nh();
+    private static final MixinTranslationStorage a = new MixinTranslationStorage();
 }

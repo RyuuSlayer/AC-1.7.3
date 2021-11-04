@@ -3,13 +3,14 @@ package io.github.ryuu.adventurecraft.overrides;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 import net.minecraft.util.io.CompoundTag;
 
-public class lx extends net.minecraft.entity.Entity {
+public class FishHook extends Entity {
     private int d;
 
     private int e;
@@ -22,7 +23,7 @@ public class lx extends net.minecraft.entity.Entity {
 
     public int a;
 
-    public gs b;
+    public Player b;
 
     private int i;
 
@@ -50,7 +51,7 @@ public class lx extends net.minecraft.entity.Entity {
 
     private double t;
 
-    public lx(Level world) {
+    public FishHook(Level world) {
         super(world);
         this.d = -1;
         this.e = -1;
@@ -65,13 +66,13 @@ public class lx extends net.minecraft.entity.Entity {
         this.bM = true;
     }
 
-    public lx(Level world, double d, double d1, double d2) {
+    public FishHook(Level world, double d, double d1, double d2) {
         this(world);
         e(d, d1, d2);
         this.bM = true;
     }
 
-    public lx(Level world, Player entityplayer) {
+    public FishHook(Level world, Player entityplayer) {
         super(world);
         this.d = -1;
         this.e = -1;
@@ -334,7 +335,7 @@ public class lx extends net.minecraft.entity.Entity {
             this.c.aR += d4 * d8;
             byte0 = 3;
         } else if (this.k > 0) {
-            hl entityitem = new hl(this.aI, this.aM, this.aN, this.aO, new iz(ItemType.aS));
+            ItemEntity entityitem = new ItemEntity(this.aI, this.aM, this.aN, this.aO, new iz(ItemType.aS));
             double d1 = this.b.aM - this.aM;
             double d3 = this.b.aN - this.aN;
             double d5 = this.b.aO - this.aO;
