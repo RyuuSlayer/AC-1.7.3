@@ -234,31 +234,31 @@ public class PlayerRenderer extends LivingEntityRenderer {
         }
     }
 
-    protected void a(ls entityliving, double d, double d1, double d2) {
+    protected void a(LivingEntity entityliving, double d, double d1, double d2) {
         a((Player) entityliving, d, d1, d2);
     }
 
-    protected void a(ls entityliving, float f) {
+    protected void a(LivingEntity entityliving, float f) {
         b((Player) entityliving, f);
     }
 
-    protected boolean a(ls entityliving, int i, float f) {
+    protected boolean a(LivingEntity entityliving, int i, float f) {
         return a((Player) entityliving, i, f);
     }
 
-    protected void b(ls entityliving, float f) {
+    protected void b(LivingEntity entityliving, float f) {
         a((Player) entityliving, f);
     }
 
-    protected void a(ls entityliving, float f, float f1, float f2) {
+    protected void a(LivingEntity entityliving, float f, float f1, float f2) {
         a((Player) entityliving, f, f1, f2);
     }
 
-    protected void b(ls entityliving, double d, double d1, double d2) {
+    protected void b(LivingEntity entityliving, double d, double d1, double d2) {
         b((Player) entityliving, d, d1, d2);
     }
 
-    public void a(ls entityliving, double d, double d1, double d2, float f, float f1) {
+    public void a(LivingEntity entityliving, double d, double d1, double d2, float f, float f1) {
         a((Player) entityliving, d, d1, d2, f, f1);
     }
 

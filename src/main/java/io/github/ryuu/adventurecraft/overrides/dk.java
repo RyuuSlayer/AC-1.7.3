@@ -118,7 +118,7 @@ public class dk {
                                         }
                                         if (i2 == 0 && Tile.p[i3]) {
                                             TileEntity tileentity = chunkcache.b(l2, j2, k2);
-                                            if (ll.a.a(tileentity))
+                                            if (TileEntityRenderDispatcher.a.a(tileentity))
                                                 this.B.add(tileentity);
                                         }
                                         Tile block = Tile.m[i3];

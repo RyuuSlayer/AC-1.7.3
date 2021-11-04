@@ -5,7 +5,7 @@ import javax.imageio.ImageIO;
 
 import net.minecraft.client.Minecraft;
 
-public class jh {
+public class FoliageColour {
     public static void a(int[] ai) {
         a = ai;
     }
@@ -33,7 +33,7 @@ public class jh {
         BufferedImage bufferedimage = Minecraft.minecraftInstance.f.loadMapTexture(foliageName);
         if (bufferedimage == null)
             try {
-                bufferedimage = ImageIO.read(jh.class.getResource(foliageName));
+                bufferedimage = ImageIO.read(FoliageColour.class.getResource(foliageName));
             } catch (Exception exception) {
                 exception.printStackTrace();
             }

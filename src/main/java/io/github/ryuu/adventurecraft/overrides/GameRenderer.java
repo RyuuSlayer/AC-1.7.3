@@ -64,7 +64,7 @@ public class GameRenderer {
         this.A = this.z;
         this.C = this.B;
         if (this.j.i == null)
-            this.j.i = (ls) this.j.h;
+            this.j.i = (LivingEntity) this.j.h;
         float f = this.j.f.c(MathsHelper.b(this.j.i.aM), MathsHelper.b(this.j.i.aN), MathsHelper.b(this.j.i.aO));
         float f1 = (4 - this.j.z.e) / 4.0F;
         float f2 = f * (1.0F - f1) + f1;
@@ -123,7 +123,7 @@ public class GameRenderer {
     }
 
     private float d(float f) {
-        ls entityliving = this.j.i;
+        LivingEntity entityliving = this.j.i;
         float f1 = 70.0F;
         if (entityliving.a(ln.g))
             f1 = 60.0F;
@@ -135,7 +135,7 @@ public class GameRenderer {
     }
 
     private void e(float f) {
-        ls entityliving = this.j.i;
+        LivingEntity entityliving = this.j.i;
         float f1 = entityliving.aa - f;
         if (entityliving.Y <= 0) {
             float f2 = entityliving.ad + f;
@@ -166,7 +166,7 @@ public class GameRenderer {
     }
 
     private void g(float f) {
-        ls entityliving = this.j.i;
+        LivingEntity entityliving = this.j.i;
         float f1 = entityliving.bf - 1.62F;
         double d = entityliving.aJ + (entityliving.aM - entityliving.aJ) * f;
         double d1 = entityliving.aK + (entityliving.aN - entityliving.aK) * f - f1;
@@ -418,7 +418,7 @@ public class GameRenderer {
         this.j.i.aO = this.j.i.bn = this.j.i.aL = p.posZ;
         this.j.i.aS = this.j.i.aU = p.rotYaw;
         this.j.i.aT = this.j.i.aV = p.rotPitch;
-        this.j.i = (ls) this.j.h;
+        this.j.i = (LivingEntity) this.j.h;
         if (this.j.h.stunned != 0) {
             this.j.h.bl = this.j.h.aJ = this.j.h.aM;
             this.j.h.bm = this.j.h.aK = this.j.h.aN;
@@ -426,7 +426,7 @@ public class GameRenderer {
             this.j.h.bi = this.j.h.bj;
         }
         a(f);
-        ls entityliving = this.j.i;
+        LivingEntity entityliving = this.j.i;
         n renderglobal = this.j.g;
         ParticleManager effectrenderer = this.j.j;
         double d = entityliving.bl + (entityliving.aM - entityliving.bl) * f;
@@ -551,8 +551,8 @@ public class GameRenderer {
             if (DebugMode.active || DebugMode.renderFov)
                 for (Object obj : this.j.f.b) {
                     Entity e = (Entity) obj;
-                    if (e instanceof ls)
-                        renderglobal.drawEntityFOV((ls) e, entityliving, f);
+                    if (e instanceof LivingEntity)
+                        renderglobal.drawEntityFOV((LivingEntity) e, entityliving, f);
                 }
             GL11.glEnable(3008);
             GL11.glDisable(2912);
@@ -581,7 +581,7 @@ public class GameRenderer {
         if (f == 0.0F)
             return;
         this.J.setSeed(this.l * 312987231L);
-        ls entityliving = this.j.i;
+        LivingEntity entityliving = this.j.i;
         Level world = this.j.f;
         int i = MathsHelper.b(entityliving.aM);
         int j = MathsHelper.b(entityliving.aN);
@@ -626,7 +626,7 @@ public class GameRenderer {
         float f1 = this.j.f.g(f);
         if (f1 <= 0.0F)
             return;
-        ls entityliving = this.j.i;
+        LivingEntity entityliving = this.j.i;
         Level world = this.j.f;
         int i = MathsHelper.b(entityliving.aM);
         int j = MathsHelper.b(entityliving.aN);
@@ -745,7 +745,7 @@ public class GameRenderer {
 
     private void h(float f) {
         Level world = this.j.f;
-        ls entityliving = this.j.i;
+        LivingEntity entityliving = this.j.i;
         float f1 = 1.0F / (5 - this.j.z.e);
         f1 = 1.0F - (float) Math.pow(f1, 0.25D);
         bt vec3d = world.a((Entity) this.j.i, f);
@@ -804,7 +804,7 @@ public class GameRenderer {
     }
 
     private void a(int i, float f) {
-        ls entityliving = this.j.i;
+        LivingEntity entityliving = this.j.i;
         GL11.glFog(2918, a(this.g, this.h, this.i, 1.0F));
         GL11.glNormal3f(0.0F, -1.0F, 0.0F);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

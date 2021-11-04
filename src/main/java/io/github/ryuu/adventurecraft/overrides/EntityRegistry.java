@@ -89,7 +89,7 @@ public class EntityRegistry {
         a(by.class, "Snowball", 11);
         a(ItemEntity.class, "Item", 1);
         a(qv.class, "Painting", 9);
-        a(ls.class, "Mob", 48);
+        a(LivingEntity.class, "Mob", 48);
         a(gz.class, "Monster", 49);
         a(gb.class, "Creeper", 50);
         a(fr.class, "Skeleton", 51);

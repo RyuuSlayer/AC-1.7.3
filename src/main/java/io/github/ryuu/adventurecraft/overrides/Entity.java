@@ -902,7 +902,7 @@ public abstract class Entity {
             this.bv = 300;
     }
 
-    public void a(ls entityliving) {
+    public void a(LivingEntity entityliving) {
     }
 
     protected boolean c(double d, double d1, double d2) {

@@ -261,7 +261,7 @@ public class Wolf extends Animal {
                 }
                 if (entity instanceof Arrow && ((Arrow) entity).c != null)
                     entity = ((Arrow) entity).c;
-                if (entity instanceof ls) {
+                if (entity instanceof LivingEntity) {
                     List list = this.aI.a(Wolf.class, eq.b(this.aM, this.aN, this.aO, this.aM + 1.0D, this.aN + 1.0D, this.aO + 1.0D).b(16.0D, 4.0D, 16.0D));
                     Iterator<Entity> iterator = list.iterator();
                     while (iterator.hasNext()) {

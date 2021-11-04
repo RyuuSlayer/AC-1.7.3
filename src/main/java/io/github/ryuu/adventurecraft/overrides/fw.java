@@ -3,10 +3,11 @@ package io.github.ryuu.adventurecraft.overrides;
 import java.util.LinkedList;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.level.TileView;
 import net.minecraft.src.PathPoint;
 
 public class fw {
-    private final xp a;
+    private final TileView a;
 
     private final lf b;
 
@@ -14,7 +15,7 @@ public class fw {
 
     private final d[] d;
 
-    public fw(xp iblockaccess) {
+    public fw(TileView iblockaccess) {
         this.b = new lf();
         this.c = new jx();
         this.d = new d[32];

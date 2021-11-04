@@ -21,22 +21,22 @@ public class PlaceableTileItem extends FancyTile {
 
     public int b(int i) {
         if ((i & 0x1) == 1)
-            return jh.a();
+            return FoliageColour.a();
         if ((i & 0x2) == 2)
-            return jh.b();
-        return jh.c();
+            return FoliageColour.b();
+        return FoliageColour.c();
     }
 
     public int b(xp iblockaccess, int i, int j, int k) {
         int l = iblockaccess.e(i, j, k);
         if ((l & 0x1) == 1)
-            return jh.a();
+            return FoliageColour.a();
         if ((l & 0x2) == 2)
-            return jh.b();
+            return FoliageColour.b();
         iblockaccess.a().a(i, k, 1, 1);
         double d = (iblockaccess.a()).a[0];
         double d1 = (iblockaccess.a()).b[0];
-        return jh.a(d, d1);
+        return FoliageColour.a(d, d1);
     }
 
     public void b(Level world, int i, int j, int k) {

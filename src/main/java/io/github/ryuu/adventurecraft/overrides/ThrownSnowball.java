@@ -25,7 +25,7 @@ public class ThrownSnowball extends Entity {
 
     public int a;
 
-    private ls g;
+    private LivingEntity g;
 
     private int h;
 
@@ -53,7 +53,7 @@ public class ThrownSnowball extends Entity {
         return (d < d1 * d1);
     }
 
-    public by(Level world, ls entityliving) {
+    public by(Level world, LivingEntity entityliving) {
         super(world);
         this.b = -1;
         this.c = -1;

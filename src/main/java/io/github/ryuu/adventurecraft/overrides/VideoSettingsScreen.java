@@ -1,15 +1,19 @@
 package io.github.ryuu.adventurecraft.overrides;
 
 import io.github.ryuu.adventurecraft.mixin.MixinTranslationStorage;
+import net.minecraft.client.gui.widgets.Button;
+import net.minecraft.client.gui.widgets.OptionButton;
+import net.minecraft.client.gui.widgets.Slider;
+import net.minecraft.client.util.ScreenScaler;
 
-public class nj extends da {
-    private final da i;
+public class VideoSettingsScreen extends Screen {
+    private final Screen i;
 
     protected String a;
 
     private final GameOptions j;
 
-    public nj(da guiscreen, GameOptions gamesettings) {
+    public VideoSettingsScreen(Screen guiscreen, GameOptions gamesettings) {
         this.a = "Video Settings";
         this.i = guiscreen;
         this.j = gamesettings;
@@ -24,27 +28,27 @@ public class nj extends da {
         for (int k = 0; k < j; k++) {
             Option enumoptions = aenumoptions[k];
             if (!enumoptions.a()) {
-                this.e.add(new ab(enumoptions.c(), this.c / 2 - 155 + i % 2 * 160, this.d / 6 + 24 * (i >> 1), enumoptions, this.j.c(enumoptions)));
+                this.e.add(new OptionButton(enumoptions.c(), this.c / 2 - 155 + i % 2 * 160, this.d / 6 + 24 * (i >> 1), enumoptions, this.j.c(enumoptions)));
             } else {
-                this.e.add(new vz(enumoptions.c(), this.c / 2 - 155 + i % 2 * 160, this.d / 6 + 24 * (i >> 1), enumoptions, this.j.c(enumoptions), this.j.a(enumoptions)));
+                this.e.add(new Slider(enumoptions.c(), this.c / 2 - 155 + i % 2 * 160, this.d / 6 + 24 * (i >> 1), enumoptions, this.j.c(enumoptions), this.j.a(enumoptions)));
             }
             i++;
         }
-        this.e.add(new ke(200, this.c / 2 - 100, this.d / 6 + 168, stringtranslate.a("gui.done")));
+        this.e.add(new Button(200, this.c / 2 - 100, this.d / 6 + 168, stringtranslate.a("gui.done")));
     }
 
-    protected void a(ke guibutton) {
+    protected void a(Button guibutton) {
         if (!guibutton.g)
             return;
-        if (guibutton.f < 100 && guibutton instanceof ab) {
-            this.j.a(((ab) guibutton).a(), 1);
+        if (guibutton.f < 100 && guibutton instanceof OptionButton) {
+            this.j.a(((OptionButton) guibutton).a(), 1);
             guibutton.e = this.j.c(Option.a(guibutton.f));
         }
         if (guibutton.f == 200) {
             this.b.z.b();
             this.b.a(this.i);
         }
-        qq scaledresolution = new qq(this.b.z, this.b.d, this.b.e);
+        ScreenScaler scaledresolution = new ScreenScaler(this.b.z, this.b.d, this.b.e);
         int i = scaledresolution.a();
         int j = scaledresolution.b();
         a(this.b, i, j);

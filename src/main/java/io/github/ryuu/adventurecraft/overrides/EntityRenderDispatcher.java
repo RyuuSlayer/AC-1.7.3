@@ -34,7 +34,7 @@ public class EntityRenderDispatcher {
         this.o.put(nt.class, new yg((ko) new ej(), 0.5F, 6.0F));
         this.o.put(Ghast.class, new pq());
         this.o.put(xt.class, new es((ko) new wn(), 0.7F));
-        this.o.put(ls.class, new gv((ko) new fh(), 0.5F));
+        this.o.put(LivingEntity.class, new gv((ko) new fh(), 0.5F));
         this.o.put(Entity.class, new mb());
         this.o.put(qv.class, new dy());
         this.o.put(Arrow.class, new mc());
@@ -73,7 +73,7 @@ public class EntityRenderDispatcher {
         return a(entity.getClass());
     }
 
-    public void a(Level world, ji renderengine, TextRenderer fontrenderer, ls entityliving, GameOptions gamesettings, float f) {
+    public void a(Level world, ji renderengine, TextRenderer fontrenderer, LivingEntity entityliving, GameOptions gamesettings, float f) {
         this.g = world;
         this.e = renderengine;
         this.k = gamesettings;
@@ -145,7 +145,7 @@ public class EntityRenderDispatcher {
 
     public Level g;
 
-    public ls h;
+    public LivingEntity h;
 
     public float i;
 

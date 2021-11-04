@@ -8,8 +8,8 @@ import io.github.ryuu.adventurecraft.scripting.ScriptItem;
 import io.github.ryuu.adventurecraft.scripting.ScriptVec3;
 import bt;
 import cv;
-import net.minecraft.client.util.OcclusionQueryTester;
-import cz;
+import net.minecraft.client.colour.FoliageColour;
+import net.minecraft.client.util.*;
 import dk;
 import ep;
 import eq;
@@ -60,9 +60,6 @@ import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.render.entity.model.BipedModel;
 import net.minecraft.client.sound.SoundHelper;
 import net.minecraft.client.texture.TextureManager;
-import net.minecraft.client.util.ScreenScaler;
-import net.minecraft.client.util.ScreenshotManager;
-import net.minecraft.client.util.Session;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ClientPlayer;
@@ -80,6 +77,7 @@ import net.minecraft.level.storage.SessionLockException;
 import net.minecraft.network.Connection;
 import net.minecraft.stat.StatManager;
 import net.minecraft.tile.Tile;
+import net.minecraft.util.ProgressListener;
 import net.minecraft.util.ProgressListenerError;
 import net.minecraft.util.ProgressListenerImpl;
 import net.minecraft.util.Vec3i;
@@ -99,11 +97,9 @@ import net.minecraft.client.PlayerKeypressManager;
 import uq;
 import ur;
 import vf;
-import vx;
 import vy;
 import x;
 import xa;
-import yb;
 
 public abstract class Minecraft implements Runnable {
     public Minecraft(Component component, Canvas canvas, MinecraftApplet minecraftapplet, int i, int j, boolean flag) {
@@ -205,7 +201,7 @@ public abstract class Minecraft implements Runnable {
         this.q = new TextRenderer(this.z, "/font/default.png", this.p);
         WaterColour.a(this.p.a("/misc/watercolor.png"));
         ia.a(this.p.a("/misc/grasscolor.png"));
-        jh.a(this.p.a("/misc/foliagecolor.png"));
+        FoliageColour.a(this.p.a("/misc/foliagecolor.png"));
         this.t = new GameRenderer(this);
         EntityRenderDispatcher.a.f = new HandItemRenderer(this);
         this.I = new StatManager(this.k, this.Z);
@@ -248,7 +244,7 @@ public abstract class Minecraft implements Runnable {
         GL11.glViewport(0, 0, this.d, this.e);
         this.j = new ParticleManager(this.f, this.p);
         try {
-            this.U = new cz(this.Z, this);
+            this.U = new ResourceDownloadThread(this.Z, this);
             this.U.start();
             this.U.a();
         } catch (Exception exception1) {
@@ -256,7 +252,7 @@ public abstract class Minecraft implements Runnable {
         c("Post startup");
         this.v = new uq(this);
         if (this.ab != null) {
-            a((Screen) new vx(this, this.ab, this.ac));
+            a((Screen) new ServerConnectingScreen(this, this.ab, this.ac));
         } else {
             a(new TitleScreen());
         }
@@ -1055,11 +1051,11 @@ public abstract class Minecraft implements Runnable {
                             if (Keyboard.getEventKey() == 65)
                                 this.h.displayGUIPalette();
                             if (Keyboard.getEventKey() == this.z.r.b)
-                                a((Screen) new ue((Player) this.h));
+                                a((Screen) new PlayerInventoryScreen((Player) this.h));
                             if (Keyboard.getEventKey() == this.z.s.b)
                                 this.h.D();
                             if ((l() || DebugMode.active) && Keyboard.getEventKey() == this.z.t.b)
-                                a((Screen) new gc());
+                                a((Screen) new ChatScreen());
                             if (DebugMode.active && (Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157)))
                                 if (Keyboard.getEventKey() == 44) {
                                     this.f.undo();
@@ -1277,7 +1273,7 @@ public abstract class Minecraft implements Runnable {
         this.s.d("");
         this.B.a(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
         if (this.f != null)
-            this.f.a((yb) this.s);
+            this.f.a((ProgressListener) this.s);
         this.f = world;
         if (world != null) {
             this.f.loadMapTextures();
@@ -1316,7 +1312,7 @@ public abstract class Minecraft implements Runnable {
             }
             world.a((Player) this.h);
             if (world.s)
-                world.a((yb) this.s);
+                world.a((ProgressListener) this.s);
             this.i = this.h;
         } else {
             this.h = null;
@@ -1328,7 +1324,7 @@ public abstract class Minecraft implements Runnable {
     private void b(String s, String s1) {
         this.s.a("Converting World to " + this.aa.a());
         this.s.d("This may take a while :)");
-        this.aa.a(s, (yb) this.s);
+        this.aa.a(s, (ProgressListener) this.s);
         a(s, s1, 0L);
     }
 
@@ -1551,7 +1547,7 @@ public abstract class Minecraft implements Runnable {
 
     public GameRenderer t;
 
-    public cz U;
+    public ResourceDownloadThread U;
 
     private int V;
 

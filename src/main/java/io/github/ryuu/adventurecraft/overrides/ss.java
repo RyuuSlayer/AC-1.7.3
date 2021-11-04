@@ -257,7 +257,7 @@ public class ss extends BlockColor {
         this.a.d(world, i, j, k);
     }
 
-    public void a(Level world, int i, int j, int k, ls entityliving) {
+    public void a(Level world, int i, int j, int k, LivingEntity entityliving) {
         int l = MathsHelper.b((entityliving.aS * 4.0F / 360.0F) + 0.5D) & 0x3;
         if (l == 0)
             world.d(i, j, k, 2);

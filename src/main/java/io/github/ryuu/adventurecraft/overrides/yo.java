@@ -83,7 +83,7 @@ public class yo {
     public void c() {
     }
 
-    public void a(ls entityliving, float f) {
+    public void a(LivingEntity entityliving, float f) {
         if (!g || this.f.b == 0.0F)
             return;
         if (entityliving == null)

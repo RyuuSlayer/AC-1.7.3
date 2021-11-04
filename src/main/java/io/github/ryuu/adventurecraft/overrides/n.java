@@ -314,7 +314,7 @@ public class n implements pm {
             this.I--;
             return;
         }
-        ll.a.a(this.k, this.l, this.t.q, this.t.i, f);
+        TileEntityRenderDispatcher.a.a(this.k, this.l, this.t.q, this.t.i, f);
         th.a.a(this.k, this.l, this.t.q, this.t.i, this.t.z, f);
         this.J = 0;
         this.K = 0;
@@ -323,9 +323,9 @@ public class n implements pm {
         th.b = entityliving.bl + (entityliving.aM - entityliving.bl) * f;
         th.c = entityliving.bm + (entityliving.aN - entityliving.bm) * f;
         th.d = entityliving.bn + (entityliving.aO - entityliving.bn) * f;
-        ll.b = entityliving.bl + (entityliving.aM - entityliving.bl) * f;
-        ll.c = entityliving.bm + (entityliving.aN - entityliving.bm) * f;
-        ll.d = entityliving.bn + (entityliving.aO - entityliving.bn) * f;
+        TileEntityRenderDispatcher.b = entityliving.bl + (entityliving.aM - entityliving.bl) * f;
+        TileEntityRenderDispatcher.c = entityliving.bm + (entityliving.aN - entityliving.bm) * f;
+        TileEntityRenderDispatcher.d = entityliving.bn + (entityliving.aO - entityliving.bn) * f;
         List<Entity> list = this.k.o();
         this.J = list.size();
         for (int i = 0; i < this.k.e.size(); i++) {
@@ -357,7 +357,7 @@ public class n implements pm {
         ScriptModel.renderAll(f);
         GL11.glPopMatrix();
         for (int k = 0; k < this.a.size(); k++)
-            ll.a.a(this.a.get(k), f);
+            TileEntityRenderDispatcher.a.a(this.a.get(k), f);
     }
 
     public String b() {

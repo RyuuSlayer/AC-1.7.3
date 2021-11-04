@@ -2416,7 +2416,7 @@ public class MixinLevel extends Level implements TileView {
         FlowingWaterTextureBinder2.loadImage();
         oh.loadImage();
         GrassColour.loadGrass("/misc/grasscolor.png");
-        jh.loadFoliage("/misc/foliagecolor.png");
+        FoliageColour.loadFoliage("/misc/foliagecolor.png");
         this.x.loadTextureReplacements(this);
     }
 

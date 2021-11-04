@@ -5,7 +5,7 @@ import net.minecraft.util.io.CompoundTag;
 
 import java.util.List;
 
-public abstract class ls extends Entity {
+public abstract class LivingEntity extends Entity {
     public int E;
 
     public float F;
@@ -150,7 +150,7 @@ public abstract class ls extends Entity {
 
     public int randomLookRateVariation;
 
-    public ls(Level world) {
+    public LivingEntity(Level world) {
         super(world);
         this.timesCanJumpInAir = 0;
         this.jumpsLeft = 0;
@@ -529,7 +529,7 @@ public abstract class ls extends Entity {
         this.ah = true;
         if (!this.aI.B) {
             q();
-            if (entity != null && entity instanceof ls && ((ls) entity).Y < ((ls) entity).maxHealth)
+            if (entity != null && entity instanceof LivingEntity && ((LivingEntity) entity).Y < ((LivingEntity) entity).maxHealth)
                 if (this.bs.nextInt(3) != 0) {
                     ItemEntity ItemEntity = new ItemEntity(this.aI, this.aM, this.aN, this.aO, new iz(AC_Items.heart.bf, 1, 0));
                     this.aI.b((Entity) ItemEntity);
@@ -889,8 +889,8 @@ public abstract class ls extends Entity {
     public void a(Entity entity, float f, float f1) {
         double d1, d = entity.aM - this.aM;
         double d2 = entity.aO - this.aO;
-        if (entity instanceof ls) {
-            ls entityliving = (ls) entity;
+        if (entity instanceof LivingEntity) {
+            LivingEntity entityliving = (LivingEntity) entity;
             d1 = this.aN + w() - entityliving.aN + entityliving.w();
         } else {
             d1 = (entity.aW.b + entity.aW.e) / 2.0D - this.aN + w();

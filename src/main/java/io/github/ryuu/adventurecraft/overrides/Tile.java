@@ -383,7 +383,7 @@ public class Tile {
         return true;
     }
 
-    public void a(Level world, int i, int j, int k, ls entityliving) {
+    public void a(Level world, int i, int j, int k, LivingEntity entityliving) {
     }
 
     public Tile a(String s) {

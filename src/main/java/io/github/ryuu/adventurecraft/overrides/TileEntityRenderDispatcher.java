@@ -5,13 +5,14 @@ import java.util.Iterator;
 import java.util.Map;
 
 import io.github.ryuu.adventurecraft.entities.tile.*;
+import net.minecraft.client.render.entity.tile.TileEntityRenderer;
 import net.minecraft.level.Level;
 import org.lwjgl.opengl.GL11;
 
-public class ll {
+public class TileEntityRenderDispatcher {
     private final Map m;
 
-    private ll() {
+    private TileEntityRenderDispatcher() {
         this.m = new HashMap<>();
         this.m.put(yk.class, new po());
         this.m.put(cy.class, new ag());
@@ -24,12 +25,12 @@ public class ll {
         this.m.put(TileEntityMobSpawner.class, new TileEntityMobSpawnerRenderer());
         this.m.put(TileEntityStore.class, new TileEntityStoreRenderer());
         this.m.put(TileEntityEffect.class, new TileEntityEffectRenderer());
-        for (Iterator<je> iterator = this.m.values().iterator(); iterator.hasNext(); tileentityspecialrenderer.a(this))
-            je tileentityspecialrenderer = iterator.next();
+        for (Iterator<TileEntityRenderer> iterator = this.m.values().iterator(); iterator.hasNext(); tileentityspecialrenderer.a(this))
+            TileEntityRenderer tileentityspecialrenderer = iterator.next();
     }
 
-    public je a(Class<TileEntity> class1) {
-        je tileentityspecialrenderer = (je) this.m.get(class1);
+    public TileEntityRenderer a(Class<TileEntity> class1) {
+        TileEntityRenderer tileentityspecialrenderer = (TileEntityRenderer) this.m.get(class1);
         if (tileentityspecialrenderer == null && class1 != TileEntity.class) {
             tileentityspecialrenderer = a(class1.getSuperclass());
             this.m.put(class1, tileentityspecialrenderer);
@@ -47,7 +48,7 @@ public class ll {
         return a(tileentity.getClass());
     }
 
-    public void a(Level world, ji renderengine, TextRenderer fontrenderer, ls entityliving, float f) {
+    public void a(Level world, ji renderengine, TextRenderer fontrenderer, LivingEntity entityliving, float f) {
         if (this.f != world)
             a(world);
         this.e = renderengine;
@@ -69,16 +70,16 @@ public class ll {
     }
 
     public void a(TileEntity tileentity, double d, double d1, double d2, float f) {
-        je tileentityspecialrenderer = b(tileentity);
+        TileEntityRenderer tileentityspecialrenderer = b(tileentity);
         if (tileentityspecialrenderer != null)
             tileentityspecialrenderer.a(tileentity, d, d1, d2, f);
     }
 
     public void a(Level world) {
         this.f = world;
-        Iterator<je> iterator = this.m.values().iterator();
+        Iterator<TileEntityRenderer> iterator = this.m.values().iterator();
         while (iterator.hasNext()) {
-            je tileentityspecialrenderer = iterator.next();
+            TileEntityRenderer tileentityspecialrenderer = iterator.next();
             if (tileentityspecialrenderer != null)
                 tileentityspecialrenderer.a(world);
         }
@@ -88,7 +89,7 @@ public class ll {
         return this.n;
     }
 
-    public static ll a = new ll();
+    public static TileEntityRenderDispatcher a = new TileEntityRenderDispatcher();
 
     private TextRenderer n;
 
@@ -102,7 +103,7 @@ public class ll {
 
     public Level f;
 
-    public ls g;
+    public LivingEntity g;
 
     public float h;
 
