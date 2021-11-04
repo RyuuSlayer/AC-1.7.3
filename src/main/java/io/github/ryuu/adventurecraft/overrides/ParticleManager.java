@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import io.github.ryuu.adventurecraft.mixin.Level;
+import net.minecraft.client.render.Tessellator;
 import org.lwjgl.opengl.GL11;
 
 public class ParticleManager {
@@ -77,7 +78,7 @@ public class ParticleManager {
                 if (i == 4)
                     j = this.c.b("/terrain3.png");
                 GL11.glBindTexture(3553, j);
-                nw tessellator = nw.a;
+                Tessellator tessellator = Tessellator.a;
                 tessellator.b();
                 for (int k = 0; k < this.b[i].size(); k++) {
                     xw entityfx = this.b[i].get(k);
@@ -92,7 +93,7 @@ public class ParticleManager {
         byte byte0 = 5;
         if (this.b[byte0].size() == 0)
             return;
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         for (int i = 0; i < this.b[byte0].size(); i++) {
             xw entityfx = this.b[byte0].get(i);
             entityfx.a(tessellator, f, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);

@@ -2,16 +2,18 @@ package io.github.ryuu.adventurecraft.overrides;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
+import io.github.ryuu.adventurecraft.gui.GuiMapDownload;
+import io.github.ryuu.adventurecraft.gui.GuiMapSelect;
 import io.github.ryuu.adventurecraft.scripting.ScriptModel;
 import io.github.ryuu.adventurecraft.util.Version;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.Tessellator;
 import org.lwjgl.opengl.GL11;
 
 public class fu extends da {
@@ -75,7 +77,7 @@ public class fu extends da {
         if (guibutton.f == 0) {
             this.b.a((da) new co(this, this.b.z));
         } else if (guibutton.f == 1) {
-            this.b.a(new rq(this));
+            this.b.a(new SelectWorldScreen(this));
         } else if (guibutton.f == 2) {
             this.b.a((da) new lq(this));
         } else if (guibutton.f == 3) {
@@ -83,17 +85,17 @@ public class fu extends da {
         } else if (guibutton.f == 4) {
             this.b.f();
         } else if (guibutton.f == 5) {
-            this.b.a((da) new AC_GuiMapDownload(this));
+            this.b.a((da) new GuiMapDownload(this));
         } else if (guibutton.f == 6) {
-            this.b.a((da) new AC_GuiMapSelect(this, ""));
+            this.b.a((da) new GuiMapSelect(this, ""));
         } else if (guibutton.f == 7) {
-            this.b.a((da) new AC_GuiMapSelect(this, null));
+            this.b.a((da) new GuiMapSelect(this, null));
         }
     }
 
     public void a(int i, int j, float f) {
         i();
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         int c = 320;
         int k = this.c / 2 - c / 2;
         byte byte0 = 30;

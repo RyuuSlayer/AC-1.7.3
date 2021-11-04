@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.IntBuffer;
 import javax.imageio.ImageIO;
 
+import net.minecraft.client.render.Tessellator;
 import org.lwjgl.opengl.GL11;
 
 public class sj {
@@ -53,7 +54,7 @@ public class sj {
         }
         this.a = renderengine.a(bufferedimage);
         this.c = ge.a(288);
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         for (int i1 = 0; i1 < 256; i1++) {
             GL11.glNewList(this.c + i1, 4864);
             tessellator.b();

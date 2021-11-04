@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.List;
 
-public class rq extends da {
+public class SelectWorldScreen extends da {
     private final DateFormat j;
 
     protected da a;
@@ -34,7 +34,7 @@ public class rq extends da {
 
     private ke u;
 
-    public rq(da guiscreen) {
+    public SelectWorldScreen(da guiscreen) {
         this.j = new SimpleDateFormat();
         this.i = "Select world";
         this.l = false;
@@ -140,39 +140,39 @@ public class rq extends da {
         super.a(i, j, f);
     }
 
-    static List a(rq guiselectworld) {
+    static List a(SelectWorldScreen guiselectworld) {
         return guiselectworld.n;
     }
 
-    static int a(rq guiselectworld, int i) {
+    static int a(SelectWorldScreen guiselectworld, int i) {
         return guiselectworld.m = i;
     }
 
-    static int b(rq guiselectworld) {
+    static int b(SelectWorldScreen guiselectworld) {
         return guiselectworld.m;
     }
 
-    static ke c(rq guiselectworld) {
+    static ke c(SelectWorldScreen guiselectworld) {
         return guiselectworld.t;
     }
 
-    static ke d(rq guiselectworld) {
+    static ke d(SelectWorldScreen guiselectworld) {
         return guiselectworld.s;
     }
 
-    static ke e(rq guiselectworld) {
+    static ke e(SelectWorldScreen guiselectworld) {
         return guiselectworld.u;
     }
 
-    static String f(rq guiselectworld) {
+    static String f(SelectWorldScreen guiselectworld) {
         return guiselectworld.p;
     }
 
-    static DateFormat g(rq guiselectworld) {
+    static DateFormat g(SelectWorldScreen guiselectworld) {
         return guiselectworld.j;
     }
 
-    static String h(rq guiselectworld) {
+    static String h(SelectWorldScreen guiselectworld) {
         return guiselectworld.q;
     }
 }

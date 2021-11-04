@@ -10,6 +10,7 @@ import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.TerrainImage;
 import io.github.ryuu.adventurecraft.util.Version;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.Tessellator;
 import org.lwjgl.opengl.GL11;
 
 public class uq extends ub {
@@ -259,7 +260,7 @@ public class uq extends ub {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glDisable(3008);
         GL11.glBindTexture(3553, this.g.p.b("%blur%/misc/pumpkinblur.png"));
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         tessellator.b();
         tessellator.a(0.0D, j, -90.0D, 0.0D, 1.0D);
         tessellator.a(i, j, -90.0D, 1.0D, 1.0D);
@@ -284,7 +285,7 @@ public class uq extends ub {
         GL11.glBlendFunc(0, 769);
         GL11.glColor4f(this.c, this.c, this.c, 1.0F);
         GL11.glBindTexture(3553, this.g.p.b("%blur%/misc/vignette.png"));
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         tessellator.b();
         tessellator.a(0.0D, j, -90.0D, 0.0D, 1.0D);
         tessellator.a(i, j, -90.0D, 1.0D, 1.0D);
@@ -313,7 +314,7 @@ public class uq extends ub {
         float f2 = (Tile.bf.bm / 16) / 16.0F;
         float f3 = (Tile.bf.bm % 16 + 1) / 16.0F;
         float f4 = (Tile.bf.bm / 16 + 1) / 16.0F;
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         tessellator.b();
         tessellator.a(0.0D, j, -90.0D, f1, f4);
         tessellator.a(i, j, -90.0D, f3, f4);
@@ -333,7 +334,7 @@ public class uq extends ub {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glDisable(3008);
         GL11.glBindTexture(3553, this.g.p.b("/overlays/" + overlay));
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         tessellator.b();
         tessellator.a(0.0D, j, -90.0D, 0.0D, 1.0D);
         tessellator.a(i, j, -90.0D, 1.0D, 1.0D);

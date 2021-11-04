@@ -11,6 +11,7 @@ import io.github.ryuu.adventurecraft.util.CutsceneCameraPoint;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.MapEditing;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.Tessellator;
 import net.minecraft.level.Level;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -18,8 +19,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 import org.lwjgl.util.glu.GLU;
 
-public class px {
-    public px(Minecraft minecraft) {
+public class GameRenderer {
+    public GameRenderer(Minecraft minecraft) {
         this.k = 0.0F;
         this.m = null;
         this.n = new cu();
@@ -630,7 +631,7 @@ public class px {
         int i = in.b(entityliving.aM);
         int j = in.b(entityliving.aN);
         int k = in.b(entityliving.aO);
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         GL11.glDisable(2884);
         GL11.glNormal3f(0.0F, 1.0F, 0.0F);
         GL11.glEnable(3042);

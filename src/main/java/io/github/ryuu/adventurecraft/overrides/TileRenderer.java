@@ -1089,7 +1089,7 @@ public class TileRenderer {
     }
 
     public boolean a(pc blockrail, int i, int j, int k) {
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         int l = this.c.e(i, j, k);
         int i1 = blockrail.a(0, l);
         if (this.d >= 0)
@@ -1218,7 +1218,7 @@ public class TileRenderer {
         float f1 = (l >> 16 & 0xFF) / 255.0F;
         float f2 = (l >> 8 & 0xFF) / 255.0F;
         float f3 = (l & 0xFF) / 255.0F;
-        if (px.a) {
+        if (GameRenderer.a) {
             float f4 = (f1 * 30.0F + f2 * 59.0F + f3 * 11.0F) / 100.0F;
             float f5 = (f1 * 30.0F + f2 * 70.0F) / 100.0F;
             float f6 = (f1 * 30.0F + f3 * 70.0F) / 100.0F;
@@ -1783,7 +1783,7 @@ public class TileRenderer {
         float f = (l >> 16 & 0xFF) / 255.0F;
         float f1 = (l >> 8 & 0xFF) / 255.0F;
         float f2 = (l & 0xFF) / 255.0F;
-        if (px.a) {
+        if (GameRenderer.a) {
             float f3 = (f * 30.0F + f1 * 59.0F + f2 * 11.0F) / 100.0F;
             float f4 = (f * 30.0F + f1 * 70.0F) / 100.0F;
             float f5 = (f * 30.0F + f2 * 70.0F) / 100.0F;
@@ -2291,7 +2291,7 @@ public class TileRenderer {
 
     public boolean b(Tile block, int i, int j, int k, float f, float f1, float f2) {
         this.m = false;
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         boolean flag = false;
         float f3 = 0.5F;
         float f4 = 1.0F;
@@ -2396,7 +2396,7 @@ public class TileRenderer {
         float f = (l >> 16 & 0xFF) / 255.0F;
         float f1 = (l >> 8 & 0xFF) / 255.0F;
         float f2 = (l & 0xFF) / 255.0F;
-        if (px.a) {
+        if (GameRenderer.a) {
             float f3 = (f * 30.0F + f1 * 59.0F + f2 * 11.0F) / 100.0F;
             float f4 = (f * 30.0F + f1 * 70.0F) / 100.0F;
             float f5 = (f * 30.0F + f2 * 70.0F) / 100.0F;
@@ -3317,7 +3317,7 @@ public class TileRenderer {
     }
 
     public void a(Tile block, double d, double d1, double d2, int i) {
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         if (this.d >= 0)
             i = this.d;
         int j = (i & 0xF) << 4;

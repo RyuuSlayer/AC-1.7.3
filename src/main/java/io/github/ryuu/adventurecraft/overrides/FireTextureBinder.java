@@ -2,9 +2,10 @@ package io.github.ryuu.adventurecraft.overrides;
 
 import java.awt.image.BufferedImage;
 
+import io.github.ryuu.adventurecraft.util.Vec2;
 import net.minecraft.client.Minecraft;
 
-public class sd extends TextureBinder {
+public class FireTextureBinder extends TextureBinder {
     protected float[] g;
 
     protected float[] h;
@@ -17,7 +18,7 @@ public class sd extends TextureBinder {
 
     private static int width;
 
-    public sd(int i) {
+    public FireTextureBinder(int i) {
         super(Tile.as.bm + i * 16);
         this.g = new float[320];
         this.h = new float[320];

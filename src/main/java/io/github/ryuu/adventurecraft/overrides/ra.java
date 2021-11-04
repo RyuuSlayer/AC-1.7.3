@@ -456,7 +456,7 @@ public class ra {
     }
 
     private void c(float f) {
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         float f1 = this.a.i.a(f);
         GL11.glColor4f(f1, f1, f1, 0.5F);
         GL11.glEnable(3042);
@@ -482,7 +482,7 @@ public class ra {
     }
 
     private void d(float f) {
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.9F);
         GL11.glEnable(3042);
         GL11.glBlendFunc(770, 771);

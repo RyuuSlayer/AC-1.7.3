@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import net.minecraft.client.render.Tessellator;
 import net.minecraft.level.Level;
 
 public class qm extends xw {
@@ -33,7 +34,7 @@ public class qm extends xw {
         return 1;
     }
 
-    public void a(nw tessellator, float f, float f1, float f2, float f3, float f4, float f5) {
+    public void a(Tessellator tessellator, float f, float f1, float f2, float f3, float f4, float f5) {
         float f6 = ((this.b % 16) + this.c / 4.0F) / 16.0F;
         float f7 = f6 + 0.01560938F;
         float f8 = ((this.b / 16) + this.d / 4.0F) / 16.0F;

@@ -91,7 +91,7 @@ public class Ghast extends FlyingEntity implements MonsterEntityType {
                 this.f++;
                 if (this.f == 20) {
                     this.aI.a(this, "mob.ghast.fireball", k(), (this.bs.nextFloat() - this.bs.nextFloat()) * 0.2F + 1.0F);
-                    cf entityfireball = new cf(this.aI, this, d5, d6, d7, this.attackStrength);
+                    Snowball entityfireball = new Snowball(this.aI, this, d5, d6, d7, this.attackStrength);
                     double d8 = 4.0D;
                     bt vec3d = f(1.0F);
                     entityfireball.aM = this.aM + vec3d.a * d8;

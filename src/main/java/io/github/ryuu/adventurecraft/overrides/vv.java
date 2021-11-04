@@ -8,7 +8,7 @@ import net.minecraft.util.io.CompoundTag;
 
 import java.util.List;
 
-public class vv extends net.minecraft.entity.Entity {
+public class vv extends Entity {
     private int b;
 
     private int c;

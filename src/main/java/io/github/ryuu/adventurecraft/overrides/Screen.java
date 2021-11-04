@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.Tessellator;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -137,7 +138,7 @@ public class Screen extends ub {
     public void b(int i) {
         GL11.glDisable(2896);
         GL11.glDisable(2912);
-        nw tessellator = nw.a;
+        Tessellator tessellator = Tessellator.a;
         GL11.glBindTexture(3553, this.b.p.b("/gui/background.png"));
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         float f = 32.0F;

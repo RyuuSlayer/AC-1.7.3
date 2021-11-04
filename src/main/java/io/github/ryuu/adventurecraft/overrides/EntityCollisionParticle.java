@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.overrides;
 
 import io.github.ryuu.adventurecraft.mixin.Level;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.render.Tessellator;
 import org.lwjgl.opengl.GL11;
 
 public class EntityCollisionParticle extends Particle {
@@ -25,7 +26,7 @@ public class EntityCollisionParticle extends Particle {
         this.r = f;
     }
 
-    public void a(nw tessellator, float f, float f1, float f2, float f3, float f4, float f5) {
+    public void a(Tessellator tessellator, float f, float f1, float f2, float f3, float f4, float f5) {
         float f6 = (this.p + f) / this.q;
         f6 *= f6;
         double d = this.a.aM;

@@ -2,12 +2,15 @@ package io.github.ryuu.adventurecraft.overrides;
 
 import io.github.ryuu.adventurecraft.mixin.Level;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.level.Level;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.io.CompoundTag;
+import net.minecraft.util.maths.Vec3f;
 
 import java.util.List;
 
-public class cf extends Entity {
+public class Snowball extends Entity {
     private int f;
 
     private int g;
@@ -20,7 +23,7 @@ public class cf extends Entity {
 
     public int a;
 
-    public ls b;
+    public LivingEntity b;
 
     private int k;
 
@@ -34,7 +37,7 @@ public class cf extends Entity {
 
     private final float radius;
 
-    public cf(Level world) {
+    public Snowball(Level world) {
         super(world);
         this.f = -1;
         this.g = -1;
@@ -57,7 +60,7 @@ public class cf extends Entity {
         return (d < d1 * d1);
     }
 
-    public cf(Level world, double d, double d1, double d2, double d3, double d4, double d5) {
+    public Snowball(Level world, double d, double d1, double d2, double d3, double d4, double d5) {
         super(world);
         this.f = -1;
         this.g = -1;
@@ -76,7 +79,7 @@ public class cf extends Entity {
         this.radius = 1.0F;
     }
 
-    public cf(Level world, ls entityliving, double d, double d1, double d2) {
+    public Snowball(Level world, LivingEntity entityliving, double d, double d1, double d2) {
         super(world);
         this.f = -1;
         this.g = -1;
@@ -101,7 +104,7 @@ public class cf extends Entity {
         this.radius = 1.0F;
     }
 
-    public cf(Level world, ls entityliving, double d, double d1, double d2, float r) {
+    public Snowball(Level world, LivingEntity entityliving, double d, double d1, double d2, float r) {
         super(world);
         this.f = -1;
         this.g = -1;
@@ -149,13 +152,13 @@ public class cf extends Entity {
         } else {
             this.l++;
         }
-        bt vec3d = bt.b(this.aM, this.aN, this.aO);
-        bt vec3d1 = bt.b(this.aM + this.aP, this.aN + this.aQ, this.aO + this.aR);
-        vf movingobjectposition = this.aI.rayTraceBlocks2(vec3d, vec3d1, false, true, false);
-        vec3d = bt.b(this.aM, this.aN, this.aO);
-        vec3d1 = bt.b(this.aM + this.aP, this.aN + this.aQ, this.aO + this.aR);
+        Vec3f vec3d = Vec3f.b(this.aM, this.aN, this.aO);
+        Vec3f vec3d1 = Vec3f.b(this.aM + this.aP, this.aN + this.aQ, this.aO + this.aR);
+        HitResult movingobjectposition = this.aI.rayTraceBlocks2(vec3d, vec3d1, false, true, false);
+        vec3d = Vec3f.b(this.aM, this.aN, this.aO);
+        vec3d1 = Vec3f.b(this.aM + this.aP, this.aN + this.aQ, this.aO + this.aR);
         if (movingobjectposition != null)
-            vec3d1 = bt.b(movingobjectposition.f.a, movingobjectposition.f.b, movingobjectposition.f.c);
+            vec3d1 = Vec3f.b(movingobjectposition.f.a, movingobjectposition.f.b, movingobjectposition.f.c);
         Entity entity = null;
         List<Entity> list = this.aI.b(this, this.aW.a(this.aP, this.aQ, this.aR).b(1.0D, 1.0D, 1.0D));
         double d = 0.0D;
@@ -164,7 +167,7 @@ public class cf extends Entity {
             if (entity1.h_() && (entity1 != this.b || this.l >= 25)) {
                 float f2 = 0.3F;
                 eq axisalignedbb = entity1.aW.b(f2, f2, f2);
-                vf movingobjectposition1 = axisalignedbb.a(vec3d, vec3d1);
+                HitResult movingobjectposition1 = axisalignedbb.a(vec3d, vec3d1);
                 if (movingobjectposition1 != null) {
                     double d1 = vec3d.c(movingobjectposition1.f);
                     if (d1 < d || d == 0.0D) {
@@ -175,7 +178,7 @@ public class cf extends Entity {
             }
         }
         if (entity != null)
-            movingobjectposition = new vf(entity);
+            movingobjectposition = new HitResult(entity);
         if (movingobjectposition != null) {
             if (!this.aI.B) {
                 if (movingobjectposition.g != null)
@@ -243,7 +246,7 @@ public class cf extends Entity {
     public boolean a(Entity entity, int i) {
         ai();
         if (entity != null) {
-            bt vec3d = entity.ac();
+            Vec3f vec3d = entity.ac();
             if (vec3d != null) {
                 this.aP = vec3d.a;
                 this.aQ = vec3d.b;

@@ -40,7 +40,7 @@ public class EntityRenderDispatcher {
         this.o.put(sl.class, new mc());
         this.o.put(by.class, new dg(ItemType.aB.a(0)));
         this.o.put(vv.class, new dg(ItemType.aN.a(0)));
-        this.o.put(cf.class, new kl());
+        this.o.put(Snowball.class, new kl());
         this.o.put(hl.class, new ItemRenderer());
         this.o.put(qw.class, new on());
         this.o.put(ju.class, new gn());

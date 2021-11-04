@@ -510,7 +510,7 @@ public class n implements pm {
                 }
                 GL11.glPopMatrix();
                 if (this.t.z.g) {
-                    if (px.b == 0) {
+                    if (GameRenderer.b == 0) {
                         GL11.glColorMask(false, true, true, true);
                     } else {
                         GL11.glColorMask(true, false, false, true);
@@ -820,7 +820,7 @@ public class n implements pm {
             if (l == 0) {
                 GL11.glColorMask(false, false, false, false);
             } else if (this.t.z.g) {
-                if (px.b == 0) {
+                if (GameRenderer.b == 0) {
                     GL11.glColorMask(false, true, true, true);
                 } else {
                     GL11.glColorMask(true, false, false, true);

@@ -10,8 +10,6 @@ import io.github.ryuu.adventurecraft.scripting.ScopeTag;
 import io.github.ryuu.adventurecraft.scripting.Script;
 import io.github.ryuu.adventurecraft.scripting.ScriptModel;
 import io.github.ryuu.adventurecraft.util.*;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.class_366;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.FlowingLavaTextureBinder2;
@@ -25,7 +23,6 @@ import net.minecraft.level.chunk.ChunkIO;
 import net.minecraft.level.dimension.Dimension;
 import net.minecraft.level.dimension.DimensionData;
 import net.minecraft.level.dimension.McRegionDimensionFile;
-import net.minecraft.level.gen.BiomeSource;
 import net.minecraft.level.source.LevelSource;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.ProgressListener;
@@ -33,11 +30,9 @@ import net.minecraft.util.Vec3i;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.Box;
-import net.minecraft.util.maths.MathsHelper;
 import net.minecraft.util.maths.Vec3f;
 import org.mozilla.javascript.Scriptable;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 import javax.imageio.ImageIO;
@@ -2400,7 +2395,7 @@ public class MixinLevel extends Level implements TileView {
         }
         loadTextureAnimations();
         TextureFanFX.loadImage();
-        sd.loadImage();
+        FireTextureBinder.loadImage();
         FlowingLavaTextureBinder.loadImage();
         FlowingLavaTextureBinder2.loadImage();
         hs.loadImage();

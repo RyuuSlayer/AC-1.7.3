@@ -110,7 +110,7 @@ public class jc {
         a(yl.class, "Minecart", 40);
         a(fz.class, "Boat", 41);
         a(vv.class, "Egg", 12);
-        a(cf.class, "Fireball", 13);
+        a(Snowball.class, "Fireball", 13);
         a(lx.class, "FishingRod", 14);
         a(EntitySkeletonSword.class, "SkeletonSword", 58);
         a(EntitySkeletonBoss.class, "SkeletonBoss", 59);
