@@ -33,7 +33,7 @@ public class FootstepParticle extends Particle {
         float f9 = (float) (this.aM - l);
         float f10 = (float) (this.aN - m);
         float f11 = (float) (this.aO - n);
-        float f12 = this.aI.c(in.b(this.aM), in.b(this.aN), in.b(this.aO));
+        float f12 = this.aI.c(MathsHelper.b(this.aM), MathsHelper.b(this.aN), MathsHelper.b(this.aO));
         this.p.b(this.p.b("/misc/footprint.png"));
         GL11.glEnable(3042);
         GL11.glBlendFunc(770, 771);

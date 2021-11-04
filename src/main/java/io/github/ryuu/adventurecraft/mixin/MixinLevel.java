@@ -361,8 +361,8 @@ public class MixinLevel extends Level implements TileView {
             }
             if (this.v instanceof kx) {
                 kx chunkproviderloadorgenerate = (kx) this.v;
-                int i = in.d((int) entityplayer.aM) >> 4;
-                int j = in.d((int) entityplayer.aO) >> 4;
+                int i = MathsHelper.d((int) entityplayer.aM) >> 4;
+                int j = MathsHelper.d((int) entityplayer.aO) >> 4;
                 chunkproviderloadorgenerate.d(i, j);
             }
             b(entityplayer);
@@ -758,8 +758,8 @@ public class MixinLevel extends Level implements TileView {
     }
 
     public boolean b(Entity entity) {
-        int i = in.b(entity.aM / 16.0D);
-        int j = in.b(entity.aO / 16.0D);
+        int i = MathsHelper.b(entity.aM / 16.0D);
+        int j = MathsHelper.b(entity.aO / 16.0D);
         boolean flag = entity instanceof Player;
         if (flag || f(i, j)) {
             if (entity instanceof Player) {
@@ -808,12 +808,12 @@ public class MixinLevel extends Level implements TileView {
 
     public List a(Entity entity, Box axisalignedbb) {
         this.K.clear();
-        int i = in.b(axisalignedbb.a);
-        int j = in.b(axisalignedbb.d + 1.0D);
-        int k = in.b(axisalignedbb.b);
-        int l = in.b(axisalignedbb.e + 1.0D);
-        int i1 = in.b(axisalignedbb.c);
-        int j1 = in.b(axisalignedbb.f + 1.0D);
+        int i = MathsHelper.b(axisalignedbb.a);
+        int j = MathsHelper.b(axisalignedbb.d + 1.0D);
+        int k = MathsHelper.b(axisalignedbb.b);
+        int l = MathsHelper.b(axisalignedbb.e + 1.0D);
+        int i1 = MathsHelper.b(axisalignedbb.c);
+        int j1 = MathsHelper.b(axisalignedbb.f + 1.0D);
         for (int k1 = i; k1 < j; k1++) {
             for (int l1 = i1; l1 < j1; l1++) {
                 if (i(k1, 64, l1))
@@ -839,7 +839,7 @@ public class MixinLevel extends Level implements TileView {
 
     public int a(float f) {
         float f1 = b(f);
-        float f2 = 1.0F - in.b(f1 * 3.141593F * 2.0F) * 2.0F + 0.5F;
+        float f2 = 1.0F - MathsHelper.b(f1 * 3.141593F * 2.0F) * 2.0F + 0.5F;
         if (f2 < 0.0F)
             f2 = 0.0F;
         if (f2 > 1.0F)
@@ -853,13 +853,13 @@ public class MixinLevel extends Level implements TileView {
 
     public Vec3f a(Entity entity, float f) {
         float f1 = b(f);
-        float f2 = in.b(f1 * 3.141593F * 2.0F) * 2.0F + 0.5F;
+        float f2 = MathsHelper.b(f1 * 3.141593F * 2.0F) * 2.0F + 0.5F;
         if (f2 < 0.0F)
             f2 = 0.0F;
         if (f2 > 1.0F)
             f2 = 1.0F;
-        int i = in.b(entity.aM);
-        int j = in.b(entity.aO);
+        int i = MathsHelper.b(entity.aM);
+        int j = MathsHelper.b(entity.aO);
         float f3 = (float) a().b(i, j);
         int k = a().a(i, j).a(f3);
         float f4 = (k >> 16 & 0xFF) / 255.0F;
@@ -902,7 +902,7 @@ public class MixinLevel extends Level implements TileView {
 
     public Vec3f c(float f) {
         float f1 = b(f);
-        float f2 = in.b(f1 * 3.141593F * 2.0F) * 2.0F + 0.5F;
+        float f2 = MathsHelper.b(f1 * 3.141593F * 2.0F) * 2.0F + 0.5F;
         if (f2 < 0.0F)
             f2 = 0.0F;
         if (f2 > 1.0F)
@@ -968,7 +968,7 @@ public class MixinLevel extends Level implements TileView {
 
     public float e(float f) {
         float f1 = b(f);
-        float f2 = 1.0F - in.b(f1 * 3.141593F * 2.0F) * 2.0F + 0.75F;
+        float f2 = 1.0F - MathsHelper.b(f1 * 3.141593F * 2.0F) * 2.0F + 0.75F;
         if (f2 < 0.0F)
             f2 = 0.0F;
         if (f2 > 1.0F)
@@ -1084,8 +1084,8 @@ public class MixinLevel extends Level implements TileView {
     }
 
     public void a(Entity entity, boolean flag) {
-        int i = in.b(entity.aM);
-        int j = in.b(entity.aO);
+        int i = MathsHelper.b(entity.aM);
+        int j = MathsHelper.b(entity.aO);
         byte byte0 = 32;
         if (flag && !a(i - byte0, 0, j - byte0, i + byte0, 128, j + byte0))
             return;
@@ -1112,9 +1112,9 @@ public class MixinLevel extends Level implements TileView {
             entity.aT = entity.aV;
         if (Double.isNaN(entity.aS) || Double.isInfinite(entity.aS))
             entity.aS = entity.aU;
-        int k = in.b(entity.aM / 16.0D);
-        int l = in.b(entity.aN / 16.0D);
-        int i1 = in.b(entity.aO / 16.0D);
+        int k = MathsHelper.b(entity.aM / 16.0D);
+        int l = MathsHelper.b(entity.aN / 16.0D);
+        int i1 = MathsHelper.b(entity.aO / 16.0D);
         if (!entity.bF || entity.bG != k || entity.bH != l || entity.bI != i1) {
             if (entity.bF && f(entity.bG, entity.bI))
                 c(entity.bG, entity.bI).a(entity, entity.bH);
@@ -1145,12 +1145,12 @@ public class MixinLevel extends Level implements TileView {
     }
 
     public boolean b(Box axisalignedbb) {
-        int i = in.b(axisalignedbb.a);
-        int j = in.b(axisalignedbb.d + 1.0D);
-        int k = in.b(axisalignedbb.b);
-        int l = in.b(axisalignedbb.e + 1.0D);
-        int i1 = in.b(axisalignedbb.c);
-        int j1 = in.b(axisalignedbb.f + 1.0D);
+        int i = MathsHelper.b(axisalignedbb.a);
+        int j = MathsHelper.b(axisalignedbb.d + 1.0D);
+        int k = MathsHelper.b(axisalignedbb.b);
+        int l = MathsHelper.b(axisalignedbb.e + 1.0D);
+        int i1 = MathsHelper.b(axisalignedbb.c);
+        int j1 = MathsHelper.b(axisalignedbb.f + 1.0D);
         if (axisalignedbb.a < 0.0D)
             i--;
         if (axisalignedbb.b < 0.0D)
@@ -1170,12 +1170,12 @@ public class MixinLevel extends Level implements TileView {
     }
 
     public boolean c(Box axisalignedbb) {
-        int i = in.b(axisalignedbb.a);
-        int j = in.b(axisalignedbb.d + 1.0D);
-        int k = in.b(axisalignedbb.b);
-        int l = in.b(axisalignedbb.e + 1.0D);
-        int i1 = in.b(axisalignedbb.c);
-        int j1 = in.b(axisalignedbb.f + 1.0D);
+        int i = MathsHelper.b(axisalignedbb.a);
+        int j = MathsHelper.b(axisalignedbb.d + 1.0D);
+        int k = MathsHelper.b(axisalignedbb.b);
+        int l = MathsHelper.b(axisalignedbb.e + 1.0D);
+        int i1 = MathsHelper.b(axisalignedbb.c);
+        int j1 = MathsHelper.b(axisalignedbb.f + 1.0D);
         if (a(i, k, i1, j, l, j1))
             for (int k1 = i; k1 < j; k1++) {
                 for (int l1 = k; l1 < l; l1++) {
@@ -1190,12 +1190,12 @@ public class MixinLevel extends Level implements TileView {
     }
 
     public boolean a(Box axisalignedbb, Material material, Entity entity) {
-        int i = in.b(axisalignedbb.a);
-        int j = in.b(axisalignedbb.d + 1.0D);
-        int k = in.b(axisalignedbb.b);
-        int l = in.b(axisalignedbb.e + 1.0D);
-        int i1 = in.b(axisalignedbb.c);
-        int j1 = in.b(axisalignedbb.f + 1.0D);
+        int i = MathsHelper.b(axisalignedbb.a);
+        int j = MathsHelper.b(axisalignedbb.d + 1.0D);
+        int k = MathsHelper.b(axisalignedbb.b);
+        int l = MathsHelper.b(axisalignedbb.e + 1.0D);
+        int i1 = MathsHelper.b(axisalignedbb.c);
+        int j1 = MathsHelper.b(axisalignedbb.f + 1.0D);
         if (!a(i, k, i1, j, l, j1))
             return false;
         boolean flag = false;
@@ -1225,12 +1225,12 @@ public class MixinLevel extends Level implements TileView {
     }
 
     public boolean a(Box axisalignedbb, Material material) {
-        int i = in.b(axisalignedbb.a);
-        int j = in.b(axisalignedbb.d + 1.0D);
-        int k = in.b(axisalignedbb.b);
-        int l = in.b(axisalignedbb.e + 1.0D);
-        int i1 = in.b(axisalignedbb.c);
-        int j1 = in.b(axisalignedbb.f + 1.0D);
+        int i = MathsHelper.b(axisalignedbb.a);
+        int j = MathsHelper.b(axisalignedbb.d + 1.0D);
+        int k = MathsHelper.b(axisalignedbb.b);
+        int l = MathsHelper.b(axisalignedbb.e + 1.0D);
+        int i1 = MathsHelper.b(axisalignedbb.c);
+        int j1 = MathsHelper.b(axisalignedbb.f + 1.0D);
         for (int k1 = i; k1 < j; k1++) {
             for (int l1 = k; l1 < l; l1++) {
                 for (int i2 = i1; i2 < j1; i2++) {
@@ -1244,12 +1244,12 @@ public class MixinLevel extends Level implements TileView {
     }
 
     public boolean b(Box axisalignedbb, Material material) {
-        int i = in.b(axisalignedbb.a);
-        int j = in.b(axisalignedbb.d + 1.0D);
-        int k = in.b(axisalignedbb.b);
-        int l = in.b(axisalignedbb.e + 1.0D);
-        int i1 = in.b(axisalignedbb.c);
-        int j1 = in.b(axisalignedbb.f + 1.0D);
+        int i = MathsHelper.b(axisalignedbb.a);
+        int j = MathsHelper.b(axisalignedbb.d + 1.0D);
+        int k = MathsHelper.b(axisalignedbb.b);
+        int l = MathsHelper.b(axisalignedbb.e + 1.0D);
+        int i1 = MathsHelper.b(axisalignedbb.c);
+        int j1 = MathsHelper.b(axisalignedbb.f + 1.0D);
         for (int k1 = i; k1 < j; k1++) {
             for (int l1 = k; l1 < l; l1++) {
                 for (int i2 = i1; i2 < j1; i2++) {
@@ -1537,8 +1537,8 @@ public class MixinLevel extends Level implements TileView {
     protected void n() {
         for (int i = 0; i < this.d.size(); i++) {
             Player entityplayer = this.d.get(i);
-            int j = in.b(entityplayer.aM / 16.0D);
-            int l = in.b(entityplayer.aO / 16.0D);
+            int j = MathsHelper.b(entityplayer.aM / 16.0D);
+            int l = MathsHelper.b(entityplayer.aO / 16.0D);
             byte byte0 = 9;
             for (int j1 = -byte0; j1 <= byte0; j1++) {
                 for (int k2 = -byte0; k2 <= byte0; k2++)
@@ -1587,10 +1587,10 @@ public class MixinLevel extends Level implements TileView {
 
     public List b(Entity entity, Box axisalignedbb) {
         this.R.clear();
-        int i = in.b((axisalignedbb.a - 2.0D) / 16.0D);
-        int j = in.b((axisalignedbb.d + 2.0D) / 16.0D);
-        int k = in.b((axisalignedbb.c - 2.0D) / 16.0D);
-        int l = in.b((axisalignedbb.f + 2.0D) / 16.0D);
+        int i = MathsHelper.b((axisalignedbb.a - 2.0D) / 16.0D);
+        int j = MathsHelper.b((axisalignedbb.d + 2.0D) / 16.0D);
+        int k = MathsHelper.b((axisalignedbb.c - 2.0D) / 16.0D);
+        int l = MathsHelper.b((axisalignedbb.f + 2.0D) / 16.0D);
         for (int i1 = i; i1 <= j; i1++) {
             for (int j1 = k; j1 <= l; j1++) {
                 if (f(i1, j1))
@@ -1601,10 +1601,10 @@ public class MixinLevel extends Level implements TileView {
     }
 
     public List a(Class class1, Box axisalignedbb) {
-        int i = in.b((axisalignedbb.a - 2.0D) / 16.0D);
-        int j = in.b((axisalignedbb.d + 2.0D) / 16.0D);
-        int k = in.b((axisalignedbb.c - 2.0D) / 16.0D);
-        int l = in.b((axisalignedbb.f + 2.0D) / 16.0D);
+        int i = MathsHelper.b((axisalignedbb.a - 2.0D) / 16.0D);
+        int j = MathsHelper.b((axisalignedbb.d + 2.0D) / 16.0D);
+        int k = MathsHelper.b((axisalignedbb.c - 2.0D) / 16.0D);
+        int l = MathsHelper.b((axisalignedbb.f + 2.0D) / 16.0D);
         ArrayList arraylist = new ArrayList();
         for (int i1 = i; i1 <= j; i1++) {
             for (int j1 = k; j1 <= l; j1++) {
@@ -1665,9 +1665,9 @@ public class MixinLevel extends Level implements TileView {
     }
 
     public dh a(Entity entity, Entity entity1, float f) {
-        int i = in.b(entity.aM);
-        int j = in.b(entity.aN);
-        int k = in.b(entity.aO);
+        int i = MathsHelper.b(entity.aM);
+        int j = MathsHelper.b(entity.aN);
+        int k = MathsHelper.b(entity.aO);
         int l = (int) (f + 16.0F);
         int i1 = i - l;
         int j1 = j - l;
@@ -1680,9 +1680,9 @@ public class MixinLevel extends Level implements TileView {
     }
 
     public dh a(Entity entity, int i, int j, int k, float f) {
-        int l = in.b(entity.aM);
-        int i1 = in.b(entity.aN);
-        int j1 = in.b(entity.aO);
+        int l = MathsHelper.b(entity.aM);
+        int i1 = MathsHelper.b(entity.aN);
+        int j1 = MathsHelper.b(entity.aO);
         int k1 = (int) (f + 8.0F);
         int l1 = l - k1;
         int i2 = i1 - k1;
@@ -2223,12 +2223,12 @@ public class MixinLevel extends Level implements TileView {
             return null;
         if (Double.isNaN(vec3d1.a) || Double.isNaN(vec3d1.b) || Double.isNaN(vec3d1.c))
             return null;
-        int i = in.b(vec3d1.a);
-        int j = in.b(vec3d1.b);
-        int k = in.b(vec3d1.c);
-        int l = in.b(vec3d.a);
-        int i1 = in.b(vec3d.b);
-        int j1 = in.b(vec3d.c);
+        int i = MathsHelper.b(vec3d1.a);
+        int j = MathsHelper.b(vec3d1.b);
+        int k = MathsHelper.b(vec3d1.c);
+        int l = MathsHelper.b(vec3d.a);
+        int i1 = MathsHelper.b(vec3d.b);
+        int j1 = MathsHelper.b(vec3d.c);
         int k1 = a(l, i1, j1);
         int i2 = e(l, i1, j1);
         Tile block = Tile.m[k1];
@@ -2311,17 +2311,17 @@ public class MixinLevel extends Level implements TileView {
                 vec3d.c = d2;
             }
             Vec3f vec3d2 = Vec3f.b(vec3d.a, vec3d.b, vec3d.c);
-            l = (int) (vec3d2.a = in.b(vec3d.a));
+            l = (int) (vec3d2.a = MathsHelper.b(vec3d.a));
             if (byte0 == 5) {
                 l--;
                 vec3d2.a++;
             }
-            i1 = (int) (vec3d2.b = in.b(vec3d.b));
+            i1 = (int) (vec3d2.b = MathsHelper.b(vec3d.b));
             if (byte0 == 1) {
                 i1--;
                 vec3d2.b++;
             }
-            j1 = (int) (vec3d2.c = in.b(vec3d.c));
+            j1 = (int) (vec3d2.c = MathsHelper.b(vec3d.c));
             if (byte0 == 3) {
                 j1--;
                 vec3d2.c++;
@@ -2398,10 +2398,10 @@ public class MixinLevel extends Level implements TileView {
         FireTextureBinder.loadImage();
         FlowingLavaTextureBinder.loadImage();
         FlowingLavaTextureBinder2.loadImage();
-        hs.loadImage();
+        PortalTextureBinder.loadImage();
         vs.loadImage();
         oh.loadImage();
-        ia.loadGrass("/misc/grasscolor.png");
+        GrassColour.loadGrass("/misc/grasscolor.png");
         jh.loadFoliage("/misc/foliagecolor.png");
         this.x.loadTextureReplacements(this);
     }
@@ -2490,8 +2490,8 @@ public class MixinLevel extends Level implements TileView {
             initCoordOrder();
         for (int i = 0; i < this.players.size(); i++) {
             Player entityplayer = this.d.get(i);
-            int pcx = in.b(entityplayer.aM / 16.0D);
-            int pcz = in.b(entityplayer.aO / 16.0D);
+            int pcx = MathsHelper.b(entityplayer.aM / 16.0D);
+            int pcz = MathsHelper.b(entityplayer.aO / 16.0D);
             int radius = 9;
             for (int cx = -radius; cx <= radius; cx++) {
                 for (int cz = -radius; cz <= radius; cz++) {

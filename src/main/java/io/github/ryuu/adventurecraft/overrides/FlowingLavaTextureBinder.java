@@ -94,8 +94,8 @@ public class FlowingLavaTextureBinder extends TextureBinder {
         for (int i = 0; i < w; i++) {
             for (int j = 0; j < h; j++) {
                 float f = 0.0F;
-                int l = (int) (in.a(j * 3.141593F * 2.0F / w) * 1.2F);
-                int i1 = (int) (in.a(i * 3.141593F * 2.0F / h) * 1.2F);
+                int l = (int) (MathsHelper.a(j * 3.141593F * 2.0F / w) * 1.2F);
+                int i1 = (int) (MathsHelper.a(i * 3.141593F * 2.0F / h) * 1.2F);
                 for (int k1 = i - vw; k1 <= i + vw; k1++) {
                     for (int i2 = j - vh; i2 <= j + vh; i2++) {
                         int k2 = k1 + l & w - 1;

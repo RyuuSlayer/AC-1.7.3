@@ -56,11 +56,11 @@ public class ParticleManager {
     }
 
     public void a(Entity entity, float f) {
-        float f1 = in.b(entity.aS * 3.141593F / 180.0F);
-        float f2 = in.a(entity.aS * 3.141593F / 180.0F);
-        float f3 = -f2 * in.a(entity.aT * 3.141593F / 180.0F);
-        float f4 = f1 * in.a(entity.aT * 3.141593F / 180.0F);
-        float f5 = in.b(entity.aT * 3.141593F / 180.0F);
+        float f1 = MathsHelper.b(entity.aS * 3.141593F / 180.0F);
+        float f2 = MathsHelper.a(entity.aS * 3.141593F / 180.0F);
+        float f3 = -f2 * MathsHelper.a(entity.aT * 3.141593F / 180.0F);
+        float f4 = f1 * MathsHelper.a(entity.aT * 3.141593F / 180.0F);
+        float f5 = MathsHelper.b(entity.aT * 3.141593F / 180.0F);
         xw.l = entity.bl + (entity.aM - entity.bl) * f;
         xw.m = entity.bm + (entity.aN - entity.bm) * f;
         xw.n = entity.bn + (entity.aO - entity.bn) * f;

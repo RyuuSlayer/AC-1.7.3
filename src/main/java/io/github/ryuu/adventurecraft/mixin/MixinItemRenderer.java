@@ -28,7 +28,7 @@ public class MixinItemRenderer extends EntityRenderer {
         this.f.setSeed(187L);
         ItemInstance itemstack = entityitem.a;
         GL11.glPushMatrix();
-        float f2 = in.a((entityitem.b + f1) / 10.0F + entityitem.d) * 0.1F + 0.1F;
+        float f2 = MathsHelper.a((entityitem.b + f1) / 10.0F + entityitem.d) * 0.1F + 0.1F;
         float f3 = ((entityitem.b + f1) / 20.0F + entityitem.d) * 57.29578F;
         byte byte0 = 1;
         if (entityitem.a.a > 1)

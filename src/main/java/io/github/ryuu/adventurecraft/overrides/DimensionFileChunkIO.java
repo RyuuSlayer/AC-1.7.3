@@ -54,7 +54,7 @@ public class DimensionFileChunkIO implements ChunkIO {
         return file;
     }
 
-    public lm a(Level world, int i, int j) throws IOException {
+    public Chunk a(Level world, int i, int j) throws IOException {
         File file = a(i, j);
         if (file != null && file.exists())
             try {
@@ -68,7 +68,7 @@ public class DimensionFileChunkIO implements ChunkIO {
                     System.out.println("Chunk file at " + i + "," + j + " is missing block data, skipping");
                     return null;
                 }
-                lm chunk = a(world, nbttagcompound.k("Level"));
+                Chunk chunk = a(world, nbttagcompound.k("Level"));
                 if (!chunk.a(i, j)) {
                     System.out.println("Chunk file at " + i + "," + j + " is in the wrong location; relocating. (Expected " + i + ", " + j + ", got " + chunk.j + ", " + chunk.k + ")");
                     nbttagcompound.a("xPos", i);
@@ -83,7 +83,7 @@ public class DimensionFileChunkIO implements ChunkIO {
         return null;
     }
 
-    public void a(Level world, lm chunk) throws IOException {
+    public void a(Level world, Chunk chunk) throws IOException {
         world.r();
         File file = a(chunk.j, chunk.k);
         if (file.exists()) {
@@ -109,7 +109,7 @@ public class DimensionFileChunkIO implements ChunkIO {
         }
     }
 
-    public static void a(lm chunk, Level world, CompoundTag nbttagcompound) {
+    public static void a(Chunk chunk, Level world, CompoundTag nbttagcompound) {
         world.r();
         nbttagcompound.a("xPos", chunk.j);
         nbttagcompound.a("zPos", chunk.k);
@@ -143,10 +143,10 @@ public class DimensionFileChunkIO implements ChunkIO {
         nbttagcompound.a("TileEntities", (ij) nbttaglist1);
     }
 
-    public static lm a(Level world, CompoundTag nbttagcompound) {
+    public static Chunk a(Level world, CompoundTag nbttagcompound) {
         int i = nbttagcompound.e("xPos");
         int j = nbttagcompound.e("zPos");
-        lm chunk = new lm(world, i, j, false);
+        Chunk chunk = new Chunk(world, i, j, false);
         chunk.b = nbttagcompound.j("Blocks");
         chunk.e = new wi(nbttagcompound.j("Data"));
         chunk.f = new wi(nbttagcompound.j("SkyLight"));
@@ -171,7 +171,7 @@ public class DimensionFileChunkIO implements ChunkIO {
         if (nbttaglist != null)
             for (int k = 0; k < nbttaglist.c(); k++) {
                 CompoundTag nbttagcompound1 = (CompoundTag) nbttaglist.a(k);
-                Entity entity = jc.a(nbttagcompound1, world);
+                Entity entity = EntityRegistry.a(nbttagcompound1, world);
                 chunk.q = true;
                 if (entity != null)
                     chunk.a(entity);
@@ -193,6 +193,6 @@ public class DimensionFileChunkIO implements ChunkIO {
     public void b() {
     }
 
-    public void b(Level world, lm chunk) throws IOException {
+    public void b(Level world, Chunk chunk) throws IOException {
     }
 }

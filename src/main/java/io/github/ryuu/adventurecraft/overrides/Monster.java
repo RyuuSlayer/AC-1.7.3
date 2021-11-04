@@ -79,9 +79,9 @@ public class Monster extends WalkingEntity implements MonsterEntityType {
     }
 
     public boolean d() {
-        int i = in.b(this.aM);
-        int j = in.b(this.aW.b);
-        int k = in.b(this.aO);
+        int i = MathsHelper.b(this.aM);
+        int j = MathsHelper.b(this.aW.b);
+        int k = MathsHelper.b(this.aO);
         if (this.aI.a(eb.a, i, j, k) > this.bs.nextInt(32))
             return false;
         int l = this.aI.n(i, j, k);

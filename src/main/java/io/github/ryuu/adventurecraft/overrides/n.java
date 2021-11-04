@@ -302,7 +302,7 @@ public class n implements pm {
         if (this.k != null) {
             LivingEntity entityliving = this.t.i;
             if (entityliving != null) {
-                b(in.b(entityliving.aM), in.b(entityliving.aN), in.b(entityliving.aO));
+                b(MathsHelper.b(entityliving.aM), MathsHelper.b(entityliving.aN), MathsHelper.b(entityliving.aO));
                 Arrays.sort(this.n, new jo((Entity) entityliving));
             }
         }
@@ -337,12 +337,12 @@ public class n implements pm {
         for (int j = 0; j < list.size(); j++) {
             Entity entity1 = list.get(j);
             if (entity1.a(vec3d) && (entity1.bM || icamera.a(entity1.aW)) && (entity1 != this.t.i || this.t.z.A || this.t.i.N())) {
-                int l = in.b(entity1.aN);
+                int l = MathsHelper.b(entity1.aN);
                 if (l < 0)
                     l = 0;
                 if (l >= 128)
                     l = 127;
-                if (this.k.i(in.b(entity1.aM), l, in.b(entity1.aO))) {
+                if (this.k.i(MathsHelper.b(entity1.aM), l, MathsHelper.b(entity1.aO))) {
                     this.K++;
                     if ((this.t.cameraActive && this.t.cameraPause) || (AC_DebugMode.active && !(entity1 instanceof gs)) || entity1.stunned > 0) {
                         th.a.a(entity1, 1.0F);
@@ -446,7 +446,7 @@ public class n implements pm {
             this.f = entityliving.aM;
             this.g = entityliving.aN;
             this.h = entityliving.aO;
-            b(in.b(entityliving.aM), in.b(entityliving.aN), in.b(entityliving.aO));
+            b(MathsHelper.b(entityliving.aM), MathsHelper.b(entityliving.aN), MathsHelper.b(entityliving.aO));
             Arrays.sort(this.n, new jo((Entity) entityliving));
         }
         u.a();
@@ -484,7 +484,7 @@ public class n implements pm {
                         if ((this.n[k1]).x)
                             (this.n[k1]).x = (this.n[k1].a(entityliving) > farPlane);
                         if ((this.n[k1]).o && !(this.n[k1]).y) {
-                            float f3 = in.c(this.n[k1].a(entityliving));
+                            float f3 = MathsHelper.c(this.n[k1].a(entityliving));
                             int l1 = (int) (1.0F + f3 / 128.0F);
                             if (this.x % l1 == k1 % l1) {
                                 dk worldrenderer1 = this.n[k1];
@@ -655,8 +655,8 @@ public class n implements pm {
             tessellator.a(af[0], af[1], af[2], 0.0F);
             for (int j = 0; j <= i; j++) {
                 float f20 = j * 3.141593F * 2.0F / i;
-                float f21 = in.a(f20);
-                float f22 = in.b(f20);
+                float f21 = MathsHelper.a(f20);
+                float f22 = MathsHelper.b(f20);
                 tessellator.a((f21 * 120.0F), (f22 * 120.0F), (-f22 * 40.0F * af[3]));
             }
             tessellator.a();
@@ -748,8 +748,8 @@ public class n implements pm {
             f4 = f8;
         }
         float f6 = 4.882813E-4F;
-        int j = in.b(d / 2048.0D);
-        int k = in.b(d1 / 2048.0D);
+        int j = MathsHelper.b(d / 2048.0D);
+        int k = MathsHelper.b(d1 / 2048.0D);
         d -= (j * 2048);
         d1 -= (k * 2048);
         float f9 = this.k.t.d() - f1 + 0.33F;
@@ -786,8 +786,8 @@ public class n implements pm {
         double d = (this.t.i.aJ + (this.t.i.aM - this.t.i.aJ) * f + ((this.x + f) * 0.03F)) / f2;
         double d1 = (this.t.i.aL + (this.t.i.aO - this.t.i.aL) * f) / f2 + 0.33000001311302185D;
         float f4 = this.k.t.d() - f1 + 0.33F;
-        int i = in.b(d / 2048.0D);
-        int j = in.b(d1 / 2048.0D);
+        int i = MathsHelper.b(d / 2048.0D);
+        int j = MathsHelper.b(d1 / 2048.0D);
         d -= (i * 2048);
         d1 -= (j * 2048);
         GL11.glBindTexture(3553, this.l.b("/environment/clouds.png"));
@@ -808,10 +808,10 @@ public class n implements pm {
         float f9 = (float) (d * 0.0D);
         float f11 = (float) (d1 * 0.0D);
         float f13 = 0.00390625F;
-        f9 = in.b(d) * f13;
-        f11 = in.b(d1) * f13;
-        float f14 = (float) (d - in.b(d));
-        float f15 = (float) (d1 - in.b(d1));
+        f9 = MathsHelper.b(d) * f13;
+        f11 = MathsHelper.b(d1) * f13;
+        float f14 = (float) (d - MathsHelper.b(d));
+        float f15 = (float) (d1 - MathsHelper.b(d1));
         int k = 8;
         byte byte0 = 3;
         float f16 = 9.765625E-4F;
@@ -1013,7 +1013,7 @@ public class n implements pm {
         GL11.glEnable(3042);
         GL11.glEnable(3008);
         GL11.glBlendFunc(770, 1);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, (in.a((float) System.currentTimeMillis() / 100.0F) * 0.2F + 0.4F) * 0.5F);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, (MathsHelper.a((float) System.currentTimeMillis() / 100.0F) * 0.2F + 0.4F) * 0.5F);
         if (i == 0) {
             if (this.i > 0.0F) {
                 GL11.glBlendFunc(774, 768);
@@ -1047,8 +1047,8 @@ public class n implements pm {
             }
         } else if (itemstack != null) {
             GL11.glBlendFunc(770, 771);
-            float f1 = in.a((float) System.currentTimeMillis() / 100.0F) * 0.2F + 0.8F;
-            GL11.glColor4f(f1, f1, f1, in.a((float) System.currentTimeMillis() / 200.0F) * 0.2F + 0.5F);
+            float f1 = MathsHelper.a((float) System.currentTimeMillis() / 100.0F) * 0.2F + 0.8F;
+            GL11.glColor4f(f1, f1, f1, MathsHelper.a((float) System.currentTimeMillis() / 200.0F) * 0.2F + 0.5F);
             int l = this.l.b("/terrain.png");
             GL11.glBindTexture(3553, l);
             int i1 = movingobjectposition.b;
@@ -1156,7 +1156,7 @@ public class n implements pm {
                 tessellator.a(3);
                 GL11.glEnable(3042);
                 GL11.glBlendFunc(770, 771);
-                if (e instanceof ii && ((ii) e).G() != null) {
+                if (e instanceof WalkingEntity && ((WalkingEntity) e).G() != null) {
                     GL11.glColor4f(1.0F, 0.0F, 0.0F, 0.4F);
                 } else {
                     GL11.glColor4f(1.0F, 1.0F, 0.0F, 0.4F);
@@ -1236,12 +1236,12 @@ public class n implements pm {
     }
 
     public void a(int i, int j, int k, int l, int i1, int j1) {
-        int k1 = in.a(i, 16);
-        int l1 = in.a(j, 16);
-        int i2 = in.a(k, 16);
-        int j2 = in.a(l, 16);
-        int k2 = in.a(i1, 16);
-        int l2 = in.a(j1, 16);
+        int k1 = MathsHelper.a(i, 16);
+        int l1 = MathsHelper.a(j, 16);
+        int i2 = MathsHelper.a(k, 16);
+        int j2 = MathsHelper.a(l, 16);
+        int k2 = MathsHelper.a(i1, 16);
+        int l2 = MathsHelper.a(j1, 16);
         for (int i3 = k1; i3 <= j2; i3++) {
             int j3 = i3 % this.p;
             if (j3 < 0)

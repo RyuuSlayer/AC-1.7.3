@@ -72,7 +72,7 @@ public class Snowball extends Entity {
         b(1.0F, 1.0F);
         c(d, d1, d2, this.aS, this.aT);
         e(d, d1, d2);
-        double d6 = in.a(d3 * d3 + d4 * d4 + d5 * d5);
+        double d6 = MathsHelper.a(d3 * d3 + d4 * d4 + d5 * d5);
         this.c = d3 / d6 * 0.1D;
         this.d = d4 / d6 * 0.1D;
         this.e = d5 / d6 * 0.1D;
@@ -97,7 +97,7 @@ public class Snowball extends Entity {
         d += this.bs.nextGaussian() * 0.4D;
         d1 += this.bs.nextGaussian() * 0.4D;
         d2 += this.bs.nextGaussian() * 0.4D;
-        double d3 = in.a(d * d + d1 * d1 + d2 * d2);
+        double d3 = MathsHelper.a(d * d + d1 * d1 + d2 * d2);
         this.c = d / d3 * 0.1D;
         this.d = d1 / d3 * 0.1D;
         this.e = d2 / d3 * 0.1D;
@@ -122,7 +122,7 @@ public class Snowball extends Entity {
         d += this.bs.nextGaussian() * 0.4D;
         d1 += this.bs.nextGaussian() * 0.4D;
         d2 += this.bs.nextGaussian() * 0.4D;
-        double d3 = in.a(d * d + d1 * d1 + d2 * d2);
+        double d3 = MathsHelper.a(d * d + d1 * d1 + d2 * d2);
         this.c = d / d3 * 0.1D;
         this.d = d1 / d3 * 0.1D;
         this.e = d2 / d3 * 0.1D;
@@ -190,7 +190,7 @@ public class Snowball extends Entity {
         this.aM += this.aP;
         this.aN += this.aQ;
         this.aO += this.aR;
-        float f = in.a(this.aP * this.aP + this.aR * this.aR);
+        float f = MathsHelper.a(this.aP * this.aP + this.aR * this.aR);
         this.aS = (float) (Math.atan2(this.aP, this.aR) * 180.0D / 3.1415927410125732D);
         for (this.aT = (float) (Math.atan2(this.aQ, f) * 180.0D / 3.1415927410125732D); this.aT - this.aV < -180.0F; this.aV -= 360.0F)
             ;

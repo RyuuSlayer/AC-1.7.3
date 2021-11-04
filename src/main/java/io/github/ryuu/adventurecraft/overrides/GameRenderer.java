@@ -51,8 +51,8 @@ public class GameRenderer {
         this.e = 0;
         this.f = ge.e(16);
         this.j = minecraft;
-        this.c = new ra(minecraft);
-        this.offHandItemRenderer = new ra(minecraft);
+        this.c = new HandItemRenderer(minecraft);
+        this.offHandItemRenderer = new HandItemRenderer(minecraft);
         this.farClipAdjustment = 1.0F;
     }
 
@@ -65,7 +65,7 @@ public class GameRenderer {
         this.C = this.B;
         if (this.j.i == null)
             this.j.i = (ls) this.j.h;
-        float f = this.j.f.c(in.b(this.j.i.aM), in.b(this.j.i.aN), in.b(this.j.i.aO));
+        float f = this.j.f.c(MathsHelper.b(this.j.i.aM), MathsHelper.b(this.j.i.aN), MathsHelper.b(this.j.i.aO));
         float f1 = (4 - this.j.z.e) / 4.0F;
         float f2 = f * (1.0F - f1) + f1;
         this.M += (f2 - this.M) * 0.1F;
@@ -144,7 +144,7 @@ public class GameRenderer {
         if (f1 < 0.0F)
             return;
         f1 /= entityliving.ab;
-        f1 = in.a(f1 * f1 * f1 * f1 * 3.141593F);
+        f1 = MathsHelper.a(f1 * f1 * f1 * f1 * 3.141593F);
         float f3 = entityliving.ac;
         GL11.glRotatef(-f3, 0.0F, 1.0F, 0.0F);
         GL11.glRotatef(-f1 * 14.0F, 0.0F, 0.0F, 1.0F);
@@ -159,9 +159,9 @@ public class GameRenderer {
         float f2 = -(entityplayer.bj + f1 * f);
         float f3 = entityplayer.h + (entityplayer.i - entityplayer.h) * f;
         float f4 = entityplayer.af + (entityplayer.ag - entityplayer.af) * f;
-        GL11.glTranslatef(in.a(f2 * 3.141593F) * f3 * 0.5F, -Math.abs(in.b(f2 * 3.141593F) * f3), 0.0F);
-        GL11.glRotatef(in.a(f2 * 3.141593F) * f3 * 3.0F, 0.0F, 0.0F, 1.0F);
-        GL11.glRotatef(Math.abs(in.b(f2 * 3.141593F - 0.2F) * f3) * 5.0F, 1.0F, 0.0F, 0.0F);
+        GL11.glTranslatef(MathsHelper.a(f2 * 3.141593F) * f3 * 0.5F, -Math.abs(MathsHelper.b(f2 * 3.141593F) * f3), 0.0F);
+        GL11.glRotatef(MathsHelper.a(f2 * 3.141593F) * f3 * 3.0F, 0.0F, 0.0F, 1.0F);
+        GL11.glRotatef(Math.abs(MathsHelper.b(f2 * 3.141593F - 0.2F) * f3) * 5.0F, 1.0F, 0.0F, 0.0F);
         GL11.glRotatef(f4, 1.0F, 0.0F, 0.0F);
     }
 
@@ -176,9 +176,9 @@ public class GameRenderer {
             f1 = (float) (f1 + 1.0D);
             GL11.glTranslatef(0.0F, 0.3F, 0.0F);
             if (!this.j.z.F) {
-                int i = this.j.f.a(in.b(entityliving.aM), in.b(entityliving.aN), in.b(entityliving.aO));
+                int i = this.j.f.a(MathsHelper.b(entityliving.aM), MathsHelper.b(entityliving.aN), MathsHelper.b(entityliving.aO));
                 if (i == Tile.T.bn) {
-                    int j = this.j.f.e(in.b(entityliving.aM), in.b(entityliving.aN), in.b(entityliving.aO));
+                    int j = this.j.f.e(MathsHelper.b(entityliving.aM), MathsHelper.b(entityliving.aN), MathsHelper.b(entityliving.aO));
                     int k = j & 0x3;
                     GL11.glRotatef((k * 90), 0.0F, 1.0F, 0.0F);
                 }
@@ -196,9 +196,9 @@ public class GameRenderer {
             } else {
                 float f3 = entityliving.aS;
                 float f5 = entityliving.aT;
-                double d4 = (-in.a(f3 / 180.0F * 3.141593F) * in.b(f5 / 180.0F * 3.141593F)) * d3;
-                double d5 = (in.b(f3 / 180.0F * 3.141593F) * in.b(f5 / 180.0F * 3.141593F)) * d3;
-                double d6 = -in.a(f5 / 180.0F * 3.141593F) * d3;
+                double d4 = (-MathsHelper.a(f3 / 180.0F * 3.141593F) * MathsHelper.b(f5 / 180.0F * 3.141593F)) * d3;
+                double d5 = (MathsHelper.b(f3 / 180.0F * 3.141593F) * MathsHelper.b(f5 / 180.0F * 3.141593F)) * d3;
+                double d6 = -MathsHelper.a(f5 / 180.0F * 3.141593F) * d3;
                 for (int l = 0; l < 8; l++) {
                     float f6 = ((l & 0x1) * 2 - 1);
                     float f7 = ((l >> 1 & 0x1) * 2 - 1);
@@ -435,8 +435,8 @@ public class GameRenderer {
         cl ichunkprovider = this.j.f.w();
         if (ichunkprovider instanceof kx) {
             kx chunkproviderloadorgenerate = (kx) ichunkprovider;
-            int j = in.d((int) d) >> 4;
-            int k = in.d((int) d2) >> 4;
+            int j = MathsHelper.d((int) d) >> 4;
+            int k = MathsHelper.d((int) d2) >> 4;
             chunkproviderloadorgenerate.d(j, k);
         }
         for (int i = 0; i < 2; i++) {
@@ -583,9 +583,9 @@ public class GameRenderer {
         this.J.setSeed(this.l * 312987231L);
         ls entityliving = this.j.i;
         Level world = this.j.f;
-        int i = in.b(entityliving.aM);
-        int j = in.b(entityliving.aN);
-        int k = in.b(entityliving.aO);
+        int i = MathsHelper.b(entityliving.aM);
+        int j = MathsHelper.b(entityliving.aN);
+        int k = MathsHelper.b(entityliving.aO);
         byte byte0 = 10;
         double d = 0.0D;
         double d1 = 0.0D;
@@ -614,7 +614,7 @@ public class GameRenderer {
         }
         if (l > 0 && this.J.nextInt(3) < this.K++) {
             this.K = 0;
-            if (d1 > entityliving.aN + 1.0D && world.e(in.b(entityliving.aM), in.b(entityliving.aO)) > in.b(entityliving.aN)) {
+            if (d1 > entityliving.aN + 1.0D && world.e(MathsHelper.b(entityliving.aM), MathsHelper.b(entityliving.aO)) > MathsHelper.b(entityliving.aN)) {
                 this.j.f.a(d, d1, d2, "ambient.weather.rain", 0.1F, 0.5F);
             } else {
                 this.j.f.a(d, d1, d2, "ambient.weather.rain", 0.2F, 1.0F);
@@ -628,9 +628,9 @@ public class GameRenderer {
             return;
         ls entityliving = this.j.i;
         Level world = this.j.f;
-        int i = in.b(entityliving.aM);
-        int j = in.b(entityliving.aN);
-        int k = in.b(entityliving.aO);
+        int i = MathsHelper.b(entityliving.aM);
+        int j = MathsHelper.b(entityliving.aN);
+        int k = MathsHelper.b(entityliving.aO);
         Tessellator tessellator = Tessellator.a;
         GL11.glDisable(2884);
         GL11.glNormal3f(0.0F, 1.0F, 0.0F);
@@ -641,7 +641,7 @@ public class GameRenderer {
         double d = entityliving.bl + (entityliving.aM - entityliving.bl) * f;
         double d1 = entityliving.bm + (entityliving.aN - entityliving.bm) * f;
         double d2 = entityliving.bn + (entityliving.aO - entityliving.bn) * f;
-        int l = in.b(d1);
+        int l = MathsHelper.b(d1);
         int i1 = 5;
         if (this.j.z.j)
             i1 = 10;
@@ -670,7 +670,7 @@ public class GameRenderer {
                         float f8 = this.J.nextFloat() + f5 * (float) this.J.nextGaussian() * 0.001F;
                         double d5 = (k1 + 0.5F) - entityliving.aM;
                         double d6 = (i2 + 0.5F) - entityliving.aO;
-                        float f11 = in.a(d5 * d5 + d6 * d6) / i1;
+                        float f11 = MathsHelper.a(d5 * d5 + d6 * d6) / i1;
                         tessellator.b();
                         float f12 = world.c(k1, i3, i2);
                         GL11.glColor4f(f12, f12, f12, ((1.0F - f11 * f11) * 0.3F + 0.5F) * f1);
@@ -709,7 +709,7 @@ public class GameRenderer {
                         float f4 = ((this.l + l1 * l1 * 3121 + l1 * 45238971 + j2 * j2 * 418711 + j2 * 13761 & 0x1F) + f) / 32.0F * (3.0F + this.J.nextFloat());
                         double d3 = (l1 + 0.5F) - entityliving.aM;
                         double d4 = (j2 + 0.5F) - entityliving.aO;
-                        float f9 = in.a(d3 * d3 + d4 * d4) / i1;
+                        float f9 = MathsHelper.a(d3 * d3 + d4 * d4) / i1;
                         tessellator.b();
                         float f10 = world.c(l1, 128, j2) * 0.85F + 0.15F;
                         GL11.glColor4f(f10, f10, f10, ((1.0F - f9 * f9) * 0.5F + 0.5F) * f1);
@@ -883,7 +883,7 @@ public class GameRenderer {
 
     private float k;
 
-    public ra c;
+    public HandItemRenderer c;
 
     private int l;
 
@@ -953,7 +953,7 @@ public class GameRenderer {
 
     private float M;
 
-    public ra offHandItemRenderer;
+    public HandItemRenderer offHandItemRenderer;
 
     float farClipAdjustment;
 }

@@ -37,7 +37,7 @@ public class EntityRenderDispatcher {
         this.o.put(ls.class, new gv((ko) new fh(), 0.5F));
         this.o.put(Entity.class, new mb());
         this.o.put(qv.class, new dy());
-        this.o.put(sl.class, new mc());
+        this.o.put(Arrow.class, new mc());
         this.o.put(by.class, new dg(ItemType.aB.a(0)));
         this.o.put(vv.class, new dg(ItemType.aN.a(0)));
         this.o.put(Snowball.class, new kl());
@@ -73,16 +73,16 @@ public class EntityRenderDispatcher {
         return a(entity.getClass());
     }
 
-    public void a(Level world, ji renderengine, sj fontrenderer, ls entityliving, kv gamesettings, float f) {
+    public void a(Level world, ji renderengine, TextRenderer fontrenderer, ls entityliving, kv gamesettings, float f) {
         this.g = world;
         this.e = renderengine;
         this.k = gamesettings;
         this.h = entityliving;
         this.p = fontrenderer;
         if (entityliving.N()) {
-            int i = world.a(in.b(entityliving.aM), in.b(entityliving.aN), in.b(entityliving.aO));
+            int i = world.a(MathsHelper.b(entityliving.aM), MathsHelper.b(entityliving.aN), MathsHelper.b(entityliving.aO));
             if (i == Tile.T.bn) {
-                int j = world.e(in.b(entityliving.aM), in.b(entityliving.aN), in.b(entityliving.aO));
+                int j = world.e(MathsHelper.b(entityliving.aM), MathsHelper.b(entityliving.aN), MathsHelper.b(entityliving.aO));
                 int k = j & 0x3;
                 this.i = (k * 90 + 180);
                 this.j = 0.0F;
@@ -125,13 +125,13 @@ public class EntityRenderDispatcher {
         return d3 * d3 + d4 * d4 + d5 * d5;
     }
 
-    public sj a() {
+    public TextRenderer a() {
         return this.p;
     }
 
     public static th a = new th();
 
-    private sj p;
+    private TextRenderer p;
 
     public static double b;
 
@@ -141,7 +141,7 @@ public class EntityRenderDispatcher {
 
     public ji e;
 
-    public ra f;
+    public HandItemRenderer f;
 
     public Level g;
 

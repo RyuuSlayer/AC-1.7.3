@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.overrides;
 
 import net.minecraft.level.Level;
+import net.minecraft.util.maths.Box;
 
 import java.util.Random;
 
@@ -13,14 +14,14 @@ public class or extends Tile {
     public void a(Level world, int i, int j, int k, Random random) {
     }
 
-    public eq e(Level world, int i, int j, int k) {
+    public Box e(Level world, int i, int j, int k) {
         float f = 0.0625F;
-        return eq.b((i + f), j, (k + f), ((i + 1) - f), ((j + 1) - f), ((k + 1) - f));
+        return Box.b((i + f), j, (k + f), ((i + 1) - f), ((j + 1) - f), ((k + 1) - f));
     }
 
-    public eq f(Level world, int i, int j, int k) {
+    public Box f(Level world, int i, int j, int k) {
         float f = 0.0625F;
-        return eq.b((i + f), j, (k + f), ((i + 1) - f), (j + 1), ((k + 1) - f));
+        return Box.b((i + f), j, (k + f), ((i + 1) - f), (j + 1), ((k + 1) - f));
     }
 
     public int a(int i) {

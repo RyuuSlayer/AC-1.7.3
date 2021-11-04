@@ -568,8 +568,8 @@ public class Tile {
         az = (new fi(58)).c(2.5F).a(e).a("workbench");
         aA = (new ni(59, 88)).c(0.0F).a(g).a("crops").q().j();
         aB = (new vl(60)).c(0.6F).a(f).a("farmland");
-        aC = (new tc(61, false)).c(3.5F).a(h).a("furnace").j();
-        aD = (new tc(62, true)).c(3.5F).a(h).a(0.875F).a("furnace").j();
+        aC = (new FurnaceTile(61, false)).c(3.5F).a(h).a("furnace").j();
+        aD = (new FurnaceTile(62, true)).c(3.5F).a(h).a(0.875F).a("furnace").j();
         aE = (new uj(63, yk.class, true)).c(1.0F).a(e).a("sign").q().j();
         aF = (new DoorTile(64, Material.d)).c(3.0F).a(e).a("doorWood").q().j();
         aG = (new LadderTile(65, 83)).c(0.4F).a(e).a("ladder").j();

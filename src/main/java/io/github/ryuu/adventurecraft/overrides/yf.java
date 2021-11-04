@@ -218,14 +218,14 @@ public class yf implements cl {
         }
     }
 
-    public lm c(int i, int j) {
+    public Chunk c(int i, int j) {
         return b(i, j);
     }
 
-    public lm b(int i, int j) {
+    public Chunk b(int i, int j) {
         this.j.setSeed(i * 341873128712L + j * 132897987541L);
         byte[] abyte0 = new byte[32768];
-        lm chunk = new lm(this.p, abyte0, i, j);
+        Chunk chunk = new Chunk(this.p, abyte0, i, j);
         this.v = this.p.a().a(this.v, i * 16, j * 16, 16, 16);
         double[] ad = (this.p.a()).a;
         a(i, j, abyte0, this.v, ad);

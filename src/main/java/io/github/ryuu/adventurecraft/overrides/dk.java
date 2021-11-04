@@ -28,7 +28,7 @@ public class dk {
         this.a = world;
         this.F = list;
         this.f = this.g = this.h = l;
-        this.t = in.c((this.f * this.f + this.g * this.g + this.h * this.h)) / 2.0F;
+        this.t = MathsHelper.c((this.f * this.f + this.g * this.g + this.h * this.h)) / 2.0F;
         this.C = i1;
         this.c = -999;
         a(i, j, k);
@@ -75,7 +75,7 @@ public class dk {
         int j1 = this.e + this.h;
         for (int k1 = 0; k1 < 2; k1++)
             this.p[k1] = true;
-        lm.a = false;
+        Chunk.a = false;
         HashSet<?> hashset = new HashSet();
         hashset.addAll(this.B);
         this.B.clear();
@@ -157,7 +157,7 @@ public class dk {
         this.F.addAll(hashset1);
         hashset.removeAll(this.B);
         this.F.removeAll(hashset);
-        this.A = lm.a;
+        this.A = Chunk.a;
         this.E = true;
         LightCache.cache.clear();
         CoordBlock.resetPool();

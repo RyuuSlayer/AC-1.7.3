@@ -1,7 +1,9 @@
 package io.github.ryuu.adventurecraft.overrides;
 
 import net.minecraft.level.Level;
+import net.minecraft.level.chunk.ChunkSubData;
 import net.minecraft.util.io.CompoundTag;
+import net.minecraft.util.maths.TilePos;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-public class lm {
+public class Chunk {
     public static boolean a;
 
     public byte[] b;
@@ -19,11 +21,11 @@ public class lm {
 
     public Level d;
 
-    public wi e;
+    public ChunkSubData e;
 
-    public wi f;
+    public ChunkSubData f;
 
-    public wi g;
+    public ChunkSubData g;
 
     public byte[] h;
 
@@ -51,7 +53,7 @@ public class lm {
 
     public long lastUpdated;
 
-    public lm(Level world, int i, int j, boolean createHeightMap) {
+    public Chunk(Level world, int i, int j, boolean createHeightMap) {
         this.l = new HashMap<Object, Object>();
         this.m = new List[8];
         this.n = false;
@@ -67,16 +69,16 @@ public class lm {
             this.m[k] = new ArrayList();
     }
 
-    public lm(Level world, int i, int j) {
+    public Chunk(Level world, int i, int j) {
         this(world, i, j, true);
     }
 
-    public lm(Level world, byte[] abyte0, int i, int j) {
+    public Chunk(Level world, byte[] abyte0, int i, int j) {
         this(world, i, j);
         this.b = abyte0;
-        this.e = new wi(abyte0.length);
-        this.f = new wi(abyte0.length);
-        this.g = new wi(abyte0.length);
+        this.e = new ChunkSubData(abyte0.length);
+        this.f = new ChunkSubData(abyte0.length);
+        this.g = new ChunkSubData(abyte0.length);
     }
 
     public boolean a(int i, int j) {
@@ -349,13 +351,13 @@ public class lm {
     public void a(Entity entity) {
         if (!(entity instanceof gs))
             this.q = true;
-        int i = in.b(entity.aM / 16.0D);
-        int j = in.b(entity.aO / 16.0D);
+        int i = MathsHelper.b(entity.aM / 16.0D);
+        int j = MathsHelper.b(entity.aO / 16.0D);
         if (i != this.j || j != this.k) {
             System.out.println("Wrong location! " + entity);
             Thread.dumpStack();
         }
-        int k = in.b(entity.aN / 16.0D);
+        int k = MathsHelper.b(entity.aN / 16.0D);
         if (k < 0)
             k = 0;
         if (k >= this.m.length)
@@ -384,7 +386,7 @@ public class lm {
     }
 
     public TileEntity d(int i, int j, int k) {
-        wf chunkposition = new wf(i, j, k);
+        TilePos chunkposition = new TilePos(i, j, k);
         TileEntity tileentity = (TileEntity) this.l.get(chunkposition);
         if (tileentity == null) {
             int l = a(i, j, k);
@@ -402,7 +404,7 @@ public class lm {
     }
 
     public TileEntity getChunkBlockTileEntityDontCreate(int i, int j, int k) {
-        wf chunkposition = new wf(i, j, k);
+        TilePos chunkposition = new TilePos(i, j, k);
         TileEntity tileentity = (TileEntity) this.l.get(chunkposition);
         return tileentity;
     }
@@ -417,7 +419,7 @@ public class lm {
     }
 
     public void a(int i, int j, int k, TileEntity tileentity) {
-        wf chunkposition = new wf(i, j, k);
+        TilePos chunkposition = new TilePos(i, j, k);
         tileentity.d = this.d;
         tileentity.e = this.j * 16 + i;
         tileentity.f = j;
@@ -431,7 +433,7 @@ public class lm {
     }
 
     public void e(int i, int j, int k) {
-        wf chunkposition = new wf(i, j, k);
+        TilePos chunkposition = new TilePos(i, j, k);
         if (this.c) {
             TileEntity tileentity = (TileEntity) this.l.remove(chunkposition);
             if (tileentity != null)
@@ -462,8 +464,8 @@ public class lm {
     }
 
     public void a(Entity entity, eq axisalignedbb, List<Entity> list) {
-        int i = in.b((axisalignedbb.b - 2.0D) / 16.0D);
-        int j = in.b((axisalignedbb.e + 2.0D) / 16.0D);
+        int i = MathsHelper.b((axisalignedbb.b - 2.0D) / 16.0D);
+        int j = MathsHelper.b((axisalignedbb.e + 2.0D) / 16.0D);
         if (i < 0)
             i = 0;
         if (j >= this.m.length)
@@ -479,8 +481,8 @@ public class lm {
     }
 
     public void a(Class class1, eq axisalignedbb, List<Entity> list) {
-        int i = in.b((axisalignedbb.b - 2.0D) / 16.0D);
-        int j = in.b((axisalignedbb.e + 2.0D) / 16.0D);
+        int i = MathsHelper.b((axisalignedbb.b - 2.0D) / 16.0D);
+        int j = MathsHelper.b((axisalignedbb.e + 2.0D) / 16.0D);
         if (i < 0)
             i = 0;
         if (j >= this.m.length)

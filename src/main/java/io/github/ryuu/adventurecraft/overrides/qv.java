@@ -129,14 +129,14 @@ public class qv extends net.minecraft.entity.Entity {
         int l = this.c;
         int i1 = this.d;
         if (this.a == 0)
-            k = in.b(this.aM - (this.e.B / 32.0F));
+            k = MathsHelper.b(this.aM - (this.e.B / 32.0F));
         if (this.a == 1)
-            i1 = in.b(this.aO - (this.e.B / 32.0F));
+            i1 = MathsHelper.b(this.aO - (this.e.B / 32.0F));
         if (this.a == 2)
-            k = in.b(this.aM - (this.e.B / 32.0F));
+            k = MathsHelper.b(this.aM - (this.e.B / 32.0F));
         if (this.a == 3)
-            i1 = in.b(this.aO - (this.e.B / 32.0F));
-        l = in.b(this.aN - (this.e.C / 32.0F));
+            i1 = MathsHelper.b(this.aO - (this.e.B / 32.0F));
+        l = MathsHelper.b(this.aN - (this.e.C / 32.0F));
         for (int j1 = 0; j1 < i; j1++) {
             for (int k1 = 0; k1 < j; k1++) {
                 ln material;

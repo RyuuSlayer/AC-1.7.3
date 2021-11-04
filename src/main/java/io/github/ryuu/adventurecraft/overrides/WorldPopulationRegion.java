@@ -12,7 +12,7 @@ public class WorldPopulationRegion implements TileView {
 
     private final int b;
 
-    private final lm[][] c;
+    private final Chunk[][] c;
 
     private final Level d;
 
@@ -22,7 +22,7 @@ public class WorldPopulationRegion implements TileView {
         this.b = k >> 4;
         int k1 = l >> 4;
         int l1 = j1 >> 4;
-        this.c = new lm[k1 - this.a + 1][l1 - this.b + 1];
+        this.c = new Chunk[k1 - this.a + 1][l1 - this.b + 1];
         for (int i2 = this.a; i2 <= k1; i2++) {
             for (int j2 = this.b; j2 <= l1; j2++)
                 this.c[i2 - this.a][j2 - this.b] = world.c(i2, j2);
@@ -38,7 +38,7 @@ public class WorldPopulationRegion implements TileView {
         int i1 = (k >> 4) - this.b;
         if (l < 0 || l >= this.c.length || i1 < 0 || i1 >= (this.c[l]).length)
             return 0;
-        lm chunk = this.c[l][i1];
+        Chunk chunk = this.c[l][i1];
         if (chunk == null)
             return 0;
         return chunk.a(i & 0xF, j, k & 0xF);

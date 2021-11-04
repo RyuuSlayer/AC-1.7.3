@@ -10,9 +10,9 @@ public class FallingTileRenderer extends EntityRenderer {
     private final TileRenderer a = new TileRenderer);
 
     public void a(FallingTile entityfallingsand, double d, double d1, double d2, float f, float f1) {
-        int x = in.b(entityfallingsand.aM);
-        int y = in.b(entityfallingsand.aN);
-        int z = in.b(entityfallingsand.aO);
+        int x = MathsHelper.b(entityfallingsand.aM);
+        int y = MathsHelper.b(entityfallingsand.aN);
+        int z = MathsHelper.b(entityfallingsand.aO);
         GL11.glPushMatrix();
         GL11.glTranslatef((float) d, (float) d1, (float) d2);
         Tile block = Tile.m[entityfallingsand.a];

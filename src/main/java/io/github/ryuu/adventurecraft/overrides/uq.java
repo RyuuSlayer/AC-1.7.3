@@ -33,7 +33,7 @@ public class uq extends ub {
         qq scaledresolution = new qq(this.g.z, this.g.d, this.g.e);
         int scaledWidth = scaledresolution.a();
         int scaledHeight = scaledresolution.b();
-        sj fontrenderer = this.g.q;
+        TextRenderer fontrenderer = this.g.q;
         this.g.t.b();
         GL11.glEnable(3042);
         if (Minecraft.u())
@@ -171,7 +171,7 @@ public class uq extends ub {
             b(fontrenderer, "x: " + this.g.h.aM, 2, 64, 14737632);
             b(fontrenderer, "y: " + this.g.h.aN, 2, 72, 14737632);
             b(fontrenderer, "z: " + this.g.h.aO, 2, 80, 14737632);
-            b(fontrenderer, "f: " + (in.b((this.g.h.aS * 4.0F / 360.0F) + 0.5D) & 0x3), 2, 88, 14737632);
+            b(fontrenderer, "f: " + (MathsHelper.b((this.g.h.aS * 4.0F / 360.0F) + 0.5D) & 0x3), 2, 88, 14737632);
             b(fontrenderer, String.format("Use Terrain Images: %b", new Object[]{Boolean.valueOf(this.g.f.x.useImages)}), 2, 96, 14737632);
             b(fontrenderer, String.format("Collide X: %d Z: %d", new Object[]{Integer.valueOf(this.g.h.collisionX), Integer.valueOf(this.g.h.collisionZ)}), 2, 104, 14737632);
             if (this.g.f.x.useImages) {

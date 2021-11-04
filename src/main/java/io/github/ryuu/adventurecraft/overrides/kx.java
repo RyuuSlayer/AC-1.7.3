@@ -6,13 +6,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.level.Level;
 
 public class kx implements cl {
-    private final lm c;
+    private final Chunk c;
 
     private final cl d;
 
     private final bf e;
 
-    private lm[] f;
+    private Chunk[] f;
 
     private final Level g;
 
@@ -20,7 +20,7 @@ public class kx implements cl {
 
     int b;
 
-    private lm h;
+    private Chunk h;
 
     private int i;
 
@@ -37,7 +37,7 @@ public class kx implements cl {
         updateVeryFar();
         this.a = -999999999;
         this.b = -999999999;
-        this.c = (lm) new li(world, new byte[32768], 0, 0);
+        this.c = (Chunk) new li(world, new byte[32768], 0, 0);
         this.g = world;
         this.e = ichunkloader;
         this.d = ichunkprovider;
@@ -51,19 +51,19 @@ public class kx implements cl {
             this.b = -999999999;
             if (this.f != null)
                 a(true, null);
-            lm[] oldChunks = this.f;
+            Chunk[] oldChunks = this.f;
             if (this.isVeryFar) {
-                this.f = new lm[4096];
+                this.f = new Chunk[4096];
                 this.mask = 63;
                 this.chunksWide = 64;
             } else {
-                this.f = new lm[1024];
+                this.f = new Chunk[1024];
                 this.mask = 31;
                 this.chunksWide = 32;
             }
             if (oldChunks != null)
                 for (int i = 0; i < oldChunks.length; i++) {
-                    lm c = oldChunks[i];
+                    Chunk c = oldChunks[i];
                     if (c != null && e(c.j, c.k)) {
                         int k = c.j & this.mask;
                         int l = c.k & this.mask;
@@ -94,11 +94,11 @@ public class kx implements cl {
         return (this.f[i1] != null && (this.f[i1] == this.c || this.f[i1].a(i, j)));
     }
 
-    public lm c(int i, int j) {
+    public Chunk c(int i, int j) {
         return b(i, j);
     }
 
-    public lm b(int i, int j) {
+    public Chunk b(int i, int j) {
         if (i == this.a && j == this.b && this.h != null)
             return this.h;
         if (!this.g.y && !e(i, j))
@@ -112,7 +112,7 @@ public class kx implements cl {
                 b(this.f[i1]);
                 a(this.f[i1]);
             }
-            lm chunk = f(i, j);
+            Chunk chunk = f(i, j);
             if (chunk == null)
                 if (this.d == null) {
                     chunk = this.c;
@@ -139,11 +139,11 @@ public class kx implements cl {
         return this.f[i1];
     }
 
-    private lm f(int i, int j) {
+    private Chunk f(int i, int j) {
         if (this.e == null)
             return this.c;
         try {
-            lm chunk = this.e.a(this.g, i, j);
+            Chunk chunk = this.e.a(this.g, i, j);
             if (chunk != null)
                 chunk.r = this.g.t();
             return chunk;
@@ -153,7 +153,7 @@ public class kx implements cl {
         }
     }
 
-    private void a(lm chunk) {
+    private void a(Chunk chunk) {
         if (this.e == null)
             return;
         try {
@@ -163,7 +163,7 @@ public class kx implements cl {
         }
     }
 
-    private void b(lm chunk) {
+    private void b(Chunk chunk) {
         if (this.e == null)
             return;
         try {
@@ -175,14 +175,14 @@ public class kx implements cl {
     }
 
     public void a(cl ichunkprovider, int i, int j) {
-        lm chunk = b(i, j);
+        Chunk chunk = b(i, j);
         if (!chunk.n) {
             chunk.n = true;
             if (this.d != null) {
-                lm.isNotPopulating = false;
+                Chunk.isNotPopulating = false;
                 this.d.a(ichunkprovider, i, j);
                 chunk.o = false;
-                lm.isNotPopulating = true;
+                Chunk.isNotPopulating = true;
             }
         }
     }

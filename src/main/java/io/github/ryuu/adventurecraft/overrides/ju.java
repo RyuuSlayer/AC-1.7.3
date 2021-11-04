@@ -66,9 +66,9 @@ public class ju extends Entity {
         this.aP *= 0.9800000190734863D;
         this.aQ *= 0.9800000190734863D;
         this.aR *= 0.9800000190734863D;
-        int i = in.b(this.aM);
-        int j = in.b(this.aN);
-        int k = in.b(this.aO);
+        int i = MathsHelper.b(this.aM);
+        int j = MathsHelper.b(this.aN);
+        int k = MathsHelper.b(this.aO);
         if (this.aI.a(i, j, k) == this.a)
             this.aI.f(i, j, k, 0);
         if (this.aX && Math.abs(this.aP) < 0.01D && Math.abs(this.aR) < 0.01D) {

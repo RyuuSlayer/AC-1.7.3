@@ -4,7 +4,7 @@ import net.minecraft.level.biome.Biome;
 
 import java.util.Random;
 
-public class g extends Biome {
+public class Taiga extends Biome {
     public pg a(Random random) {
         if (random.nextInt(3) == 0)
             return (pg) new pw();

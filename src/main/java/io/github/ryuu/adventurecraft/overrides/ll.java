@@ -15,7 +15,7 @@ public class ll {
         this.m = new HashMap<>();
         this.m.put(yk.class, new po());
         this.m.put(cy.class, new ag());
-        this.m.put(uk.class, new hy());
+        this.m.put(uk.class, new PistonRenderer());
         this.m.put(TileEntityTrigger.class, new TileEntityMinMaxRenderer(1.0F, 0.5882F, 0.0F));
         this.m.put(TileEntityTriggerInverter.class, new TileEntityMinMaxRenderer(1.0F, 1.0F, 0.0F));
         this.m.put(TileEntityTriggerMemory.class, new TileEntityMinMaxRenderer(0.0F, 1.0F, 0.0F));
@@ -47,7 +47,7 @@ public class ll {
         return a(tileentity.getClass());
     }
 
-    public void a(Level world, ji renderengine, sj fontrenderer, ls entityliving, float f) {
+    public void a(Level world, ji renderengine, TextRenderer fontrenderer, ls entityliving, float f) {
         if (this.f != world)
             a(world);
         this.e = renderengine;
@@ -84,13 +84,13 @@ public class ll {
         }
     }
 
-    public sj a() {
+    public TextRenderer a() {
         return this.n;
     }
 
     public static ll a = new ll();
 
-    private sj n;
+    private TextRenderer n;
 
     public static double b;
 

@@ -14,18 +14,20 @@ import io.github.ryuu.adventurecraft.mixin.MixinTranslationStorage;
 import io.github.ryuu.adventurecraft.scripting.ScriptModel;
 import io.github.ryuu.adventurecraft.util.Version;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.OptionsScreen;
+import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.render.Tessellator;
 import org.lwjgl.opengl.GL11;
 
-public class fu extends da {
-    public fu() {
+public class TitleScreen extends Screen {
+    public TitleScreen() {
         ScriptModel.clearAll();
         Minecraft.minecraftInstance.B.stopMusic();
         this.i = 0.0F;
         this.j = "missingno";
         try {
             ArrayList<String> arraylist = new ArrayList();
-            BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(fu.class.getResourceAsStream("/title/splashes.txt"), StandardCharsets.UTF_8));
+            BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(TitleScreen.class.getResourceAsStream("/title/splashes.txt"), StandardCharsets.UTF_8));
             String s = "";
             String s1;
             while ((s1 = bufferedreader.readLine()) != null) {
@@ -60,37 +62,37 @@ public class fu extends da {
         this.j = "A Minecraft Total Conversion!";
         MixinTranslationStorage stringtranslate = MixinTranslationStorage.a();
         int i = this.d / 4 + 48;
-        this.e.add(new ke(6, this.c / 2 - 100, i, "New Save"));
-        this.e.add(new ke(1, this.c / 2 - 100, i + 22, "Load Save"));
-        this.e.add(new ke(7, this.c / 2 - 100, i + 44, "Craft a Map"));
-        this.e.add(new ke(5, this.c / 2 - 100, i + 66, "Download a Map"));
+        this.e.add(new Button[](6, this.c / 2 - 100, i, "New Save"));
+        this.e.add(new Button(1, this.c / 2 - 100, i + 22, "Load Save"));
+        this.e.add(new Button(7, this.c / 2 - 100, i + 44, "Craft a Map"));
+        this.e.add(new Button(5, this.c / 2 - 100, i + 66, "Download a Map"));
         if (this.b.n) {
-            this.e.add(new ke(0, this.c / 2 - 100, i + 88, stringtranslate.a("menu.options")));
+            this.e.add(new Button(0, this.c / 2 - 100, i + 88, stringtranslate.a("menu.options")));
         } else {
-            this.e.add(new ke(0, this.c / 2 - 100, i + 88 + 11, 98, 20, stringtranslate.a("menu.options")));
-            this.e.add(new ke(4, this.c / 2 + 2, i + 88 + 11, 98, 20, stringtranslate.a("menu.quit")));
+            this.e.add(new Button(0, this.c / 2 - 100, i + 88 + 11, 98, 20, stringtranslate.a("menu.options")));
+            this.e.add(new Button(4, this.c / 2 + 2, i + 88 + 11, 98, 20, stringtranslate.a("menu.quit")));
         }
         if (this.b.k == null)
             this.l.g = false;
     }
 
-    protected void a(ke guibutton) {
+    protected void a(Button guibutton) {
         if (guibutton.f == 0) {
-            this.b.a((da) new co(this, this.b.z));
+            this.b.a((Screen) new OptionsScreen(this, this.b.z));
         } else if (guibutton.f == 1) {
             this.b.a(new SelectWorldScreen(this));
         } else if (guibutton.f == 2) {
-            this.b.a((da) new lq(this));
+            this.b.a((Screen) new lq(this));
         } else if (guibutton.f == 3) {
-            this.b.a((da) new ft(this));
+            this.b.a((Screen) new ft(this));
         } else if (guibutton.f == 4) {
             this.b.f();
         } else if (guibutton.f == 5) {
-            this.b.a((da) new GuiMapDownload(this));
+            this.b.a((Screen) new GuiMapDownload(this));
         } else if (guibutton.f == 6) {
-            this.b.a((da) new GuiMapSelect(this, ""));
+            this.b.a((Screen) new GuiMapSelect(this, ""));
         } else if (guibutton.f == 7) {
-            this.b.a((da) new GuiMapSelect(this, null));
+            this.b.a((Screen) new GuiMapSelect(this, null));
         }
     }
 
@@ -108,7 +110,7 @@ public class fu extends da {
         GL11.glPushMatrix();
         GL11.glTranslatef((this.c / 2 + 90), 70.0F, 0.0F);
         GL11.glRotatef(-20.0F, 0.0F, 0.0F, 1.0F);
-        float f1 = 1.8F - in.e(in.a((float) (System.currentTimeMillis() % 1000L) / 1000.0F * 3.141593F * 2.0F) * 0.1F);
+        float f1 = 1.8F - MathsHelper.e(MathsHelper.a((float) (System.currentTimeMillis() % 1000L) / 1000.0F * 3.141593F * 2.0F) * 0.1F);
         f1 = f1 * 100.0F / (this.g.a(this.j) + 32);
         GL11.glScalef(f1, f1, f1);
         a(this.g, this.j, 0, -8, 16776960);
@@ -125,5 +127,5 @@ public class fu extends da {
 
     private String j;
 
-    private ke l;
+    private Button l;
 }

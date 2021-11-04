@@ -4,11 +4,13 @@ import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.Vec2;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.Tessellator;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.ClientPlayer;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import org.lwjgl.opengl.GL11;
 
-public class ra {
+public class HandItemRenderer {
     private final Minecraft a;
 
     private ItemInstance b;
@@ -31,7 +33,7 @@ public class ra {
 
     private final fh refBiped;
 
-    public ra(Minecraft minecraft) {
+    public HandItemRenderer(Minecraft minecraft) {
         this.b = null;
         this.c = 0.0F;
         this.d = 0.0F;
@@ -49,7 +51,7 @@ public class ra {
         this.refBiped = new fh(0.0F);
     }
 
-    public void a(ls entityliving, ItemInstance itemstack) {
+    public void a(LivingEntity entityliving, ItemInstance itemstack) {
         GL11.glPushMatrix();
         if (itemstack.c < 256 && cv.a(Tile.m[itemstack.c].b())) {
             int textureNum = Tile.m[itemstack.c].getTextureNum();
@@ -190,7 +192,7 @@ public class ra {
 
     public void renderItemInFirstPerson(float f, float swingProgress, float otherHand) {
         float f1 = this.d + (this.c - this.d) * f;
-        dc entityplayersp = this.a.h;
+        ClientPlayer entityplayersp = this.a.h;
         float f2 = ((Player) entityplayersp).aV + (((Player) entityplayersp).aT - ((Player) entityplayersp).aV) * f;
         GL11.glPushMatrix();
         GL11.glRotatef(f2, 1.0F, 0.0F, 0.0F);
@@ -198,7 +200,7 @@ public class ra {
         u.b();
         GL11.glPopMatrix();
         ItemInstance itemstack = this.b;
-        float f3 = this.a.f.c(in.b(((Player) entityplayersp).aM), in.b(((Player) entityplayersp).aN), in.b(((Player) entityplayersp).aO));
+        float f3 = this.a.f.c(MathsHelper.b(((Player) entityplayersp).aM), MathsHelper.b(((Player) entityplayersp).aN), MathsHelper.b(((Player) entityplayersp).aO));
         if (itemstack != null && ItemType.c[itemstack.c] != null) {
             int i = ItemType.c[itemstack.c].f(itemstack.i());
             float f7 = (i >> 16 & 0xFF) / 255.0F;
@@ -212,15 +214,15 @@ public class ra {
             GL11.glPushMatrix();
             float f4 = 0.8F;
             float f7 = entityplayersp.d(f);
-            float f10 = in.a(f7 * 3.141593F);
-            float f13 = in.a(in.c(f7) * 3.141593F);
-            GL11.glTranslatef(-f13 * 0.4F, in.a(in.c(f7) * 3.141593F * 2.0F) * 0.2F, -f10 * 0.2F);
+            float f10 = MathsHelper.a(f7 * 3.141593F);
+            float f13 = MathsHelper.a(MathsHelper.c(f7) * 3.141593F);
+            GL11.glTranslatef(-f13 * 0.4F, MathsHelper.a(MathsHelper.c(f7) * 3.141593F * 2.0F) * 0.2F, -f10 * 0.2F);
             f7 = 1.0F - f2 / 45.0F + 0.1F;
             if (f7 < 0.0F)
                 f7 = 0.0F;
             if (f7 > 1.0F)
                 f7 = 1.0F;
-            f7 = -in.b(f7 * 3.141593F) * 0.5F + 0.5F;
+            f7 = -MathsHelper.b(f7 * 3.141593F) * 0.5F + 0.5F;
             GL11.glTranslatef(0.0F, 0.0F * f4 - (1.0F - f1) * 1.2F - f7 * 0.5F + 0.04F, -0.9F * f4);
             GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
             GL11.glRotatef(f7 * -85.0F, 0.0F, 0.0F, 1.0F);
@@ -242,8 +244,8 @@ public class ra {
                 GL11.glPopMatrix();
             }
             f10 = entityplayersp.d(f);
-            f13 = in.a(f10 * f10 * 3.141593F);
-            float f16 = in.a(in.c(f10) * 3.141593F);
+            f13 = MathsHelper.a(f10 * f10 * 3.141593F);
+            float f16 = MathsHelper.a(MathsHelper.c(f10) * 3.141593F);
             GL11.glRotatef(-f13 * 20.0F, 0.0F, 1.0F, 0.0F);
             GL11.glRotatef(-f16 * 20.0F, 0.0F, 0.0F, 1.0F);
             GL11.glRotatef(-f16 * 80.0F, 1.0F, 0.0F, 0.0F);
@@ -271,33 +273,33 @@ public class ra {
             if (itemstack.c != Items.woodenShield.bf && itemstack.c != Items.powerGlove.bf) {
                 GL11.glPushMatrix();
                 float ft3 = 0.8F;
-                float f7 = in.a(swingProgress * 3.141593F);
-                float f9 = in.a(in.c(swingProgress) * 3.141593F);
-                GL11.glTranslatef(-f9 * 0.4F, in.a(in.c(swingProgress) * 3.141593F * 2.0F) * 0.2F, -f7 * 0.2F);
+                float f7 = MathsHelper.a(swingProgress * 3.141593F);
+                float f9 = MathsHelper.a(MathsHelper.c(swingProgress) * 3.141593F);
+                GL11.glTranslatef(-f9 * 0.4F, MathsHelper.a(MathsHelper.c(swingProgress) * 3.141593F * 2.0F) * 0.2F, -f7 * 0.2F);
                 GL11.glTranslatef(0.7F * ft3, -0.65F * ft3 - (1.0F - f1) * 0.6F, -0.9F * ft3);
                 GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
                 GL11.glEnable(32826);
-                f7 = in.a(swingProgress * swingProgress * 3.141593F);
-                f9 = in.a(in.c(swingProgress) * 3.141593F);
+                f7 = MathsHelper.a(swingProgress * swingProgress * 3.141593F);
+                f9 = MathsHelper.a(MathsHelper.c(swingProgress) * 3.141593F);
                 GL11.glRotatef(-f7 * 20.0F, 0.0F, 1.0F, 0.0F);
                 GL11.glRotatef(-f9 * 20.0F, 0.0F, 0.0F, 1.0F);
                 GL11.glRotatef(-f9 * 80.0F, 1.0F, 0.0F, 0.0F);
                 GL11.glScalef(0.4F, 0.4F, 0.4F);
                 if (itemstack.a().c())
                     GL11.glRotatef(180.0F, 0.0F, 1.0F, 0.0F);
-                a((ls) entityplayersp, itemstack);
+                a((LivingEntity) entityplayersp, itemstack);
                 GL11.glPopMatrix();
             } else if (itemstack.c == Items.powerGlove.bf) {
                 GL11.glPushMatrix();
                 float f4 = 0.8F;
-                float f8 = in.a(swingProgress * 3.141593F);
-                float f10 = in.a(in.c(swingProgress) * 3.141593F);
-                GL11.glTranslatef(-f10 * 0.3F, in.a(in.c(swingProgress) * 3.141593F * 2.0F) * 0.4F, -f8 * 0.4F);
+                float f8 = MathsHelper.a(swingProgress * 3.141593F);
+                float f10 = MathsHelper.a(MathsHelper.c(swingProgress) * 3.141593F);
+                GL11.glTranslatef(-f10 * 0.3F, MathsHelper.a(MathsHelper.c(swingProgress) * 3.141593F * 2.0F) * 0.4F, -f8 * 0.4F);
                 GL11.glTranslatef(0.8F * f4, -0.75F * f4 - (1.0F - f1) * 0.6F, -0.9F * f4);
                 GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
                 GL11.glEnable(32826);
-                f8 = in.a(swingProgress * swingProgress * 3.141593F);
-                f10 = in.a(in.c(swingProgress) * 3.141593F);
+                f8 = MathsHelper.a(swingProgress * swingProgress * 3.141593F);
+                f10 = MathsHelper.a(MathsHelper.c(swingProgress) * 3.141593F);
                 GL11.glRotatef(f10 * 70.0F, 0.0F, 1.0F, 0.0F);
                 GL11.glRotatef(-f8 * 20.0F, 0.0F, 0.0F, 1.0F);
                 GL11.glBindTexture(3553, this.a.p.a(this.a.h.bA, this.a.h.q_()));
@@ -334,14 +336,14 @@ public class ra {
         } else {
             GL11.glPushMatrix();
             float f4 = 0.8F;
-            float f8 = in.a(swingProgress * 3.141593F);
-            float f10 = in.a(in.c(swingProgress) * 3.141593F);
-            GL11.glTranslatef(-f10 * 0.3F, in.a(in.c(swingProgress) * 3.141593F * 2.0F) * 0.4F, -f8 * 0.4F);
+            float f8 = MathsHelper.a(swingProgress * 3.141593F);
+            float f10 = MathsHelper.a(MathsHelper.c(swingProgress) * 3.141593F);
+            GL11.glTranslatef(-f10 * 0.3F, MathsHelper.a(MathsHelper.c(swingProgress) * 3.141593F * 2.0F) * 0.4F, -f8 * 0.4F);
             GL11.glTranslatef(0.8F * f4, -0.75F * f4 - (1.0F - f1) * 0.6F, -0.9F * f4);
             GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
             GL11.glEnable(32826);
-            f8 = in.a(swingProgress * swingProgress * 3.141593F);
-            f10 = in.a(in.c(swingProgress) * 3.141593F);
+            f8 = MathsHelper.a(swingProgress * swingProgress * 3.141593F);
+            f10 = MathsHelper.a(MathsHelper.c(swingProgress) * 3.141593F);
             GL11.glRotatef(f10 * 70.0F, 0.0F, 1.0F, 0.0F);
             GL11.glRotatef(-f8 * 20.0F, 0.0F, 0.0F, 1.0F);
             GL11.glBindTexture(3553, this.a.p.a(this.a.h.bA, this.a.h.q_()));
@@ -362,28 +364,28 @@ public class ra {
 
     public void renderShield(float f, float swingProgress, float otherHand) {
         float f1 = this.d + (this.c - this.d) * f;
-        dc entityplayersp = this.a.h;
-        float f2 = this.a.f.c(in.b(((Player) entityplayersp).aM), in.b(((Player) entityplayersp).aN), in.b(((Player) entityplayersp).aO));
+        ClientPlayer entityplayersp = this.a.h;
+        float f2 = this.a.f.c(MathsHelper.b(((Player) entityplayersp).aM), MathsHelper.b(((Player) entityplayersp).aN), MathsHelper.b(((Player) entityplayersp).aO));
         GL11.glColor4f(f2, f2, f2, 1.0F);
         ItemInstance itemstack = new ItemInstance(Items.woodenShield);
         GL11.glPushMatrix();
         float f3 = 0.8F;
         if (otherHand == 0.0F) {
-            float f7 = in.a(swingProgress * 3.141593F);
-            float f9 = in.a(in.c(swingProgress) * 3.141593F);
-            GL11.glTranslatef(-f9 * 0.4F, in.a(in.c(swingProgress) * 3.141593F * 2.0F) * 0.2F, -f7 * 0.2F);
+            float f7 = MathsHelper.a(swingProgress * 3.141593F);
+            float f9 = MathsHelper.a(MathsHelper.c(swingProgress) * 3.141593F);
+            GL11.glTranslatef(-f9 * 0.4F, MathsHelper.a(MathsHelper.c(swingProgress) * 3.141593F * 2.0F) * 0.2F, -f7 * 0.2F);
             GL11.glTranslatef(1.0F, -0.65F * f3 - (1.0F - f1) * 0.6F, -0.9F * f3);
         } else {
-            float f7 = in.a(otherHand * 3.141593F);
-            float f9 = in.a(in.c(otherHand) * 3.141593F);
-            GL11.glTranslatef(f9 * 0.4F, in.a(in.c(otherHand) * 3.141593F * 2.0F) * 0.2F, -f7 * 0.2F);
+            float f7 = MathsHelper.a(otherHand * 3.141593F);
+            float f9 = MathsHelper.a(MathsHelper.c(otherHand) * 3.141593F);
+            GL11.glTranslatef(f9 * 0.4F, MathsHelper.a(MathsHelper.c(otherHand) * 3.141593F * 2.0F) * 0.2F, -f7 * 0.2F);
             GL11.glTranslatef(1.0F, -0.65F * f3 - (1.0F - f1) * 0.6F, -0.9F * f3);
             GL11.glRotatef(-90.0F * f7, 0.0F, 1.0F, 0.0F);
         }
         GL11.glEnable(32826);
         GL11.glScalef(0.6F, 0.6F, 0.6F);
         this.itemRotate = false;
-        a((ls) entityplayersp, itemstack);
+        a((LivingEntity) entityplayersp, itemstack);
         this.itemRotate = true;
         GL11.glPopMatrix();
     }
@@ -396,9 +398,9 @@ public class ra {
             d(f);
         }
         if (this.a.i.L()) {
-            int j = in.b(this.a.i.aM);
-            int l = in.b(this.a.i.aN);
-            int i1 = in.b(this.a.i.aO);
+            int j = MathsHelper.b(this.a.i.aM);
+            int l = MathsHelper.b(this.a.i.aN);
+            int i1 = MathsHelper.b(this.a.i.aO);
             int j1 = this.a.p.b("/terrain.png");
             GL11.glBindTexture(3553, j1);
             int k1 = this.a.f.a(j, l, i1);
@@ -409,9 +411,9 @@ public class ra {
                     float f1 = (((l1 >> 0) % 2) - 0.5F) * this.a.h.bg * 0.9F;
                     float f2 = (((l1 >> 1) % 2) - 0.5F) * this.a.h.bh * 0.2F;
                     float f3 = (((l1 >> 2) % 2) - 0.5F) * this.a.h.bg * 0.9F;
-                    int i2 = in.d(j + f1);
-                    int j2 = in.d(l + f2);
-                    int k2 = in.d(i1 + f3);
+                    int i2 = MathsHelper.d(j + f1);
+                    int j2 = MathsHelper.d(l + f2);
+                    int k2 = MathsHelper.d(i1 + f3);
                     if (this.a.f.h(i2, j2, k2))
                         k1 = this.a.f.a(i2, j2, k2);
                 }
@@ -517,7 +519,7 @@ public class ra {
 
     public void a() {
         this.d = this.c;
-        dc entityplayersp = this.a.h;
+        ClientPlayer entityplayersp = this.a.h;
         ItemInstance itemstack = ((Player) entityplayersp).c.b();
         ItemInstance itemstack1 = itemstack;
         boolean flag = (this.g == ((Player) entityplayersp).c.c && itemstack1 == this.b);

@@ -333,7 +333,7 @@ public abstract class ls extends Entity {
         o();
         double d = this.aM - this.aJ;
         double d1 = this.aO - this.aL;
-        float f = in.a(d * d + d1 * d1);
+        float f = MathsHelper.a(d * d + d1 * d1);
         float f1 = this.H;
         float f2 = 0.0F;
         this.J = this.K;
@@ -509,7 +509,7 @@ public abstract class ls extends Entity {
     }
 
     public void a(Entity entity, int i, double d, double d1) {
-        float f = in.a(d * d + d1 * d1);
+        float f = MathsHelper.a(d * d + d1 * d1);
         float f1 = 0.4F;
         this.aP /= 2.0D;
         this.aQ /= 2.0D;
@@ -557,7 +557,7 @@ public abstract class ls extends Entity {
             int i = (int) Math.ceil(Math.pow(pre, 1.5D));
             if (i > 0) {
                 a(null, i);
-                int j = this.aI.a(in.b(this.aM), in.b(this.aN - 0.20000000298023224D - this.bf), in.b(this.aO));
+                int j = this.aI.a(MathsHelper.b(this.aM), MathsHelper.b(this.aN - 0.20000000298023224D - this.bf), MathsHelper.b(this.aO));
                 if (j > 0) {
                     ct stepsound = (Tile.m[j]).by;
                     this.aI.a(this, stepsound.d(), stepsound.b() * 0.5F, stepsound.c() * 0.75F);
@@ -614,7 +614,7 @@ public abstract class ls extends Entity {
             float f2 = 0.91F;
             if (this.aX) {
                 f2 = 0.5460001F;
-                int i = this.aI.a(in.b(this.aM), in.b(this.aW.b) - 1, in.b(this.aO));
+                int i = this.aI.a(MathsHelper.b(this.aM), MathsHelper.b(this.aW.b) - 1, MathsHelper.b(this.aO));
                 if (i > 0)
                     f2 = (Tile.m[i]).bB * 0.91F;
             }
@@ -623,7 +623,7 @@ public abstract class ls extends Entity {
             f2 = 0.91F;
             if (this.aX) {
                 f2 = 0.5460001F;
-                int j = this.aI.a(in.b(this.aM), in.b(this.aW.b) - 1, in.b(this.aO));
+                int j = this.aI.a(MathsHelper.b(this.aM), MathsHelper.b(this.aW.b) - 1, MathsHelper.b(this.aO));
                 if (j > 0)
                     f2 = (Tile.m[j]).bB * 0.91F;
             }
@@ -654,7 +654,7 @@ public abstract class ls extends Entity {
         this.ak = this.al;
         double d2 = this.aM - this.aJ;
         double d3 = this.aO - this.aL;
-        float f5 = in.a(d2 * d2 + d3 * d3) * 4.0F;
+        float f5 = MathsHelper.a(d2 * d2 + d3 * d3) * 4.0F;
         if (f5 > 1.0F)
             f5 = 1.0F;
         this.al += (f5 - this.al) * 0.4F;
@@ -662,9 +662,9 @@ public abstract class ls extends Entity {
     }
 
     public boolean p() {
-        int i = in.b(this.aM);
-        int j = in.b(this.aW.b);
-        int k = in.b(this.aO);
+        int i = MathsHelper.b(this.aM);
+        int j = MathsHelper.b(this.aW.b);
+        int k = MathsHelper.b(this.aO);
         int blockID = this.aI.a(i, j, k);
         int blockIDAbove = this.aI.a(i, j + 1, k);
         boolean v = (this.aI.e(i, j, k) % 3 == 0);
@@ -895,7 +895,7 @@ public abstract class ls extends Entity {
         } else {
             d1 = (entity.aW.b + entity.aW.e) / 2.0D - this.aN + w();
         }
-        double d3 = in.a(d * d + d2 * d2);
+        double d3 = MathsHelper.a(d * d + d2 * d2);
         float f2 = (float) (Math.atan2(d2, d) * 180.0D / 3.1415927410125732D) - 90.0F;
         float f3 = (float) -(Math.atan2(d1, d3) * 180.0D / 3.1415927410125732D);
         this.aT = -b(this.aT, f3, f1);
@@ -954,18 +954,18 @@ public abstract class ls extends Entity {
 
     public bt f(float f) {
         if (f == 1.0F) {
-            float f1 = in.b(-this.aS * 0.01745329F - 3.141593F);
-            float f3 = in.a(-this.aS * 0.01745329F - 3.141593F);
-            float f5 = -in.b(-this.aT * 0.01745329F);
-            float f7 = in.a(-this.aT * 0.01745329F);
+            float f1 = MathsHelper.b(-this.aS * 0.01745329F - 3.141593F);
+            float f3 = MathsHelper.a(-this.aS * 0.01745329F - 3.141593F);
+            float f5 = -MathsHelper.b(-this.aT * 0.01745329F);
+            float f7 = MathsHelper.a(-this.aT * 0.01745329F);
             return bt.b((f3 * f5), f7, (f1 * f5));
         }
         float f2 = this.aV + (this.aT - this.aV) * f;
         float f4 = this.aU + (this.aS - this.aU) * f;
-        float f6 = in.b(-f4 * 0.01745329F - 3.141593F);
-        float f8 = in.a(-f4 * 0.01745329F - 3.141593F);
-        float f9 = -in.b(-f2 * 0.01745329F);
-        float f10 = in.a(-f2 * 0.01745329F);
+        float f6 = MathsHelper.b(-f4 * 0.01745329F - 3.141593F);
+        float f8 = MathsHelper.a(-f4 * 0.01745329F - 3.141593F);
+        float f9 = -MathsHelper.b(-f2 * 0.01745329F);
+        float f10 = MathsHelper.a(-f2 * 0.01745329F);
         return bt.b((f8 * f9), f10, (f6 * f9));
     }
 

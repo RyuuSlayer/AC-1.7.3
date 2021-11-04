@@ -7,7 +7,7 @@ import net.minecraft.util.io.CompoundTag;
 import java.util.HashMap;
 import java.util.Map;
 
-public class jc {
+public class EntityRegistry {
     private static void a(Class<?> class1, String s, int i) {
         a.put(s, class1);
         b.put(class1, s);
@@ -85,7 +85,7 @@ public class jc {
     private static final Map d = new HashMap<>();
 
     static {
-        a(sl.class, "Arrow", 10);
+        a(Arrow.class, "Arrow", 10);
         a(by.class, "Snowball", 11);
         a(ItemEntity.class, "Item", 1);
         a(qv.class, "Painting", 9);

@@ -61,7 +61,7 @@ public class ItemEntity extends Entity {
         this.aK = this.aN;
         this.aL = this.aO;
         this.aQ -= 0.03999999910593033D;
-        if (this.aI.f(in.b(this.aM), in.b(this.aN), in.b(this.aO)) == ln.h) {
+        if (this.aI.f(MathsHelper.b(this.aM), MathsHelper.b(this.aN), MathsHelper.b(this.aO)) == ln.h) {
             this.aQ = 0.20000000298023224D;
             this.aP = ((this.bs.nextFloat() - this.bs.nextFloat()) * 0.2F);
             this.aR = ((this.bs.nextFloat() - this.bs.nextFloat()) * 0.2F);
@@ -72,7 +72,7 @@ public class ItemEntity extends Entity {
         float f = 0.98F;
         if (this.aX) {
             f = 0.5880001F;
-            int i = this.aI.a(in.b(this.aM), in.b(this.aW.b) - 1, in.b(this.aO));
+            int i = this.aI.a(MathsHelper.b(this.aM), MathsHelper.b(this.aW.b) - 1, MathsHelper.b(this.aO));
             if (i > 0)
                 f = (Tile.m[i]).bB * 0.98F;
         }

@@ -260,7 +260,7 @@ public abstract class Player extends LivingEntity {
         this.c.e();
         this.h = this.i;
         super.o();
-        float f = in.a(this.aP * this.aP + this.aR * this.aR);
+        float f = MathsHelper.a(this.aP * this.aP + this.aR * this.aR);
         float f1 = (float) Math.atan(-this.aQ * 0.20000000298023224D) * 15.0F;
         if (f > 0.1F)
             f = 0.1F;
@@ -335,8 +335,8 @@ public abstract class Player extends LivingEntity {
         if (this.l.equals("Notch"))
             a(new ItemInstance(ItemType.h, 1), true);
         if (entity != null) {
-            this.aP = (-in.b((this.ac + this.aS) * 3.141593F / 180.0F) * 0.1F);
-            this.aR = (-in.a((this.ac + this.aS) * 3.141593F / 180.0F) * 0.1F);
+            this.aP = (-MathsHelper.b((this.ac + this.aS) * 3.141593F / 180.0F) * 0.1F);
+            this.aR = (-MathsHelper.a((this.ac + this.aS) * 3.141593F / 180.0F) * 0.1F);
         } else {
             this.aP = this.aR = 0.0D;
         }
@@ -370,14 +370,14 @@ public abstract class Player extends LivingEntity {
         if (flag) {
             float f2 = this.bs.nextFloat() * 0.5F;
             float f4 = this.bs.nextFloat() * 3.141593F * 2.0F;
-            entityitem.aP = (-in.a(f4) * f2);
-            entityitem.aR = (in.b(f4) * f2);
+            entityitem.aP = (-MathsHelper.a(f4) * f2);
+            entityitem.aR = (MathsHelper.b(f4) * f2);
             entityitem.aQ = 0.20000000298023224D;
         } else {
             float f1 = 0.3F;
-            entityitem.aP = (-in.a(this.aS / 180.0F * 3.141593F) * in.b(this.aT / 180.0F * 3.141593F) * f1);
-            entityitem.aR = (in.b(this.aS / 180.0F * 3.141593F) * in.b(this.aT / 180.0F * 3.141593F) * f1);
-            entityitem.aQ = (-in.a(this.aT / 180.0F * 3.141593F) * f1 + 0.1F);
+            entityitem.aP = (-MathsHelper.a(this.aS / 180.0F * 3.141593F) * MathsHelper.b(this.aT / 180.0F * 3.141593F) * f1);
+            entityitem.aR = (MathsHelper.b(this.aS / 180.0F * 3.141593F) * MathsHelper.b(this.aT / 180.0F * 3.141593F) * f1);
+            entityitem.aQ = (-MathsHelper.a(this.aT / 180.0F * 3.141593F) * f1 + 0.1F);
             f1 = 0.02F;
             float f3 = this.bs.nextFloat() * 3.141593F * 2.0F;
             f1 *= this.bs.nextFloat();
@@ -414,7 +414,7 @@ public abstract class Player extends LivingEntity {
         this.u = nbttagcompound.getBoolean("Sleeping");
         this.a = nbttagcompound.getShort("SleepTimer");
         if (this.u) {
-            this.v = new Vec3i(in.b(this.aM), in.b(this.aN), in.b(this.aO));
+            this.v = new Vec3i(MathsHelper.b(this.aM), MathsHelper.b(this.aN), MathsHelper.b(this.aO));
             a(true, true, false);
         }
         if (nbttagcompound.b("SpawnX") && nbttagcompound.b("SpawnY") && nbttagcompound.b("SpawnZ"))
@@ -824,22 +824,22 @@ public abstract class Player extends LivingEntity {
         if (this.aH != null)
             return;
         if (a(ln.g)) {
-            int i = Math.round(in.a(d * d + d1 * d1 + d2 * d2) * 100.0F);
+            int i = Math.round(MathsHelper.a(d * d + d1 * d1 + d2 * d2) * 100.0F);
             if (i > 0)
                 a(Stats.diveOneCm, i);
         } else if (ag()) {
-            int j = Math.round(in.a(d * d + d2 * d2) * 100.0F);
+            int j = Math.round(MathsHelper.a(d * d + d2 * d2) * 100.0F);
             if (j > 0)
                 a(Stats.swimOneCm, j);
         } else if (p()) {
             if (d1 > 0.0D)
                 a(Stats.climbOneCm, (int) Math.round(d1 * 100.0D));
         } else if (this.aX) {
-            int k = Math.round(in.a(d * d + d2 * d2) * 100.0F);
+            int k = Math.round(MathsHelper.a(d * d + d2 * d2) * 100.0F);
             if (k > 0)
                 a(Stats.walkOneCm, k);
         } else {
-            int l = Math.round(in.a(d * d + d2 * d2) * 100.0F);
+            int l = Math.round(MathsHelper.a(d * d + d2 * d2) * 100.0F);
             if (l > 25)
                 a(Stats.flyOneCm, l);
         }
@@ -847,13 +847,13 @@ public abstract class Player extends LivingEntity {
 
     private void j(double d, double d1, double d2) {
         if (this.aH != null) {
-            int i = Math.round(in.a(d * d + d1 * d1 + d2 * d2) * 100.0F);
+            int i = Math.round(MathsHelper.a(d * d + d1 * d1 + d2 * d2) * 100.0F);
             if (i > 0)
                 if (this.aH instanceof yl) {
                     a(Stats.minecartOneCm, i);
                     if (this.bN == null) {
-                        this.bN = new Vec3i(in.b(this.aM), in.b(this.aN), in.b(this.aO));
-                    } else if (this.bN.a(in.b(this.aM), in.b(this.aN), in.b(this.aO)) >= 1000.0D) {
+                        this.bN = new Vec3i(MathsHelper.b(this.aM), MathsHelper.b(this.aN), MathsHelper.b(this.aO));
+                    } else if (this.bN.a(MathsHelper.b(this.aM), MathsHelper.b(this.aN), MathsHelper.b(this.aO)) >= 1000.0D) {
                         a(Achievements.MINE_WOOD, 1);
                     }
                 } else if (this.aH instanceof fz) {

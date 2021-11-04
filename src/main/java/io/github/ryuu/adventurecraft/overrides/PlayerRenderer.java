@@ -73,7 +73,7 @@ public class PlayerRenderer extends LivingEntityRenderer {
                         a(entityplayer, s, d, d1, d2, 64);
                     }
                 } else {
-                    sj fontrenderer = a();
+                    TextRenderer fontrenderer = a();
                     GL11.glPushMatrix();
                     GL11.glTranslatef((float) d + 0.0F, (float) d1 + 2.3F, (float) d2);
                     GL11.glNormal3f(0.0F, 1.0F, 0.0F);
@@ -146,8 +146,8 @@ public class PlayerRenderer extends LivingEntityRenderer {
             double d1 = entityplayer.p + (entityplayer.s - entityplayer.p) * f - entityplayer.aK + (entityplayer.aN - entityplayer.aK) * f;
             double d2 = entityplayer.q + (entityplayer.t - entityplayer.q) * f - entityplayer.aL + (entityplayer.aO - entityplayer.aL) * f;
             float f8 = entityplayer.I + (entityplayer.H - entityplayer.I) * f;
-            double d3 = in.a(f8 * 3.141593F / 180.0F);
-            double d4 = -in.b(f8 * 3.141593F / 180.0F);
+            double d3 = MathsHelper.a(f8 * 3.141593F / 180.0F);
+            double d4 = -MathsHelper.b(f8 * 3.141593F / 180.0F);
             float f9 = (float) d1 * 10.0F;
             if (f9 < -6.0F)
                 f9 = -6.0F;
@@ -158,7 +158,7 @@ public class PlayerRenderer extends LivingEntityRenderer {
             if (f10 < 0.0F)
                 f10 = 0.0F;
             float f12 = entityplayer.h + (entityplayer.i - entityplayer.h) * f;
-            f9 += in.a((entityplayer.bi + (entityplayer.bj - entityplayer.bi) * f) * 6.0F) * 32.0F * f12;
+            f9 += MathsHelper.a((entityplayer.bi + (entityplayer.bj - entityplayer.bi) * f) * 6.0F) * 32.0F * f12;
             if (entityplayer.t())
                 f9 += 25.0F;
             GL11.glRotatef(6.0F + f10 / 2.0F + f9, 1.0F, 0.0F, 0.0F);

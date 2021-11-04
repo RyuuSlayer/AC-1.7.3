@@ -104,71 +104,71 @@ public class kv {
         b();
     }
 
-    public void a(ht enumoptions, float f) {
-        if (enumoptions == ht.a) {
+    public void a(Option enumoptions, float f) {
+        if (enumoptions == Option.a) {
             this.a = f;
             this.x.B.a();
         }
-        if (enumoptions == ht.b) {
+        if (enumoptions == Option.b) {
             this.b = f;
             this.x.B.a();
         }
-        if (enumoptions == ht.d)
+        if (enumoptions == Option.d)
             this.c = f;
     }
 
-    public void a(ht enumoptions, int i) {
-        if (enumoptions == ht.c)
+    public void a(Option enumoptions, int i) {
+        if (enumoptions == Option.c)
             this.d = !this.d;
-        if (enumoptions == ht.e) {
+        if (enumoptions == Option.e) {
             this.e = (this.e + i) % 5;
             if (this.e < 0)
                 this.e = 4;
         }
-        if (enumoptions == ht.m)
+        if (enumoptions == Option.m)
             this.I = this.I + i & 0x3;
-        if (enumoptions == ht.f)
+        if (enumoptions == Option.f)
             this.f = !this.f;
-        if (enumoptions == ht.h) {
+        if (enumoptions == Option.h) {
             this.h = !this.h;
             this.x.g.a();
         }
-        if (enumoptions == ht.g) {
+        if (enumoptions == Option.g) {
             this.g = !this.g;
             this.x.p.b();
         }
-        if (enumoptions == ht.i)
+        if (enumoptions == Option.i)
             this.i = (this.i + i + 3) % 3;
-        if (enumoptions == ht.j)
+        if (enumoptions == Option.j)
             this.y = this.y + i & 0x3;
-        if (enumoptions == ht.k) {
+        if (enumoptions == Option.k) {
             this.j = !this.j;
             this.x.g.a();
         }
-        if (enumoptions == ht.l) {
+        if (enumoptions == Option.l) {
             this.k = !this.k;
             this.x.g.a();
         }
-        if (enumoptions == ht.AUTO_FAR_CLIP)
+        if (enumoptions == Option.AUTO_FAR_CLIP)
             this.autoFarClip = !this.autoFarClip;
-        if (enumoptions == ht.GRASS_3D) {
+        if (enumoptions == Option.GRASS_3D) {
             this.grass3d = !this.grass3d;
             this.x.g.a();
         }
         b();
     }
 
-    public float a(ht enumoptions) {
-        if (enumoptions == ht.a)
+    public float a(Option enumoptions) {
+        if (enumoptions == Option.a)
             return this.a;
-        if (enumoptions == ht.b)
+        if (enumoptions == Option.b)
             return this.b;
-        if (enumoptions == ht.d)
+        if (enumoptions == Option.d)
             return this.c;
         return 0.0F;
     }
 
-    public boolean b(ht enumoptions) {
+    public boolean b(Option enumoptions) {
         switch (fq.a[enumoptions.ordinal()]) {
             case 1:
                 return this.d;
@@ -188,12 +188,12 @@ public class kv {
         return false;
     }
 
-    public String c(ht enumoptions) {
+    public String c(Option enumoptions) {
         MixinTranslationStorage stringtranslate = MixinTranslationStorage.a();
         String s = stringtranslate.a(enumoptions.d()) + ": ";
         if (enumoptions.a()) {
             float f = a(enumoptions);
-            if (enumoptions == ht.d) {
+            if (enumoptions == Option.d) {
                 if (f == 0.0F)
                     return s + stringtranslate.a("options.sensitivity.min");
                 if (f == 1.0F)
@@ -210,22 +210,22 @@ public class kv {
                 return s + stringtranslate.a("options.on");
             return s + stringtranslate.a("options.off");
         }
-        if (enumoptions == ht.e)
+        if (enumoptions == Option.e)
             return s + stringtranslate.a(J[this.e]);
-        if (enumoptions == ht.j)
+        if (enumoptions == Option.j)
             return s + stringtranslate.a(K[this.y]);
-        if (enumoptions == ht.m)
+        if (enumoptions == Option.m)
             return s + stringtranslate.a(L[this.I]);
-        if (enumoptions == ht.i)
+        if (enumoptions == Option.i)
             return s + do.a(M[this.i]);
-        if (enumoptions == ht.k) {
+        if (enumoptions == Option.k) {
             if (this.j)
                 return s + stringtranslate.a("options.graphics.fancy");
             return s + stringtranslate.a("options.graphics.fast");
         }
-        if (enumoptions == ht.AUTO_FAR_CLIP)
+        if (enumoptions == Option.AUTO_FAR_CLIP)
             return "Auto Far Clip: " + (this.autoFarClip ? "ON" : "OFF");
-        if (enumoptions == ht.GRASS_3D)
+        if (enumoptions == Option.GRASS_3D)
             return "Grass 3D: " + (this.grass3d ? "ON" : "OFF");
         return s;
     }

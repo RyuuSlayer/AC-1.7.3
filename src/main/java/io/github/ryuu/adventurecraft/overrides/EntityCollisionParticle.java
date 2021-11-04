@@ -38,9 +38,9 @@ public class EntityCollisionParticle extends Particle {
         double d6 = d + (d3 - d) * f6;
         double d7 = d1 + (d4 - d1) * f6;
         double d8 = d2 + (d5 - d2) * f6;
-        int i = in.b(d6);
-        int j = in.b(d7 + (this.bf / 2.0F));
-        int k = in.b(d8);
+        int i = MathsHelper.b(d6);
+        int j = MathsHelper.b(d7 + (this.bf / 2.0F));
+        int k = MathsHelper.b(d8);
         float f7 = this.aI.c(i, j, k);
         d6 -= l;
         d7 -= m;

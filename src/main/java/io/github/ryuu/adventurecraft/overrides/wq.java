@@ -30,7 +30,7 @@ public class wq extends ls {
             float f2 = 0.91F;
             if (this.aX) {
                 f2 = 0.5460001F;
-                int i = this.aI.a(in.b(this.aM), in.b(this.aW.b) - 1, in.b(this.aO));
+                int i = this.aI.a(MathsHelper.b(this.aM), MathsHelper.b(this.aW.b) - 1, MathsHelper.b(this.aO));
                 if (i > 0)
                     f2 = (uu.m[i]).bB * 0.91F;
             }
@@ -39,7 +39,7 @@ public class wq extends ls {
             f2 = 0.91F;
             if (this.aX) {
                 f2 = 0.5460001F;
-                int j = this.aI.a(in.b(this.aM), in.b(this.aW.b) - 1, in.b(this.aO));
+                int j = this.aI.a(MathsHelper.b(this.aM), MathsHelper.b(this.aW.b) - 1, MathsHelper.b(this.aO));
                 if (j > 0)
                     f2 = (uu.m[j]).bB * 0.91F;
             }
@@ -51,7 +51,7 @@ public class wq extends ls {
         this.ak = this.al;
         double d = this.aM - this.aJ;
         double d1 = this.aO - this.aL;
-        float f4 = in.a(d * d + d1 * d1) * 4.0F;
+        float f4 = MathsHelper.a(d * d + d1 * d1) * 4.0F;
         if (f4 > 1.0F)
             f4 = 1.0F;
         this.al += (f4 - this.al) * 0.4F;

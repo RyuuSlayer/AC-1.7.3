@@ -5,7 +5,7 @@ import javax.imageio.ImageIO;
 
 import net.minecraft.client.Minecraft;
 
-public class ia {
+public class GrassColour {
     public static void a(int[] ai) {
         a = ai;
     }

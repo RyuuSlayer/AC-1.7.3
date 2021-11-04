@@ -92,8 +92,8 @@ public class yo {
         double d = entityliving.aJ + (entityliving.aM - entityliving.aJ) * f;
         double d1 = entityliving.aK + (entityliving.aN - entityliving.aK) * f;
         double d2 = entityliving.aL + (entityliving.aO - entityliving.aL) * f;
-        float f2 = in.b(-f1 * 0.01745329F - 3.141593F);
-        float f3 = in.a(-f1 * 0.01745329F - 3.141593F);
+        float f2 = MathsHelper.b(-f1 * 0.01745329F - 3.141593F);
+        float f3 = MathsHelper.a(-f1 * 0.01745329F - 3.141593F);
         float f4 = -f3;
         float f5 = 0.0F;
         float f6 = -f2;

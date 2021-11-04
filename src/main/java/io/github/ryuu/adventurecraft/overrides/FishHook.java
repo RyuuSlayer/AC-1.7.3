@@ -9,6 +9,7 @@ import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 import net.minecraft.util.io.CompoundTag;
+import net.minecraft.util.maths.Box;
 
 public class FishHook extends Entity {
     private int d;
@@ -88,15 +89,15 @@ public class FishHook extends Entity {
         this.b.D = this;
         b(0.25F, 0.25F);
         c(entityplayer.aM, entityplayer.aN + 1.62D - entityplayer.bf, entityplayer.aO, entityplayer.aS, entityplayer.aT);
-        this.aM -= (in.b(this.aS / 180.0F * 3.141593F) * 0.16F);
+        this.aM -= (MathsHelper.b(this.aS / 180.0F * 3.141593F) * 0.16F);
         this.aN -= 0.10000000149011612D;
-        this.aO -= (in.a(this.aS / 180.0F * 3.141593F) * 0.16F);
+        this.aO -= (MathsHelper.a(this.aS / 180.0F * 3.141593F) * 0.16F);
         e(this.aM, this.aN, this.aO);
         this.bf = 0.0F;
         float f = 0.4F;
-        this.aP = (-in.a(this.aS / 180.0F * 3.141593F) * in.b(this.aT / 180.0F * 3.141593F) * f);
-        this.aR = (in.b(this.aS / 180.0F * 3.141593F) * in.b(this.aT / 180.0F * 3.141593F) * f);
-        this.aQ = (-in.a(this.aT / 180.0F * 3.141593F) * f);
+        this.aP = (-MathsHelper.a(this.aS / 180.0F * 3.141593F) * MathsHelper.b(this.aT / 180.0F * 3.141593F) * f);
+        this.aR = (MathsHelper.b(this.aS / 180.0F * 3.141593F) * MathsHelper.b(this.aT / 180.0F * 3.141593F) * f);
+        this.aQ = (-MathsHelper.a(this.aT / 180.0F * 3.141593F) * f);
         a(this.aP, this.aQ, this.aR, 1.5F, 1.0F);
     }
 
@@ -110,7 +111,7 @@ public class FishHook extends Entity {
     }
 
     public void a(double d, double d1, double d2, float f, float f1) {
-        float f2 = in.a(d * d + d1 * d1 + d2 * d2);
+        float f2 = MathsHelper.a(d * d + d1 * d1 + d2 * d2);
         d /= f2;
         d1 /= f2;
         d2 /= f2;
@@ -123,7 +124,7 @@ public class FishHook extends Entity {
         this.aP = d;
         this.aQ = d1;
         this.aR = d2;
-        float f3 = in.a(d * d + d2 * d2);
+        float f3 = MathsHelper.a(d * d + d2 * d2);
         this.aU = this.aS = (float) (Math.atan2(d, d2) * 180.0D / 3.1415927410125732D);
         this.aV = this.aT = (float) (Math.atan2(d1, f3) * 180.0D / 3.1415927410125732D);
         this.i = 0;
@@ -218,7 +219,7 @@ public class FishHook extends Entity {
             Entity entity1 = list.get(j);
             if (entity1.h_() && (entity1 != this.b || this.j >= 5)) {
                 float f2 = 0.3F;
-                eq axisalignedbb = entity1.aW.b(f2, f2, f2);
+                Box axisalignedbb = entity1.aW.b(f2, f2, f2);
                 vf movingobjectposition1 = axisalignedbb.a(vec3d, vec3d1);
                 if (movingobjectposition1 != null) {
                     double d6 = vec3d.c(movingobjectposition1.f);
@@ -241,7 +242,7 @@ public class FishHook extends Entity {
         if (this.h)
             return;
         b(this.aP, this.aQ, this.aR);
-        float f = in.a(this.aP * this.aP + this.aR * this.aR);
+        float f = MathsHelper.a(this.aP * this.aP + this.aR * this.aR);
         this.aS = (float) (Math.atan2(this.aP, this.aR) * 180.0D / 3.1415927410125732D);
         for (this.aT = (float) (Math.atan2(this.aQ, f) * 180.0D / 3.1415927410125732D); this.aT - this.aV < -180.0F; this.aV -= 360.0F)
             ;
@@ -258,7 +259,7 @@ public class FishHook extends Entity {
         for (int l = 0; l < k; l++) {
             double d8 = this.aW.b + (this.aW.e - this.aW.b) * (l + 0) / k - 0.125D + 0.125D;
             double d9 = this.aW.b + (this.aW.e - this.aW.b) * (l + 1) / k - 0.125D + 0.125D;
-            eq axisalignedbb1 = eq.b(this.aW.a, d8, this.aW.c, this.aW.d, d9, this.aW.f);
+            Box axisalignedbb1 = Box.b(this.aW.a, d8, this.aW.c, this.aW.d, d9, this.aW.f);
             if (this.aI.b(axisalignedbb1, ln.g))
                 d5 += 1.0D / k;
         }
@@ -267,13 +268,13 @@ public class FishHook extends Entity {
                 this.k--;
             } else {
                 char c = ';
-                if (this.aI.t(in.b(this.aM), in.b(this.aN) + 1, in.b(this.aO)))
+                if (this.aI.t(MathsHelper.b(this.aM), MathsHelper.b(this.aN) + 1, MathsHelper.b(this.aO)))
                     c = ';
                 if (this.bs.nextInt(c) == 0) {
                     this.k = this.bs.nextInt(30) + 10;
                     this.aQ -= 0.20000000298023224D;
                     this.aI.a(this, "random.splash", 0.25F, 1.0F + (this.bs.nextFloat() - this.bs.nextFloat()) * 0.4F);
-                    float f3 = in.b(this.aW.b);
+                    float f3 = MathsHelper.b(this.aW.b);
                     for (int i1 = 0; i1 < 1.0F + this.bg * 20.0F; i1++) {
                         float f4 = (this.bs.nextFloat() * 2.0F - 1.0F) * this.bg;
                         float f6 = (this.bs.nextFloat() * 2.0F - 1.0F) * this.bg;
@@ -328,10 +329,10 @@ public class FishHook extends Entity {
             double d = this.b.aM - this.aM;
             double d2 = this.b.aN - this.aN;
             double d4 = this.b.aO - this.aO;
-            double d6 = in.a(d * d + d2 * d2 + d4 * d4);
+            double d6 = MathsHelper.a(d * d + d2 * d2 + d4 * d4);
             double d8 = 0.1D;
             this.c.aP += d * d8;
-            this.c.aQ += d2 * d8 + in.a(d6) * 0.08D;
+            this.c.aQ += d2 * d8 + MathsHelper.a(d6) * 0.08D;
             this.c.aR += d4 * d8;
             byte0 = 3;
         } else if (this.k > 0) {
@@ -339,10 +340,10 @@ public class FishHook extends Entity {
             double d1 = this.b.aM - this.aM;
             double d3 = this.b.aN - this.aN;
             double d5 = this.b.aO - this.aO;
-            double d7 = in.a(d1 * d1 + d3 * d3 + d5 * d5);
+            double d7 = MathsHelper.a(d1 * d1 + d3 * d3 + d5 * d5);
             double d9 = 0.1D;
             entityitem.aP = d1 * d9;
-            entityitem.aQ = d3 * d9 + in.a(d7) * 0.08D;
+            entityitem.aQ = d3 * d9 + MathsHelper.a(d7) * 0.08D;
             entityitem.aR = d5 * d9;
             this.aI.b((Entity) entityitem);
             this.b.a(jl.B, 1);

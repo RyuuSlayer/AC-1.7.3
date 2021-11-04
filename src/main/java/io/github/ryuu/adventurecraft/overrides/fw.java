@@ -32,9 +32,9 @@ public class fw {
     private dh a(Entity entity, double d3, double d1, double d2, float f) {
         this.b.a();
         this.c.a();
-        d pathpoint = a(in.b(entity.aW.a), in.b(entity.aW.b), in.b(entity.aW.c));
-        d pathpoint1 = a(in.b(d3 - (entity.bg / 2.0F)), in.b(d1), in.b(d2 - (entity.bg / 2.0F)));
-        d pathpoint2 = new d(in.d(entity.bg + 1.25F), in.d(entity.bh + 1.0F), in.d(entity.bg + 1.25F));
+        d pathpoint = a(MathsHelper.b(entity.aW.a), MathsHelper.b(entity.aW.b), MathsHelper.b(entity.aW.c));
+        d pathpoint1 = a(MathsHelper.b(d3 - (entity.bg / 2.0F)), MathsHelper.b(d1), MathsHelper.b(d2 - (entity.bg / 2.0F)));
+        d pathpoint2 = new d(MathsHelper.d(entity.bg + 1.25F), MathsHelper.d(entity.bh + 1.0F), MathsHelper.d(entity.bg + 1.25F));
         dh pathentity = a(entity, pathpoint, pathpoint1, pathpoint2, f);
         pathentity = simplifyPath(pathentity, pathpoint2);
         return pathentity;

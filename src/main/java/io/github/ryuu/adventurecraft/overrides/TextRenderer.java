@@ -5,10 +5,12 @@ import java.io.IOException;
 import java.nio.IntBuffer;
 import javax.imageio.ImageIO;
 
+import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.texture.TextureManager;
 import org.lwjgl.opengl.GL11;
 
-public class sj {
+public class TextRenderer {
     private final int[] b;
 
     public int a;
@@ -17,13 +19,13 @@ public class sj {
 
     private final IntBuffer d;
 
-    public sj(kv gamesettings, String s, ji renderengine) {
+    public TextRenderer(GameOptions gamesettings, String s, TextureManager renderengine) {
         BufferedImage bufferedimage;
         this.b = new int[256];
         this.a = 0;
         this.d = ge.d(1024);
         try {
-            bufferedimage = ImageIO.read(ji.class.getResourceAsStream(s));
+            bufferedimage = ImageIO.read(TextureManager.class.getResourceAsStream(s));
         } catch (IOException ioexception) {
             throw new RuntimeException(ioexception);
         }

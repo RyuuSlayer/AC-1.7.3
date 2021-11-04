@@ -6,7 +6,7 @@ import java.util.Random;
 import io.github.ryuu.adventurecraft.util.Vec2;
 import net.minecraft.client.Minecraft;
 
-public class hs extends TextureBinder {
+public class PortalTextureBinder extends TextureBinder {
     private int g;
 
     private byte[][] h;
@@ -19,7 +19,7 @@ public class hs extends TextureBinder {
 
     private static int width;
 
-    public hs() {
+    public PortalTextureBinder() {
         super(Tile.bf.bm);
         this.g = 0;
         generatePortalData(16, 16);
@@ -47,7 +47,7 @@ public class hs extends TextureBinder {
                             f4 -= 2.0F;
                         float f5 = f3 * f3 + f4 * f4;
                         float f6 = (float) Math.atan2(f4, f3) + (i / 32.0F * 3.141593F * 2.0F - f5 * 10.0F + (l * 2)) * (l * 2 - 1);
-                        f6 = (in.a(f6) + 1.0F) / 2.0F;
+                        f6 = (MathsHelper.a(f6) + 1.0F) / 2.0F;
                         f6 /= f5 + 1.0F;
                         f += f6 * 0.5F;
                     }

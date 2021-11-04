@@ -41,7 +41,7 @@ class mg extends lg {
     protected void a(int i, int j, int k, int l, Tessellator tessellator) {
         LevelMetadata saveformatcomparator = SelectWorldScreen.a(this.a).get(i);
         String s = saveformatcomparator.b();
-        if (s == null || in.a(s))
+        if (s == null || MathsHelper.a(s))
             s = SelectWorldScreen.f(this.a) + " " + (i + 1);
         String s1 = saveformatcomparator.a();
         s1 = s1 + " (" + SelectWorldScreen.g(this.a).format(new Date(saveformatcomparator.e()));

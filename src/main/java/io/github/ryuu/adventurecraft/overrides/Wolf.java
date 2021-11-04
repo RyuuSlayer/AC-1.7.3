@@ -184,7 +184,7 @@ public class Wolf extends Animal {
             }
             if (this.h > 0.4F) {
                 float f = (float) this.aW.b;
-                int i = (int) (in.a((this.h - 0.4F) * 3.141593F) * 7.0F);
+                int i = (int) (MathsHelper.a((this.h - 0.4F) * 3.141593F) * 7.0F);
                 for (int j = 0; j < i; j++) {
                     float f1 = (this.bs.nextFloat() * 2.0F - 1.0F) * this.bg * 0.5F;
                     float f2 = (this.bs.nextFloat() * 2.0F - 1.0F) * this.bg * 0.5F;
@@ -209,7 +209,7 @@ public class Wolf extends Animal {
         } else if (f2 > 1.0F) {
             f2 = 1.0F;
         }
-        return in.a(f2 * 3.141593F) * in.a(f2 * 3.141593F * 11.0F) * 0.15F * 3.141593F;
+        return MathsHelper.a(f2 * 3.141593F) * MathsHelper.a(f2 * 3.141593F * 11.0F) * 0.15F * 3.141593F;
     }
 
     public float c(float f) {
@@ -229,9 +229,9 @@ public class Wolf extends Animal {
     private void c(Entity entity, float f) {
         dh pathentity = this.aI.a((Entity) this, entity, 16.0F);
         if (pathentity == null && f > 12.0F) {
-            int i = in.b(entity.aM) - 2;
-            int j = in.b(entity.aO) - 2;
-            int k = in.b(entity.aW.b);
+            int i = MathsHelper.b(entity.aM) - 2;
+            int j = MathsHelper.b(entity.aO) - 2;
+            int k = MathsHelper.b(entity.aW.b);
             for (int l = 0; l <= 4; l++) {
                 for (int i1 = 0; i1 <= 4; i1++) {
                     if ((l < 1 || i1 < 1 || l > 3 || i1 > 3) && this.aI.h(i + l, k - 1, j + i1) && !this.aI.h(i + l, k, j + i1) && !this.aI.h(i + l, k + 1, j + i1)) {
@@ -251,7 +251,7 @@ public class Wolf extends Animal {
 
     public boolean a(net.minecraft.entity.Entity entity, int i) {
         b(false);
-        if (entity != null && !(entity instanceof Player) && !(entity instanceof sl))
+        if (entity != null && !(entity instanceof Player) && !(entity instanceof Arrow))
             i = (i + 1) / 2;
         if (super.a(entity, i)) {
             if (!D() && !C()) {
@@ -259,8 +259,8 @@ public class Wolf extends Animal {
                     c(true);
                     this.d = entity;
                 }
-                if (entity instanceof sl && ((sl) entity).c != null)
-                    entity = ((sl) entity).c;
+                if (entity instanceof Arrow && ((Arrow) entity).c != null)
+                    entity = ((Arrow) entity).c;
                 if (entity instanceof ls) {
                     List list = this.aI.a(Wolf.class, eq.b(this.aM, this.aN, this.aO, this.aM + 1.0D, this.aN + 1.0D, this.aO + 1.0D).b(16.0D, 4.0D, 16.0D));
                     Iterator<Entity> iterator = list.iterator();
@@ -295,7 +295,7 @@ public class Wolf extends Animal {
             if (this.aX) {
                 double d = entity.aM - this.aM;
                 double d1 = entity.aO - this.aO;
-                float f1 = in.a(d * d + d1 * d1);
+                float f1 = MathsHelper.a(d * d + d1 * d1);
                 this.aP = d / f1 * 0.5D * 0.800000011920929D + this.aP * 0.20000000298023224D;
                 this.aR = d1 / f1 * 0.5D * 0.800000011920929D + this.aR * 0.20000000298023224D;
                 this.aQ = 0.4000000059604645D;

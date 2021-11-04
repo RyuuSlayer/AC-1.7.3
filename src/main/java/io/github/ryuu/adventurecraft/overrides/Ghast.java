@@ -54,7 +54,7 @@ public class Ghast extends FlyingEntity implements MonsterEntityType {
         double d = this.b - this.aM;
         double d1 = this.c - this.aN;
         double d2 = this.d - this.aO;
-        double d3 = in.a(d * d + d1 * d1 + d2 * d2);
+        double d3 = MathsHelper.a(d * d + d1 * d1 + d2 * d2);
         if (d3 < 1.0D || d3 > 60.0D) {
             this.b = this.aM + ((this.bs.nextFloat() * 2.0F - 1.0F) * 16.0F);
             this.c = this.aN + ((this.bs.nextFloat() * 2.0F - 1.0F) * 16.0F);

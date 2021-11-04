@@ -60,8 +60,8 @@ public class uw extends ls implements ff {
             for (int j = 0; j < i * 8; j++) {
                 float f = this.bs.nextFloat() * 3.141593F * 2.0F;
                 float f1 = this.bs.nextFloat() * 0.5F + 0.5F;
-                float f2 = in.a(f) * i * 0.5F * f1;
-                float f3 = in.b(f) * i * 0.5F * f1;
+                float f2 = MathsHelper.a(f) * i * 0.5F * f1;
+                float f3 = MathsHelper.b(f) * i * 0.5F * f1;
                 this.aI.a("slime", this.aM + f2, this.aW.b, this.aO + f3, 0.0D, 0.0D, 0.0D);
             }
             if (i > 2)
@@ -124,7 +124,7 @@ public class uw extends ls implements ff {
     }
 
     public boolean d() {
-        lm chunk = this.aI.b(in.b(this.aM), in.b(this.aO));
+        Chunk chunk = this.aI.b(MathsHelper.b(this.aM), MathsHelper.b(this.aO));
         return ((v() == 1 || this.aI.q > 0) && this.bs.nextInt(10) == 0 && chunk.a(987234911L).nextInt(10) == 0 && this.aN < 16.0D);
     }
 

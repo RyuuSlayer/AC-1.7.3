@@ -66,7 +66,7 @@ public class SelectWorldScreen extends da {
 
     protected String d(int i) {
         String s = ((vb) this.n.get(i)).b();
-        if (s == null || in.a(s)) {
+        if (s == null || MathsHelper.a(s)) {
             MixinTranslationStorage stringtranslate = MixinTranslationStorage.a();
             s = stringtranslate.a("selectWorld.world") + " " + (i + 1);
         }

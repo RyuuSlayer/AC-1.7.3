@@ -132,11 +132,11 @@ public abstract class Entity {
         this.aU = this.aS;
         if (k_()) {
             if (!this.bx && !this.c) {
-                float f = in.a(this.aP * this.aP * 0.20000000298023224D + this.aQ * this.aQ + this.aR * this.aR * 0.20000000298023224D) * 0.2F;
+                float f = MathsHelper.a(this.aP * this.aP * 0.20000000298023224D + this.aQ * this.aQ + this.aR * this.aR * 0.20000000298023224D) * 0.2F;
                 if (f > 1.0F)
                     f = 1.0F;
                 this.aI.a(this, "random.splash", f, 1.0F + (this.bs.nextFloat() - this.bs.nextFloat()) * 0.4F);
-                float f1 = in.b(this.aW.b);
+                float f1 = MathsHelper.b(this.aW.b);
                 for (int i = 0; i < 1.0F + this.bg * 20.0F; i++) {
                     float f2 = (this.bs.nextFloat() * 2.0F - 1.0F) * this.bg;
                     float f4 = (this.bs.nextFloat() * 2.0F - 1.0F) * this.bg;
@@ -352,10 +352,10 @@ public abstract class Entity {
         double d10 = this.aM - d3;
         double d12 = this.aO - d4;
         if (n() && !flag && this.aH == null) {
-            this.bj = (float) (this.bj + in.a(d10 * d10 + d12 * d12) * 0.6D);
-            int l = in.b(this.aM);
-            int j1 = in.b(this.aN - 0.20000000298023224D - this.bf);
-            int l1 = in.b(this.aO);
+            this.bj = (float) (this.bj + MathsHelper.a(d10 * d10 + d12 * d12) * 0.6D);
+            int l = MathsHelper.b(this.aM);
+            int j1 = MathsHelper.b(this.aN - 0.20000000298023224D - this.bf);
+            int l1 = MathsHelper.b(this.aO);
             int j3 = this.aI.a(l, j1, l1);
             if (this.aI.a(l, j1 - 1, l1) == Tile.ba.bn)
                 j3 = this.aI.a(l, j1 - 1, l1);
@@ -371,12 +371,12 @@ public abstract class Entity {
                 Tile.m[j3].b(this.aI, l, j1, l1, this);
             }
         }
-        int i1 = in.b(this.aW.a + 0.001D);
-        int k1 = in.b(this.aW.b + 0.001D);
-        int i2 = in.b(this.aW.c + 0.001D);
-        int k3 = in.b(this.aW.d - 0.001D);
-        int l3 = in.b(this.aW.e - 0.001D);
-        int i4 = in.b(this.aW.f - 0.001D);
+        int i1 = MathsHelper.b(this.aW.a + 0.001D);
+        int k1 = MathsHelper.b(this.aW.b + 0.001D);
+        int i2 = MathsHelper.b(this.aW.c + 0.001D);
+        int k3 = MathsHelper.b(this.aW.d - 0.001D);
+        int l3 = MathsHelper.b(this.aW.e - 0.001D);
+        int i4 = MathsHelper.b(this.aW.f - 0.001D);
         if (this.aI.a(i1, k1, i2, k3, l3, i4))
             for (int j4 = i1; j4 <= k3; j4++) {
                 for (int k4 = k1; k4 <= l3; k4++) {
@@ -432,7 +432,7 @@ public abstract class Entity {
     }
 
     public boolean af() {
-        return (this.bx || this.aI.t(in.b(this.aM), in.b(this.aN), in.b(this.aO)));
+        return (this.bx || this.aI.t(MathsHelper.b(this.aM), MathsHelper.b(this.aN), MathsHelper.b(this.aO)));
     }
 
     public boolean ag() {
@@ -445,9 +445,9 @@ public abstract class Entity {
 
     public boolean a(ln material) {
         double d = this.aN + w();
-        int i = in.b(this.aM);
-        int j = in.d(in.b(d));
-        int k = in.b(this.aO);
+        int i = MathsHelper.b(this.aM);
+        int j = MathsHelper.d(MathsHelper.b(d));
+        int k = MathsHelper.b(this.aO);
         int l = this.aI.a(i, j, k);
         if (l != 0 && (Tile.m[l]).bA == material) {
             float f = rp.d(this.aI.e(i, j, k)) - 0.1111111F;
@@ -475,18 +475,18 @@ public abstract class Entity {
             return;
         f *= f2;
         f1 *= f2;
-        float f4 = in.a((this.aS + this.moveYawOffset) * 3.141593F / 180.0F);
-        float f5 = in.b((this.aS + this.moveYawOffset) * 3.141593F / 180.0F);
+        float f4 = MathsHelper.a((this.aS + this.moveYawOffset) * 3.141593F / 180.0F);
+        float f5 = MathsHelper.b((this.aS + this.moveYawOffset) * 3.141593F / 180.0F);
         this.aP += (f * f5 - f1 * f4);
         this.aR += (f1 * f5 + f * f4);
     }
 
     public float a(float f) {
-        int i = in.b(this.aM);
+        int i = MathsHelper.b(this.aM);
         double d = (this.aW.e - this.aW.b) * 0.66D;
-        int j = in.b(this.aN - this.bf + d);
-        int k = in.b(this.aO);
-        if (this.aI.a(in.b(this.aW.a), in.b(this.aW.b), in.b(this.aW.c), in.b(this.aW.d), in.b(this.aW.e), in.b(this.aW.f))) {
+        int j = MathsHelper.b(this.aN - this.bf + d);
+        int k = MathsHelper.b(this.aO);
+        if (this.aI.a(MathsHelper.b(this.aW.a), MathsHelper.b(this.aW.b), MathsHelper.b(this.aW.c), MathsHelper.b(this.aW.d), MathsHelper.b(this.aW.e), MathsHelper.b(this.aW.f))) {
             float f1 = this.aI.c(i, j, k);
             if (f1 < this.bE)
                 f1 = this.bE;
@@ -528,7 +528,7 @@ public abstract class Entity {
         float f = (float) (this.aM - entity.aM);
         float f1 = (float) (this.aN - entity.aN);
         float f2 = (float) (this.aO - entity.aO);
-        return in.c(f * f + f1 * f1 + f2 * f2);
+        return MathsHelper.c(f * f + f1 * f1 + f2 * f2);
     }
 
     public double g(double d, double d1, double d2) {
@@ -542,7 +542,7 @@ public abstract class Entity {
         double d3 = this.aM - d;
         double d4 = this.aN - d1;
         double d5 = this.aO - d2;
-        return in.a(d3 * d3 + d4 * d4 + d5 * d5);
+        return MathsHelper.a(d3 * d3 + d4 * d4 + d5 * d5);
     }
 
     public double g(Entity entity) {
@@ -560,9 +560,9 @@ public abstract class Entity {
             return;
         double d = entity.aM - this.aM;
         double d1 = entity.aO - this.aO;
-        double d2 = in.a(d, d1);
+        double d2 = MathsHelper.a(d, d1);
         if (d2 >= 0.009999999776482582D) {
-            d2 = in.a(d2);
+            d2 = MathsHelper.a(d2);
             d /= d2;
             d1 /= d2;
             double d3 = 1.0D / d2;
@@ -679,7 +679,7 @@ public abstract class Entity {
     }
 
     protected final String aj() {
-        return jc.b(this);
+        return EntityRegistry.b(this);
     }
 
     protected abstract void a(CompoundTag paramnu);
@@ -736,9 +736,9 @@ public abstract class Entity {
             float f = (((i >> 0) % 2) - 0.5F) * this.bg * 0.9F;
             float f1 = (((i >> 1) % 2) - 0.5F) * 0.1F;
             float f2 = (((i >> 2) % 2) - 0.5F) * this.bg * 0.9F;
-            int j = in.b(this.aM + f);
-            int k = in.b(this.aN + w() + f1);
-            int l = in.b(this.aO + f2);
+            int j = MathsHelper.b(this.aM + f);
+            int k = MathsHelper.b(this.aN + w() + f1);
+            int l = MathsHelper.b(this.aO + f2);
             if (this.aI.h(j, k, l) && this.aI.g(j, k, l))
                 return true;
         }
@@ -906,9 +906,9 @@ public abstract class Entity {
     }
 
     protected boolean c(double d, double d1, double d2) {
-        int i = in.b(d);
-        int j = in.b(d1);
-        int k = in.b(d2);
+        int i = MathsHelper.b(d);
+        int j = MathsHelper.b(d1);
+        int k = MathsHelper.b(d2);
         double d3 = d - i;
         double d4 = d1 - j;
         double d5 = d2 - k;

@@ -50,7 +50,7 @@ public class st {
                 } else {
                     flag2 = world.b(k1, 0, l1, 1);
                     if (flag2) {
-                        lm chunk = world.c(k1 >> 4, l1 >> 4);
+                        Chunk chunk = world.c(k1 >> 4, l1 >> 4);
                         if (chunk.h())
                             flag2 = false;
                     }

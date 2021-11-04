@@ -37,7 +37,7 @@ public class wp extends Tile implements IBlockColor {
         iblockaccess.a().a(i, k, 1, 1);
         double d = (iblockaccess.a()).a[0];
         double d1 = (iblockaccess.a()).b[0];
-        return ia.a(d, d1);
+        return GrassColour.a(d, d1);
     }
 
     public void a(Level world, int i, int j, int k, Random random) {
@@ -46,18 +46,18 @@ public class wp extends Tile implements IBlockColor {
         if (world.n(i, j + 1, k) < 4 && Tile.q[world.a(i, j + 1, k)] > 2) {
             if (random.nextInt(4) != 0)
                 return;
-            lm.isNotPopulating = false;
+            Chunk.isNotPopulating = false;
             world.f(i, j, k, Tile.w.bn);
-            lm.isNotPopulating = true;
+            Chunk.isNotPopulating = true;
         } else if (world.n(i, j + 1, k) >= 9) {
             int l = i + random.nextInt(3) - 1;
             int i1 = j + random.nextInt(5) - 3;
             int j1 = k + random.nextInt(3) - 1;
             int k1 = world.a(l, i1 + 1, j1);
             if (world.a(l, i1, j1) == uu.w.bn && world.n(l, i1 + 1, j1) >= 4 && uu.q[k1] <= 2) {
-                lm.isNotPopulating = false;
+                Chunk.isNotPopulating = false;
                 world.f(l, i1, j1, uu.v.bn);
-                lm.isNotPopulating = true;
+                Chunk.isNotPopulating = true;
             }
         }
     }

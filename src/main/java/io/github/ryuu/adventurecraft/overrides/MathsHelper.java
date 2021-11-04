@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.overrides;
 
-public class in {
+public class MathsHelper {
     public static final float a(float f) {
         return a[(int) (f * 10430.38F) & 0xFFFF];
     }

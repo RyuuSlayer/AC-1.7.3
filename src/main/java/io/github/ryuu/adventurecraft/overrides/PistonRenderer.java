@@ -2,10 +2,11 @@ package io.github.ryuu.adventurecraft.overrides;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.entity.tile.TileEntityRenderer;
 import net.minecraft.level.Level;
 import org.lwjgl.opengl.GL11;
 
-public class hy extends je {
+public class PistonRenderer extends TileEntityRenderer {
     private cv b;
 
     public void a(uk tileentitypiston, double d, double d1, double d2, float f) {

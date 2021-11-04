@@ -1643,8 +1643,8 @@ public class TileRenderer {
                 d2 = ((i2 + 16) / 256.0F);
                 d3 = ((k2 + 16) / 256.0F);
             }
-            float f14 = in.a(f12) * 8.0F / 256.0F;
-            float f16 = in.b(f12) * 8.0F / 256.0F;
+            float f14 = MathsHelper.a(f12) * 8.0F / 256.0F;
+            float f16 = MathsHelper.b(f12) * 8.0F / 256.0F;
             float f18 = block.d(this.c, i, j, k);
             tessellator.a(f4 * f18 * red, f4 * f18 * green, f4 * f18 * blue);
             tessellator.a((i + 0), (j + f7), (k + 0), d2 - f16 - f14, d3 - f16 + f14);

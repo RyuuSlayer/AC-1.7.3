@@ -3,7 +3,7 @@ package io.github.ryuu.adventurecraft.overrides;
 import io.github.ryuu.adventurecraft.util.ClipboardHandler;
 import org.lwjgl.input.Keyboard;
 
-public class gc extends da {
+public class ChatScreen extends Screen {
     protected String a = "";
 
     private int i = 0;

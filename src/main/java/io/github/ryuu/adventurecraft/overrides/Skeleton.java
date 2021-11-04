@@ -27,7 +27,7 @@ public class Skeleton extends Monster {
     public void o() {
         if (this.aI.f() && this.aI.x.mobsBurn) {
             float f = a(1.0F);
-            if (f > 0.5F && this.aI.l(in.b(this.aM), in.b(this.aN), in.b(this.aO)) && this.bs.nextFloat() * 30.0F < (f - 0.4F) * 2.0F)
+            if (f > 0.5F && this.aI.l(MathsHelper.b(this.aM), MathsHelper.b(this.aN), MathsHelper.b(this.aO)) && this.bs.nextFloat() * 30.0F < (f - 0.4F) * 2.0F)
                 this.bv = 300;
         }
         super.o();
@@ -38,10 +38,10 @@ public class Skeleton extends Monster {
             double d = entity.aM - this.aM;
             double d1 = entity.aO - this.aO;
             if (this.ae == 0) {
-                sl entityarrow = new sl(this.aI, this, this.c);
+                Arrow entityarrow = new Arrow(this.aI, this, this.c);
                 entityarrow.aN += 1.399999976158142D;
                 double d2 = entity.aN + entity.w() - 0.20000000298023224D - entityarrow.aN;
-                float f1 = in.a(d * d + d1 * d1) * 0.2F;
+                float f1 = MathsHelper.a(d * d + d1 * d1) * 0.2F;
                 this.aI.a(this, "random.bow", 1.0F, 1.0F / (this.bs.nextFloat() * 0.4F + 0.8F));
                 this.aI.b(entityarrow);
                 entityarrow.a(d, d2 + f1, d1, 0.6F, 12.0F);

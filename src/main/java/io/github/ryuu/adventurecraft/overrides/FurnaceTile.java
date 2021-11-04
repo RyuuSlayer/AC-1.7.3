@@ -1,15 +1,19 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import net.minecraft.entity.FurnaceEntity;
+import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
+import net.minecraft.tile.TileWithEntity;
 
 import java.util.Random;
 
-public class tc extends rw {
+public class FurnaceTile extends TileWithEntity {
     private final Random a;
 
     private final boolean b;
 
-    protected tc(int i, boolean flag) {
+    protected FurnaceTile(int i, boolean flag) {
         super(i, ln.e);
         this.a = new Random();
         this.b = flag;
@@ -44,7 +48,7 @@ public class tc extends rw {
         world.d(i, j, k, byte0);
     }
 
-    public int a(xp iblockaccess, int i, int j, int k, int l) {
+    public int a(TileView iblockaccess, int i, int j, int k, int l) {
         if (l == 1)
             return this.bm + 17;
         if (l == 0)
@@ -91,10 +95,10 @@ public class tc extends rw {
         return this.bm;
     }
 
-    public boolean a(Level world, int i, int j, int k, gs entityplayer) {
+    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
         if (world.B)
             return true;
-        sk tileentityfurnace = (sk) world.b(i, j, k);
+        FurnaceEntity tileentityfurnace = (FurnaceEntity) world.b(i, j, k);
         entityplayer.a(tileentityfurnace);
         return true;
     }
@@ -116,11 +120,11 @@ public class tc extends rw {
     }
 
     protected TileEntity a_() {
-        return (TileEntity) new sk();
+        return (TileEntity) new FurnaceEntity();
     }
 
     public void a(Level world, int i, int j, int k, ls entityliving) {
-        int l = in.b((entityliving.aS * 4.0F / 360.0F) + 0.5D) & 0x3;
+        int l = MathsHelper.b((entityliving.aS * 4.0F / 360.0F) + 0.5D) & 0x3;
         if (l == 0)
             world.d(i, j, k, 2);
         if (l == 1)
@@ -133,9 +137,9 @@ public class tc extends rw {
 
     public void b(Level world, int i, int j, int k) {
         if (!c) {
-            sk tileentityfurnace = (sk) world.b(i, j, k);
+            FurnaceEntity tileentityfurnace = (FurnaceEntity) world.b(i, j, k);
             for (int l = 0; l < tileentityfurnace.a(); l++) {
-                iz itemstack = tileentityfurnace.f_(l);
+                ItemInstance itemstack = tileentityfurnace.f_(l);
                 if (itemstack != null) {
                     float f = this.a.nextFloat() * 0.8F + 0.1F;
                     float f1 = this.a.nextFloat() * 0.8F + 0.1F;
@@ -145,7 +149,7 @@ public class tc extends rw {
                         if (i1 > itemstack.a)
                             i1 = itemstack.a;
                         itemstack.a -= i1;
-                        ItemEntity entityitem = new ItemEntity(world, (i + f), (j + f1), (k + f2), new iz(itemstack.c, i1, itemstack.i()));
+                        ItemEntity entityitem = new ItemEntity(world, (i + f), (j + f1), (k + f2), new ItemInstance(itemstack.c, i1, itemstack.i()));
                         float f3 = 0.05F;
                         entityitem.aP = ((float) this.a.nextGaussian() * f3);
                         entityitem.aQ = ((float) this.a.nextGaussian() * f3 + 0.2F);

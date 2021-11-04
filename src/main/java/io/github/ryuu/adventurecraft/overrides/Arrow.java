@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.overrides;
 
 import io.github.ryuu.adventurecraft.blocks.Blocks;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
@@ -9,7 +10,7 @@ import net.minecraft.util.io.CompoundTag;
 
 import java.util.List;
 
-public class sl extends Entity {
+public class Arrow extends Entity {
     public int d;
 
     public int e;
@@ -26,7 +27,7 @@ public class sl extends Entity {
 
     public int b;
 
-    public ls c;
+    public LivingEntity c;
 
     private int j;
 
@@ -34,7 +35,7 @@ public class sl extends Entity {
 
     private final int attackStrength;
 
-    public sl(Level world) {
+    public Arrow(Level world) {
         super(world);
         this.d = -1;
         this.e = -1;
@@ -49,7 +50,7 @@ public class sl extends Entity {
         this.attackStrength = 2;
     }
 
-    public sl(Level world, double d, double d1, double d2) {
+    public Arrow(Level world, double d, double d1, double d2) {
         super(world);
         this.d = -1;
         this.e = -1;
@@ -66,7 +67,7 @@ public class sl extends Entity {
         this.attackStrength = 2;
     }
 
-    public sl(Level world, ls entityliving) {
+    public Arrow(Level world, LivingEntity entityliving) {
         super(world);
         this.d = -1;
         this.e = -1;
@@ -81,19 +82,19 @@ public class sl extends Entity {
         this.a = entityliving instanceof Player;
         b(0.5F, 0.5F);
         c(entityliving.aM, entityliving.aN + entityliving.w(), entityliving.aO, entityliving.aS, entityliving.aT);
-        this.aM -= (in.b(this.aS / 180.0F * 3.141593F) * 0.16F);
+        this.aM -= (MathsHelper.b(this.aS / 180.0F * 3.141593F) * 0.16F);
         this.aN -= 0.10000000149011612D;
-        this.aO -= (in.a(this.aS / 180.0F * 3.141593F) * 0.16F);
+        this.aO -= (MathsHelper.a(this.aS / 180.0F * 3.141593F) * 0.16F);
         e(this.aM, this.aN, this.aO);
         this.bf = 0.0F;
-        this.aP = (-in.a(this.aS / 180.0F * 3.141593F) * in.b(this.aT / 180.0F * 3.141593F));
-        this.aR = (in.b(this.aS / 180.0F * 3.141593F) * in.b(this.aT / 180.0F * 3.141593F));
-        this.aQ = -in.a(this.aT / 180.0F * 3.141593F);
+        this.aP = (-MathsHelper.a(this.aS / 180.0F * 3.141593F) * MathsHelper.b(this.aT / 180.0F * 3.141593F));
+        this.aR = (MathsHelper.b(this.aS / 180.0F * 3.141593F) * MathsHelper.b(this.aT / 180.0F * 3.141593F));
+        this.aQ = -MathsHelper.a(this.aT / 180.0F * 3.141593F);
         a(this.aP, this.aQ, this.aR, 1.5F, 1.0F);
         this.attackStrength = 2;
     }
 
-    public sl(Level world, ls entityliving, int damage) {
+    public Arrow(Level world, LivingEntity entityliving, int damage) {
         super(world);
         this.d = -1;
         this.e = -1;
@@ -108,14 +109,14 @@ public class sl extends Entity {
         this.a = entityliving instanceof Player;
         b(0.5F, 0.5F);
         c(entityliving.aM, entityliving.aN + entityliving.w(), entityliving.aO, entityliving.aS, entityliving.aT);
-        this.aM -= (in.b(this.aS / 180.0F * 3.141593F) * 0.16F);
+        this.aM -= (MathsHelper.b(this.aS / 180.0F * 3.141593F) * 0.16F);
         this.aN -= 0.10000000149011612D;
-        this.aO -= (in.a(this.aS / 180.0F * 3.141593F) * 0.16F);
+        this.aO -= (MathsHelper.a(this.aS / 180.0F * 3.141593F) * 0.16F);
         e(this.aM, this.aN, this.aO);
         this.bf = 0.0F;
-        this.aP = (-in.a(this.aS / 180.0F * 3.141593F) * in.b(this.aT / 180.0F * 3.141593F));
-        this.aR = (in.b(this.aS / 180.0F * 3.141593F) * in.b(this.aT / 180.0F * 3.141593F));
-        this.aQ = -in.a(this.aT / 180.0F * 3.141593F);
+        this.aP = (-MathsHelper.a(this.aS / 180.0F * 3.141593F) * MathsHelper.b(this.aT / 180.0F * 3.141593F));
+        this.aR = (MathsHelper.b(this.aS / 180.0F * 3.141593F) * MathsHelper.b(this.aT / 180.0F * 3.141593F));
+        this.aQ = -MathsHelper.a(this.aT / 180.0F * 3.141593F);
         a(this.aP, this.aQ, this.aR, 1.5F, 1.0F);
         this.attackStrength = damage;
     }
@@ -125,7 +126,7 @@ public class sl extends Entity {
     }
 
     public void a(double d, double d1, double d2, float f, float f1) {
-        float f2 = in.a(d * d + d1 * d1 + d2 * d2);
+        float f2 = MathsHelper.a(d * d + d1 * d1 + d2 * d2);
         d /= f2;
         d1 /= f2;
         d2 /= f2;
@@ -138,7 +139,7 @@ public class sl extends Entity {
         this.aP = d;
         this.aQ = d1;
         this.aR = d2;
-        float f3 = in.a(d * d + d2 * d2);
+        float f3 = MathsHelper.a(d * d + d2 * d2);
         this.aU = this.aS = (float) (Math.atan2(d, d2) * 180.0D / 3.1415927410125732D);
         this.aV = this.aT = (float) (Math.atan2(d1, f3) * 180.0D / 3.1415927410125732D);
         this.j = 0;
@@ -149,7 +150,7 @@ public class sl extends Entity {
         this.aQ = d1;
         this.aR = d2;
         if (this.aV == 0.0F && this.aU == 0.0F) {
-            float f = in.a(d * d + d2 * d2);
+            float f = MathsHelper.a(d * d + d2 * d2);
             this.aU = this.aS = (float) (Math.atan2(d, d2) * 180.0D / 3.1415927410125732D);
             this.aV = this.aT = (float) (Math.atan2(d1, f) * 180.0D / 3.1415927410125732D);
             this.aV = this.aT;
@@ -162,7 +163,7 @@ public class sl extends Entity {
     public void w_() {
         super.w_();
         if (this.aV == 0.0F && this.aU == 0.0F) {
-            float f = in.a(this.aP * this.aP + this.aR * this.aR);
+            float f = MathsHelper.a(this.aP * this.aP + this.aR * this.aR);
             this.aU = this.aS = (float) (Math.atan2(this.aP, this.aR) * 180.0D / 3.1415927410125732D);
             this.aV = this.aT = (float) (Math.atan2(this.aQ, f) * 180.0D / 3.1415927410125732D);
         }
@@ -232,7 +233,7 @@ public class sl extends Entity {
                 this.aP = (float) (movingobjectposition.f.a - this.aM);
                 this.aQ = (float) (movingobjectposition.f.b - this.aN);
                 this.aR = (float) (movingobjectposition.f.c - this.aO);
-                float f1 = in.a(this.aP * this.aP + this.aQ * this.aQ + this.aR * this.aR);
+                float f1 = MathsHelper.a(this.aP * this.aP + this.aQ * this.aQ + this.aR * this.aR);
                 this.aM -= this.aP / f1 * 0.05000000074505806D;
                 this.aN -= this.aQ / f1 * 0.05000000074505806D;
                 this.aO -= this.aR / f1 * 0.05000000074505806D;
@@ -243,7 +244,7 @@ public class sl extends Entity {
         this.aM += this.aP;
         this.aN += this.aQ;
         this.aO += this.aR;
-        float f2 = in.a(this.aP * this.aP + this.aR * this.aR);
+        float f2 = MathsHelper.a(this.aP * this.aP + this.aR * this.aR);
         this.aS = (float) (Math.atan2(this.aP, this.aR) * 180.0D / 3.1415927410125732D);
         for (this.aT = (float) (Math.atan2(this.aQ, f2) * 180.0D / 3.1415927410125732D); this.aT - this.aV < -180.0F; this.aV -= 360.0F)
             ;
@@ -269,7 +270,7 @@ public class sl extends Entity {
     }
 
     public void handleHitEntity(vf movingobjectposition) {
-        if (movingobjectposition.g instanceof ls && ((ls) movingobjectposition.g).protectedByShield(this.aJ, this.aK, this.aL)) {
+        if (movingobjectposition.g instanceof LivingEntity && ((LivingEntity) movingobjectposition.g).protectedByShield(this.aJ, this.aK, this.aL)) {
             this.aI.a(this, "random.drr", 1.0F, 1.2F / (this.bs.nextFloat() * 0.2F + 0.9F));
             K();
         } else if (movingobjectposition.g.a((Entity) this.c, this.attackStrength)) {

@@ -23,7 +23,7 @@ public class Screen extends ub {
 
     public boolean f = false;
 
-    protected sj g;
+    protected TextRenderer g;
 
     public du h;
 

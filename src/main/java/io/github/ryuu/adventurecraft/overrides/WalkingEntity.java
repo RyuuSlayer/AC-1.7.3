@@ -1,10 +1,11 @@
 package io.github.ryuu.adventurecraft.overrides;
 
 import io.github.ryuu.adventurecraft.util.IEntityPather;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.level.Level;
 import net.minecraft.util.io.CompoundTag;
 
-public class ii extends ls implements IEntityPather {
+public class WalkingEntity extends LivingEntity implements IEntityPather {
     private dh a;
 
     protected Entity d;
@@ -17,7 +18,7 @@ public class ii extends ls implements IEntityPather {
 
     public boolean canPathRandomly;
 
-    public ii(Level world) {
+    public WalkingEntity(Level world) {
         super(world);
         this.canForgetTargetRandomly = true;
         this.timeBeforeForget = 0;
@@ -62,7 +63,7 @@ public class ii extends ls implements IEntityPather {
         } else {
             this.timeBeforeForget = 40;
         }
-        int i = in.b(this.aW.b + 0.5D);
+        int i = MathsHelper.b(this.aW.b + 0.5D);
         boolean flag = ag();
         boolean flag1 = ah();
         this.aT = 0.0F;
@@ -102,8 +103,8 @@ public class ii extends ls implements IEntityPather {
                 float f5 = this.aS;
                 this.aS = (float) (Math.atan2(d5, d4) * 180.0D / 3.1415927410125732D) - 90.0F;
                 float f4 = (f5 - this.aS + 90.0F) * 3.141593F / 180.0F;
-                this.aw = -in.a(f4) * this.ax * 1.0F;
-                this.ax = in.b(f4) * this.ax * 1.0F;
+                this.aw = -MathsHelper.a(f4) * this.ax * 1.0F;
+                this.ax = MathsHelper.b(f4) * this.ax * 1.0F;
             }
             if (d3 > 0.0D)
                 this.az = true;
@@ -123,9 +124,9 @@ public class ii extends ls implements IEntityPather {
         int k = -1;
         float f = -99999.0F;
         for (int l = 0; l < 10; l++) {
-            int i1 = in.b(this.aM + this.bs.nextInt(13) - 6.0D);
-            int j1 = in.b(this.aN + this.bs.nextInt(7) - 3.0D);
-            int k1 = in.b(this.aO + this.bs.nextInt(13) - 6.0D);
+            int i1 = MathsHelper.b(this.aM + this.bs.nextInt(13) - 6.0D);
+            int j1 = MathsHelper.b(this.aN + this.bs.nextInt(7) - 3.0D);
+            int k1 = MathsHelper.b(this.aO + this.bs.nextInt(13) - 6.0D);
             float f1 = a(i1, j1, k1);
             if (f1 > f) {
                 f = f1;
@@ -154,9 +155,9 @@ public class ii extends ls implements IEntityPather {
     }
 
     public boolean d() {
-        int i = in.b(this.aM);
-        int j = in.b(this.aW.b);
-        int k = in.b(this.aO);
+        int i = MathsHelper.b(this.aM);
+        int j = MathsHelper.b(this.aW.b);
+        int k = MathsHelper.b(this.aO);
         return (super.d() && a(i, j, k) >= 0.0F);
     }
 

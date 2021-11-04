@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.overrides;
 
-public enum ht {
+public enum Option {
     a("MUSIC", 0, "options.music", true, false),
     b("SOUND", 1, "options.sound", true, false),
     c("INVERT_MOUSE", 2, "options.invertMouse", false, true),
@@ -23,20 +23,20 @@ public enum ht {
 
     private final String p;
 
-    private static final ht[] q;
+    private static final Option[] q;
 
-    public static ht a(int i) {
-        ht[] aenumoptions = values();
+    public static Option a(int i) {
+        Option[] aenumoptions = values();
         int j = aenumoptions.length;
         for (int k = 0; k < j; k++) {
-            ht enumoptions = aenumoptions[k];
+            Option enumoptions = aenumoptions[k];
             if (enumoptions.c() == i)
                 return enumoptions;
         }
         return null;
     }
 
-    ht(String s, int i, String s1, boolean flag, boolean flag1) {
+    Option(String s, int i, String s1, boolean flag, boolean flag1) {
         this.p = s1;
         this.n = flag;
         this.o = flag1;
@@ -59,7 +59,7 @@ public enum ht {
     }
 
     static {
-        q = new ht[]{
+        q = new Option[]{
                 a, b, c, d, e, f, g, h, i, j,
                 k, l, m};
     }

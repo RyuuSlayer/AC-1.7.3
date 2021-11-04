@@ -15,7 +15,7 @@ public class Zombie extends Monster {
     public void o() {
         if (this.aI.f() && this.aI.x.mobsBurn) {
             float f = a(1.0F);
-            if (f > 0.5F && this.aI.l(in.b(this.aM), in.b(this.aN), in.b(this.aO)) && this.bs.nextFloat() * 30.0F < (f - 0.4F) * 2.0F)
+            if (f > 0.5F && this.aI.l(MathsHelper.b(this.aM), MathsHelper.b(this.aN), MathsHelper.b(this.aO)) && this.bs.nextFloat() * 30.0F < (f - 0.4F) * 2.0F)
                 this.bv = 300;
         }
         super.o();
