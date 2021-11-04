@@ -10,7 +10,9 @@ import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.hit.HitType;
 import net.minecraft.util.io.CompoundTag;
+import net.minecraft.util.maths.MathsHelper;
 import net.minecraft.util.maths.Vec3f;
 
 import java.util.List;
@@ -32,7 +34,7 @@ public class EntityHookshot extends Entity {
 
     public EntityHookshot(Level world) {
         super(world);
-        b(0.5F, 0.5F);
+        setSize(0.5F, 0.5F);
         this.turningAround = true;
         this.timeBeforeTurnAround = 0;
         this.collidesWithClipBlocks = false;
@@ -41,17 +43,17 @@ public class EntityHookshot extends Entity {
     public EntityHookshot(Level world, LivingEntity entity, boolean main, ItemInstance i) {
         this(world);
         this.mainHand = main;
-        c(entity.aS, entity.aT);
-        double xHeading = -in.a(entity.aS * 3.141593F / 180.0F);
-        double zHeading = in.b(entity.aS * 3.141593F / 180.0F);
-        this.aP = xHeading * in.b(entity.aT / 180.0F * 3.141593F);
-        this.aQ = -in.a(entity.aT / 180.0F * 3.141593F);
-        this.aR = zHeading * in.b(entity.aT / 180.0F * 3.141593F);
+        setRotation(entity.yaw, entity.pitch);
+        double xHeading = -MathsHelper.sin(entity.yaw * 3.141593F / 180.0F);
+        double zHeading = MathsHelper.cos(entity.yaw * 3.141593F / 180.0F);
+        this.velocityX = xHeading * MathsHelper.cos(entity.pitch / 180.0F * 3.141593F);
+        this.velocityY = -MathsHelper.sin(entity.pitch / 180.0F * 3.141593F);
+        this.velocityZ = zHeading * MathsHelper.cos(entity.pitch / 180.0F * 3.141593F);
         setHeading();
-        e(entity.aM, entity.aN, entity.aO);
-        this.aJ = this.aM;
-        this.aK = this.aN;
-        this.aL = this.aO;
+        setPosition(entity.x, entity.y, entity.z);
+        this.prevX = this.x;
+        this.prevY = this.y;
+        this.prevZ = this.z;
         this.timeBeforeTurnAround = 20;
         this.turningAround = false;
         this.returnsTo = entity;
@@ -60,47 +62,47 @@ public class EntityHookshot extends Entity {
     }
 
     public void setHeading() {
-        float f3 = in.a(this.aP * this.aP + this.aR * this.aR);
-        this.aU = this.aS = (float) (Math.atan2(this.aP, this.aR) * 180.0D / 3.1415927410125732D);
-        this.aV = this.aT = (float) (Math.atan2(this.aQ, f3) * 180.0D / 3.1415927410125732D);
+        float f3 = MathsHelper.sqrt(this.velocityX * this.velocityX + this.velocityZ * this.velocityZ);
+        this.prevYaw = this.yaw = (float) (Math.atan2(this.velocityX, this.velocityZ) * 180.0D / 3.1415927410125732D);
+        this.prevPitch = this.pitch = (float) (Math.atan2(this.velocityY, f3) * 180.0D / 3.1415927410125732D);
     }
 
     public void setHeadingReverse() {
-        float f3 = in.a(this.aP * this.aP + this.aR * this.aR);
-        this.aU = this.aS = (float) (Math.atan2(-this.aP, -this.aR) * 180.0D / 3.1415927410125732D);
-        this.aV = this.aT = (float) (Math.atan2(-this.aQ, f3) * 180.0D / 3.1415927410125732D);
+        float f3 = MathsHelper.sqrt(this.velocityX * this.velocityX + this.velocityZ * this.velocityZ);
+        this.prevYaw = this.yaw = (float) (Math.atan2(-this.velocityX, -this.velocityZ) * 180.0D / 3.1415927410125732D);
+        this.prevPitch = this.pitch = (float) (Math.atan2(-this.velocityY, f3) * 180.0D / 3.1415927410125732D);
     }
 
     public void w_() {
         if (this.item != null && this.returnsTo instanceof Player) {
             Player player = (Player) this.returnsTo;
-            if (this.mainHand && this.item != player.c.b())
+            if (this.mainHand && this.item != player.inventory.getHeldItem())
                 Items.hookshot.releaseHookshot(this);
-            if (!this.mainHand && this.item != player.c.getOffhandItem())
+            if (!this.mainHand && this.item != player.inventory.getOffhandItem())
                 Items.hookshot.releaseHookshot(this);
         }
-        this.aJ = this.aM;
-        this.aK = this.aN;
-        this.aL = this.aO;
-        this.aU = this.aS;
-        this.aV = this.aT;
+        this.prevX = this.x;
+        this.prevY = this.y;
+        this.prevZ = this.z;
+        this.prevYaw = this.yaw;
+        this.prevPitch = this.pitch;
         if (!this.turningAround) {
-            double prevVelX = this.aP;
-            double prevVelY = this.aQ;
-            double prevVelZ = this.aR;
-            b(this.aP, this.aQ, this.aR);
-            if (this.aP != prevVelX || this.aQ != prevVelY || this.aR != prevVelZ) {
-                Vec3f pos1 = Vec3f.a(this.aJ, this.aK, this.aL);
-                Vec3f pos2 = Vec3f.a(this.aJ + 10.0D * prevVelX, this.aK + 10.0D * prevVelY, this.aL + 10.0D * prevVelZ);
-                HitResult hit = this.aI.a(pos1, pos2);
-                if (hit != null && hit.a == jg.a) {
-                    int blockID = this.aI.a(hit.b, hit.c, hit.d);
-                    if (blockID == Tile.K.bn || blockID == Tile.y.bn || blockID == Blocks.woodBlocks.bn || blockID == Blocks.halfSteps3.bn) {
+            double prevVelX = this.velocityX;
+            double prevVelY = this.velocityY;
+            double prevVelZ = this.velocityZ;
+            move(this.velocityX, this.velocityY, this.velocityZ);
+            if (this.velocityX != prevVelX || this.velocityY != prevVelY || this.velocityZ != prevVelZ) {
+                Vec3f pos1 = Vec3f.method_1293(this.prevX, this.prevY, this.prevZ);
+                Vec3f pos2 = Vec3f.method_1293(this.prevX + 10.0D * prevVelX, this.prevY + 10.0D * prevVelY, this.prevZ + 10.0D * prevVelZ);
+                HitResult hit = this.level.raycast(pos1, pos2);
+                if (hit != null && hit.type == HitType.a) {
+                    int blockID = this.level.getTileId(hit.x, hit.y, hit.z);
+                    if (blockID == Tile.LOG.id || blockID == Tile.WOOD.id || blockID == Blocks.woodBlocks.id || blockID == Blocks.halfSteps3.id) {
                         this.attachedToSurface = true;
-                        e(hit.f.a, hit.f.b, hit.f.c);
-                        this.aI.a(this, "random.drr", 1.0F, 1.2F / (this.bs.nextFloat() * 0.2F + 0.9F));
+                        setPosition(hit.field_1988.x, hit.field_1988.y, hit.field_1988.z);
+                        this.level.playSound(this, "random.drr", 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
                     } else if (blockID != 0) {
-                        this.aI.a(this, (Tile.m[blockID]).by.d(), 1.0F, 1.2F / (this.bs.nextFloat() * 0.2F + 0.9F));
+                        this.level.playSound(this, (Tile.BY_ID[blockID]).sounds.getWalkSound(), 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
                     }
                 }
                 this.turningAround = true;
@@ -108,43 +110,43 @@ public class EntityHookshot extends Entity {
                 this.turningAround = true;
             }
         } else if (this.returnsTo != null) {
-            if (this.returnsTo.be) {
+            if (this.returnsTo.removed) {
                 K();
                 return;
             }
-            double deltaX = this.returnsTo.aM - this.aM;
-            double deltaY = this.returnsTo.aN - this.aN;
-            double deltaZ = this.returnsTo.aO - this.aO;
+            double deltaX = this.returnsTo.x - this.x;
+            double deltaY = this.returnsTo.y - this.y;
+            double deltaZ = this.returnsTo.z - this.z;
             double length = Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
-            this.aP = 0.75D * deltaX / length;
-            this.aQ = 0.75D * deltaY / length;
-            this.aR = 0.75D * deltaZ / length;
+            this.velocityX = 0.75D * deltaX / length;
+            this.velocityY = 0.75D * deltaY / length;
+            this.velocityZ = 0.75D * deltaZ / length;
             if (this.attachedToSurface) {
                 if (length > 1.2D) {
-                    this.returnsTo.d(-0.15D * this.aP, -0.15D * this.aQ, -0.15D * this.aR);
-                    this.returnsTo.bk = 0.0F;
+                    this.returnsTo.method_1322(-0.15D * this.velocityX, -0.15D * this.velocityY, -0.15D * this.velocityZ);
+                    this.returnsTo.fallDistance = 0.0F;
                 } else {
                     this.returnsTo.a(0.0D, 0.0D, 0.0D);
                 }
             } else {
                 if (length <= 1.2D)
                     K();
-                e(this.aM + this.aP, this.aN + this.aQ, this.aO + this.aR);
+                setPosition(this.x + this.velocityX, this.y + this.velocityY, this.z + this.velocityZ);
                 setHeadingReverse();
             }
         } else {
             K();
         }
         if (!this.turningAround) {
-            List<Entity> entitiesWithin = this.aI.b(this, this.aW.b(0.5D, 0.5D, 0.5D));
+            List<Entity> entitiesWithin = this.level.getEntities(this, this.boundingBox.b(0.5D, 0.5D, 0.5D));
             for (int i = 0; i < entitiesWithin.size(); i++) {
                 Entity e = entitiesWithin.get(i);
                 boolean isItem = e instanceof ItemEntity;
                 if (isItem || (e instanceof LivingEntity && e != this.returnsTo)) {
                     if (isItem) {
-                        this.aI.a(this, "damage.fallsmall", 1.0F, 1.2F / (this.bs.nextFloat() * 0.2F + 0.9F));
+                        this.level.playSound(this, "damage.fallsmall", 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
                     } else {
-                        this.aI.a(this, "damage.hurtflesh", 1.0F, 1.2F / (this.bs.nextFloat() * 0.2F + 0.9F));
+                        this.level.playSound(this, "damage.hurtflesh", 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
                     }
                     this.entityGrabbed = e;
                     this.turningAround = true;
@@ -152,9 +154,9 @@ public class EntityHookshot extends Entity {
                 }
             }
         }
-        if (this.entityGrabbed != null && !this.entityGrabbed.be) {
-            this.entityGrabbed.bk = 0.0F;
-            this.entityGrabbed.e(this.aM, this.aN, this.aO);
+        if (this.entityGrabbed != null && !this.entityGrabbed.removed) {
+            this.entityGrabbed.fallDistance = 0.0F;
+            this.entityGrabbed.setPosition(this.x, this.y, this.z);
         }
     }
 
@@ -177,7 +179,7 @@ public class EntityHookshot extends Entity {
 
     public void K() {
         if (this.item != null)
-            this.item.b(0);
-        super.K();
+            this.item.setDamage(0);
+        super.remove();
     }
 }

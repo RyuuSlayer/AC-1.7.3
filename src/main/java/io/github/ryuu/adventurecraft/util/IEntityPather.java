@@ -1,5 +1,7 @@
 package io.github.ryuu.adventurecraft.util;
 
+import net.minecraft.class_61;
+
 public interface IEntityPather {
-    dh getCurrentPath();
+    class_61 getCurrentPath();
 }
