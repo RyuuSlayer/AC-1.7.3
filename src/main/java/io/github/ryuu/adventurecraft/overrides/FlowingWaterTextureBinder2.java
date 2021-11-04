@@ -2,9 +2,11 @@ package io.github.ryuu.adventurecraft.overrides;
 
 import java.awt.image.BufferedImage;
 
+import io.github.ryuu.adventurecraft.util.TerrainImage;
+import io.github.ryuu.adventurecraft.util.Vec2;
 import net.minecraft.client.Minecraft;
 
-public class vs extends TextureBinder {
+public class FlowingWaterTextureBinder2 extends TextureBinder {
     protected float[] g;
 
     protected float[] h;
@@ -23,7 +25,7 @@ public class vs extends TextureBinder {
 
     private static int width;
 
-    public vs() {
+    public FlowingWaterTextureBinder2() {
         super(uu.B.bm);
         this.g = new float[256];
         this.h = new float[256];
@@ -125,7 +127,7 @@ public class vs extends TextureBinder {
             if (f1 < 0.0F)
                 f1 = 0.0F;
             float f2 = f1 * f1;
-            if (AC_TerrainImage.isWaterLoaded) {
+            if (TerrainImage.isWaterLoaded) {
                 l1 = (int) (127.0F + f2 * 128.0F);
                 j2 = (int) (127.0F + f2 * 128.0F);
                 k2 = (int) (127.0F + f2 * 128.0F);

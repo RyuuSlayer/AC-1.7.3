@@ -1923,7 +1923,6 @@ public class MixinLevel extends Level implements TileView {
     // }
 
 
-
     public void y() {
         this.J = !this.d.isEmpty();
         Iterator<Player> iterator = this.d.iterator();
@@ -2037,21 +2036,36 @@ public class MixinLevel extends Level implements TileView {
 
     //TODO: Actual Mixins go here.
 
-    @Shadow public File levelDir;
-    @Shadow boolean firstTick;
-    @Shadow public UndoStack undoStack;
-    @Shadow public JScriptHandler scriptHandler;
-    @Shadow protected final DimensionData mapHandler;
-    @Shadow boolean newSave;
-    @Shadow public Scriptable scope;
-    @Shadow public boolean fogDensityOverridden;
-    @Shadow public boolean fogColorOverridden;
-    @Shadow public MusicScripts musicScripts;
-    @Shadow public Script script;
-    @Shadow public TriggerManager triggerManager;
-    @Shadow public String[] soundList;
-    @Shadow public String[] musicList;
-    @Shadow private int[] coordOrder;
+    @Shadow
+    public File levelDir;
+    @Shadow
+    boolean firstTick;
+    @Shadow
+    public UndoStack undoStack;
+    @Shadow
+    public JScriptHandler scriptHandler;
+    @Shadow
+    protected final DimensionData mapHandler;
+    @Shadow
+    boolean newSave;
+    @Shadow
+    public Scriptable scope;
+    @Shadow
+    public boolean fogDensityOverridden;
+    @Shadow
+    public boolean fogColorOverridden;
+    @Shadow
+    public MusicScripts musicScripts;
+    @Shadow
+    public Script script;
+    @Shadow
+    public TriggerManager triggerManager;
+    @Shadow
+    public String[] soundList;
+    @Shadow
+    public String[] musicList;
+    @Shadow
+    private int[] coordOrder;
 
     public float getSpawnYaw() {
         return this.x.spawnYaw;
@@ -2399,7 +2413,7 @@ public class MixinLevel extends Level implements TileView {
         FlowingLavaTextureBinder.loadImage();
         FlowingLavaTextureBinder2.loadImage();
         PortalTextureBinder.loadImage();
-        vs.loadImage();
+        FlowingWaterTextureBinder2.loadImage();
         oh.loadImage();
         GrassColour.loadGrass("/misc/grasscolor.png");
         jh.loadFoliage("/misc/foliagecolor.png");

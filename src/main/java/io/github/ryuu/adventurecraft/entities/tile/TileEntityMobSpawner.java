@@ -237,7 +237,7 @@ public class TileEntityMobSpawner extends TileEntityScript {
                 for (int i = 0; i < num; i++) {
                     int entID = this.delayLoadData.getInt(String.format("entID_%d", i));
                     for (Object obj : this.level.entities) {
-                        Entity e = (Entity)obj;
+                        Entity e = (Entity) obj;
                         if (e.id == entID) {
                             this.spawnedEntities.add(e);
                             if (e.isAlive())

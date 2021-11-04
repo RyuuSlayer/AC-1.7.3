@@ -28,7 +28,7 @@ repositories {
 
 minecraft {
     // Skip old versions of libraries which Mojang use but we don't need
-    addLibraryFilter {library ->
+    addLibraryFilter { library ->
         return !(library.startsWith('net.minecraft:launchwrapper:') ||
                 library.startsWith('net.sf.jopt-simple:jopt-simple:') ||
                 library.startsWith('org.ow2.asm:asm-all:'))
@@ -83,7 +83,7 @@ java {
 
 jar {
     from("LICENSE") {
-        rename { "${it}_${project.archivesBaseName}"}
+        rename { "${it}_${project.archivesBaseName}" }
     }
 }
 

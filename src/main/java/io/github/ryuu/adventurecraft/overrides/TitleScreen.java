@@ -62,7 +62,7 @@ public class TitleScreen extends Screen {
         this.j = "A Minecraft Total Conversion!";
         MixinTranslationStorage stringtranslate = MixinTranslationStorage.a();
         int i = this.d / 4 + 48;
-        this.e.add(new Button[](6, this.c / 2 - 100, i, "New Save"));
+        this.e.add(new Button[] (6, this.c / 2 - 100, i, "New Save"));
         this.e.add(new Button(1, this.c / 2 - 100, i + 22, "Load Save"));
         this.e.add(new Button(7, this.c / 2 - 100, i + 44, "Craft a Map"));
         this.e.add(new Button(5, this.c / 2 - 100, i + 66, "Download a Map"));

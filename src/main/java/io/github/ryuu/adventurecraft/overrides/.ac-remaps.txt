@@ -86,6 +86,7 @@ uq = Overlay
 uu = Tile
 uw = Slime
 uz = Zombie
+vs = FlowingWaterTextureBinder2
 wp = GrassTile
 wq = FlyingEntity
 ya = ZombiePigman
