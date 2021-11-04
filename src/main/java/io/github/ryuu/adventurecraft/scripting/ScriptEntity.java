@@ -52,16 +52,16 @@ public class ScriptEntity {
     }
 
     public int getEntityID() {
-        return this.entity.aD;
+        return this.entity.id;
     }
 
     public ScriptVec3 getPosition() {
-        return new ScriptVec3(this.entity.aM, this.entity.aN, this.entity.aO);
+        return new ScriptVec3(this.entity.prevX, this.entity.prevY, this.entity.prevZ);
     }
 
     ScriptVec3 getPosition(float f) {
         float iF = 1.0F - f;
-        return new ScriptVec3(iF * this.entity.aJ + f * this.entity.aM, iF * this.entity.aK + f * this.entity.aN, iF * this.entity.aL + f * this.entity.aO);
+        return new ScriptVec3(iF * this.entity.prevX + f * this.entity.x, iF * this.entity.prevY + f * this.entity.y, iF * this.entity.prevZ + f * this.entity.z);
     }
 
     public void setPosition(ScriptVec3 p) {
@@ -69,24 +69,24 @@ public class ScriptEntity {
     }
 
     public void setPosition(double x, double y, double z) {
-        this.entity.e(x, y, z);
+        this.entity.setPosition(x, y, z);
     }
 
     public ScriptVecRot getRotation() {
-        return new ScriptVecRot(this.entity.aS, this.entity.aT);
+        return new ScriptVecRot(this.entity.yaw, this.entity.pitch);
     }
 
     ScriptVecRot getRotation(float f) {
         float iF = 1.0F - f;
-        return new ScriptVecRot(iF * this.entity.aU + f * this.entity.aS, iF * this.entity.aV + f * this.entity.aT);
+        return new ScriptVecRot(iF * this.entity.prevYaw + f * this.entity.yaw, iF * this.entity.prevPitch + f * this.entity.pitch);
     }
 
     public void setRotation(float yaw, float pitch) {
-        this.entity.c(yaw, pitch);
+        this.entity.setRotation(yaw, pitch);
     }
 
     public ScriptVec3 getVelocity() {
-        return new ScriptVec3(this.entity.aP, this.entity.aQ, this.entity.aR);
+        return new ScriptVec3(this.entity.velocityX, this.entity.velocityY, this.entity.velocityZ);
     }
 
     public void setVelocity(ScriptVec3 v) {
@@ -94,7 +94,7 @@ public class ScriptEntity {
     }
 
     public void setVelocity(double x, double y, double z) {
-        this.entity.a(x, y, z);
+        this.entity.setVelocity(x, y, z);
     }
 
     public void addVelocity(ScriptVec3 v) {
@@ -126,25 +126,25 @@ public class ScriptEntity {
     }
 
     public boolean isAlive() {
-        return this.entity.W();
+        return this.entity.isAlive();
     }
 
     public boolean isRiding() {
-        return this.entity.al();
+        return this.entity.method_1360();
     }
 
     public boolean isSneaking() {
-        return this.entity.t();
+        return this.entity.method_1373();
     }
 
     public ScriptEntity[] getEntitiesWithinRange(double dist) {
-        Box bb = Box.b(this.entity.aM - dist, this.entity.aN - dist, this.entity.aO - dist, this.entity.aM + dist, this.entity.aN + dist, this.entity.aO + dist);
-        List entities = this.entity.aI.b(this.entity, bb);
+        Box bb = Box.create(this.entity.x - dist, this.entity.y - dist, this.entity.z - dist, this.entity.x + dist, this.entity.y + dist, this.entity.z + dist);
+        List entities = this.entity.level.getEntities(this.entity, bb);
         List<ScriptEntity> scriptEntities = new ArrayList<>();
         double sqDist = dist * dist;
         for (Object ent : entities) {
             Entity e = (Entity) ent;
-            if (e.g(this.entity) < sqDist)
+            if (e.method_1352(this.entity) < sqDist)
                 scriptEntities.add(getEntityClass(e));
         }
         int i = 0;
@@ -155,55 +155,55 @@ public class ScriptEntity {
     }
 
     public ScriptEntity dropItem(ScriptItem item) {
-        return getEntityClass((Entity) this.entity.a(item.item, 0.0F));
+        return getEntityClass((Entity) this.entity.dropItem(item.item, 0.0F));
     }
 
     public boolean isInsideOfWater() {
-        return this.entity.a(Material.WATER);
+        return this.entity.isInFluid(Material.WATER);
     }
 
     public boolean isInsideOfLava() {
-        return this.entity.a(Material.LAVA);
+        return this.entity.isInFluid(Material.LAVA);
     }
 
     public boolean getImmuneToFire() {
-        return this.entity.bC;
+        return this.entity.immuneToFire;
     }
 
     public void setImmuneToFire(boolean i) {
-        this.entity.bC = i;
+        this.entity.immuneToFire = i;
     }
 
     public int getFireLevel() {
-        return this.entity.bv;
+        return this.entity.fire;
     }
 
     public void setFireLevel(int f) {
-        this.entity.bv = f;
+        this.entity.fire = f;
     }
 
     public int getFireResistance() {
-        return this.entity.bu;
+        return this.entity.field_1646;
     }
 
     public void setFireResistance(int f) {
-        this.entity.bu = f;
+        this.entity.field_1646 = f;
     }
 
     public int getAir() {
-        return this.entity.bz;
+        return this.entity.air;
     }
 
     public void setAir(int i) {
-        this.entity.bz = i;
+        this.entity.air = i;
     }
 
     public int getMaxAir() {
-        return this.entity.bw;
+        return this.entity.field_1648;
     }
 
     public void setMaxAir(int i) {
-        this.entity.bw = i;
+        this.entity.field_1648 = i;
     }
 
     public int getStunned() {
@@ -215,7 +215,7 @@ public class ScriptEntity {
     }
 
     public boolean attackEntityFrom(ScriptEntity e, int i) {
-        return this.entity.a(e.entity, i);
+        return this.entity.damage(e.entity, i);
     }
 
     public String getClassType() {
@@ -233,21 +233,21 @@ public class ScriptEntity {
     }
 
     public float getHeight() {
-        return this.entity.bh;
+        return this.entity.height;
     }
 
     public void setHeight(float h) {
-        this.entity.bh = h;
-        this.entity.e(this.entity.aM, this.entity.aN, this.entity.aO);
+        this.entity.height = h;
+        this.entity.setPosition(this.entity.x, this.entity.y, this.entity.z);
     }
 
     public float getWidth() {
-        return this.entity.bg;
+        return this.entity.width;
     }
 
     public void setWidth(float w) {
-        this.entity.bg = w;
-        this.entity.e(this.entity.aM, this.entity.aN, this.entity.aO);
+        this.entity.width = w;
+        this.entity.e(this.entity.x, this.entity.y, this.entity.z);
     }
 
     public void setIsFlying(boolean b) {
@@ -259,7 +259,7 @@ public class ScriptEntity {
     }
 
     public boolean getOnGround() {
-        return this.entity.aX;
+        return this.entity.onGround;
     }
 
     public Object[] rayTrace(ScriptVec3 start, ScriptVec3 end) {
@@ -267,24 +267,24 @@ public class ScriptEntity {
     }
 
     public Object[] rayTrace(double startX, double startY, double startZ, double endX, double endY, double endZ) {
-        Object[] results = new Object[3]
-        HitResult hit = UtilBullet.rayTrace(this.entity.aI, this.entity, Vec3f.b(startX, startY, startZ), Vec3f.b(endX, endY, endZ));
+        Object[] results = new Object[3];
+        HitResult hit = UtilBullet.rayTrace(this.entity.level, this.entity, Vec3f.from(startX, startY, startZ), Vec3f.from(endX, endY, endZ));
         if (hit != null) {
-            results[0] = new ScriptVec3(hit.f.a, hit.f.b, hit.f.c);
-            if (hit.a == HitType.a) {
-                results[1] = new ScriptVec3(hit.b, hit.c, hit.d);
+            results[0] = new ScriptVec3(hit.field_1988.x, hit.field_1988.y, hit.field_1988.z);
+            if (hit.type == HitType.a) {
+                results[1] = new ScriptVec3(hit.x, hit.y, hit.z);
             } else {
-                results[2] = getEntityClass(hit.g);
+                results[2] = getEntityClass(hit.field_1989);
             }
         }
         return results;
     }
 
     public float getyOffset() {
-        return this.entity.bf;
+        return this.entity.standingEyeHeight;
     }
 
     public void setyOffset(float y) {
-        this.entity.bf = y;
+        this.entity.standingEyeHeight = y;
     }
 }
