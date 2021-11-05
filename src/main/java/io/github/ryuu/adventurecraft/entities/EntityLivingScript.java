@@ -152,7 +152,7 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
         if (!this.onInteraction.equals(""))
             nbttagcompound.put("onInteraction", this.onInteraction);
         if (nbttagcompound.containsKey("scope"))
-            ScopeTag.loadScopeFromTag(this.scope, nbttagcompound.k("scope"));
+            ScopeTag.loadScopeFromTag(this.scope, nbttagcompound.getCompoundTag("scope"));
     }
 
     @Override

@@ -1,37 +1,40 @@
 package io.github.ryuu.adventurecraft.entities;
 
+import io.github.ryuu.adventurecraft.overrides.Monster;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.monster.Monster;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 
 public class EntityRat extends Monster {
     public EntityRat(Level world) {
         super(world);
-        this.O = "/mob/rat.png";
-        this.aB = 0.5F;
-        this.c = 1;
-        b(0.6F, 0.6F);
-        this.Y = 6;
+        this.texture = "/mob/rat.png";
+        this.movementSpeed = 0.5F;
+        this.attackDamage = 1;
+        setSize(0.6F, 0.6F);
+        this.health = 6;
         this.maxHealth = 6;
     }
 
-    protected Entity g_() {
-        Player entityplayer = this.aI.a(this, 5.0D);
-        if (entityplayer != null && e(entityplayer))
+    protected Entity findPlayerToTrack() {
+        Player entityplayer = this.level.getClosestPlayerTo(this, 5.0D);
+        if (entityplayer != null && method_928(entityplayer))
             return entityplayer;
         return null;
     }
 
-    protected String g() {
+    @Override
+    protected String getAmbientSound() {
         return "mob.rat.ambient";
     }
 
-    protected String j_() {
+    @Override
+    protected String getHurtSound() {
         return "mob.rat.hurt";
     }
 
-    protected String i() {
+    @Override
+    protected String getDeathSound() {
         return "mob.rat.death";
     }
 }

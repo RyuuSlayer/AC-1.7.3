@@ -12,37 +12,39 @@ public class EntitySkeletonRifle extends Skeleton {
 
     public EntitySkeletonRifle(Level world) {
         super(world);
-        this.c = 6;
+        this.attackDamage = 6; // c = attackDamage (for future)
         this.ammo = 30;
         this.heldItem = new ItemInstance(Items.rifle, 1);
     }
 
-    protected void a(Entity entity, float f) {
-        if (f < 15.0D && this.bs.nextBoolean()) {
+    @Override
+    protected void method_637(Entity entity, float f) {
+        if (f < 15.0D && this.rand.nextBoolean()) {
             a(entity, 30.0F, 30.0F);
-            if (this.ae == 0) {
+            if (this.attackTime == 0) {
                 this.ammo--;
                 a(entity, 60.0F, 90.0F);
-                this.aS = (float) (this.aS + 10.0D * this.bs.nextGaussian());
-                this.aT = (float) (this.aT + 3.0D * this.bs.nextGaussian());
-                this.aI.a(this, "items.rifle.fire", 1.0F, 1.0F);
-                UtilBullet.fireBullet(this.aI, this, 0.07F, this.c);
-                this.ae = 5;
+                this.yaw = (float) (this.yaw + 10.0D * this.rand.nextGaussian());
+                this.pitch = (float) (this.pitch + 3.0D * this.rand.nextGaussian());
+                this.level.playSound(this, "items.rifle.fire", 1.0F, 1.0F);
+                UtilBullet.fireBullet(this.level, this, 0.07F, this.attackDamage);
+                this.attackTime = 5;
                 if (this.ammo == 0) {
                     this.ammo = 30;
-                    this.ae = 40;
+                    this.attackTime = 40;
                 }
             }
-            double d = entity.aM - this.aM;
-            double d1 = entity.aO - this.aO;
-            this.aS = (float) (Math.atan2(d1, d) * 180.0D / 3.1415927410125732D) - 90.0F;
-            this.e = true;
+            double d = entity.x - this.x;
+            double d1 = entity.z - this.z;
+            this.yaw = (float) (Math.atan2(d1, d) * 180.0D / 3.1415927410125732D) - 90.0F;
+            this.field_663 = true;
         }
     }
 
-    public void w_() {
-        super.w_();
-        if (this.Y <= 0) {
+    @Override
+    public void tick() {
+        super.tick();
+        if (this.health <= 0) {
             this.heldItem.timeLeft = 0;
         } else {
             if (this.ammo == 30) {
@@ -50,14 +52,15 @@ public class EntitySkeletonRifle extends Skeleton {
                 if (this.heldItem.timeLeft < 0)
                     this.heldItem.timeLeft = 0;
             } else {
-                this.heldItem.timeLeft = this.ae;
+                this.heldItem.timeLeft = this.attackTime;
             }
             if (this.heldItem.timeLeft < 0)
                 this.heldItem.timeLeft = 0;
         }
     }
 
-    protected int j() {
-        return Items.rifleAmmo.bf;
+    @Override
+    protected int getMobDrops() {
+        return Items.rifleAmmo.id;
     }
 }

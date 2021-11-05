@@ -10,6 +10,8 @@ import io.github.ryuu.adventurecraft.models.ModelCamera;
 import io.github.ryuu.adventurecraft.models.ModelRat;
 import io.github.ryuu.adventurecraft.rendering.*;
 import net.minecraft.client.render.entity.ItemRenderer;
+import net.minecraft.client.render.entity.LivingEntityRenderer;
+import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 import org.lwjgl.opengl.GL11;
@@ -67,7 +69,7 @@ public class EntityRenderDispatcher {
         this.o.put(EntityHookshot.class, new RenderHookshot());
         this.o.put(EntityBomb.class, new RenderBomb());
         this.o.put(EntityBat.class, new gv((ko) new ModelBat(), 0.3F));
-        this.o.put(EntityRat.class, new gv((ko) new ModelRat(), 0.0F));
+        this.o.put(EntityRat.class, new LivingEntityRenderer(new ModelRat(), 0.0F));
         this.o.put(EntityCamera.class, new RenderCamera(new ModelCamera(), 0.0F));
         this.o.put(EntityNPC.class, new RenderNPC(new fh()));
         this.o.put(EntityLivingScript.class, new RenderBipedScaledScripted(new fh()));
