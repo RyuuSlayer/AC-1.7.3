@@ -68,7 +68,7 @@ public class EntityRenderDispatcher {
         this.o.put(EntityBoomerang.class, new RenderBoomerang());
         this.o.put(EntityHookshot.class, new RenderHookshot());
         this.o.put(EntityBomb.class, new RenderBomb());
-        this.o.put(EntityBat.class, new gv((ko) new ModelBat(), 0.3F));
+        this.o.put(EntityBat.class, new LivingEntityRenderer(new ModelBat(), 0.3F));
         this.o.put(EntityRat.class, new LivingEntityRenderer(new ModelRat(), 0.0F));
         this.o.put(EntityCamera.class, new RenderCamera(new ModelCamera(), 0.0F));
         this.o.put(EntityNPC.class, new RenderNPC(new fh()));
