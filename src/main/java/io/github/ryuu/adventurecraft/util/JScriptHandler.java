@@ -12,11 +12,9 @@ import net.minecraft.level.Level;
 import org.mozilla.javascript.Scriptable;
 
 public class JScriptHandler {
-    Level world;
-
-    File scriptDir;
-
     public HashMap<String, JScriptInfo> scripts;
+    Level world;
+    File scriptDir;
 
     JScriptHandler(Level w, File mapDir) {
         this.world = w;

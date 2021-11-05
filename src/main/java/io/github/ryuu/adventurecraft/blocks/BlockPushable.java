@@ -12,6 +12,18 @@ public class BlockPushable extends BlockColor {
         super(i, j, material);
     }
 
+    public static boolean canFallBelow(Level world, int i, int j, int k) {
+        int l = world.getTileId(i, j, k);
+        if (l == 0)
+            return true;
+        if (l == Tile.FIRE.id)
+            return true;
+        Material material = (Tile.BY_ID[l]).material;
+        if (material == Material.WATER)
+            return true;
+        return (material == Material.LAVA);
+    }
+
     @Override
     public void method_1611(Level world, int i, int j, int k) {
         world.method_216(i, j, k, this.id, getTickrate());
@@ -38,17 +50,5 @@ public class BlockPushable extends BlockColor {
     @Override
     public int getTickrate() {
         return 3;
-    }
-
-    public static boolean canFallBelow(Level world, int i, int j, int k) {
-        int l = world.getTileId(i, j, k);
-        if (l == 0)
-            return true;
-        if (l == Tile.FIRE.id)
-            return true;
-        Material material = (Tile.BY_ID[l]).material;
-        if (material == Material.WATER)
-            return true;
-        return (material == Material.LAVA);
     }
 }

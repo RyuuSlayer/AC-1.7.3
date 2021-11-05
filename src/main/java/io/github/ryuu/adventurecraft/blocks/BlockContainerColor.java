@@ -6,6 +6,9 @@ import net.minecraft.tile.TileWithEntity;
 import net.minecraft.tile.material.Material;
 
 public abstract class BlockContainerColor extends TileWithEntity implements IBlockColor {
+    static final int numColors = 7;
+    protected int defaultColor;
+
     protected BlockContainerColor(int i, Material material) {
         super(i, material);
         this.defaultColor = 13421772;
@@ -50,8 +53,4 @@ public abstract class BlockContainerColor extends TileWithEntity implements IBlo
         int color = (getColorMetaData(world, i, j, k) + 1) % numColors;
         setColorMetaData(world, i, j, k, color);
     }
-
-    static final int numColors = 7;
-
-    protected int defaultColor;
 }

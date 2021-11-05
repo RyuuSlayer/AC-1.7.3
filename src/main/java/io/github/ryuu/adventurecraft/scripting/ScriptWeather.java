@@ -10,27 +10,27 @@ public class ScriptWeather {
         this.world = w;
     }
 
-    public void setPrecipitating(boolean precipate) {
-        this.world.x.b(precipate);
-    }
-
     public boolean getPrecipitating() {
         return this.world.x.o();
     }
 
-    public void setTemperatureOffset(double tempOffset) {
-        this.world.x.tempOffset = tempOffset;
+    public void setPrecipitating(boolean precipate) {
+        this.world.x.b(precipate);
     }
 
     public double getTemperatureOffset() {
         return this.world.x.tempOffset;
     }
 
-    public void setThundering(boolean precipate) {
-        this.world.x.a(precipate);
+    public void setTemperatureOffset(double tempOffset) {
+        this.world.x.tempOffset = tempOffset;
     }
 
     public boolean getThundering() {
         return this.world.x.m();
+    }
+
+    public void setThundering(boolean precipate) {
+        this.world.x.a(precipate);
     }
 }

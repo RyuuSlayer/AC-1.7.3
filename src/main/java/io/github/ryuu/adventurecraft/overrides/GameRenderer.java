@@ -20,6 +20,48 @@ import org.lwjgl.opengl.GLContext;
 import org.lwjgl.util.glu.GLU;
 
 public class GameRenderer {
+    public static boolean a = false;
+    public static int b;
+    private final Minecraft j;
+    private final cu n;
+    private final cu o;
+    private final cu p;
+    private final cu q;
+    private final cu r;
+    private final cu s;
+    private final float t;
+    private final float v;
+    private final float x;
+    private final float B;
+    private final double F;
+    private final double G;
+    private final Random J;
+    public HandItemRenderer c;
+    public float z;
+    public HandItemRenderer offHandItemRenderer;
+    volatile int d;
+    volatile int e;
+    FloatBuffer f;
+    float g;
+    float h;
+    float i;
+    float farClipAdjustment;
+    private float k;
+    private int l;
+    private Entity m;
+    private float u;
+    private float w;
+    private float y;
+    private float A;
+    private float C;
+    private boolean D;
+    private double E;
+    private long H;
+    private long I;
+    private int K;
+    private float L;
+    private float M;
+
     public GameRenderer(Minecraft minecraft) {
         this.k = 0.0F;
         this.m = null;
@@ -874,86 +916,4 @@ public class GameRenderer {
         this.f.flip();
         return this.f;
     }
-
-    public static boolean a = false;
-
-    public static int b;
-
-    private final Minecraft j;
-
-    private float k;
-
-    public HandItemRenderer c;
-
-    private int l;
-
-    private Entity m;
-
-    private final cu n;
-
-    private final cu o;
-
-    private final cu p;
-
-    private final cu q;
-
-    private final cu r;
-
-    private final cu s;
-
-    private final float t;
-
-    private float u;
-
-    private final float v;
-
-    private float w;
-
-    private final float x;
-
-    private float y;
-
-    public float z;
-
-    private float A;
-
-    private final float B;
-
-    private float C;
-
-    private boolean D;
-
-    private double E;
-
-    private final double F;
-
-    private final double G;
-
-    private long H;
-
-    private long I;
-
-    private final Random J;
-
-    private int K;
-
-    volatile int d;
-
-    volatile int e;
-
-    FloatBuffer f;
-
-    float g;
-
-    float h;
-
-    float i;
-
-    private float L;
-
-    private float M;
-
-    public HandItemRenderer offHandItemRenderer;
-
-    float farClipAdjustment;
 }

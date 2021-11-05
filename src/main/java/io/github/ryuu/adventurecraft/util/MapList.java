@@ -11,9 +11,8 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 public class MapList {
-    private List<MapInfo> availableMaps;
-
     private final File mapDir;
+    private List<MapInfo> availableMaps;
 
     public MapList(File file) {
         this.availableMaps = new ArrayList<>();

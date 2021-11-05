@@ -11,11 +11,9 @@ import io.github.ryuu.adventurecraft.scripting.Script;
 import org.mozilla.javascript.Scriptable;
 
 public class MusicScripts {
-    ArrayList<MusicScriptEntry> musicEntries;
-
-    JScriptHandler handler;
-
     public Scriptable scope;
+    ArrayList<MusicScriptEntry> musicEntries;
+    JScriptHandler handler;
 
     MusicScripts(Script script, File mapDir, JScriptHandler h) {
         this.musicEntries = new ArrayList<>();

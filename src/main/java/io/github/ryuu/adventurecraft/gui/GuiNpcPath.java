@@ -15,6 +15,10 @@ public class GuiNpcPath extends Screen {
         this.path = npcPath;
     }
 
+    public static void showUI(TileEntityNpcPath npcPath) {
+        Minecraft.minecraftInstance.a(new GuiNpcPath(npcPath));
+    }
+
     @Override
     public void tick() {
     }
@@ -63,10 +67,6 @@ public class GuiNpcPath extends Screen {
         drawTextWithShadow(this.textManager, String.format("Min: (%d, %d, %d)", this.path.minX, this.path.minY, this.path.minZ), 4, 44, 14737632);
         drawTextWithShadow(this.textManager, String.format("Max: (%d, %d, %d)", this.path.maxX, this.path.maxY, this.path.maxZ), 4, 64, 14737632);
         super.render(i, j, f);
-    }
-
-    public static void showUI(TileEntityNpcPath npcPath) {
-        Minecraft.minecraftInstance.a(new GuiNpcPath(npcPath));
     }
 
     @Override

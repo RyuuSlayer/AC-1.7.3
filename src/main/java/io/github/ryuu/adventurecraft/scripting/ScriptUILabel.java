@@ -5,21 +5,14 @@ import net.minecraft.client.render.TextRenderer;
 import net.minecraft.client.texture.TextureManager;
 
 public class ScriptUILabel extends UIElement {
-    private String text;
-
-    private String[] textLines;
-
     public boolean shadow;
-
     public boolean centered;
-
     public float red;
-
     public float green;
-
     public float blue;
-
     public float alpha;
+    private String text;
+    private String[] textLines;
 
     public ScriptUILabel(String label, float xPos, float yPos) {
         this(label, xPos, yPos, Minecraft.minecraftInstance.v.scriptUI);

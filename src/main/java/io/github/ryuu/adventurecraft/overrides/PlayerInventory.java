@@ -18,14 +18,10 @@ public class PlayerInventory implements Inventory {
     public int c;
 
     public Player d;
-
-    private ItemInstance f;
-
     public boolean e;
-
     public int offhandItem;
-
     public int[] consumeInventory;
+    private ItemInstance f;
 
     public PlayerInventory(Player entityplayer) {
         this.a = new ItemInstance[36];

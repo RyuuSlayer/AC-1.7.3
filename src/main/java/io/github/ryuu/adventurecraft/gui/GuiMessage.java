@@ -8,16 +8,17 @@ import net.minecraft.level.Level;
 
 public class GuiMessage extends Screen {
     private final TileEntityMessage msg;
-
-    private TileEntityMessage soundFile;
-
     private final Level world;
-
+    private TileEntityMessage soundFile;
     private int page;
 
     public GuiMessage(Level w, TileEntityMessage tileEntityMsg) {
         this.world = w;
         this.msg = tileEntityMsg;
+    }
+
+    public static void showUI(Level w, TileEntityMessage tileEntityMsg) {
+        Minecraft.minecraftInstance.a(new GuiMessage(w, tileEntityMsg));
     }
 
     @Override
@@ -68,12 +69,8 @@ public class GuiMessage extends Screen {
         if (this.msg.sound != "") {
             drawTextWithShadow(this.textManager, String.format("Sound: %s", this.msg.sound), 4, 24, 14737632);
         } else {
-            drawTextWithShadow(this.textManager, String.format("Sound: None", new Object[0]), 4, 24, 14737632);
+            drawTextWithShadow(this.textManager, String.format("Sound: None"), 4, 24, 14737632);
         }
         super.render(i, j, f);
-    }
-
-    public static void showUI(Level w, TileEntityMessage tileEntityMsg) {
-        Minecraft.minecraftInstance.a(new GuiMessage(w, tileEntityMsg));
     }
 }

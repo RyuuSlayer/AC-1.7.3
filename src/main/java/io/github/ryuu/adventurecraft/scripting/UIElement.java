@@ -7,6 +7,12 @@ import net.minecraft.client.texture.TextureManager;
 import sj;
 
 public class UIElement {
+    public float curX = 0.0F;
+    public float curY = 0.0F;
+    public float prevX = 0.0F;
+    public float prevY = 0.0F;
+    protected ScriptUIContainer parent;
+
     public void addToScreen() {
         if (Minecraft.minecraftInstance.v != null)
             Minecraft.minecraftInstance.v.scriptUI.add(this);
@@ -68,14 +74,4 @@ public class UIElement {
         this.curX += x;
         this.curY += y;
     }
-
-    public float curX = 0.0F;
-
-    public float curY = 0.0F;
-
-    public float prevX = 0.0F;
-
-    public float prevY = 0.0F;
-
-    protected ScriptUIContainer parent;
 }

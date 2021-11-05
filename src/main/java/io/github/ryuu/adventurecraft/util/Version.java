@@ -9,6 +9,10 @@ public class Version {
 
     public static String shortVersion = "AdventureCraft Awakening";
 
+    static {
+        getVersion();
+    }
+
     private static void getVersion() {
         try {
             File file = new File("version.txt");
@@ -23,9 +27,5 @@ public class Version {
         } catch (Exception exception) {
             exception.printStackTrace();
         }
-    }
-
-    static {
-        getVersion();
     }
 }

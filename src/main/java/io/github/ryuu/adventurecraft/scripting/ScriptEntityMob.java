@@ -10,11 +10,11 @@ public class ScriptEntityMob extends ScriptEntityCreature {
         this.entityMob = e;
     }
 
-    public void setAttackStrength(int i) {
-        this.entityMob.c = i;
-    }
-
     public int getAttackStrength() {
         return this.entityMob.c;
+    }
+
+    public void setAttackStrength(int i) {
+        this.entityMob.c = i;
     }
 }

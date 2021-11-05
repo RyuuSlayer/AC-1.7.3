@@ -11,21 +11,13 @@ public class EntityNPC extends EntityLivingScript {
     public String npcName;
 
     public String chatMsg;
-
-    boolean initialSpot;
-
     public double spawnX;
-
     public double spawnY;
-
     public double spawnZ;
-
     public boolean pathToHome;
-
     public boolean trackPlayer;
-
     public boolean isAttackable;
-
+    boolean initialSpot;
     int ticksTillNewPath;
 
     class_61 pathToPoint;

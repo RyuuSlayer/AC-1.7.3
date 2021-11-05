@@ -6,17 +6,12 @@ import net.minecraft.level.Level;
 import net.minecraft.util.io.CompoundTag;
 
 public class WalkingEntity extends LivingEntity implements IEntityPather {
-    private dh a;
-
-    protected Entity d;
-
-    protected boolean e;
-
     public boolean canForgetTargetRandomly;
-
     public int timeBeforeForget;
-
     public boolean canPathRandomly;
+    protected Entity d;
+    protected boolean e;
+    private dh a;
 
     public WalkingEntity(Level world) {
         super(world);

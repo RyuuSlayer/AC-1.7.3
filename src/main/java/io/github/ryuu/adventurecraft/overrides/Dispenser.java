@@ -5,9 +5,8 @@ import net.minecraft.util.io.CompoundTag;
 import java.util.Random;
 
 public class Dispenser extends TileEntity implements lw {
-    private iz[] a = new iz[9];
-
     private final Random b = new Random();
+    private iz[] a = new iz[9];
 
     public int a() {
         return 9;

@@ -1,20 +1,17 @@
 package io.github.ryuu.adventurecraft.util;
 
 public class CutsceneCameraPoint {
+    static final int NONE = 0;
+    static final int LINEAR = 1;
+    static final int QUADRATIC = 2;
+    static int startCameraID = 0;
     public float time;
-
     public float posX;
-
     public float posY;
-
     public float posZ;
-
     public float rotYaw;
-
     public float rotPitch;
-
     public int cameraBlendType;
-
     public int cameraID;
 
     CutsceneCameraPoint(float t, float x, float y, float z, float ya, float p, int i) {
@@ -27,12 +24,4 @@ public class CutsceneCameraPoint {
         this.cameraBlendType = i;
         this.cameraID = startCameraID++;
     }
-
-    static int startCameraID = 0;
-
-    static final int NONE = 0;
-
-    static final int LINEAR = 1;
-
-    static final int QUADRATIC = 2;
 }

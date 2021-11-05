@@ -11,29 +11,18 @@ import net.minecraft.util.io.CompoundTag;
 import java.util.List;
 
 public class Arrow extends Entity {
-    public int d;
-
-    public int e;
-
-    public int f;
-
-    public int g;
-
-    private int h;
-
-    private boolean i;
-
-    public boolean a;
-
-    public int b;
-
-    public LivingEntity c;
-
-    private int j;
-
-    protected int k;
-
     private final int attackStrength;
+    public int d;
+    public int e;
+    public int f;
+    public int g;
+    public boolean a;
+    public int b;
+    public LivingEntity c;
+    protected int k;
+    private int h;
+    private boolean i;
+    private int j;
 
     public Arrow(Level world) {
         super(world);

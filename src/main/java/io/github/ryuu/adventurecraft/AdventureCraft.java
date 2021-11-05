@@ -12,7 +12,8 @@ import net.minecraft.client.Minecraft;
 
 public class AdventureCraft {
 
-    //TODO: This was used by the old AdventureCraft launcher to start the game, the AdventureCraft.jar, ACBin.jar & js.jar were added through startup parameters.
+    // TODO: This was used by the old AdventureCraft launcher to start the game, the AdventureCraft.jar, ACBin.jar & js.jar were added through startup parameters.
+    // We can very probably get rid of the whole class.
 
     public static void main(String[] args) {
         byte b;

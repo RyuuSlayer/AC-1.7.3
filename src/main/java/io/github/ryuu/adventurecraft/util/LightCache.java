@@ -6,9 +6,8 @@ class LightCache {
     static final int cacheSizeThird = 5461;
 
     static final int cacheSizeTwoThird = 10922;
-
+    static LightCache cache = new LightCache();
     CoordBlock[] coords = new CoordBlock[16384];
-
     float[] lightValues = new float[16384];
 
     public void clear() {
@@ -68,6 +67,4 @@ class LightCache {
         this.coords[i] = CoordBlock.getFromPool(x, y, z);
         this.lightValues[i] = l;
     }
-
-    static LightCache cache = new LightCache();
 }

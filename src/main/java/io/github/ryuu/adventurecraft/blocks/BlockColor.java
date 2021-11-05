@@ -6,6 +6,9 @@ import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 
 class BlockColor extends Tile implements IBlockColor {
+    static final int numColors = 7;
+    protected int defaultColor;
+
     protected BlockColor(int i, int j, Material material) {
         super(i, j, material);
         this.defaultColor = 13421772;
@@ -45,8 +48,4 @@ class BlockColor extends Tile implements IBlockColor {
         int color = (getColorMetaData(world, i, j, k) + 1) % numColors;
         setColorMetaData(world, i, j, k, color);
     }
-
-    static final int numColors = 7;
-
-    protected int defaultColor;
 }

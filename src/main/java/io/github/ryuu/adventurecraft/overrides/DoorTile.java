@@ -17,6 +17,10 @@ public class DoorTile extends Tile {
         a(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, f1, 0.5F + f);
     }
 
+    public static boolean f(int i) {
+        return ((i & 0x4) != 0);
+    }
+
     public int a(int i, int j) {
         if (i == 0 || i == 1)
             return this.bm;
@@ -211,10 +215,6 @@ public class DoorTile extends Tile {
         if (j >= 127)
             return false;
         return (world.h(i, j - 1, k) && super.a(world, i, j, k) && super.a(world, i, j + 1, k));
-    }
-
-    public static boolean f(int i) {
-        return ((i & 0x4) != 0);
     }
 
     public int h() {

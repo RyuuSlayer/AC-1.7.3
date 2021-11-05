@@ -12,6 +12,14 @@ import net.minecraft.tile.entity.TileEntity;
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityStoreRenderer extends TileEntityRenderer {
+    static ItemInstance item = new ItemInstance(0, 0, 0);
+    static ItemEntity eItem = new ItemEntity(null, 0.0D, 0.0D, 0.0D, item);
+    static MixinItemRenderer renderItem = new MixinItemRenderer();
+
+    static {
+        renderItem.scale = 1.5F;
+    }
+
     public TileEntityStoreRenderer() {
         renderItem.setDispatcher(EntityRenderDispatcher.INSTANCE);
     }
@@ -60,15 +68,5 @@ public class TileEntityStoreRenderer extends TileEntityRenderer {
     @Override
     public void render(TileEntity tileentity, double d, double d1, double d2, float f) {
         renderTileEntityStore((TileEntityStore) tileentity, d, d1, d2, f);
-    }
-
-    static ItemInstance item = new ItemInstance(0, 0, 0);
-
-    static ItemEntity eItem = new ItemEntity(null, 0.0D, 0.0D, 0.0D, item);
-
-    static MixinItemRenderer renderItem = new MixinItemRenderer();
-
-    static {
-        renderItem.scale = 1.5F;
     }
 }

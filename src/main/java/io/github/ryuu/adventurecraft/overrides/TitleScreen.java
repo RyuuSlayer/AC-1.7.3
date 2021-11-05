@@ -20,6 +20,11 @@ import net.minecraft.client.render.Tessellator;
 import org.lwjgl.opengl.GL11;
 
 public class TitleScreen extends Screen {
+    private static final Random a = new Random();
+    private float i;
+    private String j;
+    private Button l;
+
     public TitleScreen() {
         ScriptModel.clearAll();
         Minecraft.minecraftInstance.B.stopMusic();
@@ -62,7 +67,7 @@ public class TitleScreen extends Screen {
         this.j = "A Minecraft Total Conversion!";
         MixinTranslationStorage stringtranslate = MixinTranslationStorage.a();
         int i = this.d / 4 + 48;
-        this.e.add(new Button[] (6, this.c / 2 - 100, i, "New Save"));
+        this.e.add(new Button[] (6, this.c / 2 - 100, i, "New Save"))
         this.e.add(new Button(1, this.c / 2 - 100, i + 22, "Load Save"));
         this.e.add(new Button(7, this.c / 2 - 100, i + 44, "Craft a Map"));
         this.e.add(new Button(5, this.c / 2 - 100, i + 66, "Download a Map"));
@@ -120,12 +125,4 @@ public class TitleScreen extends Screen {
         b(this.g, s, this.c - this.g.a(s) - 2, this.d - 10, 16777215);
         super.a(i, j, f);
     }
-
-    private static final Random a = new Random();
-
-    private float i;
-
-    private String j;
-
-    private Button l;
 }

@@ -29,11 +29,29 @@ class GuiMapDownload extends Screen {
 
     //TODO: We will want to get rid of the ingame Map Download in favor for the Launcher.
 
-    public ScriptUIContainer ui = new ScriptUIContainer(0.0F, 26.0F, null);
-
+    static final String url = "https://www.adventurecraft.gq/";
     private final ArrayList<GuiMapElement> maps = new ArrayList<>();
 
     private final File mapDownloadFolder = new File("./mapDownloads/");
+    private final Random rand;
+    public ScriptUIContainer ui = new ScriptUIContainer(0.0F, 26.0F, null);
+    protected Screen parentScreen;
+    private boolean downloading = true;
+    private int mapImagesDownloaded = 0;
+    private int totalMaps = 0;
+    private boolean downloadingMap = false;
+    private boolean rightClickDown = false;
+    private boolean scrolling = false;
+    private GuiMapElement mouseOver;
+    private String downloadingMapName;
+    private int downloadedAmount;
+    private int downloadSize;
+    private String mapUrl;
+    private String mapName;
+    private GuiMapElement downloadingMapElement;
+    private int mouseY;
+    private int maxOffset;
+    private int scrollBarX;
 
     public GuiMapDownload(Screen guiscreen) {
         if (!this.mapDownloadFolder.exists())
@@ -400,42 +418,4 @@ class GuiMapDownload extends Screen {
         tessellator.vertex(0.0D, top, 0.0D, 0.0D, (top / f));
         tessellator.draw();
     }
-
-    private boolean downloading = true;
-
-    private int mapImagesDownloaded = 0;
-
-    private int totalMaps = 0;
-
-    private boolean downloadingMap = false;
-
-    private boolean rightClickDown = false;
-
-    private boolean scrolling = false;
-
-    static final String url = "https://www.adventurecraft.gq/";
-
-    protected Screen parentScreen;
-
-    private GuiMapElement mouseOver;
-
-    private String downloadingMapName;
-
-    private int downloadedAmount;
-
-    private int downloadSize;
-
-    private String mapUrl;
-
-    private String mapName;
-
-    private GuiMapElement downloadingMapElement;
-
-    private int mouseY;
-
-    private int maxOffset;
-
-    private int scrollBarX;
-
-    private final Random rand;
 }

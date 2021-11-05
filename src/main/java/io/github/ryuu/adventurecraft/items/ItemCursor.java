@@ -7,7 +7,24 @@ import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 
 public class ItemCursor extends ItemType {
+    public static int minX;
+    public static int minY;
+    public static int minZ;
+    public static int maxX;
+    public static int maxY;
+    public static int maxZ;
     static boolean bothSet;
+    static boolean firstPosition = true;
+    static int oneX;
+    static int oneY;
+    static int oneZ;
+    static int twoX;
+    static int twoY;
+    static int twoZ;
+
+    static {
+        bothSet = false;
+    }
 
     protected ItemCursor(int i) {
         super(i);
@@ -38,35 +55,5 @@ public class ItemCursor extends ItemType {
         maxZ = Math.max(oneZ, twoZ);
         firstPosition = !firstPosition;
         return false;
-    }
-
-    static boolean firstPosition = true;
-
-    static int oneX;
-
-    static int oneY;
-
-    static int oneZ;
-
-    static int twoX;
-
-    static int twoY;
-
-    static int twoZ;
-
-    public static int minX;
-
-    public static int minY;
-
-    public static int minZ;
-
-    public static int maxX;
-
-    public static int maxY;
-
-    public static int maxZ;
-
-    static {
-        bothSet = false;
     }
 }

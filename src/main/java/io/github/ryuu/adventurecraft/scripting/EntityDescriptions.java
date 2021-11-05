@@ -9,6 +9,8 @@ import java.util.Properties;
 import java.util.Set;
 
 public class EntityDescriptions {
+    static final HashMap<String, ScriptEntityDescription> descriptions = new HashMap<>();
+
     public static ScriptEntityDescription getDescription(String descName) {
         return descriptions.get(descName);
     }
@@ -69,6 +71,4 @@ public class EntityDescriptions {
     public static Set<String> getDescriptions() {
         return descriptions.keySet();
     }
-
-    static final HashMap<String, ScriptEntityDescription> descriptions = new HashMap<>();
 }

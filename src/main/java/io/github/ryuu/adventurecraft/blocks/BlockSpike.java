@@ -34,6 +34,6 @@ public class BlockSpike extends Tile {
 
     @Override
     public void onEntityCollision(Level world, int i, int j, int k, Entity entity) {
-        entity.damage((Entity) null, 10);
+        entity.damage(null, 10);
     }
 }

@@ -13,6 +13,10 @@ public class GuiStorage extends Screen {
         this.storage = storageClicked;
     }
 
+    public static void showUI(TileEntityStorage storageClicked) {
+        Minecraft.minecraftInstance.a(new GuiStorage(storageClicked));
+    }
+
     @Override
     public void tick() {
     }
@@ -41,10 +45,6 @@ public class GuiStorage extends Screen {
         drawTextWithShadow(this.textManager, String.format("Min: (%d, %d, %d)", this.storage.minX, this.storage.minY, this.storage.minZ), 4, 4, 14737632);
         drawTextWithShadow(this.textManager, String.format("Max: (%d, %d, %d)", this.storage.maxX, this.storage.maxY, this.storage.maxZ), 4, 24, 14737632);
         super.render(i, j, f);
-    }
-
-    public static void showUI(TileEntityStorage storageClicked) {
-        Minecraft.minecraftInstance.a(new GuiStorage(storageClicked));
     }
 
     @Override

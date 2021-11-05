@@ -18,16 +18,11 @@ public class EntityBat extends FlyingEntity implements MonsterEntityType {
     public double waypointY;
 
     public double waypointZ;
-
-    private Entity targetedEntity;
-
-    private int aggroCooldown;
-
     boolean movingToTarget;
-
     int attackCooldown;
-
     Random bs;
+    private Entity targetedEntity;
+    private int aggroCooldown;
 
     public EntityBat(Level world) {
         super(world);

@@ -8,22 +8,14 @@ import net.minecraft.level.Level;
 import java.io.File;
 
 public class GuiWorldConfig extends Screen {
-    private int page;
-
     private final Level world;
-
-    private Textbox playerName;
-
-    int selectedID;
-
-    private Button setOnNewSave;
-
-    private Button setOnLoad;
-
-    private Button setOnUpdate;
-
     private final Textbox[] lightLevels;
-
+    int selectedID;
+    private int page;
+    private Textbox playerName;
+    private Button setOnNewSave;
+    private Button setOnLoad;
+    private Button setOnUpdate;
     private boolean lightChanged;
 
     public GuiWorldConfig(Level w) {

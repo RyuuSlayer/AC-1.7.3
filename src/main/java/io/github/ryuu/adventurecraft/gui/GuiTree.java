@@ -29,6 +29,10 @@ public class GuiTree extends Screen {
         this.tree = t;
     }
 
+    public static void showUI(Level w, int x, int y, int z, TileEntityTree t) {
+        Minecraft.minecraftInstance.a(new GuiTree(w, x, y, z, t));
+    }
+
     @Override
     public void tick() {
     }
@@ -54,10 +58,6 @@ public class GuiTree extends Screen {
             this.world.getChunk(this.blockX, this.blockZ).method_885();
         }
         super.render(i, j, f);
-    }
-
-    public static void showUI(Level w, int x, int y, int z, TileEntityTree t) {
-        Minecraft.minecraftInstance.a(new GuiTree(w, x, y, z, t));
     }
 
     @Override

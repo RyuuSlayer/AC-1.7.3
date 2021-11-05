@@ -102,6 +102,85 @@ import x;
 import xa;
 
 public abstract class Minecraft implements Runnable {
+    public static byte[] b = new byte[10485760];
+    public static long[] E = new long[512];
+    public static long[] F = new long[512];
+    public static int G = 0;
+    public static long H = 0L;
+    public static Minecraft minecraftInstance;
+    public static long[] updateTimes = new long[512];
+    public static long updateRendererTime;
+    private static Minecraft a;
+    private static File af = null;
+    private final Timer T;
+    private final int Y;
+    private final FlowingWaterTextureBinder2 ad;
+    private final FlowingLavaTextureBinder ae;
+    public ClientInteractionManager c;
+    public int d;
+    public int e;
+    public Level f;
+    public n g;
+    public ClientPlayer h;
+    public LivingEntity i;
+    public ParticleManager j;
+    public Session k;
+    public String l;
+    public Canvas m;
+    public boolean n;
+    public volatile boolean o;
+    public TextureManager p;
+    public TextRenderer q;
+    public Screen r;
+    public ProgressListenerImpl s;
+    public GameRenderer t;
+    public ResourceDownloadThread U;
+    public ToastManager u;
+    public uq v;
+    public boolean w;
+    public BipedModel x;
+    public vf y;
+    public GameOptions z;
+    public SoundHelper B;
+    public vy C;
+    public ik D;
+    public StatManager I;
+    public volatile boolean J;
+    public String K;
+    public boolean N;
+    public boolean O;
+    public MapList mapList;
+    public int nextFrameTime;
+    public long prevFrameTimeForAvg;
+    public long[] tFrameTimes;
+    public CutsceneCamera cutsceneCamera;
+    public CutsceneCamera activeCutsceneCamera;
+    public boolean cameraActive;
+    public boolean cameraPause;
+    public LivingEntity cutsceneCameraEntity;
+    public GuiStore storeGUI;
+    protected MinecraftApplet A;
+    boolean L;
+    long M;
+    long P;
+    ItemInstance lastItemUsed;
+    Entity lastEntityHit;
+    ScriptVec3 lastBlockHit;
+    int gcTime;
+    private boolean Q;
+    private boolean R;
+    private OcclusionQueryTester S;
+    private int V;
+    private int W;
+    private int X;
+    private File Z;
+    private LevelStorage aa;
+    private String ab;
+    private int ac;
+    private int ag;
+    private int rightMouseTicksRan;
+    private int ah;
+
     public Minecraft(Component component, Canvas canvas, MinecraftApplet minecraftapplet, int i, int j, boolean flag) {
         this.cameraPause = true;
         this.gcTime = 0;
@@ -147,6 +226,115 @@ public abstract class Minecraft implements Runnable {
         this.tFrameTimes = new long[60];
         this.cutsceneCamera = new CutsceneCamera();
         this.storeGUI = new GuiStore();
+    }
+
+    public static File b() {
+        if (af == null)
+            af = a("minecraft");
+        return af;
+    }
+
+    public static File a(String s) {
+        File file;
+        String s2, s1 = System.getProperty("user.home", ".");
+        switch (kn.a[y().ordinal()]) {
+            case 1:
+            case 2:
+                file = new File(s1, '.' + s + '/');
+                break;
+            case 3:
+                s2 = System.getenv("APPDATA");
+                if (s2 != null) {
+                    file = new File(s2, "." + s + '/');
+                    break;
+                }
+                file = new File(s1, '.' + s + '/');
+                break;
+            case 4:
+                file = new File(s1, "Library/Application Support/" + s);
+                break;
+            default:
+                file = new File(s1, s + '/');
+                break;
+        }
+        if (!file.exists() && !file.mkdirs())
+            throw new RuntimeException("The working directory could not be created: " + file);
+        return file;
+    }
+
+    private static OperatingSystem y() {
+        String s = System.getProperty("os.name").toLowerCase();
+        if (s.contains("win"))
+            return OperatingSystem.c;
+        if (s.contains("mac"))
+            return OperatingSystem.d;
+        if (s.contains("solaris"))
+            return OperatingSystem.b;
+        if (s.contains("sunos"))
+            return OperatingSystem.b;
+        if (s.contains("linux"))
+            return OperatingSystem.a;
+        if (s.contains("unix"))
+            return OperatingSystem.a;
+        return OperatingSystem.e;
+    }
+
+    public static void a(String s, String s1) {
+        a(s, s1, null);
+    }
+
+    public static void a(String s, String s1, String s2) {
+        boolean flag = false;
+        String s3 = s;
+        Frame frame = new Frame("Minecraft");
+        Canvas canvas = new Canvas();
+        frame.setLayout(new BorderLayout());
+        frame.add(canvas, "Center");
+        canvas.setPreferredSize(new Dimension(854, 480));
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        kq minecraftimpl = new kq(frame, canvas, null, 854, 480, flag, frame);
+        Thread thread = new Thread((Runnable) minecraftimpl, "Minecraft main thread");
+        thread.setPriority(10);
+        minecraftimpl.l = "www.minecraft.net";
+        if (s3 != null && s1 != null) {
+            minecraftimpl.k = new Session(s3, s1);
+        } else {
+            minecraftimpl.k = new Session("ACPlayer", "");
+        }
+        if (s2 != null) {
+            String[] as = s2.split(":");
+            minecraftimpl.a(as[0], Integer.parseInt(as[1]));
+        }
+        frame.setVisible(true);
+        frame.addWindowListener((WindowListener) new kj((Minecraft) minecraftimpl, thread));
+        thread.start();
+    }
+
+    public static void main(String[] args) {
+        String s = "ACPlayer";
+        if (args.length > 0)
+            s = args[0];
+        String s1 = "-";
+        if (args.length > 1)
+            s1 = args[1];
+        a(s, s1);
+    }
+
+    public static boolean t() {
+        return (a == null || !a.z.z);
+    }
+
+    public static boolean u() {
+        return (a != null && a.z.j);
+    }
+
+    public static boolean v() {
+        return (a != null && a.z.k);
+    }
+
+    public static boolean w() {
+        return (a != null && a.z.B);
     }
 
     public void b(GameStartupError unexpectedthrowable) {
@@ -252,7 +440,7 @@ public abstract class Minecraft implements Runnable {
         c("Post startup");
         this.v = new uq(this);
         if (this.ab != null) {
-            a((Screen) new ServerConnectingScreen(this, this.ab, this.ac));
+            a(new ServerConnectingScreen(this, this.ab, this.ac));
         } else {
             a(new TitleScreen());
         }
@@ -303,57 +491,6 @@ public abstract class Minecraft implements Runnable {
         tessellator.a((i + i1), (j + 0), 0.0D, ((k + i1) * f), ((l + 0) * f1));
         tessellator.a((i + 0), (j + 0), 0.0D, ((k + 0) * f), ((l + 0) * f1));
         tessellator.a();
-    }
-
-    public static File b() {
-        if (af == null)
-            af = a("minecraft");
-        return af;
-    }
-
-    public static File a(String s) {
-        File file;
-        String s2, s1 = System.getProperty("user.home", ".");
-        switch (kn.a[y().ordinal()]) {
-            case 1:
-            case 2:
-                file = new File(s1, '.' + s + '/');
-                break;
-            case 3:
-                s2 = System.getenv("APPDATA");
-                if (s2 != null) {
-                    file = new File(s2, "." + s + '/');
-                    break;
-                }
-                file = new File(s1, '.' + s + '/');
-                break;
-            case 4:
-                file = new File(s1, "Library/Application Support/" + s);
-                break;
-            default:
-                file = new File(s1, s + '/');
-                break;
-        }
-        if (!file.exists() && !file.mkdirs())
-            throw new RuntimeException("The working directory could not be created: " + file);
-        return file;
-    }
-
-    private static OperatingSystem y() {
-        String s = System.getProperty("os.name").toLowerCase();
-        if (s.contains("win"))
-            return OperatingSystem.c;
-        if (s.contains("mac"))
-            return OperatingSystem.d;
-        if (s.contains("solaris"))
-            return OperatingSystem.b;
-        if (s.contains("sunos"))
-            return OperatingSystem.b;
-        if (s.contains("linux"))
-            return OperatingSystem.a;
-        if (s.contains("unix"))
-            return OperatingSystem.a;
-        return OperatingSystem.e;
     }
 
     public LevelStorage c() {
@@ -1051,11 +1188,11 @@ public abstract class Minecraft implements Runnable {
                             if (Keyboard.getEventKey() == 65)
                                 this.h.displayGUIPalette();
                             if (Keyboard.getEventKey() == this.z.r.b)
-                                a((Screen) new PlayerInventoryScreen((Player) this.h));
+                                a(new PlayerInventoryScreen(this.h));
                             if (Keyboard.getEventKey() == this.z.s.b)
                                 this.h.D();
                             if ((l() || DebugMode.active) && Keyboard.getEventKey() == this.z.t.b)
-                                a((Screen) new ChatScreen());
+                                a(new ChatScreen());
                             if (DebugMode.active && (Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157)))
                                 if (Keyboard.getEventKey() == 44) {
                                     this.f.undo();
@@ -1238,7 +1375,7 @@ public abstract class Minecraft implements Runnable {
                 this.f.a((Entity) this.h, false);
             Level world = null;
             world = new Level(this.f, xa.a(-1));
-            a(world, "Entering the Nether", (Player) this.h);
+            a(world, "Entering the Nether", this.h);
         } else {
             d *= d2;
             d1 *= d2;
@@ -1247,7 +1384,7 @@ public abstract class Minecraft implements Runnable {
                 this.f.a((Entity) this.h, false);
             Level world1 = null;
             world1 = new Level(this.f, xa.a(0));
-            a(world1, "Leaving the Nether", (Player) this.h);
+            a(world1, "Leaving the Nether", this.h);
         }
         this.h.aI = this.f;
         if (this.h.W()) {
@@ -1430,230 +1567,16 @@ public abstract class Minecraft implements Runnable {
             a((Screen) null);
     }
 
-    public static void a(String s, String s1) {
-        a(s, s1, null);
-    }
-
-    public static void a(String s, String s1, String s2) {
-        boolean flag = false;
-        String s3 = s;
-        Frame frame = new Frame("Minecraft");
-        Canvas canvas = new Canvas();
-        frame.setLayout(new BorderLayout());
-        frame.add(canvas, "Center");
-        canvas.setPreferredSize(new Dimension(854, 480));
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        kq minecraftimpl = new kq(frame, canvas, null, 854, 480, flag, frame);
-        Thread thread = new Thread((Runnable) minecraftimpl, "Minecraft main thread");
-        thread.setPriority(10);
-        minecraftimpl.l = "www.minecraft.net";
-        if (s3 != null && s1 != null) {
-            minecraftimpl.k = new Session(s3, s1);
-        } else {
-            minecraftimpl.k = new Session("ACPlayer", "");
-        }
-        if (s2 != null) {
-            String[] as = s2.split(":");
-            minecraftimpl.a(as[0], Integer.parseInt(as[1]));
-        }
-        frame.setVisible(true);
-        frame.addWindowListener((WindowListener) new kj((Minecraft) minecraftimpl, thread));
-        thread.start();
-    }
-
     public ClientPlayNetworkHandler s() {
         if (this.h instanceof MultiplayerClientPlayer)
             return ((MultiplayerClientPlayer) this.h).bN;
         return null;
     }
 
-    public static void main(String[] args) {
-        String s = "ACPlayer";
-        if (args.length > 0)
-            s = args[0];
-        String s1 = "-";
-        if (args.length > 1)
-            s1 = args[1];
-        a(s, s1);
-    }
-
-    public static boolean t() {
-        return (a == null || !a.z.z);
-    }
-
-    public static boolean u() {
-        return (a != null && a.z.j);
-    }
-
-    public static boolean v() {
-        return (a != null && a.z.k);
-    }
-
-    public static boolean w() {
-        return (a != null && a.z.B);
-    }
-
     public boolean b(String s) {
         if (!s.startsWith("/")) ;
         return false;
     }
-
-    public static byte[] b = new byte[10485760];
-
-    private static Minecraft a;
-
-    public ClientInteractionManager c;
-
-    private boolean Q;
-
-    private boolean R;
-
-    public int d;
-
-    public int e;
-
-    private OcclusionQueryTester S;
-
-    private final Timer T;
-
-    public Level f;
-
-    public n g;
-
-    public ClientPlayer h;
-
-    public LivingEntity i;
-
-    public ParticleManager j;
-
-    public Session k;
-
-    public String l;
-
-    public Canvas m;
-
-    public boolean n;
-
-    public volatile boolean o;
-
-    public TextureManager p;
-
-    public TextRenderer q;
-
-    public Screen r;
-
-    public ProgressListenerImpl s;
-
-    public GameRenderer t;
-
-    public ResourceDownloadThread U;
-
-    private int V;
-
-    private int W;
-
-    private int X;
-
-    private final int Y;
-
-    public ToastManager u;
-
-    public uq v;
-
-    public boolean w;
-
-    public BipedModel x;
-
-    public vf y;
-
-    public GameOptions z;
-
-    protected MinecraftApplet A;
-
-    public SoundHelper B;
-
-    public vy C;
-
-    public ik D;
-
-    private File Z;
-
-    private LevelStorage aa;
-
-    public static long[] E = new long[512];
-
-    public static long[] F = new long[512];
-
-    public static int G = 0;
-
-    public static long H = 0L;
-
-    public StatManager I;
-
-    private String ab;
-
-    private int ac;
-
-    private final FlowingWaterTextureBinder2 ad;
-
-    private final FlowingLavaTextureBinder ae;
-
-    private static File af = null;
-
-    public volatile boolean J;
-
-    public String K;
-
-    boolean L;
-
-    long M;
-
-    public boolean N;
-
-    private int ag;
-
-    private int rightMouseTicksRan;
-
-    public boolean O;
-
-    long P;
-
-    private int ah;
-
-    public static Minecraft minecraftInstance;
-
-    public static long[] updateTimes = new long[512];
-
-    public static long updateRendererTime;
-
-    public MapList mapList;
-
-    public int nextFrameTime;
-
-    public long prevFrameTimeForAvg;
-
-    public long[] tFrameTimes;
-
-    public CutsceneCamera cutsceneCamera;
-
-    public CutsceneCamera activeCutsceneCamera;
-
-    public boolean cameraActive;
-
-    public boolean cameraPause;
-
-    public LivingEntity cutsceneCameraEntity;
-
-    public GuiStore storeGUI;
-
-    ItemInstance lastItemUsed;
-
-    Entity lastEntityHit;
-
-    ScriptVec3 lastBlockHit;
-
-    int gcTime;
 
     public void updateStoreGUI() {
         ScreenScaler scaledresolution = new ScreenScaler(this.z, this.d, this.e);

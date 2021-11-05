@@ -48,35 +48,18 @@ public class EntityBomb extends ItemEntity {
         this.prevZ = this.z;
     }
 
-    @Override
-    public void tick() {
-        super.tick();
-        if (this.fuse == BOMB_FUSE)
-            this.level.playSound(this, "random.fuse", 1.0F, 1.0F);
-        this.fuse--;
-        double fuseDuration = this.fuse / (double)BOMB_FUSE;
-        double fuseOffset = 0.2D * fuseDuration;
-        if (this.fuse == 0) {
-            explode(this, this.parentEntity, this.level, this.x, this.y, this.z);
-        } else if (this.fuse % 2 == 0) {
-            this.level.addParticle("smoke", this.x, this.y + 0.675D + fuseOffset, this.z, 0.0D, 0.0D, 0.0D);
-        } else {
-            this.level.addParticle("flame", this.x, this.y + 0.675D + fuseOffset, this.z, 0.0D, 0.0D, 0.0D);
-        }
-    }
-
     public static void explode(Entity exploding, Entity parentEntity, Level worldObj, double posX, double posY, double posZ) {
         exploding.remove();
         worldObj.playSound(posX, posY, posZ, "random.explode", 4.0F, 1.0F);
         List<Entity> list = worldObj.getEntities(
-            exploding,
-            Box.create(
-                Math.floor(posX - BOMB_RANGE),
-                Math.floor(posY - BOMB_RANGE),
-                Math.floor(posZ - BOMB_RANGE),
-                Math.ceil(posX + BOMB_RANGE),
-                Math.ceil(posY + BOMB_RANGE),
-                Math.ceil(posZ + BOMB_RANGE)));
+                exploding,
+                Box.create(
+                        Math.floor(posX - BOMB_RANGE),
+                        Math.floor(posY - BOMB_RANGE),
+                        Math.floor(posZ - BOMB_RANGE),
+                        Math.ceil(posX + BOMB_RANGE),
+                        Math.ceil(posY + BOMB_RANGE),
+                        Math.ceil(posZ + BOMB_RANGE)));
 
         for (int i = 0; i < list.size(); i++) {
             Entity entity = list.get(i);
@@ -124,6 +107,23 @@ public class EntityBomb extends ItemEntity {
                     }
                 }
             }
+        }
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (this.fuse == BOMB_FUSE)
+            this.level.playSound(this, "random.fuse", 1.0F, 1.0F);
+        this.fuse--;
+        double fuseDuration = this.fuse / (double) BOMB_FUSE;
+        double fuseOffset = 0.2D * fuseDuration;
+        if (this.fuse == 0) {
+            explode(this, this.parentEntity, this.level, this.x, this.y, this.z);
+        } else if (this.fuse % 2 == 0) {
+            this.level.addParticle("smoke", this.x, this.y + 0.675D + fuseOffset, this.z, 0.0D, 0.0D, 0.0D);
+        } else {
+            this.level.addParticle("flame", this.x, this.y + 0.675D + fuseOffset, this.z, 0.0D, 0.0D, 0.0D);
         }
     }
 

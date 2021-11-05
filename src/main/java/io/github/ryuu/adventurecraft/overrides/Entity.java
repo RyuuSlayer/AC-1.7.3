@@ -8,6 +8,80 @@ import java.util.List;
 import java.util.Random;
 
 public abstract class Entity {
+    public static int a = 0;
+    public final eq aW;
+    public int aD;
+    public double aE;
+    public boolean aF;
+    public Entity aG;
+    public Entity aH;
+    public Level aI;
+    public double aJ;
+    public double aK;
+    public double aL;
+    public double aM;
+    public double aN;
+    public double aO;
+    public double aP;
+    public double aQ;
+    public double aR;
+    public float aS;
+    public float aT;
+    public float aU;
+    public float aV;
+    public boolean aX;
+    public boolean aY;
+    public boolean aZ;
+    public boolean ba;
+    public boolean bb;
+    public boolean bc;
+    public boolean bd;
+    public boolean be;
+    public float bf;
+    public float bg;
+    public float bh;
+    public float bi;
+    public float bj;
+    public double bl;
+    public double bm;
+    public double bn;
+    public float bo;
+    public float bp;
+    public boolean bq;
+    public float br;
+    public int bt;
+    public int bu;
+    public int bv;
+    public int bw;
+    public int by;
+    public int bz;
+    public String bA;
+    public String bB;
+    public boolean bC;
+    public float bE;
+    public boolean bF;
+    public int bG;
+    public int bH;
+    public int bI;
+    public int bJ;
+    public int bK;
+    public int bL;
+    public boolean bM;
+    public boolean isFlying;
+    public int stunned;
+    public boolean collidesWithClipBlocks;
+    public int collisionX;
+    public int collisionZ;
+    public float moveYawOffset;
+    protected float bk;
+    protected Random bs;
+    protected boolean bx;
+    protected ud bD;
+    private int b;
+    private boolean c;
+    private double d;
+    private double e;
+
     public Entity(Level world) {
         this.aW = eq.a(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
         this.collidesWithClipBlocks = true;
@@ -961,150 +1035,4 @@ public abstract class Entity {
         }
         return false;
     }
-
-    public static int a = 0;
-
-    public int aD;
-
-    public double aE;
-
-    public boolean aF;
-
-    public Entity aG;
-
-    public Entity aH;
-
-    public Level aI;
-
-    public double aJ;
-
-    public double aK;
-
-    public double aL;
-
-    public double aM;
-
-    public double aN;
-
-    public double aO;
-
-    public double aP;
-
-    public double aQ;
-
-    public double aR;
-
-    public float aS;
-
-    public float aT;
-
-    public float aU;
-
-    public float aV;
-
-    public final eq aW;
-
-    public boolean aX;
-
-    public boolean aY;
-
-    public boolean aZ;
-
-    public boolean ba;
-
-    public boolean bb;
-
-    public boolean bc;
-
-    public boolean bd;
-
-    public boolean be;
-
-    public float bf;
-
-    public float bg;
-
-    public float bh;
-
-    public float bi;
-
-    public float bj;
-
-    protected float bk;
-
-    private int b;
-
-    public double bl;
-
-    public double bm;
-
-    public double bn;
-
-    public float bo;
-
-    public float bp;
-
-    public boolean bq;
-
-    public float br;
-
-    protected Random bs;
-
-    public int bt;
-
-    public int bu;
-
-    public int bv;
-
-    public int bw;
-
-    protected boolean bx;
-
-    public int by;
-
-    public int bz;
-
-    private boolean c;
-
-    public String bA;
-
-    public String bB;
-
-    public boolean bC;
-
-    protected ud bD;
-
-    public float bE;
-
-    private double d;
-
-    private double e;
-
-    public boolean bF;
-
-    public int bG;
-
-    public int bH;
-
-    public int bI;
-
-    public int bJ;
-
-    public int bK;
-
-    public int bL;
-
-    public boolean bM;
-
-    public boolean isFlying;
-
-    public int stunned;
-
-    public boolean collidesWithClipBlocks;
-
-    public int collisionX;
-
-    public int collisionZ;
-
-    public float moveYawOffset;
 }

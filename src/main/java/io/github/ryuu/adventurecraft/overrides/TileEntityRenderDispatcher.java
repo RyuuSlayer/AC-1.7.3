@@ -10,7 +10,20 @@ import net.minecraft.level.Level;
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityRenderDispatcher {
+    public static TileEntityRenderDispatcher a = new TileEntityRenderDispatcher();
+    public static double b;
+    public static double c;
+    public static double d;
     private final Map m;
+    public TextureManager e;
+    public Level f;
+    public LivingEntity g;
+    public float h;
+    public float i;
+    public double j;
+    public double k;
+    public double l;
+    private TextRenderer n;
 
     private TileEntityRenderDispatcher() {
         this.m = new HashMap<>();
@@ -88,30 +101,4 @@ public class TileEntityRenderDispatcher {
     public TextRenderer a() {
         return this.n;
     }
-
-    public static TileEntityRenderDispatcher a = new TileEntityRenderDispatcher();
-
-    private TextRenderer n;
-
-    public static double b;
-
-    public static double c;
-
-    public static double d;
-
-    public TextureManager e;
-
-    public Level f;
-
-    public LivingEntity g;
-
-    public float h;
-
-    public float i;
-
-    public double j;
-
-    public double k;
-
-    public double l;
 }

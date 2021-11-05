@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class CoordBlock {
+    private static final List<CoordBlock> blockCoords = new ArrayList<>();
+    public static int numBlockCoordsInUse = 0;
     public int x;
-
     public int y;
-
     public int z;
 
     public CoordBlock(int i, int j, int k) {
@@ -52,8 +52,4 @@ public final class CoordBlock {
     public int hashCode() {
         return this.x << 16 ^ this.z ^ this.y << 24;
     }
-
-    private static final List<CoordBlock> blockCoords = new ArrayList<>();
-
-    public static int numBlockCoordsInUse = 0;
 }

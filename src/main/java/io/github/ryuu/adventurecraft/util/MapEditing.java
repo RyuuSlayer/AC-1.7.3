@@ -21,14 +21,10 @@ import org.lwjgl.opengl.GL14;
 import org.lwjgl.util.glu.GLU;
 
 public class MapEditing {
-    Minecraft mc;
-
-    Level world;
-
-    HitResult cursor;
-
     private final TileRenderer renderBlocks;
-
+    Minecraft mc;
+    Level world;
+    HitResult cursor;
     int selectedBlockID;
 
     int selectedMetadata;

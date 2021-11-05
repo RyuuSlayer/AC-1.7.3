@@ -13,36 +13,22 @@ import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
 public class Script {
+    static boolean shutterSet = false;
     public Scriptable globalScope;
-
-    Scriptable curScope;
-
-    Scriptable runScope;
-
-    Context cx;
-
-    ScriptTime time;
-
-    ScriptWorld world;
-
-    ScriptEntityPlayer player;
-
-    ScriptChat chat;
-
-    ScriptWeather weather;
-
-    ScriptEffect effect;
-
-    ScriptSound sound;
-
-    ScriptUI ui;
-
-    ScriptScript script;
-
     public ScriptKeyboard keyboard;
-
+    Scriptable curScope;
+    Scriptable runScope;
+    Context cx;
+    ScriptTime time;
+    ScriptWorld world;
+    ScriptEntityPlayer player;
+    ScriptChat chat;
+    ScriptWeather weather;
+    ScriptEffect effect;
+    ScriptSound sound;
+    ScriptUI ui;
+    ScriptScript script;
     LinkedList<ScriptContinuation> sleepingScripts;
-
     LinkedList<ScriptContinuation> removeMe;
 
     public Script(Level w) {
@@ -188,6 +174,4 @@ public class Script {
         this.sleepingScripts.add(new ScriptContinuation(cp.getContinuation(), this.time.getTickCount() + ticks, this.curScope));
         throw cp;
     }
-
-    static boolean shutterSet = false;
 }

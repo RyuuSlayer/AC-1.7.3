@@ -16,6 +16,10 @@ public class GuiCamera extends Screen {
         this.cam = c;
     }
 
+    public static void showUI(EntityCamera c) {
+        Minecraft.minecraftInstance.a(new GuiCamera(c));
+    }
+
     @Override
     public void init() {
         Button b = new Button(0, 4, 4, 160, 18, "Delete Camera Point");
@@ -87,9 +91,5 @@ public class GuiCamera extends Screen {
         drawTextWithShadow(this.textManager, "Active At:", 4, 49, 14737632);
         this.timerText.method_1883();
         super.render(i, j, f);
-    }
-
-    public static void showUI(EntityCamera c) {
-        Minecraft.minecraftInstance.a(new GuiCamera(c));
     }
 }

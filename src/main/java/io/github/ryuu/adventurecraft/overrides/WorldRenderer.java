@@ -26,97 +26,52 @@ import org.lwjgl.opengl.ARBOcclusionQuery;
 import org.lwjgl.opengl.GL11;
 
 public class WorldRenderer implements LevelListener {
-    public List a;
-
-    private Level k;
-
     private final TextureManager l;
-
     private final List m;
-
-    private dk[] n;
-
-    private dk[] o;
-
-    private int p;
-
-    private int q;
-
-    private int r;
-
     private final int s;
-
     private final Minecraft t;
-
-    private cv u;
-
-    private IntBuffer v;
-
-    private boolean w;
-
-    private int x;
-
     private final int y;
-
     private final int z;
-
     private final int A;
-
-    private int B;
-
-    private int C;
-
-    private int D;
-
-    private int E;
-
-    private int F;
-
-    private int G;
-
-    private int H;
-
-    private int I;
-
-    private int J;
-
-    private int K;
-
-    private int L;
-
-    int[] b;
-
-    IntBuffer c;
-
-    private int M;
-
-    private int N;
-
-    private int O;
-
-    private int P;
-
-    private int Q;
-
-    private int R;
-
     private final List S;
-
     private final tg[] T;
-
-    int d;
-
-    int e;
-
-    double f;
-
-    double g;
-
-    double h;
-
+    public List a;
     public float i;
-
+    int[] b;
+    IntBuffer c;
+    int d;
+    int e;
+    double f;
+    double g;
+    double h;
     int j;
+    private Level k;
+    private dk[] n;
+    private dk[] o;
+    private int p;
+    private int q;
+    private int r;
+    private cv u;
+    private IntBuffer v;
+    private boolean w;
+    private int x;
+    private int B;
+    private int C;
+    private int D;
+    private int E;
+    private int F;
+    private int G;
+    private int H;
+    private int I;
+    private int J;
+    private int K;
+    private int L;
+    private int M;
+    private int N;
+    private int O;
+    private int P;
+    private int Q;
+    private int R;
 
     public WorldRenderer(Minecraft minecraft, TextureManager renderengine) {
         this.T = new tg[]{new tg(), new tg(), new tg(), new tg()};

@@ -7,23 +7,16 @@ import io.github.ryuu.adventurecraft.util.Vec2;
 import net.minecraft.client.Minecraft;
 
 public class FlowingWaterTextureBinder2 extends TextureBinder {
-    protected float[] g;
-
-    protected float[] h;
-
-    protected float[] i;
-
-    protected float[] j;
-
-    private int k;
-
     static boolean hasImages;
-
     static int numFrames;
-
+    static int curFrame = 0;
     private static int[] frameImages;
-
     private static int width;
+    protected float[] g;
+    protected float[] h;
+    protected float[] i;
+    protected float[] j;
+    private int k;
 
     public FlowingWaterTextureBinder2() {
         super(uu.B.bm);
@@ -32,6 +25,26 @@ public class FlowingWaterTextureBinder2 extends TextureBinder {
         this.i = new float[256];
         this.j = new float[256];
         this.k = 0;
+    }
+
+    public static void loadImage() {
+        loadImage("/custom_water_still.png");
+    }
+
+    public static void loadImage(String texName) {
+        BufferedImage bufferedimage = null;
+        if (Minecraft.minecraftInstance.f != null)
+            bufferedimage = Minecraft.minecraftInstance.f.loadMapTexture(texName);
+        curFrame = 0;
+        if (bufferedimage == null) {
+            hasImages = false;
+            return;
+        }
+        width = bufferedimage.getWidth();
+        numFrames = bufferedimage.getHeight() / bufferedimage.getWidth();
+        frameImages = new int[bufferedimage.getWidth() * bufferedimage.getHeight()];
+        bufferedimage.getRGB(0, 0, bufferedimage.getWidth(), bufferedimage.getHeight(), frameImages, 0, bufferedimage.getWidth());
+        hasImages = true;
     }
 
     public void onTick(Vec2 texRes) {
@@ -151,26 +164,4 @@ public class FlowingWaterTextureBinder2 extends TextureBinder {
             this.a[i1 * 4 + 3] = (byte) l2;
         }
     }
-
-    public static void loadImage() {
-        loadImage("/custom_water_still.png");
-    }
-
-    public static void loadImage(String texName) {
-        BufferedImage bufferedimage = null;
-        if (Minecraft.minecraftInstance.f != null)
-            bufferedimage = Minecraft.minecraftInstance.f.loadMapTexture(texName);
-        curFrame = 0;
-        if (bufferedimage == null) {
-            hasImages = false;
-            return;
-        }
-        width = bufferedimage.getWidth();
-        numFrames = bufferedimage.getHeight() / bufferedimage.getWidth();
-        frameImages = new int[bufferedimage.getWidth() * bufferedimage.getHeight()];
-        bufferedimage.getRGB(0, 0, bufferedimage.getWidth(), bufferedimage.getHeight(), frameImages, 0, bufferedimage.getWidth());
-        hasImages = true;
-    }
-
-    static int curFrame = 0;
 }

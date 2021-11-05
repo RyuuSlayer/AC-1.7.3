@@ -15,15 +15,16 @@ import net.minecraft.tile.Tile;
 import org.lwjgl.opengl.GL11;
 
 class GuiEditPalette extends DrawableHelper {
+    private static final ItemRenderer itemRenderer = new ItemRenderer();
+    static int rows = 8;
+    static int columns = 4;
+    static int scrollHeight = 8;
     int numRows;
-
     List<Button> controlList;
-
     ArrayList<Tile> blocks;
-
     Button selectedButton;
-
     ItemInstance item;
+    float scrollPosition;
 
     public GuiEditPalette() {
         this.scrollPosition = 0.0F;
@@ -101,14 +102,4 @@ class GuiEditPalette extends DrawableHelper {
     private boolean needScrollbar() {
         return (this.numRows > rows);
     }
-
-    private static final ItemRenderer itemRenderer = new ItemRenderer();
-
-    static int rows = 8;
-
-    static int columns = 4;
-
-    static int scrollHeight = 8;
-
-    float scrollPosition;
 }

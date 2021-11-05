@@ -11,10 +11,8 @@ public class Slime extends LivingEntity implements MonsterEntityType {
     public float a;
 
     public float b;
-
-    private int c;
-
     public int attackStrength;
+    private int c;
 
     public Slime(Level world) {
         super(world);

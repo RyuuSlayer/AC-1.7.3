@@ -24,6 +24,14 @@ public class GuiUrlRequest extends Screen {
         this.msg = m;
     }
 
+    public static void showUI(String url) {
+        Minecraft.minecraftInstance.a(new GuiUrlRequest(url));
+    }
+
+    public static void showUI(String url, String msg) {
+        Minecraft.minecraftInstance.a(new GuiUrlRequest(url, msg));
+    }
+
     @Override
     public void tick() {
     }
@@ -56,14 +64,6 @@ public class GuiUrlRequest extends Screen {
         drawTextWithShadow(this.textManager, this.msg, this.width / 2 - this.textManager.getTextWidth(this.msg) / 2, this.height / 2 - 15, 14737632);
         drawTextWithShadow(this.textManager, this.url, this.width / 2 - this.textManager.getTextWidth(this.url) / 2, this.height / 2, 14737632);
         super.render(i, j, f);
-    }
-
-    public static void showUI(String url) {
-        Minecraft.minecraftInstance.a(new GuiUrlRequest(url));
-    }
-
-    public static void showUI(String url, String msg) {
-        Minecraft.minecraftInstance.a(new GuiUrlRequest(url, msg));
     }
 
     @Override

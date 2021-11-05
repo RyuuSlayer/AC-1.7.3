@@ -14,43 +14,25 @@ import java.util.Random;
 
 public class Chunk {
     public static boolean a;
-
-    public byte[] b;
-
-    public boolean c;
-
-    public Level d;
-
-    public ChunkSubData e;
-
-    public ChunkSubData f;
-
-    public ChunkSubData g;
-
-    public byte[] h;
-
-    public int i;
-
+    public static boolean isNotPopulating = true;
     public final int j;
-
     public final int k;
-
+    public byte[] b;
+    public boolean c;
+    public Level d;
+    public ChunkSubData e;
+    public ChunkSubData f;
+    public ChunkSubData g;
+    public byte[] h;
+    public int i;
     public Map l;
-
     public List[] m;
-
     public boolean n;
-
     public boolean o;
-
     public boolean p;
-
     public boolean q;
-
     public long r;
-
     public double[] temperatures;
-
     public long lastUpdated;
 
     public Chunk(Level world, int i, int j, boolean createHeightMap) {
@@ -79,6 +61,18 @@ public class Chunk {
         this.e = new ChunkSubData(abyte0.length);
         this.f = new ChunkSubData(abyte0.length);
         this.g = new ChunkSubData(abyte0.length);
+    }
+
+    public static int translate128(int bID) {
+        if (bID > 127)
+            return -129 + bID - 127;
+        return bID;
+    }
+
+    public static int translate256(int bID) {
+        if (bID < 0)
+            return bID + 256;
+        return bID;
     }
 
     public boolean a(int i, int j) {
@@ -567,18 +561,4 @@ public class Chunk {
     public void setTemperatureValue(int x, int z, double temp) {
         this.temperatures[z << 4 | x] = temp;
     }
-
-    public static int translate128(int bID) {
-        if (bID > 127)
-            return -129 + bID - 127;
-        return bID;
-    }
-
-    public static int translate256(int bID) {
-        if (bID < 0)
-            return bID + 256;
-        return bID;
-    }
-
-    public static boolean isNotPopulating = true;
 }

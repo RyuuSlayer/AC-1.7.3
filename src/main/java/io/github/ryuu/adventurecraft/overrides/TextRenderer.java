@@ -12,12 +12,9 @@ import org.lwjgl.opengl.GL11;
 
 public class TextRenderer {
     private final int[] b;
-
-    public int a;
-
     private final int c;
-
     private final IntBuffer d;
+    public int a;
 
     public TextRenderer(GameOptions gamesettings, String s, TextureManager renderengine) {
         BufferedImage bufferedimage;

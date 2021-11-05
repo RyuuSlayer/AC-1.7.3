@@ -4,21 +4,24 @@ import io.github.ryuu.adventurecraft.util.ChunkProviderHeightMapGenerate;
 import net.minecraft.level.Level;
 
 public abstract class Dimension {
+    private final float[] h = new float[4];
     public Level a;
-
     public BiomeSource b;
-
     public boolean c = false;
-
     public boolean d = false;
-
     public boolean e = false;
-
     public float[] f = new float[16];
-
     public int g = 0;
 
-    private final float[] h = new float[4];
+    public static Dimension a(int i) {
+        if (i == -1)
+            return (Dimension) new wd();
+        if (i == 0)
+            return (Dimension) new rh();
+        if (i == 1)
+            return (Dimension) new ay();
+        return null;
+    }
 
     public final void a(Level world) {
         this.a = world;
@@ -108,16 +111,6 @@ public abstract class Dimension {
 
     public boolean f() {
         return true;
-    }
-
-    public static Dimension a(int i) {
-        if (i == -1)
-            return (Dimension) new wd();
-        if (i == 0)
-            return (Dimension) new rh();
-        if (i == 1)
-            return (Dimension) new ay();
-        return null;
     }
 
     public float d() {

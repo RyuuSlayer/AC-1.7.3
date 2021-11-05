@@ -11,17 +11,16 @@ import paulscode.sound.codecs.CodecWav;
 import paulscode.sound.libraries.LibraryLWJGLOpenAL;
 
 public class SoundHelper {
+    private static boolean g = false;
+    private static SoundSystem a;
     private final hr b = new hr();
-
     private final hr c = new hr();
-
     private final hr d = new hr();
-
-    private int e = 0;
-
     private final Random h = new Random();
-
     private final int i = this.h.nextInt(12000);
+    private int e = 0;
+    private GameOptions f;
+    private String currentSoundName;
 
     public void a(GameOptions gamesettings) {
         this.c.b = false;
@@ -189,12 +188,4 @@ public class SoundHelper {
                 Minecraft.minecraftInstance.f.x.playingMusic = "";
         }
     }
-
-    private static boolean g = false;
-
-    private static SoundSystem a;
-
-    private GameOptions f;
-
-    private String currentSoundName;
 }

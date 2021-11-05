@@ -15,7 +15,22 @@ import net.minecraft.level.Level;
 import org.lwjgl.opengl.GL11;
 
 public class EntityRenderDispatcher {
+    public static th a = new th();
+    public static double b;
+    public static double c;
+    public static double d;
     private final Map o;
+    public TextureManager e;
+    public HandItemRenderer f;
+    public Level g;
+    public LivingEntity h;
+    public float i;
+    public float j;
+    public GameOptions k;
+    public double l;
+    public double m;
+    public double n;
+    private TextRenderer p;
 
     private EntityRenderDispatcher() {
         this.o = new HashMap<>();
@@ -53,7 +68,7 @@ public class EntityRenderDispatcher {
         this.o.put(EntityBomb.class, new RenderBomb());
         this.o.put(EntityBat.class, new gv((ko) new ModelBat(), 0.3F));
         this.o.put(EntityRat.class, new gv((ko) new ModelRat(), 0.0F));
-        this.o.put(EntityCamera.class, new RenderCamera((ko) new ModelCamera(), 0.0F));
+        this.o.put(EntityCamera.class, new RenderCamera(new ModelCamera(), 0.0F));
         this.o.put(EntityNPC.class, new RenderNPC(new fh()));
         this.o.put(EntityLivingScript.class, new RenderBipedScaledScripted(new fh()));
         for (Iterator<bw> iterator = this.o.values().iterator(); iterator.hasNext(); render.a(this))
@@ -128,34 +143,4 @@ public class EntityRenderDispatcher {
     public TextRenderer a() {
         return this.p;
     }
-
-    public static th a = new th();
-
-    private TextRenderer p;
-
-    public static double b;
-
-    public static double c;
-
-    public static double d;
-
-    public TextureManager e;
-
-    public HandItemRenderer f;
-
-    public Level g;
-
-    public LivingEntity h;
-
-    public float i;
-
-    public float j;
-
-    public GameOptions k;
-
-    public double l;
-
-    public double m;
-
-    public double n;
 }

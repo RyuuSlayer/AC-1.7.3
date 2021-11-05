@@ -17,13 +17,23 @@ public enum Option {
     AUTO_FAR_CLIP("AUTO_FAR_CLIP", 13, "options.adjustFarClip", false, true),
     GRASS_3D("GRASS_3D", 14, "options.grass3d", false, true);
 
+    private static final Option[] q;
+
+    static {
+        q = new Option[]{
+                a, b, c, d, e, f, g, h, i, j,
+                k, l, m};
+    }
+
     private final boolean n;
-
     private final boolean o;
-
     private final String p;
 
-    private static final Option[] q;
+    Option(String s, int i, String s1, boolean flag, boolean flag1) {
+        this.p = s1;
+        this.n = flag;
+        this.o = flag1;
+    }
 
     public static Option a(int i) {
         Option[] aenumoptions = values();
@@ -34,12 +44,6 @@ public enum Option {
                 return enumoptions;
         }
         return null;
-    }
-
-    Option(String s, int i, String s1, boolean flag, boolean flag1) {
-        this.p = s1;
-        this.n = flag;
-        this.o = flag1;
     }
 
     public boolean a() {
@@ -56,11 +60,5 @@ public enum Option {
 
     public String d() {
         return this.p;
-    }
-
-    static {
-        q = new Option[]{
-                a, b, c, d, e, f, g, h, i, j,
-                k, l, m};
     }
 }

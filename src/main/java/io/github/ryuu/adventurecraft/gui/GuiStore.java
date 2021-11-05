@@ -9,10 +9,9 @@ import net.minecraft.item.ItemType;
 import org.lwjgl.opengl.GL11;
 
 public class GuiStore extends Screen {
+    private static final ItemRenderer itemRenderer = new ItemRenderer();
     ItemInstance buyItem = new ItemInstance(0, 0, 0);
-
     ItemInstance sellItem = new ItemInstance(0, 0, 0);
-
     int supplyLeft;
 
     @Override
@@ -105,6 +104,4 @@ public class GuiStore extends Screen {
     public void setSupplyLeft(int s) {
         this.supplyLeft = s;
     }
-
-    private static final ItemRenderer itemRenderer = new ItemRenderer();
 }

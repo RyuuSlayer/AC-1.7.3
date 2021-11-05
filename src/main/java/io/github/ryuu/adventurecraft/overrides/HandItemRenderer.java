@@ -12,26 +12,16 @@ import org.lwjgl.opengl.GL11;
 
 public class HandItemRenderer {
     private final Minecraft a;
-
-    private ItemInstance b;
-
-    private float c;
-
-    private float d;
-
     private final cv e;
-
     private final iy f;
-
-    private int g;
-
-    private boolean itemRotate;
-
-    public ModelPart powerGlove;
-
-    public ModelPart powerGloveRuby;
-
     private final fh refBiped;
+    public ModelPart powerGlove;
+    public ModelPart powerGloveRuby;
+    private ItemInstance b;
+    private float c;
+    private float d;
+    private int g;
+    private boolean itemRotate;
 
     public HandItemRenderer(Minecraft minecraft) {
         this.b = null;
@@ -287,7 +277,7 @@ public class HandItemRenderer {
                 GL11.glScalef(0.4F, 0.4F, 0.4F);
                 if (itemstack.a().c())
                     GL11.glRotatef(180.0F, 0.0F, 1.0F, 0.0F);
-                a((LivingEntity) entityplayersp, itemstack);
+                a(entityplayersp, itemstack);
                 GL11.glPopMatrix();
             } else if (itemstack.c == Items.powerGlove.bf) {
                 GL11.glPushMatrix();
@@ -385,7 +375,7 @@ public class HandItemRenderer {
         GL11.glEnable(32826);
         GL11.glScalef(0.6F, 0.6F, 0.6F);
         this.itemRotate = false;
-        a((LivingEntity) entityplayersp, itemstack);
+        a(entityplayersp, itemstack);
         this.itemRotate = true;
         GL11.glPopMatrix();
     }

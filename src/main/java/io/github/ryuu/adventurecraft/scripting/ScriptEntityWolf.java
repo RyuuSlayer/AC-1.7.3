@@ -11,43 +11,43 @@ public class ScriptEntityWolf extends ScriptEntityCreature {
         this.entityWolf = e;
     }
 
-    public void setAttackStrength(int i) {
-        this.entityWolf.attackStrength = i;
-    }
-
     public int getAttackStrength() {
         return this.entityWolf.attackStrength;
     }
 
-    public void setWolfSitting(boolean flag) {
-        this.entityWolf.b(flag);
+    public void setAttackStrength(int i) {
+        this.entityWolf.attackStrength = i;
     }
 
     public boolean isWolfSitting() {
         return this.entityWolf.B();
     }
 
-    public void setWolfAngry(boolean flag) {
-        this.entityWolf.c(flag);
+    public void setWolfSitting(boolean flag) {
+        this.entityWolf.b(flag);
     }
 
     public boolean isWolfAngry() {
         return this.entityWolf.C();
     }
 
-    public void setWolfTamed(boolean flag) {
-        this.entityWolf.d(flag);
+    public void setWolfAngry(boolean flag) {
+        this.entityWolf.c(flag);
     }
 
     public boolean isWolfTamed() {
         return this.entityWolf.D();
     }
 
-    public void setWolfOwner(ScriptEntityPlayer player) {
-        this.entityWolf.a(player.entityPlayer.l);
+    public void setWolfTamed(boolean flag) {
+        this.entityWolf.d(flag);
     }
 
     public String getWolfOwner() {
         return this.entityWolf.A();
+    }
+
+    public void setWolfOwner(ScriptEntityPlayer player) {
+        this.entityWolf.a(player.entityPlayer.l);
     }
 }

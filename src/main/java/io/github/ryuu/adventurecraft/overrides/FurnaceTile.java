@@ -9,8 +9,8 @@ import net.minecraft.tile.TileWithEntity;
 import java.util.Random;
 
 public class FurnaceTile extends TileWithEntity {
+    private static boolean c = false;
     private final Random a;
-
     private final boolean b;
 
     protected FurnaceTile(int i, boolean flag) {
@@ -18,6 +18,22 @@ public class FurnaceTile extends TileWithEntity {
         this.a = new Random();
         this.b = flag;
         this.bm = 45;
+    }
+
+    public static void a(boolean flag, Level world, int i, int j, int k) {
+        int l = world.e(i, j, k);
+        TileEntity tileentity = world.b(i, j, k);
+        c = true;
+        if (flag) {
+            world.f(i, j, k, Tile.aD.bn);
+        } else {
+            world.f(i, j, k, Tile.aC.bn);
+        }
+        c = false;
+        world.d(i, j, k, l);
+        tileentity.j();
+        world.a(i, j, k, tileentity);
+        tileentity.j();
     }
 
     public int a(int i, Random random) {
@@ -103,22 +119,6 @@ public class FurnaceTile extends TileWithEntity {
         return true;
     }
 
-    public static void a(boolean flag, Level world, int i, int j, int k) {
-        int l = world.e(i, j, k);
-        TileEntity tileentity = world.b(i, j, k);
-        c = true;
-        if (flag) {
-            world.f(i, j, k, Tile.aD.bn);
-        } else {
-            world.f(i, j, k, Tile.aC.bn);
-        }
-        c = false;
-        world.d(i, j, k, l);
-        tileentity.j();
-        world.a(i, j, k, tileentity);
-        tileentity.j();
-    }
-
     protected TileEntity a_() {
         return (TileEntity) new FurnaceEntity();
     }
@@ -161,6 +161,4 @@ public class FurnaceTile extends TileWithEntity {
         }
         super.b(world, i, j, k);
     }
-
-    private static boolean c = false;
 }

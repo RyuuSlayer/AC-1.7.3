@@ -11,19 +11,19 @@ public class ScriptEntitySlime extends ScriptEntityLiving {
         this.entitySlime = e;
     }
 
-    public void setAttackStrength(int i) {
-        this.entitySlime.attackStrength = i;
-    }
-
     public int getAttackStrength() {
         return this.entitySlime.attackStrength;
     }
 
-    public void setSlimeSize(int i) {
-        this.entitySlime.e(i);
+    public void setAttackStrength(int i) {
+        this.entitySlime.attackStrength = i;
     }
 
     public int getSlimeSize() {
         return this.entitySlime.v();
+    }
+
+    public void setSlimeSize(int i) {
+        this.entitySlime.e(i);
     }
 }

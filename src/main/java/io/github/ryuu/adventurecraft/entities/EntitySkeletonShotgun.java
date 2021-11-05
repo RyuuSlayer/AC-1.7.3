@@ -10,6 +10,8 @@ import net.minecraft.level.Level;
 import java.util.Random;
 
 public class EntitySkeletonShotgun extends Skeleton {
+    private static final Random bs = new Random();
+
     public EntitySkeletonShotgun(Level world) {
         super(world);
         this.c = 2;
@@ -47,6 +49,4 @@ public class EntitySkeletonShotgun extends Skeleton {
     protected int j() {
         return Items.shotgunAmmo.bf;
     }
-
-    private static final Random bs = new Random();
 }

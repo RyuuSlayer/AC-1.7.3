@@ -15,32 +15,19 @@ import net.minecraft.client.render.TextRenderer;
 import net.minecraft.client.texture.TextureManager;
 
 public class GuiMapElement extends ScriptUIContainer {
-    ScriptUIRect topBack;
-
-    ScriptUIRect ratingBack;
-
-    ScriptUISprite ratingBar;
-
-    ScriptUIRect botFadeBack;
-
-    ScriptUISprite background;
-
-    ScriptUILabel[] descriptions;
-
-    ScriptUIRect topFadeBack;
-
-    ScriptUILabel[] topFadeText;
-
-    long fadeTimePrev;
-
-    boolean fadeIn;
-
-    boolean fadeOut;
-
     public String mapName;
-
     public String mapURL;
-
+    ScriptUIRect topBack;
+    ScriptUIRect ratingBack;
+    ScriptUISprite ratingBar;
+    ScriptUIRect botFadeBack;
+    ScriptUISprite background;
+    ScriptUILabel[] descriptions;
+    ScriptUIRect topFadeBack;
+    ScriptUILabel[] topFadeText;
+    long fadeTimePrev;
+    boolean fadeIn;
+    boolean fadeOut;
     int mapID;
 
     int totalRating;

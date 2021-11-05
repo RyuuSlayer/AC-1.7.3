@@ -12,28 +12,17 @@ import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.Box;
 
 public class FishHook extends Entity {
-    private int d;
-
-    private int e;
-
-    private int f;
-
-    private int g;
-
-    private boolean h;
-
     public int a;
-
     public Player b;
-
-    private int i;
-
-    private int j;
-
-    private int k;
-
     public Entity c;
-
+    private int d;
+    private int e;
+    private int f;
+    private int g;
+    private boolean h;
+    private int i;
+    private int j;
+    private int k;
     private int l;
 
     private double m;

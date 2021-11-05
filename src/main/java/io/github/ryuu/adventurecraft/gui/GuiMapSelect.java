@@ -93,7 +93,7 @@ public class GuiMapSelect extends Screen {
                 this.minecraft.startWorld(this.saveName, this.saveName, 0L, this.selectedMap.name);
             }
         } else if (guibutton.id == 7) {
-            this.minecraft.openScreen((Screen) new GuiCreateNewMap(this));
+            this.minecraft.openScreen(new GuiCreateNewMap(this));
         }
     }
 

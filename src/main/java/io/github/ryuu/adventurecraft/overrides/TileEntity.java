@@ -10,11 +10,77 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TileEntity {
+    private static final Map a = new HashMap<>();
+    private static final Map b = new HashMap<>();
+
+    static {
+        a(FurnaceEntity.class, "Furnace");
+        a(Chest.class, "Chest");
+        a(Jukebox.class, "RecordPlayer");
+        a(Dispenser.class, "Trap");
+        a(Sign.class, "Sign");
+        a(MobSpawner.class, "MobSpawner");
+        a(Noteblock.class, "Note");
+        a(Piston.class, "Piston");
+        a(TileEntityMobSpawner.class, "MobSpawnerNew");
+        a(TileEntityTrigger.class, "Trigger");
+        a(TileEntityTriggerInverter.class, "TriggerInverter");
+        a(TileEntityTriggerMemory.class, "TriggerMemory");
+        a(TileEntityRedstoneTrigger.class, "RedstoneTrigger");
+        a(TileEntityWeather.class, "Weather");
+        a(TileEntityMusic.class, "Music");
+        a(TileEntityTimer.class, "Timer");
+        a(TileEntityMessage.class, "Message");
+        a(TileEntityCamera.class, "Camera");
+        a(TileEntityTriggerPushable.class, "TriggerPushable");
+        a(TileEntityStorage.class, "Storage");
+        a(TileEntityHealDamage.class, "HealDamage");
+        a(TileEntityTeleport.class, "Teleport");
+        a(TileEntityTree.class, "Tree");
+        a(TileEntityScript.class, "Script");
+        a(TileEntityStore.class, "Store");
+        a(TileEntityEffect.class, "Effect");
+        a(TileEntityUrl.class, "Url");
+        a(TileEntityNpcPath.class, "NpcPath");
+    }
+
+    public Level d;
+    public int e;
+    public int f;
+    public int g;
+    public boolean killedFromSaving = false;
+    protected boolean h;
+
     private static void a(Class<?> class1, String s) {
         if (b.containsKey(s))
             throw new IllegalArgumentException("Duplicate id: " + s);
         a.put(s, class1);
         b.put(class1, s);
+    }
+
+    public static TileEntity c(CompoundTag nbttagcompound) {
+        TileEntity tileentity = null;
+        try {
+            Class<TileEntity> class1 = (Class) a.get(nbttagcompound.i("id"));
+            if (class1 != null)
+                tileentity = class1.newInstance();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        if (tileentity != null) {
+            tileentity.a(nbttagcompound);
+        } else {
+            System.out.println("Skipping TileEntity with id " + nbttagcompound.i("id"));
+        }
+        return tileentity;
+    }
+
+    static Class _mthclass$(String s) {
+        try {
+            return Class.forName(s);
+        } catch (ClassNotFoundException classnotfoundexception) {
+            throw new NoClassDefFoundError(classnotfoundexception.getMessage());
+        }
     }
 
     public void a(CompoundTag nbttagcompound) {
@@ -38,23 +104,6 @@ public class TileEntity {
     }
 
     public void n_() {
-    }
-
-    public static TileEntity c(CompoundTag nbttagcompound) {
-        TileEntity tileentity = null;
-        try {
-            Class<TileEntity> class1 = (Class) a.get(nbttagcompound.i("id"));
-            if (class1 != null)
-                tileentity = class1.newInstance();
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-        if (tileentity != null) {
-            tileentity.a(nbttagcompound);
-        } else {
-            System.out.println("Skipping TileEntity with id " + nbttagcompound.i("id"));
-        }
-        return tileentity;
     }
 
     public int e() {
@@ -87,60 +136,5 @@ public class TileEntity {
 
     public void j() {
         this.h = false;
-    }
-
-    static Class _mthclass$(String s) {
-        try {
-            return Class.forName(s);
-        } catch (ClassNotFoundException classnotfoundexception) {
-            throw new NoClassDefFoundError(classnotfoundexception.getMessage());
-        }
-    }
-
-    private static final Map a = new HashMap<>();
-
-    private static final Map b = new HashMap<>();
-
-    public Level d;
-
-    public int e;
-
-    public int f;
-
-    public int g;
-
-    protected boolean h;
-
-    public boolean killedFromSaving = false;
-
-    static {
-        a(FurnaceEntity.class, "Furnace");
-        a(Chest.class, "Chest");
-        a(Jukebox.class, "RecordPlayer");
-        a(Dispenser.class, "Trap");
-        a(Sign.class, "Sign");
-        a(MobSpawner.class, "MobSpawner");
-        a(Noteblock.class, "Note");
-        a(Piston.class, "Piston");
-        a(TileEntityMobSpawner.class, "MobSpawnerNew");
-        a(TileEntityTrigger.class, "Trigger");
-        a(TileEntityTriggerInverter.class, "TriggerInverter");
-        a(TileEntityTriggerMemory.class, "TriggerMemory");
-        a(TileEntityRedstoneTrigger.class, "RedstoneTrigger");
-        a(TileEntityWeather.class, "Weather");
-        a(TileEntityMusic.class, "Music");
-        a(TileEntityTimer.class, "Timer");
-        a(TileEntityMessage.class, "Message");
-        a(TileEntityCamera.class, "Camera");
-        a(TileEntityTriggerPushable.class, "TriggerPushable");
-        a(TileEntityStorage.class, "Storage");
-        a(TileEntityHealDamage.class, "HealDamage");
-        a(TileEntityTeleport.class, "Teleport");
-        a(TileEntityTree.class, "Tree");
-        a(TileEntityScript.class, "Script");
-        a(TileEntityStore.class, "Store");
-        a(TileEntityEffect.class, "Effect");
-        a(TileEntityUrl.class, "Url");
-        a(TileEntityNpcPath.class, "NpcPath");
     }
 }

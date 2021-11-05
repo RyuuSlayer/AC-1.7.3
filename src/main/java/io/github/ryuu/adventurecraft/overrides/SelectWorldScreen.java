@@ -2,16 +2,18 @@ package io.github.ryuu.adventurecraft.overrides;
 
 import io.github.ryuu.adventurecraft.gui.GuiMapSelect;
 import io.github.ryuu.adventurecraft.mixin.MixinTranslationStorage;
+import net.minecraft.client.gui.widgets.Button;
+import net.minecraft.level.storage.LevelStorage;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.List;
 
-public class SelectWorldScreen extends da {
+public class SelectWorldScreen extends Screen {
     private final DateFormat j;
 
-    protected da a;
+    protected Screen a;
 
     protected String i;
 
@@ -29,17 +31,53 @@ public class SelectWorldScreen extends da {
 
     private boolean r;
 
-    private ke s;
+    private Button s;
 
-    private ke t;
+    private Button t;
 
-    private ke u;
+    private Button u;
 
-    public SelectWorldScreen(da guiscreen) {
+    public SelectWorldScreen(Screen guiscreen) {
         this.j = new SimpleDateFormat();
         this.i = "Select world";
         this.l = false;
         this.a = guiscreen;
+    }
+
+    static List a(SelectWorldScreen guiselectworld) {
+        return guiselectworld.n;
+    }
+
+    static int a(SelectWorldScreen guiselectworld, int i) {
+        return guiselectworld.m = i;
+    }
+
+    static int b(SelectWorldScreen guiselectworld) {
+        return guiselectworld.m;
+    }
+
+    static Button c(SelectWorldScreen guiselectworld) {
+        return guiselectworld.t;
+    }
+
+    static Button d(SelectWorldScreen guiselectworld) {
+        return guiselectworld.s;
+    }
+
+    static Button e(SelectWorldScreen guiselectworld) {
+        return guiselectworld.u;
+    }
+
+    static String f(SelectWorldScreen guiselectworld) {
+        return guiselectworld.p;
+    }
+
+    static DateFormat g(SelectWorldScreen guiselectworld) {
+        return guiselectworld.j;
+    }
+
+    static String h(SelectWorldScreen guiselectworld) {
+        return guiselectworld.q;
     }
 
     public void b() {
@@ -54,7 +92,7 @@ public class SelectWorldScreen extends da {
     }
 
     private void l() {
-        nl isaveformat = this.b.c();
+        LevelStorage isaveformat = this.b.c();
         this.n = isaveformat.b();
         Collections.sort(this.n);
         this.m = -1;
@@ -75,14 +113,14 @@ public class SelectWorldScreen extends da {
 
     public void k() {
         MixinTranslationStorage stringtranslate = MixinTranslationStorage.a();
-        this.e.add(this.t = new ke(1, this.c / 2 - 152, this.d - 28, 100, 20, "Load Save"));
-        this.e.add(this.u = new ke(2, this.c / 2 - 50, this.d - 28, 100, 20, stringtranslate.a("selectWorld.delete")));
-        this.e.add(new ke(0, this.c / 2 + 52, this.d - 28, 100, 20, stringtranslate.a("gui.cancel")));
+        this.e.add(this.t = new Button(1, this.c / 2 - 152, this.d - 28, 100, 20, "Load Save"));
+        this.e.add(this.u = new Button(2, this.c / 2 - 50, this.d - 28, 100, 20, stringtranslate.a("selectWorld.delete")));
+        this.e.add(new Button(0, this.c / 2 + 52, this.d - 28, 100, 20, stringtranslate.a("gui.cancel")));
         this.t.g = false;
         this.u.g = false;
     }
 
-    protected void a(ke guibutton) {
+    protected void a(Button guibutton) {
         if (!guibutton.g)
             return;
         if (guibutton.f == 2) {
@@ -95,14 +133,14 @@ public class SelectWorldScreen extends da {
                 String s3 = stringtranslate.a("selectWorld.deleteButton");
                 String s4 = stringtranslate.a("gui.cancel");
                 qt guiyesno = new qt(this, s1, s2, s3, s4, this.m);
-                this.b.a((da) guiyesno);
+                this.b.a((Screen) guiyesno);
             }
         } else if (guibutton.f == 1) {
             e(this.m);
         } else if (guibutton.f == 3) {
-            this.b.a((da) new GuiMapSelect(this, ""));
+            this.b.a((Screen) new GuiMapSelect(this, ""));
         } else if (guibutton.f == 6) {
-            this.b.a((da) new jk(this, c(this.m)));
+            this.b.a((Screen) new jk(this, c(this.m)));
         } else if (guibutton.f == 0) {
             this.b.a(this.a);
         } else {
@@ -126,7 +164,7 @@ public class SelectWorldScreen extends da {
         if (this.r) {
             this.r = false;
             if (flag) {
-                nl isaveformat = this.b.c();
+                LevelStorage isaveformat = this.b.c();
                 isaveformat.c();
                 isaveformat.c(c(i));
                 l();
@@ -139,41 +177,5 @@ public class SelectWorldScreen extends da {
         this.o.a(i, j, f);
         a(this.g, this.i, this.c / 2, 20, 16777215);
         super.a(i, j, f);
-    }
-
-    static List a(SelectWorldScreen guiselectworld) {
-        return guiselectworld.n;
-    }
-
-    static int a(SelectWorldScreen guiselectworld, int i) {
-        return guiselectworld.m = i;
-    }
-
-    static int b(SelectWorldScreen guiselectworld) {
-        return guiselectworld.m;
-    }
-
-    static ke c(SelectWorldScreen guiselectworld) {
-        return guiselectworld.t;
-    }
-
-    static ke d(SelectWorldScreen guiselectworld) {
-        return guiselectworld.s;
-    }
-
-    static ke e(SelectWorldScreen guiselectworld) {
-        return guiselectworld.u;
-    }
-
-    static String f(SelectWorldScreen guiselectworld) {
-        return guiselectworld.p;
-    }
-
-    static DateFormat g(SelectWorldScreen guiselectworld) {
-        return guiselectworld.j;
-    }
-
-    static String h(SelectWorldScreen guiselectworld) {
-        return guiselectworld.q;
     }
 }

@@ -14,54 +14,30 @@ import org.lwjgl.input.Keyboard;
 
 public class GuiCreateNewMap extends Screen {
     private final Screen parent;
-
-    private Textbox textboxMapName;
-
-    private Textbox textboxSeed;
-
-    private String folderName;
-
-    private boolean createClicked;
-
     public double mapSize;
-
     public int waterLevel;
-
     public double fractureHorizontal;
-
     public double fractureVertical;
-
     public double maxAvgDepth;
-
     public double maxAvgHeight;
-
     public double volatility1;
-
     public double volatility2;
-
     public double volatilityWeight1;
-
     public double volatilityWeight2;
-
     GuiSlider2 sliderMapSize;
-
     GuiSlider2 sliderWaterLevel;
-
     GuiSlider2 sliderFracHorizontal;
-
     GuiSlider2 sliderFracVertical;
-
     GuiSlider2 sliderMaxAvgDepth;
-
     GuiSlider2 sliderMaxAvgHeight;
-
     GuiSlider2 sliderVolatility1;
-
     GuiSlider2 sliderVolatility2;
-
     GuiSlider2 sliderVolatilityWeight1;
-
     GuiSlider2 sliderVolatilityWeight2;
+    private Textbox textboxMapName;
+    private Textbox textboxSeed;
+    private String folderName;
+    private boolean createClicked;
 
     public GuiCreateNewMap(Screen guiscreen) {
         this.mapSize = 250.0D;

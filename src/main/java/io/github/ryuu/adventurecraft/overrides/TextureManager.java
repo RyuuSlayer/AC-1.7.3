@@ -18,10 +18,29 @@ import javax.imageio.ImageIO;
 import io.github.ryuu.adventurecraft.util.TextureAnimated;
 import io.github.ryuu.adventurecraft.util.Vec2;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.TexturePackManager;
 import org.lwjgl.opengl.GL11;
 
 public class TextureManager {
-    public TextureManager(ik texturepacklist, GameOptions gamesettings) {
+    public static boolean a = false;
+    private final HashMap c;
+    private final HashMap d;
+    private final IntBuffer e;
+    private final List g;
+    private final Map h;
+    private final GameOptions i;
+    private final TexturePackManager l;
+    private final BufferedImage m;
+    private final HashMap<Integer, Vec2> textureResolutions;
+    private final HashMap<String, TextureAnimated> textureAnimations;
+    public HashMap b;
+    public File mapDir;
+    public ArrayList<String> replacedTextures;
+    private ByteBuffer f;
+    private boolean j;
+    private boolean k;
+
+    public TextureManager(TexturePackManager texturepacklist, GameOptions gamesettings) {
         this.b = new HashMap<>();
         this.c = new HashMap<>();
         this.d = new HashMap<>();
@@ -539,38 +558,4 @@ public class TextureManager {
             GL11.glTexSubImage2D(3553, 0, animTex.x, animTex.y, animTex.width, animTex.height, 6408, 5121, this.f);
         }
     }
-
-    public static boolean a = false;
-
-    public HashMap b;
-
-    private final HashMap c;
-
-    private final HashMap d;
-
-    private final IntBuffer e;
-
-    private ByteBuffer f;
-
-    private final List g;
-
-    private final Map h;
-
-    private final GameOptions i;
-
-    private boolean j;
-
-    private boolean k;
-
-    private final ik l;
-
-    private final BufferedImage m;
-
-    public File mapDir;
-
-    public ArrayList<String> replacedTextures;
-
-    private final HashMap<Integer, Vec2> textureResolutions;
-
-    private final HashMap<String, TextureAnimated> textureAnimations;
 }

@@ -1,6 +1,13 @@
 package io.github.ryuu.adventurecraft.overrides;
 
 public class MathsHelper {
+    private static final float[] a = new float[65536];
+
+    static {
+        for (int i = 0; i < 65536; i++)
+            a[i] = (float) Math.sin(i * Math.PI * 2.0D / 65536.0D);
+    }
+
     public static final float a(float f) {
         return a[(int) (f * 10430.38F) & 0xFFFF];
     }
@@ -51,12 +58,5 @@ public class MathsHelper {
 
     public static boolean a(String s) {
         return (s == null || s.length() == 0);
-    }
-
-    private static final float[] a = new float[65536];
-
-    static {
-        for (int i = 0; i < 65536; i++)
-            a[i] = (float) Math.sin(i * Math.PI * 2.0D / 65536.0D);
     }
 }

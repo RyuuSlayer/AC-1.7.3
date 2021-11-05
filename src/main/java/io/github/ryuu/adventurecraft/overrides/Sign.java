@@ -4,7 +4,11 @@ import io.github.ryuu.adventurecraft.util.MusicPlayer;
 
 public class Sign extends TileEntity {
     public int b = -1;
-
+    public String[] a = new String[]{"", "", "", ""};
+    public boolean playSong;
+    public String instrument;
+    public int onNote;
+    public int tickSinceStart;
     private boolean c = true;
 
     public void b(CompoundTag nbttagcompound) {
@@ -24,16 +28,6 @@ public class Sign extends TileEntity {
                 this.a[i] = this.a[i].substring(0, 15);
         }
     }
-
-    public String[] a = new String[]{"", "", "", ""};
-
-    public boolean playSong;
-
-    public String instrument;
-
-    public int onNote;
-
-    public int tickSinceStart;
 
     public void n_() {
         if (this.playSong) {

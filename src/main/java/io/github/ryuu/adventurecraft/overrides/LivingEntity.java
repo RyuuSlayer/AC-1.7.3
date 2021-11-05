@@ -1,5 +1,7 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import io.github.ryuu.adventurecraft.items.Items;
+import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
 import net.minecraft.util.io.CompoundTag;
 
@@ -15,140 +17,73 @@ public abstract class LivingEntity extends Entity {
     public float H;
 
     public float I;
-
-    protected float J;
-
-    protected float K;
-
-    protected float L;
-
-    protected float M;
-
-    protected boolean N;
-
     public String O;
-
-    protected boolean P;
-
-    protected float Q;
-
-    protected String R;
-
-    protected float S;
-
-    protected int T;
-
-    protected float U;
-
     public boolean V;
-
     public float W;
-
     public float X;
-
     public int Y;
-
     public int maxHealth;
-
     public int Z;
-
-    private int a;
-
     public int aa;
-
     public int ab;
-
     public float ac;
-
     public int ad;
-
     public int ae;
-
     public float af;
-
     public float ag;
-
-    protected boolean ah;
-
     public int ai;
-
     public float aj;
-
     public float ak;
-
     public float al;
-
     public float am;
-
-    protected int an;
-
-    protected double ao;
-
-    protected double ap;
-
-    protected double aq;
-
-    protected double ar;
-
-    protected double as;
-
-    float at;
-
     public int au;
-
-    protected int av;
-
-    protected float aw;
-
-    protected float ax;
-
-    protected float ay;
-
     public boolean az;
-
-    protected float aA;
-
     public float aB;
-
     public Entity b;
-
-    protected int aC;
-
-    public iz heldItem;
-
-    private long hurtTick;
-
+    public ItemInstance heldItem;
     public int timesCanJumpInAir;
-
     public int jumpsLeft;
-
     public boolean canWallJump;
-
-    private long tickBeforeNextJump;
-
     public double jumpVelocity;
-
     public double jumpWallMultiplier;
-
     public double jumpInAirMultiplier;
-
     public float airControl;
-
     public double gravity;
-
     public float fov;
-
     public float extraFov;
-
     public boolean canLookRandomly;
-
     public float randomLookVelocity;
-
     public int randomLookNext;
-
     public int randomLookRate;
-
     public int randomLookRateVariation;
+    protected float J;
+    protected float K;
+    protected float L;
+    protected float M;
+    protected boolean N;
+    protected boolean P;
+    protected float Q;
+    protected String R;
+    protected float S;
+    protected int T;
+    protected float U;
+    protected boolean ah;
+    protected int an;
+    protected double ao;
+    protected double ap;
+    protected double aq;
+    protected double ar;
+    protected double as;
+    protected int av;
+    protected float aw;
+    protected float ax;
+    protected float ay;
+    protected float aA;
+    protected int aC;
+    float at;
+    private int a;
+    private long hurtTick;
+    private long tickBeforeNextJump;
 
     public LivingEntity(Level world) {
         super(world);
@@ -531,7 +466,7 @@ public abstract class LivingEntity extends Entity {
             q();
             if (entity != null && entity instanceof LivingEntity && ((LivingEntity) entity).Y < ((LivingEntity) entity).maxHealth)
                 if (this.bs.nextInt(3) != 0) {
-                    ItemEntity ItemEntity = new ItemEntity(this.aI, this.aM, this.aN, this.aO, new iz(AC_Items.heart.bf, 1, 0));
+                    ItemEntity ItemEntity = new ItemEntity(this.aI, this.aM, this.aN, this.aO, new ItemInstance(Items.heart.bf, 1, 0));
                     this.aI.b((Entity) ItemEntity);
                 }
         }
@@ -980,7 +915,7 @@ public abstract class LivingEntity extends Entity {
         return 4;
     }
 
-    public iz r_() {
+    public ItemInstance r_() {
         return this.heldItem;
     }
 
@@ -1005,7 +940,7 @@ public abstract class LivingEntity extends Entity {
         return false;
     }
 
-    public int c(iz itemstack) {
+    public int c(ItemInstance itemstack) {
         return itemstack.b();
     }
 

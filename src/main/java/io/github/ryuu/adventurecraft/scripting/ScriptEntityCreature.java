@@ -12,12 +12,12 @@ public class ScriptEntityCreature extends ScriptEntityLiving {
         this.entityCreature = e;
     }
 
-    public void setTarget(ScriptEntity e) {
-        this.entityCreature.c(e.entity);
-    }
-
     public ScriptEntity getTarget() {
         return ScriptEntity.getEntityClass(this.entityCreature.G());
+    }
+
+    public void setTarget(ScriptEntity e) {
+        this.entityCreature.c(e.entity);
     }
 
     public boolean hasPath() {

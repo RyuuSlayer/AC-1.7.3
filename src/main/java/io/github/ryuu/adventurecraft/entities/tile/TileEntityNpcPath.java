@@ -6,7 +6,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.io.CompoundTag;
 
 public class TileEntityNpcPath extends TileEntityMinMax {
+    public static EntityNPC lastEntity = null;
     private int entityID;
+    private EntityNPC npc = null;
 
     @Override
     public void readIdentifyingData(CompoundTag nbttagcompound) {
@@ -57,8 +59,4 @@ public class TileEntityNpcPath extends TileEntityMinMax {
             this.level.triggerManager.removeArea(this.x, this.y, this.z);
         }
     }
-
-    private EntityNPC npc = null;
-
-    public static EntityNPC lastEntity = null;
 }

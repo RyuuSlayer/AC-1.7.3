@@ -6,6 +6,8 @@ import javax.imageio.ImageIO;
 import net.minecraft.client.Minecraft;
 
 public class FoliageColour {
+    private static int[] a = new int[65536];
+
     public static void a(int[] ai) {
         a = ai;
     }
@@ -40,6 +42,4 @@ public class FoliageColour {
         if (bufferedimage != null)
             bufferedimage.getRGB(0, 0, 256, 256, a, 0, 256);
     }
-
-    private static int[] a = new int[65536];
 }

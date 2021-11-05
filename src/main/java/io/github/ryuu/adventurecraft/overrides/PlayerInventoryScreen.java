@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.overrides;
 
 import net.minecraft.client.gui.screen.container.ContainerScreen;
+import net.minecraft.client.gui.widgets.Button;
 import org.lwjgl.opengl.GL11;
 
 public class PlayerInventoryScreen extends ContainerScreen {
@@ -69,7 +70,7 @@ public class PlayerInventoryScreen extends ContainerScreen {
         GL11.glDisable(32826);
     }
 
-    protected void a(ke guibutton) {
+    protected void a(Button guibutton) {
         if (guibutton.f == 0)
             this.b.a((da) new xm(this.b.I));
         if (guibutton.f == 1)

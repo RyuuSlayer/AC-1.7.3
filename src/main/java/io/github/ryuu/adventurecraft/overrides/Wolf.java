@@ -12,21 +12,14 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Wolf extends Animal {
-    private boolean a;
-
-    private float b;
-
-    private float c;
-
-    private boolean f;
-
-    private boolean g;
-
-    private float h;
-
-    private float i;
-
     public int attackStrength;
+    private boolean a;
+    private float b;
+    private float c;
+    private boolean f;
+    private boolean g;
+    private float h;
+    private float i;
 
     public Wolf(Level world) {
         super(world);

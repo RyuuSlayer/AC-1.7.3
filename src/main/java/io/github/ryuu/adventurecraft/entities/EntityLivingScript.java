@@ -20,41 +20,24 @@ import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
 public class EntityLivingScript extends LivingEntity implements IEntityPather {
-    String initDescTo;
-
-    String descriptionName;
-
-    float prevWidth;
-
-    float prevHeight;
-
-    protected Scriptable scope;
-
     public String onCreated;
-
     public String onUpdate;
-
     public String onPathReached;
-
     public String onAttacked;
-
     public String onDeath;
-
     public String onInteraction;
-
-    private class_61 path;
-
-    private Entity pathToEntity;
-
-    private CoordBlock pathToVec;
-
     public Float maxPathDistance;
-
-    private int nextPathIn;
-
-    private double prevDistToPoint;
-
     public TileEntityNpcPath triggerOnPath;
+    protected Scriptable scope;
+    String initDescTo;
+    String descriptionName;
+    float prevWidth;
+    float prevHeight;
+    private class_61 path;
+    private Entity pathToEntity;
+    private CoordBlock pathToVec;
+    private int nextPathIn;
+    private double prevDistToPoint;
 
     public EntityLivingScript(Level w) {
         super(w);

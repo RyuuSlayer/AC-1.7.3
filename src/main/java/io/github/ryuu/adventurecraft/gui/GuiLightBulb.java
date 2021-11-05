@@ -27,6 +27,10 @@ public class GuiLightBulb extends Screen {
         this.lightValue = w.getTileMeta(x, y, z);
     }
 
+    public static void showUI(Level w, int x, int y, int z) {
+        Minecraft.minecraftInstance.a(new GuiLightBulb(w, x, y, z));
+    }
+
     @Override
     public void tick() {
     }
@@ -52,10 +56,6 @@ public class GuiLightBulb extends Screen {
         }
         super.render(i, j, f);
         this.world.getChunk(this.blockX, this.blockZ).method_885();
-    }
-
-    public static void showUI(Level w, int x, int y, int z) {
-        Minecraft.minecraftInstance.a(new GuiLightBulb(w, x, y, z));
     }
 
     @Override

@@ -7,6 +7,8 @@ import net.minecraft.level.Level;
 import java.util.Random;
 
 public abstract class FluidTile extends Tile {
+    static boolean isHittable = true;
+
     protected FluidTile(int i, ln material) {
         super(i, ((material != ln.h) ? 12 : 14) * 16 + 13, material);
         float f = 0.0F;
@@ -15,17 +17,28 @@ public abstract class FluidTile extends Tile {
         b(true);
     }
 
-    public int b(xp iblockaccess, int i, int j, int k) {
-        if (!TerrainImage.isWaterLoaded || (this.bn != Tile.B.bn && this.bn != Tile.C.bn))
-            return -1;
-        return TerrainImage.getWaterColor(i, k);
-    }
-
     public static float d(int i) {
         if (i >= 8)
             i = 0;
         float f = (i + 1) / 9.0F;
         return f;
+    }
+
+    public static double a(xp iblockaccess, int i, int j, int k, ln material) {
+        bt vec3d = null;
+        if (material == ln.g)
+            vec3d = ((rp) Tile.B).e(iblockaccess, i, j, k);
+        if (material == ln.h)
+            vec3d = ((rp) Tile.D).e(iblockaccess, i, j, k);
+        if (vec3d.a == 0.0D && vec3d.c == 0.0D)
+            return -1000.0D;
+        return Math.atan2(vec3d.c, vec3d.a) - 1.5707963267948966D;
+    }
+
+    public int b(xp iblockaccess, int i, int j, int k) {
+        if (!TerrainImage.isWaterLoaded || (this.bn != Tile.B.bn && this.bn != Tile.C.bn))
+            return -1;
+        return TerrainImage.getWaterColor(i, k);
     }
 
     public int a(int i) {
@@ -196,17 +209,6 @@ public abstract class FluidTile extends Tile {
         }
     }
 
-    public static double a(xp iblockaccess, int i, int j, int k, ln material) {
-        bt vec3d = null;
-        if (material == ln.g)
-            vec3d = ((rp) Tile.B).e(iblockaccess, i, j, k);
-        if (material == ln.h)
-            vec3d = ((rp) Tile.D).e(iblockaccess, i, j, k);
-        if (vec3d.a == 0.0D && vec3d.c == 0.0D)
-            return -1000.0D;
-        return Math.atan2(vec3d.c, vec3d.a) - 1.5707963267948966D;
-    }
-
     public void c(Level world, int i, int j, int k) {
         j(world, i, j, k);
     }
@@ -245,6 +247,4 @@ public abstract class FluidTile extends Tile {
         for (int l = 0; l < 8; l++)
             world.a("largesmoke", i + Math.random(), j + 1.2D, k + Math.random(), 0.0D, 0.0D, 0.0D);
     }
-
-    static boolean isHittable = true;
 }

@@ -12,6 +12,8 @@ public class TileEntityCamera extends TileEntity {
     public String sound;
 
     public CutsceneCamera camera = new CutsceneCamera();
+    public int type = 2;
+    public boolean pauseGame = true;
 
     public void loadCamera() {
         copyCamera(this.camera, Minecraft.minecraftInstance.cutsceneCamera);
@@ -78,8 +80,4 @@ public class TileEntityCamera extends TileEntity {
             type = nbttagcompound.getByte("type");
         this.camera.addCameraPoint(time, posX, posY, posZ, yaw, pitch, type);
     }
-
-    public int type = 2;
-
-    public boolean pauseGame = true;
 }

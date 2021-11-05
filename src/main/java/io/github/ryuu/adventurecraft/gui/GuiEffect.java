@@ -9,51 +9,53 @@ import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 
 public class GuiEffect extends Screen {
+    private static final ArrayList<String> particleTypes = new ArrayList<String>();
+
+    static {
+        particleTypes.add("bubble");
+        particleTypes.add("explode");
+        particleTypes.add("flame");
+        particleTypes.add("heart");
+        particleTypes.add("largesmoke");
+        particleTypes.add("lava");
+        particleTypes.add("note");
+        particleTypes.add("portal");
+        particleTypes.add("reddust");
+        particleTypes.add("slime");
+        particleTypes.add("smoke");
+        particleTypes.add("snowballpoof");
+        particleTypes.add("splash");
+    }
+
     private final TileEntityEffect effect;
-
     private GuiSlider2 ticksBetweenParticles;
-
     private GuiSlider2 particlesPerSpawn;
-
     private GuiSlider2 offsetX;
-
     private GuiSlider2 offsetY;
-
     private GuiSlider2 offsetZ;
-
     private GuiSlider2 randX;
-
     private GuiSlider2 randY;
-
     private GuiSlider2 randZ;
-
     private GuiSlider2 floatArg1;
-
     private GuiSlider2 floatArg2;
-
     private GuiSlider2 floatArg3;
-
     private GuiSlider2 floatRand1;
-
     private GuiSlider2 floatRand2;
-
     private GuiSlider2 floatRand3;
-
     private GuiSlider2 fogR;
-
     private GuiSlider2 fogG;
-
     private GuiSlider2 fogB;
-
     private GuiSlider2 fogStart;
-
     private GuiSlider2 fogEnd;
-
     private int page;
 
     public GuiEffect(TileEntityEffect m) {
         this.page = 0;
         this.effect = m;
+    }
+
+    public static void showUI(TileEntityEffect m) {
+        Minecraft.minecraftInstance.a(new GuiEffect(m));
     }
 
     @Override
@@ -295,30 +297,8 @@ public class GuiEffect extends Screen {
         this.effect.level.getChunk(this.effect.x, this.effect.z).method_885();
     }
 
-    public static void showUI(TileEntityEffect m) {
-        Minecraft.minecraftInstance.a(new GuiEffect(m));
-    }
-
     @Override
     public boolean isPauseScreen() {
         return false;
-    }
-
-    private static final ArrayList<String> particleTypes = new ArrayList<String>();
-
-    static {
-        particleTypes.add("bubble");
-        particleTypes.add("explode");
-        particleTypes.add("flame");
-        particleTypes.add("heart");
-        particleTypes.add("largesmoke");
-        particleTypes.add("lava");
-        particleTypes.add("note");
-        particleTypes.add("portal");
-        particleTypes.add("reddust");
-        particleTypes.add("slime");
-        particleTypes.add("smoke");
-        particleTypes.add("snowballpoof");
-        particleTypes.add("splash");
     }
 }

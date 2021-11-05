@@ -22,7 +22,7 @@ public class BowItem extends ItemType {
             if (entityplayer.c.c(Items.bombArow.bf)) {
                 world.a((net.minecraft.entity.Entity) entityplayer, "random.bow", 1.0F, 1.0F / (b.nextFloat() * 0.4F + 0.8F));
                 if (!world.B)
-                    world.b((Entity) new EntityArrowBomb(world, (LivingEntity) entityplayer));
+                    world.b((Entity) new EntityArrowBomb(world, entityplayer));
             }
         } else if (entityplayer.c.c(ItemType.j.bf)) {
             world.a((net.minecraft.entity.Entity) entityplayer, "random.bow", 1.0F, 1.0F / (b.nextFloat() * 0.4F + 0.8F));

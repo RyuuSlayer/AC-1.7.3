@@ -22,6 +22,10 @@ public class GuiScript extends Screen {
         this.script = s;
     }
 
+    public static void showUI(TileEntityScript s) {
+        Minecraft.minecraftInstance.a(new GuiScript(s));
+    }
+
     @Override
     public void init() {
         this.selectedID = 0;
@@ -100,10 +104,6 @@ public class GuiScript extends Screen {
     public void render(int i, int j, float f) {
         fill(0, 0, this.width, this.height, -2147483648);
         super.render(i, j, f);
-    }
-
-    public static void showUI(TileEntityScript s) {
-        Minecraft.minecraftInstance.a(new GuiScript(s));
     }
 
     @Override

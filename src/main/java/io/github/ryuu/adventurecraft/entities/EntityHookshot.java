@@ -18,14 +18,10 @@ import net.minecraft.util.maths.Vec3f;
 import java.util.List;
 
 public class EntityHookshot extends Entity {
-    int timeBeforeTurnAround;
-
-    boolean turningAround;
-
     public boolean attachedToSurface;
-
     public boolean mainHand;
-
+    int timeBeforeTurnAround;
+    boolean turningAround;
     LivingEntity returnsTo;
 
     Entity entityGrabbed;

@@ -23,14 +23,14 @@ public class PlayerContainer extends ToolItem {
 
     public PlayerContainer(PlayerInventory inventoryplayer, boolean flag) {
         this.a = new CraftingInventory(this, 2, 2);
-        this.b = (Inventory) new CraftingResultInventory();
+        this.b = new CraftingResultInventory();
         this.c = false;
         this.c = flag;
         if (Minecraft.minecraftInstance.f.x.allowsInventoryCrafting) {
             a((Slot) new CraftingResultSlot(inventoryplayer.d, (Inventory) this.a, this.b, 0, 144, 52));
             for (int i = 0; i < 2; i++) {
                 for (int i1 = 0; i1 < 2; i1++)
-                    a(new Slot((Inventory) this.a, i1 + i * 2, 88 + i1 * 18, 26 + i * 18 + 16));
+                    a(new Slot(this.a, i1 + i * 2, 88 + i1 * 18, 26 + i * 18 + 16));
             }
         }
         for (int j = 0; j < 4; j++) {

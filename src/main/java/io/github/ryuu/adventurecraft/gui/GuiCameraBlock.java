@@ -12,6 +12,10 @@ public class GuiCameraBlock extends Screen {
         this.cam = c;
     }
 
+    public static void showUI(TileEntityCamera c) {
+        Minecraft.minecraftInstance.a(new GuiCameraBlock(c));
+    }
+
     @Override
     public void init() {
         Button b = new Button(0, 4, 4, 160, 18, "Skip to first point");
@@ -51,9 +55,5 @@ public class GuiCameraBlock extends Screen {
     public void render(int i, int j, float f) {
         renderBackground();
         super.render(i, j, f);
-    }
-
-    public static void showUI(TileEntityCamera c) {
-        Minecraft.minecraftInstance.a(new GuiCameraBlock(c));
     }
 }

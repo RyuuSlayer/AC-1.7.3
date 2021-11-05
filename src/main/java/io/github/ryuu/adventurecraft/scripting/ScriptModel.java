@@ -14,41 +14,29 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector4f;
 
 public class ScriptModel {
-    HashMap<String, ModelRenderer> boxes;
-
-    public ScriptEntity attachedTo;
-
-    public ScriptModel modelAttachment;
-
-    public String texture;
-
-    public double prevX;
-
-    public double prevY;
-
-    public double prevZ;
-
-    public float prevYaw;
-
-    public float prevPitch;
-
-    public float prevRoll;
-
-    public double x;
-
-    public double y;
-
-    public double z;
-
-    public float yaw;
-
-    public float pitch;
-
-    public float roll;
-
+    private static final FloatBuffer modelview = BufferUtils.createFloatBuffer(16);
+    private static final Matrix4f transform = new Matrix4f();
+    private static final Vector4f v = new Vector4f();
+    private static final Vector4f vr = new Vector4f();
+    static LinkedList<ScriptModel> activeModels = new LinkedList<>();
     private final int textureWidth;
-
     private final int textureHeight;
+    public ScriptEntity attachedTo;
+    public ScriptModel modelAttachment;
+    public String texture;
+    public double prevX;
+    public double prevY;
+    public double prevZ;
+    public float prevYaw;
+    public float prevPitch;
+    public float prevRoll;
+    public double x;
+    public double y;
+    public double z;
+    public float yaw;
+    public float pitch;
+    public float roll;
+    HashMap<String, ModelRenderer> boxes;
 
     public ScriptModel() {
         this(64, 32);
@@ -59,6 +47,25 @@ public class ScriptModel {
         addToRendering();
         this.textureWidth = texWidth;
         this.textureHeight = texHeight;
+    }
+
+    public static void renderAll(float f) {
+        GL11.glEnable(32826);
+        GL11.glDisable(2884);
+        GL11.glEnable(3008);
+        for (ScriptModel m : activeModels)
+            m.render(f);
+        GL11.glEnable(2884);
+        GL11.glDisable(32826);
+    }
+
+    public static void updateAll() {
+        for (ScriptModel m : activeModels)
+            m.update();
+    }
+
+    public static void clearAll() {
+        activeModels.clear();
     }
 
     public void addBox(String boxName, float offsetX, float offsetY, float offsetZ, int width, int height, int depth, int u, int v) {
@@ -177,34 +184,5 @@ public class ScriptModel {
 
     public void addToRendering() {
         activeModels.add(this);
-    }
-
-    private static final FloatBuffer modelview = BufferUtils.createFloatBuffer(16);
-
-    private static final Matrix4f transform = new Matrix4f();
-
-    private static final Vector4f v = new Vector4f();
-
-    private static final Vector4f vr = new Vector4f();
-
-    static LinkedList<ScriptModel> activeModels = new LinkedList<>();
-
-    public static void renderAll(float f) {
-        GL11.glEnable(32826);
-        GL11.glDisable(2884);
-        GL11.glEnable(3008);
-        for (ScriptModel m : activeModels)
-            m.render(f);
-        GL11.glEnable(2884);
-        GL11.glDisable(32826);
-    }
-
-    public static void updateAll() {
-        for (ScriptModel m : activeModels)
-            m.update();
-    }
-
-    public static void clearAll() {
-        activeModels.clear();
     }
 }

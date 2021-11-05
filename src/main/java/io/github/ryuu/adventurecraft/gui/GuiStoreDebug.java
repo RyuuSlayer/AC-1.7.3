@@ -18,6 +18,10 @@ public class GuiStoreDebug extends Screen {
         this.store = s;
     }
 
+    public static void showUI(TileEntityStore s) {
+        Minecraft.minecraftInstance.a(new GuiStoreDebug(s));
+    }
+
     @Override
     public void init() {
         OptionButton b = new OptionButton(0, 4, 0, "Set Items");
@@ -82,10 +86,6 @@ public class GuiStoreDebug extends Screen {
         this.minecraft.updateStoreGUI();
         this.minecraft.storeGUI.a(i, j, f);
         this.store.level.getChunk(this.store.x, this.store.z).method_885();
-    }
-
-    public static void showUI(TileEntityStore s) {
-        Minecraft.minecraftInstance.a(new GuiStoreDebug(s));
     }
 
     @Override

@@ -13,18 +13,12 @@ import net.minecraft.util.maths.Vec3f;
 import java.util.List;
 
 public class ThrownSnowball extends Entity {
-    private int b;
-
-    private int c;
-
-    private int d;
-
-    private int e;
-
-    private boolean f;
-
     public int a;
-
+    private int b;
+    private int c;
+    private int d;
+    private int e;
+    private boolean f;
     private LivingEntity g;
 
     private int h;
@@ -42,15 +36,6 @@ public class ThrownSnowball extends Entity {
         this.i = 0;
         b(0.25F, 0.25F);
         this.collidesWithClipBlocks = false;
-    }
-
-    protected void b() {
-    }
-
-    public boolean a(double d) {
-        double d1 = this.aW.c() * 4.0D;
-        d1 *= 64.0D;
-        return (d < d1 * d1);
     }
 
     public by(Level world, LivingEntity entityliving) {
@@ -90,6 +75,15 @@ public class ThrownSnowball extends Entity {
         b(0.25F, 0.25F);
         e(d, d1, d2);
         this.bf = 0.0F;
+    }
+
+    protected void b() {
+    }
+
+    public boolean a(double d) {
+        double d1 = this.aW.c() * 4.0D;
+        d1 *= 64.0D;
+        return (d < d1 * d1);
     }
 
     public void a(double d, double d1, double d2, float f, float f1) {

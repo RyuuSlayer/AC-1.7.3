@@ -16,60 +16,33 @@ public class OverworldLevelSource implements cl {
     private final uf n;
 
     private final uf o;
-
-    public uf a;
-
-    public uf b;
-
-    public uf c;
-
     private final Level p;
-
-    private double[] q;
-
-    private double[] r;
-
-    private double[] s;
-
-    private double[] t;
-
     private final fv u;
-
-    private kd[] v;
-
-    double[] d;
-
-    double[] e;
-
-    double[] f;
-
-    double[] g;
-
-    double[] h;
-
-    int[][] i;
-
-    private double[] w;
-
+    public uf a;
+    public uf b;
+    public uf c;
     public double mapSize;
-
     public int waterLevel;
-
     public double fractureHorizontal;
-
     public double fractureVertical;
-
     public double maxAvgDepth;
-
     public double maxAvgHeight;
-
     public double volatility1;
-
     public double volatility2;
-
     public double volatilityWeight1;
-
     public double volatilityWeight2;
+    double[] d;
+    double[] e;
+    double[] f;
+    double[] g;
+    double[] h;
+    int[][] i;
+    private double[] q;
+    private double[] r;
+    private double[] s;
+    private double[] t;
+    private kd[] v;
+    private double[] w;
 
     public OverworldLevelSource(Level world, long l) {
         this.mapSize = 250.0D;

@@ -8,80 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EntityRegistry {
-    private static void a(Class<?> class1, String s, int i) {
-        a.put(s, class1);
-        b.put(class1, s);
-        c.put(Integer.valueOf(i), class1);
-        d.put(class1, Integer.valueOf(i));
-    }
-
-    public static Entity a(String s, Level world) {
-        Entity entity = null;
-        try {
-            Class<Entity> class1 = (Class) a.get(s);
-            if (class1 != null)
-                entity = class1.getConstructor(new Class[]{Level.class}).newInstance(new Object[]{world});
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-        return entity;
-    }
-
-    public static Entity a(CompoundTag nbttagcompound, Level world) {
-        Entity entity = null;
-        try {
-            Class<Entity> class1 = (Class) a.get(nbttagcompound.i("id"));
-            if (class1 != null)
-                entity = class1.getConstructor(new Class[]{Level.class}).newInstance(new Object[]{world});
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-        if (entity != null) {
-            entity.e(nbttagcompound);
-        } else {
-            System.out.println("Skipping Entity with id " + nbttagcompound.i("id"));
-        }
-        return entity;
-    }
-
-    public static Entity a(int i, Level world) {
-        Entity entity = null;
-        try {
-            Class<Entity> class1 = (Class) c.get(Integer.valueOf(i));
-            if (class1 != null)
-                entity = class1.getConstructor(new Class[]{Level.class}).newInstance(new Object[]{world});
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-        if (entity == null)
-            System.out.println("Skipping Entity with id " + i);
-        return entity;
-    }
-
-    public static int a(Entity entity) {
-        return ((Integer) d.get(entity.getClass())).intValue();
-    }
-
-    public static String b(Entity entity) {
-        return (String) b.get(entity.getClass());
-    }
-
-    public static String getEntityStringClimbing(Entity entity) {
-        String returning = null;
-        Class<?> obj = entity.getClass();
-        while (returning == null && obj != null) {
-            returning = (String) b.get(obj);
-            obj = obj.getSuperclass();
-        }
-        return returning;
-    }
-
     private static final Map a = new HashMap<>();
-
     private static final Map b = new HashMap<>();
-
     private static final Map c = new HashMap<>();
-
     private static final Map d = new HashMap<>();
 
     static {
@@ -125,5 +54,73 @@ public class EntityRegistry {
         a(EntityArrowBomb.class, "Bomb Arrow", 1002);
         a(EntityHookshot.class, "Hookshot", 1003);
         a(EntityLivingScript.class, "Script", 1004);
+    }
+
+    private static void a(Class<?> class1, String s, int i) {
+        a.put(s, class1);
+        b.put(class1, s);
+        c.put(Integer.valueOf(i), class1);
+        d.put(class1, Integer.valueOf(i));
+    }
+
+    public static Entity a(String s, Level world) {
+        Entity entity = null;
+        try {
+            Class<Entity> class1 = (Class) a.get(s);
+            if (class1 != null)
+                entity = class1.getConstructor(new Class[]{Level.class}).newInstance(world);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return entity;
+    }
+
+    public static Entity a(CompoundTag nbttagcompound, Level world) {
+        Entity entity = null;
+        try {
+            Class<Entity> class1 = (Class) a.get(nbttagcompound.i("id"));
+            if (class1 != null)
+                entity = class1.getConstructor(new Class[]{Level.class}).newInstance(world);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        if (entity != null) {
+            entity.e(nbttagcompound);
+        } else {
+            System.out.println("Skipping Entity with id " + nbttagcompound.i("id"));
+        }
+        return entity;
+    }
+
+    public static Entity a(int i, Level world) {
+        Entity entity = null;
+        try {
+            Class<Entity> class1 = (Class) c.get(Integer.valueOf(i));
+            if (class1 != null)
+                entity = class1.getConstructor(new Class[]{Level.class}).newInstance(world);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        if (entity == null)
+            System.out.println("Skipping Entity with id " + i);
+        return entity;
+    }
+
+    public static int a(Entity entity) {
+        return ((Integer) d.get(entity.getClass())).intValue();
+    }
+
+    public static String b(Entity entity) {
+        return (String) b.get(entity.getClass());
+    }
+
+    public static String getEntityStringClimbing(Entity entity) {
+        String returning = null;
+        Class<?> obj = entity.getClass();
+        while (returning == null && obj != null) {
+            returning = (String) b.get(obj);
+            obj = obj.getSuperclass();
+        }
+        return returning;
     }
 }

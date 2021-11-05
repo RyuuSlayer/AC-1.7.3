@@ -12,10 +12,64 @@ import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 
 public class GuiMobSpawner extends Screen {
+    private static final ArrayList<String> entityTypes = new ArrayList<>();
+
+    static {
+        entityTypes.add("Bat");
+        entityTypes.add("Boat");
+        entityTypes.add("Chicken");
+        entityTypes.add("Cow");
+        entityTypes.add("Creeper");
+        entityTypes.add("Falling Block");
+        entityTypes.add("Ghast");
+        entityTypes.add("Giant");
+        entityTypes.add("Item");
+        entityTypes.add("Minecart");
+        entityTypes.add("Minecart Chest");
+        entityTypes.add("Minecart Furnace");
+        entityTypes.add("Pig Zombie");
+        entityTypes.add("Pig");
+        entityTypes.add("Primed Tnt");
+        entityTypes.add("Rat");
+        entityTypes.add("Sheep");
+        entityTypes.add("Skeleton");
+        entityTypes.add("Skeleton Boss");
+        entityTypes.add("Skeleton Rifle");
+        entityTypes.add("Skeleton Shotgun");
+        entityTypes.add("Skeleton Sword");
+        entityTypes.add("Slime");
+        entityTypes.add("Slime Size: 1");
+        entityTypes.add("Slime Size: 2");
+        entityTypes.add("Slime Size: 4");
+        entityTypes.add("Slime Size: 8");
+        entityTypes.add("Slime Size: 16");
+        entityTypes.add("Squid");
+        entityTypes.add("Spider");
+        entityTypes.add("Spider Skeleton");
+        entityTypes.add("Spider Skeleton Sword");
+        entityTypes.add("Wolf");
+        entityTypes.add("Wolf (Angry)");
+        entityTypes.add("Wolf (Tame)");
+        entityTypes.add("Zombie");
+        entityTypes.add("ZombiePistol");
+    }
+
     private final TileEntityMobSpawner mobSpawner;
+    Button setOnTrigger;
+    Button setOnDetrigger;
+    Button setOnUpdate;
+    int selectedID;
+    private GuiSlider2 spawnCountSlider;
+    private GuiSlider2 respawnSlider;
+    private String newSliderString;
+    private int displayScreen;
 
     public GuiMobSpawner(TileEntityMobSpawner ms) {
         this.mobSpawner = ms;
+    }
+
+    public static void showUI(TileEntityMobSpawner ms) {
+        Minecraft.minecraftInstance.a(new GuiMobSpawner(ms));
     }
 
     @Override
@@ -197,10 +251,6 @@ public class GuiMobSpawner extends Screen {
         this.mobSpawner.level.getChunk(this.mobSpawner.x, this.mobSpawner.z).method_885();
     }
 
-    public static void showUI(TileEntityMobSpawner ms) {
-        Minecraft.minecraftInstance.a(new GuiMobSpawner(ms));
-    }
-
     public boolean c() {
         return false;
     }
@@ -239,63 +289,5 @@ public class GuiMobSpawner extends Screen {
             return fileNames;
         }
         return null;
-    }
-
-    private static final ArrayList<String> entityTypes = new ArrayList<>();
-
-    private GuiSlider2 spawnCountSlider;
-
-    private GuiSlider2 respawnSlider;
-
-    private String newSliderString;
-
-    private int displayScreen;
-
-    Button setOnTrigger;
-
-    Button setOnDetrigger;
-
-    Button setOnUpdate;
-
-    int selectedID;
-
-    static {
-        entityTypes.add("Bat");
-        entityTypes.add("Boat");
-        entityTypes.add("Chicken");
-        entityTypes.add("Cow");
-        entityTypes.add("Creeper");
-        entityTypes.add("Falling Block");
-        entityTypes.add("Ghast");
-        entityTypes.add("Giant");
-        entityTypes.add("Item");
-        entityTypes.add("Minecart");
-        entityTypes.add("Minecart Chest");
-        entityTypes.add("Minecart Furnace");
-        entityTypes.add("Pig Zombie");
-        entityTypes.add("Pig");
-        entityTypes.add("Primed Tnt");
-        entityTypes.add("Rat");
-        entityTypes.add("Sheep");
-        entityTypes.add("Skeleton");
-        entityTypes.add("Skeleton Boss");
-        entityTypes.add("Skeleton Rifle");
-        entityTypes.add("Skeleton Shotgun");
-        entityTypes.add("Skeleton Sword");
-        entityTypes.add("Slime");
-        entityTypes.add("Slime Size: 1");
-        entityTypes.add("Slime Size: 2");
-        entityTypes.add("Slime Size: 4");
-        entityTypes.add("Slime Size: 8");
-        entityTypes.add("Slime Size: 16");
-        entityTypes.add("Squid");
-        entityTypes.add("Spider");
-        entityTypes.add("Spider Skeleton");
-        entityTypes.add("Spider Skeleton Sword");
-        entityTypes.add("Wolf");
-        entityTypes.add("Wolf (Angry)");
-        entityTypes.add("Wolf (Tame)");
-        entityTypes.add("Zombie");
-        entityTypes.add("ZombiePistol");
     }
 }

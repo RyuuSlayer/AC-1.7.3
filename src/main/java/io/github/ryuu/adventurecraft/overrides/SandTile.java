@@ -8,8 +8,22 @@ import net.minecraft.tile.material.Material;
 import java.util.Random;
 
 public class SandTile extends Tile implements IBlockColor {
+    public static boolean a = false;
+
     public SandTile(int i, int j) {
         super(i, j, ln.n);
+    }
+
+    public static boolean c_(Level world, int i, int j, int k) {
+        int l = world.a(i, j, k);
+        if (l == 0)
+            return true;
+        if (l == Tile.as.bn)
+            return true;
+        Material material = (Tile.m[l]).bA;
+        if (material == Material.WATER)
+            return true;
+        return (material == Material.LAVA);
     }
 
     public void c(Level world, int i, int j, int k) {
@@ -48,18 +62,6 @@ public class SandTile extends Tile implements IBlockColor {
         return 3;
     }
 
-    public static boolean c_(Level world, int i, int j, int k) {
-        int l = world.a(i, j, k);
-        if (l == 0)
-            return true;
-        if (l == Tile.as.bn)
-            return true;
-        Material material = (Tile.m[l]).bA;
-        if (material == Material.WATER)
-            return true;
-        return (material == Material.LAVA);
-    }
-
     public int a(int i, int j) {
         if (j == 0)
             return this.bm;
@@ -72,6 +74,4 @@ public class SandTile extends Tile implements IBlockColor {
             world.d(i, j, k, (metadata + 1) % subTypes[this.bn]);
         }
     }
-
-    public static boolean a = false;
 }

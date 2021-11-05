@@ -17,6 +17,20 @@ import net.minecraft.client.render.entity.ItemRenderer;
 import org.lwjgl.opengl.GL11;
 
 public class Overlay extends DrawableHelper {
+    private static final ItemRenderer d = new ItemRenderer();
+    private final List e;
+    private final Random f;
+    private final Minecraft g;
+    public String a;
+    public float b;
+    public ScriptUIContainer scriptUI;
+    public boolean hudEnabled;
+    float c;
+    private int h;
+    private String i;
+    private int j;
+    private boolean l;
+
     public Overlay(Minecraft minecraft) {
         this.hudEnabled = true;
         this.e = new ArrayList();
@@ -402,30 +416,4 @@ public class Overlay extends DrawableHelper {
         String s1 = stringtranslate.a(s);
         a(s1);
     }
-
-    private static final ItemRenderer d = new ItemRenderer();
-
-    private final List e;
-
-    private final Random f;
-
-    private final Minecraft g;
-
-    public String a;
-
-    private int h;
-
-    private String i;
-
-    private int j;
-
-    private boolean l;
-
-    public float b;
-
-    float c;
-
-    public ScriptUIContainer scriptUI;
-
-    public boolean hudEnabled;
 }

@@ -14,6 +14,10 @@ public class GuiHealDamage extends Screen {
         this.tileEnt = t;
     }
 
+    public static void showUI(Level worldArg, TileEntityHealDamage w) {
+        Minecraft.minecraftInstance.a(new GuiHealDamage(w));
+    }
+
     @Override
     public void tick() {
     }
@@ -37,10 +41,6 @@ public class GuiHealDamage extends Screen {
         }
         super.render(i, j, f);
         this.tileEnt.level.getChunk(this.tileEnt.x, this.tileEnt.z).method_885();
-    }
-
-    public static void showUI(Level worldArg, TileEntityHealDamage w) {
-        Minecraft.minecraftInstance.a(new GuiHealDamage(w));
     }
 
     @Override

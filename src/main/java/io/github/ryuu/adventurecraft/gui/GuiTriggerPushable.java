@@ -14,6 +14,10 @@ public class GuiTriggerPushable extends Screen {
         this.trigger = triggerClicked;
     }
 
+    public static void showUI(TileEntityTriggerPushable triggerClicked) {
+        Minecraft.minecraftInstance.a(new GuiTriggerPushable(triggerClicked));
+    }
+
     @Override
     public void tick() {
     }
@@ -53,10 +57,6 @@ public class GuiTriggerPushable extends Screen {
         drawTextWithShadow(this.textManager, String.format("Min: (%d, %d, %d)", this.trigger.minX, this.trigger.minY, this.trigger.minZ), 4, 4, 14737632);
         drawTextWithShadow(this.textManager, String.format("Max: (%d, %d, %d)", this.trigger.maxX, this.trigger.maxY, this.trigger.maxZ), 4, 24, 14737632);
         super.render(i, j, f);
-    }
-
-    public static void showUI(TileEntityTriggerPushable triggerClicked) {
-        Minecraft.minecraftInstance.a(new GuiTriggerPushable(triggerClicked));
     }
 
     @Override

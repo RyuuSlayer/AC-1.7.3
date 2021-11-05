@@ -10,11 +10,11 @@ public class ScriptEntityFlying extends ScriptEntityLiving {
         this.entityFlying = e;
     }
 
-    public void setAttackStrength(int i) {
-        this.entityFlying.attackStrength = i;
-    }
-
     public int getAttackStrength() {
         return this.entityFlying.attackStrength;
+    }
+
+    public void setAttackStrength(int i) {
+        this.entityFlying.attackStrength = i;
     }
 }

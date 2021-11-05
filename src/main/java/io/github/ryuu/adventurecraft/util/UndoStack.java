@@ -7,13 +7,15 @@ import net.minecraft.level.Level;
 import net.minecraft.util.io.CompoundTag;
 
 public class UndoStack {
+    static final int MAX_UNDO = 128;
     LinkedList<EditAction> undoStack = new LinkedList<>();
-
     LinkedList<EditAction> redoStack = new LinkedList<>();
-
     LinkedList<UndoSelection> undoSelectionStack = new LinkedList<>();
-
     LinkedList<UndoSelection> redoSelectionStack = new LinkedList<>();
+    boolean isRecording = false;
+    UndoSelection selection = null;
+    EditAction firstAction = null;
+    EditAction lastAction = null;
 
     public void startRecording() {
         assert !this.isRecording;
@@ -94,14 +96,4 @@ public class UndoStack {
             Minecraft.minecraftInstance.v.a(String.format("Redo (Undo Actions Left: %d Redo Actions Left: %d)", new Object[]{Integer.valueOf(this.undoStack.size()), Integer.valueOf(this.redoStack.size())}));
         }
     }
-
-    boolean isRecording = false;
-
-    UndoSelection selection = null;
-
-    EditAction firstAction = null;
-
-    EditAction lastAction = null;
-
-    static final int MAX_UNDO = 128;
 }

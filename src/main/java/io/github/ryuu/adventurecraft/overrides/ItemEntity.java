@@ -9,16 +9,11 @@ import net.minecraft.util.io.CompoundTag;
 
 public class ItemEntity extends Entity {
     public ItemInstance a;
-
-    private int e;
-
     public int b;
-
     public int c;
-
-    private int f;
-
     public float d;
+    private int e;
+    private int f;
 
     public ItemEntity(Level world, double d, double d1, double d2, ItemInstance itemstack) {
         super(world);
@@ -37,10 +32,6 @@ public class ItemEntity extends Entity {
             K();
     }
 
-    protected boolean n() {
-        return false;
-    }
-
     public ItemEntity(Level world) {
         super(world);
         this.b = 0;
@@ -48,6 +39,10 @@ public class ItemEntity extends Entity {
         this.d = (float) (Math.random() * Math.PI * 2.0D);
         b(0.25F, 0.25F);
         this.bf = this.bh / 2.0F;
+    }
+
+    protected boolean n() {
+        return false;
     }
 
     protected void b() {

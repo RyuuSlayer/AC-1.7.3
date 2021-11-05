@@ -7,41 +7,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.render.Tessellator;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 public class Screen extends ub {
-    protected Minecraft b;
-
     public int c;
-
     public int d;
-
-    protected List e = new ArrayList();
-
     public boolean f = false;
-
-    protected TextRenderer g;
-
     public du h;
-
-    protected ke a = null;
-
-    public void a(int i, int j, float f) {
-        for (int k = 0; k < this.e.size(); k++) {
-            ke guibutton = this.e.get(k);
-            guibutton.a(this.b, i, j);
-        }
-    }
-
-    protected void a(char c, int i) {
-        if (i == 1) {
-            this.b.a(null);
-            this.b.g();
-        }
-    }
+    public boolean disableInputGrabbing = false;
+    protected Minecraft b;
+    protected List e = new ArrayList();
+    protected TextRenderer g;
+    protected Button a = null;
 
     public static String d() {
         try {
@@ -55,10 +36,24 @@ public class Screen extends ub {
         return null;
     }
 
+    public void a(int i, int j, float f) {
+        for (int k = 0; k < this.e.size(); k++) {
+            Button guibutton = this.e.get(k);
+            guibutton.a(this.b, i, j);
+        }
+    }
+
+    protected void a(char c, int i) {
+        if (i == 1) {
+            this.b.a(null);
+            this.b.g();
+        }
+    }
+
     protected void a(int i, int j, int k) {
         if (k == 0)
             for (int l = 0; l < this.e.size(); l++) {
-                ke guibutton = this.e.get(l);
+                Button guibutton = this.e.get(l);
                 if (guibutton.c(this.b, i, j)) {
                     this.a = guibutton;
                     this.b.B.a("random.click", 1.0F, 1.0F);
@@ -74,7 +69,7 @@ public class Screen extends ub {
         }
     }
 
-    protected void a(ke guibutton) {
+    protected void a(Button guibutton) {
     }
 
     public void a(Minecraft minecraft, int i, int j) {
@@ -160,6 +155,4 @@ public class Screen extends ub {
 
     public void j() {
     }
-
-    public boolean disableInputGrabbing = false;
 }

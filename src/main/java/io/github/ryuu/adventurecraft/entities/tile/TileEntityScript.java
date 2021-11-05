@@ -16,6 +16,10 @@ public class TileEntityScript extends TileEntity {
     public String onUpdateScriptFile = "";
 
     public Scriptable scope = Minecraft.minecraftInstance.f.script.getNewScope();
+    public boolean inited = false;
+    public boolean checkTrigger = true;
+    public boolean isActivated = false;
+    public boolean loaded = false;
 
     @Override
     public void tick() {
@@ -59,12 +63,4 @@ public class TileEntityScript extends TileEntity {
         nbttagcompound.put("isActivated", this.isActivated);
         nbttagcompound.put("scope", ScopeTag.getTagFromScope(this.scope));
     }
-
-    public boolean inited = false;
-
-    public boolean checkTrigger = true;
-
-    public boolean isActivated = false;
-
-    public boolean loaded = false;
 }

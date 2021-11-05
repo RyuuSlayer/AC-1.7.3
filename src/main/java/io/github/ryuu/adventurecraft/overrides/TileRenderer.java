@@ -11,13 +11,73 @@ import net.minecraft.level.TileView;
 import org.lwjgl.opengl.GL11;
 
 public class TileRenderer {
+    public static boolean a = true;
+    private final int O;
+    private final Random rand;
+    private final int curTextureNum;
     public TileView c;
-
+    public boolean b;
     private int d;
-
     private boolean e;
-
     private boolean f;
+    private int g;
+    private int h;
+    private int i;
+    private int j;
+    private int k;
+    private int l;
+    private boolean m;
+    private float n;
+    private float o;
+    private float p;
+    private float q;
+    private float r;
+    private float s;
+    private float t;
+    private float u;
+    private float v;
+    private float w;
+    private float x;
+    private float y;
+    private float z;
+    private float A;
+    private float B;
+    private float C;
+    private float D;
+    private float E;
+    private float F;
+    private float G;
+    private float H;
+    private float I;
+    private float J;
+    private float K;
+    private float L;
+    private float M;
+    private float N;
+    private float P;
+    private float Q;
+    private float R;
+    private float S;
+    private float T;
+    private float U;
+    private float V;
+    private float W;
+    private float X;
+    private float Y;
+    private float Z;
+    private float aa;
+    private boolean ab;
+    private boolean ac;
+    private boolean ad;
+    private boolean ae;
+    private boolean af;
+    private boolean ag;
+    private boolean ah;
+    private boolean ai;
+    private boolean aj;
+    private boolean ak;
+    private boolean al;
+    private boolean am;
 
     public TileRenderer(TileView iblockaccess) {
         this.curTextureNum = -1;
@@ -50,6 +110,18 @@ public class TileRenderer {
         this.l = 0;
         this.O = 1;
         this.rand = new Random();
+    }
+
+    public static boolean a(int i) {
+        if (i == 0)
+            return true;
+        if (i == 13)
+            return true;
+        if (i == 10)
+            return true;
+        if (i == 11)
+            return true;
+        return (i == 16);
     }
 
     public void a(Tile block, int i, int j, int k, int l) {
@@ -3984,18 +4056,6 @@ public class TileRenderer {
         }
     }
 
-    public static boolean a(int i) {
-        if (i == 0)
-            return true;
-        if (i == 13)
-            return true;
-        if (i == 10)
-            return true;
-        if (i == 11)
-            return true;
-        return (i == 16);
-    }
-
     public boolean renderGrass(Tile block, int i, int j, int k) {
         Tessellator tessellator = Tessellator.a;
         float f = block.d(this.c, i, j + 1, k);
@@ -4229,130 +4289,4 @@ public class TileRenderer {
         }
         return true;
     }
-
-    public static boolean a = true;
-
-    public boolean b;
-
-    private int g;
-
-    private int h;
-
-    private int i;
-
-    private int j;
-
-    private int k;
-
-    private int l;
-
-    private boolean m;
-
-    private float n;
-
-    private float o;
-
-    private float p;
-
-    private float q;
-
-    private float r;
-
-    private float s;
-
-    private float t;
-
-    private float u;
-
-    private float v;
-
-    private float w;
-
-    private float x;
-
-    private float y;
-
-    private float z;
-
-    private float A;
-
-    private float B;
-
-    private float C;
-
-    private float D;
-
-    private float E;
-
-    private float F;
-
-    private float G;
-
-    private float H;
-
-    private float I;
-
-    private float J;
-
-    private float K;
-
-    private float L;
-
-    private float M;
-
-    private float N;
-
-    private final int O;
-
-    private float P;
-
-    private float Q;
-
-    private float R;
-
-    private float S;
-
-    private float T;
-
-    private float U;
-
-    private float V;
-
-    private float W;
-
-    private float X;
-
-    private float Y;
-
-    private float Z;
-
-    private float aa;
-
-    private boolean ab;
-
-    private boolean ac;
-
-    private boolean ad;
-
-    private boolean ae;
-
-    private boolean af;
-
-    private boolean ag;
-
-    private boolean ah;
-
-    private boolean ai;
-
-    private boolean aj;
-
-    private boolean ak;
-
-    private boolean al;
-
-    private boolean am;
-
-    private final Random rand;
-
-    private final int curTextureNum;
 }

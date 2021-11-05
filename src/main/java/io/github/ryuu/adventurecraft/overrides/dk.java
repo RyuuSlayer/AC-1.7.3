@@ -12,11 +12,43 @@ import net.minecraft.level.Level;
 import org.lwjgl.opengl.GL11;
 
 public class dk {
-    public Level a;
-
-    private int C;
-
     private static final nw D;
+    public static int b = 0;
+
+    static {
+        D = nw.a;
+    }
+
+    private final List F;
+    public Level a;
+    public int c;
+    public int d;
+    public int e;
+    public int f;
+    public int g;
+    public int h;
+    public int i;
+    public int j;
+    public int k;
+    public int l;
+    public int m;
+    public int n;
+    public boolean o;
+    public boolean[] p;
+    public int q;
+    public int r;
+    public int s;
+    public float t;
+    public boolean u;
+    public eq v;
+    public int w;
+    public boolean x;
+    public boolean y;
+    public int z;
+    public boolean A;
+    public List B;
+    private int C;
+    private boolean E;
 
     public dk(Level world, List list, int i, int j, int k, int l, int i1) {
         this.C = -1;
@@ -206,67 +238,5 @@ public class dk {
 
     public void f() {
         this.u = true;
-    }
-
-    public static int b = 0;
-
-    public int c;
-
-    public int d;
-
-    public int e;
-
-    public int f;
-
-    public int g;
-
-    public int h;
-
-    public int i;
-
-    public int j;
-
-    public int k;
-
-    public int l;
-
-    public int m;
-
-    public int n;
-
-    public boolean o;
-
-    public boolean[] p;
-
-    public int q;
-
-    public int r;
-
-    public int s;
-
-    public float t;
-
-    public boolean u;
-
-    public eq v;
-
-    public int w;
-
-    public boolean x;
-
-    public boolean y;
-
-    public int z;
-
-    public boolean A;
-
-    private boolean E;
-
-    public List B;
-
-    private final List F;
-
-    static {
-        D = nw.a;
     }
 }

@@ -71,12 +71,12 @@ public class ScriptEntityLiving extends ScriptEntity {
         return this.entityLiving.aa;
     }
 
-    public int getHurtTimeResistance() {
-        return this.entityLiving.au;
-    }
-
     public void setHurtTime(int i) {
         this.entityLiving.aa = i;
+    }
+
+    public int getHurtTimeResistance() {
+        return this.entityLiving.au;
     }
 
     public void setHurtTimeResistance(int i) {

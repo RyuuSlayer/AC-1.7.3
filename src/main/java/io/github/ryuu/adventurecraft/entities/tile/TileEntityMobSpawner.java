@@ -47,24 +47,15 @@ public class TileEntityMobSpawner extends TileEntityScript {
     public int spawnID;
 
     public int spawnMeta;
-
-    Random rand;
-
     public Coord[] minVec;
-
     public Coord[] maxVec;
-
     public Coord minSpawnVec;
-
     public Coord maxSpawnVec;
-
     public int ticksBeforeLoad;
-
     public CompoundTag delayLoadData;
-
-    private boolean spawnStill;
-
+    Random rand;
     Scriptable scope;
+    private boolean spawnStill;
 
     public TileEntityMobSpawner() {
         this.ticksBeforeLoad = 20;
@@ -100,8 +91,7 @@ public class TileEntityMobSpawner extends TileEntityScript {
                 numAlive++;
                 continue;
             }
-            if (this.entitiesLeft.contains(ent))
-                this.entitiesLeft.remove(ent);
+            this.entitiesLeft.remove(ent);
         }
         return numAlive;
     }

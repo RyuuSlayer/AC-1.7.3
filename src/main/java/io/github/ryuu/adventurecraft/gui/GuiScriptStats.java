@@ -36,6 +36,10 @@ public class GuiScriptStats extends Screen {
         Arrays.sort(this.scriptInfo);
     }
 
+    public static void showUI() {
+        Minecraft.minecraftInstance.a(new GuiScriptStats());
+    }
+
     @Override
     public void init() {
     }
@@ -69,9 +73,5 @@ public class GuiScriptStats extends Screen {
             yOffset += 10;
         }
         super.render(i, j, f);
-    }
-
-    public static void showUI() {
-        Minecraft.minecraftInstance.a(new GuiScriptStats());
     }
 }

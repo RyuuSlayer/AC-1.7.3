@@ -12,6 +12,8 @@ import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.Vec3f;
 
 public class UtilBullet {
+    static Random rand = new Random();
+
     public static void fireBullet(Level worldObj, LivingEntity e, float spread, int damage) {
         HitResult hit = findHit(worldObj, e, spread);
         if (hit != null) {
@@ -81,6 +83,4 @@ public class UtilBullet {
         }
         return hit;
     }
-
-    static Random rand = new Random();
 }

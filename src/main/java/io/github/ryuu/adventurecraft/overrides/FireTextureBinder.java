@@ -6,22 +6,38 @@ import io.github.ryuu.adventurecraft.util.Vec2;
 import net.minecraft.client.Minecraft;
 
 public class FireTextureBinder extends TextureBinder {
-    protected float[] g;
-
-    protected float[] h;
-
     static boolean hasImages;
-
     static int numFrames;
-
+    static int curFrame = 0;
     private static int[] frameImages;
-
     private static int width;
+    protected float[] g;
+    protected float[] h;
 
     public FireTextureBinder(int i) {
         super(Tile.as.bm + i * 16);
         this.g = new float[320];
         this.h = new float[320];
+    }
+
+    public static void loadImage() {
+        loadImage("/custom_fire.png");
+    }
+
+    public static void loadImage(String texName) {
+        BufferedImage bufferedimage = null;
+        if (Minecraft.minecraftInstance.f != null)
+            bufferedimage = Minecraft.minecraftInstance.f.loadMapTexture(texName);
+        curFrame = 0;
+        if (bufferedimage == null) {
+            hasImages = false;
+            return;
+        }
+        width = bufferedimage.getWidth();
+        numFrames = bufferedimage.getHeight() / bufferedimage.getWidth();
+        frameImages = new int[bufferedimage.getWidth() * bufferedimage.getHeight()];
+        bufferedimage.getRGB(0, 0, bufferedimage.getWidth(), bufferedimage.getHeight(), frameImages, 0, bufferedimage.getWidth());
+        hasImages = true;
     }
 
     public void onTick(Vec2 texRes) {
@@ -144,26 +160,4 @@ public class FireTextureBinder extends TextureBinder {
             this.a[k * 4 + 3] = (byte) c;
         }
     }
-
-    public static void loadImage() {
-        loadImage("/custom_fire.png");
-    }
-
-    public static void loadImage(String texName) {
-        BufferedImage bufferedimage = null;
-        if (Minecraft.minecraftInstance.f != null)
-            bufferedimage = Minecraft.minecraftInstance.f.loadMapTexture(texName);
-        curFrame = 0;
-        if (bufferedimage == null) {
-            hasImages = false;
-            return;
-        }
-        width = bufferedimage.getWidth();
-        numFrames = bufferedimage.getHeight() / bufferedimage.getWidth();
-        frameImages = new int[bufferedimage.getWidth() * bufferedimage.getHeight()];
-        bufferedimage.getRGB(0, 0, bufferedimage.getWidth(), bufferedimage.getHeight(), frameImages, 0, bufferedimage.getWidth());
-        hasImages = true;
-    }
-
-    static int curFrame = 0;
 }

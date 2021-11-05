@@ -11,31 +11,19 @@ import net.minecraft.util.maths.Vec3f;
 import java.util.List;
 
 public class Snowball extends Entity {
-    private int f;
-
-    private int g;
-
-    private int h;
-
-    private int i;
-
-    private boolean j;
-
-    public int a;
-
-    public LivingEntity b;
-
-    private int k;
-
-    private int l;
-
-    public double c;
-
-    public double d;
-
-    public double e;
-
     private final float radius;
+    public int a;
+    public LivingEntity b;
+    public double c;
+    public double d;
+    public double e;
+    private int f;
+    private int g;
+    private int h;
+    private int i;
+    private boolean j;
+    private int k;
+    private int l;
 
     public Snowball(Level world) {
         super(world);
@@ -49,15 +37,6 @@ public class Snowball extends Entity {
         b(1.0F, 1.0F);
         this.collidesWithClipBlocks = false;
         this.radius = 1.0F;
-    }
-
-    protected void b() {
-    }
-
-    public boolean a(double d) {
-        double d1 = this.aW.c() * 4.0D;
-        d1 *= 64.0D;
-        return (d < d1 * d1);
     }
 
     public Snowball(Level world, double d, double d1, double d2, double d3, double d4, double d5) {
@@ -127,6 +106,15 @@ public class Snowball extends Entity {
         this.d = d1 / d3 * 0.1D;
         this.e = d2 / d3 * 0.1D;
         this.radius = r;
+    }
+
+    protected void b() {
+    }
+
+    public boolean a(double d) {
+        double d1 = this.aW.c() * 4.0D;
+        d1 *= 64.0D;
+        return (d < d1 * d1);
     }
 
     public void w_() {

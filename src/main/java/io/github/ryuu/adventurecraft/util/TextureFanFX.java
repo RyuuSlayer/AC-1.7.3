@@ -9,14 +9,10 @@ import net.minecraft.client.render.TextureBinder;
 
 public class TextureFanFX extends TextureBinder {
     static int numFrames;
-
-    int curFrame;
-
     private static int[] fanImage;
-
     private static int width;
-
     private static int height;
+    int curFrame;
 
     public TextureFanFX() {
         super(Blocks.fan.bm);

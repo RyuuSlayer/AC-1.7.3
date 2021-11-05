@@ -22,31 +22,18 @@ public class ChunkProviderHeightMapGenerate implements LevelSource {
     private final PerlinOctaveNoise field_910_m;
 
     private final PerlinOctaveNoise field_908_o;
-
-    public PerlinOctaveNoise field_922_a;
-
-    public PerlinOctaveNoise field_921_b;
-
-    public PerlinOctaveNoise mobSpawnerNoise;
-
     private final Level worldObj;
-
-    private double[] stoneNoise;
-
-    private Biome[] biomesForGeneration;
-
+    public PerlinOctaveNoise field_922_a;
+    public PerlinOctaveNoise field_921_b;
+    public PerlinOctaveNoise mobSpawnerNoise;
     double[] field_4185_d;
-
     double[] field_4184_e;
-
     double[] field_4183_f;
-
     double[] field_4182_g;
-
     double[] field_4181_h;
-
     int[][] unusedIntArray32x32;
-
+    private double[] stoneNoise;
+    private Biome[] biomesForGeneration;
     private double[] generatedTemperatures;
 
     public ChunkProviderHeightMapGenerate(Level world, long l) {

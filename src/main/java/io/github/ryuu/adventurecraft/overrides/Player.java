@@ -69,48 +69,27 @@ public abstract class Player extends LivingEntity {
     public double s;
 
     public double t;
-
-    protected boolean u;
-
     public Vec3i v;
-
-    private int a;
-
     public float w;
-
     public float x;
-
     public float y;
-
-    private Vec3i b;
-
-    private Vec3i bN;
-
     public int z;
-
-    protected boolean A;
-
     public float B;
-
     public float C;
-
-    private int bO;
-
     public DoubleTag D;
-
     public boolean isSwingingOffhand;
-
     public int swingProgressIntOffhand;
-
     public float prevSwingProgressOffhand;
-
     public float swingProgressOffhand;
-
     public boolean swappedItems;
-
     public int numHeartPieces;
-
     public String cloakTexture;
+    protected boolean u;
+    protected boolean A;
+    private int a;
+    private Vec3i b;
+    private Vec3i bN;
+    private int bO;
 
     public Player(Level world) {
         super(world);
@@ -138,6 +117,18 @@ public abstract class Player extends LivingEntity {
         this.swingProgressIntOffhand = 0;
         this.swappedItems = false;
         this.numHeartPieces = 0;
+    }
+
+    public static Vec3i a(Level world, Vec3i chunkcoordinates) {
+        LevelSource ichunkprovider = world.w();
+        ichunkprovider.c(chunkcoordinates.a - 3 >> 4, chunkcoordinates.c - 3 >> 4);
+        ichunkprovider.c(chunkcoordinates.a + 3 >> 4, chunkcoordinates.c - 3 >> 4);
+        ichunkprovider.c(chunkcoordinates.a - 3 >> 4, chunkcoordinates.c + 3 >> 4);
+        ichunkprovider.c(chunkcoordinates.a + 3 >> 4, chunkcoordinates.c + 3 >> 4);
+        if (world.a(chunkcoordinates.a, chunkcoordinates.b, chunkcoordinates.c) != Tile.T.bn)
+            return null;
+        Vec3i chunkcoordinates1 = BedTile.f(world, chunkcoordinates.a, chunkcoordinates.b, chunkcoordinates.c, 0);
+        return chunkcoordinates1;
     }
 
     protected void b() {
@@ -741,18 +732,6 @@ public abstract class Player extends LivingEntity {
 
     private boolean am() {
         return (this.aI.a(this.v.a, this.v.b, this.v.c) == Tile.T.bn);
-    }
-
-    public static Vec3i a(Level world, Vec3i chunkcoordinates) {
-        LevelSource ichunkprovider = world.w();
-        ichunkprovider.c(chunkcoordinates.a - 3 >> 4, chunkcoordinates.c - 3 >> 4);
-        ichunkprovider.c(chunkcoordinates.a + 3 >> 4, chunkcoordinates.c - 3 >> 4);
-        ichunkprovider.c(chunkcoordinates.a - 3 >> 4, chunkcoordinates.c + 3 >> 4);
-        ichunkprovider.c(chunkcoordinates.a + 3 >> 4, chunkcoordinates.c + 3 >> 4);
-        if (world.a(chunkcoordinates.a, chunkcoordinates.b, chunkcoordinates.c) != Tile.T.bn)
-            return null;
-        Vec3i chunkcoordinates1 = BedTile.f(world, chunkcoordinates.a, chunkcoordinates.b, chunkcoordinates.c, 0);
-        return chunkcoordinates1;
     }
 
     public float M() {

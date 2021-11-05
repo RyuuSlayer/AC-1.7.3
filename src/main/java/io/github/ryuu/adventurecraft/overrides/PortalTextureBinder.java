@@ -7,22 +7,38 @@ import io.github.ryuu.adventurecraft.util.Vec2;
 import net.minecraft.client.Minecraft;
 
 public class PortalTextureBinder extends TextureBinder {
-    private int g;
-
-    private byte[][] h;
-
     static boolean hasImages;
-
     static int numFrames;
-
+    static int curFrame = 0;
     private static int[] frameImages;
-
     private static int width;
+    private int g;
+    private byte[][] h;
 
     public PortalTextureBinder() {
         super(Tile.bf.bm);
         this.g = 0;
         generatePortalData(16, 16);
+    }
+
+    public static void loadImage() {
+        loadImage("/custom_portal.png");
+    }
+
+    public static void loadImage(String texName) {
+        BufferedImage bufferedimage = null;
+        if (Minecraft.minecraftInstance.f != null)
+            bufferedimage = Minecraft.minecraftInstance.f.loadMapTexture(texName);
+        curFrame = 0;
+        if (bufferedimage == null) {
+            hasImages = false;
+            return;
+        }
+        width = bufferedimage.getWidth();
+        numFrames = bufferedimage.getHeight() / bufferedimage.getWidth();
+        frameImages = new int[bufferedimage.getWidth() * bufferedimage.getHeight()];
+        bufferedimage.getRGB(0, 0, bufferedimage.getWidth(), bufferedimage.getHeight(), frameImages, 0, bufferedimage.getWidth());
+        hasImages = true;
     }
 
     private void generatePortalData(int w, int h) {
@@ -141,26 +157,4 @@ public class PortalTextureBinder extends TextureBinder {
             this.a[i * 4 + 3] = (byte) i1;
         }
     }
-
-    public static void loadImage() {
-        loadImage("/custom_portal.png");
-    }
-
-    public static void loadImage(String texName) {
-        BufferedImage bufferedimage = null;
-        if (Minecraft.minecraftInstance.f != null)
-            bufferedimage = Minecraft.minecraftInstance.f.loadMapTexture(texName);
-        curFrame = 0;
-        if (bufferedimage == null) {
-            hasImages = false;
-            return;
-        }
-        width = bufferedimage.getWidth();
-        numFrames = bufferedimage.getHeight() / bufferedimage.getWidth();
-        frameImages = new int[bufferedimage.getWidth() * bufferedimage.getHeight()];
-        bufferedimage.getRGB(0, 0, bufferedimage.getWidth(), bufferedimage.getHeight(), frameImages, 0, bufferedimage.getWidth());
-        hasImages = true;
-    }
-
-    static int curFrame = 0;
 }

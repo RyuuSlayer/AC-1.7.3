@@ -16,10 +16,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class ResourceDownloadThread extends Thread {
-    public File a;
-
     private final Minecraft b;
-
+    public File a;
     private boolean c;
 
     public ResourceDownloadThread(File file, Minecraft minecraft) {

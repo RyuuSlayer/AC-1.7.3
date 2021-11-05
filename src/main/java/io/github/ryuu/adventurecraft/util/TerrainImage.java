@@ -5,23 +5,15 @@ import java.io.File;
 import javax.imageio.ImageIO;
 
 public class TerrainImage {
-    private static int[] biomeInfo;
-
-    private static int[] terrainInfo;
-
-    private static int[] waterInfo;
-
-    private static int imageHeight;
-
-    private static int imageWidth;
-
-    private static int halfHeight;
-
-    private static int halfWidth;
-
     public static boolean isLoaded;
-
     public static boolean isWaterLoaded;
+    private static int[] biomeInfo;
+    private static int[] terrainInfo;
+    private static int[] waterInfo;
+    private static int imageHeight;
+    private static int imageWidth;
+    private static int halfHeight;
+    private static int halfWidth;
 
     private static int getOffset(int x, int z) {
         x += halfWidth;

@@ -6,14 +6,10 @@ import net.minecraft.client.Minecraft;
 import org.lwjgl.opengl.GL11;
 
 public class MapInfo {
-    public String name;
-
-    public String description1;
-
-    public String description2;
-
     private final BufferedImage mapThumbnail;
-
+    public String name;
+    public String description1;
+    public String description2;
     private int textureID;
 
     MapInfo(String mapName, String mapDescription1, String mapDescription2, BufferedImage thumbnail) {

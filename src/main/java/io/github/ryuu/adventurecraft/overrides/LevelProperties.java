@@ -11,112 +11,59 @@ import net.minecraft.util.io.CompoundTag;
 
 public class LevelProperties {
     private final long a;
-
-    private int b;
-
-    private int c;
-
-    private int d;
-
-    private long e;
-
-    private long f;
-
-    private long g;
-
-    private CompoundTag h;
-
-    private int i;
-
-    private String j;
-
-    private int k;
-
-    private boolean l;
-
-    private int m;
-
-    private boolean n;
-
-    private int o;
-
     public double tempOffset;
-
     public boolean useImages;
-
     public double mapSize;
-
     public int waterLevel;
-
     public double fractureHorizontal;
-
     public double fractureVertical;
-
     public double maxAvgDepth;
-
     public double maxAvgHeight;
-
     public double volatility1;
-
     public double volatility2;
-
     public double volatilityWeight1;
-
     public double volatilityWeight2;
-
     public boolean iceMelts;
-
     public CompoundTag triggerData;
-
-    float timeOfDay;
-
-    float timeRate;
-
     public String playingMusic;
-
     public boolean mobsBurn;
-
     public boolean overrideFogColor;
-
     public float fogR;
-
     public float fogG;
-
     public float fogB;
-
     public boolean overrideFogDensity;
-
     public float fogStart;
-
     public float fogEnd;
-
     public String overlay;
-
-    CompoundTag replacementTag;
-
     public HashMap<String, String> replacementTextures;
-
     public String onNewSaveScript;
-
     public String onLoadScript;
-
     public String onUpdateScript;
-
     public String playerName;
-
     public float[] brightness;
-
     public float spawnYaw;
-
     public CompoundTag globalScope;
-
     public CompoundTag worldScope;
-
     public CompoundTag musicScope;
-
     public boolean originallyFromAC;
-
     public boolean allowsInventoryCrafting;
+    float timeOfDay;
+    float timeRate;
+    CompoundTag replacementTag;
+    private int b;
+    private int c;
+    private int d;
+    private long e;
+    private long f;
+    private long g;
+    private CompoundTag h;
+    private int i;
+    private String j;
+    private int k;
+    private boolean l;
+    private int m;
+    private boolean n;
+    private int o;
 
     public LevelProperties(CompoundTag nbttagcompound) {
         this.useImages = true;
@@ -433,16 +380,16 @@ public class LevelProperties {
         return (long) this.timeOfDay;
     }
 
-    public void addToTimeOfDay(float t) {
-        this.timeOfDay += t;
+    public void setTimeOfDay(float l) {
+        this.timeOfDay = l;
         while (this.timeOfDay < 0.0F)
             this.timeOfDay += 24000.0F;
         while (this.timeOfDay > 24000.0F)
             this.timeOfDay -= 24000.0F;
     }
 
-    public void setTimeOfDay(float l) {
-        this.timeOfDay = l;
+    public void addToTimeOfDay(float t) {
+        this.timeOfDay += t;
         while (this.timeOfDay < 0.0F)
             this.timeOfDay += 24000.0F;
         while (this.timeOfDay > 24000.0F)

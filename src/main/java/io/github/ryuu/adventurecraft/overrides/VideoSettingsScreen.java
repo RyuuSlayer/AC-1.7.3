@@ -7,11 +7,10 @@ import net.minecraft.client.gui.widgets.Slider;
 import net.minecraft.client.util.ScreenScaler;
 
 public class VideoSettingsScreen extends Screen {
+    private static final Option[] l = new Option[]{Option.k, Option.e, Option.l, Option.i, Option.g, Option.f, Option.m, Option.h, Option.AUTO_FAR_CLIP, Option.GRASS_3D};
     private final Screen i;
-
-    protected String a;
-
     private final GameOptions j;
+    protected String a;
 
     public VideoSettingsScreen(Screen guiscreen, GameOptions gamesettings) {
         this.a = "Video Settings";
@@ -59,6 +58,4 @@ public class VideoSettingsScreen extends Screen {
         a(this.g, this.a, this.c / 2, 20, 16777215);
         super.a(i, j, f);
     }
-
-    private static final Option[] l = new Option[]{Option.k, Option.e, Option.l, Option.i, Option.g, Option.f, Option.m, Option.h, Option.AUTO_FAR_CLIP, Option.GRASS_3D};
 }

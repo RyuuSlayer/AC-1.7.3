@@ -59,13 +59,13 @@ public class ScriptEntity {
         return new ScriptVec3(this.entity.prevX, this.entity.prevY, this.entity.prevZ);
     }
 
+    public void setPosition(ScriptVec3 p) {
+        setPosition(p.x, p.y, p.z);
+    }
+
     ScriptVec3 getPosition(float f) {
         float iF = 1.0F - f;
         return new ScriptVec3(iF * this.entity.prevX + f * this.entity.x, iF * this.entity.prevY + f * this.entity.y, iF * this.entity.prevZ + f * this.entity.z);
-    }
-
-    public void setPosition(ScriptVec3 p) {
-        setPosition(p.x, p.y, p.z);
     }
 
     public void setPosition(double x, double y, double z) {
@@ -155,7 +155,7 @@ public class ScriptEntity {
     }
 
     public ScriptEntity dropItem(ScriptItem item) {
-        return getEntityClass((Entity) this.entity.dropItem(item.item, 0.0F));
+        return getEntityClass(this.entity.dropItem(item.item, 0.0F));
     }
 
     public boolean isInsideOfWater() {
@@ -250,12 +250,12 @@ public class ScriptEntity {
         this.entity.setPosition(this.entity.x, this.entity.y, this.entity.z);
     }
 
-    public void setIsFlying(boolean b) {
-        this.entity.isFlying = b;
-    }
-
     public boolean getIsFlying() {
         return this.entity.isFlying;
+    }
+
+    public void setIsFlying(boolean b) {
+        this.entity.isFlying = b;
     }
 
     public boolean getOnGround() {

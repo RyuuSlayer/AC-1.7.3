@@ -14,26 +14,16 @@ public class ClientChunkCache implements LevelSource {
     private final LevelSource d;
 
     private final ChunkIO e;
-
-    private Chunk[] f;
-
     private final Level g;
-
     int a;
-
     int b;
-
-    private Chunk h;
-
-    private int i;
-
-    private int j;
-
     boolean isVeryFar;
-
     int mask;
-
     int chunksWide;
+    private Chunk[] f;
+    private Chunk h;
+    private int i;
+    private int j;
 
     public ClientChunkCache(Level world, ChunkIO ichunkloader, LevelSource ichunkprovider) {
         this.isVeryFar = (Minecraft.minecraftInstance.z.e != 0);

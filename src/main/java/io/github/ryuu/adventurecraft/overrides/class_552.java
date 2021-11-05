@@ -5,11 +5,9 @@ import net.minecraft.client.render.Tessellator;
 import net.minecraft.util.maths.Vec3f;
 
 public class class_552 {
-    public class_290[] a;
-
-    public int b;
-
     private final boolean c;
+    public class_290[] a;
+    public int b;
 
     public class_552(class_290[] apositiontexturevertex) {
         this.b = 0;

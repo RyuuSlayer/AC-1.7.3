@@ -30,6 +30,84 @@ public class DimensionFileChunkIO implements ChunkIO {
         this.b = flag;
     }
 
+    public static void a(Chunk chunk, Level world, CompoundTag nbttagcompound) {
+        world.r();
+        nbttagcompound.a("xPos", chunk.j);
+        nbttagcompound.a("zPos", chunk.k);
+        nbttagcompound.a("LastUpdate", world.t());
+        nbttagcompound.a("Blocks", chunk.b);
+        nbttagcompound.a("Data", chunk.e.a);
+        nbttagcompound.a("SkyLight", chunk.f.a);
+        nbttagcompound.a("BlockLight", chunk.g.a);
+        nbttagcompound.a("HeightMap", chunk.h);
+        nbttagcompound.a("TerrainPopulated", chunk.n);
+        nbttagcompound.a("acVersion", 0);
+        chunk.q = false;
+        sp nbttaglist = new sp();
+        for (int i = 0; i < chunk.m.length; i++) {
+            Iterator<?> iterator = chunk.m[i].iterator();
+            while (iterator.hasNext()) {
+                Entity entity = (Entity) iterator.next();
+                chunk.q = true;
+                CompoundTag nbttagcompound1 = new CompoundTag();
+                if (entity.c(nbttagcompound1))
+                    nbttaglist.a((ij) nbttagcompound1);
+            }
+        }
+        nbttagcompound.a("Entities", (ij) nbttaglist);
+        sp nbttaglist1 = new sp();
+        for (Iterator<TileEntity> iterator1 = chunk.l.values().iterator(); iterator1.hasNext(); nbttaglist1.a((ij) nbttagcompound2)) {
+            TileEntity tileentity = iterator1.next();
+            CompoundTag nbttagcompound2 = new CompoundTag();
+            tileentity.b(nbttagcompound2);
+        }
+        nbttagcompound.a("TileEntities", (ij) nbttaglist1);
+    }
+
+    public static Chunk a(Level world, CompoundTag nbttagcompound) {
+        int i = nbttagcompound.e("xPos");
+        int j = nbttagcompound.e("zPos");
+        Chunk chunk = new Chunk(world, i, j, false);
+        chunk.b = nbttagcompound.j("Blocks");
+        chunk.e = new wi(nbttagcompound.j("Data"));
+        chunk.f = new wi(nbttagcompound.j("SkyLight"));
+        chunk.g = new wi(nbttagcompound.j("BlockLight"));
+        chunk.h = nbttagcompound.j("HeightMap");
+        chunk.n = nbttagcompound.m("TerrainPopulated");
+        if (!chunk.e.a())
+            chunk.e = new wi(chunk.b.length);
+        if (!nbttagcompound.b("acVersion"))
+            if (world.x.originallyFromAC)
+                Blocks.convertACVersion(chunk.b);
+        if (chunk.h == null || !chunk.f.a()) {
+            chunk.h = new byte[256];
+            chunk.f = new wi(chunk.b.length);
+            chunk.c();
+        }
+        if (!chunk.g.a()) {
+            chunk.g = new wi(chunk.b.length);
+            chunk.a();
+        }
+        sp nbttaglist = nbttagcompound.l("Entities");
+        if (nbttaglist != null)
+            for (int k = 0; k < nbttaglist.c(); k++) {
+                CompoundTag nbttagcompound1 = (CompoundTag) nbttaglist.a(k);
+                Entity entity = EntityRegistry.a(nbttagcompound1, world);
+                chunk.q = true;
+                if (entity != null)
+                    chunk.a(entity);
+            }
+        sp nbttaglist1 = nbttagcompound.l("TileEntities");
+        if (nbttaglist1 != null)
+            for (int l = 0; l < nbttaglist1.c(); l++) {
+                CompoundTag nbttagcompound2 = (CompoundTag) nbttaglist1.a(l);
+                TileEntity tileentity = TileEntity.c(nbttagcompound2);
+                if (tileentity != null)
+                    chunk.a(tileentity);
+            }
+        return chunk;
+    }
+
     private File a(int i, int j) {
         String s = "c." + Integer.toString(i, 36) + "." + Integer.toString(j, 36) + ".dat";
         String s1 = Integer.toString(i & 0x3F, 36);
@@ -107,84 +185,6 @@ public class DimensionFileChunkIO implements ChunkIO {
         } catch (Exception exception) {
             exception.printStackTrace();
         }
-    }
-
-    public static void a(Chunk chunk, Level world, CompoundTag nbttagcompound) {
-        world.r();
-        nbttagcompound.a("xPos", chunk.j);
-        nbttagcompound.a("zPos", chunk.k);
-        nbttagcompound.a("LastUpdate", world.t());
-        nbttagcompound.a("Blocks", chunk.b);
-        nbttagcompound.a("Data", chunk.e.a);
-        nbttagcompound.a("SkyLight", chunk.f.a);
-        nbttagcompound.a("BlockLight", chunk.g.a);
-        nbttagcompound.a("HeightMap", chunk.h);
-        nbttagcompound.a("TerrainPopulated", chunk.n);
-        nbttagcompound.a("acVersion", 0);
-        chunk.q = false;
-        sp nbttaglist = new sp();
-        for (int i = 0; i < chunk.m.length; i++) {
-            Iterator<?> iterator = chunk.m[i].iterator();
-            while (iterator.hasNext()) {
-                Entity entity = (Entity) iterator.next();
-                chunk.q = true;
-                CompoundTag nbttagcompound1 = new CompoundTag();
-                if (entity.c(nbttagcompound1))
-                    nbttaglist.a((ij) nbttagcompound1);
-            }
-        }
-        nbttagcompound.a("Entities", (ij) nbttaglist);
-        sp nbttaglist1 = new sp();
-        for (Iterator<TileEntity> iterator1 = chunk.l.values().iterator(); iterator1.hasNext(); nbttaglist1.a((ij) nbttagcompound2)) {
-            TileEntity tileentity = iterator1.next();
-            CompoundTag nbttagcompound2 = new CompoundTag();
-            tileentity.b(nbttagcompound2);
-        }
-        nbttagcompound.a("TileEntities", (ij) nbttaglist1);
-    }
-
-    public static Chunk a(Level world, CompoundTag nbttagcompound) {
-        int i = nbttagcompound.e("xPos");
-        int j = nbttagcompound.e("zPos");
-        Chunk chunk = new Chunk(world, i, j, false);
-        chunk.b = nbttagcompound.j("Blocks");
-        chunk.e = new wi(nbttagcompound.j("Data"));
-        chunk.f = new wi(nbttagcompound.j("SkyLight"));
-        chunk.g = new wi(nbttagcompound.j("BlockLight"));
-        chunk.h = nbttagcompound.j("HeightMap");
-        chunk.n = nbttagcompound.m("TerrainPopulated");
-        if (!chunk.e.a())
-            chunk.e = new wi(chunk.b.length);
-        if (!nbttagcompound.b("acVersion"))
-            if (world.x.originallyFromAC)
-                Blocks.convertACVersion(chunk.b);
-        if (chunk.h == null || !chunk.f.a()) {
-            chunk.h = new byte[256];
-            chunk.f = new wi(chunk.b.length);
-            chunk.c();
-        }
-        if (!chunk.g.a()) {
-            chunk.g = new wi(chunk.b.length);
-            chunk.a();
-        }
-        sp nbttaglist = nbttagcompound.l("Entities");
-        if (nbttaglist != null)
-            for (int k = 0; k < nbttaglist.c(); k++) {
-                CompoundTag nbttagcompound1 = (CompoundTag) nbttaglist.a(k);
-                Entity entity = EntityRegistry.a(nbttagcompound1, world);
-                chunk.q = true;
-                if (entity != null)
-                    chunk.a(entity);
-            }
-        sp nbttaglist1 = nbttagcompound.l("TileEntities");
-        if (nbttaglist1 != null)
-            for (int l = 0; l < nbttaglist1.c(); l++) {
-                CompoundTag nbttagcompound2 = (CompoundTag) nbttaglist1.a(l);
-                TileEntity tileentity = TileEntity.c(nbttagcompound2);
-                if (tileentity != null)
-                    chunk.a(tileentity);
-            }
-        return chunk;
     }
 
     public void a() {

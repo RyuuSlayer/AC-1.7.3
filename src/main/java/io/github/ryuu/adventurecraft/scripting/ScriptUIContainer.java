@@ -9,9 +9,8 @@ import net.minecraft.client.texture.TextureManager;
 import org.lwjgl.opengl.GL11;
 
 public class ScriptUIContainer extends UIElement {
-    public String text;
-
     private final List<UIElement> uiElements;
+    public String text;
 
     public ScriptUIContainer(float xPos, float yPos) {
         this(xPos, yPos, Minecraft.minecraftInstance.v.scriptUI);

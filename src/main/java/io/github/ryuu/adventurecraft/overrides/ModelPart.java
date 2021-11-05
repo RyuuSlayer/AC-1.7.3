@@ -5,14 +5,10 @@ import net.minecraft.client.render.Tessellator;
 import org.lwjgl.opengl.GL11;
 
 public class ModelPart {
-    private class_290[] j;
-
-    private class_552[] k;
-
     private final int l;
-
     private final int m;
-
+    private final int tWidth;
+    private final int tHeight;
     public float a;
 
     public float b;
@@ -24,20 +20,13 @@ public class ModelPart {
     public float e;
 
     public float f;
-
-    private boolean n;
-
-    private int o;
-
     public boolean g;
-
     public boolean h;
-
     public boolean i;
-
-    private final int tWidth;
-
-    private final int tHeight;
+    private class_290[] j;
+    private class_552[] k;
+    private boolean n;
+    private int o;
 
     public ModelPart(int i, int j) {
         this(i, j, 64, 32);

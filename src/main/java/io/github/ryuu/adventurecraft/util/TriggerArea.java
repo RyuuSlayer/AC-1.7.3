@@ -24,6 +24,16 @@ public class TriggerArea {
         this.maxZ = zMax;
     }
 
+    public static TriggerArea getFromTagCompound(CompoundTag tag) {
+        int minX = tag.getInt("minX");
+        int minY = tag.getInt("minY");
+        int minZ = tag.getInt("minZ");
+        int maxX = tag.getInt("maxX");
+        int maxY = tag.getInt("maxY");
+        int maxZ = tag.getInt("maxZ");
+        return new TriggerArea(minX, minY, minZ, maxX, maxY, maxZ);
+    }
+
     public boolean isPointInside(int x, int y, int z) {
         if (x < this.minX || x > this.maxX)
             return false;
@@ -41,15 +51,5 @@ public class TriggerArea {
         t.put("maxY", this.maxY);
         t.put("maxZ", this.maxZ);
         return t;
-    }
-
-    public static TriggerArea getFromTagCompound(CompoundTag tag) {
-        int minX = tag.getInt("minX");
-        int minY = tag.getInt("minY");
-        int minZ = tag.getInt("minZ");
-        int maxX = tag.getInt("maxX");
-        int maxY = tag.getInt("maxY");
-        int maxZ = tag.getInt("maxZ");
-        return new TriggerArea(minX, minY, minZ, maxX, maxY, maxZ);
     }
 }

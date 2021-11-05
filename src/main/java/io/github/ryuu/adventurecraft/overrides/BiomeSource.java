@@ -6,20 +6,13 @@ import net.minecraft.level.Level;
 import java.util.Random;
 
 public class BiomeSource {
-    private ug e;
-
-    private ug f;
-
-    private ug g;
-
     public double[] a;
-
     public double[] b;
-
     public double[] c;
-
     public kd[] d;
-
+    private ug e;
+    private ug f;
+    private ug g;
     private Level worldObj;
 
     protected BiomeSource() {

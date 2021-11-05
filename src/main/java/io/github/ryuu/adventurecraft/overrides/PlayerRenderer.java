@@ -11,10 +11,9 @@ import net.minecraft.item.ItemType;
 import org.lwjgl.opengl.GL11;
 
 public class PlayerRenderer extends LivingEntityRenderer {
+    private static final String[] i = new String[]{"cloth", "chain", "iron", "diamond", "gold"};
     private final BipedModel a;
-
     private final BipedModel g;
-
     private final BipedModel h;
 
     public PlayerRenderer() {
@@ -265,6 +264,4 @@ public class PlayerRenderer extends LivingEntityRenderer {
     public void a(Entity entity, double d, double d1, double d2, float f, float f1) {
         a((Player) entity, d, d1, d2, f, f1);
     }
-
-    private static final String[] i = new String[]{"cloth", "chain", "iron", "diamond", "gold"};
 }

@@ -19,6 +19,10 @@ public class GuiUrl extends Screen {
         this.msg = u;
     }
 
+    public static void showUI(Level w, TileEntityUrl tileEntityMsg) {
+        Minecraft.minecraftInstance.a(new GuiUrl(w, tileEntityMsg));
+    }
+
     @Override
     public void init() {
     }
@@ -47,9 +51,5 @@ public class GuiUrl extends Screen {
         renderBackground();
         drawTextWithShadow(this.textManager, String.format("Url: '%s'", this.msg.url), 4, 4, 14737632);
         super.render(i, j, f);
-    }
-
-    public static void showUI(Level w, TileEntityUrl tileEntityMsg) {
-        Minecraft.minecraftInstance.a(new GuiUrl(w, tileEntityMsg));
     }
 }

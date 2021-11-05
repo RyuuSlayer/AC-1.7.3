@@ -4,8 +4,8 @@ import io.github.ryuu.adventurecraft.util.ClipboardHandler;
 import org.lwjgl.input.Keyboard;
 
 public class ChatScreen extends Screen {
+    private static final String j = fp.a;
     protected String a = "";
-
     private int i = 0;
 
     public void b() {
@@ -72,6 +72,4 @@ public class ChatScreen extends Screen {
         if (this.a.length() > byte0)
             this.a = this.a.substring(0, byte0);
     }
-
-    private static final String j = fp.a;
 }

@@ -11,17 +11,13 @@ import net.minecraft.entity.LivingEntity;
 import org.lwjgl.opengl.GL11;
 
 public class CutsceneCamera {
-    long startTime;
-
-    CutsceneCameraPoint curPoint = new CutsceneCameraPoint(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0);
-
-    CutsceneCameraPoint prevPrevPoint;
-
-    CutsceneCameraPoint prevPoint;
-
     public List<CutsceneCameraPoint> cameraPoints = new LinkedList<>();
-
+    long startTime;
+    CutsceneCameraPoint curPoint = new CutsceneCameraPoint(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0);
+    CutsceneCameraPoint prevPrevPoint;
+    CutsceneCameraPoint prevPoint;
     List<Vec3D> lineVecs = new LinkedList<Vec3D>();
+    int startType = 2;
 
     public void addCameraPoint(float time, float posX, float posY, float posZ, float yaw, float pitch, int type) {
         int index = 0;
@@ -270,6 +266,4 @@ public class CutsceneCamera {
             }
         }
     }
-
-    int startType = 2;
 }

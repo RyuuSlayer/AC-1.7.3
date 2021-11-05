@@ -10,6 +10,10 @@ public class LadderTile extends Tile {
         super(i, j, ln.o);
     }
 
+    public static boolean isLadderID(int bID) {
+        return (bID == Tile.aG.bn || bID == Blocks.ladders1.bn || bID == Blocks.ladders2.bn || bID == Blocks.ladders3.bn || bID == Blocks.ladders4.bn);
+    }
+
     public eq e(Level world, int i, int j, int k) {
         int l = world.e(i, j, k) % 4 + 2;
         float f = 0.125F;
@@ -61,10 +65,6 @@ public class LadderTile extends Tile {
         if (isLadderID(bID))
             return true;
         return world.h(i, j, k + 1);
-    }
-
-    public static boolean isLadderID(int bID) {
-        return (bID == Tile.aG.bn || bID == Blocks.ladders1.bn || bID == Blocks.ladders2.bn || bID == Blocks.ladders3.bn || bID == Blocks.ladders4.bn);
     }
 
     public void e(Level world, int i, int j, int k, int l) {

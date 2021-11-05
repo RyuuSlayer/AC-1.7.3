@@ -31,10 +31,6 @@ public class ScriptInventoryPlayer extends ScriptInventory {
         return -1;
     }
 
-    public void setCurrentItem(int i) {
-        this.invPlayer.a(i, false);
-    }
-
     public void changeCurrentItem(int i) {
         this.invPlayer.b(i);
     }
@@ -60,6 +56,10 @@ public class ScriptInventoryPlayer extends ScriptInventory {
         if (i == null || i.c == 0)
             return null;
         return new ScriptItem(i);
+    }
+
+    public void setCurrentItem(int i) {
+        this.invPlayer.a(i, false);
     }
 
     public ScriptItem getOffhandItem() {

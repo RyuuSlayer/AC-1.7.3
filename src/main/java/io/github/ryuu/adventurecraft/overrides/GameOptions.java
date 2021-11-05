@@ -12,6 +12,50 @@ import net.minecraft.client.options.KeyBinding;
 import org.lwjgl.input.Keyboard;
 
 public class GameOptions {
+    private static final String[] J = new String[]{"options.renderDistance.veryFar", "options.renderDistance.far", "options.renderDistance.normal", "options.renderDistance.short", "options.renderDistance.tiny"};
+    private static final String[] K = new String[]{"options.difficulty.peaceful", "options.difficulty.easy", "options.difficulty.normal", "options.difficulty.hard"};
+    private static final String[] L = new String[]{"options.guiScale.auto", "options.guiScale.small", "options.guiScale.normal", "options.guiScale.large"};
+    private static final String[] M = new String[]{"performance.max", "performance.balanced", "performance.powersaver"};
+    public float a;
+    public float b;
+    public float c;
+    public boolean d;
+    public int e;
+    public boolean f;
+    public boolean g;
+    public boolean h;
+    public int i;
+    public boolean j;
+    public boolean k;
+    public String l;
+    public KeyBinding m;
+    public KeyBinding n;
+    public KeyBinding o;
+    public KeyBinding p;
+    public KeyBinding q;
+    public KeyBinding r;
+    public KeyBinding s;
+    public KeyBinding t;
+    public KeyBinding u;
+    public KeyBinding v;
+    public KeyBinding[] w;
+    public int y;
+    public boolean z;
+    public boolean A;
+    public boolean B;
+    public String C;
+    public boolean D;
+    public boolean E;
+    public boolean F;
+    public float G;
+    public float H;
+    public int I;
+    public boolean autoFarClip;
+    public boolean grass3d;
+    protected Minecraft x;
+
+    private File N;
+
     public GameOptions(Minecraft minecraft, File file) {
         this.a = 1.0F;
         this.b = 1.0F;
@@ -326,88 +370,4 @@ public class GameOptions {
             exception.printStackTrace();
         }
     }
-
-    private static final String[] J = new String[]{"options.renderDistance.veryFar", "options.renderDistance.far", "options.renderDistance.normal", "options.renderDistance.short", "options.renderDistance.tiny"};
-
-    private static final String[] K = new String[]{"options.difficulty.peaceful", "options.difficulty.easy", "options.difficulty.normal", "options.difficulty.hard"};
-
-    private static final String[] L = new String[]{"options.guiScale.auto", "options.guiScale.small", "options.guiScale.normal", "options.guiScale.large"};
-
-    private static final String[] M = new String[]{"performance.max", "performance.balanced", "performance.powersaver"};
-
-    public float a;
-
-    public float b;
-
-    public float c;
-
-    public boolean d;
-
-    public int e;
-
-    public boolean f;
-
-    public boolean g;
-
-    public boolean h;
-
-    public int i;
-
-    public boolean j;
-
-    public boolean k;
-
-    public String l;
-
-    public KeyBinding m;
-
-    public KeyBinding n;
-
-    public KeyBinding o;
-
-    public KeyBinding p;
-
-    public KeyBinding q;
-
-    public KeyBinding r;
-
-    public KeyBinding s;
-
-    public KeyBinding t;
-
-    public KeyBinding u;
-
-    public KeyBinding v;
-
-    public KeyBinding[] w;
-
-    protected Minecraft x;
-
-    private File N;
-
-    public int y;
-
-    public boolean z;
-
-    public boolean A;
-
-    public boolean B;
-
-    public String C;
-
-    public boolean D;
-
-    public boolean E;
-
-    public boolean F;
-
-    public float G;
-
-    public float H;
-
-    public int I;
-
-    public boolean autoFarClip;
-
-    public boolean grass3d;
 }

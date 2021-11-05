@@ -10,10 +10,8 @@ import org.lwjgl.input.Keyboard;
 
 public class GuiMapEditHUD extends Screen {
     private final Level world;
-
-    private long clickedTime;
-
     private final GuiEditPalette palette;
+    private long clickedTime;
 
     public GuiMapEditHUD(Level w) {
         this.world = w;

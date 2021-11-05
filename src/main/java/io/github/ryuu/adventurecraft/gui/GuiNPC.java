@@ -11,13 +11,9 @@ import net.minecraft.client.gui.widgets.Textbox;
 
 public class GuiNPC extends Screen {
     private final EntityNPC npc;
-
-    private Textbox npcName;
-
-    private Textbox chatMsg;
-
     int selectedID;
-
+    private Textbox npcName;
+    private Textbox chatMsg;
     private Button setOnCreated;
 
     private Button setOnUpdate;
@@ -36,6 +32,11 @@ public class GuiNPC extends Screen {
         this.selectedID = 0;
         this.page = 0;
         this.npc = n;
+    }
+
+    public static void showUI(EntityNPC n) {
+        TileEntityNpcPath.lastEntity = n;
+        Minecraft.minecraftInstance.a(new GuiNPC(n));
     }
 
     @Override
@@ -251,10 +252,5 @@ public class GuiNPC extends Screen {
             this.npc.chatMsg = this.chatMsg.method_1876();
         }
         super.render(i, j, f);
-    }
-
-    public static void showUI(EntityNPC n) {
-        TileEntityNpcPath.lastEntity = n;
-        Minecraft.minecraftInstance.a(new GuiNPC(n));
     }
 }

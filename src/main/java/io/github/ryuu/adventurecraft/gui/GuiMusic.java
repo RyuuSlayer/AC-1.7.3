@@ -22,6 +22,10 @@ public class GuiMusic extends Screen {
         this.music = m;
     }
 
+    public static void showUI(Level w, TileEntityMusic m) {
+        Minecraft.minecraftInstance.a(new GuiMusic(w, m));
+    }
+
     @Override
     public void tick() {
     }
@@ -75,10 +79,6 @@ public class GuiMusic extends Screen {
         this.fadeIn.text = String.format("Fade In: %d", this.music.fadeIn);
         super.render(i, j, f);
         this.world.getChunk(this.music.x, this.music.z).method_885();
-    }
-
-    public static void showUI(Level w, TileEntityMusic m) {
-        Minecraft.minecraftInstance.a(new GuiMusic(w, m));
     }
 
     @Override

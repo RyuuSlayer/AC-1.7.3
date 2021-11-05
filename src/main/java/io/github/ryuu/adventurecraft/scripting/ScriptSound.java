@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import net.minecraft.client.sound.SoundHelper;
+
+import io.github.ryuu.adventurecraft.overrides.SoundHelper;
 
 public class ScriptSound {
     SoundHelper soundMgr;

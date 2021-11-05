@@ -28,6 +28,10 @@ public class GuiMusicSheet extends Screen {
         this.songPlayed = null;
     }
 
+    public static void showUI(String i) {
+        Minecraft.minecraftInstance.a(new GuiMusicSheet(i));
+    }
+
     @Override
     public void tick() {
     }
@@ -148,10 +152,6 @@ public class GuiMusicSheet extends Screen {
 
     private void drawSharp(int x, int note) {
         blit((this.width - 205) / 2 + 36 + x, this.height - 59 - 2 - 48 + 46 - (note - 2) * 4 - 5, 16, 64, 12, 17);
-    }
-
-    public static void showUI(String i) {
-        Minecraft.minecraftInstance.a(new GuiMusicSheet(i));
     }
 
     @Override

@@ -17,33 +17,9 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ScriptableObject;
 
 public class ItemCustom extends ItemType {
+    static ArrayList<Integer> loadedItemIDs = new ArrayList<>();
     String fileName;
-
     String onItemUsedScript;
-
-    private static ItemCustom loadScript(File descFile) {
-        Properties p = new Properties();
-        try {
-            p.load(new FileInputStream(descFile));
-            int itemID = Integer.parseInt(p.getProperty("itemID", "-1"));
-            if (itemID == -1) {
-                Minecraft.minecraftInstance.v.a(String.format("ItemID for %s is unspecified", new Object[]{descFile.getName()}));
-            } else if (itemID <= 0) {
-                Minecraft.minecraftInstance.v.a(String.format("ItemID for %s specifies a negative itemID", new Object[]{descFile.getName()}));
-            } else if (ItemType.c[itemID] != null) {
-                Minecraft.minecraftInstance.v.a(String.format("ItemID (%d) for %s is already in use by %s", new Object[]{Integer.valueOf(itemID), descFile.getName()}));
-            } else {
-                return new ItemCustom(itemID, descFile.getName(), p);
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (NumberFormatException e) {
-            Minecraft.minecraftInstance.v.a(String.format("ItemID for %s is specified invalidly '%s'", new Object[]{descFile.getName(), p.getProperty("itemID")}));
-        }
-        return null;
-    }
 
     public ItemCustom(int itemID, String fName, Properties p) {
         super(itemID - 256);
@@ -71,6 +47,45 @@ public class ItemCustom extends ItemType {
         this.itemUseDelay = 1;
     }
 
+    private static ItemCustom loadScript(File descFile) {
+        Properties p = new Properties();
+        try {
+            p.load(new FileInputStream(descFile));
+            int itemID = Integer.parseInt(p.getProperty("itemID", "-1"));
+            if (itemID == -1) {
+                Minecraft.minecraftInstance.v.a(String.format("ItemID for %s is unspecified", new Object[]{descFile.getName()}));
+            } else if (itemID <= 0) {
+                Minecraft.minecraftInstance.v.a(String.format("ItemID for %s specifies a negative itemID", new Object[]{descFile.getName()}));
+            } else if (ItemType.c[itemID] != null) {
+                Minecraft.minecraftInstance.v.a(String.format("ItemID (%d) for %s is already in use by %s", new Object[]{Integer.valueOf(itemID), descFile.getName()}));
+            } else {
+                return new ItemCustom(itemID, descFile.getName(), p);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NumberFormatException e) {
+            Minecraft.minecraftInstance.v.a(String.format("ItemID for %s is specified invalidly '%s'", new Object[]{descFile.getName(), p.getProperty("itemID")}));
+        }
+        return null;
+    }
+
+    static void loadItems(File itemFolder) {
+        for (Integer i : loadedItemIDs)
+            ItemType.c[i.intValue()] = null;
+        loadedItemIDs.clear();
+        if (!itemFolder.exists())
+            return;
+        for (File itemFile : itemFolder.listFiles()) {
+            if (itemFile.isFile()) {
+                ItemCustom item = loadScript(itemFile);
+                if (item != null)
+                    loadedItemIDs.add(Integer.valueOf(item.bf));
+            }
+        }
+    }
+
     private Integer loadPropertyInt(String pName, String intString) {
         try {
             Integer i = Integer.valueOf(Integer.parseInt(intString));
@@ -89,22 +104,5 @@ public class ItemCustom extends ItemType {
             world.scriptHandler.runScript(this.onItemUsedScript, world.scope);
         }
         return itemstack;
-    }
-
-    static ArrayList<Integer> loadedItemIDs = new ArrayList<>();
-
-    static void loadItems(File itemFolder) {
-        for (Integer i : loadedItemIDs)
-            ItemType.c[i.intValue()] = null;
-        loadedItemIDs.clear();
-        if (!itemFolder.exists())
-            return;
-        for (File itemFile : itemFolder.listFiles()) {
-            if (itemFile.isFile()) {
-                ItemCustom item = loadScript(itemFile);
-                if (item != null)
-                    loadedItemIDs.add(Integer.valueOf(item.bf));
-            }
-        }
     }
 }

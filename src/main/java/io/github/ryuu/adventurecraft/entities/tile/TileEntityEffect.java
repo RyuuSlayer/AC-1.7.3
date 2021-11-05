@@ -6,6 +6,38 @@ import net.minecraft.util.io.CompoundTag;
 import java.util.Random;
 
 public class TileEntityEffect extends TileEntity {
+    private static final Random rand = new Random();
+    public boolean checkTrigger = true;
+    public String particleType = "heart";
+    public int particlesPerSpawn = 1;
+    public int ticksBetweenParticles = 1;
+    public boolean isActivated = false;
+    public int ticksBeforeParticle = 0;
+    public float offsetX = 0.0F;
+    public float offsetY = 0.0F;
+    public float offsetZ = 0.0F;
+    public float randX = 0.0F;
+    public float randY = 0.0F;
+    public float randZ = 0.0F;
+    public float floatArg1 = 0.0F;
+    public float floatArg2 = 0.0F;
+    public float floatArg3 = 0.0F;
+    public float floatRand1 = 0.0F;
+    public float floatRand2 = 0.0F;
+    public float floatRand3 = 0.0F;
+    public int changeFogColor;
+    public float fogR;
+    public float fogG;
+    public float fogB;
+    public int changeFogDensity;
+    public float fogStart;
+    public float fogEnd;
+    public boolean setOverlay = false;
+    public String overlay = "";
+    public boolean revertTextures = false;
+    public boolean replaceTextures = false;
+    public String textureReplacement = "";
+
     @Override
     public void readIdentifyingData(CompoundTag nbttagcompound) {
         super.readIdentifyingData(nbttagcompound);
@@ -95,66 +127,4 @@ public class TileEntityEffect extends TileEntity {
                 }
             }
     }
-
-    public boolean checkTrigger = true;
-
-    public String particleType = "heart";
-
-    public int particlesPerSpawn = 1;
-
-    public int ticksBetweenParticles = 1;
-
-    public boolean isActivated = false;
-
-    public int ticksBeforeParticle = 0;
-
-    public float offsetX = 0.0F;
-
-    public float offsetY = 0.0F;
-
-    public float offsetZ = 0.0F;
-
-    public float randX = 0.0F;
-
-    public float randY = 0.0F;
-
-    public float randZ = 0.0F;
-
-    public float floatArg1 = 0.0F;
-
-    public float floatArg2 = 0.0F;
-
-    public float floatArg3 = 0.0F;
-
-    public float floatRand1 = 0.0F;
-
-    public float floatRand2 = 0.0F;
-
-    public float floatRand3 = 0.0F;
-
-    public int changeFogColor;
-
-    public float fogR;
-
-    public float fogG;
-
-    public float fogB;
-
-    public int changeFogDensity;
-
-    public float fogStart;
-
-    public float fogEnd;
-
-    public boolean setOverlay = false;
-
-    public String overlay = "";
-
-    public boolean revertTextures = false;
-
-    public boolean replaceTextures = false;
-
-    public String textureReplacement = "";
-
-    private static final Random rand = new Random();
 }

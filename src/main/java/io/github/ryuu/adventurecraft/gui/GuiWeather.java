@@ -20,6 +20,10 @@ public class GuiWeather extends Screen {
         this.weather = w;
     }
 
+    public static void showUI(Level worldArg, TileEntityWeather w) {
+        Minecraft.minecraftInstance.a(new GuiWeather(worldArg, w));
+    }
+
     @Override
     public void tick() {
     }
@@ -135,10 +139,6 @@ public class GuiWeather extends Screen {
         this.weather.timeRate = this.timeRate.sliderValue * 32.0F - 16.0F;
         this.timeRate.text = String.format("Time Rate: %.2f", this.weather.timeRate);
         super.render(i, j, f);
-    }
-
-    public static void showUI(Level worldArg, TileEntityWeather w) {
-        Minecraft.minecraftInstance.a(new GuiWeather(worldArg, w));
     }
 
     @Override

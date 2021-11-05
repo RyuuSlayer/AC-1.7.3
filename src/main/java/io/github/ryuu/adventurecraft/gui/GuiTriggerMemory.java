@@ -27,6 +27,10 @@ public class GuiTriggerMemory extends Screen {
         this.trigger = triggerClicked;
     }
 
+    public static void showUI(Level w, int x, int y, int z, TileEntityTriggerMemory triggerClicked) {
+        Minecraft.minecraftInstance.a(new GuiTriggerMemory(w, x, y, z, triggerClicked));
+    }
+
     @Override
     public void tick() {
     }
@@ -79,10 +83,6 @@ public class GuiTriggerMemory extends Screen {
             drawTextWithShadow(this.textManager, "Memory Unset", 4, 104, 14737632);
         }
         super.render(i, j, f);
-    }
-
-    public static void showUI(Level w, int x, int y, int z, TileEntityTriggerMemory triggerClicked) {
-        Minecraft.minecraftInstance.a(new GuiTriggerMemory(w, x, y, z, triggerClicked));
     }
 
     @Override

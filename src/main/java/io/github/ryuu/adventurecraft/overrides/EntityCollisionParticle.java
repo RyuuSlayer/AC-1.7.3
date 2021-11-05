@@ -3,18 +3,16 @@ package io.github.ryuu.adventurecraft.overrides;
 import io.github.ryuu.adventurecraft.mixin.Level;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.render.Tessellator;
+import net.minecraft.level.Level;
 import org.lwjgl.opengl.GL11;
 
 public class EntityCollisionParticle extends Particle {
     private final Entity a;
 
     private final Entity o;
-
-    private int p;
-
-    private int q;
-
     private final float r;
+    private int p;
+    private int q;
 
     public EntityCollisionParticle(Level world, Entity entity, Entity entity1, float f) {
         super(world, entity.aM, entity.aN, entity.aO, entity.aP, entity.aQ, entity.aR);

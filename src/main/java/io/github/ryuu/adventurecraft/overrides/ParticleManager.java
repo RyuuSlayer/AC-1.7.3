@@ -6,16 +6,14 @@ import java.util.Random;
 
 import io.github.ryuu.adventurecraft.mixin.Level;
 import net.minecraft.client.render.Tessellator;
+import net.minecraft.level.Level;
 import org.lwjgl.opengl.GL11;
 
 public class ParticleManager {
-    protected Level a;
-
     private final List[] b = new List[6];
-
     private final TextureManager c;
-
     private final Random d = new Random();
+    protected Level a;
 
     public ParticleManager(Level world, TextureManager renderengine) {
         if (world != null)

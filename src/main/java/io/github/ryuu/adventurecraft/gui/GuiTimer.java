@@ -10,18 +10,12 @@ import net.minecraft.client.gui.widgets.Textbox;
 import net.minecraft.level.Level;
 
 public class GuiTimer extends Screen {
-    boolean ignoreNext;
-
     private final TileEntityTimer timer;
-
     private final int blockX;
-
     private final int blockY;
-
     private final int blockZ;
-
     private final Level world;
-
+    boolean ignoreNext;
     boolean useTextFields;
 
     GuiSlider2 activeTime;
@@ -43,6 +37,10 @@ public class GuiTimer extends Screen {
         this.blockY = y;
         this.blockZ = z;
         this.timer = timerClicked;
+    }
+
+    public static void showUI(Level w, int x, int y, int z, TileEntityTimer timerClicked) {
+        Minecraft.minecraftInstance.a(new GuiTimer(w, x, y, z, timerClicked));
     }
 
     @Override
@@ -177,10 +175,6 @@ public class GuiTimer extends Screen {
             this.deactiveTimeText.method_1879(i, j, k);
         }
         super.mouseClicked(i, j, k);
-    }
-
-    public static void showUI(Level w, int x, int y, int z, TileEntityTimer timerClicked) {
-        Minecraft.minecraftInstance.a(new GuiTimer(w, x, y, z, timerClicked));
     }
 
     @Override

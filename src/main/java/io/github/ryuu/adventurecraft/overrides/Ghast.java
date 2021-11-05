@@ -14,14 +14,10 @@ public class Ghast extends FlyingEntity implements MonsterEntityType {
     public double c;
 
     public double d;
-
-    private Entity g;
-
-    private int h;
-
     public int e;
-
     public int f;
+    private Entity g;
+    private int h;
 
     public Ghast(Level world) {
         super(world);
