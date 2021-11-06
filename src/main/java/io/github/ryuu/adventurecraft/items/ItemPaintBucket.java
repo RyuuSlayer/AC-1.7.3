@@ -12,7 +12,8 @@ public class ItemPaintBucket extends ItemType {
         super(i);
     }
 
-    public boolean a(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
+    @Override
+    public boolean useOnTile(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
         if (ItemCursor.bothSet) {
             int minX = Math.min(ItemCursor.oneX, ItemCursor.twoX);
             int maxX = Math.max(ItemCursor.oneX, ItemCursor.twoX);
@@ -23,10 +24,10 @@ public class ItemPaintBucket extends ItemType {
             for (int x = minX; x <= maxX; x++) {
                 for (int y = minY; y <= maxY; y++) {
                     for (int z = minZ; z <= maxZ; z++) {
-                        Tile b = Tile.m[world.a(x, y, z)];
+                        Tile b = Tile.BY_ID[world.getTileId(x, y, z)];
                         if (b != null && b instanceof IBlockColor) {
                             ((IBlockColor) b).incrementColor(world, x, y, z);
-                            world.j(x, y, z);
+                            world.j(x, y, z); // probably method_243 but not sure
                         }
                     }
                 }

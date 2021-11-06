@@ -12,10 +12,11 @@ public class ItemWrench extends ItemType {
         super(i);
     }
 
-    public boolean a(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
+    @Override
+    public boolean useOnTile(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
         if (ItemCursor.bothSet) {
-            int blockToSwapTo = world.a(i, j, k);
-            int metadata = world.e(i, j, k);
+            int blockToSwapTo = world.getTileId(i, j, k);
+            int metadata = world.getTileMeta(i, j, k);
             Minecraft.minecraftInstance.v.a(String.format("Swapping blocks With BlockID %d", new Object[]{Integer.valueOf(blockToSwapTo)}));
             int minX = Math.min(ItemCursor.oneX, ItemCursor.twoX);
             int maxX = Math.max(ItemCursor.oneX, ItemCursor.twoX);
@@ -26,10 +27,10 @@ public class ItemWrench extends ItemType {
             for (int x = minX; x <= maxX; x++) {
                 for (int y = minY; y <= maxY; y++) {
                     for (int z = minZ; z <= maxZ; z++) {
-                        int blockID = world.a(x, y, z);
+                        int blockID = world.getTileId(x, y, z);
                         switch (blockID) {
                             default:
-                                world.b(x, y, z, blockToSwapTo, metadata);
+                                world.setTileWithMetadata(x, y, z, blockToSwapTo, metadata);
                                 break;
                             case 0:
                             case 23:
@@ -69,11 +70,13 @@ public class ItemWrench extends ItemType {
         return false;
     }
 
-    public float a(ItemInstance itemstack, Tile block) {
+    @Override
+    public float method_438(ItemInstance itemstack, Tile block) {
         return 32.0F;
     }
 
-    public boolean a(Tile block) {
+    @Override
+    public boolean isEffectiveOn(Tile block) {
         return true;
     }
 

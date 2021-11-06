@@ -31,10 +31,11 @@ public class ItemCursor extends ItemType {
     }
 
     public boolean onItemUseLeftClick(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
-        return a(itemstack, entityplayer, world, i, j, k, l);
+        return useOnTile(itemstack, entityplayer, world, i, j, k, l);
     }
 
-    public boolean a(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
+    @Override
+    public boolean useOnTile(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
         if (firstPosition) {
             Minecraft.minecraftInstance.v.a(String.format("Setting Cursor Position 1 (%d, %d, %d)", new Object[]{Integer.valueOf(i), Integer.valueOf(j), Integer.valueOf(k)}));
             oneX = i;

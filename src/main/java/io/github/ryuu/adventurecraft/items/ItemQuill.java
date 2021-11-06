@@ -11,11 +11,12 @@ public class ItemQuill extends ItemType {
         super(i);
     }
 
-    public boolean a(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
+    @Override
+    public boolean useOnTile(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
         double yToUse = 128.0D;
         for (int y = j; y <= 128; y++) {
             if (world.a(i, y, k) == 0) {
-                yToUse = (y + entityplayer.bf);
+                yToUse = (y + entityplayer.standingEyeHeight);
                 break;
             }
         }

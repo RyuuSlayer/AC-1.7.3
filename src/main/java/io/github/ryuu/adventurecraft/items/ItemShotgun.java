@@ -9,11 +9,12 @@ import net.minecraft.level.Level;
 class ItemShotgun extends ItemType implements IItemReload {
     public ItemShotgun(int itemIndex) {
         super(itemIndex);
-        this.bg = 1;
+        this.maxStackSize = 1;
         this.itemUseDelay = 1;
     }
 
-    public ItemInstance a(ItemInstance itemstack, Level world, Player entityplayer) {
+    @Override
+    public ItemInstance use(ItemInstance itemstack, Level world, Player entityplayer) {
         if (itemstack.timeLeft > 0) {
             if (itemstack.isReloading && itemstack.i() > 0) {
                 itemstack.isReloading = false;
@@ -21,17 +22,17 @@ class ItemShotgun extends ItemType implements IItemReload {
             }
             return itemstack;
         }
-        if (itemstack.i() == itemstack.j()) {
+        if (itemstack.getDamage() == itemstack.method_723()) {
             itemstack.isReloading = true;
             itemstack.timeLeft = 0;
             return itemstack;
         }
-        world.a(entityplayer, "items.shotgun.fire_and_pump", 1.0F, 1.0F);
+        world.playSound(entityplayer, "items.shotgun.fire_and_pump", 1.0F, 1.0F);
         for (int i = 0; i < 14; i++)
             UtilBullet.fireBullet(world, entityplayer, 0.12F, 2);
-        itemstack.b(itemstack.i() + 1);
+        itemstack.setDamage(itemstack.getDamage() + 1);
         itemstack.timeLeft = 40;
-        if (itemstack.i() == itemstack.j())
+        if (itemstack.getDamage() == itemstack.method_723())
             itemstack.isReloading = true;
         return itemstack;
     }
@@ -44,12 +45,13 @@ class ItemShotgun extends ItemType implements IItemReload {
         return itemstack.timeLeft > 35;
     }
 
+    @Override
     public void reload(ItemInstance itemstack, Level world, Player entityplayer) {
-        if (itemstack.i() > 0 && entityplayer.c.c(Items.shotgunAmmo.bf)) {
-            itemstack.b(itemstack.i() - 1);
+        if (itemstack.getDamage() > 0 && entityplayer.inventory.decreaseAmountOfItem(Items.shotgunAmmo.id)) {
+            itemstack.setDamage(itemstack.getDamage() - 1);
             itemstack.timeLeft = 20;
-            world.a(entityplayer, "items.shotgun.reload", 1.0F, 1.0F);
-            if (itemstack.i() == 0)
+            world.playSound(entityplayer, "items.shotgun.reload", 1.0F, 1.0F);
+            if (itemstack.getDamage() == 0)
                 itemstack.isReloading = false;
         } else {
             itemstack.isReloading = false;

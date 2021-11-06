@@ -11,7 +11,8 @@ public class ItemEraser extends ItemType {
         super(i);
     }
 
-    public boolean a(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
+    @Override
+    public boolean useOnTile(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
         if (ItemCursor.bothSet) {
             Minecraft.minecraftInstance.v.a("Erasing Area");
             int minX = Math.min(ItemCursor.oneX, ItemCursor.twoX);
@@ -23,7 +24,7 @@ public class ItemEraser extends ItemType {
             for (int x = minX; x <= maxX; x++) {
                 for (int y = minY; y <= maxY; y++) {
                     for (int z = minZ; z <= maxZ; z++)
-                        world.f(x, y, z, 0);
+                        world.setTile(x, y, z, 0);
                 }
             }
         }

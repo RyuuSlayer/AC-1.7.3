@@ -9,22 +9,24 @@ import net.minecraft.level.Level;
 class ItemBoomerang extends ItemType {
     public ItemBoomerang(int itemIndex) {
         super(itemIndex);
-        c(144);
-        this.bg = 1;
-        e(0);
-        a(true);
+        setTexturePosition(144);
+        this.maxStackSize = 1;
+        setDurability(0); // e = setDurability
+        method_457(true); // a = method_457
     }
 
-    public int a(int i) {
+    @Override
+    public int getTexturePosition(int i) {
         if (i == 0)
-            return this.bh;
+            return this.texturePosition;
         return 165;
     }
 
-    public ItemInstance a(ItemInstance itemstack, Level world, Player entityplayer) {
-        if (itemstack.i() == 0) {
-            world.b(new EntityBoomerang(world, entityplayer, itemstack));
-            itemstack.b(1);
+    @Override
+    public ItemInstance use(ItemInstance itemstack, Level world, Player entityplayer) {
+        if (itemstack.getDamage() == 0) { // i = getDamage
+            world.spawnEntity(new EntityBoomerang(world, entityplayer, itemstack));
+            itemstack.setDamage(1); // b = setDamage
         }
         return itemstack;
     }

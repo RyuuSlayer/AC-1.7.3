@@ -13,11 +13,12 @@ public class ItemBrush extends ItemType {
         super(i);
     }
 
-    public boolean a(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
-        Tile b = Tile.m[world.a(i, j, k)];
+    @Override
+    public boolean useOnTile(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
+        Tile b = Tile.BY_ID[world.getTileId(i, j, k)];
         if (b != null && b instanceof IBlockColor) {
             ((IBlockColor) b).incrementColor(world, i, j, k);
-            world.j(i, j, k);
+            world.j(i, j, k); // probably method_243 but not sure
         } else {
             Minecraft.minecraftInstance.v.a("Doesn't implement Color :(");
         }

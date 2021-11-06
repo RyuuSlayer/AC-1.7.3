@@ -6,7 +6,7 @@ import net.minecraft.item.armour.ArmourItem;
 class ItemPegasusBoots extends ArmourItem {
     public ItemPegasusBoots(int itemIndex) {
         super(itemIndex, 0, 0, 3);
-        c(183);
+        setTexturePosition(183);
     }
 
     public void onAddToSlot(Player entityPlayer, int slot, int damage) {

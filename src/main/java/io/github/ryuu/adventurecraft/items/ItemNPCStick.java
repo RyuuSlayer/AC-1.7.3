@@ -12,19 +12,21 @@ import net.minecraft.level.Level;
 class ItemNPCStick extends ItemType {
     public ItemNPCStick(int itemIndex) {
         super(itemIndex);
-        a(5, 3);
-        h();
+        setTexturePosition(5, 3);
+        method_466();
     }
 
-    public boolean a(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
+    @Override
+    public boolean useOnTile(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
         EntityNPC npc = new EntityNPC(world);
-        npc.b(i + 0.5D, (j + 1), k + 0.5D, entityplayer.aS + 180.0F, 0.0F);
-        npc.H = npc.aS;
-        world.b((Entity) npc);
+        npc.method_1338(i + 0.5D, (j + 1), k + 0.5D, entityplayer.yaw + 180.0F, 0.0F);
+        npc.field_1012 = npc.yaw;
+        world.spawnEntity(npc);
         return true;
     }
 
-    public boolean a(ItemInstance itemstack, LivingEntity entityliving, LivingEntity entityliving1) {
+    @Override
+    public boolean postHit(ItemInstance itemstack, LivingEntity entityliving, LivingEntity entityliving1) {
         if (entityliving instanceof EntityNPC) {
             GuiNPC.showUI((EntityNPC) entityliving);
             return true;

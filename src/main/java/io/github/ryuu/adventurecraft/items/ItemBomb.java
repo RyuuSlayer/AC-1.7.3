@@ -10,12 +10,13 @@ import net.minecraft.level.Level;
 class ItemBomb extends ItemType {
     public ItemBomb(int itemIndex) {
         super(itemIndex);
-        c(150);
+        setTexturePosition(150); // c = setTexturePosition
     }
 
-    public ItemInstance a(ItemInstance itemstack, Level world, Player entityplayer) {
-        itemstack.a--;
-        world.b((Entity) new EntityBomb(world, entityplayer));
+    @Override
+    public ItemInstance use(ItemInstance itemstack, Level world, Player entityplayer) {
+        itemstack.count--; // a = count
+        world.spawnEntity(new EntityBomb(world, entityplayer)); // Removed redundant cast no worry
         return itemstack;
     }
 }

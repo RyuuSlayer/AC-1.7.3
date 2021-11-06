@@ -24,21 +24,23 @@ class ItemHookshot extends ItemType {
         this.mainActiveHookshot = null;
         this.offActiveHookshot = null;
         this.player = null;
-        a(3, 10);
-        this.bg = 1;
+        setTexturePosition(3, 10);
+        this.maxStackSize = 1;
     }
 
     public boolean c() {
         return true;
     }
 
-    public int a(int i) {
+    @Override
+    public int getTexturePosition(int i) {
         if (i == 1)
-            return this.bh + 1;
-        return this.bh;
+            return this.texturePosition + 1;
+        return this.texturePosition;
     }
 
-    public ItemInstance a(ItemInstance itemstack, Level world, Player entityplayer) {
+    @Override
+    public ItemInstance use(ItemInstance itemstack, Level world, Player entityplayer) {
         EntityHookshot hookshot, other;
         boolean main = true;
         if (!entityplayer.swappedItems) {
@@ -49,16 +51,16 @@ class ItemHookshot extends ItemType {
             other = this.mainHookshot;
             main = false;
         }
-        if ((hookshot == null || hookshot.be) && ((other != null && other.attachedToSurface) || entityplayer.aX || entityplayer.ah() || entityplayer.k_())) {
+        if ((hookshot == null || hookshot.removed) && ((other != null && other.attachedToSurface) || entityplayer.onGround || entityplayer.method_1335() || entityplayer.method_1393())) {
             hookshot = new EntityHookshot(world, entityplayer, main, itemstack);
-            world.b(hookshot);
-            entityplayer.J();
+            world.spawnEntity(hookshot);
+            entityplayer.swingHand();
             if (main) {
                 this.mainActiveHookshot = itemstack;
-                this.mainActiveHookshot.b(1);
+                this.mainActiveHookshot.setDamage(1);
             } else {
                 this.offActiveHookshot = itemstack;
-                this.offActiveHookshot.b(1);
+                this.offActiveHookshot.setDamage(1);
             }
             this.player = entityplayer;
         } else {
@@ -79,10 +81,10 @@ class ItemHookshot extends ItemType {
         hookshot.attachedToSurface = false;
         hookshot.entityGrabbed = null;
         if (hookshot == this.mainHookshot && this.mainActiveHookshot != null) {
-            this.mainActiveHookshot.b(0);
+            this.mainActiveHookshot.setDamage(0);
             this.mainActiveHookshot = null;
         } else if (this.offActiveHookshot != null) {
-            this.offActiveHookshot.b(0);
+            this.offActiveHookshot.setDamage(0);
             this.offActiveHookshot = null;
         }
     }

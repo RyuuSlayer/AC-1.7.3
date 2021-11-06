@@ -10,7 +10,7 @@ import net.minecraft.level.Level;
 public class ItemTriggerStick extends ItemType {
     protected ItemTriggerStick(int i) {
         super(i);
-        a(5, 3);
+        setTexturePosition(5, 3);
     }
 
     public boolean onItemUseLeftClick(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {

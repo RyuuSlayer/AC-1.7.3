@@ -13,10 +13,11 @@ public class ItemNudge extends ItemType {
         super(i);
     }
 
-    public ItemInstance a(ItemInstance itemstack, Level world, Player entityplayer) {
+    @Override
+    public ItemInstance use(ItemInstance itemstack, Level world, Player entityplayer) {
         if (ItemCursor.bothSet) {
             LivingEntity camera = Minecraft.minecraftInstance.i;
-            Vec3f lookDir = camera.ac();
+            Vec3f lookDir = camera.method_1320();
             int width = ItemCursor.maxX - ItemCursor.minX + 1;
             int height = ItemCursor.maxY - ItemCursor.minY + 1;
             int depth = ItemCursor.maxZ - ItemCursor.minZ + 1;
@@ -25,22 +26,22 @@ public class ItemNudge extends ItemType {
             for (int i = 0; i < width; i++) {
                 for (int k = 0; k < height; k++) {
                     for (int m = 0; m < depth; m++) {
-                        int blockID = world.a(i + ItemCursor.minX, k + ItemCursor.minY, m + ItemCursor.minZ);
-                        int metadata = world.e(i + ItemCursor.minX, k + ItemCursor.minY, m + ItemCursor.minZ);
+                        int blockID = world.getTileId(i + ItemCursor.minX, k + ItemCursor.minY, m + ItemCursor.minZ);
+                        int metadata = world.getTileMeta(i + ItemCursor.minX, k + ItemCursor.minY, m + ItemCursor.minZ);
                         blocks[depth * (height * i + k) + m] = blockID;
                         meta[depth * (height * i + k) + m] = metadata;
-                        world.c(i + ItemCursor.minX, k + ItemCursor.minY, m + ItemCursor.minZ, 0);
+                        world.setTileInChunk(i + ItemCursor.minX, k + ItemCursor.minY, m + ItemCursor.minZ, 0);
                     }
                 }
             }
-            double absX = Math.abs(lookDir.a);
-            double absY = Math.abs(lookDir.b);
-            double absZ = Math.abs(lookDir.c);
+            double absX = Math.abs(lookDir.x);
+            double absY = Math.abs(lookDir.y);
+            double absZ = Math.abs(lookDir.z);
             int xOffset = ItemCursor.minX;
             int yOffset = ItemCursor.minY;
             int zOffset = ItemCursor.minZ;
             if (absX > absY && absX > absZ) {
-                if (lookDir.a < 0.0D) {
+                if (lookDir.x < 0.0D) {
                     xOffset++;
                     ItemCursor.minX++;
                     ItemCursor.maxX++;
@@ -54,7 +55,7 @@ public class ItemNudge extends ItemType {
                     ItemCursor.twoX--;
                 }
             } else if (absY > absZ) {
-                if (lookDir.b < 0.0D) {
+                if (lookDir.y < 0.0D) {
                     yOffset++;
                     ItemCursor.minY++;
                     ItemCursor.maxY++;
@@ -67,7 +68,7 @@ public class ItemNudge extends ItemType {
                     ItemCursor.oneY--;
                     ItemCursor.twoY--;
                 }
-            } else if (lookDir.c < 0.0D) {
+            } else if (lookDir.z < 0.0D) {
                 zOffset++;
                 ItemCursor.minZ++;
                 ItemCursor.maxZ++;
@@ -86,7 +87,7 @@ public class ItemNudge extends ItemType {
                     for (int m = 0; m < depth; m++) {
                         int blockID = blocks[depth * (height * j + k) + m];
                         int metadata = meta[depth * (height * j + k) + m];
-                        world.a(xOffset + j, yOffset + k, zOffset + m, blockID, metadata);
+                        world.setTileWithMetadata(xOffset + j, yOffset + k, zOffset + m, blockID, metadata);
                     }
                 }
             }
@@ -95,7 +96,7 @@ public class ItemNudge extends ItemType {
                     for (int m = 0; m < depth; m++) {
                         int blockID = blocks[depth * (height * j + k) + m];
                         int metadata = meta[depth * (height * j + k) + m];
-                        world.a(xOffset + j, yOffset + k, zOffset + m, blockID, metadata);
+                        world.setTileWithMetadata(xOffset + j, yOffset + k, zOffset + m, blockID, metadata);
                     }
                 }
             }
@@ -114,7 +115,7 @@ public class ItemNudge extends ItemType {
     public void onItemLeftClick(ItemInstance itemstack, Level world, Player entityplayer) {
         if (ItemCursor.bothSet) {
             LivingEntity camera = Minecraft.minecraftInstance.i;
-            Vec3f lookDir = camera.ac();
+            Vec3f lookDir = camera.method_1320();
             int width = ItemCursor.maxX - ItemCursor.minX + 1;
             int height = ItemCursor.maxY - ItemCursor.minY + 1;
             int depth = ItemCursor.maxZ - ItemCursor.minZ + 1;
@@ -123,22 +124,22 @@ public class ItemNudge extends ItemType {
             for (int i = 0; i < width; i++) {
                 for (int k = 0; k < height; k++) {
                     for (int m = 0; m < depth; m++) {
-                        int blockID = world.a(i + ItemCursor.minX, k + ItemCursor.minY, m + ItemCursor.minZ);
-                        int metadata = world.e(i + ItemCursor.minX, k + ItemCursor.minY, m + ItemCursor.minZ);
+                        int blockID = world.getTileId(i + ItemCursor.minX, k + ItemCursor.minY, m + ItemCursor.minZ);
+                        int metadata = world.getTileMeta(i + ItemCursor.minX, k + ItemCursor.minY, m + ItemCursor.minZ);
                         blocks[depth * (height * i + k) + m] = blockID;
                         meta[depth * (height * i + k) + m] = metadata;
-                        world.c(i + ItemCursor.minX, k + ItemCursor.minY, m + ItemCursor.minZ, 0);
+                        world.setTileInChunk(i + ItemCursor.minX, k + ItemCursor.minY, m + ItemCursor.minZ, 0);
                     }
                 }
             }
-            double absX = Math.abs(lookDir.a);
-            double absY = Math.abs(lookDir.b);
-            double absZ = Math.abs(lookDir.c);
+            double absX = Math.abs(lookDir.x);
+            double absY = Math.abs(lookDir.y);
+            double absZ = Math.abs(lookDir.z);
             int xOffset = ItemCursor.minX;
             int yOffset = ItemCursor.minY;
             int zOffset = ItemCursor.minZ;
             if (absX > absY && absX > absZ) {
-                if (lookDir.a > 0.0D) {
+                if (lookDir.x > 0.0D) {
                     xOffset++;
                     ItemCursor.minX++;
                     ItemCursor.maxX++;
@@ -152,7 +153,7 @@ public class ItemNudge extends ItemType {
                     ItemCursor.twoX--;
                 }
             } else if (absY > absZ) {
-                if (lookDir.b > 0.0D) {
+                if (lookDir.y > 0.0D) {
                     yOffset++;
                     ItemCursor.minY++;
                     ItemCursor.maxY++;
@@ -165,7 +166,7 @@ public class ItemNudge extends ItemType {
                     ItemCursor.oneY--;
                     ItemCursor.twoY--;
                 }
-            } else if (lookDir.c > 0.0D) {
+            } else if (lookDir.z > 0.0D) {
                 zOffset++;
                 ItemCursor.minZ++;
                 ItemCursor.maxZ++;
@@ -184,7 +185,7 @@ public class ItemNudge extends ItemType {
                     for (int m = 0; m < depth; m++) {
                         int blockID = blocks[depth * (height * j + k) + m];
                         int metadata = meta[depth * (height * j + k) + m];
-                        world.a(xOffset + j, yOffset + k, zOffset + m, blockID, metadata);
+                        world.setTileWithMetadata(xOffset + j, yOffset + k, zOffset + m, blockID, metadata);
                     }
                 }
             }

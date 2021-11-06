@@ -14,10 +14,11 @@ public class ItemPaste extends ItemType {
         super(i);
     }
 
-    public ItemInstance a(ItemInstance itemstack, Level world, Player entityplayer) {
+    @Override
+    public ItemInstance use(ItemInstance itemstack, Level world, Player entityplayer) {
         if (ItemCursor.bothSet) {
             LivingEntity camera = Minecraft.minecraftInstance.i;
-            Vec3f lookDir = camera.ac();
+            Vec3f lookDir = camera.method_1320();
             int width = ItemCursor.maxX - ItemCursor.minX + 1;
             int height = ItemCursor.maxY - ItemCursor.minY + 1;
             int depth = ItemCursor.maxZ - ItemCursor.minZ + 1;
@@ -26,23 +27,23 @@ public class ItemPaste extends ItemType {
             for (int i = 0; i < width; i++) {
                 for (int k = 0; k < height; k++) {
                     for (int m = 0; m < depth; m++) {
-                        int blockID = world.a(i + ItemCursor.minX, k + ItemCursor.minY, m + ItemCursor.minZ);
-                        int metadata = world.e(i + ItemCursor.minX, k + ItemCursor.minY, m + ItemCursor.minZ);
+                        int blockID = world.getTileId(i + ItemCursor.minX, k + ItemCursor.minY, m + ItemCursor.minZ);
+                        int metadata = world.getTileMeta(i + ItemCursor.minX, k + ItemCursor.minY, m + ItemCursor.minZ);
                         blocks[depth * (height * i + k) + m] = blockID;
                         meta[depth * (height * i + k) + m] = metadata;
                     }
                 }
             }
-            int xOffset = (int) (camera.aM + DebugMode.reachDistance * lookDir.a);
-            int yOffset = (int) (camera.aN + DebugMode.reachDistance * lookDir.b);
-            int zOffset = (int) (camera.aO + DebugMode.reachDistance * lookDir.c);
+            int xOffset = (int) (camera.x + DebugMode.reachDistance * lookDir.x);
+            int yOffset = (int) (camera.y + DebugMode.reachDistance * lookDir.y);
+            int zOffset = (int) (camera.z + DebugMode.reachDistance * lookDir.z);
             int j;
             for (j = 0; j < width; j++) {
                 for (int k = 0; k < height; k++) {
                     for (int m = 0; m < depth; m++) {
                         int blockID = blocks[depth * (height * j + k) + m];
                         int metadata = meta[depth * (height * j + k) + m];
-                        world.a(xOffset + j, yOffset + k, zOffset + m, blockID, metadata);
+                        world.setTileWithMetadata(xOffset + j, yOffset + k, zOffset + m, blockID, metadata);
                     }
                 }
             }
@@ -51,7 +52,7 @@ public class ItemPaste extends ItemType {
                     for (int m = 0; m < depth; m++) {
                         int blockID = blocks[depth * (height * j + k) + m];
                         int metadata = meta[depth * (height * j + k) + m];
-                        world.a(xOffset + j, yOffset + k, zOffset + m, blockID, metadata);
+                        world.setTileWithMetadata(xOffset + j, yOffset + k, zOffset + m, blockID, metadata);
                     }
                 }
             }

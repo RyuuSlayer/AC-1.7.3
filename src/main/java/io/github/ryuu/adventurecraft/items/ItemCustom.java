@@ -28,21 +28,21 @@ public class ItemCustom extends ItemType {
         if (iconIndexS != null) {
             Integer iconIndexI = loadPropertyInt("iconIndex", iconIndexS);
             if (iconIndexI != null)
-                c(iconIndexI.intValue());
+                setTexturePosition(iconIndexI.intValue());
         }
         String maxItemDamageS = p.getProperty("maxItemDamage");
         if (maxItemDamageS != null) {
             Integer maxItemDamageI = loadPropertyInt("maxItemDamage", maxItemDamageS);
             if (maxItemDamageI != null)
-                this.a = maxItemDamageI.intValue();
+                this.a = maxItemDamageI.intValue(); // really high chance of being field_402, but it has private access for some reason
         }
         String maxStackSizeS = p.getProperty("maxStackSize");
         if (maxStackSizeS != null) {
             Integer maxStackSizeI = loadPropertyInt("maxStackSize", maxStackSizeS);
             if (maxStackSizeI != null)
-                this.bg = maxStackSizeI.intValue();
+                this.maxStackSize = maxStackSizeI.intValue();
         }
-        a(p.getProperty("name", "Unnamed"));
+        setName(p.getProperty("name", "Unnamed"));
         this.onItemUsedScript = p.getProperty("onItemUsedScript", "");
         this.itemUseDelay = 1;
     }
@@ -73,7 +73,7 @@ public class ItemCustom extends ItemType {
 
     static void loadItems(File itemFolder) {
         for (Integer i : loadedItemIDs)
-            ItemType.c[i.intValue()] = null;
+            ItemType.byId[i.intValue()] = null;
         loadedItemIDs.clear();
         if (!itemFolder.exists())
             return;
@@ -81,7 +81,7 @@ public class ItemCustom extends ItemType {
             if (itemFile.isFile()) {
                 ItemCustom item = loadScript(itemFile);
                 if (item != null)
-                    loadedItemIDs.add(Integer.valueOf(item.bf));
+                    loadedItemIDs.add(Integer.valueOf(item.id));
             }
         }
     }
@@ -96,7 +96,8 @@ public class ItemCustom extends ItemType {
         }
     }
 
-    public ItemInstance a(ItemInstance itemstack, Level world, Player entityplayer) {
+    @Override
+    public ItemInstance use(ItemInstance itemstack, Level world, Player entityplayer) {
         if (!this.onItemUsedScript.equals("")) {
             ScriptItem item = new ScriptItem(itemstack);
             Object wrappedOut = Context.javaToJS(item, world.scope);
