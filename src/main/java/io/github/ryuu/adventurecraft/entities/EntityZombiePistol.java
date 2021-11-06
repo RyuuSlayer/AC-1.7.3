@@ -56,7 +56,7 @@ public class EntityZombiePistol extends Zombie {
         int i = this.rand.nextInt(3) + 1;
         for (int j = 0; j < i; j++) {
             ItemEntity item = dropItem(getMobDrops(), 1);
-            item.a.a = 5;
+            item.item.count = 5;
         }
     }
 

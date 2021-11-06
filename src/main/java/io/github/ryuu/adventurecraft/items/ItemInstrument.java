@@ -16,15 +16,15 @@ public class ItemInstrument extends ItemType {
         this.instrument = instrumentToUse;
     }
 
-    public boolean a(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
-        if (world.a(i, j, k) == Tile.aE.bn) {
-            Sign sign = (Sign) world.b(i, j, k);
+    public boolean useOnTile(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
+        if (world.getTileId(i, j, k) == Tile.STANDING_SIGN.id) {
+            Sign sign = (Sign) world.getTileEntity(i, j, k);
             sign.playSong(this.instrument);
         }
         return false;
     }
 
-    public ItemInstance a(ItemInstance itemstack, Level world, Player entityplayer) {
+    public ItemInstance use(ItemInstance itemstack, Level world, Player entityplayer) {
         GuiMusicSheet.showUI(this.instrument);
         return itemstack;
     }

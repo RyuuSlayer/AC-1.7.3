@@ -12,7 +12,8 @@ public class ItemHammer extends ItemType {
         super(i);
     }
 
-    public boolean a(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
+    @Override
+    public boolean useOnTile(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
         if (ItemCursor.bothSet) {
             int blockToSwapTo = world.a(i, j, k);
             int metadata = world.e(i, j, k);
@@ -26,18 +27,20 @@ public class ItemHammer extends ItemType {
             for (int x = minX; x <= maxX; x++) {
                 for (int y = minY; y <= maxY; y++) {
                     for (int z = minZ; z <= maxZ; z++)
-                        world.b(x, y, z, blockToSwapTo, metadata);
+                        world.method_201(x, y, z, blockToSwapTo, metadata);
                 }
             }
         }
         return false;
     }
 
-    public float a(ItemInstance itemstack, Tile block) {
+    @Override
+    public float method_438(ItemInstance itemstack, Tile block) {
         return 32.0F;
     }
 
-    public boolean a(Tile block) {
+    @Override
+    public boolean isEffectiveOn(Tile block) {
         return true;
     }
 
