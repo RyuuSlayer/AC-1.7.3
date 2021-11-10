@@ -5,7 +5,7 @@ import java.util.List;
 
 import io.github.ryuu.adventurecraft.entities.EntityLivingScript;
 import io.github.ryuu.adventurecraft.entities.EntityNPC;
-import io.github.ryuu.adventurecraft.util.UtilBullet; jc;
+import io.github.ryuu.adventurecraft.util.UtilBullet;
 import net.minecraft.entity.*;
 import net.minecraft.entity.animal.Wolf;
 import net.minecraft.entity.monster.Monster;
@@ -76,7 +76,7 @@ public class ScriptEntity {
         return new ScriptVecRot(this.entity.yaw, this.entity.pitch);
     }
 
-    ScriptVecRot getRotation(float f) {
+    public ScriptVecRot getRotation(float f) {
         float iF = 1.0F - f;
         return new ScriptVecRot(iF * this.entity.prevYaw + f * this.entity.yaw, iF * this.entity.prevPitch + f * this.entity.pitch);
     }
@@ -102,27 +102,27 @@ public class ScriptEntity {
     }
 
     public void addVelocity(double x, double y, double z) {
-        this.entity.d(x, y, z);
+        this.entity.method_1322(x, y, z);
     }
 
     public void setDead() {
-        this.entity.K();
+        this.entity.remove();
     }
 
     public void mountEntity(ScriptEntity e) {
         if (e != null) {
-            this.entity.i(e.entity);
+            this.entity.startRiding(e.entity);
         } else {
-            this.entity.i(null);
+            this.entity.startRiding(null);
         }
     }
 
     public ScriptEntity getMountedEntity() {
-        return getEntityClass(this.entity.aH);
+        return getEntityClass(this.entity.vehicle);
     }
 
     public boolean isBurning() {
-        return this.entity.ak();
+        return this.entity.method_1359();
     }
 
     public boolean isAlive() {
