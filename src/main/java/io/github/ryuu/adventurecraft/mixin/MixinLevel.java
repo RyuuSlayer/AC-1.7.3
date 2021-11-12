@@ -4,7 +4,6 @@ import io.github.ryuu.adventurecraft.blocks.BlockStairMulti;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityNpcPath;
 import io.github.ryuu.adventurecraft.items.ItemCustom;
-import io.github.ryuu.adventurecraft.mixin.overrides.*;
 import io.github.ryuu.adventurecraft.scripting.EntityDescriptions;
 import io.github.ryuu.adventurecraft.scripting.ScopeTag;
 import io.github.ryuu.adventurecraft.scripting.Script;
