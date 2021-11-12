@@ -11,8 +11,10 @@ import net.minecraft.entity.FurnaceEntity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.animal.Wolf;
+import net.minecraft.entity.monster.Creeper;
 import net.minecraft.entity.monster.Ghast;
 import net.minecraft.entity.monster.Monster;
+import net.minecraft.entity.player.Player;
 import net.minecraft.entity.player.PlayerContainer;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.projectile.Arrow;
@@ -512,7 +514,7 @@ public abstract class MixinPlayer extends LivingEntity {
     }
 
     protected void a(LivingEntity entityliving, boolean flag) {
-        if (entityliving instanceof gb || entityliving instanceof Ghast)
+        if (entityliving instanceof Creeper || entityliving instanceof Ghast)
             return;
         if (entityliving instanceof Wolf) {
             Wolf entitywolf = (Wolf) entityliving;

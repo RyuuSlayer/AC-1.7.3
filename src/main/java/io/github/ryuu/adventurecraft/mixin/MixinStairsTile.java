@@ -3,7 +3,9 @@ package io.github.ryuu.adventurecraft.mixin;
 import io.github.ryuu.adventurecraft.blocks.BlockColor;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
 import net.minecraft.tile.Tile;
 import net.minecraft.util.maths.MathsHelper;
 
@@ -24,7 +26,7 @@ public class MixinStairsTile extends BlockColor {
             this.defaultColor = 16777215;
     }
 
-    public void a(xp iblockaccess, int i, int j, int k) {
+    public void a(TileView iblockaccess, int i, int j, int k) {
         a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
     }
 
@@ -44,7 +46,7 @@ public class MixinStairsTile extends BlockColor {
         return 10;
     }
 
-    public boolean b(xp iblockaccess, int i, int j, int k, int l) {
+    public boolean b(TileView iblockaccess, int i, int j, int k, int l) {
         return super.b(iblockaccess, i, j, k, l);
     }
 
@@ -164,7 +166,7 @@ public class MixinStairsTile extends BlockColor {
         this.a.b(world, i, j, k, random);
     }
 
-    public void b(Level world, int i, int j, int k, gs entityplayer) {
+    public void b(Level world, int i, int j, int k, Player entityplayer) {
         this.a.b(world, i, j, k, entityplayer);
     }
 
@@ -172,7 +174,7 @@ public class MixinStairsTile extends BlockColor {
         this.a.c(world, i, j, k, l);
     }
 
-    public float d(xp iblockaccess, int i, int j, int k) {
+    public float d(TileView iblockaccess, int i, int j, int k) {
         return this.a.d(iblockaccess, i, j, k);
     }
 
@@ -200,7 +202,7 @@ public class MixinStairsTile extends BlockColor {
         return this.a.a(i);
     }
 
-    public int a(xp iblockaccess, int i, int j, int k, int l) {
+    public int a(TileView iblockaccess, int i, int j, int k, int l) {
         return this.a.a(iblockaccess, i, j, k, l);
     }
 
@@ -253,7 +255,7 @@ public class MixinStairsTile extends BlockColor {
         this.a.a(world, i, j, k, random);
     }
 
-    public boolean a(Level world, int i, int j, int k, gs entityplayer) {
+    public boolean a(Level world, int i, int j, int k, Player entityplayer) {
         return this.a.a(world, i, j, k, entityplayer);
     }
 
@@ -273,7 +275,7 @@ public class MixinStairsTile extends BlockColor {
             world.d(i, j, k, 0);
     }
 
-    protected int getColorMetaData(xp iblockaccess, int i, int j, int k) {
+    protected int getColorMetaData(TileView iblockaccess, int i, int j, int k) {
         return iblockaccess.e(i, j, k) >> 2;
     }
 

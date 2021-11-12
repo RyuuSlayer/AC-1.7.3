@@ -12,6 +12,7 @@ import net.minecraft.entity.projectile.ThrownEgg;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
 import net.minecraft.tile.entity.Dispenser;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.maths.MathsHelper;
@@ -59,7 +60,7 @@ public class MixinDispenserTile extends rw {
         world.d(i, j, k, byte0);
     }
 
-    public int a(xp iblockaccess, int i, int j, int k, int l) {
+    public int a(TileView iblockaccess, int i, int j, int k, int l) {
         if (l == 1)
             return this.bm + 17;
         if (l == 0)

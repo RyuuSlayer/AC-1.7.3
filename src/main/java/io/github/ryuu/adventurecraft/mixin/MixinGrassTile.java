@@ -6,6 +6,7 @@ import io.github.ryuu.adventurecraft.blocks.IBlockColor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.colour.GrassColour;
 import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
 import net.minecraft.level.chunk.Chunk;
 import net.minecraft.tile.Tile;
 
@@ -16,7 +17,7 @@ public class MixinGrassTile extends Tile implements IBlockColor {
         b(true);
     }
 
-    public int a(xp iblockaccess, int i, int j, int k, int l) {
+    public int a(TileView iblockaccess, int i, int j, int k, int l) {
         if (l == 1) {
             int metadata = iblockaccess.e(i, j, k);
             if (metadata == 0)
@@ -35,7 +36,7 @@ public class MixinGrassTile extends Tile implements IBlockColor {
         return 232 + metadata - 1;
     }
 
-    public int b(xp iblockaccess, int i, int j, int k) {
+    public int b(TileView iblockaccess, int i, int j, int k) {
         iblockaccess.a().a(i, k, 1, 1);
         double d = (iblockaccess.a()).a[0];
         double d1 = (iblockaccess.a()).b[0];

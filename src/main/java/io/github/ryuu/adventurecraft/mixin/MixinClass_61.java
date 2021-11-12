@@ -1,19 +1,21 @@
-package io.github.ryuu.adventurecraft.mixin.overrides;
+package io.github.ryuu.adventurecraft.mixin;
 
+import net.minecraft.class_108;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.maths.Vec3f;
 
-public class dh {
+public class MixinClass_61 {
     public d[] b;
 
     public int a;
 
     public int c;
 
-    public fw p;
+    public class_108 p;
 
     public d clearSize;
 
-    public dh(d[] apathpoint) {
+    public MixinClass_61(d[] apathpoint) {
         this.b = apathpoint;
         this.a = apathpoint.length;
     }

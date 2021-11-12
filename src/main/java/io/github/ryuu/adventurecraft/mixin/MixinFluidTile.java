@@ -4,6 +4,7 @@ import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.TerrainImage;
 import net.minecraft.entity.Entity;
 import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
 import net.minecraft.tile.Tile;
 
 import java.util.Random;
@@ -26,7 +27,7 @@ public abstract class MixinFluidTile extends Tile {
         return f;
     }
 
-    public static double a(xp iblockaccess, int i, int j, int k, ln material) {
+    public static double a(TileView iblockaccess, int i, int j, int k, ln material) {
         bt vec3d = null;
         if (material == ln.g)
             vec3d = ((rp) Tile.B).e(iblockaccess, i, j, k);
@@ -37,7 +38,7 @@ public abstract class MixinFluidTile extends Tile {
         return Math.atan2(vec3d.c, vec3d.a) - 1.5707963267948966D;
     }
 
-    public int b(xp iblockaccess, int i, int j, int k) {
+    public int b(TileView iblockaccess, int i, int j, int k) {
         if (!TerrainImage.isWaterLoaded || (this.bn != Tile.B.bn && this.bn != Tile.C.bn))
             return -1;
         return TerrainImage.getWaterColor(i, k);
@@ -55,7 +56,7 @@ public abstract class MixinFluidTile extends Tile {
         return world.e(i, j, k);
     }
 
-    protected int c(xp iblockaccess, int i, int j, int k) {
+    protected int c(TileView iblockaccess, int i, int j, int k) {
         if (iblockaccess.f(i, j, k) != this.bA)
             return -1;
         int l = iblockaccess.e(i, j, k);
@@ -80,7 +81,7 @@ public abstract class MixinFluidTile extends Tile {
         return (DebugMode.active && isHittable);
     }
 
-    public boolean d(xp iblockaccess, int i, int j, int k, int l) {
+    public boolean d(TileView iblockaccess, int i, int j, int k, int l) {
         ln material = iblockaccess.f(i, j, k);
         if (material == this.bA)
             return false;
@@ -91,7 +92,7 @@ public abstract class MixinFluidTile extends Tile {
         return super.d(iblockaccess, i, j, k, l);
     }
 
-    public boolean b(xp iblockaccess, int i, int j, int k, int l) {
+    public boolean b(TileView iblockaccess, int i, int j, int k, int l) {
         ln material = iblockaccess.f(i, j, k);
         if (material == this.bA)
             return false;
@@ -118,7 +119,7 @@ public abstract class MixinFluidTile extends Tile {
         return 0;
     }
 
-    private bt e(xp iblockaccess, int i, int j, int k) {
+    private bt e(TileView iblockaccess, int i, int j, int k) {
         bt vec3d = bt.b(0.0D, 0.0D, 0.0D);
         int l = c(iblockaccess, i, j, k);
         for (int i1 = 0; i1 < 4; i1++) {
@@ -171,7 +172,7 @@ public abstract class MixinFluidTile extends Tile {
     }
 
     public void a(Level world, int i, int j, int k, Entity entity, bt vec3d) {
-        bt vec3d1 = e((xp) world, i, j, k);
+        bt vec3d1 = e((TileView) world, i, j, k);
         vec3d.a += vec3d1.a;
         vec3d.b += vec3d1.b;
         vec3d.c += vec3d1.c;
@@ -183,7 +184,7 @@ public abstract class MixinFluidTile extends Tile {
         return (this.bA != ln.h) ? 0 : 30;
     }
 
-    public float d(xp iblockaccess, int i, int j, int k) {
+    public float d(TileView iblockaccess, int i, int j, int k) {
         float f = iblockaccess.c(i, j, k);
         float f1 = iblockaccess.c(i, j + 1, k);
         return (f <= f1) ? f1 : f;

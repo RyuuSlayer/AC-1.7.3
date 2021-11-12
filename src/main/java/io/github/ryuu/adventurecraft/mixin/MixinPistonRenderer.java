@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.entity.tile.TileEntityRenderer;
 import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.entity.TileEntity;
 import org.lwjgl.opengl.GL11;
@@ -53,7 +54,7 @@ public class MixinPistonRenderer extends TileEntityRenderer {
     }
 
     public void a(Level world) {
-        this.b = new cv((xp) world);
+        this.b = new cv((TileView) world);
     }
 
     public void a(TileEntity tileentity, double d, double d1, double d2, float f) {

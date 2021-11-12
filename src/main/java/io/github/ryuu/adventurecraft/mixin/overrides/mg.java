@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.overrides;
 
+import net.minecraft.class_97;
 import net.minecraft.client.gui.screen.SelectWorldScreen;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.level.storage.LevelMetadata;
@@ -7,7 +8,7 @@ import net.minecraft.util.maths.MathsHelper;
 
 import java.util.Date;
 
-class mg extends lg {
+class mg extends class_97 {
     final net.minecraft.client.gui.screen.SelectWorldScreen a;
 
     public mg(SelectWorldScreen guiselectworld) {

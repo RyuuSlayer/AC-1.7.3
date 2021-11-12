@@ -1,6 +1,8 @@
 package io.github.ryuu.adventurecraft.mixin;
 
+import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.TranslucentTile;
 
@@ -17,11 +19,11 @@ public class MixinIceTile extends TranslucentTile {
         return 1;
     }
 
-    public boolean b(xp iblockaccess, int i, int j, int k, int l) {
+    public boolean b(TileView iblockaccess, int i, int j, int k, int l) {
         return super.b(iblockaccess, i, j, k, 1 - l);
     }
 
-    public void a(Level world, gs entityplayer, int i, int j, int k, int l) {
+    public void a(Level world, Player entityplayer, int i, int j, int k, int l) {
         super.a(world, entityplayer, i, j, k, l);
         ln material = world.f(i, j - 1, k);
         if (material.c() || material.d())

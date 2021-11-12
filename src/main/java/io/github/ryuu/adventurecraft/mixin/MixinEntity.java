@@ -4,6 +4,7 @@ import io.github.ryuu.adventurecraft.blocks.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityRegistry;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 import net.minecraft.util.io.CompoundTag;
@@ -631,7 +632,7 @@ public abstract class MixinEntity {
         return d * d + d1 * d1 + d2 * d2;
     }
 
-    public void b(gs entityplayer) {
+    public void b(Player entityplayer) {
     }
 
     public void h(Entity entity) {
@@ -824,7 +825,7 @@ public abstract class MixinEntity {
         return false;
     }
 
-    public boolean a(gs entityplayer) {
+    public boolean a(Player entityplayer) {
         return false;
     }
 

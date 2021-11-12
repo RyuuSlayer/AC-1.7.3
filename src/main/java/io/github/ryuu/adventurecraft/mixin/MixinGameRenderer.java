@@ -17,6 +17,7 @@ import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.level.chunk.ClientChunkCache;
 import net.minecraft.tile.Tile;
@@ -202,9 +203,9 @@ public class MixinGameRenderer {
     }
 
     private void f(float f) {
-        if (!(this.j.i instanceof gs) || this.j.cameraActive || this.j.i.stunned != 0)
+        if (!(this.j.i instanceof Player) || this.j.cameraActive || this.j.i.stunned != 0)
             return;
-        gs entityplayer = (gs) this.j.i;
+        Player entityplayer = (Player) this.j.i;
         float f1 = entityplayer.bj - entityplayer.bi;
         float f2 = -(entityplayer.bj + f1 * f);
         float f3 = entityplayer.h + (entityplayer.i - entityplayer.h) * f;
@@ -536,8 +537,8 @@ public class MixinGameRenderer {
             u.a();
             a(0, f);
             effectrenderer.a(entityliving, f);
-            if (this.j.y != null && entityliving.a(ln.g) && entityliving instanceof gs) {
-                gs entityplayer = (gs) entityliving;
+            if (this.j.y != null && entityliving.a(ln.g) && entityliving instanceof Player) {
+                Player entityplayer = (Player) entityliving;
                 GL11.glDisable(3008);
                 renderglobal.a(entityplayer, this.j.y, 0, entityplayer.c.b(), f);
                 renderglobal.b(entityplayer, this.j.y, 0, entityplayer.c.b(), f);
@@ -582,15 +583,15 @@ public class MixinGameRenderer {
             GL11.glDepthMask(true);
             GL11.glEnable(2884);
             GL11.glDisable(3042);
-            if (!DebugMode.editMode && this.E == 1.0D && entityliving instanceof gs && this.j.y != null && !entityliving.a(ln.g)) {
-                gs entityplayer1 = (gs) entityliving;
+            if (!DebugMode.editMode && this.E == 1.0D && entityliving instanceof Player && this.j.y != null && !entityliving.a(ln.g)) {
+                Player entityplayer1 = (Player) entityliving;
                 GL11.glDisable(3008);
                 renderglobal.a(entityplayer1, this.j.y, 0, entityplayer1.c.b(), f);
                 renderglobal.b(entityplayer1, this.j.y, 0, entityplayer1.c.b(), f);
                 GL11.glEnable(3008);
             }
             GL11.glDisable(3008);
-            renderglobal.drawCursorSelection(entityliving, ((gs) entityliving).c.b(), f);
+            renderglobal.drawCursorSelection(entityliving, ((Player) entityliving).c.b(), f);
             if (DebugMode.active && this.j.activeCutsceneCamera != null)
                 this.j.activeCutsceneCamera.drawLines(entityliving, f);
             if (DebugMode.active || DebugMode.renderPaths)

@@ -263,7 +263,7 @@ public class MixinHandItemRenderer {
             tessellator.a((0 - byte0), (0 - byte0), 0.0D, 0.0D, 0.0D);
             tessellator.a();
             iu mapdata = ItemType.bb.a(itemstack, this.a.f);
-            this.f.a((gs) this.a.h, this.a.p, mapdata);
+            this.f.a((Player) this.a.h, this.a.p, mapdata);
             GL11.glPopMatrix();
         } else if (itemstack != null) {
             if (itemstack.c != Items.woodenShield.bf && itemstack.c != Items.powerGlove.bf) {

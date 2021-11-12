@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.mixin.overrides;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 
@@ -25,7 +26,7 @@ public class ob {
     }
 
     public void a(int i, int j, int k, int l) {
-        this.a.f.a((gs) this.a.h, i, j, k, l);
+        this.a.f.a((Player) this.a.h, i, j, k, l);
         b(i, j, k, l);
     }
 
@@ -53,7 +54,7 @@ public class ob {
         return 5.0F;
     }
 
-    public boolean a(gs entityplayer, Level world, iz itemstack) {
+    public boolean a(Player entityplayer, Level world, iz itemstack) {
         int i = itemstack.a;
         iz itemstack1 = itemstack.a(world, entityplayer);
         if (itemstack1 != itemstack || (itemstack1 != null && itemstack1.a != i)) {
@@ -65,7 +66,7 @@ public class ob {
         return false;
     }
 
-    public void a(gs entityplayer) {
+    public void a(Player entityplayer) {
     }
 
     public void c() {
@@ -75,10 +76,10 @@ public class ob {
         return true;
     }
 
-    public void b(gs entityplayer) {
+    public void b(Player entityplayer) {
     }
 
-    public boolean a(gs entityplayer, Level world, iz itemstack, int i, int j, int k, int l) {
+    public boolean a(Player entityplayer, Level world, iz itemstack, int i, int j, int k, int l) {
         int i1 = world.a(i, j, k);
         if (i1 > 0 && Tile.m[i1].a(world, i, j, k, entityplayer))
             return true;
@@ -87,23 +88,23 @@ public class ob {
         return itemstack.a(entityplayer, world, i, j, k, l);
     }
 
-    public gs b(Level world) {
-        return (gs) new dc(this.a, world, this.a.k, world.t.g);
+    public Player b(Level world) {
+        return (Player) new dc(this.a, world, this.a.k, world.t.g);
     }
 
-    public void a(gs entityplayer, Entity entity) {
+    public void a(Player entityplayer, Entity entity) {
         entityplayer.c(entity);
     }
 
-    public void b(gs entityplayer, Entity entity) {
+    public void b(Player entityplayer, Entity entity) {
         entityplayer.d(entity);
     }
 
-    public iz a(int i, int j, int k, boolean flag, gs entityplayer) {
+    public iz a(int i, int j, int k, boolean flag, Player entityplayer) {
         return entityplayer.e.a(j, k, flag, entityplayer);
     }
 
-    public void a(int i, gs entityplayer) {
+    public void a(int i, Player entityplayer) {
         entityplayer.e.a(entityplayer);
         entityplayer.e = entityplayer.d;
     }

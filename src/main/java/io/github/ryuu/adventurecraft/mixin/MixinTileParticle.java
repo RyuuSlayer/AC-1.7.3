@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.mixin;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
 import net.minecraft.tile.Tile;
 
 public class MixinTileParticle extends Particle {
@@ -20,7 +21,7 @@ public class MixinTileParticle extends Particle {
     public MixinTileParticle a(int i, int j, int k) {
         if (this.a == Tile.v)
             return this;
-        int l = this.a.b((xp) this.aI, i, j, k);
+        int l = this.a.b((TileView) this.aI, i, j, k);
         this.i *= (l >> 16 & 0xFF) / 255.0F;
         this.j *= (l >> 8 & 0xFF) / 255.0F;
         this.k *= (l & 0xFF) / 255.0F;

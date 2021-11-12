@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.mixin;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.level.chunk.ChunkSubData;
 import net.minecraft.tile.Tile;
@@ -347,7 +348,7 @@ public class MixinChunk {
     }
 
     public void a(Entity entity) {
-        if (!(entity instanceof gs))
+        if (!(entity instanceof Player))
             this.q = true;
         int i = MathsHelper.b(entity.aM / 16.0D);
         int j = MathsHelper.b(entity.aO / 16.0D);

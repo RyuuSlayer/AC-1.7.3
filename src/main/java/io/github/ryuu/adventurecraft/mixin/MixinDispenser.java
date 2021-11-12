@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin;
 
+import net.minecraft.entity.player.Player;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.io.CompoundTag;
 
@@ -92,7 +93,7 @@ public class MixinDispenser extends TileEntity implements lw {
         return 64;
     }
 
-    public boolean a_(gs entityplayer) {
+    public boolean a_(Player entityplayer) {
         if (this.d.b(this.e, this.f, this.g) != this)
             return false;
         return (entityplayer.g(this.e + 0.5D, this.f + 0.5D, this.g + 0.5D) <= 64.0D);

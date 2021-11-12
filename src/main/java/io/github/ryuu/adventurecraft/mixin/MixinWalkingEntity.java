@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.mixin;
 
 import io.github.ryuu.adventurecraft.util.IEntityPather;
+import net.minecraft.class_61;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.level.Level;
@@ -13,7 +14,7 @@ public class MixinWalkingEntity extends LivingEntity implements IEntityPather {
     public boolean canPathRandomly;
     protected Entity d;
     protected boolean e;
-    private dh a;
+    private class_61 a;
 
     public MixinWalkingEntity(Level world) {
         super(world);
@@ -162,7 +163,7 @@ public class MixinWalkingEntity extends LivingEntity implements IEntityPather {
         return (this.a != null);
     }
 
-    public void a(dh pathentity) {
+    public void a(class_61 pathentity) {
         this.a = pathentity;
     }
 
@@ -174,7 +175,7 @@ public class MixinWalkingEntity extends LivingEntity implements IEntityPather {
         this.d = entity;
     }
 
-    public dh getCurrentPath() {
+    public class_61 getCurrentPath() {
         return this.a;
     }
 

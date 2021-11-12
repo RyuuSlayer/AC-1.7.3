@@ -6,6 +6,7 @@ import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
 import net.minecraft.tile.FancyTile;
 import net.minecraft.tile.Tile;
 
@@ -30,7 +31,7 @@ public class MixinPlaceableTileItem extends FancyTile {
         return FoliageColour.c();
     }
 
-    public int b(xp iblockaccess, int i, int j, int k) {
+    public int b(TileView iblockaccess, int i, int j, int k) {
         int l = iblockaccess.e(i, j, k);
         if ((l & 0x1) == 1)
             return FoliageColour.a();

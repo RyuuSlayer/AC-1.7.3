@@ -1,10 +1,14 @@
 package io.github.ryuu.adventurecraft.mixin;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.github.ryuu.adventurecraft.blocks.BlockEffect;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.level.Level;
 import net.minecraft.level.LevelProperties;
 import net.minecraft.util.io.CompoundTag;
 
@@ -279,9 +283,9 @@ public class MixinLevelProperties {
         return nbttagcompound;
     }
 
-    public CompoundTag a(List<gs> list) {
+    public CompoundTag a(List<Player> list) {
         CompoundTag nbttagcompound = new CompoundTag();
-        gs entityplayer = null;
+        Player entityplayer = null;
         CompoundTag nbttagcompound1 = null;
         if (list.size() > 0)
             entityplayer = list.get(0);

@@ -15,6 +15,7 @@ import io.github.ryuu.adventurecraft.util.CutsceneCameraPoint;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.IEntityPather;
 import io.github.ryuu.adventurecraft.util.PlayerTorch;
+import net.minecraft.class_61;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.Tessellator;
@@ -28,6 +29,7 @@ import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 import net.minecraft.level.LevelListener;
+import net.minecraft.level.TileView;
 import net.minecraft.level.chunk.ClientChunkCache;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.entity.TileEntity;
@@ -211,7 +213,7 @@ public class MixinWorldRenderer implements LevelListener {
         this.h = -9999.0D;
         th.a.a(world);
         this.k = world;
-        this.u = new cv((xp) world);
+        this.u = new cv((TileView) world);
         if (world != null) {
             world.a(this);
             a();
@@ -310,7 +312,7 @@ public class MixinWorldRenderer implements LevelListener {
                     l = 127;
                 if (this.k.i(MathsHelper.b(entity1.aM), l, MathsHelper.b(entity1.aO))) {
                     this.K++;
-                    if ((this.t.cameraActive && this.t.cameraPause) || (DebugMode.active && !(entity1 instanceof gs)) || entity1.stunned > 0) {
+                    if ((this.t.cameraActive && this.t.cameraPause) || (DebugMode.active && !(entity1 instanceof Player)) || entity1.stunned > 0) {
                         th.a.a(entity1, 1.0F);
                     } else {
                         th.a.a(entity1, f);
@@ -1048,7 +1050,7 @@ public class MixinWorldRenderer implements LevelListener {
             float f1 = 0.002F;
             int j = this.k.a(movingobjectposition.b, movingobjectposition.c, movingobjectposition.d);
             if (j > 0) {
-                Tile.m[j].a((xp) this.k, movingobjectposition.b, movingobjectposition.c, movingobjectposition.d);
+                Tile.m[j].a((TileView) this.k, movingobjectposition.b, movingobjectposition.c, movingobjectposition.d);
                 double d = entityplayer.bl + (entityplayer.aM - entityplayer.bl) * f;
                 double d1 = entityplayer.bm + (entityplayer.aN - entityplayer.bm) * f;
                 double d2 = entityplayer.bn + (entityplayer.aO - entityplayer.bn) * f;
@@ -1113,7 +1115,7 @@ public class MixinWorldRenderer implements LevelListener {
     public void drawEntityPath(net.minecraft.entity.Entity e, LivingEntity entityplayer, float f) {
         if (e instanceof IEntityPather) {
             IEntityPather ent = (IEntityPather) e;
-            dh path = ent.getCurrentPath();
+            class_61 path = ent.getCurrentPath();
             double offX = entityplayer.bl + (entityplayer.aM - entityplayer.bl) * f;
             double offY = entityplayer.bm + (entityplayer.aN - entityplayer.bm) * f;
             double offZ = entityplayer.bn + (entityplayer.aO - entityplayer.bn) * f;

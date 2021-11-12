@@ -10,6 +10,7 @@ import io.github.ryuu.adventurecraft.scripting.Script;
 import io.github.ryuu.adventurecraft.scripting.ScriptModel;
 import io.github.ryuu.adventurecraft.util.*;
 import net.minecraft.class_366;
+import net.minecraft.class_61;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.colour.FoliageColour;
 import net.minecraft.client.colour.GrassColour;
@@ -1669,7 +1670,7 @@ public class MixinLevel extends Level implements TileView {
         return (i > 0 && block == null && block1.a(this, j, k, l, i1));
     }
 
-    public dh a(Entity entity, Entity entity1, float f) {
+    public class_61 a(Entity entity, Entity entity1, float f) {
         int i = MathsHelper.b(entity.aM);
         int j = MathsHelper.b(entity.aN);
         int k = MathsHelper.b(entity.aO);
@@ -1684,7 +1685,7 @@ public class MixinLevel extends Level implements TileView {
         return (new fw((TileView) chunkcache)).a(entity, entity1, f);
     }
 
-    public dh a(Entity entity, int i, int j, int k, float f) {
+    public class_61 a(Entity entity, int i, int j, int k, float f) {
         int l = MathsHelper.b(entity.aM);
         int i1 = MathsHelper.b(entity.aN);
         int j1 = MathsHelper.b(entity.aO);

@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.mixin;
 import net.minecraft.client.gui.screen.container.ContainerScreen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.Player;
 import org.lwjgl.opengl.GL11;
 
 public class MixinPlayerInventoryScreen extends ContainerScreen {
@@ -10,7 +11,7 @@ public class MixinPlayerInventoryScreen extends ContainerScreen {
 
     private float m;
 
-    public MixinPlayerInventoryScreen(gs entityplayer) {
+    public MixinPlayerInventoryScreen(Player entityplayer) {
         super(entityplayer.d);
         this.f = true;
         entityplayer.a((vr) ep.f, 1);

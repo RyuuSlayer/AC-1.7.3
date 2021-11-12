@@ -7,6 +7,7 @@ import java.util.List;
 import io.github.ryuu.adventurecraft.util.CoordBlock;
 import io.github.ryuu.adventurecraft.util.LightCache;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.entity.ItemRenderer;
 import net.minecraft.client.render.tile.TileEntityRenderDispatcher;
 import net.minecraft.entity.Entity;
@@ -18,11 +19,11 @@ import net.minecraft.util.maths.MathsHelper;
 import org.lwjgl.opengl.GL11;
 
 public class dk {
-    private static final nw D;
+    private static final Tessellator D;
     public static int b = 0;
 
     static {
-        D = nw.a;
+        D = Tessellator.a;
     }
 
     private final List F;

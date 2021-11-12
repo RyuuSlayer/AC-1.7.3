@@ -4,6 +4,7 @@ import io.github.ryuu.adventurecraft.items.Items;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
 import net.minecraft.tile.LadderTile;
@@ -641,7 +642,7 @@ public abstract class MixinLivingEntity extends Entity {
         this.aa = nbttagcompound.d("HurtTime");
         this.ad = nbttagcompound.d("DeathTime");
         this.ae = nbttagcompound.d("AttackTime");
-        if (nbttagcompound.b("EntityID") && !(this instanceof gs))
+        if (nbttagcompound.b("EntityID") && !(this instanceof Player))
             this.aD = nbttagcompound.e("EntityID");
         this.timesCanJumpInAir = nbttagcompound.e("timesCanJumpInAir");
         this.canWallJump = nbttagcompound.m("canWallJump");
@@ -766,7 +767,7 @@ public abstract class MixinLivingEntity extends Entity {
     }
 
     protected void X() {
-        gs entityplayer = this.aI.a(this, -1.0D);
+        Player entityplayer = this.aI.a(this, -1.0D);
         if (u() && entityplayer != null) {
             double d = entityplayer.aM - this.aM;
             double d1 = entityplayer.aN - this.aN;
@@ -785,13 +786,13 @@ public abstract class MixinLivingEntity extends Entity {
 
     protected void f_() {
         this.av++;
-        gs entityplayer = this.aI.a(this, -1.0D);
+        Player entityplayer = this.aI.a(this, -1.0D);
         X();
         this.aw = 0.0F;
         this.ax = 0.0F;
         float f = 8.0F;
         if (this.bs.nextFloat() < 0.02F) {
-            gs entityplayer1 = this.aI.a(this, f);
+            Player entityplayer1 = this.aI.a(this, f);
             if (entityplayer1 != null && e(entityplayer1)) {
                 this.b = entityplayer1;
                 this.aC = 10 + this.bs.nextInt(20);

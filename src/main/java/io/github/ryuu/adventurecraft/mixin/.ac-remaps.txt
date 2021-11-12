@@ -16,6 +16,7 @@ cz = ResourceDownloadThread
 da = Screen
 db = GameStartupErrorPanel
 dc = ClientPlayer
+dh = class_61
 dn = ParticleManager
 dp = LadderTile
 ds = PlayerRenderer

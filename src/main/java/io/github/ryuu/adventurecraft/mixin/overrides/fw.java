@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.overrides;
 
+import io.github.ryuu.adventurecraft.mixin.MixinClass_61;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.level.TileView;
@@ -23,26 +24,26 @@ public class fw {
         this.a = iblockaccess;
     }
 
-    public dh a(Entity entity, Entity entity1, float f) {
+    public MixinClass_61 a(Entity entity, Entity entity1, float f) {
         return a(entity, entity1.aM, entity1.aW.b, entity1.aO, f);
     }
 
-    public dh a(Entity entity, int i, int j, int k, float f) {
+    public MixinClass_61 a(Entity entity, int i, int j, int k, float f) {
         return a(entity, (i + 0.5F), (j + 0.5F), (k + 0.5F), f);
     }
 
-    private dh a(Entity entity, double d3, double d1, double d2, float f) {
+    private MixinClass_61 a(Entity entity, double d3, double d1, double d2, float f) {
         this.b.a();
         this.c.a();
         d pathpoint = a(MathsHelper.b(entity.aW.a), MathsHelper.b(entity.aW.b), MathsHelper.b(entity.aW.c));
         d pathpoint1 = a(MathsHelper.b(d3 - (entity.bg / 2.0F)), MathsHelper.b(d1), MathsHelper.b(d2 - (entity.bg / 2.0F)));
         d pathpoint2 = new d(MathsHelper.d(entity.bg + 1.25F), MathsHelper.d(entity.bh + 1.0F), MathsHelper.d(entity.bg + 1.25F));
-        dh pathentity = a(entity, pathpoint, pathpoint1, pathpoint2, f);
+        MixinClass_61 pathentity = a(entity, pathpoint, pathpoint1, pathpoint2, f);
         pathentity = simplifyPath(pathentity, pathpoint2);
         return pathentity;
     }
 
-    private dh a(Entity entity, d pathpoint, d pathpoint1, d pathpoint2, float f) {
+    private MixinClass_61 a(Entity entity, d pathpoint, d pathpoint1, d pathpoint2, float f) {
         pathpoint.e = 0.0F;
         pathpoint.f = pathpoint.a(pathpoint1);
         pathpoint.g = pathpoint.f;
@@ -166,7 +167,7 @@ public class fw {
         return 1;
     }
 
-    private dh a(d pathpoint, d pathpoint1) {
+    private MixinClass_61 a(d pathpoint, d pathpoint1) {
         int i = 1;
         for (d pathpoint2 = pathpoint1; pathpoint2.h != null; pathpoint2 = pathpoint2.h)
             i++;
@@ -174,10 +175,10 @@ public class fw {
         d pathpoint3 = pathpoint1;
         for (apathpoint[--i] = pathpoint3; pathpoint3.h != null; apathpoint[--i] = pathpoint3)
             pathpoint3 = pathpoint3.h;
-        return new dh(apathpoint);
+        return new MixinClass_61(apathpoint);
     }
 
-    public dh simplifyPath(dh p, d clearSize) {
+    public MixinClass_61 simplifyPath(MixinClass_61 p, d clearSize) {
         if (p == null)
             return p;
         LinkedList<PathPoint> points = new LinkedList<PathPoint>();

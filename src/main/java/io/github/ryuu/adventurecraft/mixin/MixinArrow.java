@@ -7,6 +7,8 @@ import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
+import net.minecraft.tile.LadderTile;
 import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.MathsHelper;
 
@@ -160,7 +162,7 @@ public class MixinArrow extends Entity {
         }
         int i = this.aI.a(this.d, this.e, this.f);
         if (i > 0 && i != Blocks.clipBlock.bn && !LadderTile.isLadderID(i)) {
-            MixinTile.m[i].a((xp) this.aI, this.d, this.e, this.f);
+            MixinTile.m[i].a((TileView) this.aI, this.d, this.e, this.f);
             eq axisalignedbb = MixinTile.m[i].e(this.aI, this.d, this.e, this.f);
             if (axisalignedbb != null && axisalignedbb.a(bt.b(this.aM, this.aN, this.aO)))
                 this.i = true;

@@ -20,6 +20,7 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.monster.Ghast;
 import net.minecraft.entity.monster.Slime;
 import net.minecraft.entity.monster.Zombie;
+import net.minecraft.entity.player.Player;
 import net.minecraft.entity.projectile.Arrow;
 import net.minecraft.entity.projectile.Snowball;
 import net.minecraft.entity.projectile.ThrownEgg;
@@ -60,7 +61,7 @@ public class MixinEntityRenderDispatcher {
         this.o.put(EntitySkeletonBoss.class, new RenderBipedScaled((fh) new lc(), 0.5F, 2.5F));
         this.o.put(Zombie.class, new v((fh) new ej(), 0.5F));
         this.o.put(Slime.class, new mj((ko) new no(16), (ko) new no(0), 0.25F));
-        this.o.put(gs.class, new PlayerRenderer());
+        this.o.put(Player.class, new PlayerRenderer());
         this.o.put(nt.class, new yg((ko) new ej(), 0.5F, 6.0F));
         this.o.put(Ghast.class, new pq());
         this.o.put(xt.class, new es((ko) new wn(), 0.7F));
