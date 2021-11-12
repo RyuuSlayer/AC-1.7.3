@@ -1,4 +1,4 @@
-package io.github.ryuu.adventurecraft.overrides;
+package io.github.ryuu.adventurecraft.mixin.overrides;
 
 import net.minecraft.client.gui.screen.SelectWorldScreen;
 import net.minecraft.client.render.Tessellator;

@@ -1,4 +1,4 @@
-package io.github.ryuu.adventurecraft.overrides;
+package io.github.ryuu.adventurecraft.mixin.overrides;
 
 import java.io.File;
 import java.net.MalformedURLException;

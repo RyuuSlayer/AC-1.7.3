@@ -1,4 +1,4 @@
-package io.github.ryuu.adventurecraft.overrides;
+package io.github.ryuu.adventurecraft.mixin.overrides;
 
 import net.minecraft.level.biome.Biome;
 

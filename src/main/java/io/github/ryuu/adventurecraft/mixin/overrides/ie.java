@@ -1,4 +1,4 @@
-package io.github.ryuu.adventurecraft.overrides;
+package io.github.ryuu.adventurecraft.mixin.overrides;
 
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.entity.player.Player;

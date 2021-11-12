@@ -1,4 +1,4 @@
-package io.github.ryuu.adventurecraft.overrides;
+package io.github.ryuu.adventurecraft.mixin.overrides;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
