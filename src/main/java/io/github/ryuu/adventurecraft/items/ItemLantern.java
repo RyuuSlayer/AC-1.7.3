@@ -10,7 +10,6 @@ class ItemLantern extends ItemType {
         this.maxStackSize = 1;
     }
 
-    // Don't know if everything is right here because of minecraftInstance not being implemented yet
     public boolean isLighting(ItemInstance itemstack) {
         if (itemstack.getDamage() < itemstack.method_723()) {
             itemstack.setDamage(itemstack.getDamage() + 1);

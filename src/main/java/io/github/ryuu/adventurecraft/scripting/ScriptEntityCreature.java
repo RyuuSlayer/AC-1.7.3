@@ -1,7 +1,6 @@
 package io.github.ryuu.adventurecraft.scripting;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.WalkingEntity;
 
 public class ScriptEntityCreature extends ScriptEntityLiving {

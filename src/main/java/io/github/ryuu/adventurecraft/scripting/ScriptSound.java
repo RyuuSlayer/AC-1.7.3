@@ -1,12 +1,11 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-
-import io.github.ryuu.adventurecraft.overrides.SoundHelper;
+import io.github.ryuu.adventurecraft.mixin.MixinSoundHelper;
 
 public class ScriptSound {
-    SoundHelper soundMgr;
+    MixinSoundHelper soundMgr;
 
-    ScriptSound(SoundHelper s) {
+    ScriptSound(MixinSoundHelper s) {
         this.soundMgr = s;
     }
 

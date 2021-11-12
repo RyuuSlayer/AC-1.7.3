@@ -10,7 +10,6 @@ import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 import org.mozilla.javascript.Scriptable;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(ItemType.class)
 public class MixinItemType {
@@ -208,7 +207,8 @@ public class MixinItemType {
         }
     }
 
-    //TODO: Vanilla Code, no need for mixin.
+    // TODO: Vanilla Code, no need for mixin.
+    // TODO: Make sure Ryuu is not dumb.
 
     // protected static Random rand = new Random();
     // public static ItemType[] byId = new ItemType[32000];

@@ -1,10 +1,8 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import ji;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.TextRenderer;
 import net.minecraft.client.texture.TextureManager;
-import sj;
 
 public class UIElement {
     public float curX = 0.0F;

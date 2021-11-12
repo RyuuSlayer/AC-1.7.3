@@ -1,7 +1,6 @@
 package io.github.ryuu.adventurecraft.scripting;
 
 import java.nio.FloatBuffer;
-import java.util.HashMap;
 import java.util.LinkedList;
 
 import net.minecraft.client.Minecraft;

@@ -8,7 +8,13 @@ import io.github.ryuu.adventurecraft.util.CoordBlock;
 import io.github.ryuu.adventurecraft.util.LightCache;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.entity.ItemRenderer;
+import net.minecraft.client.render.tile.TileEntityRenderDispatcher;
+import net.minecraft.entity.Entity;
 import net.minecraft.level.Level;
+import net.minecraft.level.chunk.Chunk;
+import net.minecraft.tile.Tile;
+import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.util.maths.MathsHelper;
 import org.lwjgl.opengl.GL11;
 
 public class dk {

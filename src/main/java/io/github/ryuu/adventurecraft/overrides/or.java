@@ -1,6 +1,8 @@
 package io.github.ryuu.adventurecraft.overrides;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.level.Level;
+import net.minecraft.tile.Tile;
 import net.minecraft.util.maths.Box;
 
 import java.util.Random;

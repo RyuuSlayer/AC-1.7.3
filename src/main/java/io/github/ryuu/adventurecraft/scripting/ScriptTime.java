@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import io.github.ryuu.adventurecraft.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.MixinMinecraft;
 import net.minecraft.level.Level;
 
 public class ScriptTime {
@@ -39,6 +39,6 @@ public class ScriptTime {
     }
 
     public void sleep(float t) {
-        Minecraft.minecraftInstance.f.script.sleep(t);
+        MixinMinecraft.minecraftInstance.f.script.sleep(t);
     }
 }

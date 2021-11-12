@@ -1,10 +1,11 @@
 package io.github.ryuu.adventurecraft.overrides;
 
-import java.util.LinkedList;
-
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.level.TileView;
-import net.minecraft.src.PathPoint;
+import net.minecraft.tile.DoorTile;
+import net.minecraft.tile.Tile;
+import net.minecraft.util.maths.MathsHelper;
 
 public class fw {
     private final TileView a;

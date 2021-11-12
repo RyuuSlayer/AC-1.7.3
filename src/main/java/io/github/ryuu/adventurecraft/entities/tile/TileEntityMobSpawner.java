@@ -7,12 +7,11 @@ import java.util.Random;
 import io.github.ryuu.adventurecraft.entities.EntityLivingScript;
 import io.github.ryuu.adventurecraft.entities.EntitySkeletonSword;
 import io.github.ryuu.adventurecraft.items.ItemCursor;
-import io.github.ryuu.adventurecraft.overrides.Tile;
+import io.github.ryuu.adventurecraft.mixin.MixinTile;
 import io.github.ryuu.adventurecraft.scripting.ScopeTag;
 import io.github.ryuu.adventurecraft.scripting.ScriptEntity;
 import io.github.ryuu.adventurecraft.util.Coord;
 import io.github.ryuu.adventurecraft.util.TriggerArea;
-import net.minecraft.class_61;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
 import net.minecraft.entity.animal.Wolf;
@@ -136,7 +135,7 @@ public class TileEntityMobSpawner extends TileEntityScript {
             if (entity == null)
                 return;
             if (spawnEntityID.equalsIgnoreCase("FallingSand")) {
-                if (this.spawnID < 256 && Tile.m[this.spawnID] != null) {
+                if (this.spawnID < 256 && MixinTile.m[this.spawnID] != null) {
                     ((FallingTile) entity).tile = this.spawnID;
                     ((FallingTile) entity).metadata = this.spawnMeta;
                 } else {

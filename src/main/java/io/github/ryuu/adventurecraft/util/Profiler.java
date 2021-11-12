@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
-import net.minecraft.src.ProfileContext;
-
 public class Profiler {
     static Stack<ProfileContext> profileStack;
 

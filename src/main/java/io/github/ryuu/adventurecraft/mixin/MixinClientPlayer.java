@@ -4,22 +4,20 @@ import io.github.ryuu.adventurecraft.gui.GuiMapEditHUD;
 import io.github.ryuu.adventurecraft.gui.GuiPalette;
 import io.github.ryuu.adventurecraft.gui.GuiScriptStats;
 import io.github.ryuu.adventurecraft.gui.GuiWorldConfig;
-import io.github.ryuu.adventurecraft.mixin.Level;
-import io.github.ryuu.adventurecraft.overrides.*;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.InventoryDebug;
 import io.github.ryuu.adventurecraft.util.JScriptInfo;
 import net.minecraft.achievement.Achievement;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
 import net.minecraft.client.util.Session;
 import net.minecraft.client.util.Smoother;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.ClientPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.stat.Stat;
-import org.spongepowered.asm.mixin.Mixin;
 
-@Mixin(ClientPlayer.class)
 public class MixinClientPlayer extends Player {
     // public PlayerKeypressManager a;
     // protected Minecraft b;
@@ -286,7 +284,7 @@ public class MixinClientPlayer extends Player {
     //     this.minecraft.overlay.method_1953(string);
     // }
 
-    //TODO: This one seems different than Vanilla, not sure if its because of decompilation or AC changes.
+    //TODO: This one seems different from Vanilla, not sure if its because of decompilation or AC changes.
 
     public void a(Stat statbase, int i) {
         if (statbase == null)

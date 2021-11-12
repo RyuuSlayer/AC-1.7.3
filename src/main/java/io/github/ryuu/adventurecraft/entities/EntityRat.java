@@ -1,7 +1,7 @@
 package io.github.ryuu.adventurecraft.entities;
 
-import io.github.ryuu.adventurecraft.overrides.Monster;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.monster.Monster;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 

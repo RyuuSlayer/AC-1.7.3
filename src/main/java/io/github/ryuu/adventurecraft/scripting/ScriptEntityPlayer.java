@@ -1,6 +1,5 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
 
 public class ScriptEntityPlayer extends ScriptEntityLiving {

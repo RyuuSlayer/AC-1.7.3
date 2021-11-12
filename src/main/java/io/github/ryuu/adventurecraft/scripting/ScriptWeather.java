@@ -1,6 +1,5 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-
 import net.minecraft.level.Level;
 
 public class ScriptWeather {

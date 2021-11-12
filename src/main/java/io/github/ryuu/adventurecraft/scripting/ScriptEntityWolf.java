@@ -1,6 +1,5 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import net.minecraft.entity.WalkingEntity;
 import net.minecraft.entity.animal.Wolf;
 
 public class ScriptEntityWolf extends ScriptEntityCreature {

@@ -44,7 +44,7 @@ public class EntityBoomerang extends Entity {
         this.boomerangRotation = 0.0F;
         this.turningAround = true;
         this.timeBeforeTurnAround = 0;
-        this.itemsPickedUp = new ArrayList<Entity>();
+        this.itemsPickedUp = new ArrayList<>();
         this.collidesWithClipBlocks = false;
     }
 

@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.entities;
 
-import io.github.ryuu.adventurecraft.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.MixinMinecraft;
 import io.github.ryuu.adventurecraft.gui.GuiCamera;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
@@ -26,8 +26,8 @@ public class EntityCamera extends LivingEntity {
     }
 
     public void deleteCameraPoint() {
-        Minecraft.minecraftInstance.activeCutsceneCamera.deletePoint(this.cameraID);
-        Minecraft.minecraftInstance.activeCutsceneCamera.loadCameraEntities();
+        MixinMinecraft.minecraftInstance.activeCutsceneCamera.deletePoint(this.cameraID);
+        MixinMinecraft.minecraftInstance.activeCutsceneCamera.loadCameraEntities();
     }
 
     @Override

@@ -5,6 +5,7 @@ import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
+import net.minecraft.tile.Tile;
 
 public class ck extends ItemType {
     private final int a;

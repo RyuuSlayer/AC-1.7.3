@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.blocks;
 
-import io.github.ryuu.adventurecraft.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.MixinMinecraft;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityCamera;
 import io.github.ryuu.adventurecraft.gui.GuiCameraBlock;
 import io.github.ryuu.adventurecraft.util.DebugMode;
@@ -43,9 +43,9 @@ public class BlockCamera extends TileWithEntity {
     public void onTriggerActivated(Level world, int i, int j, int k) {
         TileEntityCamera obj = (TileEntityCamera) world.getTileEntity(i, j, k);
         obj.loadCamera();
-        Minecraft.minecraftInstance.cutsceneCamera.startCamera();
-        Minecraft.minecraftInstance.cameraActive = true;
-        Minecraft.minecraftInstance.cameraPause = obj.pauseGame;
+        MixinMinecraft.minecraftInstance.cutsceneCamera.startCamera();
+        MixinMinecraft.minecraftInstance.cameraActive = true;
+        MixinMinecraft.minecraftInstance.cameraPause = obj.pauseGame;
     }
 
     public void onTriggerDeactivated(Level world, int i, int j, int k) {
@@ -54,9 +54,9 @@ public class BlockCamera extends TileWithEntity {
     @Override
     public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
         if (DebugMode.active) {
-            Minecraft.minecraftInstance.overlay.addChatMessage("Set Active Editing Camera");
+            MixinMinecraft.minecraftInstance.overlay.addChatMessage("Set Active Editing Camera");
             TileEntityCamera obj = (TileEntityCamera) world.getTileEntity(i, j, k);
-            Minecraft.minecraftInstance.activeCutsceneCamera = obj.camera;
+            MixinMinecraft.minecraftInstance.activeCutsceneCamera = obj.camera;
             obj.camera.loadCameraEntities();
             GuiCameraBlock.showUI(obj);
             return true;

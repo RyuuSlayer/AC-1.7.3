@@ -12,28 +12,33 @@ import io.github.ryuu.adventurecraft.scripting.ScriptModel;
 import io.github.ryuu.adventurecraft.util.*;
 import net.minecraft.class_366;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.render.FlowingLavaTextureBinder2;
+import net.minecraft.client.colour.FoliageColour;
+import net.minecraft.client.colour.GrassColour;
+import net.minecraft.client.render.*;
+import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.entity.Entity;
-import net.minecraft.level.Level;
-import net.minecraft.level.LevelData;
-import net.minecraft.level.LevelListener;
-import net.minecraft.level.TileView;
+import net.minecraft.entity.player.Player;
+import net.minecraft.level.*;
+import net.minecraft.level.biome.Biome;
 import net.minecraft.level.chunk.Chunk;
 import net.minecraft.level.chunk.ChunkIO;
 import net.minecraft.level.dimension.Dimension;
 import net.minecraft.level.dimension.DimensionData;
 import net.minecraft.level.dimension.McRegionDimensionFile;
 import net.minecraft.level.source.LevelSource;
+import net.minecraft.tile.LadderTile;
+import net.minecraft.tile.Tile;
+import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.ProgressListener;
 import net.minecraft.util.Vec3i;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.Box;
+import net.minecraft.util.maths.MathsHelper;
 import net.minecraft.util.maths.Vec3f;
 import org.mozilla.javascript.Scriptable;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -88,6 +93,7 @@ public class MixinLevel extends Level implements TileView {
     // private boolean field_193 = true;
 
     //TODO: These seemed to be missing but are in the Vanilla class. Might have to removed using mixin.
+
     static int field_179 = 0;
     private Set field_194 = new HashSet();
     private int field_195 = this.rand.nextInt(12000);
@@ -212,7 +218,7 @@ public class MixinLevel extends Level implements TileView {
         File mcDir = Minecraft.b();
         File mapDir = new File(mcDir, "../maps");
         File levelFile = new File(mapDir, levelName);
-        MixinTranslationStorage.a().loadMapTranslation(levelFile);
+        TranslationStorage.a().loadMapTranslation(levelFile);
         this.mapHandler = new McRegionDimensionFile(mapDir, levelName, false);
         this.levelDir = levelFile;
         this.a = false;
@@ -1835,7 +1841,8 @@ public class MixinLevel extends Level implements TileView {
         this.x.a(chunkcoordinates.a, chunkcoordinates.b, chunkcoordinates.c);
     }
 
-    //TODO: Unchanged Vanilla Code.
+    // TODO: Unchanged Vanilla Code.
+    // TODO: Make sure Ryuu is not dumb
 
     // @Environment(EnvType.CLIENT)
     // public void method_287(Entity arg) {
@@ -1986,7 +1993,7 @@ public class MixinLevel extends Level implements TileView {
             return false;
         if (e(i, k) > j)
             return false;
-        MixinBiome biomegenbase = a().a(i, k);
+        Biome biomegenbase = a().a(i, k);
         if (biomegenbase.c())
             return false;
         return biomegenbase.d();
@@ -2034,37 +2041,36 @@ public class MixinLevel extends Level implements TileView {
     //////////////////////////////////////////////////
     //////////////////////////////////////////////////
 
-    //TODO: Actual Mixins go here.
+    // TODO: Actual Mixins go here.
 
-    @Shadow
     public File levelDir;
-    @Shadow
+
     boolean firstTick;
-    @Shadow
+
     public UndoStack undoStack;
-    @Shadow
+
     public JScriptHandler scriptHandler;
-    @Shadow
+
     protected final DimensionData mapHandler;
-    @Shadow
+
     boolean newSave;
-    @Shadow
+
     public Scriptable scope;
-    @Shadow
+
     public boolean fogDensityOverridden;
-    @Shadow
+
     public boolean fogColorOverridden;
-    @Shadow
+
     public MusicScripts musicScripts;
-    @Shadow
+
     public Script script;
-    @Shadow
+
     public TriggerManager triggerManager;
-    @Shadow
+
     public String[] soundList;
-    @Shadow
+
     public String[] musicList;
-    @Shadow
+
     private int[] coordOrder;
 
     public float getSpawnYaw() {
@@ -2342,7 +2348,7 @@ public class MixinLevel extends Level implements TileView {
             }
             int j2 = a(l, i1, j1);
             int k2 = e(l, i1, j1);
-            Tile block1 = Tile.m[j2];
+            MixinTile block1 = MixinTile.m[j2];
             if ((!flag1 || block1 == null || block1.e(this, l, i1, j1) != null) && j2 > 0 && block1.a(k2, flag) && block1.shouldRender(this, l, i1, j1)) {
                 HitResult movingobjectposition1 = block1.a(this, l, i1, j1, vec3d, vec3d1);
                 if (movingobjectposition1 != null && (collideWithClip || (block1.bn != Blocks.clipBlock.bn && !LadderTile.isLadderID(block1.bn))))

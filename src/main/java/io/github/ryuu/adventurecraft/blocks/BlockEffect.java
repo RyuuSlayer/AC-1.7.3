@@ -9,7 +9,6 @@ import java.io.IOException;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityEffect;
 import io.github.ryuu.adventurecraft.gui.GuiEffect;
 import io.github.ryuu.adventurecraft.items.Items;
-import io.github.ryuu.adventurecraft.overrides.FlowingLavaTextureBinder2;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.TerrainImage;
 import net.minecraft.client.Minecraft;

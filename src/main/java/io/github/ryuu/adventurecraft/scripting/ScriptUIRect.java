@@ -1,13 +1,10 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import ji;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.TextRenderer;
 import net.minecraft.client.texture.TextureManager;
-import nw;
 import org.lwjgl.opengl.GL11;
-import sj;
 
 public class ScriptUIRect extends UIElement {
     public float width;

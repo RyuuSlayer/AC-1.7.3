@@ -1,7 +1,9 @@
 package io.github.ryuu.adventurecraft.overrides;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.level.Level;
+import net.minecraft.tile.Tile;
 
 public class ob {
     protected final Minecraft a;

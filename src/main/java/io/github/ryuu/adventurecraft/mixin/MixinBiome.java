@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin;
 
-// import io.github.ryuu.adventurecraft.overrides.Tile;
+// import io.github.ryuu.adventurecraft.mixin.Tile;
 // import net.fabricmc.api.EnvType;
 // import net.fabricmc.api.Environment;
 // import net.minecraft.entity.EntityType;
@@ -16,6 +16,7 @@ package io.github.ryuu.adventurecraft.mixin;
 // import java.util.Random;
 
 // TODO: This class is identical to the vanilla class so no mixin required, this can be deleted after decompilation.
+// TODO: Make sure Ryuu is not dumb thou.
 
 // @Mixin(Biome.class)
 public class MixinBiome {
