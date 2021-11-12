@@ -3,7 +3,6 @@ package io.github.ryuu.adventurecraft.mixin;
 import java.io.File;
 import java.util.Random;
 
-import io.github.ryuu.adventurecraft.mixin.overrides.hr;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.options.GameOptions;
 import net.minecraft.entity.LivingEntity;

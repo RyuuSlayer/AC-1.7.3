@@ -2,7 +2,6 @@ package io.github.ryuu.adventurecraft.mixin;
 
 import io.github.ryuu.adventurecraft.blocks.BlockColor;
 import io.github.ryuu.adventurecraft.items.ItemSubtypes;
-import io.github.ryuu.adventurecraft.mixin.overrides.ck;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
