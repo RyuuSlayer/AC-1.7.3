@@ -3,8 +3,11 @@ package io.github.ryuu.adventurecraft.mixin;
 import io.github.ryuu.adventurecraft.gui.GuiMapSelect;
 import net.minecraft.class_520;
 import net.minecraft.client.gui.Screen;
+import net.minecraft.client.gui.screen.DeleteConfirmationScreen;
+import net.minecraft.client.gui.screen.EditLevelScreen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.resource.language.TranslationStorage;
+import net.minecraft.level.storage.LevelMetadata;
 import net.minecraft.level.storage.LevelStorage;
 import net.minecraft.util.maths.MathsHelper;
 
@@ -26,7 +29,7 @@ public class MixinSelectWorldScreen extends Screen {
 
     private List n;
 
-    private mg o;
+    private class_569 o;
 
     private String p;
 
@@ -85,11 +88,11 @@ public class MixinSelectWorldScreen extends Screen {
 
     public void b() {
         TranslationStorage stringtranslate = TranslationStorage.a();
-        this.i = stringtranslate.a("selectWorld.title");
-        this.p = stringtranslate.a("selectWorld.world");
-        this.q = stringtranslate.a("selectWorld.conversion");
+        this.i = stringtranslate.translate("selectWorld.title");
+        this.p = stringtranslate.translate("selectWorld.world");
+        this.q = stringtranslate.translate("selectWorld.conversion");
         l();
-        this.o = new mg(this);
+        this.o = new class_569(this);
         this.o.a(this.e, 4, 5);
         k();
     }
@@ -102,20 +105,20 @@ public class MixinSelectWorldScreen extends Screen {
     }
 
     protected String c(int i) {
-        return ((vb) this.n.get(i)).a();
+        return ((LevelMetadata) this.n.get(i)).a();
     }
 
     protected String d(int i) {
-        String s = ((vb) this.n.get(i)).b();
+        String s = ((LevelMetadata) this.n.get(i)).b();
         if (s == null || MathsHelper.a(s)) {
             TranslationStorage stringtranslate = TranslationStorage.a();
-            s = stringtranslate.a("selectWorld.world") + " " + (i + 1);
+            s = stringtranslate.translate("selectWorld.world") + " " + (i + 1);
         }
         return s;
     }
 
     public void k() {
-        TranslationStorage stringtranslate = TranslationStorage.a();
+        TranslationStorage stringtranslate = TranslationStorage.getInstance();
         this.e.add(this.t = new Button(1, this.c / 2 - 152, this.d - 28, 100, 20, "Load Save"));
         this.e.add(this.u = new Button(2, this.c / 2 - 50, this.d - 28, 100, 20, stringtranslate.a("selectWorld.delete")));
         this.e.add(new Button(0, this.c / 2 + 52, this.d - 28, 100, 20, stringtranslate.a("gui.cancel")));
@@ -130,12 +133,12 @@ public class MixinSelectWorldScreen extends Screen {
             String s = d(this.m);
             if (s != null) {
                 this.r = true;
-                TranslationStorage stringtranslate = TranslationStorage.a();
+                TranslationStorage stringtranslate = TranslationStorage.getInstance();
                 String s1 = stringtranslate.a("selectWorld.deleteQuestion");
                 String s2 = "'" + s + "' " + stringtranslate.a("selectWorld.deleteWarning");
                 String s3 = stringtranslate.a("selectWorld.deleteButton");
                 String s4 = stringtranslate.a("gui.cancel");
-                qt guiyesno = new qt(this, s1, s2, s3, s4, this.m);
+                DeleteConfirmationScreen guiyesno = new DeleteConfirmationScreen(this, s1, s2, s3, s4, this.m);
                 this.b.a((Screen) guiyesno);
             }
         } else if (guibutton.f == 1) {
@@ -143,7 +146,7 @@ public class MixinSelectWorldScreen extends Screen {
         } else if (guibutton.f == 3) {
             this.b.a((Screen) new GuiMapSelect(this, ""));
         } else if (guibutton.f == 6) {
-            this.b.a((Screen) new jk(this, c(this.m)));
+            this.b.a((Screen) new EditLevelScreen(this, c(this.m)));
         } else if (guibutton.f == 0) {
             this.b.a(this.a);
         } else {

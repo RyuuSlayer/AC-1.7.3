@@ -150,9 +150,9 @@ public class fw {
                             if (!DoorTile.f(l1))
                                 return 0;
                         } else {
-                            ln material = (Tile.m[k1]).bA;
-                            if (Tile.m[k1].v_()) {
-                                eq collision = Tile.m[k1].e(Minecraft.minecraftInstance.f, l, i1, j1);
+                            ln material = (Tile.BY_ID[k1]).bA;
+                            if (Tile.BY_ID[k1].v_()) {
+                                eq collision = Tile.BY_ID[k1].e(Minecraft.minecraftInstance.f, l, i1, j1);
                                 if (collision != null)
                                     return 0;
                             }

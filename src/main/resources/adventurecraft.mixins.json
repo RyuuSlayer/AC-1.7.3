@@ -83,6 +83,7 @@
     "MixinPlayerInventoryScreen",
     "MixinPlayerRenderer",
     "MixinPortalTextureBinder",
+    "MixinRecipe",
     "MixinResourceDownloadThread",
     "MixinSandTile",
     "MixinScreen",

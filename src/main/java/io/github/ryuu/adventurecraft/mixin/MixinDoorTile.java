@@ -119,7 +119,7 @@ public class MixinDoorTile extends Tile {
         if ((i1 & 0x8) != 0) {
             if (world.a(i, j - 1, k) != this.bn)
                 world.f(i, j, k, 0);
-            if (l > 0 && Tile.m[l].f())
+            if (l > 0 && Tile.BY_ID[l].f())
                 b(world, i, j - 1, k, l);
         } else {
             boolean flag = false;
@@ -136,7 +136,8 @@ public class MixinDoorTile extends Tile {
             if (flag) {
                 if (!world.B)
                     g(world, i, j, k, i1);
-            } else if (l > 0 && Tile.m[l].f()) {
+            } else if (l > 0 && Tile.BY_ID[l].f()) {
+            } else if (l > 0 && Tile.BY_ID[l].f()) {
                 boolean flag1 = (world.s(i, j, k) || world.s(i, j + 1, k));
                 a(world, i, j, k, flag1);
             }

@@ -18,6 +18,7 @@ import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
 import net.minecraft.level.chunk.ClientChunkCache;
 import net.minecraft.tile.Tile;
@@ -571,7 +572,7 @@ public class MixinGameRenderer {
             }
             if (DebugMode.editMode && DebugMode.mapEditing != null)
                 DebugMode.mapEditing.render(f);
-            iz curItem = this.j.h.c.b();
+            ItemInstance curItem = this.j.h.c.b();
             if (curItem != null && curItem.c == Items.paste.bf) {
                 if (DebugMode.mapEditing == null) {
                     DebugMode.mapEditing = new MapEditing(this.j, this.j.f);
@@ -651,15 +652,15 @@ public class MixinGameRenderer {
                 float f1 = this.J.nextFloat();
                 float f2 = this.J.nextFloat();
                 if (i2 > 0)
-                    if ((Tile.m[i2]).bA == ln.h) {
-                        this.j.j.a((xw) new xn(world, (j1 + f1), (l1 + 0.1F) - (Tile.m[i2]).bt, (k1 + f2), 0.0D, 0.0D, 0.0D));
+                    if ((Tile.BY_ID[i2]).bA == ln.h) {
+                        this.j.j.a((xw) new xn(world, (j1 + f1), (l1 + 0.1F) - (Tile.BY_ID[i2]).bt, (k1 + f2), 0.0D, 0.0D, 0.0D));
                     } else {
                         if (this.J.nextInt(++l) == 0) {
                             d = (j1 + f1);
-                            d1 = (l1 + 0.1F) - (Tile.m[i2]).bt;
+                            d1 = (l1 + 0.1F) - (Tile.BY_ID[i2]).bt;
                             d2 = (k1 + f2);
                         }
-                        this.j.j.a((xw) new xd(world, (j1 + f1), (l1 + 0.1F) - (Tile.m[i2]).bt, (k1 + f2)));
+                        this.j.j.a((xw) new xd(world, (j1 + f1), (l1 + 0.1F) - (Tile.BY_ID[i2]).bt, (k1 + f2)));
                     }
             }
         }

@@ -181,7 +181,7 @@ public class MixinTileRenderer {
         if (l == 30) {
             if (this.c != null && this.d == -1) {
                 int blockID = this.c.a(i, j + 1, k);
-                if (blockID == 0 || !Tile.m[blockID].shouldRender(this.c, i, j + 1, k))
+                if (blockID == 0 || !Tile.BY_ID[blockID].shouldRender(this.c, i, j + 1, k))
                     renderGrass(block, i, j, k);
             }
             return l(block, i, j, k);
@@ -2757,7 +2757,7 @@ public class MixinTileRenderer {
         block.a(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
         l(block, i, j, k);
         if (l == 0) {
-            Tile b = Tile.m[this.c.a(i - 1, j, k)];
+            Tile b = Tile.BY_ID[this.c.a(i - 1, j, k)];
             if (b != null && b.b() == 10) {
                 int n = this.c.e(i - 1, j, k) & 0x3;
                 if (n == 2) {
@@ -2769,7 +2769,7 @@ public class MixinTileRenderer {
                 }
             }
             int m = this.c.e(i + 1, j, k) & 0x3;
-            b = Tile.m[this.c.a(i + 1, j, k)];
+            b = Tile.BY_ID[this.c.a(i + 1, j, k)];
             if (b != null && b.b() == 10 && (m == 2 || m == 3)) {
                 if (m == 2) {
                     block.a(0.5F, 0.5F, 0.5F, 1.0F, 1.0F, 1.0F);
@@ -2785,7 +2785,7 @@ public class MixinTileRenderer {
             flag = true;
         } else if (l == 1) {
             int m = this.c.e(i - 1, j, k) & 0x3;
-            Tile b = Tile.m[this.c.a(i - 1, j, k)];
+            Tile b = Tile.BY_ID[this.c.a(i - 1, j, k)];
             if (b != null && b.b() == 10 && (m == 2 || m == 3)) {
                 if (m == 3) {
                     block.a(0.0F, 0.5F, 0.0F, 0.5F, 1.0F, 0.5F);
@@ -2798,7 +2798,7 @@ public class MixinTileRenderer {
                 block.a(0.0F, 0.5F, 0.0F, 0.5F, 1.0F, 1.0F);
                 l(block, i, j, k);
             }
-            b = Tile.m[this.c.a(i + 1, j, k)];
+            b = Tile.BY_ID[this.c.a(i + 1, j, k)];
             if (b != null && b.b() == 10) {
                 m = this.c.e(i + 1, j, k) & 0x3;
                 if (m == 2) {
@@ -2811,7 +2811,7 @@ public class MixinTileRenderer {
             }
             flag = true;
         } else if (l == 2) {
-            Tile b = Tile.m[this.c.a(i, j, k - 1)];
+            Tile b = Tile.BY_ID[this.c.a(i, j, k - 1)];
             if (b != null && b.b() == 10) {
                 int n = this.c.e(i, j, k - 1) & 0x3;
                 if (n == 1) {
@@ -2823,7 +2823,7 @@ public class MixinTileRenderer {
                 }
             }
             int m = this.c.e(i, j, k + 1) & 0x3;
-            b = Tile.m[this.c.a(i, j, k + 1)];
+            b = Tile.BY_ID[this.c.a(i, j, k + 1)];
             if (b != null && b.b() == 10 && (m == 0 || m == 1)) {
                 if (m == 0) {
                     block.a(0.5F, 0.5F, 0.5F, 1.0F, 1.0F, 1.0F);
@@ -2838,7 +2838,7 @@ public class MixinTileRenderer {
             }
             flag = true;
         } else if (l == 3) {
-            Tile b = Tile.m[this.c.a(i, j, k + 1)];
+            Tile b = Tile.BY_ID[this.c.a(i, j, k + 1)];
             if (b != null && b.b() == 10) {
                 int n = this.c.e(i, j, k + 1) & 0x3;
                 if (n == 1) {
@@ -2850,7 +2850,7 @@ public class MixinTileRenderer {
                 }
             }
             int m = this.c.e(i, j, k - 1) & 0x3;
-            b = Tile.m[this.c.a(i, j, k - 1)];
+            b = Tile.BY_ID[this.c.a(i, j, k - 1)];
             if (b != null && b.b() == 10 && (m == 0 || m == 1)) {
                 if (m == 0) {
                     block.a(0.5F, 0.5F, 0.0F, 1.0F, 1.0F, 0.5F);
@@ -2887,7 +2887,7 @@ public class MixinTileRenderer {
         tessellator.a((i + 1), j, (k + 1), u2, v2);
         tessellator.a(i, j, (k + 1), u1, v2);
         if (l == 0) {
-            Tile nB = Tile.m[this.c.a(i - 1, j, k)];
+            Tile nB = Tile.BY_ID[this.c.a(i - 1, j, k)];
             int m = this.c.e(i - 1, j, k) & 0x3;
             if (nB != null && nB.b() == 38 && (m == 2 || m == 3)) {
                 if (m == 2) {
@@ -2932,7 +2932,7 @@ public class MixinTileRenderer {
                 tessellator.a((i + 1), j, (k + 1), u2, v2);
             } else {
                 m = this.c.e(i + 1, j, k) & 0x3;
-                nB = Tile.m[this.c.a(i + 1, j, k)];
+                nB = Tile.BY_ID[this.c.a(i + 1, j, k)];
                 if (nB != null && nB.b() == 38 && (m == 2 || m == 3)) {
                     if (m == 2) {
                         tessellator.a(0.9F * b, 0.9F * b, 0.9F * b);
@@ -2988,7 +2988,7 @@ public class MixinTileRenderer {
                 }
             }
         } else if (l == 1) {
-            Tile nB = Tile.m[this.c.a(i + 1, j, k)];
+            Tile nB = Tile.BY_ID[this.c.a(i + 1, j, k)];
             int m = this.c.e(i + 1, j, k) & 0x3;
             if (nB != null && nB.b() == 38 && (m == 2 || m == 3)) {
                 if (m == 2) {
@@ -3035,7 +3035,7 @@ public class MixinTileRenderer {
                 tessellator.a(i, (j + 1), k, u1, v1);
             } else {
                 m = this.c.e(i - 1, j, k) & 0x3;
-                nB = Tile.m[this.c.a(i - 1, j, k)];
+                nB = Tile.BY_ID[this.c.a(i - 1, j, k)];
                 if (nB != null && nB.b() == 38 && (m == 2 || m == 3)) {
                     if (m == 3) {
                         tessellator.a(0.9F * b, 0.9F * b, 0.9F * b);
@@ -3091,7 +3091,7 @@ public class MixinTileRenderer {
             }
         } else if (l == 2) {
             int m = this.c.e(i, j, k - 1) & 0x3;
-            Tile nB = Tile.m[this.c.a(i, j, k - 1)];
+            Tile nB = Tile.BY_ID[this.c.a(i, j, k - 1)];
             if (nB != null && nB.b() == 38 && (m == 0 || m == 1)) {
                 if (m == 1) {
                     tessellator.a(0.8F * b, 0.8F * b, 0.8F * b);
@@ -3138,7 +3138,7 @@ public class MixinTileRenderer {
                 tessellator.a(i, j, k, u2, v2);
             } else {
                 m = this.c.e(i, j, k + 1) & 0x3;
-                nB = Tile.m[this.c.a(i, j, k + 1)];
+                nB = Tile.BY_ID[this.c.a(i, j, k + 1)];
                 if (nB != null && nB.b() == 38 && (m == 0 || m == 1)) {
                     if (m == 0) {
                         tessellator.a(0.8F * b, 0.8F * b, 0.8F * b);
@@ -3197,7 +3197,7 @@ public class MixinTileRenderer {
             }
         } else if (l == 3) {
             int m = this.c.e(i, j, k + 1) & 0x3;
-            Tile nB = Tile.m[this.c.a(i, j, k + 1)];
+            Tile nB = Tile.BY_ID[this.c.a(i, j, k + 1)];
             if (nB != null && nB.b() == 38 && (m == 0 || m == 1)) {
                 if (m == 1) {
                     tessellator.a(0.6F * b, 0.6F * b, 0.6F * b);
@@ -3244,7 +3244,7 @@ public class MixinTileRenderer {
                 tessellator.a(i, (j + 1), k, u1, v1);
             } else {
                 m = this.c.e(i, j, k - 1) & 0x3;
-                nB = Tile.m[this.c.a(i, j, k - 1)];
+                nB = Tile.BY_ID[this.c.a(i, j, k - 1)];
                 if (nB != null && nB.b() == 38 && (m == 0 || m == 1)) {
                     if (m == 0) {
                         tessellator.a(0.8F * b, 0.8F * b, 0.8F * b);

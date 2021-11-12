@@ -118,7 +118,7 @@ public class MixinPlayerRenderer extends LivingEntityRenderer {
         if (itemstack != null && (itemstack.a()).bf < 256) {
             GL11.glPushMatrix();
             this.a.a.c(0.0625F);
-            if (cv.a(Tile.m[itemstack.c].b())) {
+            if (cv.a(Tile.BY_ID[itemstack.c].b())) {
                 float f1 = 0.625F;
                 GL11.glTranslatef(0.0F, -0.25F, 0.0F);
                 GL11.glRotatef(180.0F, 0.0F, 1.0F, 0.0F);
@@ -181,7 +181,7 @@ public class MixinPlayerRenderer extends LivingEntityRenderer {
             GL11.glTranslatef(-0.0625F, 0.4375F, 0.0625F);
             if (entityplayer.D != null)
                 itemstack1 = new ItemInstance(ItemType.B);
-            if (itemstack1.c < 256 && cv.a(Tile.m[itemstack1.c].b())) {
+            if (itemstack1.c < 256 && cv.a(Tile.BY_ID[itemstack1.c].b())) {
                 float f3 = 0.5F;
                 GL11.glTranslatef(0.0F, 0.1875F, -0.3125F);
                 f3 *= 0.75F;

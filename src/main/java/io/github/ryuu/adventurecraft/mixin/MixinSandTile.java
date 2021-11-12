@@ -21,7 +21,7 @@ public class MixinSandTile extends MixinTile implements IBlockColor {
             return true;
         if (l == Tile.as.bn)
             return true;
-        Material material = (Tile.m[l]).bA;
+        Material material = (Tile.BY_ID[l]).bA;
         if (material == Material.WATER)
             return true;
         return (material == Material.LAVA);

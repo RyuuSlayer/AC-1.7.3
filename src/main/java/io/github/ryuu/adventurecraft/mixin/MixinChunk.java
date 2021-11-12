@@ -230,7 +230,7 @@ public class MixinChunk {
         int i2 = this.k * 16 + k;
         this.b[i << 11 | k << 7 | j] = (byte) translate128(byte0);
         if (k1 != 0 && !this.d.B)
-            Tile.m[k1].b(this.d, l1, j, i2);
+            Tile.BY_ID[k1].b(this.d, l1, j, i2);
         this.e.a(i, j, k, i1);
         if (!this.d.t.e) {
             if (Tile.q[byte0 & 0xFF] != 0) {
@@ -245,7 +245,7 @@ public class MixinChunk {
         c(i, k);
         this.e.a(i, j, k, i1);
         if (l != 0)
-            Tile.m[l].c(this.d, l1, j, i2);
+            Tile.BY_ID[l].c(this.d, l1, j, i2);
         if (isNotPopulating)
             this.o = true;
         return true;
@@ -279,7 +279,7 @@ public class MixinChunk {
         int l1 = this.k * 16 + k;
         this.b[i << 11 | k << 7 | j] = (byte) translate128(byte0);
         if (j1 != 0)
-            Tile.m[j1].b(this.d, k1, j, l1);
+            Tile.BY_ID[j1].b(this.d, k1, j, l1);
         this.e.a(i, j, k, 0);
         if (Tile.q[byte0 & 0xFF] != 0) {
             if (j >= i1)
@@ -291,7 +291,7 @@ public class MixinChunk {
         this.d.a(eb.b, k1, j, l1, k1, j, l1);
         c(i, k);
         if (l != 0 && !this.d.B)
-            Tile.m[l].c(this.d, k1, j, l1);
+            Tile.BY_ID[l].c(this.d, k1, j, l1);
         if (isNotPopulating)
             this.o = true;
         return true;
@@ -391,7 +391,7 @@ public class MixinChunk {
             int l = a(i, j, k);
             if (!Tile.p[l])
                 return null;
-            rw blockcontainer = (rw) Tile.m[l];
+            rw blockcontainer = (rw) Tile.BY_ID[l];
             blockcontainer.c(this.d, this.j * 16 + i, j, this.k * 16 + k);
             tileentity = (TileEntity) this.l.get(chunkposition);
         }
@@ -423,7 +423,7 @@ public class MixinChunk {
         tileentity.e = this.j * 16 + i;
         tileentity.f = j;
         tileentity.g = this.k * 16 + k;
-        if (a(i, j, k) == 0 || !(Tile.m[a(i, j, k)] instanceof rw)) {
+        if (a(i, j, k) == 0 || !(Tile.BY_ID[a(i, j, k)] instanceof rw)) {
             System.out.printf("No container :( BlockID: %d Tile Entity: %s Coord: %d, %d, %d\n", Integer.valueOf(a(i, j, k)), tileentity.getClassName(), Integer.valueOf(tileentity.e), Integer.valueOf(tileentity.f), Integer.valueOf(tileentity.g));
             return;
         }

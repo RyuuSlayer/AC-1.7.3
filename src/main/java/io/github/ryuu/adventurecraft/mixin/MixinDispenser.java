@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.mixin;
 
 import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.io.CompoundTag;
 
@@ -8,30 +9,30 @@ import java.util.Random;
 
 public class MixinDispenser extends TileEntity implements lw {
     private final Random b = new Random();
-    private iz[] a = new iz[9];
+    private ItemInstance[] a = new ItemInstance[9];
 
     public int a() {
         return 9;
     }
 
-    public iz f_(int i) {
+    public ItemInstance f_(int i) {
         return this.a[i];
     }
 
-    public iz a(int i, int j) {
+    public ItemInstance a(int i, int j) {
         if (this.a[i] != null) {
             if ((this.a[i]).a <= j && (this.a[i]).a >= 0) {
-                iz itemstack = this.a[i];
+                ItemInstance itemstack = this.a[i];
                 this.a[i] = null;
                 y_();
                 return itemstack;
             }
             if ((this.a[i]).a < 0) {
-                iz item = this.a[i].k();
+                ItemInstance item = this.a[i].k();
                 item.a = 1;
                 return item;
             }
-            iz itemstack1 = this.a[i].a(j);
+            ItemInstance itemstack1 = this.a[i].a(j);
             if ((this.a[i]).a == 0)
                 this.a[i] = null;
             y_();
@@ -40,7 +41,7 @@ public class MixinDispenser extends TileEntity implements lw {
         return null;
     }
 
-    public iz b() {
+    public ItemInstance b() {
         int i = -1;
         int j = 1;
         for (int k = 0; k < this.a.length; k++) {
@@ -52,7 +53,7 @@ public class MixinDispenser extends TileEntity implements lw {
         return null;
     }
 
-    public void a(int i, iz itemstack) {
+    public void a(int i, ItemInstance itemstack) {
         this.a[i] = itemstack;
         if (itemstack != null && itemstack.a > d())
             itemstack.a = d();
@@ -66,12 +67,12 @@ public class MixinDispenser extends TileEntity implements lw {
     public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
         sp nbttaglist = nbttagcompound.l("Items");
-        this.a = new iz[a()];
+        this.a = new ItemInstance[a()];
         for (int i = 0; i < nbttaglist.c(); i++) {
             CompoundTag nbttagcompound1 = (CompoundTag) nbttaglist.a(i);
             int j = nbttagcompound1.c("Slot") & 0xFF;
             if (j >= 0 && j < this.a.length)
-                this.a[j] = new iz(nbttagcompound1);
+                this.a[j] = new ItemInstance(nbttagcompound1);
         }
     }
 

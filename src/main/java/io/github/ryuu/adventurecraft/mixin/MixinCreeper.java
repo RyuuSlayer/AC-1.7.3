@@ -26,7 +26,7 @@ public class MixinCreeper extends Monster {
     public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
         if (this.bD.a(17) == 1)
-            nbttagcompound.a("powered", true);
+            nbttagcompound.put("powered", true);
     }
 
     public void a(CompoundTag nbttagcompound) {

@@ -41,16 +41,16 @@ public class MixinItemRenderer extends EntityRenderer {
             byte0 = 4;
         GL11.glTranslatef((float) d, (float) d1 + f2, (float) d2);
         GL11.glEnable(32826);
-        if (itemstack.c < 256 && TileRenderer.a(Tile.m[itemstack.c].b())) {
+        if (itemstack.c < 256 && TileRenderer.a(Tile.BY_ID[itemstack.c].b())) {
             GL11.glRotatef(f3, 0.0F, 1.0F, 0.0F);
-            int textureNum = Tile.m[itemstack.c].getTextureNum();
+            int textureNum = Tile.BY_ID[itemstack.c].getTextureNum();
             if (textureNum == 0) {
                 a("/terrain.png");
             } else {
                 a(String.format("/terrain%d.png", new Object[]{Integer.valueOf(textureNum)}));
             }
             float f4 = 0.25F;
-            if (!Tile.m[itemstack.c].d() && itemstack.c != Tile.al.bn && Tile.m[itemstack.c].b() != 16)
+            if (!Tile.BY_ID[itemstack.c].d() && itemstack.c != Tile.al.bn && Tile.BY_ID[itemstack.c].b() != 16)
                 f4 = 0.5F;
             GL11.glScalef(this.scale * f4, this.scale * f4, this.scale * f4);
             for (int j = 0; j < byte0; j++) {
@@ -61,14 +61,14 @@ public class MixinItemRenderer extends EntityRenderer {
                     float f9 = (this.f.nextFloat() * 2.0F - 1.0F) * 0.2F / f4;
                     GL11.glTranslatef(f5, f7, f9);
                 }
-                this.e.a(Tile.m[itemstack.c], itemstack.i(), entityitem.a(f1));
+                this.e.a(Tile.BY_ID[itemstack.c], itemstack.i(), entityitem.a(f1));
                 GL11.glPopMatrix();
             }
         } else {
             GL11.glScalef(this.scale * 0.5F, this.scale * 0.5F, this.scale * 0.5F);
             int i = itemstack.b();
             if (itemstack.c < 256) {
-                int textureNum = Tile.m[itemstack.c].getTextureNum();
+                int textureNum = Tile.BY_ID[itemstack.c].getTextureNum();
                 if (textureNum == 0) {
                     a("/terrain.png");
                 } else {
@@ -117,14 +117,14 @@ public class MixinItemRenderer extends EntityRenderer {
     }
 
     public void a(TextRenderer fontrenderer, TextureManager renderengine, int i, int j, int k, int l, int i1) {
-        if (i < 256 && TileRenderer.a(Tile.m[i].b())) {
-            int textureNum = Tile.m[i].getTextureNum();
+        if (i < 256 && TileRenderer.a(Tile.BY_ID[i].b())) {
+            int textureNum = Tile.BY_ID[i].getTextureNum();
             if (textureNum == 0) {
                 renderengine.b(renderengine.b("/terrain.png"));
             } else {
                 renderengine.b(renderengine.b(String.format("/terrain%d.png", Integer.valueOf(textureNum))));
             }
-            Tile block = Tile.m[i];
+            Tile block = Tile.BY_ID[i];
             GL11.glPushMatrix();
             GL11.glTranslatef((l - 2), (i1 + 3), -3.0F);
             GL11.glScalef(10.0F, 10.0F, 10.0F);
@@ -146,7 +146,7 @@ public class MixinItemRenderer extends EntityRenderer {
         } else if (k >= 0) {
             GL11.glDisable(2896);
             if (i < 256) {
-                int textureNum = Tile.m[i].getTextureNum();
+                int textureNum = Tile.BY_ID[i].getTextureNum();
                 if (textureNum == 0) {
                     renderengine.b(renderengine.b("/terrain.png"));
                 } else {

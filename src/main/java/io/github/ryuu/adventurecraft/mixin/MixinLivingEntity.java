@@ -501,7 +501,7 @@ public abstract class MixinLivingEntity extends Entity {
                 a(null, i);
                 int j = this.aI.a(MathsHelper.b(this.aM), MathsHelper.b(this.aN - 0.20000000298023224D - this.bf), MathsHelper.b(this.aO));
                 if (j > 0) {
-                    ct stepsound = (Tile.m[j]).by;
+                    ct stepsound = (Tile.BY_ID[j]).by;
                     this.aI.a(this, stepsound.d(), stepsound.b() * 0.5F, stepsound.c() * 0.75F);
                 }
             }
@@ -558,7 +558,7 @@ public abstract class MixinLivingEntity extends Entity {
                 f2 = 0.5460001F;
                 int i = this.aI.a(MathsHelper.b(this.aM), MathsHelper.b(this.aW.b) - 1, MathsHelper.b(this.aO));
                 if (i > 0)
-                    f2 = (Tile.m[i]).bB * 0.91F;
+                    f2 = (Tile.BY_ID[i]).bB * 0.91F;
             }
             float f3 = 0.1627714F / f2 * f2 * f2;
             a(f, f1, this.aX ? (0.1F * f3) : (0.1F * this.airControl * f3));
@@ -567,7 +567,7 @@ public abstract class MixinLivingEntity extends Entity {
                 f2 = 0.5460001F;
                 int j = this.aI.a(MathsHelper.b(this.aM), MathsHelper.b(this.aW.b) - 1, MathsHelper.b(this.aO));
                 if (j > 0)
-                    f2 = (Tile.m[j]).bB * 0.91F;
+                    f2 = (Tile.BY_ID[j]).bB * 0.91F;
             }
             if (p()) {
                 float f4 = 0.15F;

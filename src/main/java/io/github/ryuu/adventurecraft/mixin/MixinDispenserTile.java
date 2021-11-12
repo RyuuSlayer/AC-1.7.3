@@ -191,7 +191,7 @@ public class MixinDispenserTile extends rw {
                     if (i1 > itemstack.a)
                         i1 = itemstack.a;
                     itemstack.a -= i1;
-                    ItemEntity entityitem = new ItemEntity(world, (i + f), (j + f1), (k + f2), new iz(itemstack.c, i1, itemstack.i()));
+                    ItemEntity entityitem = new ItemEntity(world, (i + f), (j + f1), (k + f2), new ItemInstance(itemstack.c, i1, itemstack.i()));
                     float f3 = 0.05F;
                     entityitem.aP = ((float) this.a.nextGaussian() * f3);
                     entityitem.aQ = ((float) this.a.nextGaussian() * f3 + 0.2F);

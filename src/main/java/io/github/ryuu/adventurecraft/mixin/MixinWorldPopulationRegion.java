@@ -101,7 +101,7 @@ public class MixinWorldPopulationRegion implements TileView {
             return 15;
         if (flag) {
             int l = a(i, j, k);
-            if (l != 0 && (l == Tile.al.bn || l == Tile.aB.bn || l == Tile.au.bn || l == Tile.aI.bn || Tile.m[l] instanceof BlockStairMulti)) {
+            if (l != 0 && (l == Tile.al.bn || l == Tile.aB.bn || l == Tile.au.bn || l == Tile.aI.bn || Tile.BY_ID[l] instanceof BlockStairMulti)) {
                 int k1 = a(i, j + 1, k, false);
                 int i2 = a(i + 1, j, k, false);
                 int j2 = a(i - 1, j, k, false);
@@ -145,7 +145,7 @@ public class MixinWorldPopulationRegion implements TileView {
         int l = a(i, j, k);
         if (l == 0)
             return ln.a;
-        return (Tile.m[l]).bA;
+        return (Tile.BY_ID[l]).bA;
     }
 
     public BiomeSource a() {
@@ -153,14 +153,14 @@ public class MixinWorldPopulationRegion implements TileView {
     }
 
     public boolean g(int i, int j, int k) {
-        Tile block = Tile.m[a(i, j, k)];
+        Tile block = Tile.BY_ID[a(i, j, k)];
         if (block == null)
             return false;
         return block.c();
     }
 
     public boolean h(int i, int j, int k) {
-        Tile block = Tile.m[a(i, j, k)];
+        Tile block = Tile.BY_ID[a(i, j, k)];
         if (block == null)
             return false;
         return (block.bA.c() && block.d());

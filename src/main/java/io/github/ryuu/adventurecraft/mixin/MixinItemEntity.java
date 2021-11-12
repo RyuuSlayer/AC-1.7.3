@@ -71,7 +71,7 @@ public class MixinItemEntity extends Entity {
             f = 0.5880001F;
             int i = this.aI.a(MathsHelper.b(this.aM), MathsHelper.b(this.aW.b) - 1, MathsHelper.b(this.aO));
             if (i > 0)
-                f = (Tile.m[i]).bB * 0.98F;
+                f = (Tile.BY_ID[i]).bB * 0.98F;
         }
         this.aP *= f;
         this.aQ *= 0.9800000190734863D;

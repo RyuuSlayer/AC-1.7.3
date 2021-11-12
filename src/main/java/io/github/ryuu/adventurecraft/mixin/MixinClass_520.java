@@ -72,7 +72,7 @@ public class MixinClass_520 extends ChunkSubData {
         int j1 = this.a.f.e(i, j, k);
         boolean flag = super.b(i, j, k, l);
         ItemInstance itemstack = this.a.h.G();
-        boolean flag1 = this.a.h.b(Tile.m[i1]);
+        boolean flag1 = this.a.h.b(Tile.BY_ID[i1]);
         if (itemstack != null) {
             itemstack.a(i1, i, j, k, (Player) this.a.h);
             if (itemstack.a == 0) {
@@ -81,7 +81,7 @@ public class MixinClass_520 extends ChunkSubData {
             }
         }
         if (flag && flag1)
-            Tile.m[i1].a(this.a.f, (Player) this.a.h, i, j, k, j1);
+            Tile.BY_ID[i1].a(this.a.f, (Player) this.a.h, i, j, k, j1);
         return flag;
     }
 
@@ -89,8 +89,8 @@ public class MixinClass_520 extends ChunkSubData {
         this.a.f.a((Player) this.a.h, i, j, k, l);
         int i1 = this.a.f.a(i, j, k);
         if (i1 > 0 && this.f == 0.0F)
-            Tile.m[i1].b(this.a.f, i, j, k, (Player) this.a.h);
-        if (DebugMode.active && i1 > 0 && Tile.m[i1].a((Player) this.a.h) >= 1.0F)
+            Tile.BY_ID[i1].b(this.a.f, i, j, k, (Player) this.a.h);
+        if (DebugMode.active && i1 > 0 && Tile.BY_ID[i1].a((Player) this.a.h) >= 1.0F)
             b(i, j, k, l);
     }
 
@@ -110,7 +110,7 @@ public class MixinClass_520 extends ChunkSubData {
             int i1 = this.a.f.a(i, j, k);
             if (i1 == 0)
                 return;
-            Tile block = Tile.m[i1];
+            Tile block = Tile.BY_ID[i1];
             this.f += block.a((Player) this.a.h);
             if (this.h % 4.0F == 0.0F && block != null)
                 this.a.B.b(block.by.d(), i + 0.5F, j + 0.5F, k + 0.5F, (block.by.b() + 1.0F) / 8.0F, block.by.c() * 0.5F);

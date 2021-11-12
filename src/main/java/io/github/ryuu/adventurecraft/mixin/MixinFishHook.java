@@ -327,7 +327,7 @@ public class MixinFishHook extends Entity {
             this.c.aR += d4 * d8;
             byte0 = 3;
         } else if (this.k > 0) {
-            ItemEntity entityitem = new ItemEntity(this.aI, this.aM, this.aN, this.aO, new iz(ItemType.aS));
+            ItemEntity entityitem = new ItemEntity(this.aI, this.aM, this.aN, this.aO, new ItemInstance(ItemType.aS));
             double d1 = this.b.aM - this.aM;
             double d3 = this.b.aN - this.aN;
             double d5 = this.b.aO - this.aO;

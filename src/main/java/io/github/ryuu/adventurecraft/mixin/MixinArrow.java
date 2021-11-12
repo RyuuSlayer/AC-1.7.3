@@ -291,14 +291,14 @@ public class MixinArrow extends Entity {
     }
 
     public void a(CompoundTag nbttagcompound) {
-        this.d = nbttagcompound.d("xTile");
-        this.e = nbttagcompound.d("yTile");
-        this.f = nbttagcompound.d("zTile");
-        this.g = nbttagcompound.c("inTile") & 0xFF;
-        this.h = nbttagcompound.c("inData") & 0xFF;
-        this.b = nbttagcompound.c("shake") & 0xFF;
-        this.i = (nbttagcompound.c("inGround") == 1);
-        this.a = nbttagcompound.m("player");
+        this.d = nbttagcompound.getShort("xTile");
+        this.e = nbttagcompound.getShort("yTile");
+        this.f = nbttagcompound.getShort("zTile");
+        this.g = nbttagcompound.getByte("inTile") & 0xFF;
+        this.h = nbttagcompound.getByte("inData") & 0xFF;
+        this.b = nbttagcompound.getByte("shake") & 0xFF;
+        this.i = (nbttagcompound.getByte("inGround") == 1);
+        this.a = nbttagcompound.getBoolean("player");
     }
 
     public void b(Player entityplayer) {

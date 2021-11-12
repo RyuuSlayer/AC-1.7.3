@@ -16,6 +16,7 @@ import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.TextRenderer;
 import net.minecraft.client.render.entity.ItemRenderer;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemInstance;
 import net.minecraft.tile.Tile;
 import org.lwjgl.opengl.GL11;
 
@@ -57,7 +58,7 @@ public class MixinOverlay extends DrawableHelper {
         GL11.glEnable(3042);
         if (Minecraft.u())
             a(this.g.h.a(f), scaledWidth, scaledHeight);
-        iz itemstack = this.g.h.c.d(3);
+        ItemInstance itemstack = this.g.h.c.d(3);
         if (!this.g.z.A && !this.g.cameraActive && itemstack != null && itemstack.c == Tile.bb.bn)
             a(scaledWidth, scaledHeight);
         if (this.g.f != null && !this.g.f.x.overlay.isEmpty())
@@ -368,7 +369,7 @@ public class MixinOverlay extends DrawableHelper {
     }
 
     private void a(int i, int j, int k, float f) {
-        iz itemstack = this.g.h.c.a[i];
+        ItemInstance itemstack = this.g.h.c.a[i];
         if (itemstack == null)
             return;
         float f1 = itemstack.b - f;

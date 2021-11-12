@@ -15,10 +15,10 @@ public class MixinSign extends TileEntity {
 
     public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.a("Text1", this.a[0]);
-        nbttagcompound.a("Text2", this.a[1]);
-        nbttagcompound.a("Text3", this.a[2]);
-        nbttagcompound.a("Text4", this.a[3]);
+        nbttagcompound.put("Text1", this.a[0]);
+        nbttagcompound.put("Text2", this.a[1]);
+        nbttagcompound.put("Text3", this.a[2]);
+        nbttagcompound.put("Text4", this.a[3]);
     }
 
     public void a(CompoundTag nbttagcompound) {

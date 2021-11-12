@@ -7,8 +7,11 @@ import net.minecraft.level.Level;
 import net.minecraft.level.LevelProperties;
 import net.minecraft.level.chunk.Chunk;
 import net.minecraft.level.chunk.ChunkIO;
+import net.minecraft.level.chunk.ChunkSubData;
 import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.util.io.AbstractTag;
 import net.minecraft.util.io.CompoundTag;
+import net.minecraft.util.io.ListTag;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,18 +40,18 @@ public class MixinDimensionFileChunkIO implements ChunkIO {
 
     public static void a(Chunk chunk, Level world, CompoundTag nbttagcompound) {
         world.r();
-        nbttagcompound.a("xPos", chunk.j);
-        nbttagcompound.a("zPos", chunk.k);
-        nbttagcompound.a("LastUpdate", world.t());
-        nbttagcompound.a("Blocks", chunk.b);
-        nbttagcompound.a("Data", chunk.e.a);
-        nbttagcompound.a("SkyLight", chunk.f.a);
-        nbttagcompound.a("BlockLight", chunk.g.a);
-        nbttagcompound.a("HeightMap", chunk.h);
-        nbttagcompound.a("TerrainPopulated", chunk.n);
-        nbttagcompound.a("acVersion", 0);
+        nbttagcompound.put("xPos", chunk.j);
+        nbttagcompound.put("zPos", chunk.k);
+        nbttagcompound.put("LastUpdate", world.t());
+        nbttagcompound.put("Blocks", chunk.b);
+        nbttagcompound.put("Data", chunk.e.a);
+        nbttagcompound.put("SkyLight", chunk.f.a);
+        nbttagcompound.put("BlockLight", chunk.g.a);
+        nbttagcompound.put("HeightMap", chunk.h);
+        nbttagcompound.put("TerrainPopulated", chunk.n);
+        nbttagcompound.put("acVersion", 0);
         chunk.q = false;
-        sp nbttaglist = new sp();
+        ListTag nbttaglist = new ListTag();
         for (int i = 0; i < chunk.m.length; i++) {
             Iterator<?> iterator = chunk.m[i].iterator();
             while (iterator.hasNext()) {
@@ -56,44 +59,44 @@ public class MixinDimensionFileChunkIO implements ChunkIO {
                 chunk.q = true;
                 CompoundTag nbttagcompound1 = new CompoundTag();
                 if (entity.c(nbttagcompound1))
-                    nbttaglist.a((ij) nbttagcompound1);
+                    nbttaglist.a((AbstractTag) nbttagcompound1);
             }
         }
-        nbttagcompound.a("Entities", (ij) nbttaglist);
-        sp nbttaglist1 = new sp();
-        for (Iterator<TileEntity> iterator1 = chunk.l.values().iterator(); iterator1.hasNext(); nbttaglist1.a((ij) nbttagcompound2)) {
+        nbttagcompound.put("Entities", nbttaglist);
+        ListTag nbttaglist1 = new ListTag();
+        for (Iterator<TileEntity> iterator1 = chunk.l.values().iterator(); iterator1.hasNext(); nbttaglist1.a((AbstractTag) nbttagcompound2)) {
             TileEntity tileentity = iterator1.next();
             CompoundTag nbttagcompound2 = new CompoundTag();
             tileentity.b(nbttagcompound2);
         }
-        nbttagcompound.a("TileEntities", (ij) nbttaglist1);
+        nbttagcompound.put("TileEntities", nbttaglist1);
     }
 
     public static Chunk a(Level world, CompoundTag nbttagcompound) {
-        int i = nbttagcompound.e("xPos");
-        int j = nbttagcompound.e("zPos");
+        int i = nbttagcompound.getInt("xPos");
+        int j = nbttagcompound.getInt("zPos");
         Chunk chunk = new Chunk(world, i, j, false);
-        chunk.b = nbttagcompound.j("Blocks");
-        chunk.e = new wi(nbttagcompound.j("Data"));
-        chunk.f = new wi(nbttagcompound.j("SkyLight"));
-        chunk.g = new wi(nbttagcompound.j("BlockLight"));
-        chunk.h = nbttagcompound.j("HeightMap");
-        chunk.n = nbttagcompound.m("TerrainPopulated");
+        chunk.b = nbttagcompound.getByteArray("Blocks");
+        chunk.e = new ChunkSubData(nbttagcompound.getByteArray("Data"));
+        chunk.f = new ChunkSubData(nbttagcompound.getByteArray("SkyLight"));
+        chunk.g = new ChunkSubData(nbttagcompound.getByteArray("BlockLight"));
+        chunk.h = nbttagcompound.getByteArray("HeightMap");
+        chunk.n = nbttagcompound.getBoolean("TerrainPopulated");
         if (!chunk.e.a())
-            chunk.e = new wi(chunk.b.length);
-        if (!nbttagcompound.b("acVersion"))
+            chunk.e = new ChunkSubData(chunk.b.length);
+        if (!nbttagcompound.containsKey("acVersion"))
             if (world.x.originallyFromAC)
                 Blocks.convertACVersion(chunk.b);
         if (chunk.h == null || !chunk.f.a()) {
             chunk.h = new byte[256];
-            chunk.f = new wi(chunk.b.length);
+            chunk.f = new ChunkSubData(chunk.b.length);
             chunk.c();
         }
         if (!chunk.g.a()) {
-            chunk.g = new wi(chunk.b.length);
+            chunk.g = new ChunkSubData(chunk.b.length);
             chunk.a();
         }
-        sp nbttaglist = nbttagcompound.l("Entities");
+        ListTag nbttaglist = nbttagcompound.getListTag("Entities");
         if (nbttaglist != null)
             for (int k = 0; k < nbttaglist.c(); k++) {
                 CompoundTag nbttagcompound1 = (CompoundTag) nbttaglist.a(k);
@@ -102,7 +105,7 @@ public class MixinDimensionFileChunkIO implements ChunkIO {
                 if (entity != null)
                     chunk.a(entity);
             }
-        sp nbttaglist1 = nbttagcompound.l("TileEntities");
+        ListTag nbttaglist1 = nbttagcompound.l("TileEntities");
         if (nbttaglist1 != null)
             for (int l = 0; l < nbttaglist1.c(); l++) {
                 CompoundTag nbttagcompound2 = (CompoundTag) nbttaglist1.a(l);
@@ -143,20 +146,20 @@ public class MixinDimensionFileChunkIO implements ChunkIO {
             try {
                 FileInputStream fileinputstream = new FileInputStream(file);
                 CompoundTag nbttagcompound = as.a(fileinputstream);
-                if (!nbttagcompound.b("Level")) {
+                if (!nbttagcompound.containsKey("Level")) {
                     System.out.println("Chunk file at " + i + "," + j + " is missing level data, skipping");
                     return null;
                 }
-                if (!nbttagcompound.k("Level").b("Blocks")) {
+                if (!nbttagcompound.getCompoundTag("Level").b("Blocks")) {
                     System.out.println("Chunk file at " + i + "," + j + " is missing block data, skipping");
                     return null;
                 }
-                Chunk chunk = a(world, nbttagcompound.k("Level"));
+                Chunk chunk = a(world, nbttagcompound.getCompoundTag("Level"));
                 if (!chunk.a(i, j)) {
                     System.out.println("Chunk file at " + i + "," + j + " is in the wrong location; relocating. (Expected " + i + ", " + j + ", got " + chunk.j + ", " + chunk.k + ")");
-                    nbttagcompound.a("xPos", i);
-                    nbttagcompound.a("zPos", j);
-                    chunk = a(world, nbttagcompound.k("Level"));
+                    nbttagcompound.put("xPos", i);
+                    nbttagcompound.put("zPos", j);
+                    chunk = a(world, nbttagcompound.getCompoundTag("Level"));
                 }
                 chunk.i();
                 return chunk;
@@ -178,7 +181,7 @@ public class MixinDimensionFileChunkIO implements ChunkIO {
             FileOutputStream fileoutputstream = new FileOutputStream(file1);
             CompoundTag nbttagcompound = new CompoundTag();
             CompoundTag nbttagcompound1 = new CompoundTag();
-            nbttagcompound.a("Level", (ij) nbttagcompound1);
+            nbttagcompound.put("Level", (AbstractTag) nbttagcompound1);
             a(chunk, world, nbttagcompound1);
             as.a(nbttagcompound, fileoutputstream);
             fileoutputstream.close();

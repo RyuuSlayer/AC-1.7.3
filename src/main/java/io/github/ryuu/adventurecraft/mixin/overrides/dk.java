@@ -8,10 +8,12 @@ import io.github.ryuu.adventurecraft.util.CoordBlock;
 import io.github.ryuu.adventurecraft.util.LightCache;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.TileRenderer;
 import net.minecraft.client.render.entity.ItemRenderer;
 import net.minecraft.client.render.tile.TileEntityRenderDispatcher;
 import net.minecraft.entity.Entity;
 import net.minecraft.level.Level;
+import net.minecraft.level.WorldPopulationRegion;
 import net.minecraft.level.chunk.Chunk;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.entity.TileEntity;
@@ -119,8 +121,8 @@ public class dk {
         hashset.addAll(this.B);
         this.B.clear();
         int l1 = 1;
-        ew chunkcache = new ew(this.a, i - l1, j - l1, k - l1, l + l1, i1 + l1, j1 + l1);
-        cv renderblocks = new cv(chunkcache);
+        WorldPopulationRegion chunkcache = new WorldPopulationRegion(this.a, i - l1, j - l1, k - l1, l + l1, i1 + l1, j1 + l1);
+        TileRenderer renderblocks = new TileRenderer(chunkcache);
         int i2 = 0;
         while (i2 < 2) {
             boolean flag = false;
@@ -134,7 +136,7 @@ public class dk {
                             for (int l2 = i; l2 < l; l2++) {
                                 int i3 = chunkcache.a(l2, j2, k2);
                                 if (i3 > 0)
-                                    if (texNum == Tile.m[i3].getTextureNum()) {
+                                    if (texNum == Tile.BY_ID[i3].getTextureNum()) {
                                         if (!flag2) {
                                             flag2 = true;
                                             GL11.glNewList(this.C + i2, 4864);
@@ -160,7 +162,7 @@ public class dk {
                                             if (TileEntityRenderDispatcher.a.a(tileentity))
                                                 this.B.add(tileentity);
                                         }
-                                        Tile block = Tile.m[i3];
+                                        Tile block = Tile.BY_ID[i3];
                                         int j3 = block.b_();
                                         if (j3 != i2) {
                                             flag = true;

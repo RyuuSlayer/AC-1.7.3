@@ -13,7 +13,7 @@ public class MixinPistonRenderer extends TileEntityRenderer {
     private cv b;
 
     public void a(uk tileentitypiston, double d, double d1, double d2, float f) {
-        Tile block = Tile.m[tileentitypiston.a()];
+        Tile block = Tile.BY_ID[tileentitypiston.a()];
         if (block != null && tileentitypiston.a(f) < 1.0F) {
             String textureName;
             Tessellator tessellator = Tessellator.a;

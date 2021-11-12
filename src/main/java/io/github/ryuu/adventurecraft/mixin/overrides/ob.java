@@ -32,7 +32,7 @@ public class ob {
 
     public boolean b(int i, int j, int k, int l) {
         Level world = this.a.f;
-        Tile block = Tile.m[world.a(i, j, k)];
+        Tile block = Tile.BY_ID[world.a(i, j, k)];
         world.e(2001, i, j, k, block.bn + world.e(i, j, k) * 256);
         int i1 = world.e(i, j, k);
         boolean flag = world.f(i, j, k, 0);
@@ -81,7 +81,7 @@ public class ob {
 
     public boolean a(Player entityplayer, Level world, iz itemstack, int i, int j, int k, int l) {
         int i1 = world.a(i, j, k);
-        if (i1 > 0 && Tile.m[i1].a(world, i, j, k, entityplayer))
+        if (i1 > 0 && Tile.BY_ID[i1].a(world, i, j, k, entityplayer))
             return true;
         if (itemstack == null)
             return false;

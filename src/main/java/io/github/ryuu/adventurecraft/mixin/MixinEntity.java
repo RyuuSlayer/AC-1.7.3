@@ -5,6 +5,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityRegistry;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 import net.minecraft.util.io.CompoundTag;
@@ -441,14 +442,14 @@ public abstract class MixinEntity {
                 j3 = this.aI.a(l, j1 - 1, l1);
             if (this.bj > this.b && j3 > 0) {
                 this.b = (int) (this.b + Math.ceil((this.bj - this.b)));
-                ct stepsound = (Tile.m[j3]).by;
+                ct stepsound = (Tile.BY_ID[j3]).by;
                 if (this.aI.a(l, j1 + 1, l1) == Tile.aT.bn) {
                     stepsound = Tile.aT.by;
                     this.aI.a(this, stepsound.d(), stepsound.b() * 0.15F, stepsound.c());
-                } else if (!(Tile.m[j3]).bA.d()) {
+                } else if (!(Tile.BY_ID[j3]).bA.d()) {
                     this.aI.a(this, stepsound.d(), stepsound.b() * 0.15F, stepsound.c());
                 }
-                Tile.m[j3].b(this.aI, l, j1, l1, this);
+                Tile.BY_ID[j3].b(this.aI, l, j1, l1, this);
             }
         }
         int i1 = MathsHelper.b(this.aW.a + 0.001D);
@@ -463,7 +464,7 @@ public abstract class MixinEntity {
                     for (int l4 = i2; l4 <= i4; l4++) {
                         int i5 = this.aI.a(j4, k4, l4);
                         if (i5 > 0)
-                            Tile.m[i5].a(this.aI, j4, k4, l4, this);
+                            Tile.BY_ID[i5].a(this.aI, j4, k4, l4, this);
                     }
                 }
             }
@@ -529,7 +530,7 @@ public abstract class MixinEntity {
         int j = MathsHelper.d(MathsHelper.b(d));
         int k = MathsHelper.b(this.aO);
         int l = this.aI.a(i, j, k);
-        if (l != 0 && (Tile.m[l]).bA == material) {
+        if (l != 0 && (Tile.BY_ID[l]).bA == material) {
             float f = rp.d(this.aI.e(i, j, k)) - 0.1111111F;
             float f1 = (j + 1) - f;
             return (d < f1);
@@ -797,10 +798,10 @@ public abstract class MixinEntity {
     }
 
     public ItemEntity a(int i, int j, float f) {
-        return a(new iz(i, j, 0), f);
+        return a(new ItemInstance(i, j, 0), f);
     }
 
-    public ItemEntity a(iz itemstack, float f) {
+    public ItemEntity a(ItemInstance itemstack, float f) {
         ItemEntity entityitem = new ItemEntity(this.aI, this.aM, this.aN + f, this.aO, itemstack);
         entityitem.c = 10;
         this.aI.b((Entity) entityitem);

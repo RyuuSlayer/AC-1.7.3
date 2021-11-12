@@ -112,7 +112,7 @@ public class MixinParticleManager {
     public void a(int i, int j, int k, int l, int i1) {
         if (l == 0)
             return;
-        Tile block = Tile.m[l];
+        Tile block = Tile.BY_ID[l];
         int j1 = 4;
         for (int k1 = 0; k1 < j1; k1++) {
             for (int l1 = 0; l1 < j1; l1++) {
@@ -131,7 +131,7 @@ public class MixinParticleManager {
         int i1 = this.a.a(i, j, k);
         if (i1 == 0)
             return;
-        Tile block = Tile.m[i1];
+        Tile block = Tile.BY_ID[i1];
         float f = 0.1F;
         double d = i + this.d.nextDouble() * (block.bv - block.bs - (f * 2.0F)) + f + block.bs;
         double d1 = j + this.d.nextDouble() * (block.bw - block.bt - (f * 2.0F)) + f + block.bt;

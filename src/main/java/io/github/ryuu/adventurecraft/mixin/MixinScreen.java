@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.SmokeRenderer;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.TextRenderer;
@@ -14,11 +16,11 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
-public class MixinScreen extends ub {
+public class MixinScreen extends DrawableHelper {
     public int c;
     public int d;
     public boolean f = false;
-    public du h;
+    public SmokeRenderer h;
     public boolean disableInputGrabbing = false;
     protected Minecraft b;
     protected List e = new ArrayList();
@@ -74,7 +76,7 @@ public class MixinScreen extends ub {
     }
 
     public void a(Minecraft minecraft, int i, int j) {
-        this.h = new du(minecraft);
+        this.h = new SmokeRenderer(minecraft);
         this.b = minecraft;
         this.g = minecraft.q;
         this.c = i;

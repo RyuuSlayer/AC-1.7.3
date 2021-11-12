@@ -124,7 +124,7 @@ public class MixinTileEntity {
     }
 
     public Tile f() {
-        return Tile.m[this.d.a(this.e, this.f, this.g)];
+        return Tile.BY_ID[this.d.a(this.e, this.f, this.g)];
     }
 
     public boolean g() {

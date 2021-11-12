@@ -110,7 +110,7 @@ public class MixinFlowingFluidTile extends FluidTile {
                 if (this.bA == ln.h) {
                     i(world, i, j, k);
                 } else {
-                    Tile.m[i1].g(world, i, j, k, world.e(i, j, k));
+                    Tile.BY_ID[i1].g(world, i, j, k, world.e(i, j, k));
                 }
             world.b(i, j, k, this.bn, l);
         }
@@ -182,7 +182,7 @@ public class MixinFlowingFluidTile extends FluidTile {
             return true;
         if (l == 0)
             return false;
-        ln material = (Tile.m[l]).bA;
+        ln material = (Tile.BY_ID[l]).bA;
         return material.c();
     }
 

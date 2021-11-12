@@ -990,7 +990,7 @@ public class MixinWorldRenderer implements LevelListener {
                 GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.5F);
                 GL11.glPushMatrix();
                 int k = this.k.a(movingobjectposition.b, movingobjectposition.c, movingobjectposition.d);
-                Tile block = (k <= 0) ? null : Tile.m[k];
+                Tile block = (k <= 0) ? null : Tile.BY_ID[k];
                 GL11.glDisable(3008);
                 GL11.glPolygonOffset(-3.0F, -3.0F);
                 GL11.glEnable(32823);
@@ -1050,11 +1050,11 @@ public class MixinWorldRenderer implements LevelListener {
             float f1 = 0.002F;
             int j = this.k.a(movingobjectposition.b, movingobjectposition.c, movingobjectposition.d);
             if (j > 0) {
-                Tile.m[j].a((TileView) this.k, movingobjectposition.b, movingobjectposition.c, movingobjectposition.d);
+                Tile.BY_ID[j].a((TileView) this.k, movingobjectposition.b, movingobjectposition.c, movingobjectposition.d);
                 double d = entityplayer.bl + (entityplayer.aM - entityplayer.bl) * f;
                 double d1 = entityplayer.bm + (entityplayer.aN - entityplayer.bm) * f;
                 double d2 = entityplayer.bn + (entityplayer.aO - entityplayer.bn) * f;
-                a(Tile.m[j].f(this.k, movingobjectposition.b, movingobjectposition.c, movingobjectposition.d).b(f1, f1, f1).c(-d, -d1, -d2));
+                a(Tile.BY_ID[j].f(this.k, movingobjectposition.b, movingobjectposition.c, movingobjectposition.d).b(f1, f1, f1).c(-d, -d1, -d2));
             }
             GL11.glDepthMask(true);
             GL11.glEnable(3553);
@@ -1386,7 +1386,7 @@ public class MixinWorldRenderer implements LevelListener {
             case 2001:
                 i2 = i1 & 0xFF;
                 if (i2 > 0) {
-                    Tile block = Tile.m[i2];
+                    Tile block = Tile.BY_ID[i2];
                     this.t.B.b(block.by.a(), j + 0.5F, k + 0.5F, l + 0.5F, (block.by.b() + 1.0F) / 2.0F, block.by.c() * 0.8F);
                 }
                 this.t.j.a(j, k, l, i1 & 0xFF, i1 >> 8 & 0xFF);
@@ -1426,7 +1426,7 @@ public class MixinWorldRenderer implements LevelListener {
                         for (int z = 0; z < 16; z++) {
                             int blockID = this.k.a(xOffset + x, yOffset + y, zOffset + z);
                             if (blockID > 0)
-                                Tile.m[blockID].reset(this.k, xOffset + x, yOffset + y, zOffset + z, forDeath);
+                                Tile.BY_ID[blockID].reset(this.k, xOffset + x, yOffset + y, zOffset + z, forDeath);
                         }
                     }
                 }

@@ -489,7 +489,7 @@ public class MixinLevel extends Level implements TileView {
         int l = a(i, j, k);
         if (l == 0)
             return Material.a;
-        return (Tile.m[l]).bA;
+        return (Tile.BY_ID[l]).bA;
     }
 
     public int e(int i, int j, int k) {
@@ -587,7 +587,7 @@ public class MixinLevel extends Level implements TileView {
     private void l(int i, int j, int k, int l) {
         if (this.o || this.B)
             return;
-        Tile block = Tile.m[a(i, j, k)];
+        Tile block = Tile.BY_ID[a(i, j, k)];
         if (block != null)
             block.b(this, i, j, k, l);
     }
@@ -613,7 +613,7 @@ public class MixinLevel extends Level implements TileView {
             return 15;
         if (flag) {
             int l = a(i, j, k);
-            if (l != 0 && (l == Tile.al.bn || l == Tile.aB.bn || l == Tile.aI.bn || l == Tile.au.bn || Tile.m[l] instanceof BlockStairMulti)) {
+            if (l != 0 && (l == Tile.al.bn || l == Tile.aB.bn || l == Tile.aI.bn || l == Tile.au.bn || Tile.BY_ID[l] instanceof BlockStairMulti)) {
                 int i1 = a(i, j + 1, k, false);
                 int j1 = a(i + 1, j, k, false);
                 int k1 = a(i - 1, j, k, false);
@@ -674,8 +674,8 @@ public class MixinLevel extends Level implements TileView {
                 l = 15;
         } else if (enumskyblock == eb.b) {
             int i1 = a(i, j, k);
-            if (Tile.m[i1] != null && Tile.m[i1].getBlockLightValue(this, i, j, k) < l)
-                l = Tile.m[i1].getBlockLightValue(this, i, j, k);
+            if (Tile.BY_ID[i1] != null && Tile.BY_ID[i1].getBlockLightValue(this, i, j, k) < l)
+                l = Tile.BY_ID[i1].getBlockLightValue(this, i, j, k);
         }
         if (a(enumskyblock, i, j, k) != l)
             a(enumskyblock, i, j, k, i, j, k);
@@ -825,7 +825,7 @@ public class MixinLevel extends Level implements TileView {
             for (int l1 = i1; l1 < j1; l1++) {
                 if (i(k1, 64, l1))
                     for (int i2 = k - 1; i2 < l; i2++) {
-                        Tile block = Tile.m[a(k1, i2, l1)];
+                        Tile block = Tile.BY_ID[a(k1, i2, l1)];
                         if (block != null && (entity.collidesWithClipBlocks || (block.bn != Blocks.clipBlock.bn && !LadderTile.isLadderID(block.bn))))
                             block.a(this, k1, i2, l1, axisalignedbb, this.K);
                     }
@@ -963,7 +963,7 @@ public class MixinLevel extends Level implements TileView {
         j &= 0xF;
         while (k > 0) {
             int l = chunk.a(i, k, j);
-            Material material = (l != 0) ? (Tile.m[l]).bA : Material.a;
+            Material material = (l != 0) ? (Tile.BY_ID[l]).bA : Material.a;
             if (!material.c() && !material.d()) {
                 k--;
                 continue;
@@ -990,7 +990,7 @@ public class MixinLevel extends Level implements TileView {
             if (a(nextticklistentry.a - byte0, nextticklistentry.b - byte0, nextticklistentry.c - byte0, nextticklistentry.a + byte0, nextticklistentry.b + byte0, nextticklistentry.c + byte0)) {
                 int j1 = a(nextticklistentry.a, nextticklistentry.b, nextticklistentry.c);
                 if (j1 == nextticklistentry.d && j1 > 0)
-                    Tile.m[j1].a(this, nextticklistentry.a, nextticklistentry.b, nextticklistentry.c, this.r);
+                    Tile.BY_ID[j1].a(this, nextticklistentry.a, nextticklistentry.b, nextticklistentry.c, this.r);
             }
             return;
         }
@@ -1167,7 +1167,7 @@ public class MixinLevel extends Level implements TileView {
         for (int k1 = i; k1 < j; k1++) {
             for (int l1 = k; l1 < l; l1++) {
                 for (int i2 = i1; i2 < j1; i2++) {
-                    Tile block = Tile.m[a(k1, l1, i2)];
+                    Tile block = Tile.BY_ID[a(k1, l1, i2)];
                     if (block != null && block.bA.d())
                         return true;
                 }
@@ -1210,7 +1210,7 @@ public class MixinLevel extends Level implements TileView {
         for (int k1 = i; k1 < j; k1++) {
             for (int l1 = k; l1 < l; l1++) {
                 for (int i2 = i1; i2 < j1; i2++) {
-                    Tile block = Tile.m[a(k1, l1, i2)];
+                    Tile block = Tile.BY_ID[a(k1, l1, i2)];
                     if (block != null && block.bA == material) {
                         double d1 = ((l1 + 1) - rp.d(e(k1, l1, i2)));
                         if (l >= d1) {
@@ -1241,7 +1241,7 @@ public class MixinLevel extends Level implements TileView {
         for (int k1 = i; k1 < j; k1++) {
             for (int l1 = k; l1 < l; l1++) {
                 for (int i2 = i1; i2 < j1; i2++) {
-                    Tile block = Tile.m[a(k1, l1, i2)];
+                    Tile block = Tile.BY_ID[a(k1, l1, i2)];
                     if (block != null && block.bA == material)
                         return true;
                 }
@@ -1260,7 +1260,7 @@ public class MixinLevel extends Level implements TileView {
         for (int k1 = i; k1 < j; k1++) {
             for (int l1 = k; l1 < l; l1++) {
                 for (int i2 = i1; i2 < j1; i2++) {
-                    Tile block = Tile.m[a(k1, l1, i2)];
+                    Tile block = Tile.BY_ID[a(k1, l1, i2)];
                     if (block != null && block.bA == material) {
                         int j2 = e(k1, l1, i2);
                         double d = (l1 + 1);
@@ -1380,14 +1380,14 @@ public class MixinLevel extends Level implements TileView {
     }
 
     public boolean g(int i, int j, int k) {
-        Tile block = Tile.m[a(i, j, k)];
+        Tile block = Tile.BY_ID[a(i, j, k)];
         if (block == null)
             return false;
         return block.c();
     }
 
     public boolean h(int i, int j, int k) {
-        Tile block = Tile.m[a(i, j, k)];
+        Tile block = Tile.BY_ID[a(i, j, k)];
         if (block == null)
             return false;
         return (block.bA.h() && block.d());
@@ -1570,7 +1570,7 @@ public class MixinLevel extends Level implements TileView {
                 if (a(nextticklistentry.a - byte0, nextticklistentry.b - byte0, nextticklistentry.c - byte0, nextticklistentry.a + byte0, nextticklistentry.b + byte0, nextticklistentry.c + byte0)) {
                     int k = a(nextticklistentry.a, nextticklistentry.b, nextticklistentry.c);
                     if (k == nextticklistentry.d && k > 0) {
-                        Tile.m[k].a(this, nextticklistentry.a, nextticklistentry.b, nextticklistentry.c, this.r);
+                        Tile.BY_ID[k].a(this, nextticklistentry.a, nextticklistentry.b, nextticklistentry.c, this.r);
                         Box.b();
                     }
                 }
@@ -1588,7 +1588,7 @@ public class MixinLevel extends Level implements TileView {
             int k1 = k + this.r.nextInt(byte0) - this.r.nextInt(byte0);
             int l1 = a(i1, j1, k1);
             if (l1 > 0)
-                Tile.m[l1].b(this, i1, j1, k1, random);
+                Tile.BY_ID[l1].b(this, i1, j1, k1, random);
         }
     }
 
@@ -1659,8 +1659,8 @@ public class MixinLevel extends Level implements TileView {
 
     public boolean a(int i, int j, int k, int l, boolean flag, int i1) {
         int j1 = a(j, k, l);
-        Tile block = Tile.m[j1];
-        Tile block1 = Tile.m[i];
+        Tile block = Tile.BY_ID[j1];
+        Tile block1 = Tile.BY_ID[i];
         Box axisalignedbb = block1.e(this, j, k, l);
         if (flag)
             axisalignedbb = null;
@@ -1705,7 +1705,7 @@ public class MixinLevel extends Level implements TileView {
         int i1 = a(i, j, k);
         if (i1 == 0)
             return false;
-        return Tile.m[i1].d(this, i, j, k, l);
+        return Tile.BY_ID[i1].d(this, i, j, k, l);
     }
 
     public boolean r(int i, int j, int k) {
@@ -1728,7 +1728,7 @@ public class MixinLevel extends Level implements TileView {
         int i1 = a(i, j, k);
         if (i1 == 0)
             return false;
-        return Tile.m[i1].c(this, i, j, k, l);
+        return Tile.BY_ID[i1].c(this, i, j, k, l);
     }
 
     public boolean s(int i, int j, int k) {
@@ -2176,7 +2176,7 @@ public class MixinLevel extends Level implements TileView {
         if (getTemperatureValue(x, z) < 0.5D) {
             if (!d(x, height, z))
                 return false;
-            if (topBlock != 0 && Tile.m[topBlock].c()) {
+            if (topBlock != 0 && Tile.BY_ID[topBlock].c()) {
                 if (!f(x, height - 1, z).c())
                     return false;
                 if (a(eb.b, x, height, z) > 11)
@@ -2252,7 +2252,7 @@ public class MixinLevel extends Level implements TileView {
         int j1 = MathsHelper.b(vec3d.c);
         int k1 = a(l, i1, j1);
         int i2 = e(l, i1, j1);
-        Tile block = Tile.m[k1];
+        Tile block = Tile.BY_ID[k1];
         if ((!flag1 || block == null || block.e(this, l, i1, j1) != null) && k1 > 0 && block.a(i2, flag) && (collideWithClip || (k1 != Blocks.clipBlock.bn && !LadderTile.isLadderID(k1)))) {
             HitResult movingobjectposition = block.a(this, l, i1, j1, vec3d, vec3d1);
             if (movingobjectposition != null)
@@ -2386,7 +2386,7 @@ public class MixinLevel extends Level implements TileView {
             int j6 = k3 >> 16 & 0x7F;
             int l6 = chunk.b[k4 << 11 | k5 << 7 | j6] & 0xFF;
             if (Tile.n[l6])
-                Tile.m[l6].a(this, k4 + coordX, j6, k5 + coordZ, this.rand);
+                Tile.BY_ID[l6].a(this, k4 + coordX, j6, k5 + coordZ, this.rand);
             j2++;
         }
     }

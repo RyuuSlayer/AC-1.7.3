@@ -892,7 +892,7 @@ public abstract class MixinMinecraft implements Runnable {
             int k = this.y.c;
             int l = this.y.d;
             int i1 = this.y.e;
-            Tile block = Tile.m[this.f.a(j, k, l)];
+            Tile block = Tile.BY_ID[this.f.a(j, k, l)];
             if (!DebugMode.active && (block.bn == Tile.av.bn || block.bn == Blocks.store.bn))
                 i = 1;
             if (block != null) {

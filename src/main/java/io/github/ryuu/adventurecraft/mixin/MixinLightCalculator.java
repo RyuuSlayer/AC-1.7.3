@@ -77,8 +77,8 @@ public class MixinLightCalculator {
                             if (world.o(k1, k2, l1))
                                 l3 = 15;
                         } else if (this.a == eb.b) {
-                            if (Tile.m[j3] != null) {
-                                l3 = Tile.m[j3].getBlockLightValue(world, k1, k2, l1);
+                            if (Tile.BY_ID[j3] != null) {
+                                l3 = Tile.BY_ID[j3].getBlockLightValue(world, k1, k2, l1);
                             } else {
                                 l3 = Tile.s[j3];
                             }
