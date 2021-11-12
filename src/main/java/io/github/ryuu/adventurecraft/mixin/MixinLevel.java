@@ -22,6 +22,7 @@ import net.minecraft.level.*;
 import net.minecraft.level.biome.Biome;
 import net.minecraft.level.chunk.Chunk;
 import net.minecraft.level.chunk.ChunkIO;
+import net.minecraft.level.chunk.ClientChunkCache;
 import net.minecraft.level.dimension.Dimension;
 import net.minecraft.level.dimension.DimensionData;
 import net.minecraft.level.dimension.McRegionDimensionFile;
