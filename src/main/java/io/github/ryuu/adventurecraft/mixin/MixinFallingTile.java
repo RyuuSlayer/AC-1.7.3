@@ -1,44 +1,43 @@
 package io.github.ryuu.adventurecraft.mixin;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.FallingTile;
 import net.minecraft.level.Level;
+import net.minecraft.tile.SandTile;
 import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.MathsHelper;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 
-public class MixinFallingTile extends Entity {
-    public int a;
+@Mixin(FallingTile.class)
+public abstract class MixinFallingTile extends Entity {
+
+    @Shadow
+    public int tile;
+
+    @Shadow
+    public int field_848;
 
     public int metadata;
-
-    public int b;
-
     public double startX;
-
     public double startZ;
 
-    public MixinFallingTile(Level world) {
-        super(world);
-        this.b = 0;
-        b(0.98F, 0.98F);
-        this.bh = 0.98F;
-        this.bf = this.bh / 2.0F;
+    public MixinFallingTile(Level arg) {
+        super(arg);
     }
 
-    public MixinFallingTile(Level world, double d, double d1, double d2, int i) {
-        super(world);
-        this.b = 0;
-        this.a = i;
-        this.aF = true;
-        b(0.98F, 0.98F);
-        this.bh = 0.98F;
-        this.bf = this.bh / 2.0F;
-        e(d, d1, d2);
-        this.aP = 0.0D;
-        this.aQ = 0.0D;
-        this.aR = 0.0D;
-        this.aJ = d;
-        this.aK = d1;
-        this.aL = d2;
+    @Inject(at = @At("TAIL"), method = "<init>(Lnet/minecraft/level/Level;)V")
+    private void constructor(Level world) {
+        setSize(0.98F, 0.98F);
+        this.standingEyeHeight = this.height / 2.0F;
+    }
+
+    @Inject(at = @At("TAIL"), method = "<init>(Lnet/minecraft/level/Level;DDDI)V")
+    private void constructor(Level world, double d, double d1, double d2, int i) {
+        constructor(world);
         this.startX = d;
         this.startZ = d2;
     }
@@ -50,72 +49,69 @@ public class MixinFallingTile extends Entity {
     protected void b() {
     }
 
-    public boolean h_() {
-        return !this.be;
+    @Overwrite
+    public boolean method_1356() {
+        return !this.removed;
     }
 
-    public void w_() {
-        if (this.a == 0) {
-            K();
-            return;
-        }
-        this.aJ = this.aM;
-        this.aK = this.aN;
-        this.aL = this.aO;
-        this.b++;
-        this.aQ -= 0.03999999910593033D;
-        b(this.aP, this.aQ, this.aR);
-        this.aP *= 0.9800000190734863D;
-        this.aQ *= 0.9800000190734863D;
-        this.aR *= 0.9800000190734863D;
-        int i = MathsHelper.b(this.aM);
-        int j = MathsHelper.b(this.aN);
-        int k = MathsHelper.b(this.aO);
-        if (this.aI.a(i, j, k) == this.a)
-            this.aI.f(i, j, k, 0);
-        if (this.aX && Math.abs(this.aP) < 0.01D && Math.abs(this.aR) < 0.01D) {
-            this.aP *= 0.699999988079071D;
-            this.aR *= 0.699999988079071D;
-            this.aQ *= -0.5D;
-            if (!gk.c_(this.aI, i, j - 1, k)) {
-                K();
-                if ((!this.aI.a(this.a, i, j, k, true, 1) || !this.aI.b(i, j, k, this.a, this.metadata)) && !this.aI.B)
-                    b(this.a, 1);
-            } else {
-                e(i + 0.5D, this.aN, k + 0.5D);
-                this.aP = 0.0D;
-                this.aR = 0.0D;
+    /**
+     * @author TechPizza
+     */
+    @Overwrite
+    public void tick() {
+        if (this.tile == 0) {
+            remove();
+        } else {
+            this.prevX = this.x;
+            this.prevY = this.y;
+            this.prevZ = this.z;
+            this.field_848++;
+            this.velocityY -= 0.03999999910593033D;
+            move(this.velocityX, this.velocityY, this.velocityZ);
+            this.velocityX *= 0.9800000190734863D;
+            this.velocityY *= 0.9800000190734863D;
+            this.velocityZ *= 0.9800000190734863D;
+            int i = MathsHelper.floor(this.x);
+            int j = MathsHelper.floor(this.y);
+            int k = MathsHelper.floor(this.z);
+            if (this.level.getTileId(i, j, k) == this.tile)
+                this.level.setTile(i, j, k, 0);
+            if (this.onGround && Math.abs(this.velocityX) < 0.01D && Math.abs(this.velocityZ) < 0.01D) {
+                this.velocityX *= 0.699999988079071D;
+                this.velocityZ *= 0.699999988079071D;
+                this.velocityY *= -0.5D;
+                if (!SandTile.method_435(this.level, i, j - 1, k)) {
+                    remove();
+                    if ((!this.level.canPlaceTile(this.tile, i, j, k, true, 1) || !this.level.method_201(i, j, k, this.tile, this.metadata)) && !this.level.isClient)
+                        dropItem(this.tile, 1);
+                } else {
+                    setPosition(i + 0.5D, this.y, k + 0.5D);
+                    this.velocityX = 0.0D;
+                    this.velocityZ = 0.0D;
+                }
+            } else if (this.field_848 > 100 && !this.level.isClient) {
+                dropItem(this.tile, 1);
+                remove();
             }
-        } else if (this.b > 100 && !this.aI.B) {
-            b(this.a, 1);
-            K();
-        }
-        if (Math.abs(this.aM - this.startX) >= 1.0D) {
-            this.aP = 0.0D;
-            e(i + 0.5D, this.aN, this.aO);
-        }
-        if (Math.abs(this.aO - this.startZ) >= 1.0D) {
-            this.aR = 0.0D;
-            e(this.aM, this.aN, k + 0.5D);
+            if (Math.abs(this.x - this.startX) >= 1.0D) {
+                this.velocityX = 0.0D;
+                setPosition(i + 0.5D, this.y, this.z);
+            }
+            if (Math.abs(this.z - this.startZ) >= 1.0D) {
+                this.velocityZ = 0.0D;
+                setPosition(this.x, this.y, k + 0.5D);
+            }
         }
     }
 
-    protected void b(CompoundTag nbttagcompound) {
-        nbttagcompound.a("Tile", (byte) this.a);
-        nbttagcompound.a("EntityID", this.aD);
+    @Inject(at = @At("TAIL"), method = "writeCustomDataToTag(Lnet/minecraft/util/io/CompoundTag;)V")
+    private void writeACDataToTag(CompoundTag nbttagcompound) {
+        nbttagcompound.put("EntityID", this.id);
     }
 
-    protected void a(CompoundTag nbttagcompound) {
-        this.a = nbttagcompound.c("Tile") & 0xFF;
-        if (nbttagcompound.b("EntityID"))
-            this.aD = nbttagcompound.e("EntityID");
-    }
-
-    public float x_() {
-        return 0.0F;
-    }
-
-    public Level k() {
-        return this.aI;
+    @Inject(at = @At("TAIL"), method = "readCustomDataFromTag(Lnet/minecraft/util/io/CompoundTag;)V")
+    private void readACDataFromTag(CompoundTag nbttagcompound) {
+        if (nbttagcompound.containsKey("EntityID"))
+            this.id = nbttagcompound.getInt("EntityID");
     }
 }

@@ -20,7 +20,7 @@ public class MixinTileEntityRenderDispatcher {
     public static double b;
     public static double c;
     public static double d;
-    private final Map m;
+    private final Map<Class, TileEntityRenderer> m;
     public TextureManager e;
     public Level f;
     public LivingEntity g;
@@ -44,8 +44,9 @@ public class MixinTileEntityRenderDispatcher {
         this.m.put(TileEntityMobSpawner.class, new TileEntityMobSpawnerRenderer());
         this.m.put(TileEntityStore.class, new TileEntityStoreRenderer());
         this.m.put(TileEntityEffect.class, new TileEntityEffectRenderer());
-        for (Iterator<TileEntityRenderer> iterator = this.m.values().iterator(); iterator.hasNext(); tileentityspecialrenderer.a(this))
-            TileEntityRenderer tileentityspecialrenderer = iterator.next();
+        for (TileEntityRenderer tileentityspecialrenderer : this.m.values()) {
+            tileentityspecialrenderer.a(this);
+        }
     }
 
     public TileEntityRenderer a(Class<TileEntity> class1) {
@@ -96,9 +97,7 @@ public class MixinTileEntityRenderDispatcher {
 
     public void a(Level world) {
         this.f = world;
-        Iterator<TileEntityRenderer> iterator = this.m.values().iterator();
-        while (iterator.hasNext()) {
-            TileEntityRenderer tileentityspecialrenderer = iterator.next();
+        for (TileEntityRenderer tileentityspecialrenderer : this.m.values()) {
             if (tileentityspecialrenderer != null)
                 tileentityspecialrenderer.a(world);
         }

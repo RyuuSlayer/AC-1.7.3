@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.mixin;
 
 import io.github.ryuu.adventurecraft.blocks.BlockColor;
 import io.github.ryuu.adventurecraft.items.ItemSubtypes;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
@@ -671,7 +672,7 @@ public class MixinTile {
     }
 
     public String n() {
-        return do.a(o() + ".name");
+        return I18n.translate(o() + ".name");
     }
 
     public String o() {
