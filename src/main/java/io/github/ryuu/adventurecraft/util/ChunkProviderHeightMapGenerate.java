@@ -6,6 +6,7 @@ import net.minecraft.level.chunk.Chunk;
 import net.minecraft.level.source.LevelSource;
 import net.minecraft.level.structure.CactusPatch;
 import net.minecraft.level.structure.Feature;
+import net.minecraft.level.structure.MushroomPatch;
 import net.minecraft.tile.Tile;
 import net.minecraft.util.ProgressListener;
 import net.minecraft.util.noise.PerlinOctaveNoise;
@@ -271,25 +272,25 @@ public class ChunkProviderHeightMapGenerate implements LevelSource {
             int l15 = k + this.rand.nextInt(16) + 8;
             int k18 = this.rand.nextInt(128);
             int i21 = l + this.rand.nextInt(16) + 8;
-            (new be(Tile.DANDELION.id)).a(this.worldObj, this.rand, l15, k18, i21);
+            (new MushroomPatch(Tile.DANDELION.id)).a(this.worldObj, this.rand, l15, k18, i21);
         }
         if (this.rand.nextInt(2) == 0) {
             int k11 = k + this.rand.nextInt(16) + 8;
             int i16 = this.rand.nextInt(128);
             int l18 = l + this.rand.nextInt(16) + 8;
-            (new be(Tile.ROSE.id)).a(this.worldObj, this.rand, k11, i16, l18);
+            (new MushroomPatch(Tile.ROSE.id)).a(this.worldObj, this.rand, k11, i16, l18);
         }
         if (this.rand.nextInt(4) == 0) {
             int l11 = k + this.rand.nextInt(16) + 8;
             int j16 = this.rand.nextInt(128);
             int i19 = l + this.rand.nextInt(16) + 8;
-            (new be(Tile.BROWN_MUSHROOM.id)).a(this.worldObj, this.rand, l11, j16, i19);
+            (new MushroomPatch(Tile.BROWN_MUSHROOM.id)).a(this.worldObj, this.rand, l11, j16, i19);
         }
         if (this.rand.nextInt(8) == 0) {
             int i12 = k + this.rand.nextInt(16) + 8;
             int k16 = this.rand.nextInt(128);
             int j19 = l + this.rand.nextInt(16) + 8;
-            (new be(Tile.RED_MUSHROOM.id)).a(this.worldObj, this.rand, i12, k16, j19);
+            (new MushroomPatch(Tile.RED_MUSHROOM.id)).a(this.worldObj, this.rand, i12, k16, j19);
         }
         int l12 = 0;
         if (mobspawnerbase == Biome.DESERT)

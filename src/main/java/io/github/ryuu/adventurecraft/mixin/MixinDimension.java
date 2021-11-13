@@ -7,6 +7,7 @@ import net.minecraft.level.dimension.Dimension;
 import net.minecraft.level.gen.BiomeSource;
 import net.minecraft.level.source.OverworldLevelSource;
 import net.minecraft.util.maths.MathsHelper;
+import net.minecraft.util.maths.Vec3f;
 
 public abstract class MixinDimension {
     private final float[] h = new float[4];
@@ -99,7 +100,7 @@ public abstract class MixinDimension {
         return null;
     }
 
-    public bt b(float f, float f1) {
+    public Vec3f b(float f, float f1) {
         float f2 = MathsHelper.b(f * 3.141593F * 2.0F) * 2.0F + 0.5F;
         if (f2 < 0.0F)
             f2 = 0.0F;
@@ -111,7 +112,7 @@ public abstract class MixinDimension {
         f3 *= f2 * 0.94F + 0.06F;
         f4 *= f2 * 0.94F + 0.06F;
         f5 *= f2 * 0.91F + 0.09F;
-        return bt.b(f3, f4, f5);
+        return Vec3f.b(f3, f4, f5);
     }
 
     public boolean f() {

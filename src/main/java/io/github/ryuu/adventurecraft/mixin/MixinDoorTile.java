@@ -5,6 +5,7 @@ import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
 import net.minecraft.tile.Tile;
+import net.minecraft.util.maths.Vec3f;
 
 import java.util.Random;
 
@@ -152,19 +153,19 @@ public class MixinDoorTile extends Tile {
         return ItemType.at.bf;
     }
 
-    public vf a(Level world, int i, int j, int k, bt vec3d, bt vec3d1) {
+    public vf a(Level world, int i, int j, int k, Vec3f vec3d, Vec3f vec3d1) {
         a((TileView) world, i, j, k);
         int m = world.e(i, j, k);
         if (this.bA == ln.f && (m & 0x8) == 8)
             this.bt = 0.8125D;
         vec3d = vec3d.c(-i, -j, -k);
         vec3d1 = vec3d1.c(-i, -j, -k);
-        bt vec3d2 = vec3d.a(vec3d1, this.bs);
-        bt vec3d3 = vec3d.a(vec3d1, this.bv);
-        bt vec3d4 = vec3d.b(vec3d1, this.bt);
-        bt vec3d5 = vec3d.b(vec3d1, this.bw);
-        bt vec3d6 = vec3d.c(vec3d1, this.bu);
-        bt vec3d7 = vec3d.c(vec3d1, this.bx);
+        Vec3f vec3d2 = vec3d.a(vec3d1, this.bs);
+        Vec3f vec3d3 = vec3d.a(vec3d1, this.bv);
+        Vec3f vec3d4 = vec3d.b(vec3d1, this.bt);
+        Vec3f vec3d5 = vec3d.b(vec3d1, this.bw);
+        Vec3f vec3d6 = vec3d.c(vec3d1, this.bu);
+        Vec3f vec3d7 = vec3d.c(vec3d1, this.bx);
         if (!a(vec3d2))
             vec3d2 = null;
         if (!a(vec3d3))
@@ -177,7 +178,7 @@ public class MixinDoorTile extends Tile {
             vec3d6 = null;
         if (!c(vec3d7))
             vec3d7 = null;
-        bt vec3d8 = null;
+        Vec3f vec3d8 = null;
         if (vec3d2 != null && (vec3d8 == null || vec3d.c(vec3d2) < vec3d.c(vec3d8)))
             vec3d8 = vec3d2;
         if (vec3d3 != null && (vec3d8 == null || vec3d.c(vec3d3) < vec3d.c(vec3d8)))

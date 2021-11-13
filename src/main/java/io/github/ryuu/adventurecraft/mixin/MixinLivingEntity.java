@@ -11,6 +11,7 @@ import net.minecraft.tile.LadderTile;
 import net.minecraft.tile.Tile;
 import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.MathsHelper;
+import net.minecraft.util.maths.Vec3f;
 
 import java.util.List;
 
@@ -157,7 +158,7 @@ public abstract class MixinLivingEntity extends Entity {
             diffAngle -= 360.0D;
         if (Math.abs(diffAngle) > (this.fov / 2.0F + this.extraFov))
             return false;
-        return (this.aI.a(bt.b(this.aM, this.aN + w(), this.aO), bt.b(entity.aM, entity.aN + entity.w(), entity.aO)) == null);
+        return (this.aI.a(Vec3f.b(this.aM, this.aN + w(), this.aO), Vec3f.b(entity.aM, entity.aN + entity.w(), entity.aO)) == null);
     }
 
     public String q_() {
@@ -615,47 +616,47 @@ public abstract class MixinLivingEntity extends Entity {
     }
 
     public void b(CompoundTag nbttagcompound) {
-        nbttagcompound.a("Health", (short) this.Y);
-        nbttagcompound.a("MaxHealth", (short) this.maxHealth);
-        nbttagcompound.a("HurtTime", (short) this.aa);
-        nbttagcompound.a("DeathTime", (short) this.ad);
-        nbttagcompound.a("AttackTime", (short) this.ae);
-        nbttagcompound.a("EntityID", this.aD);
-        nbttagcompound.a("timesCanJumpInAir", this.timesCanJumpInAir);
-        nbttagcompound.a("canWallJump", this.canWallJump);
-        nbttagcompound.a("fov", this.fov);
-        nbttagcompound.a("canLookRandomly", this.canLookRandomly);
-        nbttagcompound.a("randomLookVelocity", this.randomLookVelocity);
-        nbttagcompound.a("randomLookRate", this.randomLookRate);
-        nbttagcompound.a("randomLookRateVariation", this.randomLookRateVariation);
+        nbttagcompound.put("Health", (short) this.Y);
+        nbttagcompound.put("MaxHealth", (short) this.maxHealth);
+        nbttagcompound.put("HurtTime", (short) this.aa);
+        nbttagcompound.put("DeathTime", (short) this.ad);
+        nbttagcompound.put("AttackTime", (short) this.ae);
+        nbttagcompound.put("EntityID", this.aD);
+        nbttagcompound.put("timesCanJumpInAir", this.timesCanJumpInAir);
+        nbttagcompound.put("canWallJump", this.canWallJump);
+        nbttagcompound.put("fov", this.fov);
+        nbttagcompound.put("canLookRandomly", this.canLookRandomly);
+        nbttagcompound.put("randomLookVelocity", this.randomLookVelocity);
+        nbttagcompound.put("randomLookRate", this.randomLookRate);
+        nbttagcompound.put("randomLookRateVariation", this.randomLookRateVariation);
     }
 
     public void a(CompoundTag nbttagcompound) {
-        this.Y = nbttagcompound.d("Health");
-        if (!nbttagcompound.b("Health"))
+        this.Y = nbttagcompound.getShort("Health");
+        if (!nbttagcompound.containsKey("Health"))
             this.Y = 10;
-        if (!nbttagcompound.b("MaxHealth")) {
+        if (!nbttagcompound.containsKey("MaxHealth")) {
             this.maxHealth = 10;
         } else {
-            this.maxHealth = nbttagcompound.d("MaxHealth");
+            this.maxHealth = nbttagcompound.getShort ("MaxHealth");
         }
-        this.aa = nbttagcompound.d("HurtTime");
-        this.ad = nbttagcompound.d("DeathTime");
-        this.ae = nbttagcompound.d("AttackTime");
-        if (nbttagcompound.b("EntityID") && !(this instanceof Player))
-            this.aD = nbttagcompound.e("EntityID");
-        this.timesCanJumpInAir = nbttagcompound.e("timesCanJumpInAir");
-        this.canWallJump = nbttagcompound.m("canWallJump");
-        if (nbttagcompound.b("fov"))
-            this.fov = nbttagcompound.g("fov");
-        if (nbttagcompound.b("canLookRandomly"))
-            this.canLookRandomly = nbttagcompound.m("canLookRandomly");
-        if (nbttagcompound.b("randomLookVelocity"))
-            this.randomLookVelocity = nbttagcompound.g("randomLookVelocity");
-        if (nbttagcompound.b("randomLookRate"))
-            this.randomLookRate = nbttagcompound.e("randomLookRate");
-        if (nbttagcompound.b("randomLookRateVariation"))
-            this.randomLookRateVariation = nbttagcompound.e("randomLookRateVariation");
+        this.aa = nbttagcompound.getShort("HurtTime");
+        this.ad = nbttagcompound.getShort("DeathTime");
+        this.ae = nbttagcompound.getShort("AttackTime");
+        if (nbttagcompound.containsKey("EntityID") && !(this instanceof Player))
+            this.aD = nbttagcompound.getInt("EntityID");
+        this.timesCanJumpInAir = nbttagcompound.getInt("timesCanJumpInAir");
+        this.canWallJump = nbttagcompound.getBoolean("canWallJump");
+        if (nbttagcompound.containsKey("fov"))
+            this.fov = nbttagcompound.getFloat("fov");
+        if (nbttagcompound.containsKey("canLookRandomly"))
+            this.canLookRandomly = nbttagcompound.getBoolean("canLookRandomly");
+        if (nbttagcompound.containsKey("randomLookVelocity"))
+            this.randomLookVelocity = nbttagcompound.getFloat("randomLookVelocity");
+        if (nbttagcompound.containsKey("randomLookRate"))
+            this.randomLookRate = nbttagcompound.getInt("randomLookRate");
+        if (nbttagcompound.containsKey("randomLookRateVariation"))
+            this.randomLookRateVariation = nbttagcompound.getInt("randomLookRateVariation");
     }
 
     public boolean W() {
@@ -881,26 +882,26 @@ public abstract class MixinLivingEntity extends Entity {
         return this.W + f1 * f;
     }
 
-    public bt e(float f) {
+    public Vec3f e(float f) {
         if (f == 1.0F)
-            return bt.b(this.aM, this.aN, this.aO);
+            return Vec3f.b(this.aM, this.aN, this.aO);
         double d = this.aJ + (this.aM - this.aJ) * f;
         double d1 = this.aK + (this.aN - this.aK) * f;
         double d2 = this.aL + (this.aO - this.aL) * f;
-        return bt.b(d, d1, d2);
+        return Vec3f.b(d, d1, d2);
     }
 
-    public bt ac() {
+    public Vec3f ac() {
         return f(1.0F);
     }
 
-    public bt f(float f) {
+    public Vec3f f(float f) {
         if (f == 1.0F) {
             float f1 = MathsHelper.b(-this.aS * 0.01745329F - 3.141593F);
             float f3 = MathsHelper.a(-this.aS * 0.01745329F - 3.141593F);
             float f5 = -MathsHelper.b(-this.aT * 0.01745329F);
             float f7 = MathsHelper.a(-this.aT * 0.01745329F);
-            return bt.b((f3 * f5), f7, (f1 * f5));
+            return Vec3f.b((f3 * f5), f7, (f1 * f5));
         }
         float f2 = this.aV + (this.aT - this.aV) * f;
         float f4 = this.aU + (this.aS - this.aU) * f;
@@ -908,13 +909,13 @@ public abstract class MixinLivingEntity extends Entity {
         float f8 = MathsHelper.a(-f4 * 0.01745329F - 3.141593F);
         float f9 = -MathsHelper.b(-f2 * 0.01745329F);
         float f10 = MathsHelper.a(-f2 * 0.01745329F);
-        return bt.b((f8 * f9), f10, (f6 * f9));
+        return Vec3f.b((f8 * f9), f10, (f6 * f9));
     }
 
     public vf a(double d, float f) {
-        bt vec3d = e(f);
-        bt vec3d1 = f(f);
-        bt vec3d2 = vec3d.c(vec3d1.a * d, vec3d1.b * d, vec3d1.c * d);
+        Vec3f vec3d = e(f);
+        Vec3f vec3d1 = f(f);
+        Vec3f vec3d2 = vec3d.c(vec3d1.a * d, vec3d1.b * d, vec3d1.c * d);
         return this.aI.a(vec3d, vec3d2);
     }
 

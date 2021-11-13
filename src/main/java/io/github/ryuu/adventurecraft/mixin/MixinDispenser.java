@@ -4,6 +4,7 @@ import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.io.CompoundTag;
+import net.minecraft.util.io.ListTag;
 
 import java.util.Random;
 
@@ -66,7 +67,7 @@ public class MixinDispenser extends TileEntity implements lw {
 
     public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
-        sp nbttaglist = nbttagcompound.l("Items");
+        ListTag nbttaglist = nbttagcompound.l("Items");
         this.a = new ItemInstance[a()];
         for (int i = 0; i < nbttaglist.c(); i++) {
             CompoundTag nbttagcompound1 = (CompoundTag) nbttaglist.a(i);
@@ -78,16 +79,16 @@ public class MixinDispenser extends TileEntity implements lw {
 
     public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
-        sp nbttaglist = new sp();
+        ListTag nbttaglist = new ListTag();
         for (int i = 0; i < this.a.length; i++) {
             if (this.a[i] != null) {
                 CompoundTag nbttagcompound1 = new CompoundTag();
-                nbttagcompound1.a("Slot", (byte) i);
+                nbttagcompound1.put("Slot", (byte) i);
                 this.a[i].a(nbttagcompound1);
                 nbttaglist.a(nbttagcompound1);
             }
         }
-        nbttagcompound.a("Items", (ij) nbttaglist);
+        nbttagcompound.put("Items", (ij) nbttaglist);
     }
 
     public int d() {

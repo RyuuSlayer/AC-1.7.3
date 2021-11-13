@@ -13,13 +13,14 @@ import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
+import net.minecraft.tile.TileWithEntity;
 import net.minecraft.tile.entity.Dispenser;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.maths.MathsHelper;
 
 import java.util.Random;
 
-public class MixinDispenserTile extends rw {
+public class MixinDispenserTile extends TileWithEntity {
     private final Random a;
 
     protected MixinDispenserTile(int i) {
