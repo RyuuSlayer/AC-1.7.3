@@ -11,6 +11,7 @@ import net.minecraft.level.TileView;
 import net.minecraft.tile.LadderTile;
 import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.MathsHelper;
+import net.minecraft.util.maths.Vec3f;
 
 import java.util.List;
 
@@ -164,7 +165,7 @@ public class MixinArrow extends Entity {
         if (i > 0 && i != Blocks.clipBlock.bn && !LadderTile.isLadderID(i)) {
             MixinTile.m[i].a((TileView) this.aI, this.d, this.e, this.f);
             eq axisalignedbb = MixinTile.m[i].e(this.aI, this.d, this.e, this.f);
-            if (axisalignedbb != null && axisalignedbb.a(bt.b(this.aM, this.aN, this.aO)))
+            if (axisalignedbb != null && axisalignedbb.a(Vec3f.b(this.aM, this.aN, this.aO)))
                 this.i = true;
         }
         if (this.b > 0)
@@ -187,13 +188,13 @@ public class MixinArrow extends Entity {
             return;
         }
         this.k++;
-        bt vec3d = bt.b(this.aM, this.aN, this.aO);
-        bt vec3d1 = bt.b(this.aM + this.aP, this.aN + this.aQ, this.aO + this.aR);
+        Vec3f vec3d = Vec3f.b(this.aM, this.aN, this.aO);
+        Vec3f vec3d1 = Vec3f.b(this.aM + this.aP, this.aN + this.aQ, this.aO + this.aR);
         vf movingobjectposition = this.aI.rayTraceBlocks2(vec3d, vec3d1, false, true, false);
-        vec3d = bt.b(this.aM, this.aN, this.aO);
-        vec3d1 = bt.b(this.aM + this.aP, this.aN + this.aQ, this.aO + this.aR);
+        vec3d = Vec3f.b(this.aM, this.aN, this.aO);
+        vec3d1 = Vec3f.b(this.aM + this.aP, this.aN + this.aQ, this.aO + this.aR);
         if (movingobjectposition != null)
-            vec3d1 = bt.b(movingobjectposition.f.a, movingobjectposition.f.b, movingobjectposition.f.c);
+            vec3d1 = Vec3f.b(movingobjectposition.f.a, movingobjectposition.f.b, movingobjectposition.f.c);
         Entity entity = null;
         List<Entity> list = this.aI.b(this, this.aW.a(this.aP, this.aQ, this.aR).b(1.0D, 1.0D, 1.0D));
         double d = 0.0D;

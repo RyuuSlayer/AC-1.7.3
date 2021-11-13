@@ -5,6 +5,7 @@ import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.level.chunk.ChunkSubData;
 import net.minecraft.tile.Tile;
+import net.minecraft.tile.TileWithEntity;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.MathsHelper;
@@ -41,7 +42,7 @@ public class MixinChunk {
     public long lastUpdated;
 
     public MixinChunk(Level world, int i, int j, boolean createHeightMap) {
-        this.l = new HashMap<Object, Object>();
+        this.l = new HashMap<>();
         this.m = new List[8];
         this.n = false;
         this.o = false;
@@ -119,7 +120,7 @@ public class MixinChunk {
                     int l1 = 15;
                     int i2 = 127;
                     do {
-                        l1 -= Tile.q[translate256(this.b[k1 + i2])];
+                        l1 -= Tile.field_1941[translate256(this.b[k1 + i2])];
                         if (l1 <= 0)
                             continue;
                         this.f.a(j, i2, l, l1);
@@ -233,7 +234,7 @@ public class MixinChunk {
             Tile.BY_ID[k1].b(this.d, l1, j, i2);
         this.e.a(i, j, k, i1);
         if (!this.d.t.e) {
-            if (Tile.q[byte0 & 0xFF] != 0) {
+            if (Tile.field_1941[byte0 & 0xFF] != 0) {
                 if (j >= j1)
                     g(i, j + 1, k);
             } else if (j == j1 - 1) {
@@ -281,7 +282,7 @@ public class MixinChunk {
         if (j1 != 0)
             Tile.BY_ID[j1].b(this.d, k1, j, l1);
         this.e.a(i, j, k, 0);
-        if (Tile.q[byte0 & 0xFF] != 0) {
+        if (Tile.field_1941[byte0 & 0xFF] != 0) {
             if (j >= i1)
                 g(i, j + 1, k);
         } else if (j == i1 - 1) {
@@ -389,9 +390,9 @@ public class MixinChunk {
         TileEntity tileentity = (TileEntity) this.l.get(chunkposition);
         if (tileentity == null) {
             int l = a(i, j, k);
-            if (!Tile.p[l])
+            if (!Tile.HAS_TILE_ENTITY[l])
                 return null;
-            rw blockcontainer = (rw) Tile.BY_ID[l];
+            TileWithEntity blockcontainer = (TileWithEntity) Tile.BY_ID[l];
             blockcontainer.c(this.d, this.j * 16 + i, j, this.k * 16 + k);
             tileentity = (TileEntity) this.l.get(chunkposition);
         }
@@ -423,7 +424,7 @@ public class MixinChunk {
         tileentity.e = this.j * 16 + i;
         tileentity.f = j;
         tileentity.g = this.k * 16 + k;
-        if (a(i, j, k) == 0 || !(Tile.BY_ID[a(i, j, k)] instanceof rw)) {
+        if (a(i, j, k) == 0 || !(Tile.BY_ID[a(i, j, k)] instanceof TileWithEntity)) {
             System.out.printf("No container :( BlockID: %d Tile Entity: %s Coord: %d, %d, %d\n", Integer.valueOf(a(i, j, k)), tileentity.getClassName(), Integer.valueOf(tileentity.e), Integer.valueOf(tileentity.f), Integer.valueOf(tileentity.g));
             return;
         }

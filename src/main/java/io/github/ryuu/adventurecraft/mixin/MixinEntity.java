@@ -9,6 +9,7 @@ import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 import net.minecraft.util.io.CompoundTag;
+import net.minecraft.util.io.ListTag;
 import net.minecraft.util.maths.MathsHelper;
 
 import java.util.List;
@@ -722,20 +723,20 @@ public abstract class MixinEntity {
     }
 
     public void d(CompoundTag nbttagcompound) {
-        nbttagcompound.a("Pos", (ij) a(new double[]{this.aM, this.aN + this.bo, this.aO}));
-        nbttagcompound.a("Motion", (ij) a(new double[]{this.aP, this.aQ, this.aR}));
-        nbttagcompound.a("Rotation", (ij) a(new float[]{this.aS, this.aT}));
-        nbttagcompound.a("FallDistance", this.bk);
-        nbttagcompound.a("Fire", (short) this.bv);
-        nbttagcompound.a("Air", (short) this.bz);
-        nbttagcompound.a("OnGround", this.aX);
+        nbttagcompound.put("Pos", (ij) a(new double[]{this.aM, this.aN + this.bo, this.aO}));
+        nbttagcompound.put("Motion", (ij) a(new double[]{this.aP, this.aQ, this.aR}));
+        nbttagcompound.put("Rotation", (ij) a(new float[]{this.aS, this.aT}));
+        nbttagcompound.put("FallDistance", this.bk);
+        nbttagcompound.put("Fire", (short) this.bv);
+        nbttagcompound.put("Air", (short) this.bz);
+        nbttagcompound.put("OnGround", this.aX);
         b(nbttagcompound);
     }
 
     public void e(CompoundTag nbttagcompound) {
-        sp nbttaglist = nbttagcompound.l("Pos");
-        sp nbttaglist1 = nbttagcompound.l("Motion");
-        sp nbttaglist2 = nbttagcompound.l("Rotation");
+        ListTag nbttaglist = nbttagcompound.l("Pos");
+        ListTag nbttaglist1 = nbttagcompound.l("Motion");
+        ListTag nbttaglist2 = nbttagcompound.l("Rotation");
         this.aP = ((sz) nbttaglist1.a(0)).a;
         this.aQ = ((sz) nbttaglist1.a(1)).a;
         this.aR = ((sz) nbttaglist1.a(2)).a;
@@ -767,8 +768,8 @@ public abstract class MixinEntity {
 
     protected abstract void b(CompoundTag paramnu);
 
-    protected sp a(double[] ad) {
-        sp nbttaglist = new sp();
+    protected ListTag a(double[] ad) {
+        ListTag nbttaglist = new ListTag();
         double[] ad1 = ad;
         int i = ad1.length;
         for (int j = 0; j < i; j++) {
@@ -778,8 +779,8 @@ public abstract class MixinEntity {
         return nbttaglist;
     }
 
-    protected sp a(float[] af) {
-        sp nbttaglist = new sp();
+    protected ListTag a(float[] af) {
+        ListTag nbttaglist = new ListTag();
         float[] af1 = af;
         int i = af1.length;
         for (int j = 0; j < i; j++) {
