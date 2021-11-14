@@ -68,13 +68,13 @@ public class ChunkProviderHeightMapGenerate implements LevelSource {
                                 int waterHeight = TerrainImage.getWaterHeight(x, y);
                                 if (k1 * 8 + l1 < waterHeight)
                                     if (d17 < 0.5D && k1 * 8 + l1 >= waterHeight - 1) {
-                                        l2 = Tile.aU.bn;
+                                        l2 = Tile.ICE.id;
                                     } else {
-                                        l2 = Tile.B.bn;
+                                        l2 = Tile.FLOWING_WATER.id;
                                     }
                                 int height = TerrainImage.getTerrainHeight(x, y);
                                 if (k1 * 8 + l1 <= height)
-                                    l2 = Tile.u.bn;
+                                    l2 = Tile.STONE.id;
                                 abyte0[j2] = (byte) l2;
                                 j2 += c;
                             }
@@ -87,14 +87,14 @@ public class ChunkProviderHeightMapGenerate implements LevelSource {
 
     public void replaceBlocksForBiome(int i, int j, byte[] abyte0, Biome[] amobspawnerbase) {
         double d = 0.03125D;
-        this.stoneNoise = this.field_908_o.a(this.stoneNoise, (i * 16), (j * 16), 0.0D, 16, 16, 1, d * 2.0D, d * 2.0D, d * 2.0D);
+        this.stoneNoise = this.field_908_o.sample(this.stoneNoise, (i * 16), (j * 16), 0.0D, 16, 16, 1, d * 2.0D, d * 2.0D, d * 2.0D);
         for (int k = 0; k < 16; k++) {
             for (int l = 0; l < 16; l++) {
                 Biome mobspawnerbase = amobspawnerbase[k + l * 16];
                 int i1 = (int) (this.stoneNoise[k + l * 16] / 3.0D + 3.0D + this.rand.nextDouble() * 0.25D);
                 int j1 = -1;
-                byte byte1 = mobspawnerbase.p;
-                byte byte2 = mobspawnerbase.q;
+                byte byte1 = mobspawnerbase.topTileId;
+                byte byte2 = mobspawnerbase.underTileId;
                 for (int k1 = 127; k1 >= 0; k1--) {
                     int x = k + (15 - i) * 16;
                     int z = l + (15 - j) * 16;
@@ -103,14 +103,14 @@ public class ChunkProviderHeightMapGenerate implements LevelSource {
                     byte byte3 = abyte0[l1];
                     if (byte3 == 0) {
                         j1 = -1;
-                    } else if (byte3 == Tile.u.bn) {
+                    } else if (byte3 == Tile.STONE.id) {
                         if (j1 == -1) {
                             if (k1 >= waterHeight - 4 && k1 <= waterHeight + 1) {
-                                byte1 = mobspawnerbase.p;
-                                byte2 = mobspawnerbase.q;
+                                byte1 = mobspawnerbase.topTileId;
+                                byte2 = mobspawnerbase.underTileId;
                                 if (TerrainImage.hasSandNearWaterEdge(x, z)) {
-                                    byte1 = (byte) Tile.F.bn;
-                                    byte2 = (byte) Tile.F.bn;
+                                    byte1 = (byte) Tile.SAND.id;
+                                    byte2 = (byte) Tile.SAND.id;
                                 }
                             }
                             if (k1 < waterHeight && byte1 == 0)
@@ -143,8 +143,8 @@ public class ChunkProviderHeightMapGenerate implements LevelSource {
         double[] ad = (this.worldObj.a()).a;
         generateTerrain(i, j, abyte0, this.biomesForGeneration, ad);
         replaceBlocksForBiome(i, j, abyte0, this.biomesForGeneration);
-        chunk.c();
-        chunk.o = false;
+        chunk.generateHeightmap();
+        chunk.shouldSave = false;
         return chunk;
     }
 
@@ -155,11 +155,11 @@ public class ChunkProviderHeightMapGenerate implements LevelSource {
         double d1 = 684.412D;
         double[] ad1 = (this.worldObj.a()).a;
         double[] ad2 = (this.worldObj.a()).b;
-        this.field_4182_g = this.field_922_a.a(this.field_4182_g, i, k, l, j1, 1.121D, 1.121D, 0.5D);
-        this.field_4181_h = this.field_921_b.a(this.field_4181_h, i, k, l, j1, 200.0D, 200.0D, 0.5D);
-        this.field_4185_d = this.field_910_m.a(this.field_4185_d, i, j, k, l, i1, j1, d / 80.0D, d1 / 160.0D, d / 80.0D);
-        this.field_4184_e = this.field_912_k.a(this.field_4184_e, i, j, k, l, i1, j1, d, d1, d);
-        this.field_4183_f = this.field_911_l.a(this.field_4183_f, i, j, k, l, i1, j1, d, d1, d);
+        this.field_4182_g = this.field_922_a.sample(this.field_4182_g, i, k, l, j1, 1.121D, 1.121D, 0.5D);
+        this.field_4181_h = this.field_921_b.sample(this.field_4181_h, i, k, l, j1, 200.0D, 200.0D, 0.5D);
+        this.field_4185_d = this.field_910_m.sample(this.field_4185_d, i, j, k, l, i1, j1, d / 80.0D, d1 / 160.0D, d / 80.0D);
+        this.field_4184_e = this.field_912_k.sample(this.field_4184_e, i, j, k, l, i1, j1, d, d1, d);
+        this.field_4183_f = this.field_911_l.sample(this.field_4183_f, i, j, k, l, i1, j1, d, d1, d);
         int k1 = 0;
         int l1 = 0;
         int i2 = 16 / l;
@@ -264,33 +264,33 @@ public class ChunkProviderHeightMapGenerate implements LevelSource {
         for (int i11 = 0; i11 < l7; i11++) {
             int k15 = k + this.rand.nextInt(16) + 8;
             int j18 = l + this.rand.nextInt(16) + 8;
-            Feature worldgenerator = mobspawnerbase.a(this.rand);
-            worldgenerator.a(1.0D, 1.0D, 1.0D);
-            worldgenerator.a(this.worldObj, this.rand, k15, this.worldObj.d(k15, j18), j18);
+            Feature worldgenerator = mobspawnerbase.getTree(this.rand);
+            worldgenerator.setupTreeGeneration(1.0D, 1.0D, 1.0D);
+            worldgenerator.generate(this.worldObj, this.rand, k15, this.worldObj.d(k15, j18), j18);
         }
         for (int j11 = 0; j11 < 2; j11++) {
             int l15 = k + this.rand.nextInt(16) + 8;
             int k18 = this.rand.nextInt(128);
             int i21 = l + this.rand.nextInt(16) + 8;
-            (new MushroomPatch(Tile.DANDELION.id)).a(this.worldObj, this.rand, l15, k18, i21);
+            (new MushroomPatch(Tile.DANDELION.id)).generate(this.worldObj, this.rand, l15, k18, i21);
         }
         if (this.rand.nextInt(2) == 0) {
             int k11 = k + this.rand.nextInt(16) + 8;
             int i16 = this.rand.nextInt(128);
             int l18 = l + this.rand.nextInt(16) + 8;
-            (new MushroomPatch(Tile.ROSE.id)).a(this.worldObj, this.rand, k11, i16, l18);
+            (new MushroomPatch(Tile.ROSE.id)).generate(this.worldObj, this.rand, k11, i16, l18);
         }
         if (this.rand.nextInt(4) == 0) {
             int l11 = k + this.rand.nextInt(16) + 8;
             int j16 = this.rand.nextInt(128);
             int i19 = l + this.rand.nextInt(16) + 8;
-            (new MushroomPatch(Tile.BROWN_MUSHROOM.id)).a(this.worldObj, this.rand, l11, j16, i19);
+            (new MushroomPatch(Tile.BROWN_MUSHROOM.id)).generate(this.worldObj, this.rand, l11, j16, i19);
         }
         if (this.rand.nextInt(8) == 0) {
             int i12 = k + this.rand.nextInt(16) + 8;
             int k16 = this.rand.nextInt(128);
             int j19 = l + this.rand.nextInt(16) + 8;
-            (new MushroomPatch(Tile.RED_MUSHROOM.id)).a(this.worldObj, this.rand, i12, k16, j19);
+            (new MushroomPatch(Tile.RED_MUSHROOM.id)).generate(this.worldObj, this.rand, i12, k16, j19);
         }
         int l12 = 0;
         if (mobspawnerbase == Biome.DESERT)
