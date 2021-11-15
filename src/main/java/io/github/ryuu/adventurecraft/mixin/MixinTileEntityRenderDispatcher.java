@@ -6,11 +6,15 @@ import java.util.Map;
 
 import io.github.ryuu.adventurecraft.entities.tile.*;
 import net.minecraft.client.render.TextRenderer;
+import net.minecraft.client.render.entity.tile.MobSpawnerRenderer;
 import net.minecraft.client.render.entity.tile.PistonRenderer;
+import net.minecraft.client.render.entity.tile.SignRenderer;
 import net.minecraft.client.render.entity.tile.TileEntityRenderer;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.level.Level;
+import net.minecraft.tile.entity.MobSpawner;
+import net.minecraft.tile.entity.Piston;
 import net.minecraft.tile.entity.Sign;
 import net.minecraft.tile.entity.TileEntity;
 import org.lwjgl.opengl.GL11;
@@ -33,9 +37,9 @@ public class MixinTileEntityRenderDispatcher {
 
     private MixinTileEntityRenderDispatcher() {
         this.m = new HashMap<>();
-        this.m.put(Sign.class, new po());
-        this.m.put(cy.class, new ag());
-        this.m.put(uk.class, new PistonRenderer());
+        this.m.put(Sign.class, new SignRenderer());
+        this.m.put(MobSpawner.class, new MobSpawnerRenderer());
+        this.m.put(Piston.class, new PistonRenderer());
         this.m.put(TileEntityTrigger.class, new TileEntityMinMaxRenderer(1.0F, 0.5882F, 0.0F));
         this.m.put(TileEntityTriggerInverter.class, new TileEntityMinMaxRenderer(1.0F, 1.0F, 0.0F));
         this.m.put(TileEntityTriggerMemory.class, new TileEntityMinMaxRenderer(0.0F, 1.0F, 0.0F));

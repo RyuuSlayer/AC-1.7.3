@@ -7,6 +7,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.level.Level;
 import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.MathsHelper;
+import net.minecraft.util.maths.Vec3f;
 
 public class MixinWalkingEntity extends LivingEntity implements IEntityPather {
     public boolean canForgetTargetRandomly;
@@ -70,7 +71,7 @@ public class MixinWalkingEntity extends LivingEntity implements IEntityPather {
             this.a = null;
             return;
         }
-        bt vec3d = this.a.a(this);
+        Vec3f vec3d = this.a.a(this);
         for (double d = (this.bg * 2.0F); vec3d != null && vec3d.d(this.aM, vec3d.b, this.aO) < d * d; ) {
             this.a.a();
             if (this.a.b()) {
@@ -181,15 +182,15 @@ public class MixinWalkingEntity extends LivingEntity implements IEntityPather {
 
     public void b(CompoundTag nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.a("canPathRandomly", this.canPathRandomly);
-        nbttagcompound.a("canForgetTargetRandomly", this.canForgetTargetRandomly);
+        nbttagcompound.put("canPathRandomly", this.canPathRandomly);
+        nbttagcompound.put("canForgetTargetRandomly", this.canForgetTargetRandomly);
     }
 
     public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
-        if (nbttagcompound.b("canPathRandomly"))
-            this.canPathRandomly = nbttagcompound.m("canPathRandomly");
-        if (nbttagcompound.b("canForgetTargetRandomly"))
-            this.canPathRandomly = nbttagcompound.m("canForgetTargetRandomly");
+        if (nbttagcompound.containsKey("canPathRandomly"))
+            this.canPathRandomly = nbttagcompound.getBoolean("canPathRandomly");
+        if (nbttagcompound.containsKey("canForgetTargetRandomly"))
+            this.canPathRandomly = nbttagcompound.getBoolean("canForgetTargetRandomly");
     }
 }

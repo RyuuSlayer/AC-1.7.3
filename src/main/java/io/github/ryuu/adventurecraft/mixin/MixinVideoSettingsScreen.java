@@ -23,7 +23,7 @@ public class MixinVideoSettingsScreen extends Screen {
 
     public void b() {
         TranslationStorage stringtranslate = TranslationStorage.a();
-        this.a = stringtranslate.a("options.videoTitle");
+        this.a = stringtranslate.translate("options.videoTitle");
         int i = 0;
         Option[] aenumoptions = l;
         int j = aenumoptions.length;

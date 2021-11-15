@@ -16,9 +16,11 @@ import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.IEntityPather;
 import io.github.ryuu.adventurecraft.util.PlayerTorch;
 import net.minecraft.class_61;
+import net.minecraft.class_66;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.TileRenderer;
 import net.minecraft.client.render.tile.TileEntityRenderDispatcher;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.entity.Entity;
@@ -33,7 +35,9 @@ import net.minecraft.level.TileView;
 import net.minecraft.level.chunk.ClientChunkCache;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.maths.MathsHelper;
+import net.minecraft.util.maths.Vec3f;
 import org.lwjgl.opengl.ARBOcclusionQuery;
 import org.lwjgl.opengl.GL11;
 
@@ -58,12 +62,12 @@ public class MixinWorldRenderer implements LevelListener {
     double h;
     int j;
     private Level k;
-    private dk[] n;
-    private dk[] o;
+    private class_66[] n;
+    private class_66[] o;
     private int p;
     private int q;
     private int r;
-    private cv u;
+    private TileRenderer u;
     private IntBuffer v;
     private boolean w;
     private int x;
@@ -213,7 +217,7 @@ public class MixinWorldRenderer implements LevelListener {
         this.h = -9999.0D;
         th.a.a(world);
         this.k = world;
-        this.u = new cv((TileView) world);
+        this.u = new TileRenderer(world);
         if (world != null) {
             world.a(this);
             a();
@@ -236,8 +240,8 @@ public class MixinWorldRenderer implements LevelListener {
         this.p = j / 16 + 1;
         this.q = 8;
         this.r = j / 16 + 1;
-        this.o = new dk[this.p * this.q * this.r];
-        this.n = new dk[this.p * this.q * this.r];
+        this.o = new class_66[this.p * this.q * this.r];
+        this.n = new class_66[this.p * this.q * this.r];
         int k = 0;
         int l = 0;
         this.B = 0;
@@ -247,13 +251,13 @@ public class MixinWorldRenderer implements LevelListener {
         this.F = this.q;
         this.G = this.r;
         for (int i1 = 0; i1 < this.m.size(); i1++)
-            ((dk) this.m.get(i1)).u = false;
+            ((class_66) this.m.get(i1)).u = false;
         this.m.clear();
         this.a.clear();
         for (int j1 = 0; j1 < this.p; j1++) {
             for (int k1 = 0; k1 < this.q; k1++) {
                 for (int l1 = 0; l1 < this.r; l1++) {
-                    this.o[(l1 * this.q + k1) * this.p + j1] = new dk(this.k, this.a, j1 * 16, k1 * 16, l1 * 16, 16, this.s + k);
+                    this.o[(l1 * this.q + k1) * this.p + j1] = new class_66(this.k, this.a, j1 * 16, k1 * 16, l1 * 16, 16, this.s + k);
                     if (this.w)
                         (this.o[(l1 * this.q + k1) * this.p + j1]).z = this.v.get(l);
                     (this.o[(l1 * this.q + k1) * this.p + j1]).y = false;
@@ -277,7 +281,7 @@ public class MixinWorldRenderer implements LevelListener {
         this.I = 2;
     }
 
-    public void a(bt vec3d, yn icamera, float f) {
+    public void a(Vec3f vec3d, yn icamera, float f) {
         if (this.I > 0) {
             this.I--;
             return;
@@ -376,7 +380,7 @@ public class MixinWorldRenderer implements LevelListener {
                         this.C = i3;
                     if (i3 > this.F)
                         this.F = i3;
-                    dk worldrenderer = this.o[(i2 * this.q + l2) * this.p + j1];
+                    class_66 worldrenderer = this.o[(i2 * this.q + l2) * this.p + j1];
                     boolean flag = worldrenderer.u;
                     worldrenderer.a(k1, i3, j2);
                     if (!flag && worldrenderer.u)
@@ -389,7 +393,7 @@ public class MixinWorldRenderer implements LevelListener {
     public int a(LivingEntity entityliving, int i, double d) {
         for (int j = 0; j < 10; j++) {
             this.R = (this.R + 1) % this.o.length;
-            dk worldrenderer = this.o[this.R];
+            class_66 worldrenderer = this.o[this.R];
             if (worldrenderer.u && !this.m.contains(worldrenderer))
                 this.m.add(worldrenderer);
         }
@@ -455,7 +459,7 @@ public class MixinWorldRenderer implements LevelListener {
                             float f3 = MathsHelper.c(this.n[k1].a(entityliving));
                             int l1 = (int) (1.0F + f3 / 128.0F);
                             if (this.x % l1 == k1 % l1) {
-                                dk worldrenderer1 = this.n[k1];
+                                class_66 worldrenderer1 = this.n[k1];
                                 float f4 = (float) (worldrenderer1.i - d1);
                                 float f5 = (float) (worldrenderer1.j - d2);
                                 float f6 = (float) (worldrenderer1.k - d3);
@@ -545,7 +549,7 @@ public class MixinWorldRenderer implements LevelListener {
         for (int l1 = 0; l1 < this.T.length; l1++)
             this.T[l1].b();
         for (int i2 = 0; i2 < this.S.size(); i2++) {
-            dk worldrenderer = this.S.get(i2);
+            class_66 worldrenderer = this.S.get(i2);
             int j2 = -1;
             for (int k2 = 0; k2 < k1; k2++) {
                 if (this.T[k2].a(worldrenderer.i, worldrenderer.j, worldrenderer.k))
@@ -574,7 +578,7 @@ public class MixinWorldRenderer implements LevelListener {
         if (this.t.f.t.c)
             return;
         GL11.glDisable(3553);
-        bt vec3d = this.k.a((Entity) this.t.i, f);
+        Vec3f vec3d = this.k.a((Entity) this.t.i, f);
         float f1 = (float) vec3d.a;
         float f2 = (float) vec3d.b;
         float f3 = (float) vec3d.c;
@@ -703,7 +707,7 @@ public class MixinWorldRenderer implements LevelListener {
         GL11.glBindTexture(3553, this.l.b("/environment/clouds.png"));
         GL11.glEnable(3042);
         GL11.glBlendFunc(770, 771);
-        bt vec3d = this.k.c(f);
+        Vec3f vec3d = this.k.c(f);
         float f2 = (float) vec3d.a;
         float f3 = (float) vec3d.b;
         float f4 = (float) vec3d.c;
@@ -761,7 +765,7 @@ public class MixinWorldRenderer implements LevelListener {
         GL11.glBindTexture(3553, this.l.b("/environment/clouds.png"));
         GL11.glEnable(3042);
         GL11.glBlendFunc(770, 771);
-        bt vec3d = this.k.c(f);
+        Vec3f vec3d = this.k.c(f);
         float f5 = (float) vec3d.a;
         float f6 = (float) vec3d.b;
         float f7 = (float) vec3d.c;
@@ -873,7 +877,7 @@ public class MixinWorldRenderer implements LevelListener {
             int i = this.m.size() - 1;
             int j = this.m.size();
             for (int k = 0; k < j; k++) {
-                dk worldrenderer = this.m.get(i - k);
+                class_66 worldrenderer = this.m.get(i - k);
                 if (!flag) {
                     if (worldrenderer.a(entityliving) > 256.0F)
                         if (worldrenderer.o) {
@@ -894,15 +898,15 @@ public class MixinWorldRenderer implements LevelListener {
         }
         byte byte0 = 2;
         md rendersorter = new md(entityliving);
-        dk[] aworldrenderer = new dk[byte0];
-        ArrayList<dk> arraylist = null;
+        class_66[] aworldrenderer = new class_66[byte0];
+        ArrayList<class_66> arraylist = null;
         int l = this.m.size();
         int i1 = 0;
         long avgTime = 0L;
         if (PlayerTorch.isTorchActive())
             avgTime = Minecraft.minecraftInstance.getAvgFrameTime();
         for (int j1 = 0; j1 < l; j1++) {
-            dk worldrenderer1 = this.m.get(j1);
+            class_66 worldrenderer1 = this.m.get(j1);
             if (!flag) {
                 if (worldrenderer1.a(entityliving) > 256.0F) {
                     int k2;
@@ -935,14 +939,14 @@ public class MixinWorldRenderer implements LevelListener {
             if (arraylist.size() > 1)
                 Collections.sort(arraylist, rendersorter);
             for (int k1 = arraylist.size() - 1; k1 >= 0; k1--) {
-                dk worldrenderer2 = arraylist.get(k1);
+                class_66 worldrenderer2 = arraylist.get(k1);
                 worldrenderer2.a();
                 worldrenderer2.u = false;
             }
         }
         int l1 = 0;
         for (int i2 = byte0 - 1; i2 >= 0; i2--) {
-            dk worldrenderer3 = aworldrenderer[i2];
+            class_66 worldrenderer3 = aworldrenderer[i2];
             if (worldrenderer3 != null) {
                 if (!worldrenderer3.o && i2 != byte0 - 1) {
                     aworldrenderer[i2] = null;
@@ -957,7 +961,7 @@ public class MixinWorldRenderer implements LevelListener {
         int j2 = 0;
         int l2 = 0;
         for (int j3 = this.m.size(); j2 != j3; j2++) {
-            dk worldrenderer4 = this.m.get(j2);
+            class_66 worldrenderer4 = this.m.get(j2);
             if (worldrenderer4 != null) {
                 boolean flag2 = false;
                 for (int k3 = 0; k3 < byte0 && !flag2; k3++) {
@@ -976,7 +980,7 @@ public class MixinWorldRenderer implements LevelListener {
         return (l == i1 + l1);
     }
 
-    public void a(Player entityplayer, vf movingobjectposition, int i, ItemInstance itemstack, float f) {
+    public void a(Player entityplayer, HitResult movingobjectposition, int i, ItemInstance itemstack, float f) {
         Tessellator tessellator = Tessellator.a;
         GL11.glEnable(3042);
         GL11.glEnable(3008);
@@ -1039,7 +1043,7 @@ public class MixinWorldRenderer implements LevelListener {
         GL11.glDisable(3008);
     }
 
-    public void b(Player entityplayer, vf movingobjectposition, int i, ItemInstance itemstack, float f) {
+    public void b(Player entityplayer, HitResult movingobjectposition, int i, ItemInstance itemstack, float f) {
         if (i == 0 && movingobjectposition.a == jg.a) {
             GL11.glEnable(3042);
             GL11.glBlendFunc(770, 771);
@@ -1223,7 +1227,7 @@ public class MixinWorldRenderer implements LevelListener {
                     if (j4 < 0)
                         j4 += this.r;
                     int k4 = (j4 * this.q + l3) * this.p + j3;
-                    dk worldrenderer = this.o[k4];
+                    class_66 worldrenderer = this.o[k4];
                     if (!worldrenderer.u) {
                         this.m.add(worldrenderer);
                         worldrenderer.f();

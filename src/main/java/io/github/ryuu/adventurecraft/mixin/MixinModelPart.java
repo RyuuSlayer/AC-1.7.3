@@ -11,15 +11,10 @@ public class MixinModelPart {
     private final int tWidth;
     private final int tHeight;
     public float a;
-
     public float b;
-
     public float c;
-
     public float d;
-
     public float e;
-
     public float f;
     public boolean g;
     public boolean h;

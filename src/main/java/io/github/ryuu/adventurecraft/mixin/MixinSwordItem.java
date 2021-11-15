@@ -4,12 +4,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
+import net.minecraft.item.tool.ToolMaterial;
 import net.minecraft.tile.Tile;
 
 public class MixinSwordItem extends ItemType {
     private final int a;
 
-    public MixinSwordItem(int i, bu enumtoolmaterial) {
+    public MixinSwordItem(int i, ToolMaterial enumtoolmaterial) {
         super(i);
         this.bg = 1;
         e(enumtoolmaterial.a());

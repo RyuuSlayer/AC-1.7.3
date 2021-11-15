@@ -2,12 +2,16 @@ package io.github.ryuu.adventurecraft.mixin;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.animal.Chicken;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.io.CompoundTag;
+import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.MathsHelper;
+import net.minecraft.util.maths.Vec3f;
 
 import java.util.List;
 
@@ -19,9 +23,7 @@ public class MixinThrownEgg extends Entity {
     private int e;
     private boolean f;
     private LivingEntity g;
-
     private int h;
-
     private int i;
 
     public MixinThrownEgg(Level world) {
@@ -141,13 +143,13 @@ public class MixinThrownEgg extends Entity {
         } else {
             this.i++;
         }
-        bt vec3d = bt.b(this.aM, this.aN, this.aO);
-        bt vec3d1 = bt.b(this.aM + this.aP, this.aN + this.aQ, this.aO + this.aR);
-        vf movingobjectposition = this.aI.rayTraceBlocks2(vec3d, vec3d1, false, true, false);
-        vec3d = bt.b(this.aM, this.aN, this.aO);
-        vec3d1 = bt.b(this.aM + this.aP, this.aN + this.aQ, this.aO + this.aR);
+        Vec3f vec3d = Vec3f.b(this.aM, this.aN, this.aO);
+        Vec3f vec3d1 = Vec3f.b(this.aM + this.aP, this.aN + this.aQ, this.aO + this.aR);
+        HitResult movingobjectposition = this.aI.rayTraceBlocks2(vec3d, vec3d1, false, true, false);
+        vec3d = Vec3f.b(this.aM, this.aN, this.aO);
+        vec3d1 = Vec3f.b(this.aM + this.aP, this.aN + this.aQ, this.aO + this.aR);
         if (movingobjectposition != null)
-            vec3d1 = bt.b(movingobjectposition.f.a, movingobjectposition.f.b, movingobjectposition.f.c);
+            vec3d1 = Vec3f.b(movingobjectposition.f.a, movingobjectposition.f.b, movingobjectposition.f.c);
         if (!this.aI.B) {
             Entity entity = null;
             List<Entity> list = this.aI.b(this, this.aW.a(this.aP, this.aQ, this.aR).b(1.0D, 1.0D, 1.0D));
@@ -156,8 +158,8 @@ public class MixinThrownEgg extends Entity {
                 Entity entity1 = list.get(i1);
                 if (entity1.h_() && (entity1 != this.g || this.i >= 5)) {
                     float f4 = 0.3F;
-                    eq axisalignedbb = entity1.aW.b(f4, f4, f4);
-                    vf movingobjectposition1 = axisalignedbb.a(vec3d, vec3d1);
+                    Box axisalignedbb = entity1.aW.b(f4, f4, f4);
+                    HitResult movingobjectposition1 = axisalignedbb.a(vec3d, vec3d1);
                     if (movingobjectposition1 != null) {
                         double d1 = vec3d.c(movingobjectposition1.f);
                         if (d1 < d || d == 0.0D) {
@@ -168,7 +170,7 @@ public class MixinThrownEgg extends Entity {
                 }
             }
             if (entity != null)
-                movingobjectposition = new vf(entity);
+                movingobjectposition = new HitResult(entity);
         }
         if (movingobjectposition != null) {
             if (movingobjectposition.g != null)
@@ -178,7 +180,7 @@ public class MixinThrownEgg extends Entity {
                 if (this.bs.nextInt(32) == 0)
                     byte0 = 4;
                 for (int k = 0; k < byte0; k++) {
-                    ww entitychicken = new ww(this.aI);
+                    Chicken entitychicken = new Chicken(this.aI);
                     entitychicken.c(this.aM, this.aN, this.aO, this.aS, 0.0F);
                     this.aI.b((Entity) entitychicken);
                 }
@@ -225,12 +227,12 @@ public class MixinThrownEgg extends Entity {
     }
 
     public void a(CompoundTag nbttagcompound) {
-        this.b = nbttagcompound.d("xTile");
-        this.c = nbttagcompound.d("yTile");
-        this.d = nbttagcompound.d("zTile");
-        this.e = nbttagcompound.c("inTile") & 0xFF;
-        this.a = nbttagcompound.c("shake") & 0xFF;
-        this.f = (nbttagcompound.c("inGround") == 1);
+        this.b = nbttagcompound.getShort("xTile");
+        this.c = nbttagcompound.getShort("yTile");
+        this.d = nbttagcompound.getShort("zTile");
+        this.e = nbttagcompound.getByte("inTile") & 0xFF;
+        this.a = nbttagcompound.getByte("shake") & 0xFF;
+        this.f = (nbttagcompound.getByte("inGround") == 1);
     }
 
     public void b(Player entityplayer) {

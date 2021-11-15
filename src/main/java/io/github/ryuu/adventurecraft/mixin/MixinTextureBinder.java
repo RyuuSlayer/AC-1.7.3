@@ -6,15 +6,10 @@ import org.lwjgl.opengl.GL11;
 
 public class MixinTextureBinder {
     public byte[] a;
-
     public int b;
-
     public boolean c;
-
     public int d;
-
     public int e;
-
     public int f;
 
     public MixinTextureBinder(int i) {
@@ -30,7 +25,7 @@ public class MixinTextureBinder {
     }
 
     public void a(TextureManager renderengine) {
-        GL11.glBindTexture(3553, renderengine.b(getTexture()));
+        GL11.glBindTexture(3553, renderengine.getTextureId(getTexture()));
     }
 
     public String getTexture() {

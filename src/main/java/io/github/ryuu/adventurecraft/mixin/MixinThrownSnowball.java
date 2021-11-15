@@ -22,9 +22,7 @@ public class MixinThrownSnowball extends Entity {
     private int e;
     private boolean f;
     private LivingEntity g;
-
     private int h;
-
     private int i;
 
     public MixinThrownSnowball(Level world) {
@@ -218,12 +216,12 @@ public class MixinThrownSnowball extends Entity {
     }
 
     public void a(CompoundTag nbttagcompound) {
-        this.b = nbttagcompound.d("xTile");
-        this.c = nbttagcompound.d("yTile");
-        this.d = nbttagcompound.d("zTile");
-        this.e = nbttagcompound.c("inTile") & 0xFF;
-        this.a = nbttagcompound.c("shake") & 0xFF;
-        this.f = (nbttagcompound.c("inGround") == 1);
+        this.b = nbttagcompound.getShort("xTile");
+        this.c = nbttagcompound.getShort("yTile");
+        this.d = nbttagcompound.getShort("zTile");
+        this.e = nbttagcompound.getByte("inTile") & 0xFF;
+        this.a = nbttagcompound.getByte("shake") & 0xFF;
+        this.f = (nbttagcompound.getByte("inGround") == 1);
     }
 
     public void b(Player entityplayer) {

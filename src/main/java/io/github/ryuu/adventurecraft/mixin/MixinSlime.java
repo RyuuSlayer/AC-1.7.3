@@ -51,7 +51,7 @@ public class MixinSlime extends LivingEntity implements MonsterEntityType {
 
     public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
-        e(nbttagcompound.e("Size") + 1);
+        e(nbttagcompound.getInt("Size") + 1);
     }
 
     public void w_() {

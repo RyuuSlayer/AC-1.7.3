@@ -17,8 +17,7 @@ import javax.imageio.ImageIO;
 
 import io.github.ryuu.adventurecraft.util.TextureAnimated;
 import io.github.ryuu.adventurecraft.util.Vec2;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.TexturePackManager;
+import net.minecraft.client.*;
 import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.render.TextureBinder;
 import org.lwjgl.opengl.GL11;
@@ -46,8 +45,8 @@ public class MixinTextureManager {
         this.b = new HashMap<>();
         this.c = new HashMap<>();
         this.d = new HashMap<>();
-        this.e = ge.d(1);
-        this.f = ge.c(1048576);
+        this.e = GLAllocator.createIntBuffer(1);
+        this.f = GLAllocator.createByteBuffer(1048576);
         this.g = new ArrayList();
         this.h = new HashMap<>();
         this.j = false;
@@ -122,7 +121,7 @@ public class MixinTextureManager {
         if (integer != null)
             return integer.intValue();
         this.e.clear();
-        ge.a(this.e);
+        GLAllocator.addTexture(this.e);
         int i = this.e.get(0);
         loadTexture(i, s);
         this.b.put(s, Integer.valueOf(i));
@@ -206,7 +205,7 @@ public class MixinTextureManager {
 
     public int a(BufferedImage bufferedimage) {
         this.e.clear();
-        ge.a(this.e);
+        GLAllocator.a(this.e);
         int i = this.e.get(0);
         a(bufferedimage, i);
         this.d.put(Integer.valueOf(i), bufferedimage);
@@ -257,7 +256,7 @@ public class MixinTextureManager {
             abyte0[l * 4 + 3] = (byte) j1;
         }
         if (this.f.capacity() < j * k * 4)
-            this.f = ge.c(j * k * 4);
+            this.f = GLAllocator.createByteBuffer(j * k * 4);
         this.f.clear();
         this.f.put(abyte0);
         this.f.position(0).limit(abyte0.length);
@@ -335,40 +334,40 @@ public class MixinTextureManager {
     }
 
     public int a(String s, String s1) {
-        ek threaddownloadimagedata = (ek) this.h.get(s);
-        if (threaddownloadimagedata != null && threaddownloadimagedata.a != null && !threaddownloadimagedata.d) {
-            if (threaddownloadimagedata.c < 0) {
-                threaddownloadimagedata.c = a(threaddownloadimagedata.a);
+        ImageDownloader threaddownloadimagedata = (ImageDownloader) this.h.get(s);
+        if (threaddownloadimagedata != null && threaddownloadimagedata.image != null && !threaddownloadimagedata.loaded) {
+            if (threaddownloadimagedata.pointer < 0) {
+                threaddownloadimagedata.pointer = a(threaddownloadimagedata.image);
             } else {
-                a(threaddownloadimagedata.a, threaddownloadimagedata.c);
+                a(threaddownloadimagedata.image, threaddownloadimagedata.pointer);
             }
-            threaddownloadimagedata.d = true;
+            threaddownloadimagedata.loaded = true;
         }
-        if (threaddownloadimagedata == null || threaddownloadimagedata.c < 0) {
+        if (threaddownloadimagedata == null || threaddownloadimagedata.pointer < 0) {
             if (s1 == null)
                 return -1;
             return b(s1);
         }
-        return threaddownloadimagedata.c;
+        return threaddownloadimagedata.pointer;
     }
 
-    public ek a(String s, nf imagebuffer) {
-        ek threaddownloadimagedata = (ek) this.h.get(s);
+    public ImageDownloader a(String s, ImageProcessor imagebuffer) {
+        ImageDownloader threaddownloadimagedata = (ImageDownloader) this.h.get(s);
         if (threaddownloadimagedata == null) {
-            this.h.put(s, new ek(s, imagebuffer));
+            this.h.put(s, new ImageDownloader(s, imagebuffer));
         } else {
-            threaddownloadimagedata.b++;
+            threaddownloadimagedata.downloading++;
         }
         return threaddownloadimagedata;
     }
 
     public void c(String s) {
-        ek threaddownloadimagedata = (ek) this.h.get(s);
+        ImageDownloader threaddownloadimagedata = (ImageDownloader) this.h.get(s);
         if (threaddownloadimagedata != null) {
-            threaddownloadimagedata.b--;
-            if (threaddownloadimagedata.b == 0) {
-                if (threaddownloadimagedata.c >= 0)
-                    a(threaddownloadimagedata.c);
+            threaddownloadimagedata.downloading--;
+            if (threaddownloadimagedata.downloading == 0) {
+                if (threaddownloadimagedata.pointer >= 0)
+                    a(threaddownloadimagedata.pointer);
                 this.h.remove(s);
             }
         }
@@ -486,9 +485,9 @@ public class MixinTextureManager {
             int i = iterator.next().intValue();
             BufferedImage bufferedimage = (BufferedImage) this.d.get(Integer.valueOf(i));
         }
-        for (Iterator<ek> iterator1 = this.h.values().iterator(); iterator1.hasNext(); ) {
-            ek threaddownloadimagedata = iterator1.next();
-            threaddownloadimagedata.d = false;
+        for (Iterator<ImageDownloader> iterator1 = this.h.values().iterator(); iterator1.hasNext(); ) {
+            ImageDownloader threaddownloadimagedata = iterator1.next();
+            threaddownloadimagedata.loaded = false;
         }
         for (Iterator<String> iterator2 = this.b.keySet().iterator(); iterator2.hasNext(); ) {
             String s = iterator2.next();

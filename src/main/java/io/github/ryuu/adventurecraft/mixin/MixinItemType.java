@@ -15,9 +15,9 @@ import org.spongepowered.asm.mixin.Mixin;
 public class MixinItemType {
     protected MixinItemType(int i) {
         this.itemUseDelay = 5;
-        this.bg = 64;
+        this.maxStackSize = 64;
         this.a = 0;
-        this.bi = false;
+        this.field_464 = false;
         this.bj = false;
         this.bk = null;
         this.bf = 256 + i;
@@ -32,7 +32,7 @@ public class MixinItemType {
     }
 
     public MixinItemType d(int i) {
-        this.bg = i;
+        this.maxStackSize = i;
         return this;
     }
 
@@ -72,7 +72,7 @@ public class MixinItemType {
     }
 
     public int d() {
-        return this.bg;
+        return this.maxStackSize;
     }
 
     public int b(int i) {
@@ -121,12 +121,12 @@ public class MixinItemType {
     }
 
     public MixinItemType h() {
-        this.bi = true;
+        this.field_464 = true;
         return this;
     }
 
     public boolean b() {
-        return this.bi;
+        return this.field_464;
     }
 
     public boolean c() {
@@ -147,7 +147,7 @@ public class MixinItemType {
     }
 
     public MixinItemType a(MixinItemType item) {
-        if (this.bg > 1)
+        if (this.maxStackSize > 1)
             throw new IllegalArgumentException("Max stack size must be 1 for items with crafting results");
         this.bk = item;
         return this;
@@ -326,10 +326,8 @@ public class MixinItemType {
     // private ItemType containerItemType = null;
     // private String translationKey;
 
-    @Shadow
     public boolean decrementDamage;
 
-    @Shadow
     public int itemUseDelay;
 
     static {

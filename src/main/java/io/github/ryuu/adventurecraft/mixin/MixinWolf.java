@@ -67,9 +67,9 @@ public class MixinWolf extends Animal {
 
     public void a(CompoundTag nbttagcompound) {
         super.a(nbttagcompound);
-        c(nbttagcompound.m("Angry"));
-        b(nbttagcompound.m("Sitting"));
-        String s = nbttagcompound.i("Owner");
+        c(nbttagcompound.getBoolean("Angry"));
+        b(nbttagcompound.getBoolean("Sitting"));
+        String s = nbttagcompound.getString("Owner");
         if (s.length() > 0) {
             a(s);
             d(true);

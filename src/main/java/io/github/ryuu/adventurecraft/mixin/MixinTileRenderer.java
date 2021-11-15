@@ -10,6 +10,7 @@ import net.minecraft.client.render.Tessellator;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
 import net.minecraft.tile.Tile;
+import net.minecraft.util.maths.MathsHelper;
 import org.lwjgl.opengl.GL11;
 
 public class MixinTileRenderer {

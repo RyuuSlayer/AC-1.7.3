@@ -8,6 +8,7 @@ import net.minecraft.level.TileView;
 import net.minecraft.level.chunk.Chunk;
 import net.minecraft.level.gen.BiomeSource;
 import net.minecraft.tile.Tile;
+import net.minecraft.tile.material.Material;
 
 public class MixinWorldPopulationRegion implements TileView {
     private final int a;
@@ -141,10 +142,10 @@ public class MixinWorldPopulationRegion implements TileView {
         return this.c[l][i1].b(i & 0xF, j, k & 0xF);
     }
 
-    public ln f(int i, int j, int k) {
+    public Material f(int i, int j, int k) {
         int l = a(i, j, k);
         if (l == 0)
-            return ln.a;
+            return Material.AIR;
         return (Tile.BY_ID[l]).bA;
     }
 
