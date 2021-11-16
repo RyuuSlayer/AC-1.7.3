@@ -1,4 +1,4 @@
-package io.github.ryuu.adventurecraft.mixin.overrides;
+package io.github.ryuu.adventurecraft.mixin;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -10,7 +10,7 @@ import java.util.Random;
 
 import net.minecraft.src.SoundPoolEntry;
 
-public class hr {
+public class MixinClass_266 {
     private final Random c = new Random();
 
     private final Map d = new HashMap<>();

@@ -1,4 +1,4 @@
-package io.github.ryuu.adventurecraft.mixin.overrides;
+package io.github.ryuu.adventurecraft.mixin;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.level.Level;
@@ -7,8 +7,8 @@ import net.minecraft.util.maths.Box;
 
 import java.util.Random;
 
-public class or extends Tile {
-    protected or(int i, int j) {
+public class MixinCactusTile extends Tile {
+    protected MixinCactusTile(int i, int j) {
         super(i, j, ln.v);
         b(true);
     }

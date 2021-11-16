@@ -1,4 +1,4 @@
-package io.github.ryuu.adventurecraft.mixin.overrides;
+package io.github.ryuu.adventurecraft.mixin;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -6,7 +6,7 @@ import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 
-public class ob {
+public class MixinClientInteractionManager {
     protected final Minecraft a;
 
     public boolean b;
@@ -15,7 +15,7 @@ public class ob {
 
     public int destroyExtraDepth;
 
-    public ob(Minecraft minecraft) {
+    public MixinClientInteractionManager(Minecraft minecraft) {
         this.destroyExtraWidth = 0;
         this.destroyExtraDepth = 0;
         this.b = false;

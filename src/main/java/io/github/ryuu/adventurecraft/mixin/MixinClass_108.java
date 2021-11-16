@@ -1,4 +1,4 @@
-package io.github.ryuu.adventurecraft.mixin.overrides;
+package io.github.ryuu.adventurecraft.mixin;
 
 import io.github.ryuu.adventurecraft.mixin.MixinClass_61;
 import net.minecraft.client.Minecraft;
@@ -8,7 +8,7 @@ import net.minecraft.tile.DoorTile;
 import net.minecraft.tile.Tile;
 import net.minecraft.util.maths.MathsHelper;
 
-public class fw {
+public class MixinClass_108 {
     private final TileView a;
 
     private final lf b;
@@ -17,7 +17,7 @@ public class fw {
 
     private final d[] d;
 
-    public fw(TileView iblockaccess) {
+    public MixinClass_108(TileView iblockaccess) {
         this.b = new lf();
         this.c = new jx();
         this.d = new d[32];

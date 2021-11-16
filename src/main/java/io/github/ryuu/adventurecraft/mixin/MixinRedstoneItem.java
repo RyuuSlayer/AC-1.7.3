@@ -1,4 +1,4 @@
-package io.github.ryuu.adventurecraft.mixin.overrides;
+package io.github.ryuu.adventurecraft.mixin;
 
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.entity.player.Player;
@@ -7,8 +7,8 @@ import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 
-public class ie extends ItemType {
-    public ie(int i) {
+public class MixinRedstoneItem extends ItemType {
+    public MixinRedstoneItem(int i) {
         super(i);
     }
 

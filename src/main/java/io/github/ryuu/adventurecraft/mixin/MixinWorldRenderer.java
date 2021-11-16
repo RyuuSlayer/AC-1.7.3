@@ -15,6 +15,7 @@ import io.github.ryuu.adventurecraft.util.CutsceneCameraPoint;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.IEntityPather;
 import io.github.ryuu.adventurecraft.util.PlayerTorch;
+import net.minecraft.class_472;
 import net.minecraft.class_61;
 import net.minecraft.class_66;
 import net.minecraft.client.Minecraft;
@@ -50,7 +51,7 @@ public class MixinWorldRenderer implements LevelListener {
     private final int z;
     private final int A;
     private final List S;
-    private final tg[] T;
+    private final class_472[] T;
     public List a;
     public float i;
     int[] b;
@@ -90,7 +91,7 @@ public class MixinWorldRenderer implements LevelListener {
     private int R;
 
     public MixinWorldRenderer(Minecraft minecraft, TextureManager renderengine) {
-        this.T = new tg[]{new tg(), new tg(), new tg(), new tg()};
+        this.T = new class_472[]{new class_472(), new class_472(), new class_472(), new class_472()};
         this.a = new ArrayList();
         this.m = new ArrayList();
         this.w = false;

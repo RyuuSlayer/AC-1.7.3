@@ -1,4 +1,4 @@
-package io.github.ryuu.adventurecraft.mixin.overrides;
+package io.github.ryuu.adventurecraft.mixin;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,7 +20,7 @@ import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.maths.MathsHelper;
 import org.lwjgl.opengl.GL11;
 
-public class dk {
+public class MixinClass_66 {
     private static final Tessellator D;
     public static int b = 0;
 
@@ -59,7 +59,7 @@ public class dk {
     private int C;
     private boolean E;
 
-    public dk(Level world, List list, int i, int j, int k, int l, int i1) {
+    public MixinClass_66(Level world, List list, int i, int j, int k, int l, int i1) {
         this.C = -1;
         this.o = false;
         this.p = new boolean[2];
