@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.mixin;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
+import io.github.ryuu.adventurecraft.mixin.tile.MixinTile;
 import io.github.ryuu.adventurecraft.util.Vec2;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.TextureBinder;

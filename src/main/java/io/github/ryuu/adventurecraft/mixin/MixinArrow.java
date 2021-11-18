@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.mixin;
 
 import io.github.ryuu.adventurecraft.blocks.Blocks;
+import io.github.ryuu.adventurecraft.mixin.tile.MixinTile;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;

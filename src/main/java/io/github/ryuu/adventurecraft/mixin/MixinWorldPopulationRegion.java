@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.mixin;
 
 import io.github.ryuu.adventurecraft.blocks.BlockStairMulti;
+import io.github.ryuu.adventurecraft.mixin.tile.entity.MixinTileEntity;
 import io.github.ryuu.adventurecraft.util.LightCache;
 import io.github.ryuu.adventurecraft.util.PlayerTorch;
 import net.minecraft.level.Level;
