@@ -4,21 +4,21 @@ import net.minecraft.class_290;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.util.maths.Vec3f;
 
-public class class_552 {
+public class MixinClass_552 {
     public class_290[] field_2518;
     public int field_2519 = 0;
     private boolean field_2520 = false;
 
-    public class_552(class_290[] apositiontexturevertex) {
+    public MixinClass_552(class_290[] apositiontexturevertex) {
         this.field_2518 = apositiontexturevertex;
         this.field_2519 = apositiontexturevertex.length;
     }
 
-    public class_552(class_290[] apositiontexturevertex, int i, int j, int k, int l) {
+    public MixinClass_552(class_290[] apositiontexturevertex, int i, int j, int k, int l) {
         this(apositiontexturevertex, i, j, k, l, 64, 32);
     }
 
-    public class_552(class_290[] apositiontexturevertex, int i, int j, int k, int l, int tw, int th) {
+    public MixinClass_552(class_290[] apositiontexturevertex, int i, int j, int k, int l, int tw, int th) {
         this(apositiontexturevertex);
         float f = 0.0015625f;
         float f1 = 0.003125f;

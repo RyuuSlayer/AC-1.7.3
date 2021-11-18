@@ -11,7 +11,7 @@ import java.util.Random;
 import net.minecraft.class_267;
 import net.minecraft.src.SoundPoolEntry;
 
-public class class_266 {
+public class MixinClass_266 {
     private Random rand = new Random();
     private Map field_1089 = new HashMap();
     private List field_1090 = new ArrayList();

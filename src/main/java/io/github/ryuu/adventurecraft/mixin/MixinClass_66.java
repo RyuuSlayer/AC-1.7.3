@@ -22,7 +22,7 @@ import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.MathsHelper;
 import org.lwjgl.opengl.GL11;
 
-public class class_66 {
+public class MixinClass_66 {
     public Level level;
     private int field_225 = -1;
     private static Tessellator tesselator;
@@ -56,7 +56,7 @@ public class class_66 {
     public List field_224 = new ArrayList();
     private List field_228;
 
-    public class_66(Level world, List list, int i, int j, int k, int l, int i1) {
+    public MixinClass_66(Level world, List list, int i, int j, int k, int l, int i1) {
         this.level = world;
         this.field_228 = list;
         this.field_235 = this.field_236 = l;

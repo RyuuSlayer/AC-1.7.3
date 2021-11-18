@@ -10,7 +10,7 @@ import net.minecraft.level.Level;
 import net.minecraft.level.chunk.ChunkSubData;
 import net.minecraft.tile.Tile;
 
-public class class_520
+public class MixinClass_520
         extends ClientInteractionManager {
     private int field_2181 = -1;
     private int field_2182 = -1;
@@ -20,7 +20,7 @@ public class class_520
     private float field_2186 = 0.0f;
     private int field_2187 = 0;
 
-    public class_520(Minecraft minecraft) {
+    public MixinClass_520(Minecraft minecraft) {
         super(minecraft);
     }
 

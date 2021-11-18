@@ -1,6 +1,5 @@
 package io.github.ryuu.adventurecraft.mixin;
 
-import io.github.ryuu.adventurecraft.mixin.MixinClass_61;
 import net.minecraft.class_109;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -15,36 +14,36 @@ import net.minecraft.util.maths.MathsHelper;
 
 import java.util.LinkedList;
 
-public class class_108 {
+public class MixinClass_108 {
     private TileView field_333;
     private class_109 field_334 = new class_109();
     private Int2ObjectLinkedHashMap field_335 = new Int2ObjectLinkedHashMap();
     private Vec3i[] field_336 = new Vec3i[32];
 
-    public class_108(TileView iblockaccess) {
+    public MixinClass_108(TileView iblockaccess) {
         this.field_333 = iblockaccess;
     }
 
-    public class_61 method_407(Entity entity, Entity entity1, float f) {
+    public MixinClass_61 method_407(Entity entity, Entity entity1, float f) {
         return this.method_402(entity, entity1.x, entity1.boundingBox.minY, entity1.z, f);
     }
 
-    public class_61 method_403(Entity entity, int i, int j, int k, float f) {
+    public MixinClass_61 method_403(Entity entity, int i, int j, int k, float f) {
         return this.method_402(entity, (float)i + 0.5f, (float)j + 0.5f, (float)k + 0.5f, f);
     }
 
-    private class_61 method_402(Entity entity, double d, double d1, double d2, float f) {
+    private MixinClass_61 method_402(Entity entity, double d, double d1, double d2, float f) {
         this.field_334.method_841();
         this.field_335.clear();
         Vec3i pathpoint = this.method_400(MathsHelper.floor(entity.boundingBox.minX), MathsHelper.floor(entity.boundingBox.minY), MathsHelper.floor(entity.boundingBox.minZ));
         Vec3i pathpoint1 = this.method_400(MathsHelper.floor(d - (double)(entity.width / 2.0f)), MathsHelper.floor(d1), MathsHelper.floor(d2 - (double)(entity.width / 2.0f)));
         Vec3i pathpoint2 = new Vec3i(MathsHelper.floor(entity.width + 1.25f), MathsHelper.floor(entity.height + 1.0f), MathsHelper.floor(entity.width + 1.25f));
-        class_61 pathentity = this.method_406(entity, pathpoint, pathpoint1, pathpoint2, f);
+        MixinClass_61 pathentity = this.method_406(entity, pathpoint, pathpoint1, pathpoint2, f);
         pathentity = this.simplifyPath(pathentity, pathpoint2);
         return pathentity;
     }
 
-    private class_61 method_406(Entity entity, Vec3i pathpoint, Vec3i pathpoint1, Vec3i pathpoint2, float f) {
+    private MixinClass_61 method_406(Entity entity, Vec3i pathpoint, Vec3i pathpoint1, Vec3i pathpoint2, float f) {
         pathpoint.field_144 = 0.0f;
         pathpoint.field_146 = pathpoint.field_145 = pathpoint.getSquaredDistance(pathpoint1);
         this.field_334.method_841();
@@ -173,7 +172,7 @@ public class class_108 {
         return 1;
     }
 
-    private class_61 method_401(Vec3i pathpoint, Vec3i pathpoint1) {
+    private MixinClass_61 method_401(Vec3i pathpoint, Vec3i pathpoint1) {
         int i = 1;
         Vec3i pathpoint2 = pathpoint1;
         while (pathpoint2.field_147 != null) {
@@ -187,10 +186,10 @@ public class class_108 {
             pathpoint3 = pathpoint3.field_147;
             apathpoint[--i] = pathpoint3;
         }
-        return new class_61(apathpoint);
+        return new MixinClass_61(apathpoint);
     }
 
-    public class_61 simplifyPath(class_61 p, Vec3i clearSize) {
+    public MixinClass_61 simplifyPath(MixinClass_61 p, Vec3i clearSize) {
         if (p == null) {
             return p;
         }

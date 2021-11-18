@@ -5,14 +5,14 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.Vec3i;
 import net.minecraft.util.maths.Vec3f;
 
-public class class_61 {
+public class MixinClass_61 {
     public Vec3i[] field_2691;
     public int field_2690;
     public int field_2692;
     public class_108 p;
     public Vec3i clearSize;
 
-    public class_61(Vec3i[] apathpoint) {
+    public MixinClass_61(Vec3i[] apathpoint) {
         this.field_2691 = apathpoint;
         this.field_2690 = apathpoint.length;
     }
