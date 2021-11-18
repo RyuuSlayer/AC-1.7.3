@@ -8,25 +8,15 @@ import org.lwjgl.opengl.GL11;
 
 public class ScriptUISprite extends UIElement {
     public String texture;
-
     public float width;
-
     public float height;
-
     public float imageWidth;
-
     public float imageHeight;
-
     public double u;
-
     public double v;
-
     public float red;
-
     public float green;
-
     public float blue;
-
     public float alpha;
 
     public ScriptUISprite(String t, float xPos, float yPos, float w, float h, double uT, double vT) {
@@ -53,9 +43,9 @@ public class ScriptUISprite extends UIElement {
 
     public void render(TextRenderer fontRenderer, TextureManager renderEngine, float partialTickTime) {
         if (this.texture.startsWith("http")) {
-            renderEngine.b(renderEngine.a(this.texture, "./pack.png"));
+            renderEngine.bindTexture(renderEngine.getTextureId(this.texture, "./pack.png"));
         } else {
-            renderEngine.b(renderEngine.b(this.texture));
+            renderEngine.bindTexture(renderEngine.getTextureId(this.texture));
         }
         GL11.glColor4f(this.red, this.green, this.blue, this.alpha);
         float x = getXAtTime(partialTickTime);
@@ -63,11 +53,11 @@ public class ScriptUISprite extends UIElement {
         float f = 1.0F / this.imageWidth;
         float f1 = 1.0F / this.imageHeight;
         Tessellator tessellator = Tessellator.a;
-        tessellator.b();
-        tessellator.a(x, (y + this.height), 0.0D, this.u * f, (this.v + this.height) * f1);
-        tessellator.a((x + this.width), (y + this.height), 0.0D, ((float) (this.u + this.width) * f), ((float) (this.v + this.height) * f1));
-        tessellator.a((x + this.width), y, 0.0D, ((float) (this.u + this.width) * f), this.v * f1);
-        tessellator.a(x, y, 0.0D, this.u * f, this.v * f1);
-        tessellator.a();
+        tessellator.start();
+        tessellator.vertex(x, (y + this.height), 0.0D, this.u * f, (this.v + this.height) * f1);
+        tessellator.vertex((x + this.width), (y + this.height), 0.0D, ((float) (this.u + this.width) * f), ((float) (this.v + this.height) * f1));
+        tessellator.vertex((x + this.width), y, 0.0D, ((float) (this.u + this.width) * f), this.v * f1);
+        tessellator.vertex(x, y, 0.0D, this.u * f, this.v * f1);
+        tessellator.draw();
     }
 }

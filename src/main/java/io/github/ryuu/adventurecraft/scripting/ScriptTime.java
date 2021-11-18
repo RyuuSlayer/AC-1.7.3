@@ -27,18 +27,18 @@ public class ScriptTime {
     }
 
     public float getRate() {
-        return this.worldObj.x.getTimeRate();
+        return this.worldObj.properties.getTimeRate();
     }
 
     public void setRate(float timeRate) {
-        this.worldObj.x.setTimeRate(timeRate);
+        this.worldObj.properties.setTimeRate(timeRate);
     }
 
     public long getTickCount() {
-        return this.worldObj.t();
+        return this.worldObj.getLevelTime();
     }
 
     public void sleep(float t) {
-        MixinMinecraft.minecraftInstance.f.script.sleep(t);
+        MixinMinecraft.minecraftInstance.level.script.sleep(t);
     }
 }

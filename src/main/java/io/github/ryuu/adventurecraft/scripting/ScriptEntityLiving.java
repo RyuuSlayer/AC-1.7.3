@@ -14,41 +14,41 @@ public class ScriptEntityLiving extends ScriptEntity {
     }
 
     public void playLivingSound() {
-        this.entityLiving.T();
+        this.entityLiving.playAmbientSound();
     }
 
     public void spawnExplosionParticle() {
-        this.entityLiving.V();
+        this.entityLiving.onSpawnedFromSpawner();
     }
 
     public void heal(int i) {
-        this.entityLiving.c(i);
+        this.entityLiving.addHealth(i);
     }
 
     public boolean isOnLadder() {
-        return this.entityLiving.p();
+        return this.entityLiving.isOnLadder();
     }
 
     public ScriptEntity getLookTarget() {
-        Entity e = this.entityLiving.Z();
+        Entity e = this.entityLiving.method_922();
         return ScriptEntity.getEntityClass(e);
     }
 
     public void setLookTarget(ScriptEntity e) {
-        this.entityLiving.b = e.entity;
+        this.entityLiving.field_1061 = e.entity;
     }
 
     public ScriptVec3 getLookVec() {
-        Vec3f v = this.entityLiving.ac();
-        return new ScriptVec3(v.a, v.b, v.c);
+        Vec3f v = this.entityLiving.method_1320();
+        return new ScriptVec3(v.x, v.y, v.z);
     }
 
     public int getHealth() {
-        return this.entityLiving.Y;
+        return this.entityLiving.health;
     }
 
     public void setHealth(int i) {
-        this.entityLiving.Y = i;
+        this.entityLiving.health = i;
     }
 
     public int getMaxHealth() {
@@ -60,27 +60,27 @@ public class ScriptEntityLiving extends ScriptEntity {
     }
 
     public String getTexture() {
-        return this.entityLiving.q_();
+        return this.entityLiving.method_1314();
     }
 
     public void setTexture(String s) {
-        this.entityLiving.O = s;
+        this.entityLiving.texture = s;
     }
 
     public int getHurtTime() {
-        return this.entityLiving.aa;
+        return this.entityLiving.hurtTime;
     }
 
     public void setHurtTime(int i) {
-        this.entityLiving.aa = i;
+        this.entityLiving.hurtTime = i;
     }
 
     public int getHurtTimeResistance() {
-        return this.entityLiving.au;
+        return this.entityLiving.field_1058;
     }
 
     public void setHurtTimeResistance(int i) {
-        this.entityLiving.au = i;
+        this.entityLiving.field_1058 = i;
     }
 
     public ScriptItem getHeldItem() {
@@ -92,11 +92,11 @@ public class ScriptEntityLiving extends ScriptEntity {
     }
 
     public float getMoveSpeed() {
-        return this.entityLiving.aB;
+        return this.entityLiving.movementSpeed;
     }
 
     public void setMoveSpeed(float moveSpeed) {
-        this.entityLiving.aB = moveSpeed;
+        this.entityLiving.movementSpeed = moveSpeed;
     }
 
     public int getTimesCanJumpInAir() {
@@ -156,11 +156,11 @@ public class ScriptEntityLiving extends ScriptEntity {
     }
 
     public boolean getShouldJump() {
-        return this.entityLiving.az;
+        return this.entityLiving.jumping;
     }
 
     public void setShouldJump(boolean j) {
-        this.entityLiving.az = j;
+        this.entityLiving.jumping = j;
     }
 
     public float getAirControl() {
@@ -172,7 +172,7 @@ public class ScriptEntityLiving extends ScriptEntity {
     }
 
     public void fireBullet(float spread, int damage) {
-        UtilBullet.fireBullet(this.entityLiving.aI, this.entityLiving, spread, damage);
+        UtilBullet.fireBullet(this.entityLiving.level, this.entityLiving, spread, damage);
     }
 
     public float getFov() {

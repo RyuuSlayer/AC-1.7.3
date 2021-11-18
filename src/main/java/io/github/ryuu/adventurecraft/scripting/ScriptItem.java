@@ -22,34 +22,34 @@ public class ScriptItem {
     }
 
     public int getItemID() {
-        return this.item.c;
+        return this.item.itemId;
     }
 
     public void setItemID(int itemID) {
-        this.item.c = itemID;
+        this.item.itemId = itemID;
     }
 
     public int getQuantity() {
-        return this.item.a;
+        return this.item.count;
     }
 
     public void setQuantity(int i) {
-        this.item.a = i;
+        this.item.count = i;
     }
 
     public int getDamage() {
-        return this.item.i();
+        return this.item.getDamage();
     }
 
     public void setDamage(int i) {
-        this.item.b(i);
+        this.item.setDamage(i);
     }
 
     public int getMaxDamage() {
-        return this.item.j();
+        return this.item.method_723();
     }
 
     public ScriptItem copy() {
-        return new ScriptItem(this.item.k());
+        return new ScriptItem(this.item.copy());
     }
 }

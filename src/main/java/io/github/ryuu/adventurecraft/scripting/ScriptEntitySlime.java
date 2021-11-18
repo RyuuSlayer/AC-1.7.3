@@ -20,10 +20,10 @@ public class ScriptEntitySlime extends ScriptEntityLiving {
     }
 
     public int getSlimeSize() {
-        return this.entitySlime.v();
+        return this.entitySlime.setSize();
     }
 
     public void setSlimeSize(int i) {
-        this.entitySlime.e(i);
+        this.entitySlime.getSize(i);
     }
 }

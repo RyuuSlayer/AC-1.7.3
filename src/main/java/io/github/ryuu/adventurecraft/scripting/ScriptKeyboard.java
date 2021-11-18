@@ -11,25 +11,15 @@ import org.mozilla.javascript.ScriptableObject;
 
 public class ScriptKeyboard {
     private final GameOptions gameSettings;
-
     public String keyForwardScript;
-
     public String keyBackScript;
-
     public String keyLeftScript;
-
     public String keyRightScript;
-
     public String keyJumpScript;
-
     public String keySneakScript;
-
     String allKeys;
-
     HashMap<Integer, String> keyBinds;
-
     Level world;
-
     Scriptable scope;
 
     ScriptKeyboard(Level w, GameOptions g, Scriptable s) {
@@ -95,21 +85,24 @@ public class ScriptKeyboard {
     public boolean processPlayerKeyPress(int keyID, boolean keyState) {
         boolean allowProcess = true;
         String scriptToRun = "";
-        if (keyID == this.gameSettings.m.b)
+        if (keyID == this.gameSettings.forwardKey.key) {
             scriptToRun = this.keyForwardScript;
-        if (keyID == this.gameSettings.o.b)
+        }
+        if (keyID == this.gameSettings.backKey.key) {
             scriptToRun = this.keyBackScript;
-        if (keyID == this.gameSettings.n.b) {
+        }
+        if (keyID == this.gameSettings.leftKey.key) {
             scriptToRun = this.keyLeftScript;
-        } else if (keyID == this.gameSettings.p.b) {
+        } else if (keyID == this.gameSettings.rightKey.key) {
             scriptToRun = this.keyRightScript;
-        } else if (keyID == this.gameSettings.q.b) {
+        } else if (keyID == this.gameSettings.jumpKey.key) {
             scriptToRun = this.keyJumpScript;
-        } else if (keyID == this.gameSettings.v.b) {
+        } else if (keyID == this.gameSettings.sneakKey.key) {
             scriptToRun = this.keySneakScript;
         }
-        if (scriptToRun != null && !scriptToRun.equals(""))
-            allowProcess = runScript(scriptToRun, keyID, keyState);
+        if (scriptToRun != null && !scriptToRun.equals("")) {
+            allowProcess = this.runScript(scriptToRun, keyID, keyState);
+        }
         return allowProcess;
     }
 

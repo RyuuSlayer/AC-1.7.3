@@ -6,15 +6,10 @@ import org.lwjgl.opengl.GL11;
 
 public class ModelRat extends EntityModel {
     public ModelPart snout;
-
     public ModelPart theHead;
-
     public ModelPart leftEar;
-
     public ModelPart rightEar;
-
     public ModelPart theBody;
-
     public ModelPart tail;
 
     public ModelRat() {

@@ -7,8 +7,7 @@ import net.minecraft.level.chunk.ChunkIO;
 import java.io.IOException;
 
 public class MapChunkLoader implements ChunkIO {
-    private final ChunkIO;
-
+    private final ChunkIO mapRegion;;
     private final ChunkIO saveRegion;
 
     public MapChunkLoader(ChunkIO mapR, ChunkIO saveR) {
@@ -16,29 +15,29 @@ public class MapChunkLoader implements ChunkIO {
         this.saveRegion = saveR;
     }
 
-    public Chunk a(Level world, int i, int j) throws IOException {
-        Chunk returnChunk = this.saveRegion.a(world, i, j);
+    public Chunk getChunk(Level world, int i, int j) throws IOException {
+        Chunk returnChunk = this.saveRegion.getChunk(world, i, j);
         if (returnChunk == null)
-            returnChunk = this.mapRegion.a(world, i, j);
+            returnChunk = this.mapRegion.getChunk(world, i, j);
         return returnChunk;
     }
 
-    public void a(Level world, Chunk chunk) {
+    public void saveChunk(Level world, Chunk chunk) {
         try {
-            this.saveRegion.a(world, chunk);
+            this.saveRegion.saveChunk(world, chunk);
             if (DebugMode.levelEditing)
-                this.mapRegion.a(world, chunk);
+                this.mapRegion.saveChunk(world, chunk);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void b(Level world, Chunk chunk) {
+    public void prepareChunk(Level world, Chunk chunk) {
     }
 
-    public void a() {
+    public void method_810() {
     }
 
-    public void b() {
+    public void method_813() {
     }
 }

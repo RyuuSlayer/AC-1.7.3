@@ -15,7 +15,7 @@ public class ScriptUILabel extends UIElement {
     private String[] textLines;
 
     public ScriptUILabel(String label, float xPos, float yPos) {
-        this(label, xPos, yPos, Minecraft.minecraftInstance.v.scriptUI);
+        this(label, xPos, yPos, Minecraft.minecraftInstance.overlay.scriptUI);
     }
 
     public ScriptUILabel(String label, float xPos, float yPos, ScriptUIContainer parent) {

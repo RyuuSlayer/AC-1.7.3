@@ -6,25 +6,15 @@ import net.minecraft.tile.Tile;
 
 public class PlayerTorch {
     static boolean torchActive;
-
     static float posX;
-
     static float posY;
-
     static float posZ;
-
     static int iX;
-
     static int iY;
-
     static int iZ;
-
     static int torchBrightness = 15;
-
     static int range = torchBrightness * 2 + 1;
-
     static float[] cache = new float[range * range * range];
-
     public static boolean isTorchActive() {
         return torchActive;
     }

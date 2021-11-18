@@ -4,57 +4,58 @@ import net.minecraft.class_290;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.util.maths.Vec3f;
 
-public class MixinClass_552 {
-    private final boolean c;
-    public class_290[] a;
-    public int b;
+public class class_552 {
+    public class_290[] field_2518;
+    public int field_2519 = 0;
+    private boolean field_2520 = false;
 
-    public MixinClass_552(class_290[] apositiontexturevertex) {
-        this.b = 0;
-        this.c = false;
-        this.a = apositiontexturevertex;
-        this.b = apositiontexturevertex.length;
+    public class_552(class_290[] apositiontexturevertex) {
+        this.field_2518 = apositiontexturevertex;
+        this.field_2519 = apositiontexturevertex.length;
     }
 
-    public MixinClass_552(class_290[] apositiontexturevertex, int i, int j, int k, int l) {
+    public class_552(class_290[] apositiontexturevertex, int i, int j, int k, int l) {
         this(apositiontexturevertex, i, j, k, l, 64, 32);
     }
 
-    public MixinClass_552(class_290[] apositiontexturevertex, int i, int j, int k, int l, int tw, int th) {
+    public class_552(class_290[] apositiontexturevertex, int i, int j, int k, int l, int tw, int th) {
         this(apositiontexturevertex);
-        float f = 0.0015625F;
-        float f1 = 0.003125F;
-        if (k < i)
+        float f = 0.0015625f;
+        float f1 = 0.003125f;
+        if (k < i) {
             f = -f;
-        if (l < j)
+        }
+        if (l < j) {
             f1 = -f1;
-        apositiontexturevertex[0] = apositiontexturevertex[0].a(k / tw - f, j / th + f1);
-        apositiontexturevertex[1] = apositiontexturevertex[1].a(i / tw + f, j / th + f1);
-        apositiontexturevertex[2] = apositiontexturevertex[2].a(i / tw + f, l / th - f1);
-        apositiontexturevertex[3] = apositiontexturevertex[3].a(k / tw - f, l / th - f1);
+        }
+        apositiontexturevertex[0] = apositiontexturevertex[0].method_983((float)k / (float)tw - f, (float)j / (float)th + f1);
+        apositiontexturevertex[1] = apositiontexturevertex[1].method_983((float)i / (float)tw + f, (float)j / (float)th + f1);
+        apositiontexturevertex[2] = apositiontexturevertex[2].method_983((float)i / (float)tw + f, (float)l / (float)th - f1);
+        apositiontexturevertex[3] = apositiontexturevertex[3].method_983((float)k / (float)tw - f, (float)l / (float)th - f1);
     }
 
-    public void a() {
-        class_290[] apositiontexturevertex = new class_290[this.a.length];
-        for (int i = 0; i < this.a.length; i++)
-            apositiontexturevertex[i] = this.a[this.a.length - i - 1];
-        this.a = apositiontexturevertex;
+    public void method_1925() {
+        class_290[] apositiontexturevertex = new class_290[this.field_2518.length];
+        for (int i = 0; i < this.field_2518.length; ++i) {
+            apositiontexturevertex[i] = this.field_2518[this.field_2518.length - i - 1];
+        }
+        this.field_2518 = apositiontexturevertex;
     }
 
-    public void a(Tessellator tessellator, float f) {
-        Vec3f vec3d = (this.a[1]).a.a((this.a[0]).a);
-        Vec3f vec3d1 = (this.a[1]).a.a((this.a[2]).a);
-        Vec3f vec3d2 = vec3d1.b(vec3d).c();
-        tessellator.b();
-        if (this.c) {
-            tessellator.b(-((float) vec3d2.a), -((float) vec3d2.b), -((float) vec3d2.c));
+    public void method_1926(Tessellator tessellator, float f) {
+        Vec3f vec3d = this.field_2518[1].field_1146.method_1307(this.field_2518[0].field_1146);
+        Vec3f vec3d1 = this.field_2518[1].field_1146.method_1307(this.field_2518[2].field_1146);
+        Vec3f vec3d2 = vec3d1.method_1309(vec3d).method_1296();
+        tessellator.start();
+        if (this.field_2520) {
+            tessellator.method_1697(-((float)vec3d2.x), -((float)vec3d2.y), -((float)vec3d2.z));
         } else {
-            tessellator.b((float) vec3d2.a, (float) vec3d2.b, (float) vec3d2.c);
+            tessellator.method_1697((float)vec3d2.x, (float)vec3d2.y, (float)vec3d2.z);
         }
-        for (int i = 0; i < 4; i++) {
-            class_290 positiontexturevertex = this.a[i];
-            tessellator.a(((float) positiontexturevertex.a.a * f), ((float) positiontexturevertex.a.b * f), ((float) positiontexturevertex.a.c * f), positiontexturevertex.b, positiontexturevertex.c);
+        for (int i = 0; i < 4; ++i) {
+            class_290 positiontexturevertex = this.field_2518[i];
+            tessellator.vertex((float)positiontexturevertex.field_1146.x * f, (float)positiontexturevertex.field_1146.y * f, (float)positiontexturevertex.field_1146.z * f, positiontexturevertex.field_1147, positiontexturevertex.field_1148);
         }
-        tessellator.a();
+        tessellator.draw();
     }
 }

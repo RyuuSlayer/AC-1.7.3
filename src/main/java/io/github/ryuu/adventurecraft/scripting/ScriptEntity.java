@@ -271,7 +271,7 @@ public class ScriptEntity {
         HitResult hit = UtilBullet.rayTrace(this.entity.level, this.entity, Vec3f.from(startX, startY, startZ), Vec3f.from(endX, endY, endZ));
         if (hit != null) {
             results[0] = new ScriptVec3(hit.field_1988.x, hit.field_1988.y, hit.field_1988.z);
-            if (hit.type == HitType.a) {
+            if (hit.type == HitType.TILE) {
                 results[1] = new ScriptVec3(hit.x, hit.y, hit.z);
             } else {
                 results[2] = getEntityClass(hit.field_1989);

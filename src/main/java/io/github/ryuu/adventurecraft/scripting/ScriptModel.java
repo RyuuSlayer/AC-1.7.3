@@ -74,7 +74,7 @@ public class ScriptModel {
     public void addBoxExpanded(String boxName, float offsetX, float offsetY, float offsetZ, int width, int height, int depth, int u, int v, float expand) {
         ModelPart r = new ModelPart(u, v, this.textureWidth, this.textureHeight);
         r.addBoxInverted(offsetX, offsetY, offsetZ, width, height, depth, expand);
-        this.boxes.put(boxName, r);
+        this.boxes.put((Object)boxName, (Object)r);
     }
 
     public void setPosition(double newX, double newY, double newZ) {
@@ -155,25 +155,27 @@ public class ScriptModel {
     }
 
     private void render(float f) {
-        Level w = Minecraft.minecraftInstance.f;
-        TextureManager renderEngine = Minecraft.minecraftInstance.p;
-        if (this.texture != null && !this.texture.equals(""))
-            renderEngine.b(renderEngine.b(this.texture));
+        Level w = Minecraft.minecraftInstance.level;
+        TextureManager renderEngine = Minecraft.minecraftInstance.textureManager;
+        if (this.texture != null && !this.texture.equals("")) {
+            renderEngine.bindTexture(renderEngine.getTextureId(this.texture));
+        }
         GL11.glPushMatrix();
         GL11.glLoadIdentity();
-        transform(f);
+        this.transform(f);
         modelview.rewind();
         GL11.glGetFloat(2982, modelview);
         transform.load(modelview);
         GL11.glPopMatrix();
-        v.set(0.0F, 0.0F, 0.0F, 1.0F);
+        v.set(0.0f, 0.0f, 0.0f, 1.0f);
         Matrix4f.transform(transform, v, vr);
-        float b = w.c(Math.round(vr.x), Math.round(vr.y), Math.round(vr.z));
+        float b = w.getBrightness(Math.round(ScriptModel.vr.x), Math.round(ScriptModel.vr.y), Math.round(ScriptModel.vr.z));
         GL11.glColor3f(b, b, b);
         GL11.glPushMatrix();
-        transform(f);
-        for (ModelPart r : this.boxes.values())
-            r.a(0.0625F);
+        this.transform(f);
+        for (ModelPart r : this.boxes.values()) {
+            r.render(0.0625f);
+        }
         GL11.glPopMatrix();
     }
 

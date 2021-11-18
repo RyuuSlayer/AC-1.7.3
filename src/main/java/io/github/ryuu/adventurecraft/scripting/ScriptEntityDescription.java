@@ -2,25 +2,15 @@ package io.github.ryuu.adventurecraft.scripting;
 
 public class ScriptEntityDescription {
     public int health;
-
     public float height;
-
     public float width;
-
     public float moveSpeed;
-
     public String texture;
-
     public String onCreated;
-
     public String onUpdate;
-
     public String onAttacked;
-
     public String onPathReached;
-
     public String onDeath;
-
     public String onInteraction;
 
     public ScriptEntityDescription(String descName) {

@@ -4,9 +4,7 @@ import org.mozilla.javascript.Scriptable;
 
 class ScriptContinuation {
     Object contituation;
-
     long wakeUp;
-
     Scriptable scope;
 
     ScriptContinuation(Object c, long wakeUpOn, Scriptable s) {

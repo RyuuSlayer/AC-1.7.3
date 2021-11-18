@@ -19,34 +19,34 @@ public class ScriptEntityWolf extends ScriptEntityCreature {
     }
 
     public boolean isWolfSitting() {
-        return this.entityWolf.B();
+        return this.entityWolf.isSitting();
     }
 
     public void setWolfSitting(boolean flag) {
-        this.entityWolf.b(flag);
+        this.entityWolf.setSitting(flag);
     }
 
     public boolean isWolfAngry() {
-        return this.entityWolf.C();
+        return this.entityWolf.isAngry();
     }
 
     public void setWolfAngry(boolean flag) {
-        this.entityWolf.c(flag);
+        this.entityWolf.setAngry(flag);
     }
 
     public boolean isWolfTamed() {
-        return this.entityWolf.D();
+        return this.entityWolf.isTamed();
     }
 
     public void setWolfTamed(boolean flag) {
-        this.entityWolf.d(flag);
+        this.entityWolf.setHasOwner(flag);
     }
 
     public String getWolfOwner() {
-        return this.entityWolf.A();
+        return this.entityWolf.getOwner();
     }
 
     public void setWolfOwner(ScriptEntityPlayer player) {
-        this.entityWolf.a(player.entityPlayer.l);
+        this.entityWolf.setOwner(player.entityPlayer.name);
     }
 }

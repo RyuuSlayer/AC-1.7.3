@@ -12,31 +12,31 @@ public class ScriptInventoryPlayer extends ScriptInventory {
     }
 
     public int getSlotContainingItem(int itemID) {
-        int i = this.invPlayer.f(itemID);
+        int i = this.invPlayer.getSlotWithItem(itemID);
         if (i == -1)
             for (int j = 36; j < 40; j++) {
-                ItemInstance k = this.invPlayer.f_(j);
-                if (k != null && k.c == itemID)
+                ItemInstance k = this.invPlayer.getInvItem(j);
+                if (k != null && k.itemId == itemID)
                     return j;
             }
         return i;
     }
 
     public int getSlotContainingItemDamage(int itemID, int damage) {
-        for (int i = 0; i < this.invPlayer.a(); i++) {
-            ItemInstance j = this.invPlayer.f_(i);
-            if (j != null && j.c == itemID && j.i() == damage)
+        for (int i = 0; i < this.invPlayer.getInvSize(); i++) {
+            ItemInstance j = this.invPlayer.getInvItem(i);
+            if (j != null && j.itemId == itemID && j.getDamage() == damage)
                 return i;
         }
         return -1;
     }
 
     public void changeCurrentItem(int i) {
-        this.invPlayer.b(i);
+        this.invPlayer.scrollInHotbar(i);
     }
 
     public boolean consumeItem(int itemID) {
-        return this.invPlayer.c(itemID);
+        return this.invPlayer.decreaseAmountOfItem(itemID);
     }
 
     public boolean consumeItemAmount(int itemID, int damage, int amount) {
@@ -44,27 +44,27 @@ public class ScriptInventoryPlayer extends ScriptInventory {
     }
 
     public int getArmorValue() {
-        return this.invPlayer.f();
+        return this.invPlayer.method_687();
     }
 
     public void dropAllItems() {
-        this.invPlayer.g();
+        this.invPlayer.dropInventory();
     }
 
     public ScriptItem getCurrentItem() {
-        ItemInstance i = this.invPlayer.b();
-        if (i == null || i.c == 0)
+        ItemInstance i = this.invPlayer.getHeldItem();
+        if (i == null || i.itemId == 0)
             return null;
         return new ScriptItem(i);
     }
 
     public void setCurrentItem(int i) {
-        this.invPlayer.a(i, false);
+        this.invPlayer.method_691(i, false);
     }
 
     public ScriptItem getOffhandItem() {
         ItemInstance i = this.invPlayer.getOffhandItem();
-        if (i == null || i.c == 0)
+        if (i == null || i.itemId == 0)
             return null;
         return new ScriptItem(i);
     }
@@ -74,21 +74,21 @@ public class ScriptInventoryPlayer extends ScriptInventory {
     }
 
     public boolean addItem(ScriptItem item) {
-        return this.invPlayer.a(item.item);
+        return this.invPlayer.pickupItem(item.item);
     }
 
     public ScriptItem getCursorItem() {
-        ItemInstance i = this.invPlayer.i();
-        if (i == null || i.c == 0)
+        ItemInstance i = this.invPlayer.getCursorItem();
+        if (i == null || i.itemId == 0)
             return null;
         return new ScriptItem(i);
     }
 
     public void setCursorItem(ScriptItem i) {
         if (i == null) {
-            this.invPlayer.b(null);
+            this.invPlayer.setCursorItem(null);
         } else {
-            this.invPlayer.b(i.item);
+            this.invPlayer.setCursorItem(i.item);
         }
     }
 }

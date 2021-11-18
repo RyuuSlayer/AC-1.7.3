@@ -6,6 +6,7 @@ import java.util.List;
 
 import io.github.ryuu.adventurecraft.util.CoordBlock;
 import io.github.ryuu.adventurecraft.util.LightCache;
+import net.minecraft.class_68;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.TileRenderer;
@@ -17,235 +18,232 @@ import net.minecraft.level.WorldPopulationRegion;
 import net.minecraft.level.chunk.Chunk;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.MathsHelper;
 import org.lwjgl.opengl.GL11;
 
-public class MixinClass_66 {
-    private static final Tessellator D;
-    public static int b = 0;
+public class class_66 {
+    public Level level;
+    private int field_225 = -1;
+    private static Tessellator tesselator;
+    public static int field_230;
+    public int field_231;
+    public int field_232;
+    public int field_233;
+    public int field_234;
+    public int field_235;
+    public int field_236;
+    public int field_237;
+    public int field_238;
+    public int field_239;
+    public int field_240;
+    public int field_241;
+    public int field_242;
+    public boolean field_243 = false;
+    public boolean[] field_244 = new boolean[2];
+    public int field_245;
+    public int field_246;
+    public int field_247;
+    public float field_248;
+    public boolean field_249;
+    public Box field_250;
+    public int field_251;
+    public boolean field_252 = true;
+    public boolean field_253;
+    public int field_254;
+    public boolean field_223;
+    private boolean field_227 = false;
+    public List field_224 = new ArrayList();
+    private List field_228;
 
-    static {
-        D = Tessellator.a;
+    public class_66(Level world, List list, int i, int j, int k, int l, int i1) {
+        this.level = world;
+        this.field_228 = list;
+        this.field_235 = this.field_236 = l;
+        this.field_234 = this.field_236;
+        this.field_248 = MathsHelper.sqrt(this.field_234 * this.field_234 + this.field_235 * this.field_235 + this.field_236 * this.field_236) / 2.0f;
+        this.field_225 = i1;
+        this.field_231 = -999;
+        this.method_298(i, j, k);
+        this.field_249 = false;
     }
 
-    private final List F;
-    public Level a;
-    public int c;
-    public int d;
-    public int e;
-    public int f;
-    public int g;
-    public int h;
-    public int i;
-    public int j;
-    public int k;
-    public int l;
-    public int m;
-    public int n;
-    public boolean o;
-    public boolean[] p;
-    public int q;
-    public int r;
-    public int s;
-    public float t;
-    public boolean u;
-    public eq v;
-    public int w;
-    public boolean x;
-    public boolean y;
-    public int z;
-    public boolean A;
-    public List B;
-    private int C;
-    private boolean E;
-
-    public MixinClass_66(Level world, List list, int i, int j, int k, int l, int i1) {
-        this.C = -1;
-        this.o = false;
-        this.p = new boolean[2];
-        this.x = true;
-        this.E = false;
-        this.B = new ArrayList();
-        this.a = world;
-        this.F = list;
-        this.f = this.g = this.h = l;
-        this.t = MathsHelper.c((this.f * this.f + this.g * this.g + this.h * this.h)) / 2.0F;
-        this.C = i1;
-        this.c = -999;
-        a(i, j, k);
-        this.u = false;
-    }
-
-    public void a(int i, int j, int k) {
-        if (i == this.c && j == this.d && k == this.e)
+    public void method_298(int i, int j, int k) {
+        if (i == this.field_231 && j == this.field_232 && k == this.field_233) {
             return;
-        b();
-        this.c = i;
-        this.d = j;
-        this.e = k;
-        this.q = i + this.f / 2;
-        this.r = j + this.g / 2;
-        this.s = k + this.h / 2;
-        this.l = i & 0x3FF;
-        this.m = j;
-        this.n = k & 0x3FF;
-        this.i = i - this.l;
-        this.j = j - this.m;
-        this.k = k - this.n;
-        float f = 6.0F;
-        this.v = eq.a((i - f), (j - f), (k - f), ((i + this.f) + f), ((j + this.g) + f), ((k + this.h) + f));
-        GL11.glNewList(this.C + 2, 4864);
-        ItemRenderer.a(eq.b((this.l - f), (this.m - f), (this.n - f), ((this.l + this.f) + f), ((this.m + this.g) + f), ((this.n + this.h) + f)));
+        }
+        this.method_301();
+        this.field_231 = i;
+        this.field_232 = j;
+        this.field_233 = k;
+        this.field_245 = i + this.field_234 / 2;
+        this.field_246 = j + this.field_235 / 2;
+        this.field_247 = k + this.field_236 / 2;
+        this.field_240 = i & 0x3FF;
+        this.field_241 = j;
+        this.field_242 = k & 0x3FF;
+        this.field_237 = i - this.field_240;
+        this.field_238 = j - this.field_241;
+        this.field_239 = k - this.field_242;
+        float f = 6.0f;
+        this.field_250 = Box.create((float)i - f, (float)j - f, (float)k - f, (float)(i + this.field_234) + f, (float)(j + this.field_235) + f, (float)(k + this.field_236) + f);
+        GL11.glNewList((int)(this.field_225 + 2), (int)4864);
+        ItemRenderer.method_2024(Box.getOrCreate((float)this.field_240 - f, (float)this.field_241 - f, (float)this.field_242 - f, (float)(this.field_240 + this.field_234) + f, (float)(this.field_241 + this.field_235) + f, (float)(this.field_242 + this.field_236) + f));
         GL11.glEndList();
-        f();
+        this.method_305();
     }
 
-    private void g() {
-        GL11.glTranslatef(this.l, this.m, this.n);
+    private void method_306() {
+        GL11.glTranslatef((float)this.field_240, (float)this.field_241, (float)this.field_242);
     }
 
-    public void a() {
-        if (!this.u)
+    public void method_296() {
+        if (!this.field_249) {
             return;
-        b++;
-        int i = this.c;
-        int j = this.d;
-        int k = this.e;
-        int l = this.c + this.f;
-        int i1 = this.d + this.g;
-        int j1 = this.e + this.h;
-        for (int k1 = 0; k1 < 2; k1++)
-            this.p[k1] = true;
-        Chunk.a = false;
-        HashSet<?> hashset = new HashSet();
-        hashset.addAll(this.B);
-        this.B.clear();
+        }
+        ++field_230;
+        int i = this.field_231;
+        int j = this.field_232;
+        int k = this.field_233;
+        int l = this.field_231 + this.field_234;
+        int i1 = this.field_232 + this.field_235;
+        int j1 = this.field_233 + this.field_236;
+        for (int k1 = 0; k1 < 2; ++k1) {
+            this.field_244[k1] = true;
+        }
+        Chunk.field_953 = false;
+        HashSet hashset = new HashSet();
+        hashset.addAll(this.field_224);
+        this.field_224.clear();
         int l1 = 1;
-        WorldPopulationRegion chunkcache = new WorldPopulationRegion(this.a, i - l1, j - l1, k - l1, l + l1, i1 + l1, j1 + l1);
+        WorldPopulationRegion chunkcache = new WorldPopulationRegion(this.level, i - l1, j - l1, k - l1, l + l1, i1 + l1, j1 + l1);
         TileRenderer renderblocks = new TileRenderer(chunkcache);
-        int i2 = 0;
-        while (i2 < 2) {
+        for (int i2 = 0; i2 < 2; ++i2) {
             boolean flag = false;
             boolean flag1 = false;
             boolean flag2 = false;
-            for (int texNum = 0; texNum <= 3; texNum++) {
-                if (texNum != 1) {
-                    boolean startedDrawing = false;
-                    for (int j2 = j; j2 < i1; j2++) {
-                        for (int k2 = k; k2 < j1; k2++) {
-                            for (int l2 = i; l2 < l; l2++) {
-                                int i3 = chunkcache.a(l2, j2, k2);
-                                if (i3 > 0)
-                                    if (texNum == Tile.BY_ID[i3].getTextureNum()) {
-                                        if (!flag2) {
-                                            flag2 = true;
-                                            GL11.glNewList(this.C + i2, 4864);
-                                            GL11.glPushMatrix();
-                                            g();
-                                            float f = 1.000001F;
-                                            GL11.glTranslatef(-this.h / 2.0F, -this.g / 2.0F, -this.h / 2.0F);
-                                            GL11.glScalef(f, f, f);
-                                            GL11.glTranslatef(this.h / 2.0F, this.g / 2.0F, this.h / 2.0F);
-                                        }
-                                        if (!startedDrawing) {
-                                            startedDrawing = true;
-                                            if (texNum == 0) {
-                                                GL11.glBindTexture(3553, Minecraft.minecraftInstance.p.b("/terrain.png"));
-                                            } else {
-                                                GL11.glBindTexture(3553, Minecraft.minecraftInstance.p.b(String.format("/terrain%d.png", new Object[]{Integer.valueOf(texNum)})));
-                                            }
-                                            D.b();
-                                            D.b(-this.c, -this.d, -this.e);
-                                        }
-                                        if (i2 == 0 && Tile.p[i3]) {
-                                            TileEntity tileentity = chunkcache.b(l2, j2, k2);
-                                            if (TileEntityRenderDispatcher.a.a(tileentity))
-                                                this.B.add(tileentity);
-                                        }
-                                        Tile block = Tile.BY_ID[i3];
-                                        int j3 = block.b_();
-                                        if (j3 != i2) {
-                                            flag = true;
-                                        } else if (j3 == i2) {
-                                            flag1 |= renderblocks.b(block, l2, j2, k2);
-                                        }
-                                    }
+            for (int texNum = 0; texNum <= 3; ++texNum) {
+                if (texNum == 1) continue;
+                boolean startedDrawing = false;
+                for (int j2 = j; j2 < i1; ++j2) {
+                    for (int k2 = k; k2 < j1; ++k2) {
+                        for (int l2 = i; l2 < l; ++l2) {
+                            Tile block;
+                            int j3;
+                            TileEntity tileentity;
+                            int i3 = chunkcache.getTileId(l2, j2, k2);
+                            if (i3 <= 0 || texNum != Tile.BY_ID[i3].getTextureNum()) continue;
+                            if (!flag2) {
+                                flag2 = true;
+                                GL11.glNewList((int)(this.field_225 + i2), (int)4864);
+                                GL11.glPushMatrix();
+                                this.method_306();
+                                float f = 1.000001f;
+                                GL11.glTranslatef((float)(-this.field_236) / 2.0f, (float)(-this.field_235) / 2.0f, (float)(-this.field_236) / 2.0f);
+                                GL11.glScalef(f, f, f);
+                                GL11.glTranslatef((float)this.field_236 / 2.0f, (float)this.field_235 / 2.0f, (float)this.field_236 / 2.0f);
                             }
-                        }
-                        if (startedDrawing) {
-                            D.a();
-                            startedDrawing = false;
+                            if (!startedDrawing) {
+                                startedDrawing = true;
+                                if (texNum == 0) {
+                                    GL11.glBindTexture(3553, (int)Minecraft.minecraftInstance.textureManager.getTextureId("/terrain.png"));
+                                } else {
+                                    GL11.glBindTexture(3553, (int)Minecraft.minecraftInstance.textureManager.getTextureId(String.format("/terrain%d.png", (Object[])new Object[]{texNum})));
+                                }
+                                tesselator.start();
+                                tesselator.prevPos(-this.field_231, -this.field_232, -this.field_233);
+                            }
+                            if (i2 == 0 && Tile.HAS_TILE_ENTITY[i3] && TileEntityRenderDispatcher.INSTANCE.hasRenderer(tileentity = chunkcache.getTileEntity(l2, j2, k2))) {
+                                this.field_224.add(tileentity);
+                            }
+                            if ((j3 = (block = Tile.BY_ID[i3]).method_1619()) != i2) {
+                                flag = true;
+                                continue;
+                            }
+                            if (j3 != i2) continue;
+                            flag1 |= renderblocks.method_57(block, l2, j2, k2);
                         }
                     }
+                    if (!startedDrawing) continue;
+                    tesselator.draw();
+                    startedDrawing = false;
                 }
             }
             if (flag2) {
                 GL11.glPopMatrix();
                 GL11.glEndList();
-                D.b(0.0D, 0.0D, 0.0D);
+                tesselator.prevPos(0.0, 0.0, 0.0);
             } else {
                 flag1 = false;
             }
-            if (flag1)
-                this.p[i2] = false;
-            if (!flag)
-                break;
-            i2++;
+            if (flag1) {
+                this.field_244[i2] = false;
+            }
+            if (!flag) break;
         }
         HashSet hashset1 = new HashSet();
-        hashset1.addAll(this.B);
+        hashset1.addAll(this.field_224);
         hashset1.removeAll(hashset);
-        this.F.addAll(hashset1);
-        hashset.removeAll(this.B);
-        this.F.removeAll(hashset);
-        this.A = Chunk.a;
-        this.E = true;
+        this.field_228.addAll(hashset1);
+        hashset.removeAll(this.field_224);
+        this.field_228.removeAll(hashset);
+        this.field_223 = Chunk.field_953;
+        this.field_227 = true;
         LightCache.cache.clear();
         CoordBlock.resetPool();
     }
 
-    public float a(Entity entity) {
-        float f = (float) (entity.aM - this.q);
-        float f1 = (float) (entity.aN - this.r);
-        float f2 = (float) (entity.aO - this.s);
+    public float method_299(Entity entity) {
+        float f = (float)(entity.x - (double)this.field_245);
+        float f1 = (float)(entity.y - (double)this.field_246);
+        float f2 = (float)(entity.z - (double)this.field_247);
         return f * f + f1 * f1 + f2 * f2;
     }
 
-    public void b() {
-        for (int i = 0; i < 2; i++)
-            this.p[i] = true;
-        this.o = false;
-        this.E = false;
+    public void method_301() {
+        for (int i = 0; i < 2; ++i) {
+            this.field_244[i] = true;
+        }
+        this.field_243 = false;
+        this.field_227 = false;
     }
 
-    public void c() {
-        b();
-        this.a = null;
+    public void method_302() {
+        this.method_301();
+        this.level = null;
     }
 
-    public int a(int i) {
-        if (!this.o)
+    public int method_297(int i) {
+        if (!this.field_243) {
             return -1;
-        if (!this.p[i])
-            return this.C + i;
+        }
+        if (!this.field_244[i]) {
+            return this.field_225 + i;
+        }
         return -1;
     }
 
-    public void a(yn icamera) {
-        this.o = icamera.a(this.v);
+    public void method_300(class_68 icamera) {
+        this.field_243 = icamera.method_2007(this.field_250);
     }
 
-    public void d() {
-        GL11.glCallList(this.C + 2);
+    public void method_303() {
+        GL11.glCallList((int)(this.field_225 + 2));
     }
 
-    public boolean e() {
-        if (!this.E)
+    public boolean method_304() {
+        if (!this.field_227) {
             return false;
-        return (this.p[0] && this.p[1]);
+        }
+        return this.field_244[0] && this.field_244[1];
     }
 
-    public void f() {
-        this.u = true;
+    public void method_305() {
+        this.field_249 = true;
+    }
+
+    static {
+        field_230 = 0;
+        tesselator = Tessellator.INSTANCE;
     }
 }

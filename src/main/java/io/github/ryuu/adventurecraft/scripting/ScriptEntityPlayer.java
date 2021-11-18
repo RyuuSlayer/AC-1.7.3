@@ -11,7 +11,7 @@ public class ScriptEntityPlayer extends ScriptEntityLiving {
     }
 
     public ScriptInventoryPlayer getInventory() {
-        return new ScriptInventoryPlayer(this.entityPlayer.c);
+        return new ScriptInventoryPlayer(this.entityPlayer.inventory);
     }
 
     public String getCloak() {
@@ -27,7 +27,7 @@ public class ScriptEntityPlayer extends ScriptEntityLiving {
     }
 
     public void swingMainHand() {
-        this.entityPlayer.J();
+        this.entityPlayer.swingHand();
     }
 
     public void swingOffHand() {

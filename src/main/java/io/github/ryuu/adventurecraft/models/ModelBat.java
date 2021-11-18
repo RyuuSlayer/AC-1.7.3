@@ -6,13 +6,9 @@ import org.lwjgl.opengl.GL11;
 
 public class ModelBat extends EntityModel {
     public ModelPart theHead;
-
     public ModelPart ears;
-
     public ModelPart rightWing;
-
     public ModelPart theBody;
-
     public ModelPart leftWing;
 
     public ModelBat() {

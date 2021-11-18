@@ -14,11 +14,11 @@ public class RenderCamera extends LivingEntityRenderer {
 
     protected void a(LivingEntity entityliving, double d, double d1, double d2) {
         EntityCamera e = (EntityCamera) entityliving;
-        a(entityliving, String.format("%.2f", new Object[]{Float.valueOf(e.time)}), d, d1 - 1.5D, d2, 64);
+        this.method_818(entityliving, String.format("%.2f", new Object[]{Float.valueOf(e.time)}), d, d1 - 1.5D, d2, 64);
     }
 
     public void a(Entity entity, double d, double d1, double d2, float f, float f1) {
         if (DebugMode.active)
-            super.a(entity, d, d1, d2, f, f1);
+            super.render(entity, d, d1, d2, f, f1);
     }
 }

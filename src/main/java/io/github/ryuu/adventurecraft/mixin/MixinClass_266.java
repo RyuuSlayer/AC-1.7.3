@@ -8,57 +8,58 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import net.minecraft.class_267;
 import net.minecraft.src.SoundPoolEntry;
 
-public class MixinClass_266 {
-    private final Random c = new Random();
+public class class_266 {
+    private Random rand = new Random();
+    private Map field_1089 = new HashMap();
+    private List field_1090 = new ArrayList();
+    public int field_1086 = 0;
+    public boolean field_1087 = true;
 
-    private final Map d = new HashMap<>();
-
-    private final List e = new ArrayList();
-
-    public int a = 0;
-
-    public boolean b = true;
-
-    public bh a(String s, File file) {
+    public class_267 method_959(String s, File file) {
         try {
             String s1 = s;
-            s = s.substring(0, s.indexOf("."));
-            String noFileExtension = s;
-            if (this.b)
-                for (; Character.isDigit(s.charAt(s.length() - 1)); s = s.substring(0, s.length() - 1)) ;
-            s = s.replaceAll("/", ".");
-            if (!this.d.containsKey(s))
-                this.d.put(s, new ArrayList());
-            bh soundpoolentry = new bh(s1, file.toURI().toURL());
-            List<SoundPoolEntry> sounds = (List<SoundPoolEntry>) this.d.get(s);
-            for (bh sEntry : sounds) {
-                if (noFileExtension.equals(sEntry.a.substring(0, sEntry.a.indexOf(".")))) {
-                    sounds.remove(sEntry);
-                    break;
+            String noFileExtension = s = s.substring(0, s.indexOf("."));
+            if (this.field_1087) {
+                while (Character.isDigit(s.charAt(s.length() - 1))) {
+                    s = s.substring(0, s.length() - 1);
                 }
             }
+            if (!this.field_1089.containsKey(s = s.replaceAll("/", "."))) {
+                this.field_1089.put(s, new ArrayList());
+            }
+            class_267 soundpoolentry = new class_267(s1, file.toURI().toURL());
+            List sounds = (List)this.field_1089.get(s);
+            for (class_267 sEntry : sounds) {
+                if (!noFileExtension.equals(sEntry.field_2126.substring(0, sEntry.field_2126.indexOf(".")))) continue;
+                sounds.remove(sEntry);
+                break;
+            }
             sounds.add(soundpoolentry);
-            this.e.add(soundpoolentry);
-            this.a++;
+            this.field_1090.add(soundpoolentry);
+            ++this.field_1086;
             return soundpoolentry;
-        } catch (MalformedURLException malformedurlexception) {
+        }
+        catch (MalformedURLException malformedurlexception) {
             malformedurlexception.printStackTrace();
             throw new RuntimeException(malformedurlexception);
         }
     }
 
-    public bh a(String s) {
-        List<bh> list = (List) this.d.get(s);
-        if (list == null)
+    public class_267 method_958(String s) {
+        List list = (List)this.field_1089.get(s);
+        if (list == null) {
             return null;
-        return list.get(this.c.nextInt(list.size()));
+        }
+        return (class_267)list.get(this.rand.nextInt(list.size()));
     }
 
-    public bh a() {
-        if (this.e.size() == 0)
+    public class_267 method_957() {
+        if (this.field_1090.size() == 0) {
             return null;
-        return this.e.get(this.c.nextInt(this.e.size()));
+        }
+        return (class_267)this.field_1090.get(this.rand.nextInt(this.field_1090.size()));
     }
 }

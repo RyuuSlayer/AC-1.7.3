@@ -2,541 +2,541 @@ package io.github.ryuu.adventurecraft.util;
 
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
 import net.minecraft.tile.Tile;
 
 public class InventoryDebug implements lw {
     private final String inventoryTitle;
-
     private final int size;
-
-    private final iz[] inventoryContents;
-
+    private final ItemInstance[] inventoryContents;
     public int firstItem;
-
     public int lastItem;
-
     public boolean atEnd;
 
     public InventoryDebug(String s, int i) {
         this.inventoryTitle = s;
         this.size = i;
-        this.inventoryContents = new iz[i];
+        this.inventoryContents = new ItemInstance[i];
     }
 
     private int getID(int i) {
         int j;
-        for (j = 0; j < 4; j++) {
-            if (i > Tile.v.bn)
-                i--;
+        for (j = 0; j < 4; ++j) {
+            if (i <= Tile.GRASS.id) continue;
+            --i;
         }
-        for (j = 0; j < 3; j++) {
-            if (i > Tile.F.bn)
-                i--;
+        for (j = 0; j < 3; ++j) {
+            if (i <= Tile.SAND.id) continue;
+            --i;
         }
-        if (i > Tile.K.bn)
-            i--;
-        if (i > Tile.K.bn)
-            i--;
-        for (j = 0; j < 2; j++) {
-            if (i > Tile.Y.bn)
-                i--;
+        if (i > Tile.LOG.id) {
+            --i;
         }
-        for (j = 0; j < 15; j++) {
-            if (i > Tile.ac.bn)
-                i--;
+        if (i > Tile.LOG.id) {
+            --i;
         }
-        for (j = 0; j < 3; j++) {
-            if (i > Tile.al.bn)
-                i--;
+        for (j = 0; j < 2; ++j) {
+            if (i <= Tile.TALLGRASS.id) continue;
+            --i;
         }
-        for (j = 0; j < 15; j++) {
-            if (i > Blocks.pillarStone.bn)
-                i--;
+        for (j = 0; j < 15; ++j) {
+            if (i <= Tile.WOOL.id) continue;
+            --i;
         }
-        for (j = 0; j < 15; j++) {
-            if (i > Blocks.pillarMetal.bn)
-                i--;
+        for (j = 0; j < 3; ++j) {
+            if (i <= Tile.STONE_SLAB.id) continue;
+            --i;
         }
-        for (j = 0; j < 15; j++) {
-            if (i > Blocks.plant1.bn)
-                i--;
+        for (j = 0; j < 15; ++j) {
+            if (i <= Blocks.pillarStone.id) continue;
+            --i;
         }
-        for (j = 0; j < 15; j++) {
-            if (i > Blocks.trees.bn)
-                i--;
+        for (j = 0; j < 15; ++j) {
+            if (i <= Blocks.pillarMetal.id) continue;
+            --i;
         }
-        for (j = 0; j < 15; j++) {
-            if (i > Blocks.glassBlocks.bn)
-                i--;
+        for (j = 0; j < 15; ++j) {
+            if (i <= Blocks.plant1.id) continue;
+            --i;
         }
-        for (j = 0; j < 9; j++) {
-            if (i > Blocks.cageBlocks.bn)
-                i--;
+        for (j = 0; j < 15; ++j) {
+            if (i <= Blocks.trees.id) continue;
+            --i;
         }
-        for (j = 0; j < 15; j++) {
-            if (i > Blocks.stoneBlocks1.bn)
-                i--;
+        for (j = 0; j < 15; ++j) {
+            if (i <= Blocks.glassBlocks.id) continue;
+            --i;
         }
-        for (j = 0; j < 15; j++) {
-            if (i > Blocks.stoneBlocks2.bn)
-                i--;
+        for (j = 0; j < 9; ++j) {
+            if (i <= Blocks.cageBlocks.id) continue;
+            --i;
         }
-        for (j = 0; j < 15; j++) {
-            if (i > Blocks.stoneBlocks3.bn)
-                i--;
+        for (j = 0; j < 15; ++j) {
+            if (i <= Blocks.stoneBlocks1.id) continue;
+            --i;
         }
-        for (j = 0; j < 15; j++) {
-            if (i > Blocks.woodBlocks.bn)
-                i--;
+        for (j = 0; j < 15; ++j) {
+            if (i <= Blocks.stoneBlocks2.id) continue;
+            --i;
         }
-        for (j = 0; j < 15; j++) {
-            if (i > Blocks.halfSteps1.bn)
-                i--;
+        for (j = 0; j < 15; ++j) {
+            if (i <= Blocks.stoneBlocks3.id) continue;
+            --i;
         }
-        for (j = 0; j < 15; j++) {
-            if (i > Blocks.halfSteps2.bn)
-                i--;
+        for (j = 0; j < 15; ++j) {
+            if (i <= Blocks.woodBlocks.id) continue;
+            --i;
         }
-        for (j = 0; j < 15; j++) {
-            if (i > Blocks.halfSteps3.bn)
-                i--;
+        for (j = 0; j < 15; ++j) {
+            if (i <= Blocks.halfSteps1.id) continue;
+            --i;
         }
-        for (j = 0; j < 15; j++) {
-            if (i > Blocks.tableBlocks.bn)
-                i--;
+        for (j = 0; j < 15; ++j) {
+            if (i <= Blocks.halfSteps2.id) continue;
+            --i;
         }
-        for (j = 0; j < 3; j++) {
-            if (i > Blocks.chairBlocks1.bn)
-                i--;
+        for (j = 0; j < 15; ++j) {
+            if (i <= Blocks.halfSteps3.id) continue;
+            --i;
         }
-        for (j = 0; j < 3; j++) {
-            if (i > Blocks.chairBlocks2.bn)
-                i--;
+        for (j = 0; j < 15; ++j) {
+            if (i <= Blocks.tableBlocks.id) continue;
+            --i;
         }
-        for (j = 0; j < 14; j++) {
-            if (i > Blocks.ropes1.bn)
-                i--;
+        for (j = 0; j < 3; ++j) {
+            if (i <= Blocks.chairBlocks1.id) continue;
+            --i;
         }
-        for (j = 0; j < 14; j++) {
-            if (i > Blocks.ropes2.bn)
-                i--;
+        for (j = 0; j < 3; ++j) {
+            if (i <= Blocks.chairBlocks2.id) continue;
+            --i;
         }
-        for (j = 0; j < 8; j++) {
-            if (i > Blocks.chains.bn)
-                i--;
+        for (j = 0; j < 14; ++j) {
+            if (i <= Blocks.ropes1.id) continue;
+            --i;
         }
-        for (j = 0; j < 3; j++) {
-            if (i > Blocks.ladders1.bn)
-                i--;
+        for (j = 0; j < 14; ++j) {
+            if (i <= Blocks.ropes2.id) continue;
+            --i;
         }
-        for (j = 0; j < 3; j++) {
-            if (i > Blocks.ladders2.bn)
-                i--;
+        for (j = 0; j < 8; ++j) {
+            if (i <= Blocks.chains.id) continue;
+            --i;
         }
-        for (j = 0; j < 3; j++) {
-            if (i > Blocks.ladders3.bn)
-                i--;
+        for (j = 0; j < 3; ++j) {
+            if (i <= Blocks.ladders1.id) continue;
+            --i;
         }
-        for (j = 0; j < 3; j++) {
-            if (i > Blocks.ladders4.bn)
-                i--;
+        for (j = 0; j < 3; ++j) {
+            if (i <= Blocks.ladders2.id) continue;
+            --i;
         }
-        for (j = 0; j < 13; j++) {
-            if (i > Blocks.lights1.bn)
-                i--;
+        for (j = 0; j < 3; ++j) {
+            if (i <= Blocks.ladders3.id) continue;
+            --i;
         }
-        for (j = 0; j < 15; j++) {
-            if (i > Blocks.plant2.bn)
-                i--;
+        for (j = 0; j < 3; ++j) {
+            if (i <= Blocks.ladders4.id) continue;
+            --i;
         }
-        for (j = 0; j < 15; j++) {
-            if (i > Blocks.plant3.bn)
-                i--;
+        for (j = 0; j < 13; ++j) {
+            if (i <= Blocks.lights1.id) continue;
+            --i;
         }
-        for (j = 0; j < 6; j++) {
-            if (i > Blocks.overlay1.bn)
-                i--;
+        for (j = 0; j < 15; ++j) {
+            if (i <= Blocks.plant2.id) continue;
+            --i;
         }
-        for (j = 0; j < 3; j++) {
-            if (i > Blocks.stairs1.bn)
-                i--;
+        for (j = 0; j < 15; ++j) {
+            if (i <= Blocks.plant3.id) continue;
+            --i;
         }
-        for (j = 0; j < 3; j++) {
-            if (i > Blocks.stairs2.bn)
-                i--;
+        for (j = 0; j < 6; ++j) {
+            if (i <= Blocks.overlay1.id) continue;
+            --i;
         }
-        for (j = 0; j < 3; j++) {
-            if (i > Blocks.stairs3.bn)
-                i--;
+        for (j = 0; j < 3; ++j) {
+            if (i <= Blocks.stairs1.id) continue;
+            --i;
         }
-        for (j = 0; j < 3; j++) {
-            if (i > Blocks.stairs4.bn)
-                i--;
+        for (j = 0; j < 3; ++j) {
+            if (i <= Blocks.stairs2.id) continue;
+            --i;
         }
-        for (j = 0; j < 3; j++) {
-            if (i > Blocks.slopes1.bn)
-                i--;
+        for (j = 0; j < 3; ++j) {
+            if (i <= Blocks.stairs3.id) continue;
+            --i;
         }
-        for (j = 0; j < 3; j++) {
-            if (i > Blocks.slopes2.bn)
-                i--;
+        for (j = 0; j < 3; ++j) {
+            if (i <= Blocks.stairs4.id) continue;
+            --i;
         }
-        for (j = 0; j < 3; j++) {
-            if (i > Blocks.slopes3.bn)
-                i--;
+        for (j = 0; j < 3; ++j) {
+            if (i <= Blocks.slopes1.id) continue;
+            --i;
         }
-        for (j = 0; j < 3; j++) {
-            if (i > Blocks.slopes4.bn)
-                i--;
+        for (j = 0; j < 3; ++j) {
+            if (i <= Blocks.slopes2.id) continue;
+            --i;
         }
-        for (j = 0; j < 15; j++) {
-            if (i > gm.aU.bf)
-                i--;
+        for (j = 0; j < 3; ++j) {
+            if (i <= Blocks.slopes3.id) continue;
+            --i;
+        }
+        for (j = 0; j < 3; ++j) {
+            if (i <= Blocks.slopes4.id) continue;
+            --i;
+        }
+        for (j = 0; j < 15; ++j) {
+            if (i <= ItemType.dyePowder.id) continue;
+            --i;
         }
         return i;
     }
 
     private int getSubtype(int i) {
-        int subtype = 0;
         int j;
-        for (j = 0; j < 4; j++) {
-            if (i > Tile.v.bn) {
-                i--;
-                subtype++;
-            }
+        int subtype = 0;
+        for (j = 0; j < 4; ++j) {
+            if (i <= Tile.GRASS.id) continue;
+            --i;
+            ++subtype;
         }
-        if (i > Tile.v.bn)
+        if (i > Tile.GRASS.id) {
             subtype = 0;
-        for (j = 0; j < 3; j++) {
-            if (i > Tile.F.bn) {
-                i--;
-                subtype++;
-            }
         }
-        if (i > Tile.F.bn)
+        for (j = 0; j < 3; ++j) {
+            if (i <= Tile.SAND.id) continue;
+            --i;
+            ++subtype;
+        }
+        if (i > Tile.SAND.id) {
             subtype = 0;
-        if (i > Tile.K.bn) {
-            i--;
-            subtype++;
         }
-        if (i > Tile.K.bn) {
-            i--;
-            subtype++;
+        if (i > Tile.LOG.id) {
+            --i;
+            ++subtype;
         }
-        if (i > Tile.K.bn)
+        if (i > Tile.LOG.id) {
+            --i;
+            ++subtype;
+        }
+        if (i > Tile.LOG.id) {
             subtype = 0;
-        for (j = 0; j < 2; j++) {
-            if (i > Tile.Y.bn) {
-                i--;
-                subtype++;
-            }
         }
-        if (i > Tile.Y.bn)
-            subtype = 0;
-        for (j = 0; j < 15; j++) {
-            if (i > Tile.ac.bn) {
-                i--;
-                subtype++;
-            }
+        for (j = 0; j < 2; ++j) {
+            if (i <= Tile.TALLGRASS.id) continue;
+            --i;
+            ++subtype;
         }
-        if (i > Tile.ac.bn)
+        if (i > Tile.TALLGRASS.id) {
             subtype = 0;
-        for (j = 0; j < 3; j++) {
-            if (i > Tile.al.bn) {
-                i--;
-                subtype++;
-            }
         }
-        if (i > Tile.al.bn)
-            subtype = 0;
-        for (j = 0; j < 15; j++) {
-            if (i > Blocks.pillarStone.bn) {
-                i--;
-                subtype++;
-            }
+        for (j = 0; j < 15; ++j) {
+            if (i <= Tile.WOOL.id) continue;
+            --i;
+            ++subtype;
         }
-        if (i > Blocks.pillarStone.bn)
+        if (i > Tile.WOOL.id) {
             subtype = 0;
-        for (j = 0; j < 15; j++) {
-            if (i > Blocks.pillarMetal.bn) {
-                i--;
-                subtype++;
-            }
         }
-        if (i > Blocks.pillarMetal.bn)
-            subtype = 0;
-        for (j = 0; j < 15; j++) {
-            if (i > Blocks.plant1.bn) {
-                i--;
-                subtype++;
-            }
+        for (j = 0; j < 3; ++j) {
+            if (i <= Tile.STONE_SLAB.id) continue;
+            --i;
+            ++subtype;
         }
-        if (i > Blocks.plant1.bn)
+        if (i > Tile.STONE_SLAB.id) {
             subtype = 0;
-        for (j = 0; j < 15; j++) {
-            if (i > Blocks.trees.bn) {
-                i--;
-                subtype++;
-            }
         }
-        if (i > Blocks.trees.bn)
-            subtype = 0;
-        for (j = 0; j < 15; j++) {
-            if (i > Blocks.glassBlocks.bn) {
-                i--;
-                subtype++;
-            }
+        for (j = 0; j < 15; ++j) {
+            if (i <= Blocks.pillarStone.id) continue;
+            --i;
+            ++subtype;
         }
-        if (i > Blocks.glassBlocks.bn)
+        if (i > Blocks.pillarStone.id) {
             subtype = 0;
-        for (j = 0; j < 9; j++) {
-            if (i > Blocks.cageBlocks.bn) {
-                i--;
-                subtype++;
-            }
         }
-        if (i > Blocks.cageBlocks.bn)
-            subtype = 0;
-        for (j = 0; j < 15; j++) {
-            if (i > Blocks.stoneBlocks1.bn) {
-                i--;
-                subtype++;
-            }
+        for (j = 0; j < 15; ++j) {
+            if (i <= Blocks.pillarMetal.id) continue;
+            --i;
+            ++subtype;
         }
-        if (i > Blocks.stoneBlocks1.bn)
+        if (i > Blocks.pillarMetal.id) {
             subtype = 0;
-        for (j = 0; j < 15; j++) {
-            if (i > Blocks.stoneBlocks2.bn) {
-                i--;
-                subtype++;
-            }
         }
-        if (i > Blocks.stoneBlocks2.bn)
-            subtype = 0;
-        for (j = 0; j < 15; j++) {
-            if (i > Blocks.stoneBlocks3.bn) {
-                i--;
-                subtype++;
-            }
+        for (j = 0; j < 15; ++j) {
+            if (i <= Blocks.plant1.id) continue;
+            --i;
+            ++subtype;
         }
-        if (i > Blocks.stoneBlocks3.bn)
+        if (i > Blocks.plant1.id) {
             subtype = 0;
-        for (j = 0; j < 15; j++) {
-            if (i > Blocks.woodBlocks.bn) {
-                i--;
-                subtype++;
-            }
         }
-        if (i > Blocks.woodBlocks.bn)
-            subtype = 0;
-        for (j = 0; j < 15; j++) {
-            if (i > Blocks.halfSteps1.bn) {
-                i--;
-                subtype++;
-            }
+        for (j = 0; j < 15; ++j) {
+            if (i <= Blocks.trees.id) continue;
+            --i;
+            ++subtype;
         }
-        if (i > Blocks.halfSteps1.bn)
+        if (i > Blocks.trees.id) {
             subtype = 0;
-        for (j = 0; j < 15; j++) {
-            if (i > Blocks.halfSteps2.bn) {
-                i--;
-                subtype++;
-            }
         }
-        if (i > Blocks.halfSteps2.bn)
-            subtype = 0;
-        for (j = 0; j < 15; j++) {
-            if (i > Blocks.halfSteps3.bn) {
-                i--;
-                subtype++;
-            }
+        for (j = 0; j < 15; ++j) {
+            if (i <= Blocks.glassBlocks.id) continue;
+            --i;
+            ++subtype;
         }
-        if (i > Blocks.halfSteps3.bn)
+        if (i > Blocks.glassBlocks.id) {
             subtype = 0;
-        for (j = 0; j < 15; j++) {
-            if (i > Blocks.tableBlocks.bn) {
-                i--;
-                subtype++;
-            }
         }
-        if (i > Blocks.tableBlocks.bn)
-            subtype = 0;
-        for (j = 0; j < 3; j++) {
-            if (i > Blocks.chairBlocks1.bn) {
-                i--;
-                subtype += 4;
-            }
+        for (j = 0; j < 9; ++j) {
+            if (i <= Blocks.cageBlocks.id) continue;
+            --i;
+            ++subtype;
         }
-        if (i > Blocks.chairBlocks1.bn)
+        if (i > Blocks.cageBlocks.id) {
             subtype = 0;
-        for (j = 0; j < 3; j++) {
-            if (i > Blocks.chairBlocks2.bn) {
-                i--;
-                subtype += 4;
-            }
         }
-        if (i > Blocks.chairBlocks2.bn)
-            subtype = 0;
-        for (j = 0; j < 14; j++) {
-            if (i > Blocks.ropes1.bn) {
-                i--;
-                subtype++;
-            }
+        for (j = 0; j < 15; ++j) {
+            if (i <= Blocks.stoneBlocks1.id) continue;
+            --i;
+            ++subtype;
         }
-        if (i > Blocks.ropes1.bn)
+        if (i > Blocks.stoneBlocks1.id) {
             subtype = 0;
-        for (j = 0; j < 14; j++) {
-            if (i > Blocks.ropes2.bn) {
-                i--;
-                subtype++;
-            }
         }
-        if (i > Blocks.ropes2.bn)
-            subtype = 0;
-        for (j = 0; j < 8; j++) {
-            if (i > Blocks.chains.bn) {
-                i--;
-                subtype++;
-            }
+        for (j = 0; j < 15; ++j) {
+            if (i <= Blocks.stoneBlocks2.id) continue;
+            --i;
+            ++subtype;
         }
-        if (i > Blocks.chains.bn)
+        if (i > Blocks.stoneBlocks2.id) {
             subtype = 0;
-        for (j = 0; j < 3; j++) {
-            if (i > Blocks.ladders1.bn) {
-                i--;
-                subtype += 4;
-            }
         }
-        if (i > Blocks.ladders1.bn)
-            subtype = 0;
-        for (j = 0; j < 3; j++) {
-            if (i > Blocks.ladders2.bn) {
-                i--;
-                subtype += 4;
-            }
+        for (j = 0; j < 15; ++j) {
+            if (i <= Blocks.stoneBlocks3.id) continue;
+            --i;
+            ++subtype;
         }
-        if (i > Blocks.ladders2.bn)
+        if (i > Blocks.stoneBlocks3.id) {
             subtype = 0;
-        for (j = 0; j < 3; j++) {
-            if (i > Blocks.ladders3.bn) {
-                i--;
-                subtype += 4;
-            }
         }
-        if (i > Blocks.ladders3.bn)
-            subtype = 0;
-        for (j = 0; j < 3; j++) {
-            if (i > Blocks.ladders4.bn) {
-                i--;
-                subtype += 4;
-            }
+        for (j = 0; j < 15; ++j) {
+            if (i <= Blocks.woodBlocks.id) continue;
+            --i;
+            ++subtype;
         }
-        if (i > Blocks.ladders4.bn)
+        if (i > Blocks.woodBlocks.id) {
             subtype = 0;
-        for (j = 0; j < 13; j++) {
-            if (i > Blocks.lights1.bn) {
-                i--;
-                subtype++;
-            }
         }
-        if (i > Blocks.lights1.bn)
-            subtype = 0;
-        for (j = 0; j < 15; j++) {
-            if (i > Blocks.plant2.bn) {
-                i--;
-                subtype++;
-            }
+        for (j = 0; j < 15; ++j) {
+            if (i <= Blocks.halfSteps1.id) continue;
+            --i;
+            ++subtype;
         }
-        if (i > Blocks.plant2.bn)
+        if (i > Blocks.halfSteps1.id) {
             subtype = 0;
-        for (j = 0; j < 15; j++) {
-            if (i > Blocks.plant3.bn) {
-                i--;
-                subtype++;
-            }
         }
-        if (i > Blocks.plant3.bn)
-            subtype = 0;
-        for (j = 0; j < 6; j++) {
-            if (i > Blocks.overlay1.bn) {
-                i--;
-                subtype++;
-            }
+        for (j = 0; j < 15; ++j) {
+            if (i <= Blocks.halfSteps2.id) continue;
+            --i;
+            ++subtype;
         }
-        if (i > Blocks.overlay1.bn)
+        if (i > Blocks.halfSteps2.id) {
             subtype = 0;
-        for (j = 0; j < 3; j++) {
-            if (i > Blocks.stairs1.bn) {
-                i--;
-                subtype += 4;
-            }
         }
-        if (i > Blocks.stairs1.bn)
-            subtype = 0;
-        for (j = 0; j < 3; j++) {
-            if (i > Blocks.stairs2.bn) {
-                i--;
-                subtype += 4;
-            }
+        for (j = 0; j < 15; ++j) {
+            if (i <= Blocks.halfSteps3.id) continue;
+            --i;
+            ++subtype;
         }
-        if (i > Blocks.stairs2.bn)
+        if (i > Blocks.halfSteps3.id) {
             subtype = 0;
-        for (j = 0; j < 3; j++) {
-            if (i > Blocks.stairs3.bn) {
-                i--;
-                subtype += 4;
-            }
         }
-        if (i > Blocks.stairs3.bn)
-            subtype = 0;
-        for (j = 0; j < 3; j++) {
-            if (i > Blocks.stairs4.bn) {
-                i--;
-                subtype += 4;
-            }
+        for (j = 0; j < 15; ++j) {
+            if (i <= Blocks.tableBlocks.id) continue;
+            --i;
+            ++subtype;
         }
-        if (i > Blocks.stairs4.bn)
+        if (i > Blocks.tableBlocks.id) {
             subtype = 0;
-        for (j = 0; j < 3; j++) {
-            if (i > Blocks.slopes1.bn) {
-                i--;
-                subtype += 4;
-            }
         }
-        if (i > Blocks.slopes1.bn)
-            subtype = 0;
-        for (j = 0; j < 3; j++) {
-            if (i > Blocks.slopes2.bn) {
-                i--;
-                subtype += 4;
-            }
+        for (j = 0; j < 3; ++j) {
+            if (i <= Blocks.chairBlocks1.id) continue;
+            --i;
+            subtype += 4;
         }
-        if (i > Blocks.slopes2.bn)
+        if (i > Blocks.chairBlocks1.id) {
             subtype = 0;
-        for (j = 0; j < 3; j++) {
-            if (i > Blocks.slopes3.bn) {
-                i--;
-                subtype += 4;
-            }
         }
-        if (i > Blocks.slopes3.bn)
-            subtype = 0;
-        for (j = 0; j < 3; j++) {
-            if (i > Blocks.slopes4.bn) {
-                i--;
-                subtype += 4;
-            }
+        for (j = 0; j < 3; ++j) {
+            if (i <= Blocks.chairBlocks2.id) continue;
+            --i;
+            subtype += 4;
         }
-        if (i > Blocks.slopes4.bn)
+        if (i > Blocks.chairBlocks2.id) {
             subtype = 0;
-        for (j = 0; j < 15; j++) {
-            if (i > gm.aU.bf) {
-                i--;
-                subtype++;
-            }
         }
-        if (i > gm.aU.bf)
+        for (j = 0; j < 14; ++j) {
+            if (i <= Blocks.ropes1.id) continue;
+            --i;
+            ++subtype;
+        }
+        if (i > Blocks.ropes1.id) {
             subtype = 0;
+        }
+        for (j = 0; j < 14; ++j) {
+            if (i <= Blocks.ropes2.id) continue;
+            --i;
+            ++subtype;
+        }
+        if (i > Blocks.ropes2.id) {
+            subtype = 0;
+        }
+        for (j = 0; j < 8; ++j) {
+            if (i <= Blocks.chains.id) continue;
+            --i;
+            ++subtype;
+        }
+        if (i > Blocks.chains.id) {
+            subtype = 0;
+        }
+        for (j = 0; j < 3; ++j) {
+            if (i <= Blocks.ladders1.id) continue;
+            --i;
+            subtype += 4;
+        }
+        if (i > Blocks.ladders1.id) {
+            subtype = 0;
+        }
+        for (j = 0; j < 3; ++j) {
+            if (i <= Blocks.ladders2.id) continue;
+            --i;
+            subtype += 4;
+        }
+        if (i > Blocks.ladders2.id) {
+            subtype = 0;
+        }
+        for (j = 0; j < 3; ++j) {
+            if (i <= Blocks.ladders3.id) continue;
+            --i;
+            subtype += 4;
+        }
+        if (i > Blocks.ladders3.id) {
+            subtype = 0;
+        }
+        for (j = 0; j < 3; ++j) {
+            if (i <= Blocks.ladders4.id) continue;
+            --i;
+            subtype += 4;
+        }
+        if (i > Blocks.ladders4.id) {
+            subtype = 0;
+        }
+        for (j = 0; j < 13; ++j) {
+            if (i <= Blocks.lights1.id) continue;
+            --i;
+            ++subtype;
+        }
+        if (i > Blocks.lights1.id) {
+            subtype = 0;
+        }
+        for (j = 0; j < 15; ++j) {
+            if (i <= Blocks.plant2.id) continue;
+            --i;
+            ++subtype;
+        }
+        if (i > Blocks.plant2.id) {
+            subtype = 0;
+        }
+        for (j = 0; j < 15; ++j) {
+            if (i <= Blocks.plant3.id) continue;
+            --i;
+            ++subtype;
+        }
+        if (i > Blocks.plant3.id) {
+            subtype = 0;
+        }
+        for (j = 0; j < 6; ++j) {
+            if (i <= Blocks.overlay1.id) continue;
+            --i;
+            ++subtype;
+        }
+        if (i > Blocks.overlay1.id) {
+            subtype = 0;
+        }
+        for (j = 0; j < 3; ++j) {
+            if (i <= Blocks.stairs1.id) continue;
+            --i;
+            subtype += 4;
+        }
+        if (i > Blocks.stairs1.id) {
+            subtype = 0;
+        }
+        for (j = 0; j < 3; ++j) {
+            if (i <= Blocks.stairs2.id) continue;
+            --i;
+            subtype += 4;
+        }
+        if (i > Blocks.stairs2.id) {
+            subtype = 0;
+        }
+        for (j = 0; j < 3; ++j) {
+            if (i <= Blocks.stairs3.id) continue;
+            --i;
+            subtype += 4;
+        }
+        if (i > Blocks.stairs3.id) {
+            subtype = 0;
+        }
+        for (j = 0; j < 3; ++j) {
+            if (i <= Blocks.stairs4.id) continue;
+            --i;
+            subtype += 4;
+        }
+        if (i > Blocks.stairs4.id) {
+            subtype = 0;
+        }
+        for (j = 0; j < 3; ++j) {
+            if (i <= Blocks.slopes1.id) continue;
+            --i;
+            subtype += 4;
+        }
+        if (i > Blocks.slopes1.id) {
+            subtype = 0;
+        }
+        for (j = 0; j < 3; ++j) {
+            if (i <= Blocks.slopes2.id) continue;
+            --i;
+            subtype += 4;
+        }
+        if (i > Blocks.slopes2.id) {
+            subtype = 0;
+        }
+        for (j = 0; j < 3; ++j) {
+            if (i <= Blocks.slopes3.id) continue;
+            --i;
+            subtype += 4;
+        }
+        if (i > Blocks.slopes3.id) {
+            subtype = 0;
+        }
+        for (j = 0; j < 3; ++j) {
+            if (i <= Blocks.slopes4.id) continue;
+            --i;
+            subtype += 4;
+        }
+        if (i > Blocks.slopes4.id) {
+            subtype = 0;
+        }
+        for (j = 0; j < 15; ++j) {
+            if (i <= ItemType.dyePowder.id) continue;
+            --i;
+            ++subtype;
+        }
+        if (i > ItemType.dyePowder.id) {
+            subtype = 0;
+        }
         return subtype;
     }
 
@@ -567,63 +567,93 @@ public class InventoryDebug implements lw {
         }
     }
 
-    public void fillInventoryBackwards(int offset) {
+    public void fillInventory(int offset) {
         boolean filledFirst = false;
         this.atEnd = false;
-        for (int i = 0; i < this.size; i++) {
-            int id = getID(offset - i);
-            if (id > 0 && gm.c[id] != null) {
-                this.inventoryContents[this.size - i - 1] = new iz(gm.c[id], -64);
-                this.inventoryContents[this.size - i - 1].b(getSubtype(offset - i));
-                this.firstItem = offset - i;
-                if (!filledFirst) {
-                    this.lastItem = offset - i;
-                    filledFirst = true;
-                }
-            } else if (offset - i > 1) {
-                i--;
-                offset--;
-            } else {
-                while (i < this.size) {
-                    this.inventoryContents[this.size - i - 1] = null;
-                    i++;
-                }
-                return;
+        for (int i = 0; i < this.size; ++i) {
+            int id = this.getID(i + offset);
+            if (ItemType.byId[id] != null) {
+                this.inventoryContents[i] = new ItemInstance(ItemType.byId[id], -64);
+                this.inventoryContents[i].setDamage(this.getSubtype(i + offset));
+                this.lastItem = i + offset;
+                if (filledFirst) continue;
+                this.firstItem = i + offset;
+                filledFirst = true;
+                continue;
             }
+            if (id < 31999) {
+                --i;
+                ++offset;
+                continue;
+            }
+            this.atEnd = true;
+            while (i < this.size) {
+                this.inventoryContents[i] = null;
+                ++i;
+            }
+            return;
         }
     }
 
-    public iz f_(int i) {
+    public void fillInventoryBackwards(int offset) {
+        boolean filledFirst = false;
+        this.atEnd = false;
+        for (int i = 0; i < this.size; ++i) {
+            int id = this.getID(offset - i);
+            if (id > 0 && ItemType.byId[id] != null) {
+                this.inventoryContents[this.size - i - 1] = new ItemInstance(ItemType.byId[id], -64);
+                this.inventoryContents[this.size - i - 1].setDamage(this.getSubtype(offset - i));
+                this.firstItem = offset - i;
+                if (filledFirst) continue;
+                this.lastItem = offset - i;
+                filledFirst = true;
+                continue;
+            }
+            if (offset - i > 1) {
+                --i;
+                --offset;
+                continue;
+            }
+            while (i < this.size) {
+                this.inventoryContents[this.size - i - 1] = null;
+                ++i;
+            }
+            return;
+        }
+    }
+
+    public ItemInstance getInvItem(int i) {
         return this.inventoryContents[i];
     }
 
-    public iz a(int i, int j) {
-        if (this.inventoryContents[i] != null)
-            return this.inventoryContents[i].k();
+    public ItemInstance takeInvItem(int index, int j) {
+        if (this.inventoryContents[index] != null) {
+            return this.inventoryContents[index].copy();
+        }
         return null;
     }
 
-    public void a(int i, iz itemstack) {
-        if (this.inventoryContents[i] != null)
-            this.inventoryContents[i] = this.inventoryContents[i].k();
+    public void setInvItem(int i, ItemInstance itemstack) {
+        if (this.inventoryContents[i] != null) {
+            this.inventoryContents[i] = this.inventoryContents[i].copy();
+        }
     }
 
-    public int a() {
+    public int getInvSize() {
         return this.size;
     }
 
-    public String c() {
+    public String getContainerName() {
         return this.inventoryTitle;
     }
 
-    public int d() {
+    public int getMaxItemCount() {
         return 64;
     }
 
-    public void y_() {
+    public void markDirty() {
     }
-
-    public boolean a_(Player entityplayer) {
+    public boolean canPlayerUse(Player entityplayer) {
         return true;
     }
 }
