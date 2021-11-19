@@ -1,23 +1,48 @@
+/*
+ * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
+ * 
+ * Could not load the following classes:
+ *  java.lang.Object
+ *  java.lang.Override
+ *  java.util.Random
+ *  net.fabricmc.api.EnvType
+ *  net.fabricmc.api.Environment
+ */
 package io.github.ryuu.adventurecraft.mixin.tile;
 
-import io.github.ryuu.adventurecraft.util.DebugMode;
+import java.util.Random;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
+import net.minecraft.tile.FireTile;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
+import io.github.ryuu.adventurecraft.mixin.item.MixinLevel;
+import io.github.ryuu.adventurecraft.mixin.item.MixinTile;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
-import java.util.Random;
+@Mixin(FireTile.class)
+public class MixinFireTile extends MixinTile {
 
-public class MixinFireTile extends Tile {
+    @Shadow()
     private int[] flammabilities = new int[256];
+
     private int[] spreadabilities = new int[256];
 
-    protected FireTile(int id, int j) {
+    protected MixinFireTile(int id, int j) {
         super(id, j, Material.FIRE);
         this.setTicksRandomly(true);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void afterTileItemCreated() {
         this.setFlammability(Tile.WOOD.id, 5, 20);
         this.setFlammability(Tile.FENCE.id, 5, 20);
@@ -30,36 +55,75 @@ public class MixinFireTile extends Tile {
         this.setFlammability(Tile.WOOL.id, 30, 60);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void setFlammability(int tileId, int flammability, int spreadabilities) {
         this.flammabilities[tileId] = flammability;
         this.spreadabilities[tileId] = spreadabilities;
     }
 
-    public Box getCollisionShape(Level level, int x, int y, int z) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public Box getCollisionShape(MixinLevel level, int x, int y, int z) {
         return null;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public boolean isFullOpaque() {
         return false;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public boolean isFullCube() {
         return false;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public int method_1621() {
         return 3;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public int getDropCount(Random rand) {
         return 0;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public int getTickrate() {
         return 40;
     }
 
-    public void onScheduledTick(Level level, int x, int y, int z, Random rand) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public void onScheduledTick(MixinLevel level, int x, int y, int z, Random rand) {
         boolean flag;
         if (DebugMode.active) {
             return;
@@ -98,12 +162,14 @@ public class MixinFireTile extends Tile {
                 for (int k1 = y - 1; k1 <= y + 4; ++k1) {
                     int j2;
                     int i2;
-                    if (i1 == x && k1 == y && j1 == z) continue;
+                    if (i1 == x && k1 == y && j1 == z)
+                        continue;
                     int l1 = 100;
                     if (k1 > y + 1) {
                         l1 += (k1 - (y + 1)) * 100;
                     }
-                    if ((i2 = this.method_1827(level, i1, k1, j1)) <= 0 || (j2 = (i2 + 40) / (l + 30)) <= 0 || rand.nextInt(l1) > j2 || level.raining() && level.canRainAt(i1, k1, j1) || level.canRainAt(i1 - 1, k1, z) || level.canRainAt(i1 + 1, k1, j1) || level.canRainAt(i1, k1, j1 - 1) || level.canRainAt(i1, k1, j1 + 1)) continue;
+                    if ((i2 = this.method_1827(level, i1, k1, j1)) <= 0 || (j2 = (i2 + 40) / (l + 30)) <= 0 || rand.nextInt(l1) > j2 || level.raining() && level.canRainAt(i1, k1, j1) || level.canRainAt(i1 - 1, k1, z) || level.canRainAt(i1 + 1, k1, j1) || level.canRainAt(i1, k1, j1 - 1) || level.canRainAt(i1, k1, j1 + 1))
+                        continue;
                     int k2 = l + rand.nextInt(5) / 4;
                     if (k2 > 15) {
                         k2 = 15;
@@ -114,7 +180,11 @@ public class MixinFireTile extends Tile {
         }
     }
 
-    private void method_1823(Level world, int i, int j, int k, int l, Random random, int i1) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    private void method_1823(MixinLevel world, int i, int j, int k, int l, Random random, int i1) {
         int j1 = this.spreadabilities[world.getTileId(i, j, k)];
         if (random.nextInt(l) < j1) {
             boolean flag;
@@ -134,7 +204,11 @@ public class MixinFireTile extends Tile {
         }
     }
 
-    private boolean method_1826(Level world, int i, int j, int k) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    private boolean method_1826(MixinLevel world, int i, int j, int k) {
         if (this.method_1824(world, i + 1, j, k)) {
             return true;
         }
@@ -153,7 +227,11 @@ public class MixinFireTile extends Tile {
         return this.method_1824(world, i, j, k + 1);
     }
 
-    private int method_1827(Level world, int i, int j, int k) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    private int method_1827(MixinLevel world, int i, int j, int k) {
         int l = 0;
         if (!world.isAir(i, j, k)) {
             return 0;
@@ -167,15 +245,28 @@ public class MixinFireTile extends Tile {
         return l;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public boolean method_1576() {
         return false;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean method_1824(TileView iblockaccess, int i, int j, int k) {
         return this.flammabilities[iblockaccess.getTileId(i, j, k)] > 0;
     }
 
-    public int method_1825(Level world, int i, int j, int k, int l) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public int method_1825(MixinLevel world, int i, int j, int k, int l) {
         int i1 = this.flammabilities[world.getTileId(i, j, k)];
         if (i1 > l) {
             return i1;
@@ -183,18 +274,33 @@ public class MixinFireTile extends Tile {
         return l;
     }
 
-    public boolean canPlaceAt(Level level, int x, int y, int z) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public boolean canPlaceAt(MixinLevel level, int x, int y, int z) {
         return level.canSuffocate(x, y - 1, z) || this.method_1826(level, x, y, z);
     }
 
-    public void method_1609(Level level, int x, int y, int z, int id) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public void method_1609(MixinLevel level, int x, int y, int z, int id) {
         if (!level.canSuffocate(x, y - 1, z) && !this.method_1826(level, x, y, z)) {
             level.setTile(x, y, z, 0);
             return;
         }
     }
 
-    public void method_1611(Level level, int x, int y, int z) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public void method_1611(MixinLevel level, int x, int y, int z) {
         if (level.getTileId(x, y - 1, z) == Tile.OBSIDIAN.id && Tile.PORTAL.method_736(level, x, y, z)) {
             return;
         }
@@ -205,58 +311,65 @@ public class MixinFireTile extends Tile {
         level.method_216(x, y, z, this.id, this.getTickrate());
     }
 
-    public void randomDisplayTick(Level level, int x, int y, int z, Random rand) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public void randomDisplayTick(MixinLevel level, int x, int y, int z, Random rand) {
         block12: {
             block11: {
                 if (rand.nextInt(24) == 0) {
-                    level.playSound((float)x + 0.5f, (float)y + 0.5f, (float)z + 0.5f, "fire.fire", 1.0f + rand.nextFloat(), rand.nextFloat() * 0.7f + 0.3f);
+                    level.playSound((float) x + 0.5f, (float) y + 0.5f, (float) z + 0.5f, "fire.fire", 1.0f + rand.nextFloat(), rand.nextFloat() * 0.7f + 0.3f);
                 }
-                if (!level.canSuffocate(x, y - 1, z) && !Tile.FIRE.method_1824(level, x, y - 1, z)) break block11;
+                if (!level.canSuffocate(x, y - 1, z) && !Tile.FIRE.method_1824(level, x, y - 1, z))
+                    break block11;
                 for (int l = 0; l < 3; ++l) {
-                    float f = (float)x + rand.nextFloat();
-                    float f6 = (float)y + rand.nextFloat() * 0.5f + 0.5f;
-                    float f12 = (float)z + rand.nextFloat();
+                    float f = (float) x + rand.nextFloat();
+                    float f6 = (float) y + rand.nextFloat() * 0.5f + 0.5f;
+                    float f12 = (float) z + rand.nextFloat();
                     level.addParticle("largesmoke", f, f6, f12, 0.0, 0.0, 0.0);
                 }
                 break block12;
             }
             if (Tile.FIRE.method_1824(level, x - 1, y, z)) {
                 for (int i1 = 0; i1 < 2; ++i1) {
-                    float f1 = (float)x + rand.nextFloat() * 0.1f;
-                    float f7 = (float)y + rand.nextFloat();
-                    float f13 = (float)z + rand.nextFloat();
+                    float f1 = (float) x + rand.nextFloat() * 0.1f;
+                    float f7 = (float) y + rand.nextFloat();
+                    float f13 = (float) z + rand.nextFloat();
                     level.addParticle("largesmoke", f1, f7, f13, 0.0, 0.0, 0.0);
                 }
             }
             if (Tile.FIRE.method_1824(level, x + 1, y, z)) {
                 for (int j1 = 0; j1 < 2; ++j1) {
-                    float f2 = (float)(x + 1) - rand.nextFloat() * 0.1f;
-                    float f8 = (float)y + rand.nextFloat();
-                    float f14 = (float)z + rand.nextFloat();
+                    float f2 = (float) (x + 1) - rand.nextFloat() * 0.1f;
+                    float f8 = (float) y + rand.nextFloat();
+                    float f14 = (float) z + rand.nextFloat();
                     level.addParticle("largesmoke", f2, f8, f14, 0.0, 0.0, 0.0);
                 }
             }
             if (Tile.FIRE.method_1824(level, x, y, z - 1)) {
                 for (int k1 = 0; k1 < 2; ++k1) {
-                    float f3 = (float)x + rand.nextFloat();
-                    float f9 = (float)y + rand.nextFloat();
-                    float f15 = (float)z + rand.nextFloat() * 0.1f;
+                    float f3 = (float) x + rand.nextFloat();
+                    float f9 = (float) y + rand.nextFloat();
+                    float f15 = (float) z + rand.nextFloat() * 0.1f;
                     level.addParticle("largesmoke", f3, f9, f15, 0.0, 0.0, 0.0);
                 }
             }
             if (Tile.FIRE.method_1824(level, x, y, z + 1)) {
                 for (int l1 = 0; l1 < 2; ++l1) {
-                    float f4 = (float)x + rand.nextFloat();
-                    float f10 = (float)y + rand.nextFloat();
-                    float f16 = (float)(z + 1) - rand.nextFloat() * 0.1f;
+                    float f4 = (float) x + rand.nextFloat();
+                    float f10 = (float) y + rand.nextFloat();
+                    float f16 = (float) (z + 1) - rand.nextFloat() * 0.1f;
                     level.addParticle("largesmoke", f4, f10, f16, 0.0, 0.0, 0.0);
                 }
             }
-            if (!Tile.FIRE.method_1824(level, x, y + 1, z)) break block12;
+            if (!Tile.FIRE.method_1824(level, x, y + 1, z))
+                break block12;
             for (int i2 = 0; i2 < 2; ++i2) {
-                float f5 = (float)x + rand.nextFloat();
-                float f11 = (float)(y + 1) - rand.nextFloat() * 0.1f;
-                float f17 = (float)z + rand.nextFloat();
+                float f5 = (float) x + rand.nextFloat();
+                float f11 = (float) (y + 1) - rand.nextFloat() * 0.1f;
+                float f17 = (float) z + rand.nextFloat();
                 level.addParticle("largesmoke", f5, f11, f17, 0.0, 0.0, 0.0);
             }
         }

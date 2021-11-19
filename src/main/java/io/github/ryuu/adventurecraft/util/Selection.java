@@ -1,8 +1,17 @@
-package io.github.ryuu.adventurecraft.util;
-
-import io.github.ryuu.adventurecraft.items.ItemCursor;
+package io.github.ryuu.adventurecraft.util;/*
+ * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
+ * 
+ * Could not load the following classes:
+ *  java.lang.Math
+ *  java.lang.Object
+ *  net.fabricmc.api.EnvType
+ *  net.fabricmc.api.Environment
+ */
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 class Selection {
+
     int oneX;
 
     int oneY;
@@ -14,6 +23,9 @@ class Selection {
     int twoY;
 
     int twoZ;
+
+    Selection() {
+    }
 
     void record() {
         this.oneX = ItemCursor.oneX;
@@ -31,11 +43,11 @@ class Selection {
         ItemCursor.twoX = this.twoX;
         ItemCursor.twoY = this.twoY;
         ItemCursor.twoZ = this.twoZ;
-        ItemCursor.minX = Math.min(this.oneX, this.twoX);
-        ItemCursor.minY = Math.min(this.oneY, this.twoY);
-        ItemCursor.minZ = Math.min(this.oneZ, this.twoZ);
-        ItemCursor.maxX = Math.max(this.oneX, this.twoX);
-        ItemCursor.maxY = Math.max(this.oneY, this.twoY);
-        ItemCursor.maxZ = Math.max(this.oneZ, this.twoZ);
+        ItemCursor.minX = Math.min((int) this.oneX, (int) this.twoX);
+        ItemCursor.minY = Math.min((int) this.oneY, (int) this.twoY);
+        ItemCursor.minZ = Math.min((int) this.oneZ, (int) this.twoZ);
+        ItemCursor.maxX = Math.max((int) this.oneX, (int) this.twoX);
+        ItemCursor.maxY = Math.max((int) this.oneY, (int) this.twoY);
+        ItemCursor.maxZ = Math.max((int) this.oneZ, (int) this.twoZ);
     }
 }

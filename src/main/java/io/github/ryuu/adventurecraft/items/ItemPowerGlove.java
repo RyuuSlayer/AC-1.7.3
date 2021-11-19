@@ -1,6 +1,15 @@
-package io.github.ryuu.adventurecraft.items;
-
-import io.github.ryuu.adventurecraft.blocks.Blocks;
+package io.github.ryuu.adventurecraft.items;/*
+ * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
+ * 
+ * Could not load the following classes:
+ *  java.lang.Object
+ *  java.lang.Override
+ *  net.fabricmc.api.EnvType
+ *  net.fabricmc.api.Environment
+ *  org.lwjgl.input.Keyboard
+ */
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.entity.FallingTile;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
@@ -10,41 +19,43 @@ import net.minecraft.tile.Tile;
 import org.lwjgl.input.Keyboard;
 
 public class ItemPowerGlove extends ItemType {
-    protected ItemPowerGlove(int i) {
-        super(i);
+
+    protected ItemPowerGlove(int id) {
+        super(id);
     }
 
     @Override
-    public boolean useOnTile(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int side) {
+    public boolean useOnTile(ItemInstance item, Player player, Level level, int x, int y, int z, int facing) {
+        int nextBlockID;
         int xOffset = 0;
         int zOffset = 0;
-        if (side == 2) {
+        if (facing == 2) {
             zOffset = 1;
-        } else if (side == 3) {
+        } else if (facing == 3) {
             zOffset = -1;
-        } else if (side == 4) {
+        } else if (facing == 4) {
             xOffset = 1;
-        } else if (side == 5) {
+        } else if (facing == 5) {
             xOffset = -1;
         } else {
             return false;
         }
-        if (world.getTileId(i, j, k) != Blocks.pushableBlock.id)
+        if (level.getTileId(x, y, z) != Blocks.pushableBlock.id) {
             return false;
-        if (Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157)) {
+        }
+        if (Keyboard.isKeyDown((int) 29) || Keyboard.isKeyDown((int) 157)) {
             xOffset *= -1;
             zOffset *= -1;
         }
-        int nextBlockID = world.getTileId(i + xOffset, j, k + zOffset);
-        if (Tile.BY_ID[nextBlockID] == null || (Tile.BY_ID[nextBlockID]).material.isLiquid() || nextBlockID == Tile.FIRE.id) {
-            int blockID = world.getTileId(i, j, k);
-            int metadata = world.getTileMeta(i, j, k);
-            world.method_201(i, j, k, 0, 0);
-            FallingTile e = new FallingTile(world, i + 0.5D, j + 0.5D, k + 0.5D, blockID);
-            e.velocityX = 0.3D * xOffset;
-            e.velocityZ = 0.3D * zOffset;
+        if (Tile.BY_ID[nextBlockID = level.getTileId(x + xOffset, y, z + zOffset)] == null || Tile.BY_ID[nextBlockID].material.isLiquid() || nextBlockID == Tile.FIRE.id) {
+            int blockID = level.getTileId(x, y, z);
+            int metadata = level.getTileMeta(x, y, z);
+            level.method_201(x, y, z, 0, 0);
+            FallingTile e = new FallingTile(level, (double) x + 0.5, (double) y + 0.5, (double) z + 0.5, blockID);
+            e.velocityX = 0.3 * (double) xOffset;
+            e.velocityZ = 0.3 * (double) zOffset;
             e.metadata = metadata;
-            world.b(e);
+            level.spawnEntity(e);
         }
         return true;
     }

@@ -1,24 +1,51 @@
+/*
+ * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
+ * 
+ * Could not load the following classes:
+ *  java.awt.image.BufferedImage
+ *  java.lang.Math
+ *  java.lang.Object
+ *  java.lang.Override
+ *  java.lang.String
+ *  net.fabricmc.api.EnvType
+ *  net.fabricmc.api.Environment
+ */
 package io.github.ryuu.adventurecraft.mixin.client.render;
 
 import java.awt.image.BufferedImage;
-
-import io.github.ryuu.adventurecraft.util.TerrainImage;
-import io.github.ryuu.adventurecraft.util.Vec2;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.FlowingWaterTextureBinder;
 import net.minecraft.client.render.TextureBinder;
 import net.minecraft.tile.Tile;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
+import io.github.ryuu.adventurecraft.mixin.item.MixinTextureBinder;
 
-public class MixinFlowingWaterTextureBinder extends TextureBinder {
+@Mixin(FlowingWaterTextureBinder.class)
+public class MixinFlowingWaterTextureBinder extends MixinTextureBinder {
+
+    @Shadow()
     protected float[] field_2118 = new float[256];
+
     protected float[] field_2119 = new float[256];
+
     protected float[] field_2120 = new float[256];
+
     protected float[] field_2121 = new float[256];
+
     private int field_2122 = 0;
+
     static boolean hasImages;
+
     static int numFrames;
+
     private static int[] frameImages;
+
     private static int width;
+
     static int curFrame;
 
     public MixinFlowingWaterTextureBinder() {
@@ -26,6 +53,11 @@ public class MixinFlowingWaterTextureBinder extends TextureBinder {
         this.field_1415 = 2;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void onTick(Vec2 texRes) {
         int w = texRes.x / 16;
         int h = texRes.y / 16;
@@ -45,10 +77,10 @@ public class MixinFlowingWaterTextureBinder extends TextureBinder {
                         for (int x = 0; x < ratio; ++x) {
                             for (int y = 0; y < ratio; ++y) {
                                 k = j * ratio + x + (i * ratio + y) * w;
-                                this.grid[k * 4 + 0] = (byte)(curPixel >> 16 & 0xFF);
-                                this.grid[k * 4 + 1] = (byte)(curPixel >> 8 & 0xFF);
-                                this.grid[k * 4 + 2] = (byte)(curPixel & 0xFF);
-                                this.grid[k * 4 + 3] = (byte)(curPixel >> 24 & 0xFF);
+                                this.grid[k * 4 + 0] = (byte) (curPixel >> 16 & 0xFF);
+                                this.grid[k * 4 + 1] = (byte) (curPixel >> 8 & 0xFF);
+                                this.grid[k * 4 + 2] = (byte) (curPixel & 0xFF);
+                                this.grid[k * 4 + 3] = (byte) (curPixel >> 24 & 0xFF);
                             }
                         }
                     }
@@ -69,10 +101,10 @@ public class MixinFlowingWaterTextureBinder extends TextureBinder {
                                 a += curPixel >> 24 & 0xFF;
                             }
                         }
-                        this.grid[k * 4 + 0] = (byte)(r / ratio / ratio);
-                        this.grid[k * 4 + 1] = (byte)(g / ratio / ratio);
-                        this.grid[k * 4 + 2] = (byte)(b / ratio / ratio);
-                        this.grid[k * 4 + 3] = (byte)(a / ratio / ratio);
+                        this.grid[k * 4 + 0] = (byte) (r / ratio / ratio);
+                        this.grid[k * 4 + 1] = (byte) (g / ratio / ratio);
+                        this.grid[k * 4 + 2] = (byte) (b / ratio / ratio);
+                        this.grid[k * 4 + 3] = (byte) (a / ratio / ratio);
                         ++k;
                     }
                 }
@@ -87,9 +119,9 @@ public class MixinFlowingWaterTextureBinder extends TextureBinder {
             this.field_2120 = new float[s];
             this.field_2121 = new float[s];
         }
-        int vh = (int)Math.sqrt(h / 16);
+        int vh = (int) Math.sqrt((double) (h / 16));
         this.field_2122 += vh;
-        float weight = (float)(vh * 2 + 1) * 1.0667f;
+        float weight = (float) (vh * 2 + 1) * 1.0667f;
         for (int i = 0; i < w; ++i) {
             for (int k = 0; k < h; ++k) {
                 float f = 0.0f;
@@ -110,7 +142,8 @@ public class MixinFlowingWaterTextureBinder extends TextureBinder {
                 }
                 int n2 = j + l * w;
                 this.field_2121[n2] = this.field_2121[n2] - 0.3f;
-                if (!(Math.random() < 0.2)) continue;
+                if (!(Math.random() < 0.2))
+                    continue;
                 this.field_2121[j + l * w] = 0.5f;
             }
         }
@@ -130,15 +163,15 @@ public class MixinFlowingWaterTextureBinder extends TextureBinder {
             }
             float f2 = f1 * f1;
             if (TerrainImage.isWaterLoaded) {
-                l1 = (int)(127.0f + f2 * 128.0f);
-                j2 = (int)(127.0f + f2 * 128.0f);
-                k2 = (int)(127.0f + f2 * 128.0f);
+                l1 = (int) (127.0f + f2 * 128.0f);
+                j2 = (int) (127.0f + f2 * 128.0f);
+                k2 = (int) (127.0f + f2 * 128.0f);
             } else {
-                l1 = (int)(32.0f + f2 * 32.0f);
-                j2 = (int)(50.0f + f2 * 64.0f);
+                l1 = (int) (32.0f + f2 * 32.0f);
+                j2 = (int) (50.0f + f2 * 64.0f);
                 k2 = 255;
             }
-            int l2 = (int)(146.0f + f2 * 50.0f);
+            int l2 = (int) (146.0f + f2 * 50.0f);
             if (this.render3d) {
                 int i3 = (l1 * 30 + j2 * 59 + k2 * 11) / 100;
                 int j3 = (l1 * 30 + j2 * 70) / 100;
@@ -147,17 +180,25 @@ public class MixinFlowingWaterTextureBinder extends TextureBinder {
                 j2 = j3;
                 k2 = k3;
             }
-            this.grid[i1 * 4 + 0] = (byte)l1;
-            this.grid[i1 * 4 + 1] = (byte)j2;
-            this.grid[i1 * 4 + 2] = (byte)k2;
-            this.grid[i1 * 4 + 3] = (byte)l2;
+            this.grid[i1 * 4 + 0] = (byte) l1;
+            this.grid[i1 * 4 + 1] = (byte) j2;
+            this.grid[i1 * 4 + 2] = (byte) k2;
+            this.grid[i1 * 4 + 3] = (byte) l2;
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public static void loadImage() {
         FlowingWaterTextureBinder.loadImage("/custom_water_flowing.png");
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public static void loadImage(String texName) {
         BufferedImage bufferedimage = null;
         if (Minecraft.minecraftInstance.level != null) {

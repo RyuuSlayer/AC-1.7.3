@@ -1,8 +1,14 @@
-package io.github.ryuu.adventurecraft.blocks;
-
-import io.github.ryuu.adventurecraft.entities.tile.TileEntityTree;
-import io.github.ryuu.adventurecraft.gui.GuiTree;
-import io.github.ryuu.adventurecraft.util.DebugMode;
+package io.github.ryuu.adventurecraft.blocks;/*
+ * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
+ * 
+ * Could not load the following classes:
+ *  java.lang.Object
+ *  java.lang.Override
+ *  net.fabricmc.api.EnvType
+ *  net.fabricmc.api.Environment
+ */
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.tile.TileWithEntity;
@@ -11,9 +17,10 @@ import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 public class BlockTree extends TileWithEntity implements IBlockColor {
+
     protected BlockTree(int i, int j) {
         super(i, j, Material.PLANT);
-        float f = 0.2F;
+        float f = 0.2f;
     }
 
     @Override
@@ -22,12 +29,12 @@ public class BlockTree extends TileWithEntity implements IBlockColor {
     }
 
     @Override
-    public int getTextureForSide(int i, int j) {
-        return this.tex + j;
+    public int getTextureForSide(int side, int meta) {
+        return this.tex + meta;
     }
 
     @Override
-    public Box getCollisionShape(Level world, int i, int j, int k) {
+    public Box getCollisionShape(Level level, int x, int y, int z) {
         return null;
     }
 
@@ -52,10 +59,10 @@ public class BlockTree extends TileWithEntity implements IBlockColor {
     }
 
     @Override
-    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
+    public boolean activate(Level level, int x, int y, int z, Player player) {
         if (DebugMode.active) {
-            TileEntityTree obj = (TileEntityTree) world.getTileEntity(i, j, k);
-            GuiTree.showUI(world, i, j, k, obj);
+            TileEntityTree obj = (TileEntityTree) level.getTileEntity(x, y, z);
+            GuiTree.showUI(level, x, y, z, obj);
         }
         return true;
     }

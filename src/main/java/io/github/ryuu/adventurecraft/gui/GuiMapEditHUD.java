@@ -1,7 +1,15 @@
-package io.github.ryuu.adventurecraft.gui;
-
-import io.github.ryuu.adventurecraft.util.DebugMode;
-import io.github.ryuu.adventurecraft.util.MapEditing;
+package io.github.ryuu.adventurecraft.gui;/*
+ * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
+ * 
+ * Could not load the following classes:
+ *  java.lang.Object
+ *  java.lang.Override
+ *  net.fabricmc.api.EnvType
+ *  net.fabricmc.api.Environment
+ *  org.lwjgl.input.Keyboard
+ */
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
@@ -9,9 +17,12 @@ import net.minecraft.level.Level;
 import org.lwjgl.input.Keyboard;
 
 public class GuiMapEditHUD extends Screen {
-    private final Level world;
-    private final GuiEditPalette palette;
+
+    private Level world;
+
     private long clickedTime;
+
+    private GuiEditPalette palette;
 
     public GuiMapEditHUD(Level w) {
         this.world = w;
@@ -29,7 +40,7 @@ public class GuiMapEditHUD extends Screen {
     }
 
     @Override
-    protected void buttonClicked(Button guibutton) {
+    protected void buttonClicked(Button button) {
     }
 
     @Override
@@ -39,14 +50,14 @@ public class GuiMapEditHUD extends Screen {
                 this.minecraft.toggleFullscreen();
                 return;
             }
-            keyPressed(Keyboard.getEventCharacter(), Keyboard.getEventKey());
+            this.keyPressed(Keyboard.getEventCharacter(), Keyboard.getEventKey());
         }
         this.minecraft.player.method_136(Keyboard.getEventKey(), Keyboard.getEventKeyState());
     }
 
     @Override
-    protected void keyPressed(char c, int i) {
-        if (i == 1) {
+    protected void keyPressed(char character, int key) {
+        if (key == 1) {
             this.minecraft.openScreen(null);
             this.minecraft.lockCursor();
             DebugMode.editMode = false;
@@ -54,33 +65,35 @@ public class GuiMapEditHUD extends Screen {
     }
 
     @Override
-    protected void mouseClicked(int i, int j, int k) {
-        if (this.palette.mouseClicked(i, j, k, this.minecraft, this.width, this.height))
+    protected void mouseClicked(int mouseX, int mouseY, int button) {
+        if (this.palette.mouseClicked(mouseX, mouseY, button, this.minecraft, this.width, this.height)) {
             return;
-        if (k == 0) {
+        }
+        if (button == 0) {
             long curTime = this.world.getLevelTime();
-            if (this.clickedTime != curTime)
+            if (this.clickedTime != curTime) {
                 DebugMode.mapEditing.paint();
-        } else if (k == 1) {
+            }
+        } else if (button == 1) {
             this.minecraft.field_2767.method_1970();
             this.minecraft.field_2778 = true;
         }
     }
 
     @Override
-    protected void mouseReleased(int i, int j, int k) {
-        if (this.lastClickedButton != null && k == 0) {
-            this.lastClickedButton.mouseReleased(i, j);
+    protected void mouseReleased(int mouseX, int mouseY, int button) {
+        if (this.lastClickedButton != null && button == 0) {
+            this.lastClickedButton.mouseReleased(mouseX, mouseY);
             this.lastClickedButton = null;
-        } else if (k == 1) {
-            this.minecraft.field_2778 = true;
+        } else if (button == 1) {
+            this.minecraft.field_2778 = false;
             this.minecraft.field_2767.method_1971();
         }
     }
 
     @Override
-    public void render(int i, int j, float f) {
-        super.render(i, j, f);
+    public void render(int mouseX, int mouseY, float delta) {
+        super.render(mouseX, mouseY, delta);
         this.palette.drawPalette(this.minecraft, this.textManager, this.width, this.height);
     }
 

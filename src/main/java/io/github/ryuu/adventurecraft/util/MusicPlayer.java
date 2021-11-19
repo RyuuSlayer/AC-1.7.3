@@ -1,62 +1,97 @@
-package io.github.ryuu.adventurecraft.util;
-
+package io.github.ryuu.adventurecraft.util;/*
+ * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
+ * 
+ * Could not load the following classes:
+ *  java.lang.Object
+ *  java.lang.String
+ *  net.fabricmc.api.EnvType
+ *  net.fabricmc.api.Environment
+ */
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.entity.Entity;
 import net.minecraft.level.Level;
+import io.github.ryuu.adventurecraft.mixin.item.MixinLevel;
+import io.github.ryuu.adventurecraft.mixin.item.MixinEntity;
 
-public class MusicPlayer {
-    public static void playNoteFromEntity(Level world, Entity ent, String instrument, char note, boolean sharp, float octave, float volume) {
-        playNote(world, ent.x, ent.y, ent.z, instrument, note, sharp, octave, volume);
+class MusicPlayer {
+
+    MusicPlayer() {
     }
 
-    public static void playNote(Level world, double x, double y, double z, String instrument, char note, boolean sharp, float octave, float volume) {
-        float pitch = 1.189207F;
-        switch (note) {
+    static void playNoteFromEntity(MixinLevel world, MixinEntity ent, String instrument, char note, boolean sharp, float octave, float volume) {
+        MusicPlayer.playNote(world, ent.x, ent.y, ent.z, instrument, note, sharp, octave, volume);
+    }
+
+    static void playNote(MixinLevel world, double x, double y, double z, String instrument, char note, boolean sharp, float octave, float volume) {
+        float pitch = 1.189207f;
+        switch(note) {
             case 'A':
-                break;
+                {
+                    break;
+                }
             case 'B':
-                pitch *= 1.122462F;
-                break;
+                {
+                    pitch *= 1.122462f;
+                    break;
+                }
             case 'C':
-                pitch *= 1.189207F;
-                break;
+                {
+                    pitch *= 1.189207f;
+                    break;
+                }
             case 'D':
-                pitch *= 1.33484F;
-                break;
+                {
+                    pitch *= 1.33484f;
+                    break;
+                }
             case 'E':
-                pitch *= 1.498307F;
-                break;
+                {
+                    pitch *= 1.498307f;
+                    break;
+                }
             case 'F':
-                pitch *= 1.587401F;
-                break;
+                {
+                    pitch *= 1.587401f;
+                    break;
+                }
             case 'G':
-                pitch *= 1.781797F;
-                break;
+                {
+                    pitch *= 1.781797f;
+                    break;
+                }
             default:
-                return;
+                {
+                    return;
+                }
         }
-        if (sharp)
-            pitch = (float) (pitch * 1.059463D);
+        if (sharp) {
+            pitch = (float) ((double) pitch * 1.059463);
+        }
         world.playSound(x, y, z, instrument, volume, pitch * octave);
     }
 
-    public static void playNoteFromSong(Level world, double x, double y, double z, String instrument, String song, int noteNum, float volume) {
-        int stringIndex = 0;
+    static void playNoteFromSong(MixinLevel world, double x, double y, double z, String instrument, String song, int noteNum, float volume) {
+        int stringIndex;
         int onNote = 0;
         boolean flat = false;
         boolean sharp = false;
         char note = 'A';
-        float octave = 1.0F;
-        while (onNote <= noteNum && stringIndex < song.length()) {
+        float octave = 1.0f;
+        for (stringIndex = 0; onNote <= noteNum && stringIndex < song.length(); ++stringIndex) {
             char curChar = song.charAt(stringIndex);
             if (curChar == '+') {
-                octave *= 2.0F;
-            } else if (curChar == '-') {
-                octave *= 0.5F;
-            } else if (curChar != '#' && curChar != 'b') {
-                note = curChar;
-                onNote++;
+                octave *= 2.0f;
+                continue;
             }
-            stringIndex++;
+            if (curChar == '-') {
+                octave *= 0.5f;
+                continue;
+            }
+            if (curChar == '#' || curChar == 'b')
+                continue;
+            note = curChar;
+            ++onNote;
         }
         if (stringIndex < song.length()) {
             char nextChar = song.charAt(stringIndex);
@@ -68,24 +103,23 @@ public class MusicPlayer {
         }
         if (flat) {
             if (note == 'A') {
-                octave *= 0.5F;
+                octave *= 0.5f;
                 note = 'G';
             } else {
                 note = (char) (note - 1);
             }
             sharp = true;
         }
-        playNote(world, x, y, z, instrument, note, sharp, octave, volume);
+        MusicPlayer.playNote(world, x, y, z, instrument, note, sharp, octave, volume);
     }
 
-    public static int countNotes(String song) {
-        int stringIndex = 0;
+    static int countNotes(String song) {
         int onNote = 0;
-        while (stringIndex < song.length()) {
+        for (int stringIndex = 0; stringIndex < song.length(); ++stringIndex) {
             char curChar = song.charAt(stringIndex);
-            if (curChar != '+' && curChar != '-' && curChar != '#' && curChar != 'b')
-                onNote++;
-            stringIndex++;
+            if (curChar == '+' || curChar == '-' || curChar == '#' || curChar == 'b')
+                continue;
+            ++onNote;
         }
         return onNote;
     }

@@ -1,11 +1,25 @@
+/*
+ * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
+ * 
+ * Could not load the following classes:
+ *  java.lang.Object
+ *  net.fabricmc.api.EnvType
+ *  net.fabricmc.api.Environment
+ */
 package io.github.ryuu.adventurecraft.scripting;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.entity.projectile.Arrow;
+import net.minecraft.script.ScriptEntity;
+import net.minecraft.script.ScriptVec3;
+import io.github.ryuu.adventurecraft.mixin.item.MixinArrow;
 
 public class ScriptEntityArrow extends ScriptEntity {
-    Arrow entityArrow;
 
-    ScriptEntityArrow(Arrow e) {
+    MixinArrow entityArrow;
+
+    ScriptEntityArrow(MixinArrow e) {
         super(e);
         this.entityArrow = e;
     }
@@ -15,8 +29,9 @@ public class ScriptEntityArrow extends ScriptEntity {
     }
 
     public ScriptVec3 getInBlockCoords() {
-        if (this.entityArrow.inTile == 0)
+        if (this.entityArrow.inTile == 0) {
             return null;
+        }
         return new ScriptVec3(this.entityArrow.xTile, this.entityArrow.yTile, this.entityArrow.zTile);
     }
 

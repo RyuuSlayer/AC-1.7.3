@@ -1,12 +1,24 @@
+/*
+ * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
+ * 
+ * Could not load the following classes:
+ *  java.lang.Object
+ *  net.fabricmc.api.EnvType
+ *  net.fabricmc.api.Environment
+ */
 package io.github.ryuu.adventurecraft.scripting;
 
-import io.github.ryuu.adventurecraft.mixin.client.MixinMinecraft;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.Minecraft;
 import net.minecraft.level.Level;
+import io.github.ryuu.adventurecraft.mixin.item.MixinLevel;
 
 public class ScriptTime {
-    Level worldObj;
 
-    ScriptTime(Level w) {
+    MixinLevel worldObj;
+
+    ScriptTime(MixinLevel w) {
         this.worldObj = w;
     }
 
@@ -39,6 +51,6 @@ public class ScriptTime {
     }
 
     public void sleep(float t) {
-        MixinMinecraft.minecraftInstance.level.script.sleep(t);
+        Minecraft.minecraftInstance.level.script.sleep(t);
     }
 }

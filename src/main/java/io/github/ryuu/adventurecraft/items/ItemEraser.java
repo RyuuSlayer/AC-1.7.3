@@ -1,5 +1,15 @@
-package io.github.ryuu.adventurecraft.items;
-
+package io.github.ryuu.adventurecraft.items;/*
+ * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
+ * 
+ * Could not load the following classes:
+ *  java.lang.Math
+ *  java.lang.Object
+ *  java.lang.Override
+ *  net.fabricmc.api.EnvType
+ *  net.fabricmc.api.Environment
+ */
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
@@ -7,24 +17,26 @@ import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 
 public class ItemEraser extends ItemType {
-    protected ItemEraser(int i) {
-        super(i);
+
+    protected ItemEraser(int id) {
+        super(id);
     }
 
     @Override
-    public boolean useOnTile(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
+    public boolean useOnTile(ItemInstance item, Player player, Level level, int x, int y, int z, int facing) {
         if (ItemCursor.bothSet) {
-            Minecraft.minecraftInstance.v.a("Erasing Area");
-            int minX = Math.min(ItemCursor.oneX, ItemCursor.twoX);
-            int maxX = Math.max(ItemCursor.oneX, ItemCursor.twoX);
-            int minY = Math.min(ItemCursor.oneY, ItemCursor.twoY);
-            int maxY = Math.max(ItemCursor.oneY, ItemCursor.twoY);
-            int minZ = Math.min(ItemCursor.oneZ, ItemCursor.twoZ);
-            int maxZ = Math.max(ItemCursor.oneZ, ItemCursor.twoZ);
-            for (int x = minX; x <= maxX; x++) {
-                for (int y = minY; y <= maxY; y++) {
-                    for (int z = minZ; z <= maxZ; z++)
-                        world.setTile(x, y, z, 0);
+            Minecraft.minecraftInstance.overlay.addChatMessage("Erasing Area");
+            int minX = Math.min((int) ItemCursor.oneX, (int) ItemCursor.twoX);
+            int maxX = Math.max((int) ItemCursor.oneX, (int) ItemCursor.twoX);
+            int minY = Math.min((int) ItemCursor.oneY, (int) ItemCursor.twoY);
+            int maxY = Math.max((int) ItemCursor.oneY, (int) ItemCursor.twoY);
+            int minZ = Math.min((int) ItemCursor.oneZ, (int) ItemCursor.twoZ);
+            int maxZ = Math.max((int) ItemCursor.oneZ, (int) ItemCursor.twoZ);
+            for (int x2 = minX; x2 <= maxX; ++x2) {
+                for (int y2 = minY; y2 <= maxY; ++y2) {
+                    for (int z2 = minZ; z2 <= maxZ; ++z2) {
+                        level.setTile(x2, y2, z2, 0);
+                    }
                 }
             }
         }

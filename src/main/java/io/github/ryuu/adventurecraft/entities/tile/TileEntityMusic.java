@@ -1,28 +1,41 @@
-package io.github.ryuu.adventurecraft.entities.tile;
-
+package io.github.ryuu.adventurecraft.entities.tile;/*
+ * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
+ * 
+ * Could not load the following classes:
+ *  java.lang.Object
+ *  java.lang.Override
+ *  java.lang.String
+ *  net.fabricmc.api.EnvType
+ *  net.fabricmc.api.Environment
+ */
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.io.CompoundTag;
 
 public class TileEntityMusic extends TileEntity {
+
+    public String musicName = "";
+
     public int fadeOut = 500;
 
     public int fadeIn = 500;
-    public String musicName = "";
 
     @Override
-    public void readIdentifyingData(CompoundTag nbttagcompound) {
-        super.readIdentifyingData(nbttagcompound);
-        this.musicName = nbttagcompound.getString("musicName");
-        this.fadeOut = nbttagcompound.getInt("fadeOut");
-        this.fadeIn = nbttagcompound.getInt("fadeIn");
+    public void readIdentifyingData(CompoundTag tag) {
+        super.readIdentifyingData(tag);
+        this.musicName = tag.getString("musicName");
+        this.fadeOut = tag.getInt("fadeOut");
+        this.fadeIn = tag.getInt("fadeIn");
     }
 
     @Override
-    public void writeIdentifyingData(CompoundTag nbttagcompound) {
-        super.writeIdentifyingData(nbttagcompound);
-        if (this.musicName != null && !this.musicName.equals(""))
-            nbttagcompound.put("musicName", this.musicName);
-        nbttagcompound.put("fadeOut", this.fadeOut);
-        nbttagcompound.put("fadeIn", this.fadeIn);
+    public void writeIdentifyingData(CompoundTag tag) {
+        super.writeIdentifyingData(tag);
+        if (this.musicName != null && !this.musicName.equals((Object) "")) {
+            tag.put("musicName", this.musicName);
+        }
+        tag.put("fadeOut", this.fadeOut);
+        tag.put("fadeIn", this.fadeIn);
     }
 }

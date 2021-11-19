@@ -1,39 +1,56 @@
-package io.github.ryuu.adventurecraft.models;
-
+package io.github.ryuu.adventurecraft.models;/*
+ * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
+ * 
+ * Could not load the following classes:
+ *  java.lang.Math
+ *  java.lang.Object
+ *  java.lang.Override
+ *  java.lang.System
+ *  net.fabricmc.api.EnvType
+ *  net.fabricmc.api.Environment
+ *  org.lwjgl.opengl.GL11
+ */
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.entity.model.EntityModel;
 import org.lwjgl.opengl.GL11;
 
 public class ModelBat extends EntityModel {
+
     public ModelPart theHead;
+
     public ModelPart ears;
+
     public ModelPart rightWing;
+
     public ModelPart theBody;
+
     public ModelPart leftWing;
 
     public ModelBat() {
-        float offset = 16.0F;
+        float offset = 16.0f;
         this.theHead = new ModelPart(0, 0);
-        this.theHead.addCuboid(-1.5F, -3.0F, -1.5F, 3, 3, 3, 0.0F);
-        this.theHead.setPivot(0.0F, -4.0F + offset, 0.0F);
+        this.theHead.addCuboid(-1.5f, -3.0f, -1.5f, 3, 3, 3, 0.0f);
+        this.theHead.setPivot(0.0f, -4.0f + offset, 0.0f);
         this.ears = new ModelPart(12, 10);
-        this.ears.addCuboid(-1.5F, -4.0F, 0.0F, 3, 1, 0, 0.0F);
-        this.ears.setPivot(0.0F, -4.0F + offset, 0.0F);
+        this.ears.addCuboid(-1.5f, -4.0f, 0.0f, 3, 1, 0, 0.0f);
+        this.ears.setPivot(0.0f, -4.0f + offset, 0.0f);
         this.theBody = new ModelPart(0, 6);
-        this.theBody.addCuboid(-1.5F, -4.0F, -1.5F, 3, 5, 3, 0.0F);
-        this.theBody.setPivot(0.0F, 0.0F + offset, 0.0F);
+        this.theBody.addCuboid(-1.5f, -4.0f, -1.5f, 3, 5, 3, 0.0f);
+        this.theBody.setPivot(0.0f, 0.0f + offset, 0.0f);
         this.leftWing = new ModelPart(12, 0);
-        this.leftWing.addCuboid(0.0F, -4.0F, 0.0F, 7, 5, 0, 0.0F);
-        this.leftWing.setPivot(1.5F, 0.0F + offset, 0.0F);
+        this.leftWing.addCuboid(0.0f, -4.0f, 0.0f, 7, 5, 0, 0.0f);
+        this.leftWing.setPivot(1.5f, 0.0f + offset, 0.0f);
         this.rightWing = new ModelPart(12, 5);
-        this.rightWing.addCuboid(-7.0F, -4.0F, 0.0F, 7, 5, 0, 0.0F);
-        this.rightWing.setPivot(-1.5F, 0.0F + offset, 0.0F);
+        this.rightWing.addCuboid(-7.0f, -4.0f, 0.0f, 7, 5, 0, 0.0f);
+        this.rightWing.setPivot(-1.5f, 0.0f + offset, 0.0f);
     }
 
     @Override
     public void render(float f, float f1, float f2, float f3, float f4, float f5) {
-        GL11.glEnable(2884);
-        setAngles(f, f1, f2, f3, f4, f5);
+        GL11.glEnable((int) 2884);
+        this.setAngles(f, f1, f2, f3, f4, f5);
         this.theHead.render(f5);
         this.ears.render(f5);
         this.theBody.render(f5);
@@ -43,12 +60,12 @@ public class ModelBat extends EntityModel {
 
     @Override
     public void setAngles(float f, float f1, float f2, float f3, float f4, float f5) {
-        this.theHead.pitch = -(f4 / 57.29578F);
-        this.theHead.yaw = f3 / 57.29578F;
+        this.theHead.pitch = -(f4 / 57.29578f);
+        this.theHead.yaw = f3 / 57.29578f;
         this.ears.pitch = this.theHead.pitch;
         this.ears.yaw = this.theHead.yaw;
-        double t = (System.currentTimeMillis() % 500L) / 500.0D;
-        this.leftWing.yaw = 0.3F * (float) Math.cos(2.0D * t * Math.PI);
-        this.rightWing.yaw = -0.3F * (float) Math.cos(2.0D * t * Math.PI);
+        double t = (double) (System.currentTimeMillis() % 500L) / 500.0;
+        this.leftWing.yaw = 0.3f * (float) Math.cos((double) (2.0 * t * Math.PI));
+        this.rightWing.yaw = -0.3f * (float) Math.cos((double) (2.0 * t * Math.PI));
     }
 }

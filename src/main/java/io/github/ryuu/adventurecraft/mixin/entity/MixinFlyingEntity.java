@@ -1,27 +1,57 @@
+/*
+ * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
+ * 
+ * Could not load the following classes:
+ *  java.lang.Object
+ *  java.lang.Override
+ *  net.fabricmc.api.EnvType
+ *  net.fabricmc.api.Environment
+ */
 package io.github.ryuu.adventurecraft.mixin.entity;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.entity.FlyingEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 import net.minecraft.util.maths.MathsHelper;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
+import io.github.ryuu.adventurecraft.mixin.item.MixinLevel;
+import io.github.ryuu.adventurecraft.mixin.item.MixinLivingEntity;
 
-public class MixinFlyingEntity extends LivingEntity {
+@Mixin(FlyingEntity.class)
+public class MixinFlyingEntity extends MixinLivingEntity {
+
+    @Shadow()
     public int attackStrength = 1;
 
-    public MixinFlyingEntity(Level world) {
+    public MixinFlyingEntity(MixinLevel world) {
         super(world);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     protected void handleFallDamage(float f) {
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void travel(float f, float f1) {
         if (this.method_1334()) {
             this.movementInputToVelocity(f, f1, 0.02f);
             this.move(this.velocityX, this.velocityY, this.velocityZ);
-            this.velocityX *= 0.8f;
-            this.velocityY *= 0.8f;
-            this.velocityZ *= 0.8f;
+            this.velocityX *= (double) 0.8f;
+            this.velocityY *= (double) 0.8f;
+            this.velocityZ *= (double) 0.8f;
         } else if (this.method_1335()) {
             this.movementInputToVelocity(f, f1, 0.02f);
             this.move(this.velocityX, this.velocityY, this.velocityZ);
@@ -48,9 +78,9 @@ public class MixinFlyingEntity extends LivingEntity {
                 }
             }
             this.move(this.velocityX, this.velocityY, this.velocityZ);
-            this.velocityX *= f2;
-            this.velocityY *= f2;
-            this.velocityZ *= f2;
+            this.velocityX *= (double) f2;
+            this.velocityY *= (double) f2;
+            this.velocityZ *= (double) f2;
         }
         this.field_1048 = this.limbDistance;
         double d = this.x - this.prevX;
@@ -63,6 +93,11 @@ public class MixinFlyingEntity extends LivingEntity {
         this.field_1050 += this.limbDistance;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public boolean isOnLadder() {
         return false;
     }

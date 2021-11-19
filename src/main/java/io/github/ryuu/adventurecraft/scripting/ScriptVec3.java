@@ -1,7 +1,19 @@
+/*
+ * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
+ * 
+ * Could not load the following classes:
+ *  java.lang.Math
+ *  java.lang.Object
+ *  net.fabricmc.api.EnvType
+ *  net.fabricmc.api.Environment
+ */
 package io.github.ryuu.adventurecraft.scripting;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class ScriptVec3 {
+
     public double x;
 
     public double y;
@@ -35,14 +47,14 @@ public class ScriptVec3 {
     }
 
     public double length() {
-        return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+        return Math.sqrt((double) (this.x * this.x + this.y * this.y + this.z * this.z));
     }
 
     public double distance(ScriptVec3 other) {
         double dx = this.x - other.x;
         double dy = this.y - other.y;
         double dz = this.z - other.z;
-        return Math.sqrt(dx * dx + dy * dy + dz * dz);
+        return Math.sqrt((double) (dx * dx + dy * dy + dz * dz));
     }
 
     public ScriptVec3 scale(double s) {

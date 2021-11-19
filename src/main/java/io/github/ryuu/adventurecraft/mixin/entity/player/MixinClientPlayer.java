@@ -1,12 +1,20 @@
+/*
+ * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
+ * 
+ * Could not load the following classes:
+ *  java.lang.Float
+ *  java.lang.NumberFormatException
+ *  java.lang.Object
+ *  java.lang.Override
+ *  java.lang.String
+ *  java.lang.StringIndexOutOfBoundsException
+ *  net.fabricmc.api.EnvType
+ *  net.fabricmc.api.Environment
+ */
 package io.github.ryuu.adventurecraft.mixin.entity.player;
 
-import io.github.ryuu.adventurecraft.gui.GuiMapEditHUD;
-import io.github.ryuu.adventurecraft.gui.GuiPalette;
-import io.github.ryuu.adventurecraft.gui.GuiScriptStats;
-import io.github.ryuu.adventurecraft.gui.GuiWorldConfig;
-import io.github.ryuu.adventurecraft.util.DebugMode;
-import io.github.ryuu.adventurecraft.util.InventoryDebug;
-import io.github.ryuu.adventurecraft.util.JScriptInfo;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.achievement.Achievement;
 import net.minecraft.achievement.Achievements;
 import net.minecraft.client.Minecraft;
@@ -22,6 +30,7 @@ import net.minecraft.client.util.Smoother;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.FurnaceEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.ClientPlayer;
 import net.minecraft.entity.player.Player;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.level.Level;
@@ -31,15 +40,33 @@ import net.minecraft.tile.entity.Dispenser;
 import net.minecraft.tile.entity.Sign;
 import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.MathsHelper;
+import io.github.ryuu.adventurecraft.mixin.item.MixinDispenser;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
+import io.github.ryuu.adventurecraft.mixin.item.MixinPlayer;
+import io.github.ryuu.adventurecraft.mixin.item.MixinLevel;
+import io.github.ryuu.adventurecraft.mixin.item.MixinLivingEntity;
+import io.github.ryuu.adventurecraft.mixin.item.MixinCompoundTag;
+import io.github.ryuu.adventurecraft.mixin.item.MixinEntity;
+import io.github.ryuu.adventurecraft.mixin.item.MixinEntityCollisionParticle;
+import io.github.ryuu.adventurecraft.mixin.item.MixinSign;
 
-public class MixinClientPlayer extends Player {
+@Mixin(ClientPlayer.class)
+public class MixinClientPlayer extends MixinPlayer {
+
+    @Shadow()
     public PlayerKeypressManager keypressManager;
+
     protected Minecraft minecraft;
+
     private Smoother field_163 = new Smoother();
+
     private Smoother field_164 = new Smoother();
+
     private Smoother field_165 = new Smoother();
 
-    public MixinClientPlayer(Minecraft minecraft, Level level, Session session, int dimensionId) {
+    public MixinClientPlayer(Minecraft minecraft, MixinLevel level, Session session, int dimensionId) {
         super(level);
         this.minecraft = minecraft;
         this.dimensionId = dimensionId;
@@ -47,10 +74,20 @@ public class MixinClientPlayer extends Player {
         this.movementSpeed = 1.0f;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void move(double d, double d1, double d2) {
         super.move(d, d1, d2);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void tickHandSwing() {
         super.tickHandSwing();
         this.perpendicularMovement = this.movementSpeed * this.keypressManager.perpendicularMovement;
@@ -58,6 +95,11 @@ public class MixinClientPlayer extends Player {
         this.jumping = this.keypressManager.jump;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void updateDespawnCounter() {
         if (!this.minecraft.statManager.hasAchievement(Achievements.OPEN_INVENTORY)) {
             this.minecraft.toastManager.set(Achievements.OPEN_INVENTORY);
@@ -99,116 +141,181 @@ public class MixinClientPlayer extends Player {
         super.updateDespawnCounter();
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_140() {
         this.keypressManager.resetKeys();
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_136(int i, boolean flag) {
         if (this.level.script.keyboard.processPlayerKeyPress(i, flag)) {
             this.keypressManager.onKeyPressed(i, flag);
         }
     }
 
-    public void writeCustomDataToTag(CompoundTag tag) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public void writeCustomDataToTag(MixinCompoundTag tag) {
         super.writeCustomDataToTag(tag);
         tag.put("Score", this.score);
     }
 
-    public void readCustomDataFromTag(CompoundTag tag) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public void readCustomDataFromTag(MixinCompoundTag tag) {
         super.readCustomDataFromTag(tag);
         this.score = tag.getInt("Score");
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void closeContainer() {
         super.closeContainer();
         this.minecraft.openScreen(null);
     }
 
-    public void openSignScreen(Sign tileentitysign) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public void openSignScreen(MixinSign tileentitysign) {
         this.minecraft.openScreen(new EditSignScreen(tileentitysign));
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void openChestScreen(Inventory iinventory) {
         this.minecraft.openScreen(new DoubleChestScreen(this.inventory, iinventory));
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void displayGUIPalette() {
         InventoryDebug palette = new InventoryDebug("Palette", 54);
         palette.fillInventory(1);
-        this.minecraft.openScreen(new GuiPalette(this.inventory, palette));
+        this.minecraft.openScreen(new GuiPalette((Inventory) this.inventory, palette));
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void openCraftingScreen(int i, int j, int k) {
         this.minecraft.openScreen(new CraftingScreen(this.inventory, this.level, i, j, k));
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void openFurnaceScreen(FurnaceEntity tileentityfurnace) {
         this.minecraft.openScreen(new FurnaceScreen(this.inventory, tileentityfurnace));
     }
 
-    public void openDispenserScreen(Dispenser tileentitydispenser) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public void openDispenserScreen(MixinDispenser tileentitydispenser) {
         this.minecraft.openScreen(new DispenserScreen(this.inventory, tileentitydispenser));
     }
 
-    public void onEntityCollision(Entity entity, int i) {
-        this.minecraft.particleManager.addParticle(new EntityCollisionParticle(this.minecraft.level, entity, this, -0.5f));
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public void onEntityCollision(MixinEntity entity, int i) {
+        this.minecraft.particleManager.addParticle(new MixinEntityCollisionParticle(this.minecraft.level, entity, this, -0.5f));
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public int method_141() {
         return this.inventory.method_687();
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void sendChatMessage(String s) {
         String orig = s;
-        if ((s = s.toLowerCase()).equals("/day")) {
+        if ((s = s.toLowerCase()).equals((Object) "/day")) {
             this.level.setTimeOfDay(0L);
-        } else if (s.equals("/night")) {
+        } else if (s.equals((Object) "/night")) {
             this.level.setTimeOfDay(12000L);
-        } else if (s.equals("/fly")) {
+        } else if (s.equals((Object) "/fly")) {
             this.isFlying = !this.isFlying;
-            this.minecraft.overlay.addChatMessage(String.format("Flying: %b", new Object[]{this.isFlying}));
-        } else if (s.equals("/health")) {
+            this.minecraft.overlay.addChatMessage(String.format((String) "Flying: %b", (Object[]) new Object[] { this.isFlying }));
+        } else if (s.equals((Object) "/health")) {
             this.health = 12;
             this.maxHealth = 12;
             this.numHeartPieces = 0;
-        } else if (s.equals("/mapedit")) {
+        } else if (s.equals((Object) "/mapedit")) {
             DebugMode.levelEditing = !DebugMode.levelEditing;
-        } else if (s.equals("/removemobs")) {
-            for (Entity obj : this.level.entities) {
-                Entity e = obj;
-                if (!(e instanceof LivingEntity) || e instanceof Player) continue;
+        } else if (s.equals((Object) "/removemobs")) {
+            for (MixinEntity obj : this.level.entities) {
+                MixinEntity e = obj;
+                if (!(e instanceof MixinLivingEntity) || e instanceof MixinPlayer)
+                    continue;
                 e.removed = true;
             }
-        } else if (s.equals("/noclip")) {
+        } else if (s.equals((Object) "/noclip")) {
             boolean bl = this.field_1642 = !this.field_1642;
             if (this.field_1642) {
                 this.isFlying = true;
             }
-            this.minecraft.overlay.addChatMessage(String.format("NoClip: %b", new Object[]{this.field_1642}));
-        } else if (s.equals("/togglemelting")) {
+            this.minecraft.overlay.addChatMessage(String.format((String) "NoClip: %b", (Object[]) new Object[] { this.field_1642 }));
+        } else if (s.equals((Object) "/togglemelting")) {
             this.level.properties.iceMelts = !this.level.properties.iceMelts;
-            this.minecraft.overlay.addChatMessage(String.format("Ice Melts: %b", new Object[]{this.level.properties.iceMelts}));
+            this.minecraft.overlay.addChatMessage(String.format((String) "Ice Melts: %b", (Object[]) new Object[] { this.level.properties.iceMelts }));
         } else if (s.startsWith("/cameraadd")) {
             if (this.minecraft.activeCutsceneCamera != null) {
                 float t;
                 try {
-                    t = Float.valueOf(s.substring(11)).floatValue();
-                }
-                catch (StringIndexOutOfBoundsException e) {
+                    t = Float.valueOf((String) s.substring(11)).floatValue();
+                } catch (StringIndexOutOfBoundsException e) {
                     this.minecraft.overlay.addChatMessage("/cameraadd must have a time specified for the point");
                     return;
-                }
-                catch (NumberFormatException e) {
+                } catch (NumberFormatException e) {
                     this.minecraft.overlay.addChatMessage("'" + s.substring(11) + "' is not a valid number");
                     return;
                 }
-                this.minecraft.activeCutsceneCamera.addCameraPoint(t, (float)this.x, (float)(this.y - (double)this.standingEyeHeight + (double)1.62f), (float)this.z, this.yaw, this.pitch, 2);
+                this.minecraft.activeCutsceneCamera.addCameraPoint(t, (float) this.x, (float) (this.y - (double) this.standingEyeHeight + (double) 1.62f), (float) this.z, this.yaw, this.pitch, 2);
                 this.minecraft.activeCutsceneCamera.loadCameraEntities();
                 this.minecraft.overlay.addChatMessage("Point Added");
             } else {
                 this.minecraft.overlay.addChatMessage("Need to be editing a camera block");
             }
-        } else if (s.equals("/cameraclear")) {
+        } else if (s.equals((Object) "/cameraclear")) {
             if (this.minecraft.activeCutsceneCamera != null) {
                 this.minecraft.activeCutsceneCamera.clearPoints();
                 this.minecraft.overlay.addChatMessage("Clearing Points");
@@ -216,29 +323,29 @@ public class MixinClientPlayer extends Player {
             } else {
                 this.minecraft.overlay.addChatMessage("Need to be editing a camera block");
             }
-        } else if (s.equals("/mobsburn")) {
+        } else if (s.equals((Object) "/mobsburn")) {
             this.level.properties.mobsBurn = !this.level.properties.mobsBurn;
-            this.minecraft.overlay.addChatMessage(String.format("Mobs Burn in Daylight: %b", new Object[]{this.level.properties.mobsBurn}));
-        } else if (s.equals("/config")) {
+            this.minecraft.overlay.addChatMessage(String.format((String) "Mobs Burn in Daylight: %b", (Object[]) new Object[] { this.level.properties.mobsBurn }));
+        } else if (s.equals((Object) "/config")) {
             this.minecraft.openScreen(new GuiWorldConfig(this.level));
-        } else if (s.equals("/test")) {
+        } else if (s.equals((Object) "/test")) {
             this.minecraft.openScreen(new GuiMapEditHUD(this.level));
-        } else if (s.equals("/renderpaths")) {
+        } else if (s.equals((Object) "/renderpaths")) {
             DebugMode.renderPaths = !DebugMode.renderPaths;
-            this.minecraft.overlay.addChatMessage(String.format("Render Paths: %b", new Object[]{DebugMode.renderPaths}));
-        } else if (s.equals("/renderfov")) {
+            this.minecraft.overlay.addChatMessage(String.format((String) "Render Paths: %b", (Object[]) new Object[] { DebugMode.renderPaths }));
+        } else if (s.equals((Object) "/renderfov")) {
             DebugMode.renderFov = !DebugMode.renderFov;
-            this.minecraft.overlay.addChatMessage(String.format("Render FOV: %b", new Object[]{DebugMode.renderFov}));
-        } else if (s.equals("/fullbright")) {
+            this.minecraft.overlay.addChatMessage(String.format((String) "Render FOV: %b", (Object[]) new Object[] { DebugMode.renderFov }));
+        } else if (s.equals((Object) "/fullbright")) {
             for (int i = 0; i < 16; ++i) {
                 this.level.dimension.field_2178[i] = 1.0f;
             }
             this.minecraft.worldRenderer.updateAllTheRenderers();
-        } else if (s.equals("/undo")) {
+        } else if (s.equals((Object) "/undo")) {
             this.level.undo();
-        } else if (s.equals("/redo")) {
+        } else if (s.equals((Object) "/redo")) {
             this.level.redo();
-        } else if (s.equals("/fluidcollision")) {
+        } else if (s.equals((Object) "/fluidcollision")) {
             FluidTile.isHittable = !FluidTile.isHittable;
         } else if (s.startsWith("/scriptstats")) {
             GuiScriptStats.showUI();
@@ -268,10 +375,19 @@ public class MixinClientPlayer extends Player {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public boolean method_1373() {
         return this.keypressManager.sneak && !this.sleeping;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void updateHealth(int i) {
         int j = this.health - i;
         if (j <= 0) {
@@ -289,23 +405,43 @@ public class MixinClientPlayer extends Player {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void respawn() {
         this.minecraft.respawn(false, 0);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void method_494() {
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void sendTranslatedMessage(String key) {
         this.minecraft.overlay.method_1953(key);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void increaseStat(Stat state, int amount) {
         if (state == null) {
             return;
         }
         if (state.isAchievement()) {
-            Achievement achievement = (Achievement)state;
+            Achievement achievement = (Achievement) state;
             if (achievement.parent == null || this.minecraft.statManager.hasAchievement(achievement.parent)) {
                 if (!this.minecraft.statManager.hasAchievement(achievement)) {
                     this.minecraft.toastManager.setWithoutDescription(achievement);
@@ -317,16 +453,25 @@ public class MixinClientPlayer extends Player {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private boolean method_138(int i, int j, int k) {
         return this.level.canSuffocate(i, j, k);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     protected boolean method_1372(double d, double d1, double d2) {
         int i = MathsHelper.floor(d);
         int j = MathsHelper.floor(d1);
         int k = MathsHelper.floor(d2);
-        double d3 = d - (double)i;
-        double d4 = d2 - (double)k;
+        double d3 = d - (double) i;
+        double d4 = d2 - (double) k;
         if (this.method_138(i, j, k) || this.method_138(i, j + 1, k)) {
             boolean flag = !this.method_138(i - 1, j, k) && !this.method_138(i - 1, j + 1, k);
             boolean flag1 = !this.method_138(i + 1, j, k) && !this.method_138(i + 1, j + 1, k);

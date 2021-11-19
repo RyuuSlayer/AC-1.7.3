@@ -1,18 +1,39 @@
+/*
+ * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
+ * 
+ * Could not load the following classes:
+ *  java.lang.Object
+ *  java.lang.Override
+ */
 package io.github.ryuu.adventurecraft.mixin.item;
 
-import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
+import net.minecraft.item.RedstoneItem;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
+import io.github.ryuu.adventurecraft.mixin.item.MixinPlayer;
+import io.github.ryuu.adventurecraft.mixin.item.MixinItemType;
+import io.github.ryuu.adventurecraft.mixin.item.MixinLevel;
+import io.github.ryuu.adventurecraft.mixin.item.MixinItemInstance;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
-public class MixinRedstoneItem extends ItemType {
+@Mixin(RedstoneItem.class)
+public class MixinRedstoneItem extends MixinItemType {
+
     public MixinRedstoneItem(int id) {
         super(id);
     }
 
-    public boolean useOnTile(ItemInstance item, Player player, Level level, int x, int y, int z, int facing) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public boolean useOnTile(MixinItemInstance item, MixinPlayer player, MixinLevel level, int x, int y, int z, int facing) {
         if (level.getTileId(x, y, z) != Tile.SNOW.id) {
             if (facing == 0) {
                 --y;

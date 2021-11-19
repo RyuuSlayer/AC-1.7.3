@@ -1,20 +1,42 @@
+/*
+ * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
+ * 
+ * Could not load the following classes:
+ *  java.lang.Object
+ *  java.lang.Override
+ *  java.util.Random
+ *  net.fabricmc.api.EnvType
+ *  net.fabricmc.api.Environment
+ */
 package io.github.ryuu.adventurecraft.mixin.tile;
 
-import io.github.ryuu.adventurecraft.blocks.Blocks;
+import java.util.Random;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.level.Level;
 import net.minecraft.tile.LadderTile;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
+import io.github.ryuu.adventurecraft.mixin.item.MixinLevel;
+import io.github.ryuu.adventurecraft.mixin.item.MixinTile;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
-import java.util.Random;
+@Mixin(LadderTile.class)
+public class MixinLadderTile extends MixinTile {
 
-public class MixinLadderTile extends Tile {
-    protected LadderTile(int id, int texUVStart) {
+    protected MixinLadderTile(int id, int texUVStart) {
         super(id, texUVStart, Material.DOODADS);
     }
 
-    public Box getCollisionShape(Level level, int x, int y, int z) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public Box getCollisionShape(MixinLevel level, int x, int y, int z) {
         int l = level.getTileMeta(x, y, z) % 4 + 2;
         float f = 0.125f;
         if (l == 2) {
@@ -32,7 +54,12 @@ public class MixinLadderTile extends Tile {
         return super.getCollisionShape(level, x, y, z);
     }
 
-    public Box getOutlineShape(Level level, int x, int y, int z) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public Box getOutlineShape(MixinLevel level, int x, int y, int z) {
         int l = level.getTileMeta(x, y, z) % 4 + 2;
         float f = 0.125f;
         if (l == 2) {
@@ -50,19 +77,39 @@ public class MixinLadderTile extends Tile {
         return super.getOutlineShape(level, x, y, z);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public boolean isFullOpaque() {
         return false;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public boolean isFullCube() {
         return false;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public int method_1621() {
         return 8;
     }
 
-    public boolean canPlaceAt(Level level, int x, int y, int z) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public boolean canPlaceAt(MixinLevel level, int x, int y, int z) {
         if (level.canSuffocate(x - 1, y, z)) {
             return true;
         }
@@ -79,11 +126,20 @@ public class MixinLadderTile extends Tile {
         return level.canSuffocate(x, y, z + 1);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public static boolean isLadderID(int bID) {
         return bID == Tile.LADDER.id || bID == Blocks.ladders1.id || bID == Blocks.ladders2.id || bID == Blocks.ladders3.id || bID == Blocks.ladders4.id;
     }
 
-    public void onPlaced(Level level, int x, int y, int z, int facing) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public void onPlaced(MixinLevel level, int x, int y, int z, int facing) {
         int i1 = level.getTileMeta(x, y, z);
         if (i1 == 0 && LadderTile.isLadderID(level.getTileId(x, y - 1, z))) {
             i1 = level.getTileMeta(x, y - 1, z) % 4 + 2;
@@ -106,6 +162,38 @@ public class MixinLadderTile extends Tile {
         level.setTileMeta(x, y, z, i1 - 2);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public void method_1609(MixinLevel level, int n, int n2, int n3, int n4) {
+        int n5 = level.getTileMeta(n, n2, n3);
+        boolean bl = false;
+        if (n5 == 2 && level.canSuffocate(n, n2, n3 + 1)) {
+            bl = true;
+        }
+        if (n5 == 3 && level.canSuffocate(n, n2, n3 - 1)) {
+            bl = true;
+        }
+        if (n5 == 4 && level.canSuffocate(n + 1, n2, n3)) {
+            bl = true;
+        }
+        if (n5 == 5 && level.canSuffocate(n - 1, n2, n3)) {
+            bl = true;
+        }
+        if (!bl) {
+            this.drop(level, n, n2, n3, n5);
+            level.setTile(n, n2, n3, 0);
+        }
+        super.method_1609(level, n, n2, n3, n4);
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public int getDropCount(Random rand) {
         return 1;
     }

@@ -1,42 +1,87 @@
+/*
+ * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
+ * 
+ * Could not load the following classes:
+ *  java.lang.Object
+ *  java.lang.Override
+ *  java.lang.String
+ *  net.fabricmc.api.EnvType
+ *  net.fabricmc.api.Environment
+ */
 package io.github.ryuu.adventurecraft.mixin.entity.monster;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.Lightning;
+import net.minecraft.entity.monster.Creeper;
 import net.minecraft.entity.monster.Monster;
 import net.minecraft.entity.monster.Skeleton;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 import net.minecraft.util.io.CompoundTag;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
+import io.github.ryuu.adventurecraft.mixin.item.MixinMonster;
+import io.github.ryuu.adventurecraft.mixin.item.MixinLevel;
+import io.github.ryuu.adventurecraft.mixin.item.MixinCompoundTag;
+import io.github.ryuu.adventurecraft.mixin.item.MixinEntity;
+import io.github.ryuu.adventurecraft.mixin.item.MixinSkeleton;
 
-public class MixinCreeper extends Monster {
+@Mixin(Creeper.class)
+public class MixinCreeper extends MixinMonster {
+
+    @Shadow()
     int currentFuseTime;
+
     int lastFuseTime;
 
-    public MixinCreeper(Level world) {
+    public MixinCreeper(MixinLevel world) {
         super(world);
         this.texture = "/mob/creeper.png";
         this.attackDamage = 3;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     protected void initDataTracker() {
         super.initDataTracker();
-        this.dataTracker.startTracking(16, (byte)-1);
-        this.dataTracker.startTracking(17, (byte)0);
+        this.dataTracker.startTracking(16, (byte) -1);
+        this.dataTracker.startTracking(17, (byte) 0);
     }
 
-    public void writeCustomDataToTag(CompoundTag tag) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public void writeCustomDataToTag(MixinCompoundTag tag) {
         super.writeCustomDataToTag(tag);
         if (this.dataTracker.getByte(17) == 1) {
             tag.put("powered", true);
         }
     }
 
-    public void readCustomDataFromTag(CompoundTag tag) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public void readCustomDataFromTag(MixinCompoundTag tag) {
         super.readCustomDataFromTag(tag);
-        this.dataTracker.setData(17, (byte)(tag.getBoolean("powered") ? 1 : 0));
+        this.dataTracker.setData(17, (byte) (tag.getBoolean("powered") ? 1 : 0));
     }
 
-    protected void method_639(Entity entity, float f) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    protected void method_639(MixinEntity entity, float f) {
         if (this.level.isClient) {
             return;
         }
@@ -49,6 +94,11 @@ public class MixinCreeper extends Monster {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void tick() {
         this.lastFuseTime = this.currentFuseTime;
         if (this.level.isClient) {
@@ -74,22 +124,42 @@ public class MixinCreeper extends Monster {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     protected String getHurtSound() {
         return "mob.creeper";
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     protected String getDeathSound() {
         return "mob.creeperdeath";
     }
 
-    public void onKilledBy(Entity entity) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public void onKilledBy(MixinEntity entity) {
         super.onKilledBy(entity);
-        if (entity instanceof Skeleton) {
+        if (entity instanceof MixinSkeleton) {
             this.dropItem(ItemType.record_13.id + this.rand.nextInt(2), 1);
         }
     }
 
-    protected void method_637(Entity entity, float f) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    protected void method_637(MixinEntity entity, float f) {
         if (this.level.isClient) {
             return;
         }
@@ -102,7 +172,7 @@ public class MixinCreeper extends Monster {
             ++this.currentFuseTime;
             if (this.currentFuseTime >= 30) {
                 if (this.isCharged()) {
-                    this.level.createExplosion(this, this.x, this.y, this.z, (float)this.attackDamage * 2.0f);
+                    this.level.createExplosion(this, this.x, this.y, this.z, (float) this.attackDamage * 2.0f);
                 } else {
                     this.level.createExplosion(this, this.x, this.y, this.z, this.attackDamage);
                 }
@@ -118,28 +188,54 @@ public class MixinCreeper extends Monster {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean isCharged() {
         return this.dataTracker.getByte(17) == 1;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public float method_410(float f) {
-        return ((float)this.lastFuseTime + (float)(this.currentFuseTime - this.lastFuseTime) * f) / 28.0f;
+        return ((float) this.lastFuseTime + (float) (this.currentFuseTime - this.lastFuseTime) * f) / 28.0f;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     protected int getMobDrops() {
         return ItemType.sulphur.id;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private int getFuseSpeed() {
         return this.dataTracker.getByte(16);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void setFuseSpeed(int i) {
-        this.dataTracker.setData(16, (byte)i);
+        this.dataTracker.setData(16, (byte) i);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void onStruckByLightning(Lightning entitylightningbolt) {
         super.onStruckByLightning(entitylightningbolt);
-        this.dataTracker.setData(17, (byte)1);
+        this.dataTracker.setData(17, (byte) 1);
     }
 }

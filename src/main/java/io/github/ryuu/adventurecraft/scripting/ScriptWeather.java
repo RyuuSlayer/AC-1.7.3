@@ -1,11 +1,23 @@
+/*
+ * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
+ * 
+ * Could not load the following classes:
+ *  java.lang.Object
+ *  net.fabricmc.api.EnvType
+ *  net.fabricmc.api.Environment
+ */
 package io.github.ryuu.adventurecraft.scripting;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.level.Level;
+import io.github.ryuu.adventurecraft.mixin.item.MixinLevel;
 
 public class ScriptWeather {
-    Level world;
 
-    ScriptWeather(Level w) {
+    MixinLevel world;
+
+    ScriptWeather(MixinLevel w) {
         this.world = w;
     }
 

@@ -1,8 +1,14 @@
-package io.github.ryuu.adventurecraft.blocks;
-
-import io.github.ryuu.adventurecraft.entities.tile.TileEntityMessage;
-import io.github.ryuu.adventurecraft.gui.GuiMessage;
-import io.github.ryuu.adventurecraft.util.DebugMode;
+package io.github.ryuu.adventurecraft.blocks;/*
+ * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
+ * 
+ * Could not load the following classes:
+ *  java.lang.Object
+ *  java.lang.Override
+ *  net.fabricmc.api.EnvType
+ *  net.fabricmc.api.Environment
+ */
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
@@ -13,6 +19,7 @@ import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 public class BlockMessage extends TileWithEntity {
+
     protected BlockMessage(int i, int j) {
         super(i, j, Material.AIR);
     }
@@ -28,30 +35,36 @@ public class BlockMessage extends TileWithEntity {
     }
 
     @Override
-    public Box getCollisionShape(Level world, int i, int j, int k) {
+    public Box getCollisionShape(Level level, int x, int y, int z) {
         return null;
     }
 
+    @Override
     public boolean shouldRender(TileView blockAccess, int i, int j, int k) {
         return DebugMode.active;
     }
 
+    @Override
     public boolean canBeTriggered() {
         return true;
     }
 
+    @Override
     public void onTriggerActivated(Level world, int i, int j, int k) {
         TileEntityMessage obj = (TileEntityMessage) world.getTileEntity(i, j, k);
-        if (!obj.message.equals(""))
+        if (!obj.message.equals((Object) "")) {
             Minecraft.minecraftInstance.overlay.addChatMessage(obj.message);
-        if (!obj.sound.equals(""))
-            world.playSound(i + 0.5D, j + 0.5D, k + 0.5D, obj.sound, 1.0F, 1.0F);
+        }
+        if (!obj.sound.equals((Object) "")) {
+            world.playSound((double) i + 0.5, (double) j + 0.5, (double) k + 0.5, obj.sound, 1.0f, 1.0f);
+        }
     }
 
-    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
+    @Override
+    public boolean activate(Level level, int x, int y, int z, Player player) {
         if (DebugMode.active) {
-            TileEntityMessage obj = (TileEntityMessage) world.getTileEntity(i, j, k);
-            GuiMessage.showUI(world, obj);
+            TileEntityMessage obj = (TileEntityMessage) level.getTileEntity(x, y, z);
+            GuiMessage.showUI(level, obj);
             return true;
         }
         return false;

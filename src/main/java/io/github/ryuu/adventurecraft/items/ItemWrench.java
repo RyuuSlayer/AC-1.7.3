@@ -1,5 +1,16 @@
-package io.github.ryuu.adventurecraft.items;
-
+package io.github.ryuu.adventurecraft.items;/*
+ * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
+ * 
+ * Could not load the following classes:
+ *  java.lang.Math
+ *  java.lang.Object
+ *  java.lang.Override
+ *  java.lang.String
+ *  net.fabricmc.api.EnvType
+ *  net.fabricmc.api.Environment
+ */
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
@@ -8,30 +19,32 @@ import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 
 public class ItemWrench extends ItemType {
-    protected ItemWrench(int i) {
-        super(i);
+
+    protected ItemWrench(int id) {
+        super(id);
     }
 
     @Override
-    public boolean useOnTile(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
+    public boolean useOnTile(ItemInstance item, Player player, Level level, int x, int y, int z, int facing) {
         if (ItemCursor.bothSet) {
-            int blockToSwapTo = world.getTileId(i, j, k);
-            int metadata = world.getTileMeta(i, j, k);
-            Minecraft.minecraftInstance.v.a(String.format("Swapping blocks With BlockID %d", new Object[]{Integer.valueOf(blockToSwapTo)}));
-            int minX = Math.min(ItemCursor.oneX, ItemCursor.twoX);
-            int maxX = Math.max(ItemCursor.oneX, ItemCursor.twoX);
-            int minY = Math.min(ItemCursor.oneY, ItemCursor.twoY);
-            int maxY = Math.max(ItemCursor.oneY, ItemCursor.twoY);
-            int minZ = Math.min(ItemCursor.oneZ, ItemCursor.twoZ);
-            int maxZ = Math.max(ItemCursor.oneZ, ItemCursor.twoZ);
-            for (int x = minX; x <= maxX; x++) {
-                for (int y = minY; y <= maxY; y++) {
-                    for (int z = minZ; z <= maxZ; z++) {
-                        int blockID = world.getTileId(x, y, z);
-                        switch (blockID) {
+            int blockToSwapTo = level.getTileId(x, y, z);
+            int metadata = level.getTileMeta(x, y, z);
+            Minecraft.minecraftInstance.overlay.addChatMessage(String.format((String) "Swapping blocks With BlockID %d", (Object[]) new Object[] { blockToSwapTo }));
+            int minX = Math.min((int) ItemCursor.oneX, (int) ItemCursor.twoX);
+            int maxX = Math.max((int) ItemCursor.oneX, (int) ItemCursor.twoX);
+            int minY = Math.min((int) ItemCursor.oneY, (int) ItemCursor.twoY);
+            int maxY = Math.max((int) ItemCursor.oneY, (int) ItemCursor.twoY);
+            int minZ = Math.min((int) ItemCursor.oneZ, (int) ItemCursor.twoZ);
+            int maxZ = Math.max((int) ItemCursor.oneZ, (int) ItemCursor.twoZ);
+            for (int x2 = minX; x2 <= maxX; ++x2) {
+                for (int y2 = minY; y2 <= maxY; ++y2) {
+                    for (int z2 = minZ; z2 <= maxZ; ++z2) {
+                        int blockID = level.getTileId(x2, y2, z2);
+                        switch(blockID) {
                             default:
-                                world.setTileWithMetadata(x, y, z, blockToSwapTo, metadata);
-                                break;
+                                {
+                                    level.method_201(x2, y2, z2, blockToSwapTo, metadata);
+                                }
                             case 0:
                             case 23:
                             case 25:
@@ -61,7 +74,6 @@ public class ItemWrench extends ItemType {
                             case 115:
                             case 117:
                             case 118:
-                                break;
                         }
                     }
                 }
@@ -71,16 +83,17 @@ public class ItemWrench extends ItemType {
     }
 
     @Override
-    public float method_438(ItemInstance itemstack, Tile block) {
-        return 32.0F;
+    public float method_438(ItemInstance item, Tile tile) {
+        return 32.0f;
     }
 
     @Override
-    public boolean isEffectiveOn(Tile block) {
+    public boolean isEffectiveOn(Tile tile) {
         return true;
     }
 
-    public boolean c() {
+    @Override
+    public boolean shouldRotate180() {
         return true;
     }
 }

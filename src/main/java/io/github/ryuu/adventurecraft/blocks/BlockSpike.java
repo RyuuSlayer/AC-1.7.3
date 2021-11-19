@@ -1,5 +1,14 @@
-package io.github.ryuu.adventurecraft.blocks;
-
+package io.github.ryuu.adventurecraft.blocks;/*
+ * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
+ * 
+ * Could not load the following classes:
+ *  java.lang.Object
+ *  java.lang.Override
+ *  net.fabricmc.api.EnvType
+ *  net.fabricmc.api.Environment
+ */
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.entity.Entity;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
@@ -7,14 +16,15 @@ import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 public class BlockSpike extends Tile {
+
     protected BlockSpike(int i) {
         super(i, 246, Material.METAL);
     }
 
     @Override
-    public Box getCollisionShape(Level world, int i, int j, int k) {
-        float f = 0.25F;
-        return Box.getOrCreate((i + f), j, (k + f), ((i + 1) - f), ((j + 1) - f), ((k + 1) - f));
+    public Box getCollisionShape(Level level, int x, int y, int z) {
+        float f = 0.25f;
+        return Box.getOrCreate((float) x + f, y, (float) z + f, (float) (x + 1) - f, (float) (y + 1) - f, (float) (z + 1) - f);
     }
 
     @Override

@@ -1,7 +1,14 @@
-package io.github.ryuu.adventurecraft.blocks;
-
-import io.github.ryuu.adventurecraft.gui.GuiLightBulb;
-import io.github.ryuu.adventurecraft.util.DebugMode;
+package io.github.ryuu.adventurecraft.blocks;/*
+ * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
+ * 
+ * Could not load the following classes:
+ *  java.lang.Object
+ *  java.lang.Override
+ *  net.fabricmc.api.EnvType
+ *  net.fabricmc.api.Environment
+ */
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
@@ -11,6 +18,7 @@ import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 public class BlockLightBulb extends Tile {
+
     protected BlockLightBulb(int i, int j) {
         super(i, j, Material.AIR);
     }
@@ -21,39 +29,45 @@ public class BlockLightBulb extends Tile {
     }
 
     @Override
-    public Box getCollisionShape(Level world, int i, int j, int k) {
+    public Box getCollisionShape(Level level, int x, int y, int z) {
         return null;
     }
 
+    @Override
     public boolean shouldRender(TileView blockAccess, int i, int j, int k) {
         return DebugMode.active;
     }
 
+    @Override
     public boolean canBeTriggered() {
         return true;
     }
 
+    @Override
     public void onTriggerActivated(Level world, int i, int j, int k) {
         int m = world.getTileMeta(i, j, k);
         world.method_201(i, j, k, 0, 0);
         world.method_201(i, j, k, this.id, m);
     }
 
+    @Override
     public void onTriggerDeactivated(Level world, int i, int j, int k) {
         int m = world.getTileMeta(i, j, k);
         world.method_201(i, j, k, 0, 0);
         world.method_201(i, j, k, this.id, m);
     }
 
+    @Override
     public int getBlockLightValue(TileView iblockaccess, int i, int j, int k) {
-        if (!Minecraft.minecraftInstance.level.triggerManager.isActivated(i, j, k))
+        if (!Minecraft.minecraftInstance.level.triggerManager.isActivated(i, j, k)) {
             return iblockaccess.getTileMeta(i, j, k);
+        }
         return 0;
     }
 
     @Override
-    public void onPlaced(Level world, int i, int j, int k, int l) {
-        world.setTileMeta(i, j, k, 15);
+    public void onPlaced(Level level, int x, int y, int z, int facing) {
+        level.setTileMeta(x, y, z, 15);
     }
 
     @Override
@@ -72,9 +86,10 @@ public class BlockLightBulb extends Tile {
     }
 
     @Override
-    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
-        if (DebugMode.active)
-            GuiLightBulb.showUI(world, i, j, k);
+    public boolean activate(Level level, int x, int y, int z, Player player) {
+        if (DebugMode.active) {
+            GuiLightBulb.showUI(level, x, y, z);
+        }
         return true;
     }
 }

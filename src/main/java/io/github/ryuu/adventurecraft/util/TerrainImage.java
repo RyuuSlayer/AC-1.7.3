@@ -1,24 +1,45 @@
-package io.github.ryuu.adventurecraft.util;
-
+package io.github.ryuu.adventurecraft.util;/*
+ * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
+ * 
+ * Could not load the following classes:
+ *  java.awt.image.BufferedImage
+ *  java.io.File
+ *  java.lang.Exception
+ *  java.lang.Object
+ *  java.lang.System
+ *  javax.imageio.ImageIO
+ *  net.fabricmc.api.EnvType
+ *  net.fabricmc.api.Environment
+ */
 import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class TerrainImage {
-    public static boolean isLoaded;
-    public static boolean isWaterLoaded;
+
     private static int[] biomeInfo;
+
     private static int[] terrainInfo;
+
     private static int[] waterInfo;
+
     private static int imageHeight;
+
     private static int imageWidth;
+
     private static int halfHeight;
+
     private static int halfWidth;
 
+    public static boolean isLoaded;
+
+    public static boolean isWaterLoaded;
+
     private static int getOffset(int x, int z) {
-        x += halfWidth;
         z += halfHeight;
-        if (x < 0) {
+        if ((x += halfWidth) < 0) {
             x = 0;
         } else if (x >= imageWidth) {
             x = imageWidth - 1;
@@ -32,57 +53,63 @@ public class TerrainImage {
     }
 
     public static int getTerrainInfo(int x, int z) {
-        return terrainInfo[getOffset(x, z)];
+        return terrainInfo[TerrainImage.getOffset(x, z)];
     }
 
     public static int getBiomeInfo(int x, int z) {
-        return biomeInfo[getOffset(x, z)];
+        return biomeInfo[TerrainImage.getOffset(x, z)];
     }
 
     public static int getWaterColor(int x, int z) {
-        if (isWaterLoaded)
-            return waterInfo[getOffset(x, z)];
+        if (isWaterLoaded) {
+            return waterInfo[TerrainImage.getOffset(x, z)];
+        }
         return 4221183;
     }
 
     public static int getTerrainHeight(int x, int z) {
-        if (!isLoaded)
+        if (!isLoaded) {
             return 64;
-        int value = getTerrainInfo(x, z);
+        }
+        int value = TerrainImage.getTerrainInfo(x, z);
         return (value >> 8 & 0xFF) / 2;
     }
 
     public static int getWaterHeight(int x, int z) {
-        if (!isLoaded)
+        if (!isLoaded) {
             return 0;
-        int value = getTerrainInfo(x, z);
+        }
+        int value = TerrainImage.getTerrainInfo(x, z);
         return (value & 0xFF) / 2;
     }
 
     public static boolean hasSandNearWaterEdge(int x, int z) {
-        if (!isLoaded)
+        if (!isLoaded) {
             return false;
-        int value = getTerrainInfo(x, z);
-        return ((value >> 16 & 0xFF) > 127);
+        }
+        int value = TerrainImage.getTerrainInfo(x, z);
+        return (value >> 16 & 0xFF) > 127;
     }
 
     public static double getTerrainHumidity(int x, int z) {
-        if (!isLoaded)
-            return 0.25D;
-        return (getBiomeInfo(x, z) & 0xFF) / 255.0D;
+        if (!isLoaded) {
+            return 0.25;
+        }
+        return (double) (TerrainImage.getBiomeInfo(x, z) & 0xFF) / 255.0;
     }
 
     public static double getTerrainTemperature(int x, int z) {
-        if (!isLoaded)
-            return 0.75D;
-        return (getBiomeInfo(x, z) >> 16 & 0xFF) / 255.0D;
+        if (!isLoaded) {
+            return 0.75;
+        }
+        return (double) (TerrainImage.getBiomeInfo(x, z) >> 16 & 0xFF) / 255.0;
     }
 
     public static boolean loadBiomeMap(File biomeFile) {
         try {
-            BufferedImage bufferedimage = ImageIO.read(biomeFile);
-            assert imageWidth == bufferedimage.getWidth() : "biomeMap.png width doesn't match the width of terrainMap.png";
-            assert imageHeight == bufferedimage.getHeight() : "biomeMap.png height doesn't match the height of terrainMap.png";
+            BufferedImage bufferedimage = ImageIO.read((File) biomeFile);
+            assert (imageWidth == bufferedimage.getWidth()) : "biomeMap.png width doesn't match the width of terrainMap.png";
+            assert (imageHeight == bufferedimage.getHeight()) : "biomeMap.png height doesn't match the height of terrainMap.png";
             bufferedimage.getRGB(0, 0, imageWidth, imageHeight, biomeInfo, 0, imageWidth);
         } catch (Exception exception) {
             return false;
@@ -92,9 +119,9 @@ public class TerrainImage {
 
     public static boolean loadWaterMap(File waterFile) {
         try {
-            BufferedImage bufferedimage = ImageIO.read(waterFile);
-            assert imageWidth == bufferedimage.getWidth() : "waterMap.png width doesn't match the width of terrainMap.png";
-            assert imageHeight == bufferedimage.getHeight() : "waterMap.png height doesn't match the height of terrainMap.png";
+            BufferedImage bufferedimage = ImageIO.read((File) waterFile);
+            assert (imageWidth == bufferedimage.getWidth()) : "waterMap.png width doesn't match the width of terrainMap.png";
+            assert (imageHeight == bufferedimage.getHeight()) : "waterMap.png height doesn't match the height of terrainMap.png";
             waterInfo = new int[imageWidth * imageHeight];
             bufferedimage.getRGB(0, 0, imageWidth, imageHeight, waterInfo, 0, imageWidth);
             isWaterLoaded = true;
@@ -116,8 +143,8 @@ public class TerrainImage {
         isWaterLoaded = false;
         try {
             File terrainFile = new File(f, "terrainMap.png");
-            System.out.printf("Exists: %b Path: %s\n", Boolean.valueOf(terrainFile.exists()), terrainFile.getCanonicalPath());
-            BufferedImage bufferedimage = ImageIO.read(terrainFile);
+            System.out.printf("Exists: %b Path: %s\n", new Object[] { terrainFile.exists(), terrainFile.getCanonicalPath() });
+            BufferedImage bufferedimage = ImageIO.read((File) terrainFile);
             imageWidth = bufferedimage.getWidth();
             imageHeight = bufferedimage.getHeight();
             halfWidth = imageWidth / 2;
@@ -126,12 +153,12 @@ public class TerrainImage {
             biomeInfo = new int[imageWidth * imageHeight];
             bufferedimage.getRGB(0, 0, imageWidth, imageHeight, terrainInfo, 0, imageWidth);
             File biomeFile = new File(f, "biomeMap.png");
-            if (!loadBiomeMap(biomeFile)) {
+            if (!TerrainImage.loadBiomeMap(biomeFile)) {
                 isLoaded = false;
                 return false;
             }
             File waterFile = new File(f, "waterMap.png");
-            loadWaterMap(waterFile);
+            TerrainImage.loadWaterMap(waterFile);
             isLoaded = true;
         } catch (Exception exception) {
             isLoaded = false;

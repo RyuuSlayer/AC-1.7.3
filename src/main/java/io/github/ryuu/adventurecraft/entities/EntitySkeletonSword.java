@@ -1,5 +1,14 @@
-package io.github.ryuu.adventurecraft.entities;
-
+package io.github.ryuu.adventurecraft.entities;/*
+ * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
+ * 
+ * Could not load the following classes:
+ *  java.lang.Object
+ *  java.lang.Override
+ *  net.fabricmc.api.EnvType
+ *  net.fabricmc.api.Environment
+ */
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.Skeleton;
 import net.minecraft.item.ItemInstance;
@@ -7,6 +16,7 @@ import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 
 public class EntitySkeletonSword extends Skeleton {
+
     public EntitySkeletonSword(Level world) {
         super(world);
         this.attackDamage = 1;
@@ -15,7 +25,7 @@ public class EntitySkeletonSword extends Skeleton {
 
     @Override
     protected void method_637(Entity entity, float f) {
-        if (f < 2.5D && entity.boundingBox.maxY > this.boundingBox.minY && entity.boundingBox.minY < this.boundingBox.maxY) {
+        if ((double) f < 2.5 && entity.boundingBox.maxY > this.boundingBox.minY && entity.boundingBox.minY < this.boundingBox.maxY) {
             this.attackTime = 20;
             entity.damage(this, this.attackDamage);
         }

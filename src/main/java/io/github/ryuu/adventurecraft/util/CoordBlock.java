@@ -1,14 +1,30 @@
-package io.github.ryuu.adventurecraft.util;
-
+package io.github.ryuu.adventurecraft.util;/*
+ * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
+ * 
+ * Could not load the following classes:
+ *  java.lang.Object
+ *  java.util.ArrayList
+ *  java.util.List
+ *  net.fabricmc.api.EnvType
+ *  net.fabricmc.api.Environment
+ *  net.minecraft.src.CoordBlock
+ */
 import java.util.ArrayList;
 import java.util.List;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
-public final class CoordBlock {
-    private static final List<CoordBlock> blockCoords = new ArrayList<>();
-    public static int numBlockCoordsInUse = 0;
+final class CoordBlock {
+
     public int x;
+
     public int y;
+
     public int z;
+
+    private static List<net.minecraft.src.CoordBlock> blockCoords = new ArrayList();
+
+    public static int numBlockCoordsInUse = 0;
 
     public CoordBlock(int i, int j, int k) {
         this.x = i;
@@ -17,9 +33,10 @@ public final class CoordBlock {
     }
 
     public static CoordBlock getFromPool(int i, int j, int k) {
-        if (numBlockCoordsInUse >= blockCoords.size())
-            blockCoords.add(new CoordBlock(i, j, k));
-        return blockCoords.get(numBlockCoordsInUse++).set(i, j, k);
+        if (numBlockCoordsInUse >= blockCoords.size()) {
+            blockCoords.add((Object) new CoordBlock(i, j, k));
+        }
+        return ((CoordBlock) blockCoords.get(numBlockCoordsInUse++)).set(i, j, k);
     }
 
     public static void resetPool() {
@@ -27,7 +44,7 @@ public final class CoordBlock {
     }
 
     public static void releaseLastOne() {
-        numBlockCoordsInUse--;
+        --numBlockCoordsInUse;
     }
 
     public CoordBlock set(int i, int j, int k) {
@@ -38,13 +55,13 @@ public final class CoordBlock {
     }
 
     public boolean isEqual(int i, int j, int k) {
-        return (this.x == i && this.y == j && this.z == k);
+        return this.x == i && this.y == j && this.z == k;
     }
 
     public boolean equals(Object obj) {
         if (obj instanceof CoordBlock) {
             CoordBlock otherCoord = (CoordBlock) obj;
-            return (this.x == otherCoord.x && this.y == otherCoord.y && this.z == otherCoord.z);
+            return this.x == otherCoord.x && this.y == otherCoord.y && this.z == otherCoord.z;
         }
         return false;
     }

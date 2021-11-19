@@ -1,59 +1,73 @@
-package io.github.ryuu.adventurecraft.entities.tile;
-
-import io.github.ryuu.adventurecraft.items.Items;
-import io.github.ryuu.adventurecraft.util.TriggerArea;
+package io.github.ryuu.adventurecraft.entities.tile;/*
+ * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
+ * 
+ * Could not load the following classes:
+ *  java.lang.Object
+ *  java.lang.Override
+ *  net.fabricmc.api.EnvType
+ *  net.fabricmc.api.Environment
+ */
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.io.CompoundTag;
 
 public class TileEntityStore extends TileEntity {
-    public int buyItemID = Items.bomb.id;
 
-    public int buyItemAmount = 3;
+    public int buyItemID;
+
+    public int buyItemAmount;
 
     public int buyItemDamage;
 
     public int buySupply;
 
-    public int buySupplyLeft = 1;
+    public int buySupplyLeft;
 
-    public int sellItemID = Items.shotgun.id;
+    public int sellItemID;
 
-    public int sellItemAmount = 1;
+    public int sellItemAmount;
 
-    public int sellItemDamage = 0;
+    public int sellItemDamage;
 
     public TriggerArea tradeTrigger;
 
-    @Override
-    public void readIdentifyingData(CompoundTag nbttagcompound) {
-        super.readIdentifyingData(nbttagcompound);
-        this.buyItemID = nbttagcompound.getInt("buyItemID");
-        this.buyItemAmount = nbttagcompound.getInt("buyItemAmount");
-        this.buyItemDamage = nbttagcompound.getInt("buyItemDamage");
-        this.buySupply = nbttagcompound.getInt("buySupply");
-        this.buySupplyLeft = nbttagcompound.getInt("buySupplyLeft");
-        this.sellItemID = nbttagcompound.getInt("sellItemID");
-        this.sellItemAmount = nbttagcompound.getInt("sellItemAmount");
-        this.sellItemDamage = nbttagcompound.getInt("sellItemDamage");
-        if (nbttagcompound.containsKey("tradeTrigger")) {
-            this.tradeTrigger = TriggerArea.getFromTagCompound(nbttagcompound.getCompoundTag("tradeTrigger"));
-        } else {
-            this.tradeTrigger = null;
-        }
+    TileEntityStore() {
+        this.buyItemID = Items.bomb.id;
+        this.buyItemAmount = 3;
+        this.buySupplyLeft = 1;
+        this.sellItemID = Items.shotgun.id;
+        this.sellItemAmount = 1;
+        this.sellItemDamage = 0;
     }
 
     @Override
-    public void writeIdentifyingData(CompoundTag nbttagcompound) {
-        super.writeIdentifyingData(nbttagcompound);
-        nbttagcompound.put("buyItemID", this.buyItemID);
-        nbttagcompound.put("buyItemAmount", this.buyItemAmount);
-        nbttagcompound.put("buyItemDamage", this.buyItemDamage);
-        nbttagcompound.put("buySupply", this.buySupply);
-        nbttagcompound.put("buySupplyLeft", this.buySupplyLeft);
-        nbttagcompound.put("sellItemID", this.sellItemID);
-        nbttagcompound.put("sellItemAmount", this.sellItemAmount);
-        nbttagcompound.put("sellItemDamage", this.sellItemDamage);
-        if (this.tradeTrigger != null)
-            nbttagcompound.put("tradeTrigger", this.tradeTrigger.getTagCompound());
+    public void readIdentifyingData(CompoundTag tag) {
+        super.readIdentifyingData(tag);
+        this.buyItemID = tag.getInt("buyItemID");
+        this.buyItemAmount = tag.getInt("buyItemAmount");
+        this.buyItemDamage = tag.getInt("buyItemDamage");
+        this.buySupply = tag.getInt("buySupply");
+        this.buySupplyLeft = tag.getInt("buySupplyLeft");
+        this.sellItemID = tag.getInt("sellItemID");
+        this.sellItemAmount = tag.getInt("sellItemAmount");
+        this.sellItemDamage = tag.getInt("sellItemDamage");
+        this.tradeTrigger = tag.containsKey("tradeTrigger") ? TriggerArea.getFromTagCompound(tag.getCompoundTag("tradeTrigger")) : null;
+    }
+
+    @Override
+    public void writeIdentifyingData(CompoundTag tag) {
+        super.writeIdentifyingData(tag);
+        tag.put("buyItemID", this.buyItemID);
+        tag.put("buyItemAmount", this.buyItemAmount);
+        tag.put("buyItemDamage", this.buyItemDamage);
+        tag.put("buySupply", this.buySupply);
+        tag.put("buySupplyLeft", this.buySupplyLeft);
+        tag.put("sellItemID", this.sellItemID);
+        tag.put("sellItemAmount", this.sellItemAmount);
+        tag.put("sellItemDamage", this.sellItemDamage);
+        if (this.tradeTrigger != null) {
+            tag.put("tradeTrigger", this.tradeTrigger.getTagCompound());
+        }
     }
 }

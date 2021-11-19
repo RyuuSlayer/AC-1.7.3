@@ -1,6 +1,14 @@
-package io.github.ryuu.adventurecraft.blocks;
-
-import io.github.ryuu.adventurecraft.util.DebugMode;
+package io.github.ryuu.adventurecraft.blocks;/*
+ * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
+ * 
+ * Could not load the following classes:
+ *  java.lang.Object
+ *  java.lang.Override
+ *  net.fabricmc.api.EnvType
+ *  net.fabricmc.api.Environment
+ */
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
 import net.minecraft.tile.Tile;
@@ -8,9 +16,10 @@ import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 public class BlockDarkness extends Tile {
+
     protected BlockDarkness(int i, int j) {
         super(i, j, Material.AIR);
-        method_1590(2);
+        this.method_1590(2);
     }
 
     @Override
@@ -19,10 +28,11 @@ public class BlockDarkness extends Tile {
     }
 
     @Override
-    public Box getCollisionShape(Level world, int i, int j, int k) {
+    public Box getCollisionShape(Level level, int x, int y, int z) {
         return null;
     }
 
+    @Override
     public boolean shouldRender(TileView blockAccess, int i, int j, int k) {
         return DebugMode.active;
     }

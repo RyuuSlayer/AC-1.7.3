@@ -1,19 +1,61 @@
+/*
+ * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
+ * 
+ * Could not load the following classes:
+ *  java.io.DataInputStream
+ *  java.io.DataOutputStream
+ *  java.io.File
+ *  java.io.FileOutputStream
+ *  java.io.IOException
+ *  java.io.OutputStream
+ *  java.lang.Exception
+ *  java.lang.Long
+ *  java.lang.Object
+ *  java.lang.RuntimeException
+ *  java.lang.String
+ *  java.lang.System
+ *  java.lang.Thread
+ *  java.net.URL
+ *  javax.xml.parsers.DocumentBuilder
+ *  javax.xml.parsers.DocumentBuilderFactory
+ *  net.fabricmc.api.EnvType
+ *  net.fabricmc.api.Environment
+ *  org.w3c.dom.Document
+ *  org.w3c.dom.Element
+ *  org.w3c.dom.Node
+ *  org.w3c.dom.NodeList
+ */
 package io.github.ryuu.adventurecraft.mixin.client.util;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URL;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.util.ResourceDownloadThread;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
+@Mixin(ResourceDownloadThread.class)
 public class MixinResourceDownloadThread extends Thread {
+
+    @Shadow()
     public File workingDirectory;
+
     private Minecraft field_138;
+
     private boolean field_139 = false;
 
     public MixinResourceDownloadThread(File file, Minecraft minecraft) {
@@ -26,11 +68,19 @@ public class MixinResourceDownloadThread extends Thread {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void run() {
         this.downloadResource("http://s3.amazonaws.com/MinecraftResources/");
         this.downloadResource("http://adventurecraft.org/resources/");
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void downloadResource(String urlString) {
         try {
             URL url = new URL(urlString);
@@ -41,27 +91,37 @@ public class MixinResourceDownloadThread extends Thread {
             for (int i = 0; i < 2; ++i) {
                 for (int j = 0; j < nodelist.getLength(); ++j) {
                     Node node = nodelist.item(j);
-                    if (node.getNodeType() != 1) continue;
-                    Element element = (Element)node;
-                    String s = element.getElementsByTagName("Key").item(0).getChildNodes().item(0).getNodeValue();
-                    long l = Long.parseLong(element.getElementsByTagName("Size").item(0).getChildNodes().item(0).getNodeValue());
-                    if (l <= 0L) continue;
+                    if (node.getNodeType() != 1)
+                        continue;
+                    Element element = (Element) node;
+                    String s = ((Element) element.getElementsByTagName("Key").item(0)).getChildNodes().item(0).getNodeValue();
+                    long l = Long.parseLong((String) ((Element) element.getElementsByTagName("Size").item(0)).getChildNodes().item(0).getNodeValue());
+                    if (l <= 0L)
+                        continue;
                     this.method_110(url, s, l, i);
-                    if (!this.field_139) continue;
+                    if (!this.field_139)
+                        continue;
                     return;
                 }
             }
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             this.method_108(this.workingDirectory, "");
             exception.printStackTrace();
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_107() {
         this.method_108(this.workingDirectory, "");
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     void method_108(File file, String s) {
         File[] afile = file.listFiles();
         for (int i = 0; i < afile.length; ++i) {
@@ -72,18 +132,21 @@ public class MixinResourceDownloadThread extends Thread {
             try {
                 this.field_138.loadSoundFromDir(s + afile[i].getName(), afile[i]);
                 continue;
-            }
-            catch (Exception exception) {
+            } catch (Exception exception) {
                 System.out.println("Failed to add " + s + afile[i].getName());
             }
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void method_110(URL url, String s, long l, int i) {
         try {
             int j = s.indexOf("/");
             String s1 = s.substring(0, j);
-            if (s1.equals("sound") || s1.equals("newsound") ? i != 0 : i != 1) {
+            if (s1.equals((Object) "sound") || s1.equals((Object) "newsound") ? i != 0 : i != 1) {
                 return;
             }
             File file = new File(this.workingDirectory, s);
@@ -96,26 +159,34 @@ public class MixinResourceDownloadThread extends Thread {
                 }
             }
             this.field_138.loadSoundFromDir(s, file);
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             exception.printStackTrace();
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void method_109(URL url, File file, long l) throws IOException {
         byte[] abyte0 = new byte[4096];
         DataInputStream datainputstream = new DataInputStream(url.openStream());
-        DataOutputStream dataoutputstream = new DataOutputStream(new FileOutputStream(file));
+        DataOutputStream dataoutputstream = new DataOutputStream((OutputStream) new FileOutputStream(file));
         int i = 0;
         while ((i = datainputstream.read(abyte0)) >= 0) {
             dataoutputstream.write(abyte0, 0, i);
-            if (!this.field_139) continue;
+            if (!this.field_139)
+                continue;
             return;
         }
         datainputstream.close();
         dataoutputstream.close();
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_111() {
         this.field_139 = true;
     }

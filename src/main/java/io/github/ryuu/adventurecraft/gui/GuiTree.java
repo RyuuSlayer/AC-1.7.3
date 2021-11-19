@@ -1,19 +1,31 @@
-package io.github.ryuu.adventurecraft.gui;
-
-import io.github.ryuu.adventurecraft.entities.tile.TileEntityTree;
+package io.github.ryuu.adventurecraft.gui;/*
+ * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
+ * 
+ * Could not load the following classes:
+ *  java.lang.Float
+ *  java.lang.Integer
+ *  java.lang.Object
+ *  java.lang.Override
+ *  java.lang.String
+ *  net.fabricmc.api.EnvType
+ *  net.fabricmc.api.Environment
+ */
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.level.Level;
 
 public class GuiTree extends Screen {
-    private final int blockX;
 
-    private final int blockY;
+    private int blockX;
 
-    private final int blockZ;
+    private int blockY;
 
-    private final Level world;
+    private int blockZ;
+
+    private Level world;
 
     TileEntityTree tree;
 
@@ -29,35 +41,35 @@ public class GuiTree extends Screen {
         this.tree = t;
     }
 
-    public static void showUI(Level w, int x, int y, int z, TileEntityTree t) {
-        Minecraft.minecraftInstance.a(new GuiTree(w, x, y, z, t));
-    }
-
     @Override
     public void tick() {
     }
 
     @Override
     public void init() {
-        this.treeSize = new GuiSlider2(4, 4, 4, 10, String.format("Tree Size: %.2f", this.tree.size), (this.tree.size - 0.5F) / 3.5F);
-        this.buttons.add(this.treeSize);
+        this.treeSize = new GuiSlider2(4, 4, 4, 10, String.format((String) "Tree Size: %.2f", (Object[]) new Object[] { Float.valueOf((float) this.tree.size) }), (this.tree.size - 0.5f) / 3.5f);
+        this.buttons.add((Object) this.treeSize);
         this.prevValue = this.treeSize.sliderValue;
     }
 
     @Override
-    protected void buttonClicked(Button guibutton) {
+    protected void buttonClicked(Button button) {
     }
 
     @Override
-    public void render(int i, int j, float f) {
-        fill(0, 0, this.width, this.height, -2147483648);
+    public void render(int mouseX, int mouseY, float delta) {
+        this.fill(0, 0, this.width, this.height, Integer.MIN_VALUE);
         if (this.prevValue != this.treeSize.sliderValue) {
-            this.tree.size = this.treeSize.sliderValue * 3.5F + 0.5F;
-            this.treeSize.text = String.format("Tree Size: %.2f", this.tree.size);
+            this.tree.size = this.treeSize.sliderValue * 3.5f + 0.5f;
+            this.treeSize.text = String.format((String) "Tree Size: %.2f", (Object[]) new Object[] { Float.valueOf((float) this.tree.size) });
             this.world.method_246(this.blockX, this.blockY, this.blockZ);
             this.world.getChunk(this.blockX, this.blockZ).method_885();
         }
-        super.render(i, j, f);
+        super.render(mouseX, mouseY, delta);
+    }
+
+    public static void showUI(Level w, int x, int y, int z, TileEntityTree t) {
+        Minecraft.minecraftInstance.openScreen(new GuiTree(w, x, y, z, t));
     }
 
     @Override
