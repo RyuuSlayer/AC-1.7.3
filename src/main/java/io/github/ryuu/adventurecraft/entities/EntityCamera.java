@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.entities;
 
-import io.github.ryuu.adventurecraft.mixin.MixinMinecraft;
+import io.github.ryuu.adventurecraft.mixin.client.MixinMinecraft;
 import io.github.ryuu.adventurecraft.gui.GuiCamera;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;

@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.entities;
 
-import io.github.ryuu.adventurecraft.mixin.MixinMinecraft;
+import io.github.ryuu.adventurecraft.mixin.client.MixinMinecraft;
 import net.minecraft.class_61;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.Player;

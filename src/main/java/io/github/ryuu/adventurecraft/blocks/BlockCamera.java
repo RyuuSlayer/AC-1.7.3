@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.blocks;
 
-import io.github.ryuu.adventurecraft.mixin.MixinMinecraft;
+import io.github.ryuu.adventurecraft.mixin.client.MixinMinecraft;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityCamera;
 import io.github.ryuu.adventurecraft.gui.GuiCameraBlock;
 import io.github.ryuu.adventurecraft.util.DebugMode;

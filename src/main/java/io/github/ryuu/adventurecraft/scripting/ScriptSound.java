@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import io.github.ryuu.adventurecraft.mixin.MixinSoundHelper;
+import io.github.ryuu.adventurecraft.mixin.client.sound.MixinSoundHelper;
 
 public class ScriptSound {
     MixinSoundHelper soundMgr;

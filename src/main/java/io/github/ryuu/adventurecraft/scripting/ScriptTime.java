@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import io.github.ryuu.adventurecraft.mixin.MixinMinecraft;
+import io.github.ryuu.adventurecraft.mixin.client.MixinMinecraft;
 import net.minecraft.level.Level;
 
 public class ScriptTime {

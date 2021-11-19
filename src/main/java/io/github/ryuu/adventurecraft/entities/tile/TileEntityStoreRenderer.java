@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
-import io.github.ryuu.adventurecraft.mixin.MixinItemRenderer;
+import io.github.ryuu.adventurecraft.mixin.client.render.entity.MixinItemRenderer;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.render.entity.tile.TileEntityRenderer;
