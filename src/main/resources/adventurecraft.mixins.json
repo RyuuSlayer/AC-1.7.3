@@ -76,7 +76,7 @@
     "client.model.MixinModelPart",
     "entity.monster.MixinMonster",
     "client.options.MixinOption",
-    "MixinOptionIds",
+    "client.options.MixinOptionIds",
     "client.gui.MixinOverlay",
     "level.source.MixinOverworldLevelSource",
     "entity.MixinPainting",
