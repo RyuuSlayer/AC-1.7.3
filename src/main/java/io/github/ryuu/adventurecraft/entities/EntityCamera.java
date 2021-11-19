@@ -1,20 +1,16 @@
 package io.github.ryuu.adventurecraft.entities;
 
-import io.github.ryuu.adventurecraft.mixin.client.MixinMinecraft;
-import io.github.ryuu.adventurecraft.gui.GuiCamera;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.Player;
-import net.minecraft.level.Level;
-import net.minecraft.util.io.CompoundTag;
+import net.minecraft.client.Minecraft;
 
-public class EntityCamera extends LivingEntity {
-    public float time;
+public class EntityCamera extends MixinLivingEntity {
 
-    public int type;
+    float time;
 
-    public int cameraID;
+    int type;
 
-    EntityCamera(Level world, float t, int ty, int id) {
+    int cameraID;
+
+    EntityCamera(MixinLevel world, float t, int ty, int id) {
         super(world);
         this.time = t;
         this.cameraID = id;
@@ -26,16 +22,16 @@ public class EntityCamera extends LivingEntity {
     }
 
     public void deleteCameraPoint() {
-        MixinMinecraft.minecraftInstance.activeCutsceneCamera.deletePoint(this.cameraID);
-        MixinMinecraft.minecraftInstance.activeCutsceneCamera.loadCameraEntities();
+        Minecraft.minecraftInstance.activeCutsceneCamera.deletePoint(this.cameraID);
+        Minecraft.minecraftInstance.activeCutsceneCamera.loadCameraEntities();
     }
 
     @Override
-    public void readCustomDataFromTag(CompoundTag nbttagcompound) {
+    public void readCustomDataFromTag(MixinCompoundTag tag) {
     }
 
     @Override
-    public void writeCustomDataToTag(CompoundTag nbttagcompound) {
+    public void writeCustomDataToTag(MixinCompoundTag tag) {
     }
 
     @Override
@@ -61,7 +57,7 @@ public class EntityCamera extends LivingEntity {
     }
 
     @Override
-    public boolean interact(Player entityplayer) {
+    public boolean interact(MixinPlayer entityplayer) {
         GuiCamera.showUI(this);
         return true;
     }

@@ -1,16 +1,12 @@
 package io.github.ryuu.adventurecraft.blocks;
 
-import io.github.ryuu.adventurecraft.gui.GuiLightBulb;
-import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.Player;
-import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
-import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
-public class BlockLightBulb extends Tile {
+public class BlockLightBulb extends MixinTile {
+
     protected BlockLightBulb(int i, int j) {
         super(i, j, Material.AIR);
     }
@@ -21,39 +17,45 @@ public class BlockLightBulb extends Tile {
     }
 
     @Override
-    public Box getCollisionShape(Level world, int i, int j, int k) {
+    public Box getCollisionShape(MixinLevel level, int x, int y, int z) {
         return null;
     }
 
+    @Override
     public boolean shouldRender(TileView blockAccess, int i, int j, int k) {
         return DebugMode.active;
     }
 
+    @Override
     public boolean canBeTriggered() {
         return true;
     }
 
-    public void onTriggerActivated(Level world, int i, int j, int k) {
+    @Override
+    public void onTriggerActivated(MixinLevel world, int i, int j, int k) {
         int m = world.getTileMeta(i, j, k);
         world.method_201(i, j, k, 0, 0);
         world.method_201(i, j, k, this.id, m);
     }
 
-    public void onTriggerDeactivated(Level world, int i, int j, int k) {
+    @Override
+    public void onTriggerDeactivated(MixinLevel world, int i, int j, int k) {
         int m = world.getTileMeta(i, j, k);
         world.method_201(i, j, k, 0, 0);
         world.method_201(i, j, k, this.id, m);
     }
 
+    @Override
     public int getBlockLightValue(TileView iblockaccess, int i, int j, int k) {
-        if (!Minecraft.minecraftInstance.level.triggerManager.isActivated(i, j, k))
+        if (!Minecraft.minecraftInstance.level.triggerManager.isActivated(i, j, k)) {
             return iblockaccess.getTileMeta(i, j, k);
+        }
         return 0;
     }
 
     @Override
-    public void onPlaced(Level world, int i, int j, int k, int l) {
-        world.setTileMeta(i, j, k, 15);
+    public void onPlaced(MixinLevel level, int x, int y, int z, int facing) {
+        level.setTileMeta(x, y, z, 15);
     }
 
     @Override
@@ -72,9 +74,10 @@ public class BlockLightBulb extends Tile {
     }
 
     @Override
-    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
-        if (DebugMode.active)
-            GuiLightBulb.showUI(world, i, j, k);
+    public boolean activate(MixinLevel level, int x, int y, int z, MixinPlayer player) {
+        if (DebugMode.active) {
+            GuiLightBulb.showUI(level, x, y, z);
+        }
         return true;
     }
 }

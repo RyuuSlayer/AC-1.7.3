@@ -1,14 +1,12 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import io.github.ryuu.adventurecraft.util.UtilBullet;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.maths.Vec3f;
 
 public class ScriptEntityLiving extends ScriptEntity {
-    LivingEntity entityLiving;
 
-    ScriptEntityLiving(LivingEntity e) {
+    MixinLivingEntity entityLiving;
+
+    ScriptEntityLiving(MixinLivingEntity e) {
         super(e);
         this.entityLiving = e;
     }
@@ -30,7 +28,7 @@ public class ScriptEntityLiving extends ScriptEntity {
     }
 
     public ScriptEntity getLookTarget() {
-        Entity e = this.entityLiving.method_922();
+        MixinEntity e = this.entityLiving.method_922();
         return ScriptEntity.getEntityClass(e);
     }
 

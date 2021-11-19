@@ -1,25 +1,18 @@
 package io.github.ryuu.adventurecraft.blocks;
 
-import io.github.ryuu.adventurecraft.entities.tile.TileEntityMinMax;
-import io.github.ryuu.adventurecraft.entities.tile.TileEntityTimer;
-import io.github.ryuu.adventurecraft.gui.GuiTimer;
-import io.github.ryuu.adventurecraft.items.ItemCursor;
-import io.github.ryuu.adventurecraft.util.DebugMode;
-import net.minecraft.entity.player.Player;
-import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
 import net.minecraft.tile.TileWithEntity;
-import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 public class BlockTimer extends TileWithEntity {
+
     protected BlockTimer(int i, int j) {
         super(i, j, Material.AIR);
     }
 
     @Override
-    protected TileEntity createTileEntity() {
+    protected MixinTileEntity createTileEntity() {
         return new TileEntityTimer();
     }
 
@@ -29,22 +22,25 @@ public class BlockTimer extends TileWithEntity {
     }
 
     @Override
-    public Box getCollisionShape(Level world, int i, int j, int k) {
+    public Box getCollisionShape(MixinLevel level, int x, int y, int z) {
         return null;
     }
 
+    @Override
     public boolean shouldRender(TileView blockAccess, int i, int j, int k) {
         return DebugMode.active;
     }
 
+    @Override
     public boolean canBeTriggered() {
         return true;
     }
 
-    public void setTriggerToSelection(Level world, int i, int j, int k) {
+    public void setTriggerToSelection(MixinLevel world, int i, int j, int k) {
         TileEntityMinMax obj = (TileEntityMinMax) world.getTileEntity(i, j, k);
-        if (obj.minX == ItemCursor.minX && obj.minY == ItemCursor.minY && obj.minZ == ItemCursor.minZ && obj.maxX == ItemCursor.maxX && obj.maxY == ItemCursor.maxY && obj.maxZ == ItemCursor.maxZ)
+        if (obj.minX == ItemCursor.minX && obj.minY == ItemCursor.minY && obj.minZ == ItemCursor.minZ && obj.maxX == ItemCursor.maxX && obj.maxY == ItemCursor.maxY && obj.maxZ == ItemCursor.maxZ) {
             return;
+        }
         obj.minX = ItemCursor.minX;
         obj.minY = ItemCursor.minY;
         obj.minZ = ItemCursor.minZ;
@@ -53,26 +49,30 @@ public class BlockTimer extends TileWithEntity {
         obj.maxZ = ItemCursor.maxZ;
     }
 
-    public void onTriggerActivated(Level world, int i, int j, int k) {
+    @Override
+    public void onTriggerActivated(MixinLevel world, int i, int j, int k) {
         TileEntityTimer obj = (TileEntityTimer) world.getTileEntity(i, j, k);
-        if (obj.canActivate && !obj.active)
+        if (obj.canActivate && !obj.active) {
             obj.startActive();
+        }
     }
 
     @Override
-    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
+    public boolean activate(MixinLevel level, int x, int y, int z, MixinPlayer player) {
         if (DebugMode.active) {
-            TileEntityTimer obj = (TileEntityTimer) world.getTileEntity(i, j, k);
-            GuiTimer.showUI(world, i, j, k, obj);
+            TileEntityTimer obj = (TileEntityTimer) level.getTileEntity(x, y, z);
+            GuiTimer.showUI(level, x, y, z, obj);
         }
         return true;
     }
 
+    @Override
     public boolean method_1576() {
         return DebugMode.active;
     }
 
-    public void reset(Level world, int i, int j, int k, boolean death) {
+    @Override
+    public void reset(MixinLevel world, int i, int j, int k, boolean death) {
         TileEntityTimer obj = (TileEntityTimer) world.getTileEntity(i, j, k);
         obj.active = false;
         obj.canActivate = true;

@@ -1,16 +1,18 @@
 package io.github.ryuu.adventurecraft.blocks;
 
 public class BlockTable extends BlockSolid {
+
     protected BlockTable(int i, int j) {
         super(i, j);
-        setBoundingBox(0.0F, 0.875F, 0.0F, 1.0F, 1.0F, 1.0F);
+        this.setBoundingBox(0.0f, 0.875f, 0.0f, 1.0f, 1.0f, 1.0f);
     }
 
     @Override
-    public int getTextureForSide(int i, int j) {
-        if (i <= 1)
-            return this.tex + j;
-        return this.tex + 16 + j;
+    public int getTextureForSide(int side, int meta) {
+        if (side <= 1) {
+            return this.tex + meta;
+        }
+        return this.tex + 16 + meta;
     }
 
     @Override

@@ -1,23 +1,23 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import java.nio.FloatBuffer;
-import java.util.LinkedList;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelPart;
-import net.minecraft.client.texture.TextureManager;
-import net.minecraft.level.Level;
+import net.minecraft.src.ModelRenderer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector4f;
 
+import java.nio.FloatBuffer;
+import java.util.HashMap;
+import java.util.LinkedList;
+
 public class ScriptModel {
+
     private static final FloatBuffer modelview = BufferUtils.createFloatBuffer(16);
     private static final Matrix4f transform = new Matrix4f();
     private static final Vector4f v = new Vector4f();
     private static final Vector4f vr = new Vector4f();
-    static LinkedList<ScriptModel> activeModels = new LinkedList<>();
+    static LinkedList<ScriptModel> activeModels = new LinkedList();
     private final int textureWidth;
     private final int textureHeight;
     public ScriptEntity attachedTo;
@@ -35,15 +35,14 @@ public class ScriptModel {
     public float yaw;
     public float pitch;
     public float roll;
-    HashMap<String, ModelRenderer> boxes;
+    HashMap<String, ModelRenderer> boxes = new HashMap();
 
     public ScriptModel() {
         this(64, 32);
     }
 
     public ScriptModel(int texWidth, int texHeight) {
-        this.boxes = new HashMap<String, ModelRenderer>();
-        addToRendering();
+        this.addToRendering();
         this.textureWidth = texWidth;
         this.textureHeight = texHeight;
     }
@@ -52,15 +51,17 @@ public class ScriptModel {
         GL11.glEnable(32826);
         GL11.glDisable(2884);
         GL11.glEnable(3008);
-        for (ScriptModel m : activeModels)
+        for (ScriptModel m : activeModels) {
             m.render(f);
+        }
         GL11.glEnable(2884);
         GL11.glDisable(32826);
     }
 
     public static void updateAll() {
-        for (ScriptModel m : activeModels)
+        for (ScriptModel m : activeModels) {
             m.update();
+        }
     }
 
     public static void clearAll() {
@@ -68,13 +69,13 @@ public class ScriptModel {
     }
 
     public void addBox(String boxName, float offsetX, float offsetY, float offsetZ, int width, int height, int depth, int u, int v) {
-        addBoxExpanded(boxName, offsetX, offsetY, offsetZ, width, height, depth, u, v, 0.0F);
+        this.addBoxExpanded(boxName, offsetX, offsetY, offsetZ, width, height, depth, u, v, 0.0f);
     }
 
     public void addBoxExpanded(String boxName, float offsetX, float offsetY, float offsetZ, int width, int height, int depth, int u, int v, float expand) {
-        ModelPart r = new ModelPart(u, v, this.textureWidth, this.textureHeight);
+        MixinModelPart r = new MixinModelPart(u, v, this.textureWidth, this.textureHeight);
         r.addBoxInverted(offsetX, offsetY, offsetZ, width, height, depth, expand);
-        this.boxes.put((Object)boxName, (Object)r);
+        this.boxes.put((Object) boxName, (Object) r);
     }
 
     public void setPosition(double newX, double newY, double newZ) {
@@ -139,24 +140,24 @@ public class ScriptModel {
             ScriptVec3 pos = this.attachedTo.getPosition(f);
             ScriptVecRot rot = this.attachedTo.getRotation(f);
             GL11.glTranslated(pos.x, pos.y, pos.z);
-            GL11.glRotatef((float) -rot.yaw, 0.0F, 1.0F, 0.0F);
-            GL11.glRotatef((float) rot.pitch, 1.0F, 0.0F, 0.0F);
+            GL11.glRotatef((float) (-rot.yaw), 0.0f, 1.0f, 0.0f);
+            GL11.glRotatef((float) rot.pitch, 1.0f, 0.0f, 0.0f);
         } else if (this.modelAttachment != null) {
             this.modelAttachment.transform(f);
         }
-        float iF = 1.0F - f;
-        double tX = f * this.x + iF * this.prevX;
-        double tY = f * this.y + iF * this.prevY;
-        double tZ = f * this.z + iF * this.prevZ;
+        float iF = 1.0f - f;
+        double tX = (double) f * this.x + (double) iF * this.prevX;
+        double tY = (double) f * this.y + (double) iF * this.prevY;
+        double tZ = (double) f * this.z + (double) iF * this.prevZ;
         GL11.glTranslated(tX, tY, tZ);
-        GL11.glRotatef(f * this.yaw + iF * this.prevYaw, 0.0F, 1.0F, 0.0F);
-        GL11.glRotatef(f * this.pitch + iF * this.prevPitch, 1.0F, 0.0F, 0.0F);
-        GL11.glRotatef(f * this.roll + iF * this.prevRoll, 0.0F, 0.0F, 1.0F);
+        GL11.glRotatef(f * this.yaw + iF * this.prevYaw, 0.0f, 1.0f, 0.0f);
+        GL11.glRotatef(f * this.pitch + iF * this.prevPitch, 1.0f, 0.0f, 0.0f);
+        GL11.glRotatef(f * this.roll + iF * this.prevRoll, 0.0f, 0.0f, 1.0f);
     }
 
     private void render(float f) {
-        Level w = Minecraft.minecraftInstance.level;
-        TextureManager renderEngine = Minecraft.minecraftInstance.textureManager;
+        MixinLevel w = Minecraft.minecraftInstance.level;
+        MixinTextureManager renderEngine = Minecraft.minecraftInstance.textureManager;
         if (this.texture != null && !this.texture.equals("")) {
             renderEngine.bindTexture(renderEngine.getTextureId(this.texture));
         }
@@ -173,7 +174,7 @@ public class ScriptModel {
         GL11.glColor3f(b, b, b);
         GL11.glPushMatrix();
         this.transform(f);
-        for (ModelPart r : this.boxes.values()) {
+        for (MixinModelPart r : this.boxes.values()) {
             r.render(0.0625f);
         }
         GL11.glPopMatrix();

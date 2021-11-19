@@ -1,12 +1,13 @@
 package io.github.ryuu.adventurecraft.blocks;
 
 public class BlockChain extends BlockRope {
+
     protected BlockChain(int i, int j) {
         super(i, j);
     }
 
     @Override
-    public int getTextureForSide(int i, int j) {
-        return this.tex + i % 2 + j / 3 * 2;
+    public int getTextureForSide(int side, int meta) {
+        return this.tex + side % 2 + meta / 3 * 2;
     }
 }

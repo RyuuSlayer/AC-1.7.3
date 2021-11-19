@@ -1,31 +1,37 @@
 package io.github.ryuu.adventurecraft.mixin.level.chunk;
 
-import java.io.IOException;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.level.Level;
 import net.minecraft.level.chunk.Chunk;
 import net.minecraft.level.chunk.ChunkIO;
+import net.minecraft.level.chunk.ClientChunkCache;
 import net.minecraft.level.chunk.DummyChunk;
 import net.minecraft.level.source.LevelSource;
 import net.minecraft.util.ProgressListener;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
+import java.io.IOException;
+
+@Mixin(ClientChunkCache.class)
 public class MixinClientChunkCache implements LevelSource {
-    private Chunk nullChunk;
-    private LevelSource chunkGenerator;
-    private ChunkIO io;
-    private Chunk[] cache;
-    private Level level;
+
+    private final LevelSource chunkGenerator;
+    private final ChunkIO io;
+    private final MixinLevel level;
     int cachedX;
     int cachedZ;
-    private Chunk cachedChunk;
-    private int spawnX;
-    private int spawnZ;
     boolean isVeryFar;
     int mask;
     int chunksWide;
+    @Shadow()
+    private MixinChunk nullChunk;
+    private MixinChunk[] cache;
+    private MixinChunk cachedChunk;
+    private int spawnX;
+    private int spawnZ;
 
-    public MixinClientChunkCache(Level world, ChunkIO ichunkloader, LevelSource ichunkprovider) {
+    public MixinClientChunkCache(MixinLevel world, ChunkIO ichunkloader, LevelSource ichunkprovider) {
         this.isVeryFar = Minecraft.minecraftInstance.options.viewDistance != 0;
         this.updateVeryFar();
         this.cachedX = -999999999;
@@ -36,6 +42,10 @@ public class MixinClientChunkCache implements LevelSource {
         this.chunkGenerator = ichunkprovider;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void updateVeryFar() {
         boolean curVeryFar;
         boolean bl = curVeryFar = Minecraft.minecraftInstance.options.viewDistance == 0;
@@ -46,19 +56,19 @@ public class MixinClientChunkCache implements LevelSource {
             if (this.cache != null) {
                 this.saveChunks(true, null);
             }
-            Chunk[] oldChunks = this.cache;
+            MixinChunk[] oldChunks = this.cache;
             if (this.isVeryFar) {
-                this.cache = new Chunk[4096];
+                this.cache = new MixinChunk[4096];
                 this.mask = 63;
                 this.chunksWide = 64;
             } else {
-                this.cache = new Chunk[1024];
+                this.cache = new MixinChunk[1024];
                 this.mask = 31;
                 this.chunksWide = 32;
             }
             if (oldChunks != null) {
                 for (int i = 0; i < oldChunks.length; ++i) {
-                    Chunk c = oldChunks[i];
+                    MixinChunk c = oldChunks[i];
                     if (c == null || !this.isSpawnChunk(c.x, c.z)) continue;
                     int k = c.x & this.mask;
                     int l = c.z & this.mask;
@@ -69,15 +79,28 @@ public class MixinClientChunkCache implements LevelSource {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void setSpawnChunk(int spawnX, int spawnZ) {
         this.spawnX = spawnX;
         this.spawnZ = spawnZ;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean isSpawnChunk(int chunkX, int chunkZ) {
         return chunkX >= this.spawnX - this.mask && chunkZ >= this.spawnZ - this.mask && chunkX <= this.spawnX + this.mask && chunkZ <= this.spawnZ + this.mask;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public boolean isChunkLoaded(int chunkX, int chunkZ) {
         if (!this.isSpawnChunk(chunkX, chunkZ)) {
             return false;
@@ -91,11 +114,21 @@ public class MixinClientChunkCache implements LevelSource {
         return this.cache[i1] != null && (this.cache[i1] == this.nullChunk || this.cache[i1].equals(chunkX, chunkZ));
     }
 
-    public Chunk loadChunk(int x, int z) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public MixinChunk loadChunk(int x, int z) {
         return this.getChunk(x, z);
     }
 
-    public Chunk getChunk(int x, int z) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public MixinChunk getChunk(int x, int z) {
         if (x == this.cachedX && z == this.cachedZ && this.cachedChunk != null) {
             return this.cachedChunk;
         }
@@ -106,7 +139,7 @@ public class MixinClientChunkCache implements LevelSource {
         int l = z & this.mask;
         int i1 = k + l * this.chunksWide;
         if (!this.isChunkLoaded(x, z)) {
-            Chunk chunk;
+            MixinChunk chunk;
             if (this.cache[i1] != null) {
                 this.cache[i1].method_883();
                 this.method_1241(this.cache[i1]);
@@ -144,50 +177,64 @@ public class MixinClientChunkCache implements LevelSource {
         return this.cache[i1];
     }
 
-    private Chunk method_1244(int i, int j) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    private MixinChunk method_1244(int i, int j) {
         if (this.io == null) {
             return this.nullChunk;
         }
         try {
-            Chunk chunk = this.io.getChunk(this.level, i, j);
+            MixinChunk chunk = this.io.getChunk(this.level, i, j);
             if (chunk != null) {
                 chunk.lastUpdate = this.level.getLevelTime();
             }
             return chunk;
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             exception.printStackTrace();
             return this.nullChunk;
         }
     }
 
-    private void method_1240(Chunk chunk) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    private void method_1240(MixinChunk chunk) {
         if (this.io == null) {
             return;
         }
         try {
             this.io.prepareChunk(this.level, chunk);
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             exception.printStackTrace();
         }
     }
 
-    private void method_1241(Chunk chunk) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    private void method_1241(MixinChunk chunk) {
         if (this.io == null) {
             return;
         }
         try {
             chunk.lastUpdate = this.level.getLevelTime();
             this.io.saveChunk(this.level, chunk);
-        }
-        catch (IOException ioexception) {
+        } catch (IOException ioexception) {
             ioexception.printStackTrace();
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void decorate(LevelSource levelSource, int chunkX, int chunkZ) {
-        Chunk chunk = this.getChunk(chunkX, chunkZ);
+        MixinChunk chunk = this.getChunk(chunkX, chunkZ);
         if (!chunk.decorated) {
             chunk.decorated = true;
             if (this.chunkGenerator != null) {
@@ -199,6 +246,11 @@ public class MixinClientChunkCache implements LevelSource {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public boolean saveChunks(boolean flag, ProgressListener listener) {
         int i = 0;
         int j = 0;
@@ -232,6 +284,11 @@ public class MixinClientChunkCache implements LevelSource {
         return true;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public boolean method_1801() {
         if (this.io != null) {
             this.io.method_810();
@@ -239,10 +296,20 @@ public class MixinClientChunkCache implements LevelSource {
         return this.chunkGenerator.method_1801();
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public boolean isClean() {
         return true;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public String toString() {
         return "ChunkCache: " + this.cache.length;
     }

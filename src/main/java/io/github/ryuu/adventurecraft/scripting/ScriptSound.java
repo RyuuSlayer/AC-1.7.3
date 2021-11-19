@@ -1,8 +1,7 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import io.github.ryuu.adventurecraft.mixin.client.sound.MixinSoundHelper;
-
 public class ScriptSound {
+
     MixinSoundHelper soundMgr;
 
     ScriptSound(MixinSoundHelper s) {
@@ -10,19 +9,19 @@ public class ScriptSound {
     }
 
     public void playSoundUI(String soundName) {
-        this.soundMgr.a(soundName.toLowerCase(), 1.0F, 1.0F);
+        this.soundMgr.playSound(soundName.toLowerCase(), 1.0f, 1.0f);
     }
 
     public void playSoundUI(String soundName, float volume, float pitch) {
-        this.soundMgr.a(soundName.toLowerCase(), volume, pitch);
+        this.soundMgr.playSound(soundName.toLowerCase(), volume, pitch);
     }
 
     public void playSound3D(String soundName, float x, float y, float z) {
-        this.soundMgr.b(soundName.toLowerCase(), x, y, z, 1.0F, 1.0F);
+        this.soundMgr.playSound(soundName.toLowerCase(), x, y, z, 1.0f, 1.0f);
     }
 
     public void playSound3D(String soundName, float x, float y, float z, float volume, float pitch) {
-        this.soundMgr.b(soundName.toLowerCase(), x, y, z, volume, pitch);
+        this.soundMgr.playSound(soundName.toLowerCase(), x, y, z, volume, pitch);
     }
 
     public void playMusic(String musicName) {

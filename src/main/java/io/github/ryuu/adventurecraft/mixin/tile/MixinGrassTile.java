@@ -1,23 +1,31 @@
 package io.github.ryuu.adventurecraft.mixin.tile;
 
-import java.util.Random;
-
-import io.github.ryuu.adventurecraft.blocks.IBlockColor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.colour.GrassColour;
-import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
 import net.minecraft.level.chunk.Chunk;
+import net.minecraft.tile.GrassTile;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 
-public class MixinGrassTile extends Tile implements IBlockColor {
-    protected GrassTile(int id) {
+import java.util.Random;
+
+@Mixin(GrassTile.class)
+public class MixinGrassTile extends MixinTile implements IBlockColor {
+
+    protected MixinGrassTile(int id) {
         super(id, Material.ORGANIC);
         this.tex = 3;
         this.setTicksRandomly(true);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public int method_1626(TileView iblockaccess, int i, int j, int k, int l) {
         if (l == 1) {
             int metadata = iblockaccess.getTileMeta(i, j, k);
@@ -33,6 +41,11 @@ public class MixinGrassTile extends Tile implements IBlockColor {
         return material != Material.SNOW && material != Material.SNOW_BLOCK ? 3 : 68;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public int getTextureForSide(int side, int meta) {
         if (meta == 0) {
             return 0;
@@ -40,6 +53,11 @@ public class MixinGrassTile extends Tile implements IBlockColor {
         return 232 + meta - 1;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public int getTint(TileView iblockaccess, int i, int j, int k) {
         iblockaccess.getBiomeSource().getBiomes(i, k, 1, 1);
         double d = iblockaccess.getBiomeSource().temperatureNoises[0];
@@ -47,7 +65,12 @@ public class MixinGrassTile extends Tile implements IBlockColor {
         return GrassColour.getColour(d, d1);
     }
 
-    public void onScheduledTick(Level level, int x, int y, int z, Random rand) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public void onScheduledTick(MixinLevel level, int x, int y, int z, Random rand) {
         if (level.isClient) {
             return;
         }
@@ -71,10 +94,20 @@ public class MixinGrassTile extends Tile implements IBlockColor {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public int getDropId(int meta, Random rand) {
         return Tile.DIRT.getDropId(0, rand);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public int method_1621() {
         if (Minecraft.minecraftInstance.options.grass3d) {
             return 30;
@@ -82,11 +115,20 @@ public class MixinGrassTile extends Tile implements IBlockColor {
         return super.method_1621();
     }
 
-    public void incrementColor(Level world, int i, int j, int k) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public void incrementColor(MixinLevel world, int i, int j, int k) {
         int metadata = world.getTileMeta(i, j, k);
         world.setTileMeta(i, j, k, (metadata + 1) % subTypes[this.id]);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public float grassMultiplier(int metadata) {
         switch (metadata) {
             case 2: {

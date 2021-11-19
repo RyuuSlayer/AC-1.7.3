@@ -1,34 +1,75 @@
 package io.github.ryuu.adventurecraft.mixin.tile;
 
-import io.github.ryuu.adventurecraft.blocks.IBlockColor;
-import net.minecraft.entity.FallingTile;
-import net.minecraft.level.Level;
 import net.minecraft.tile.SandTile;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.Random;
 
-public class MixinSandTile extends Tile implements IBlockColor {
+@Mixin(SandTile.class)
+public class MixinSandTile extends MixinTile implements IBlockColor {
+
+    @Shadow()
     public static boolean fallInstantly = false;
 
-    public SandTile(int id, int j) {
+    public MixinSandTile(int id, int j) {
         super(id, j, Material.SAND);
     }
 
-    public void method_1611(Level level, int x, int y, int z) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static boolean method_435(MixinLevel world, int i, int j, int k) {
+        int l = world.getTileId(i, j, k);
+        if (l == 0) {
+            return true;
+        }
+        if (l == Tile.FIRE.id) {
+            return true;
+        }
+        Material material = Tile.BY_ID[l].material;
+        if (material == Material.WATER) {
+            return true;
+        }
+        return material == Material.LAVA;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public void method_1611(MixinLevel level, int x, int y, int z) {
         level.method_216(x, y, z, this.id, this.getTickrate());
     }
 
-    public void method_1609(Level level, int x, int y, int z, int id) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public void method_1609(MixinLevel level, int x, int y, int z, int id) {
         level.method_216(x, y, z, this.id, this.getTickrate());
     }
 
-    public void onScheduledTick(Level level, int x, int y, int z, Random rand) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public void onScheduledTick(MixinLevel level, int x, int y, int z, Random rand) {
         this.method_436(level, x, y, z);
     }
 
-    private void method_436(Level world, int i, int j, int k) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    private void method_436(MixinLevel world, int i, int j, int k) {
         int l = i;
         int i1 = j;
         int j1 = k;
@@ -44,32 +85,27 @@ public class MixinSandTile extends Tile implements IBlockColor {
                 }
             } else {
                 int metadata = world.getTileMeta(i, j, k);
-                FallingTile entityfallingsand = new FallingTile(world, (float)i + 0.5f, (float)j + 0.5f, (float)k + 0.5f, this.id);
+                MixinFallingTile entityfallingsand = new MixinFallingTile(world, (float) i + 0.5f, (float) j + 0.5f, (float) k + 0.5f, this.id);
                 entityfallingsand.metadata = metadata;
                 world.spawnEntity(entityfallingsand);
             }
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public int getTickrate() {
         return 3;
     }
 
-    public static boolean method_435(Level world, int i, int j, int k) {
-        int l = world.getTileId(i, j, k);
-        if (l == 0) {
-            return true;
-        }
-        if (l == Tile.FIRE.id) {
-            return true;
-        }
-        Material material = Tile.BY_ID[l].material;
-        if (material == Material.WATER) {
-            return true;
-        }
-        return material == Material.LAVA;
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public int getTextureForSide(int side, int meta) {
         if (meta == 0) {
             return this.tex;
@@ -77,7 +113,12 @@ public class MixinSandTile extends Tile implements IBlockColor {
         return 228 + meta - 1;
     }
 
-    public void incrementColor(Level world, int i, int j, int k) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public void incrementColor(MixinLevel world, int i, int j, int k) {
         if (subTypes[this.id] > 0) {
             int metadata = world.getTileMeta(i, j, k);
             world.setTileMeta(i, j, k, (metadata + 1) % subTypes[this.id]);

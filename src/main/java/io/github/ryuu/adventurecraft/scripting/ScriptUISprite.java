@@ -2,34 +2,37 @@ package io.github.ryuu.adventurecraft.scripting;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.TextRenderer;
-import net.minecraft.client.texture.TextureManager;
 import org.lwjgl.opengl.GL11;
 
 public class ScriptUISprite extends UIElement {
+
     public String texture;
+
     public float width;
+
     public float height;
-    public float imageWidth;
-    public float imageHeight;
+
+    public float imageWidth = 256.0f;
+
+    public float imageHeight = 256.0f;
+
     public double u;
+
     public double v;
-    public float red;
-    public float green;
-    public float blue;
-    public float alpha;
+
+    public float red = 1.0f;
+
+    public float green = 1.0f;
+
+    public float blue = 1.0f;
+
+    public float alpha = 1.0f;
 
     public ScriptUISprite(String t, float xPos, float yPos, float w, float h, double uT, double vT) {
-        this(t, xPos, yPos, w, h, uT, vT, Minecraft.minecraftInstance.v.scriptUI);
+        this(t, xPos, yPos, w, h, uT, vT, Minecraft.minecraftInstance.overlay.scriptUI);
     }
 
     public ScriptUISprite(String t, float xPos, float yPos, float w, float h, double uT, double vT, ScriptUIContainer parent) {
-        this.imageWidth = 256.0F;
-        this.imageHeight = 256.0F;
-        this.red = 1.0F;
-        this.green = 1.0F;
-        this.blue = 1.0F;
-        this.alpha = 1.0F;
         this.texture = t;
         this.prevX = this.curX = xPos;
         this.prevY = this.curY = yPos;
@@ -37,27 +40,29 @@ public class ScriptUISprite extends UIElement {
         this.height = h;
         this.u = uT;
         this.v = vT;
-        if (parent != null)
+        if (parent != null) {
             parent.add(this);
+        }
     }
 
-    public void render(TextRenderer fontRenderer, TextureManager renderEngine, float partialTickTime) {
+    @Override
+    public void render(MixinTextRenderer fontRenderer, MixinTextureManager renderEngine, float partialTickTime) {
         if (this.texture.startsWith("http")) {
             renderEngine.bindTexture(renderEngine.getTextureId(this.texture, "./pack.png"));
         } else {
             renderEngine.bindTexture(renderEngine.getTextureId(this.texture));
         }
         GL11.glColor4f(this.red, this.green, this.blue, this.alpha);
-        float x = getXAtTime(partialTickTime);
-        float y = getYAtTime(partialTickTime);
-        float f = 1.0F / this.imageWidth;
-        float f1 = 1.0F / this.imageHeight;
-        Tessellator tessellator = Tessellator.a;
+        float x = this.getXAtTime(partialTickTime);
+        float y = this.getYAtTime(partialTickTime);
+        float f = 1.0f / this.imageWidth;
+        float f1 = 1.0f / this.imageHeight;
+        Tessellator tessellator = Tessellator.INSTANCE;
         tessellator.start();
-        tessellator.vertex(x, (y + this.height), 0.0D, this.u * f, (this.v + this.height) * f1);
-        tessellator.vertex((x + this.width), (y + this.height), 0.0D, ((float) (this.u + this.width) * f), ((float) (this.v + this.height) * f1));
-        tessellator.vertex((x + this.width), y, 0.0D, ((float) (this.u + this.width) * f), this.v * f1);
-        tessellator.vertex(x, y, 0.0D, this.u * f, this.v * f1);
+        tessellator.vertex(x, y + this.height, 0.0, this.u * (double) f, (this.v + (double) this.height) * (double) f1);
+        tessellator.vertex(x + this.width, y + this.height, 0.0, (float) (this.u + (double) this.width) * f, (float) (this.v + (double) this.height) * f1);
+        tessellator.vertex(x + this.width, y, 0.0, (float) (this.u + (double) this.width) * f, this.v * (double) f1);
+        tessellator.vertex(x, y, 0.0, this.u * (double) f, this.v * (double) f1);
         tessellator.draw();
     }
 }

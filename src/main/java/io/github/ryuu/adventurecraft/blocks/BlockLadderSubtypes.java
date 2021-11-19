@@ -1,45 +1,47 @@
 package io.github.ryuu.adventurecraft.blocks;
 
-import net.minecraft.level.Level;
-import net.minecraft.tile.LadderTile;
+public class BlockLadderSubtypes extends MixinLadderTile implements IBlockColor {
 
-public class BlockLadderSubtypes extends LadderTile implements IBlockColor {
-    protected BlockLadderSubtypes(int i, int j) {
-        super(i, j);
+    protected BlockLadderSubtypes(int id, int texUVStart) {
+        super(id, texUVStart);
     }
 
     @Override
-    public int getTextureForSide(int i, int j) {
-        j /= 4;
-        return this.tex + j;
+    public int getTextureForSide(int side, int meta) {
+        return this.tex + (meta /= 4);
     }
 
     @Override
-    public void onPlaced(Level world, int i, int j, int k, int l) {
-        int meta = world.getTileMeta(i, j, k);
+    public void onPlaced(MixinLevel level, int x, int y, int z, int facing) {
+        int meta = level.getTileMeta(x, y, z);
         int side = 0;
-        if (side == 0 && isLadderID(world.getTileId(i, j - 1, k)))
-            side = world.getTileMeta(i, j - 1, k) % 4 + 2;
-        if (side == 0 && isLadderID(world.getTileId(i, j + 1, k)))
-            side = world.getTileMeta(i, j + 1, k) % 4 + 2;
-        if ((side == 0 || l == 2) && world.isFullOpaque(i, j, k + 1))
+        if (side == 0 && BlockLadderSubtypes.isLadderID(level.getTileId(x, y - 1, z))) {
+            side = level.getTileMeta(x, y - 1, z) % 4 + 2;
+        }
+        if (side == 0 && BlockLadderSubtypes.isLadderID(level.getTileId(x, y + 1, z))) {
+            side = level.getTileMeta(x, y + 1, z) % 4 + 2;
+        }
+        if ((side == 0 || facing == 2) && level.isFullOpaque(x, y, z + 1)) {
             side = 2;
-        if ((side == 0 || l == 3) && world.isFullOpaque(i, j, k - 1))
+        }
+        if ((side == 0 || facing == 3) && level.isFullOpaque(x, y, z - 1)) {
             side = 3;
-        if ((side == 0 || l == 4) && world.isFullOpaque(i + 1, j, k))
+        }
+        if ((side == 0 || facing == 4) && level.isFullOpaque(x + 1, y, z)) {
             side = 4;
-        if ((side == 0 || l == 5) && world.isFullOpaque(i - 1, j, k))
+        }
+        if ((side == 0 || facing == 5) && level.isFullOpaque(x - 1, y, z)) {
             side = 5;
-        meta += Math.max(side - 2, 0) % 4;
-        world.setTileMeta(i, j, k, meta);
+        }
+        level.setTileMeta(x, y, z, meta += Math.max(side - 2, 0) % 4);
     }
 
     @Override
-    public void method_1609(Level world, int i, int j, int k, int l) {
+    public void method_1609(MixinLevel level, int x, int y, int z, int id) {
     }
 
     @Override
-    public void incrementColor(Level world, int i, int j, int k) {
+    public void incrementColor(MixinLevel world, int i, int j, int k) {
         int metadata = world.getTileMeta(i, j, k);
         world.setTileMeta(i, j, k, (metadata + 4) % 16);
     }

@@ -1,19 +1,18 @@
 package io.github.ryuu.adventurecraft.util;
 
-import net.minecraft.util.io.CompoundTag;
-
 public class TriggerArea {
-    public int minX;
 
-    public int minY;
+    int minX;
 
-    public int minZ;
+    int minY;
 
-    public int maxX;
+    int minZ;
 
-    public int maxY;
+    int maxX;
 
-    public int maxZ;
+    int maxY;
+
+    int maxZ;
 
     public TriggerArea(int xMin, int yMin, int zMin, int xMax, int yMax, int zMax) {
         this.minX = xMin;
@@ -24,7 +23,7 @@ public class TriggerArea {
         this.maxZ = zMax;
     }
 
-    public static TriggerArea getFromTagCompound(CompoundTag tag) {
+    static TriggerArea getFromTagCompound(MixinCompoundTag tag) {
         int minX = tag.getInt("minX");
         int minY = tag.getInt("minY");
         int minZ = tag.getInt("minZ");
@@ -34,16 +33,18 @@ public class TriggerArea {
         return new TriggerArea(minX, minY, minZ, maxX, maxY, maxZ);
     }
 
-    public boolean isPointInside(int x, int y, int z) {
-        if (x < this.minX || x > this.maxX)
+    boolean isPointInside(int x, int y, int z) {
+        if (x < this.minX || x > this.maxX) {
             return false;
-        if (y < this.minY || y > this.maxY)
+        }
+        if (y < this.minY || y > this.maxY) {
             return false;
-        return (this.minZ <= z && z <= this.maxZ);
+        }
+        return this.minZ <= z && z <= this.maxZ;
     }
 
-    public CompoundTag getTagCompound() {
-        CompoundTag t = new CompoundTag();
+    MixinCompoundTag getTagCompound() {
+        MixinCompoundTag t = new MixinCompoundTag();
         t.put("minX", this.minX);
         t.put("minY", this.minY);
         t.put("minZ", this.minZ);

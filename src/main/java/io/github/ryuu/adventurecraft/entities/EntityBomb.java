@@ -1,110 +1,90 @@
 package io.github.ryuu.adventurecraft.entities;
 
-import io.github.ryuu.adventurecraft.blocks.BlockBombable;
-import io.github.ryuu.adventurecraft.items.Items;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.player.Player;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
-import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.Box;
 
 import java.util.List;
 import java.util.Random;
 
-public class EntityBomb extends ItemEntity {
-    private static final double BOMB_DAMAGE = 20.0D;
+public class EntityBomb extends MixinItemEntity {
 
-    private static final double BOMB_RANGE = 5.0D;
+    private static final double BOMB_DAMAGE = 20.0;
 
-    // TODO: utilize this constant
-    private static final double BOMB_DESTROY_RANGE = 3.0D;
+    private static final double BOMB_RANGE = 5.0;
+
+    private static final double BOMB_DESTROY_RANGE = 3.0;
 
     private static final int BOMB_FUSE = 45;
 
     private int fuse;
 
-    private Entity parentEntity;
+    private MixinEntity parentEntity;
 
-    public EntityBomb(Level world) {
+    public EntityBomb(MixinLevel world) {
         super(world);
-        setSize(0.5F, 0.5F);
-        this.item = new ItemInstance(Items.bomb);
-        this.fuse = BOMB_FUSE;
+        this.setSize(0.5f, 0.5f);
+        this.item = new MixinItemInstance(Items.bomb);
+        this.fuse = 45;
     }
 
-    public EntityBomb(Level world, Entity entity) {
+    public EntityBomb(MixinLevel world, MixinEntity entity) {
         this(world);
         this.parentEntity = entity;
-        setRotation(entity.yaw, entity.pitch);
-        this.velocityX = 0.3D * -Math.sin((this.yaw / 180.0F * 3.141593F)) * Math.cos((this.pitch / 180.0F * 3.141593F));
-        this.velocityZ = 0.3D * Math.cos((this.yaw / 180.0F * 3.141593F)) * Math.cos((this.pitch / 180.0F * 3.141593F));
-        this.velocityY = 0.3D * -Math.sin((this.pitch / 180.0F * 3.141593F)) + 0.10000000149011612D;
-        setPosition(entity.x, entity.y, entity.z);
+        this.setRotation(entity.yaw, entity.pitch);
+        this.velocityX = 0.3 * -Math.sin((double) (this.yaw / 180.0f * 3.141593f)) * Math.cos((double) (this.pitch / 180.0f * 3.141593f));
+        this.velocityZ = 0.3 * Math.cos((double) (this.yaw / 180.0f * 3.141593f)) * Math.cos((double) (this.pitch / 180.0f * 3.141593f));
+        this.velocityY = 0.3 * -Math.sin((double) (this.pitch / 180.0f * 3.141593f)) + (double) 0.1f;
+        this.setPosition(entity.x, entity.y, entity.z);
         this.prevX = this.x;
         this.prevY = this.y;
         this.prevZ = this.z;
     }
 
-    public static void explode(Entity exploding, Entity parentEntity, Level worldObj, double posX, double posY, double posZ) {
+    public static void explode(MixinEntity exploding, MixinEntity parentEntity, MixinLevel worldObj, double posX, double posY, double posZ) {
         exploding.remove();
-        worldObj.playSound(posX, posY, posZ, "random.explode", 4.0F, 1.0F);
-        List<Entity> list = worldObj.getEntities(
-                exploding,
-                Box.create(
-                        Math.floor(posX - BOMB_RANGE),
-                        Math.floor(posY - BOMB_RANGE),
-                        Math.floor(posZ - BOMB_RANGE),
-                        Math.ceil(posX + BOMB_RANGE),
-                        Math.ceil(posY + BOMB_RANGE),
-                        Math.ceil(posZ + BOMB_RANGE)));
-
-        for (int i = 0; i < list.size(); i++) {
-            Entity entity = list.get(i);
+        worldObj.playSound(posX, posY, posZ, "random.explode", 4.0f, 1.0f);
+        List list = worldObj.getEntities(exploding, Box.getOrCreate(Math.floor(posX - 5.0), Math.floor(posY - 5.0), Math.floor(posZ - 5.0), Math.ceil(posX + 5.0), Math.ceil(posY + 5.0), Math.ceil(posZ + 5.0)));
+        for (int i = 0; i < list.size(); ++i) {
+            MixinEntity entity = (MixinEntity) list.get(i);
             double dist = entity.method_1350(posX, posY, posZ);
-            if (dist < BOMB_RANGE) {
-                dist = (BOMB_RANGE - dist) / BOMB_RANGE;
-                double dX = entity.x - posX;
-                double dY = entity.y - posY;
-                double dZ = entity.z - posZ;
-                entity.method_1322(dist * dX, dist * dY, dist * dZ);
-                entity.damage(parentEntity, (int) Math.ceil(dist * BOMB_DAMAGE));
-            }
+            if (!(dist < 5.0)) continue;
+            dist = (5.0 - dist) / 5.0;
+            double dX = entity.x - posX;
+            double dY = entity.y - posY;
+            double dZ = entity.z - posZ;
+            entity.method_1322(dist * dX, dist * dY, dist * dZ);
+            entity.damage(parentEntity, (int) Math.ceil(dist * 20.0));
         }
         int coordX = (int) posX;
         int coordY = (int) posY;
         int coordZ = (int) posZ;
-        for (int x = -3; x <= 3; x++) {
-            for (int y = -3; y <= 3; y++) {
-                for (int z = -3; z <= 3; z++) {
-                    double distSq = x * x + (y * y) + (z * z);
-                    if (distSq <= 9.0D) {
-                        int blockID = worldObj.getTileId(coordX + x, coordY + y, coordZ + z);
-                        if (Tile.BY_ID[blockID] instanceof BlockBombable)
-                            worldObj.setTile(coordX + x, coordY + y, coordZ + z, 0);
-                    }
+        for (int x = -3; x <= 3; ++x) {
+            for (int y = -3; y <= 3; ++y) {
+                for (int z = -3; z <= 3; ++z) {
+                    int blockID;
+                    Double distSq = (double) x * (double) x + (double) (y * y) + (double) (z * z);
+                    if (!(distSq <= 9.0) || !(Tile.BY_ID[blockID = worldObj.getTileId(coordX + x, coordY + y, coordZ + z)] instanceof BlockBombable))
+                        continue;
+                    worldObj.setTile(coordX + x, coordY + y, coordZ + z, 0);
                 }
             }
         }
         Random rand = new Random();
-        rand.setSeed(worldObj.getSeed());
-        for (int j = -3; j <= 3; j++) {
-            for (int y = -3; y <= 3; y++) {
-                for (int z = -3; z <= 3; z++) {
-                    double distSq = j * j + (y * y) + (z * z);
-                    if (rand.nextInt(3) == 0 && distSq <= 9.0D) {
-                        double velX = j;
-                        double velY = y;
-                        double velZ = z;
-                        double dist = Math.sqrt(distSq) * (0.75D + 0.5D * rand.nextDouble()) * 1.5D / 3.0D;
-                        velX = velX / dist;
-                        velY = velY / dist;
-                        velZ = velZ / dist;
-                        worldObj.addParticle("explode", posX, posY, posZ, velX, velY, velZ);
-                        worldObj.addParticle("smoke", posX, posY, posZ, velX, velY, velZ);
-                    }
+        rand.setSeed(worldObj.getLevelTime());
+        for (int x = -3; x <= 3; ++x) {
+            for (int y = -3; y <= 3; ++y) {
+                for (int z = -3; z <= 3; ++z) {
+                    Double distSq = (double) x * (double) x + (double) (y * y) + (double) (z * z);
+                    if (rand.nextInt(3) != 0 || !(distSq <= 9.0)) continue;
+                    Double velX = x;
+                    Double velY = y;
+                    Double velZ = z;
+                    Double dist = Math.sqrt(distSq) * (0.75 + 0.5 * rand.nextDouble()) * 1.5 / 3.0;
+                    velX = velX / dist;
+                    velY = velY / dist;
+                    velZ = velZ / dist;
+                    worldObj.addParticle("explode", posX, posY, posZ, velX, velY, velZ);
+                    worldObj.addParticle("smoke", posX, posY, posZ, velX, velY, velZ);
                 }
             }
         }
@@ -113,42 +93,43 @@ public class EntityBomb extends ItemEntity {
     @Override
     public void tick() {
         super.tick();
-        if (this.fuse == BOMB_FUSE)
-            this.level.playSound(this, "random.fuse", 1.0F, 1.0F);
-        this.fuse--;
-        double fuseDuration = this.fuse / (double) BOMB_FUSE;
-        double fuseOffset = 0.2D * fuseDuration;
+        if (this.fuse == 45) {
+            this.level.playSound(this, "random.fuse", 1.0f, 1.0f);
+        }
+        --this.fuse;
+        double fuseDuration = (double) this.fuse / 45.0;
+        double fuseOffset = 0.2 * fuseDuration;
         if (this.fuse == 0) {
-            explode(this, this.parentEntity, this.level, this.x, this.y, this.z);
+            EntityBomb.explode(this, this.parentEntity, this.level, this.x, this.y, this.z);
         } else if (this.fuse % 2 == 0) {
-            this.level.addParticle("smoke", this.x, this.y + 0.675D + fuseOffset, this.z, 0.0D, 0.0D, 0.0D);
+            this.level.addParticle("smoke", this.x, this.y + 0.675 + fuseOffset, this.z, 0.0, 0.0, 0.0);
         } else {
-            this.level.addParticle("flame", this.x, this.y + 0.675D + fuseOffset, this.z, 0.0D, 0.0D, 0.0D);
+            this.level.addParticle("flame", this.x, this.y + 0.675 + fuseOffset, this.z, 0.0, 0.0, 0.0);
         }
     }
 
     @Override
-    public boolean damage(Entity entity, int i) {
+    public boolean damage(MixinEntity target, int amount) {
         if (!this.removed) {
-            method_1336();
-            explode(this, this.parentEntity, this.level, this.x, this.y, this.z);
+            this.method_1336();
+            EntityBomb.explode(this, this.parentEntity, this.level, this.x, this.y, this.z);
         }
         return false;
     }
 
     @Override
-    public void writeCustomDataToTag(CompoundTag nbttagcompound) {
-        super.writeCustomDataToTag(nbttagcompound);
-        nbttagcompound.put("Fuse", (byte) this.fuse);
+    public void writeCustomDataToTag(MixinCompoundTag tag) {
+        super.writeCustomDataToTag(tag);
+        tag.put("Fuse", (byte) this.fuse);
     }
 
     @Override
-    public void readCustomDataFromTag(CompoundTag nbttagcompound) {
-        super.readCustomDataFromTag(nbttagcompound);
-        this.fuse = nbttagcompound.getByte("Fuse");
+    public void readCustomDataFromTag(MixinCompoundTag tag) {
+        super.readCustomDataFromTag(tag);
+        this.fuse = tag.getByte("Fuse");
     }
 
     @Override
-    public void onPlayerCollision(Player entityplayer) {
+    public void onPlayerCollision(MixinPlayer entityplayer) {
     }
 }

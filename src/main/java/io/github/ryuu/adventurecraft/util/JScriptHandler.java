@@ -1,43 +1,39 @@
 package io.github.ryuu.adventurecraft.util;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.HashMap;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.level.Level;
 import org.mozilla.javascript.Scriptable;
 
+import java.io.*;
+import java.util.HashMap;
+
 public class JScriptHandler {
+
     public HashMap<String, JScriptInfo> scripts;
-    Level world;
+    MixinLevel world;
     File scriptDir;
 
-    JScriptHandler(Level w, File mapDir) {
+    JScriptHandler(MixinLevel w, File mapDir) {
         this.world = w;
         this.scriptDir = new File(mapDir, "scripts");
-        this.scripts = new HashMap<>();
-        loadScripts();
+        this.scripts = new HashMap();
+        this.loadScripts();
     }
 
     public void loadScripts() {
         this.scripts.clear();
-        if (this.scriptDir.exists())
+        if (this.scriptDir.exists()) {
             for (File f : this.scriptDir.listFiles()) {
                 String fileName = f.getName().toLowerCase();
-                if (fileName.endsWith(".js")) {
-                    System.out.printf("Compiling %s\n", fileName);
-                    String script = readFile(f);
-                    this.scripts.put(fileName, new JScriptInfo(f.getName(), this.world.script.compileString(script, f.getName())));
-                }
+                if (!fileName.endsWith(".js")) continue;
+                System.out.printf("Compiling %s\n", fileName);
+                String script = this.readFile(f);
+                this.scripts.put((Object) fileName, (Object) new JScriptInfo(f.getName(), this.world.script.compileString(script, f.getName())));
             }
+        }
     }
 
     public Object runScript(String fileName, Scriptable scope) {
-        return runScript(fileName, scope, true);
+        return this.runScript(fileName, scope, true);
     }
 
     public Object runScript(String fileName, Scriptable scope, boolean verbose) {
@@ -46,13 +42,15 @@ public class JScriptHandler {
             fileName = fileName.toLowerCase();
             long startTime = System.nanoTime();
             try {
-                return this.world.script.runScript(scriptInfo.compiledScript, scope);
+                Object object = this.world.script.runScript(scriptInfo.compiledScript, scope);
+                return object;
             } finally {
                 scriptInfo.addStat(System.nanoTime() - startTime);
             }
         }
-        if (verbose)
-            Minecraft.minecraftInstance.v.a(String.format("Missing '%s'", new Object[]{fileName}));
+        if (verbose) {
+            Minecraft.minecraftInstance.overlay.addChatMessage(String.format("Missing '%s'", new Object[]{fileName}));
+        }
         return null;
     }
 
@@ -61,8 +59,9 @@ public class JScriptHandler {
             BufferedReader reader = new BufferedReader(new FileReader(f));
             String buffer = "";
             try {
-                while (reader.ready())
+                while (reader.ready()) {
                     buffer = buffer + reader.readLine() + "\n";
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

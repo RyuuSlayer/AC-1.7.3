@@ -1,48 +1,44 @@
 package io.github.ryuu.adventurecraft;
 
+import net.minecraft.client.Minecraft;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
-import net.minecraft.client.Minecraft;
-
 public class AdventureCraft {
 
-    // TODO: This was used by the old AdventureCraft launcher to start the game, the AdventureCraft.jar, ACBin.jar & js.jar were added through startup parameters.
-    // We can very probably get rid of the whole class.
-
     public static void main(String[] args) {
-        byte b;
-        int i;
-        String[] arrayOfString;
-        for (i = (arrayOfString = args).length, b = 0; b < i; ) {
-            String arg = arrayOfString[b];
+        String[] stringArray = args;
+        int n = args.length;
+        int n2 = 0;
+        while (n2 < n) {
+            String arg = stringArray[n2];
             if (arg.equals("ran")) {
-                startAC(args);
+                AdventureCraft.startAC(args);
                 return;
             }
-            b++;
+            ++n2;
         }
-        runAC();
+        AdventureCraft.runAC();
     }
 
     public static void runAC() {
         try {
-            String[] emptyArgs = new String[0];
-            startAC(emptyArgs);
+            String[] emptyArgs = new String[]{};
+            AdventureCraft.startAC(emptyArgs);
         } catch (NoClassDefFoundError e) {
-            startNewAC();
+            AdventureCraft.startNewAC();
             System.exit(0);
         }
     }
 
     public static void startNewAC() {
         String os = System.getProperty("os.name").toLowerCase();
-        ArrayList<String> params = new ArrayList<>();
+        ArrayList params = new ArrayList();
         float javaVersion = Float.valueOf(System.getProperty("java.specification.version")).floatValue();
         if (os.contains("win")) {
             params.add("javaw");
@@ -51,8 +47,9 @@ public class AdventureCraft {
         }
         params.add("-Xmx512m");
         params.add("-Xms512m");
-        if (javaVersion >= 1.6D)
+        if ((double) javaVersion >= 1.6) {
             params.add("-Xincgc");
+        }
         params.add("-cp");
         if (os.contains("win")) {
             params.add("AdventureCraft.jar;ACBin.jar;js.jar;./resources/;./.minecraft/bin/jinput.jar;./.minecraft/bin/lwjgl.jar;./.minecraft/bin/lwjgl_util.jar;./.minecraft/bin/minecraft.jar");
@@ -70,8 +67,9 @@ public class AdventureCraft {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (process == null)
+        if (process == null) {
             System.out.println("Process didn't start :(");
+        }
     }
 
     public static void startAC(String[] args) {
@@ -87,7 +85,8 @@ public class AdventureCraft {
         Thread[] threads = new Thread[256];
         int count = Thread.enumerate(threads);
         Minecraft mc = null;
-        for (int i = 0; i < count; i++) {
+        int i = 0;
+        while (i < count) {
             if (threads[i].getName().equals("Minecraft main thread")) {
                 try {
                     Field f = Thread.class.getDeclaredField("target");
@@ -99,12 +98,13 @@ public class AdventureCraft {
                 }
                 break;
             }
+            ++i;
         }
     }
 
     public static void startWithLauncher(String arg) {
         String os = System.getProperty("os.name").toLowerCase();
-        ArrayList<String> params = new ArrayList<>();
+        ArrayList params = new ArrayList();
         if (os.contains("win")) {
             params.add("javaw");
         } else {
@@ -112,8 +112,9 @@ public class AdventureCraft {
         }
         params.add("-Xmx1024m");
         params.add("-Xms512m");
-        if (os.startsWith("mac"))
+        if (os.startsWith("mac")) {
             params.add("-XstartOnFirstThread");
+        }
         params.add("-cp");
         if (os.contains("win")) {
             params.add("AdventureCraft.jar;ACBin.jar;js.jar;DJNativeSwing.jar;DJNativeSwing-SWT.jar;swt.jar;./resources/;./.minecraft/bin/jinput.jar;./.minecraft/bin/lwjgl.jar;./.minecraft/bin/lwjgl_util.jar;./.minecraft/bin/minecraft.jar");
@@ -123,8 +124,9 @@ public class AdventureCraft {
         params.add("-Djava.library.path=./.minecraft/bin/natives");
         params.add("ACLauncher");
         params.add(arg);
-        if (os.startsWith("mac"))
+        if (os.startsWith("mac")) {
             params.add("firstThread");
+        }
         ProcessBuilder pb = new ProcessBuilder(params);
         pb.directory(new File(System.getProperty("user.dir")));
         Process process = null;
@@ -140,8 +142,9 @@ public class AdventureCraft {
             StringBuffer sb = new StringBuffer();
             try {
                 String line;
-                while ((line = br.readLine()) != null)
+                while ((line = br.readLine()) != null) {
                     System.out.println(line);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

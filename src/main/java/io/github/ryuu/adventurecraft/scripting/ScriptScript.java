@@ -1,12 +1,10 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import io.github.ryuu.adventurecraft.gui.GuiUrlRequest;
-import net.minecraft.level.Level;
-
 public class ScriptScript {
-    Level world;
 
-    ScriptScript(Level w) {
+    MixinLevel world;
+
+    ScriptScript(MixinLevel w) {
         this.world = w;
     }
 

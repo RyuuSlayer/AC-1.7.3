@@ -1,18 +1,15 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import io.github.ryuu.adventurecraft.util.TriggerArea;
-import io.github.ryuu.adventurecraft.util.UtilBullet;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityRegistry;
-import net.minecraft.level.Level;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.hit.HitType;
 import net.minecraft.util.maths.Vec3f;
 
 public class ScriptWorld {
-    Level worldObj;
 
-    ScriptWorld(Level w) {
+    MixinLevel worldObj;
+
+    ScriptWorld(MixinLevel w) {
         this.worldObj = w;
     }
 
@@ -33,7 +30,7 @@ public class ScriptWorld {
     }
 
     public void setBlockIDAndMetadata(int x, int y, int z, int id, int m) {
-        this.worldObj.setTileWithMetadata(x, y, z, id, m);
+        this.worldObj.method_201(x, y, z, id, m);
     }
 
     public float getLightValue(int x, int y, int z) {
@@ -41,7 +38,7 @@ public class ScriptWorld {
     }
 
     public void triggerBlock(int blockX, int blockY, int blockZ) {
-        triggerArea(blockX, blockY, blockZ, blockX, blockY, blockZ);
+        this.triggerArea(blockX, blockY, blockZ, blockX, blockY, blockZ);
     }
 
     public void triggerArea(int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
@@ -66,10 +63,10 @@ public class ScriptWorld {
     }
 
     public ScriptEntity spawnEntity(String entityType, double x, double y, double z) {
-        Entity e = EntityRegistry.create(entityType, this.worldObj);
+        MixinEntity e = EntityRegistry.create(entityType, this.worldObj);
         if (e != null) {
             e.setPosition(x, y, z);
-            this.worldObj.spawnEntity(e);
+            this.worldObj.method_287(e);
         }
         return ScriptEntity.getEntityClass(e);
     }
@@ -79,7 +76,7 @@ public class ScriptWorld {
     }
 
     public Object[] rayTraceBlocks(ScriptVec3 start, ScriptVec3 end) {
-        return rayTraceBlocks(start.x, start.y, start.z, end.x, end.y, end.z);
+        return this.rayTraceBlocks(start.x, start.y, start.z, end.x, end.y, end.z);
     }
 
     public Object[] rayTraceBlocks(double startX, double startY, double startZ, double endX, double endY, double endZ) {
@@ -93,7 +90,7 @@ public class ScriptWorld {
     }
 
     public Object[] rayTrace(ScriptVec3 start, ScriptVec3 end) {
-        return rayTrace(start.x, start.y, start.z, end.x, end.y, end.z);
+        return this.rayTrace(start.x, start.y, start.z, end.x, end.y, end.z);
     }
 
     public Object[] rayTrace(double startX, double startY, double startZ, double endX, double endY, double endZ) {

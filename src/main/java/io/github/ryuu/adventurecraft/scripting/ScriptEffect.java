@@ -1,23 +1,20 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import io.github.ryuu.adventurecraft.blocks.BlockEffect;
-import io.github.ryuu.adventurecraft.util.TextureAnimated;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.render.WorldRenderer;
-import net.minecraft.entity.Entity;
-import net.minecraft.level.Level;
 
 public class ScriptEffect {
-    Level worldObj;
-    WorldRenderer renderGlobal;
 
-    ScriptEffect(Level w, WorldRenderer rg) {
+    MixinLevel worldObj;
+
+    MixinWorldRenderer renderGlobal;
+
+    ScriptEffect(MixinLevel w, MixinWorldRenderer rg) {
         this.worldObj = w;
         this.renderGlobal = rg;
     }
 
     public ScriptEntity spawnParticle(String particleType, double x, double y, double z, double arg1, double arg2, double arg3) {
-        return ScriptEntity.getEntityClass((Entity) this.renderGlobal.spawnParticleR(particleType, x, y, z, arg1, arg2, arg3));
+        return ScriptEntity.getEntityClass(this.renderGlobal.spawnParticleR(particleType, x, y, z, arg1, arg2, arg3));
     }
 
     public boolean replaceTexture(String textureToReplace, String replacement) {
@@ -25,9 +22,10 @@ public class ScriptEffect {
     }
 
     public String getReplaceTexture(String textureToReplace) {
-        String replacement = (String) this.worldObj.properties.replacementTextures.get(textureToReplace);
-        if (replacement == null)
+        String replacement = (String) this.worldObj.properties.replacementTextures.get((Object) textureToReplace);
+        if (replacement == null) {
             return textureToReplace;
+        }
         return replacement;
     }
 
@@ -75,25 +73,25 @@ public class ScriptEffect {
     public void setLightRampValue(int i, float f) {
         this.worldObj.properties.brightness[i] = f;
         this.worldObj.loadBrightness();
-        Minecraft.minecraftInstance.g.updateAllTheRenderers();
+        Minecraft.minecraftInstance.worldRenderer.updateAllTheRenderers();
     }
 
     public void resetLightRampValues() {
-        float f = 0.05F;
-        for (int i = 0; i < 16; i++) {
-            float f1 = 1.0F - i / 15.0F;
-            this.worldObj.properties.brightness[i] = (1.0F - f1) / (f1 * 3.0F + 1.0F) * (1.0F - f) + f;
+        float f = 0.05f;
+        for (int i = 0; i < 16; ++i) {
+            float f1 = 1.0f - (float) i / 15.0f;
+            this.worldObj.properties.brightness[i] = (1.0f - f1) / (f1 * 3.0f + 1.0f) * (1.0f - f) + f;
         }
         this.worldObj.loadBrightness();
         Minecraft.minecraftInstance.worldRenderer.updateAllTheRenderers();
     }
 
     public void registerTextureAnimation(String animName, String texName, String animatedTex, int x, int y, int width, int height) {
-        Minecraft.minecraftInstance.Minecraft.minecraftInstance.textureManager.unregisterTextureAnimation.registerTextureAnimation(animName, new TextureAnimated(texName, animatedTex, x, y, width, height));
+        Minecraft.minecraftInstance.textureManager.registerTextureAnimation(animName, new TextureAnimated(texName, animatedTex, x, y, width, height));
     }
 
     public void unregisterTextureAnimation(String animName) {
-        Minecraft.minecraftInstance.Minecraft.minecraftInstance.textureManager.unregisterTextureAnimation.unregisterTextureAnimation(animName);
+        Minecraft.minecraftInstance.textureManager.unregisterTextureAnimation(animName);
     }
 
     public void explode(ScriptEntity owner, double x, double y, double z, float strength, boolean flaming) {

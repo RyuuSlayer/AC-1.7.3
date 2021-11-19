@@ -1,19 +1,26 @@
 package io.github.ryuu.adventurecraft.mixin.client.util;
 
-import java.io.*;
-import java.net.URL;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.util.ResourceDownloadThread;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.*;
+import java.net.URL;
+
+@Mixin(ResourceDownloadThread.class)
 public class MixinResourceDownloadThread extends Thread {
+
+    private final Minecraft field_138;
+    @Shadow()
     public File workingDirectory;
-    private Minecraft field_138;
     private boolean field_139 = false;
 
     public MixinResourceDownloadThread(File file, Minecraft minecraft) {
@@ -26,11 +33,19 @@ public class MixinResourceDownloadThread extends Thread {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void run() {
         this.downloadResource("http://s3.amazonaws.com/MinecraftResources/");
         this.downloadResource("http://adventurecraft.org/resources/");
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void downloadResource(String urlString) {
         try {
             URL url = new URL(urlString);
@@ -42,7 +57,7 @@ public class MixinResourceDownloadThread extends Thread {
                 for (int j = 0; j < nodelist.getLength(); ++j) {
                     Node node = nodelist.item(j);
                     if (node.getNodeType() != 1) continue;
-                    Element element = (Element)node;
+                    Element element = (Element) node;
                     String s = element.getElementsByTagName("Key").item(0).getChildNodes().item(0).getNodeValue();
                     long l = Long.parseLong(element.getElementsByTagName("Size").item(0).getChildNodes().item(0).getNodeValue());
                     if (l <= 0L) continue;
@@ -51,17 +66,24 @@ public class MixinResourceDownloadThread extends Thread {
                     return;
                 }
             }
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             this.method_108(this.workingDirectory, "");
             exception.printStackTrace();
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_107() {
         this.method_108(this.workingDirectory, "");
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     void method_108(File file, String s) {
         File[] afile = file.listFiles();
         for (int i = 0; i < afile.length; ++i) {
@@ -72,13 +94,16 @@ public class MixinResourceDownloadThread extends Thread {
             try {
                 this.field_138.loadSoundFromDir(s + afile[i].getName(), afile[i]);
                 continue;
-            }
-            catch (Exception exception) {
+            } catch (Exception exception) {
                 System.out.println("Failed to add " + s + afile[i].getName());
             }
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void method_110(URL url, String s, long l, int i) {
         try {
             int j = s.indexOf("/");
@@ -96,12 +121,15 @@ public class MixinResourceDownloadThread extends Thread {
                 }
             }
             this.field_138.loadSoundFromDir(s, file);
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             exception.printStackTrace();
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void method_109(URL url, File file, long l) throws IOException {
         byte[] abyte0 = new byte[4096];
         DataInputStream datainputstream = new DataInputStream(url.openStream());
@@ -116,6 +144,10 @@ public class MixinResourceDownloadThread extends Thread {
         dataoutputstream.close();
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_111() {
         this.field_139 = true;
     }

@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.util;
 
-public class Coord {
+class Coord {
+
     public int x;
 
     public int y;
@@ -8,11 +9,11 @@ public class Coord {
     public int z;
 
     public Coord() {
-        set(0, 0, 0);
+        this.set(0, 0, 0);
     }
 
     public Coord(int i, int j, int k) {
-        set(i, j, k);
+        this.set(i, j, k);
     }
 
     public void set(int i, int j, int k) {
@@ -24,7 +25,7 @@ public class Coord {
     public boolean equals(Object obj) {
         if (obj instanceof Coord) {
             Coord otherCoord = (Coord) obj;
-            return (this.x == otherCoord.x && this.y == otherCoord.y && this.z == otherCoord.z);
+            return this.x == otherCoord.x && this.y == otherCoord.y && this.z == otherCoord.z;
         }
         return false;
     }

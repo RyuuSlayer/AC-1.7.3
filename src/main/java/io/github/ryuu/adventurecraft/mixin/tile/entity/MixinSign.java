@@ -1,19 +1,31 @@
 package io.github.ryuu.adventurecraft.mixin.tile.entity;
 
-import io.github.ryuu.adventurecraft.util.MusicPlayer;
-import net.minecraft.tile.entity.TileEntity;
-import net.minecraft.util.io.CompoundTag;
+import net.minecraft.packet.AbstractPacket;
+import net.minecraft.packet.play.UpdateSignPacket;
+import net.minecraft.tile.entity.Sign;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
-public class MixinSign extends TileEntity {
+@Mixin(Sign.class)
+public class MixinSign extends MixinTileEntity {
+
+    @Shadow()
     public String[] lines = new String[]{"", "", "", ""};
+
     public int field_2270 = -1;
-    private boolean field_2271 = true;
     public boolean playSong;
     public String instrument;
     public int onNote;
     public int tickSinceStart;
+    private boolean field_2271 = true;
 
-    public void writeIdentifyingData(CompoundTag tag) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public void writeIdentifyingData(MixinCompoundTag tag) {
         super.writeIdentifyingData(tag);
         tag.put("Text1", this.lines[0]);
         tag.put("Text2", this.lines[1]);
@@ -21,7 +33,12 @@ public class MixinSign extends TileEntity {
         tag.put("Text4", this.lines[3]);
     }
 
-    public void readIdentifyingData(CompoundTag tag) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public void readIdentifyingData(MixinCompoundTag tag) {
         this.field_2271 = false;
         super.readIdentifyingData(tag);
         for (int i = 0; i < 4; ++i) {
@@ -31,6 +48,11 @@ public class MixinSign extends TileEntity {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void tick() {
         if (this.playSong) {
             if (this.tickSinceStart % 10 == 0) {
@@ -46,10 +68,43 @@ public class MixinSign extends TileEntity {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void playSong(String useInstrument) {
         this.playSong = true;
         this.instrument = useInstrument;
         this.tickSinceStart = 0;
         this.onNote = 0;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public AbstractPacket createInitialChunkDataPacket() {
+        String[] stringArray = new String[4];
+        for (int i = 0; i < 4; ++i) {
+            stringArray[i] = this.lines[i];
+        }
+        return new UpdateSignPacket(this.x, this.y, this.z, stringArray);
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public boolean method_1810() {
+        return this.field_2271;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public void method_1811(boolean bl) {
+        this.field_2271 = bl;
     }
 }

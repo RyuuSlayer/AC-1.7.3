@@ -1,63 +1,66 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
-import io.github.ryuu.adventurecraft.util.CutsceneCamera;
-import io.github.ryuu.adventurecraft.util.CutsceneCameraPoint;
 import net.minecraft.client.Minecraft;
-import net.minecraft.tile.entity.TileEntity;
-import net.minecraft.util.io.CompoundTag;
 
-public class TileEntityCamera extends TileEntity {
+public class TileEntityCamera extends MixinTileEntity {
+
     public String message;
 
     public String sound;
 
     public CutsceneCamera camera = new CutsceneCamera();
-    public int type = 2;
     public boolean pauseGame = true;
+    int type = 2;
+
+    TileEntityCamera() {
+    }
 
     public void loadCamera() {
-        copyCamera(this.camera, Minecraft.minecraftInstance.cutsceneCamera);
+        this.copyCamera(this.camera, Minecraft.minecraftInstance.cutsceneCamera);
         Minecraft.minecraftInstance.cutsceneCamera.startType = this.type;
     }
 
     public void saveCamera() {
-        copyCamera(Minecraft.minecraftInstance.cutsceneCamera, this.camera);
+        this.copyCamera(Minecraft.minecraftInstance.cutsceneCamera, this.camera);
     }
 
     private void copyCamera(CutsceneCamera src, CutsceneCamera tgt) {
         tgt.clearPoints();
-        for (CutsceneCameraPoint p : src.cameraPoints)
+        for (CutsceneCameraPoint p : src.cameraPoints) {
             tgt.addCameraPoint(p.time, p.posX, p.posY, p.posZ, p.rotYaw, p.rotPitch, p.cameraBlendType);
-    }
-
-    @Override
-    public void readIdentifyingData(CompoundTag nbttagcompound) {
-        super.readIdentifyingData(nbttagcompound);
-        int numPoints = nbttagcompound.getInt("numPoints");
-        for (int i = 0; i < numPoints; i++) {
-            readPointTag(nbttagcompound.getCompoundTag(String.format("point%d", i)));
         }
-        if (nbttagcompound.containsKey("type"))
-            this.type = nbttagcompound.getByte("type");
-        if (nbttagcompound.containsKey("pauseGame"))
-            this.pauseGame = nbttagcompound.getBoolean("pauseGame");
     }
 
     @Override
-    public void writeIdentifyingData(CompoundTag nbttagcompound) {
-        super.writeIdentifyingData(nbttagcompound);
+    public void readIdentifyingData(MixinCompoundTag tag) {
+        super.readIdentifyingData(tag);
+        int numPoints = tag.getInt("numPoints");
+        for (int i = 0; i < numPoints; ++i) {
+            this.readPointTag(tag.getCompoundTag(String.format("point%d", new Object[]{i})));
+        }
+        if (tag.containsKey("type")) {
+            this.type = tag.getByte("type");
+        }
+        if (tag.containsKey("pauseGame")) {
+            this.pauseGame = tag.getBoolean("pauseGame");
+        }
+    }
+
+    @Override
+    public void writeIdentifyingData(MixinCompoundTag tag) {
+        super.writeIdentifyingData(tag);
         int numPoints = 0;
         for (CutsceneCameraPoint p : this.camera.cameraPoints) {
-            nbttagcompound.put(String.format("point%d", numPoints), getPointTag(p));
-            numPoints++;
+            tag.put(String.format("point%d", new Object[]{numPoints}), this.getPointTag(p));
+            ++numPoints;
         }
-        nbttagcompound.put("numPoints", numPoints);
-        nbttagcompound.put("type", (byte) this.type);
-        nbttagcompound.put("pauseGame", this.pauseGame);
+        tag.put("numPoints", numPoints);
+        tag.put("type", (byte) this.type);
+        tag.put("pauseGame", this.pauseGame);
     }
 
-    private CompoundTag getPointTag(CutsceneCameraPoint point) {
-        CompoundTag nbttagcompound = new CompoundTag();
+    private MixinCompoundTag getPointTag(CutsceneCameraPoint point) {
+        MixinCompoundTag nbttagcompound = new MixinCompoundTag();
         nbttagcompound.put("time", point.time);
         nbttagcompound.put("posX", point.posX);
         nbttagcompound.put("posY", point.posY);
@@ -68,7 +71,7 @@ public class TileEntityCamera extends TileEntity {
         return nbttagcompound;
     }
 
-    private void readPointTag(CompoundTag nbttagcompound) {
+    private void readPointTag(MixinCompoundTag nbttagcompound) {
         float time = nbttagcompound.getFloat("time");
         float posX = nbttagcompound.getFloat("posX");
         float posY = nbttagcompound.getFloat("posY");
@@ -76,8 +79,9 @@ public class TileEntityCamera extends TileEntity {
         float yaw = nbttagcompound.getFloat("yaw");
         float pitch = nbttagcompound.getFloat("pitch");
         int type = 2;
-        if (nbttagcompound.containsKey("type"))
+        if (nbttagcompound.containsKey("type")) {
             type = nbttagcompound.getByte("type");
+        }
         this.camera.addCameraPoint(time, posX, posY, posZ, yaw, pitch, type);
     }
 }

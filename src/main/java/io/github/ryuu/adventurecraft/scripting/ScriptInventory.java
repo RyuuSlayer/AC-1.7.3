@@ -1,9 +1,9 @@
 package io.github.ryuu.adventurecraft.scripting;
 
 import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemInstance;
 
 public class ScriptInventory {
+
     Inventory inv;
 
     ScriptInventory(Inventory i) {
@@ -23,16 +23,18 @@ public class ScriptInventory {
     }
 
     public ScriptItem getItemInSlot(int i) {
-        ItemInstance item = this.inv.getInvItem(i);
-        if (item == null || item.itemId == 0)
+        MixinItemInstance item = this.inv.getInvItem(i);
+        if (item == null || item.itemId == 0) {
             return null;
+        }
         return new ScriptItem(item);
     }
 
     public ScriptItem decrementItem(int slot, int amount) {
-        ItemInstance item = this.inv.takeInvItem(slot, amount);
-        if (item == null || item.itemId == 0)
+        MixinItemInstance item = this.inv.takeInvItem(slot, amount);
+        if (item == null || item.itemId == 0) {
             return null;
+        }
         return new ScriptItem(item);
     }
 
