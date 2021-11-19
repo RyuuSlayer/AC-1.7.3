@@ -1,19 +1,22 @@
 package io.github.ryuu.adventurecraft.mixin.tile;
 
-import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemType;
-import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
+import net.minecraft.tile.DoorTile;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.Vec3f;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 
 import java.util.Random;
 
-public class MixinDoorTile extends Tile {
-    protected DoorTile(int id, Material material) {
+@Mixin(DoorTile.class)
+public class MixinDoorTile extends MixinTile {
+
+    protected MixinDoorTile(int id, Material material) {
         super(id, material);
         this.tex = 97;
         if (material == Material.METAL) {
@@ -24,6 +27,19 @@ public class MixinDoorTile extends Tile {
         this.setBoundingBox(0.5f - f, 0.0f, 0.5f - f, 0.5f + f, f1, 0.5f + f);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static boolean method_840(int i) {
+        return (i & 4) != 0;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public int getTextureForSide(int side, int meta) {
         if (side == 0 || side == 1) {
             return this.tex;
@@ -40,32 +56,66 @@ public class MixinDoorTile extends Tile {
         return i1;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public boolean isFullOpaque() {
         return false;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public boolean isFullCube() {
         return false;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public int method_1621() {
         return 7;
     }
 
-    public Box getOutlineShape(Level level, int x, int y, int z) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public Box getOutlineShape(MixinLevel level, int x, int y, int z) {
         this.method_1616(level, x, y, z);
         return super.getOutlineShape(level, x, y, z);
     }
 
-    public Box getCollisionShape(Level level, int x, int y, int z) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public Box getCollisionShape(MixinLevel level, int x, int y, int z) {
         this.method_1616(level, x, y, z);
         return super.getCollisionShape(level, x, y, z);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void method_1616(TileView iblockaccess, int i, int j, int k) {
         this.setBoundingBox(this.method_839(iblockaccess.getTileMeta(i, j, k)));
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void setBoundingBox(int meta) {
         float f = 0.1875f;
         this.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 2.0f, 1.0f);
@@ -83,11 +133,21 @@ public class MixinDoorTile extends Tile {
         }
     }
 
-    public void onPunched(Level level, int x, int y, int z, Player player) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public void onPunched(MixinLevel level, int x, int y, int z, MixinPlayer player) {
         this.activate(level, x, y, z, player);
     }
 
-    public boolean activate(Level level, int x, int y, int z, Player player) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public boolean activate(MixinLevel level, int x, int y, int z, MixinPlayer player) {
         if (this.material == Material.METAL) {
             return true;
         }
@@ -107,7 +167,11 @@ public class MixinDoorTile extends Tile {
         return true;
     }
 
-    public void method_837(Level world, int i, int j, int k, boolean flag) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public void method_837(MixinLevel world, int i, int j, int k, boolean flag) {
         boolean flag1;
         int l = world.getTileMeta(i, j, k);
         if ((l & 8) != 0) {
@@ -128,7 +192,12 @@ public class MixinDoorTile extends Tile {
         world.playLevelEvent(null, 1003, i, j, k, 0);
     }
 
-    public void method_1609(Level level, int x, int y, int z, int id) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public void method_1609(MixinLevel level, int x, int y, int z, int id) {
         int i1 = level.getTileMeta(x, y, z);
         if ((i1 & 8) != 0) {
             if (level.getTileId(x, y - 1, z) != this.id) {
@@ -161,6 +230,11 @@ public class MixinDoorTile extends Tile {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public int getDropId(int meta, Random rand) {
         if ((meta & 8) != 0) {
             return 0;
@@ -171,7 +245,12 @@ public class MixinDoorTile extends Tile {
         return ItemType.doorWood.id;
     }
 
-    public HitResult raycast(Level world, int x, int y, int z, Vec3f vec3d, Vec3f vec3d1) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public HitResult raycast(MixinLevel world, int x, int y, int z, Vec3f vec3d, Vec3f vec3d1) {
         this.method_1616(world, x, y, z);
         int m = world.getTileMeta(x, y, z);
         if (this.material == Material.METAL && (m & 8) == 8) {
@@ -247,6 +326,10 @@ public class MixinDoorTile extends Tile {
         return new HitResult(x, y, z, byte0, vec3d8.method_1301(x, y, z));
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public int method_839(int i) {
         if ((i & 4) == 0) {
             return i - 1 & 3;
@@ -254,17 +337,23 @@ public class MixinDoorTile extends Tile {
         return i & 3;
     }
 
-    public boolean canPlaceAt(Level level, int x, int y, int z) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public boolean canPlaceAt(MixinLevel level, int x, int y, int z) {
         if (y >= 127) {
             return false;
         }
         return level.canSuffocate(x, y - 1, z) && super.canPlaceAt(level, x, y, z) && super.canPlaceAt(level, x, y + 1, z);
     }
 
-    public static boolean method_840(int i) {
-        return (i & 4) != 0;
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public int getPistonPushMode() {
         return 1;
     }

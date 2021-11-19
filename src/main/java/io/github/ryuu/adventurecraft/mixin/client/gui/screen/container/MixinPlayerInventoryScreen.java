@@ -4,35 +4,62 @@ import net.minecraft.achievement.Achievements;
 import net.minecraft.client.gui.screen.AchievementsScreen;
 import net.minecraft.client.gui.screen.StatsScreen;
 import net.minecraft.client.gui.screen.container.ContainerScreen;
+import net.minecraft.client.gui.screen.container.PlayerInventoryScreen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.render.RenderHelper;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
-import net.minecraft.entity.player.Player;
 import org.lwjgl.opengl.GL11;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
+@Mixin(PlayerInventoryScreen.class)
 public class MixinPlayerInventoryScreen extends ContainerScreen {
+
+    @Shadow()
     private float mouseX;
+
     private float mouseY;
 
-    public MixinPlayerInventoryScreen(Player entityplayer) {
+    public MixinPlayerInventoryScreen(MixinPlayer entityplayer) {
         super(entityplayer.playerContainer);
         this.passEvents = true;
         entityplayer.increaseStat(Achievements.OPEN_INVENTORY, 1);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void init() {
         this.buttons.clear();
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     protected void renderForeground() {
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void render(int mouseX, int mouseY, float delta) {
         super.render(mouseX, mouseY, delta);
         this.mouseX = mouseX;
         this.mouseY = mouseY;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     protected void renderContainerBackground(float f) {
         int i = this.minecraft.textureManager.getTextureId("/gui/inventory.png");
         GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
@@ -46,22 +73,22 @@ public class MixinPlayerInventoryScreen extends ContainerScreen {
         GL11.glEnable(32826);
         GL11.glEnable(2903);
         GL11.glPushMatrix();
-        GL11.glTranslatef((float)(j + 51), (float)(k + 75), (float)50.0f);
+        GL11.glTranslatef((float) (j + 51), (float) (k + 75), 50.0f);
         float f1 = 30.0f;
         GL11.glScalef(-f1, f1, f1);
         GL11.glRotatef(180.0f, 0.0f, 0.0f, 1.0f);
         float f2 = this.minecraft.player.field_1012;
         float f3 = this.minecraft.player.yaw;
         float f4 = this.minecraft.player.pitch;
-        float f5 = (float)(j + 51) - this.mouseX;
-        float f6 = (float)(k + 75 - 50) - this.mouseY;
+        float f5 = (float) (j + 51) - this.mouseX;
+        float f6 = (float) (k + 75 - 50) - this.mouseY;
         GL11.glRotatef(135.0f, 0.0f, 1.0f, 0.0f);
         RenderHelper.enableLighting();
         GL11.glRotatef(-135.0f, 0.0f, 1.0f, 0.0f);
-        GL11.glRotatef(-((float)Math.atan(f6 / 40.0f)) * 20.0f, 1.0f, 0.0f, 0.0f);
-        this.minecraft.player.field_1012 = (float)Math.atan(f5 / 40.0f) * 20.0f;
-        this.minecraft.player.yaw = (float)Math.atan(f5 / 40.0f) * 40.0f;
-        this.minecraft.player.pitch = -((float)Math.atan(f6 / 40.0f)) * 20.0f;
+        GL11.glRotatef(-((float) Math.atan(f6 / 40.0f)) * 20.0f, 1.0f, 0.0f, 0.0f);
+        this.minecraft.player.field_1012 = (float) Math.atan(f5 / 40.0f) * 20.0f;
+        this.minecraft.player.yaw = (float) Math.atan(f5 / 40.0f) * 40.0f;
+        this.minecraft.player.pitch = -((float) Math.atan(f6 / 40.0f)) * 20.0f;
         this.minecraft.player.field_1617 = 1.0f;
         GL11.glTranslatef(0.0f, this.minecraft.player.standingEyeHeight, 0.0f);
         EntityRenderDispatcher.INSTANCE.field_2497 = 180.0f;
@@ -75,6 +102,11 @@ public class MixinPlayerInventoryScreen extends ContainerScreen {
         GL11.glDisable(32826);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     protected void buttonClicked(Button button) {
         if (button.id == 0) {
             this.minecraft.openScreen(new AchievementsScreen(this.minecraft.statManager));

@@ -1,24 +1,18 @@
 package io.github.ryuu.adventurecraft.blocks;
 
-import io.github.ryuu.adventurecraft.entities.tile.TileEntityWeather;
-import io.github.ryuu.adventurecraft.gui.GuiWeather;
-import io.github.ryuu.adventurecraft.items.Items;
-import io.github.ryuu.adventurecraft.util.DebugMode;
-import net.minecraft.entity.player.Player;
-import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
 import net.minecraft.tile.TileWithEntity;
-import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 public class BlockWeather extends TileWithEntity {
+
     protected BlockWeather(int i, int j) {
         super(i, j, Material.AIR);
     }
 
     @Override
-    protected TileEntity createTileEntity() {
+    protected MixinTileEntity createTileEntity() {
         return new TileEntityWeather();
     }
 
@@ -28,19 +22,22 @@ public class BlockWeather extends TileWithEntity {
     }
 
     @Override
-    public Box getCollisionShape(Level world, int i, int j, int k) {
+    public Box getCollisionShape(MixinLevel level, int x, int y, int z) {
         return null;
     }
 
+    @Override
     public boolean shouldRender(TileView blockAccess, int i, int j, int k) {
         return DebugMode.active;
     }
 
+    @Override
     public boolean canBeTriggered() {
         return true;
     }
 
-    public void onTriggerActivated(Level world, int i, int j, int k) {
+    @Override
+    public void onTriggerActivated(MixinLevel world, int i, int j, int k) {
         TileEntityWeather obj = (TileEntityWeather) world.getTileEntity(i, j, k);
         if (obj.changePrecipitate) {
             world.properties.setRaining(obj.precipitate);
@@ -50,20 +47,23 @@ public class BlockWeather extends TileWithEntity {
             world.properties.tempOffset = obj.tempOffset;
             world.resetCoordOrder();
         }
-        if (obj.changeTimeOfDay)
+        if (obj.changeTimeOfDay) {
             world.setTimeOfDay(obj.timeOfDay);
-        if (obj.changeTimeRate)
+        }
+        if (obj.changeTimeRate) {
             world.properties.setTimeRate(obj.timeRate);
-    }
-
-    public void onTriggerDeactivated(Level world, int i, int j, int k) {
+        }
     }
 
     @Override
-    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
-        if (DebugMode.active && entityplayer.getHeldItem() != null && (entityplayer.getHeldItem()).itemId == Items.cursor.id) {
-            TileEntityWeather obj = (TileEntityWeather) world.getTileEntity(i, j, k);
-            GuiWeather.showUI(world, obj);
+    public void onTriggerDeactivated(MixinLevel world, int i, int j, int k) {
+    }
+
+    @Override
+    public boolean activate(MixinLevel level, int x, int y, int z, MixinPlayer player) {
+        if (DebugMode.active && player.getHeldItem() != null && player.getHeldItem().itemId == Items.cursor.id) {
+            TileEntityWeather obj = (TileEntityWeather) level.getTileEntity(x, y, z);
+            GuiWeather.showUI(level, obj);
             return true;
         }
         return false;

@@ -1,72 +1,65 @@
 package io.github.ryuu.adventurecraft.entities;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.Player;
-import net.minecraft.entity.projectile.Arrow;
-import net.minecraft.level.Level;
 import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.io.CompoundTag;
 
-public class EntityArrowBomb extends Arrow {
-    private int fuse;
+public class EntityArrowBomb extends MixinArrow {
 
-    public EntityArrowBomb(Level world) {
+    private int fuse = 45;
+
+    public EntityArrowBomb(MixinLevel world) {
         super(world);
-        this.fuse = 45;
     }
 
-    public EntityArrowBomb(Level world, double d, double d1, double d2) {
+    public EntityArrowBomb(MixinLevel world, double d, double d1, double d2) {
         super(world, d, d1, d2);
-        this.fuse = 45;
     }
 
-    public EntityArrowBomb(Level world, LivingEntity entityliving) {
+    public EntityArrowBomb(MixinLevel world, MixinLivingEntity entityliving) {
         super(world, entityliving);
-        this.fuse = 45;
     }
 
     @Override
     public void tick() {
         super.tick();
-        this.fuse--;
+        --this.fuse;
         if (this.fuse == 0) {
             EntityBomb.explode(this, this.field_1576, this.level, this.x, this.y, this.z);
-            remove();
+            this.remove();
         } else {
-            this.level.addParticle("smoke", this.x, this.y, this.z, 0.0D, 0.0D, 0.0D);
+            this.level.addParticle("smoke", this.x, this.y, this.z, 0.0, 0.0, 0.0);
         }
     }
 
+    @Override
     public void handleHitEntity(HitResult movingobjectposition) {
-        this.velocityX *= -0.10000000149011612D;
-        this.velocityY *= -0.10000000149011612D;
-        this.velocityZ *= -0.10000000149011612D;
-        this.yaw += 180.0F;
-        this.prevYaw += 180.0F;
+        this.velocityX *= (double) -0.1f;
+        this.velocityY *= (double) -0.1f;
+        this.velocityZ *= (double) -0.1f;
+        this.yaw += 180.0f;
+        this.prevYaw += 180.0f;
         this.field_1584 = 0;
     }
 
     @Override
-    public void writeCustomDataToTag(CompoundTag nbttagcompound) {
-        super.writeCustomDataToTag(nbttagcompound);
-        nbttagcompound.put("fuse", (byte) this.fuse);
+    public void writeCustomDataToTag(MixinCompoundTag tag) {
+        super.writeCustomDataToTag(tag);
+        tag.put("fuse", (byte) this.fuse);
     }
 
     @Override
-    public void readCustomDataFromTag(CompoundTag nbttagcompound) {
-        super.readCustomDataFromTag(nbttagcompound);
-        this.fuse = nbttagcompound.getByte("fuse") & 0xFF;
+    public void readCustomDataFromTag(MixinCompoundTag tag) {
+        super.readCustomDataFromTag(tag);
+        this.fuse = tag.getByte("fuse") & 0xFF;
     }
 
     @Override
-    public void onPlayerCollision(Player entityplayer) {
+    public void onPlayerCollision(MixinPlayer entityplayer) {
     }
 
     @Override
-    public boolean damage(Entity entity, int i) {
+    public boolean damage(MixinEntity target, int amount) {
         if (!this.removed) {
-            method_1336();
+            this.method_1336();
             EntityBomb.explode(this, this.field_1576, this.level, this.x, this.y, this.z);
         }
         return false;

@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.util;
 
 class ProfileContext {
+
     public String contextName;
 
     long startTime;

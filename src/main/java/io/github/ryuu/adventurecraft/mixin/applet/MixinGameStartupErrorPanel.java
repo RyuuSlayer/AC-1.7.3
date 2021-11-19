@@ -1,18 +1,23 @@
 package io.github.ryuu.adventurecraft.mixin.applet;
 
+import net.minecraft.applet.GameStartupErrorPanel;
+import net.minecraft.applet.LogoCanvas;
+import net.minecraft.applet.SquareCanvas;
+import net.minecraft.client.GameStartupError;
+import org.lwjgl.Sys;
+import org.lwjgl.opengl.GL11;
+import org.spongepowered.asm.mixin.Mixin;
+
 import java.awt.*;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import io.github.ryuu.adventurecraft.util.Version;
-import net.minecraft.client.GameStartupError;
-import org.lwjgl.Sys;
-import org.lwjgl.opengl.GL11;
-
+@Mixin(GameStartupErrorPanel.class)
 public class MixinGameStartupErrorPanel extends Panel {
-    public GameStartupErrorPanel(GameStartupError unexpectedthrowable) {
+
+    public MixinGameStartupErrorPanel(GameStartupError unexpectedthrowable) {
         this.setBackground(new Color(3028036));
         this.setLayout(new BorderLayout());
         StringWriter stringwriter = new StringWriter();
@@ -30,8 +35,7 @@ public class MixinGameStartupErrorPanel extends Panel {
             s2 = s2 + "LWJGL: " + Sys.getVersion() + "\n";
             s1 = GL11.glGetString(7936);
             s2 = s2 + "OpenGL: " + GL11.glGetString(7937) + " version " + GL11.glGetString(7938) + ", " + GL11.glGetString(7936) + "\n";
-        }
-        catch (Throwable throwable) {
+        } catch (Throwable throwable) {
             s2 = s2 + "[failed to get system properties (" + throwable + ")]\n";
         }
         s2 = s2 + "\n";
@@ -73,10 +77,10 @@ public class MixinGameStartupErrorPanel extends Panel {
         s3 = s3 + "\n";
         TextArea textarea = new TextArea(s3, 0, 0, 1);
         textarea.setFont(new Font("Monospaced", 0, 12));
-        this.add((Component)new LogoCanvas(), "North");
-        this.add((Component)new SquareCanvas(80), "East");
-        this.add((Component)new SquareCanvas(80), "West");
-        this.add((Component)new SquareCanvas(100), "South");
+        this.add(new LogoCanvas(), "North");
+        this.add(new SquareCanvas(80), "East");
+        this.add(new SquareCanvas(80), "West");
+        this.add(new SquareCanvas(100), "South");
         this.add(textarea, "Center");
     }
 }

@@ -2,7 +2,8 @@ package io.github.ryuu.adventurecraft.util;
 
 import org.mozilla.javascript.Script;
 
-public class JScriptInfo implements Comparable<JScriptInfo> {
+public class JScriptInfo implements Comparable<net.minecraft.src.JScriptInfo> {
+
     public String name;
 
     public Script compiledScript;
@@ -20,16 +21,19 @@ public class JScriptInfo implements Comparable<JScriptInfo> {
 
     public void addStat(long time) {
         this.totalTime += time;
-        if (time > this.maxTime)
+        if (time > this.maxTime) {
             this.maxTime = time;
-        this.count++;
+        }
+        ++this.count;
     }
 
     public int compareTo(JScriptInfo o) {
-        if (this.totalTime < o.totalTime)
+        if (this.totalTime < o.totalTime) {
             return 1;
-        if (this.totalTime == o.totalTime)
+        }
+        if (this.totalTime == o.totalTime) {
             return 0;
+        }
         return -1;
     }
 }

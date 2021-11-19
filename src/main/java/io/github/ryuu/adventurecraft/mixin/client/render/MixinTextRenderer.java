@@ -1,29 +1,33 @@
 package io.github.ryuu.adventurecraft.mixin.client.render;
 
+import net.minecraft.client.GLAllocator;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.TextRenderer;
+import net.minecraft.util.CharacterUtils;
+import org.lwjgl.opengl.GL11;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
+
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.IntBuffer;
-import javax.imageio.ImageIO;
 
-import net.minecraft.client.GLAllocator;
-import net.minecraft.client.options.GameOptions;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.texture.TextureManager;
-import net.minecraft.util.CharacterUtils;
-import org.lwjgl.opengl.GL11;
-
+@Mixin(TextRenderer.class)
 public class MixinTextRenderer {
-    private int[] widths = new int[256];
-    public int imageId = 0;
-    private int glList;
-    private IntBuffer buffer = GLAllocator.createIntBuffer(1024);
 
-    public MixinTextRenderer(GameOptions options, String fontTexturePath, TextureManager textureManager) {
+    private final int glList;
+    private final IntBuffer buffer = GLAllocator.createIntBuffer(1024);
+    public int imageId = 0;
+    @Shadow()
+    private int[] widths = new int[256];
+
+    public MixinTextRenderer(MixinGameOptions options, String fontTexturePath, MixinTextureManager textureManager) {
         BufferedImage bufferedimage;
         try {
-            bufferedimage = ImageIO.read(TextureManager.class.getResourceAsStream(fontTexturePath));
-        }
-        catch (IOException ioexception) {
+            bufferedimage = ImageIO.read(MixinTextureManager.class.getResourceAsStream(fontTexturePath));
+        } catch (IOException ioexception) {
             throw new RuntimeException(ioexception);
         }
         int i = bufferedimage.getWidth();
@@ -61,12 +65,12 @@ public class MixinTextRenderer {
             float f = 7.99f;
             float f1 = 0.0f;
             float f2 = 0.0f;
-            tessellator.vertex(0.0, 0.0f + f, 0.0, (float)l1 / 128.0f + f1, ((float)k2 + f) / 128.0f + f2);
-            tessellator.vertex(0.0f + f, 0.0f + f, 0.0, ((float)l1 + f) / 128.0f + f1, ((float)k2 + f) / 128.0f + f2);
-            tessellator.vertex(0.0f + f, 0.0, 0.0, ((float)l1 + f) / 128.0f + f1, (float)k2 / 128.0f + f2);
-            tessellator.vertex(0.0, 0.0, 0.0, (float)l1 / 128.0f + f1, (float)k2 / 128.0f + f2);
+            tessellator.vertex(0.0, 0.0f + f, 0.0, (float) l1 / 128.0f + f1, ((float) k2 + f) / 128.0f + f2);
+            tessellator.vertex(0.0f + f, 0.0f + f, 0.0, ((float) l1 + f) / 128.0f + f1, ((float) k2 + f) / 128.0f + f2);
+            tessellator.vertex(0.0f + f, 0.0, 0.0, ((float) l1 + f) / 128.0f + f1, (float) k2 / 128.0f + f2);
+            tessellator.vertex(0.0, 0.0, 0.0, (float) l1 / 128.0f + f1, (float) k2 / 128.0f + f2);
             tessellator.draw();
-            GL11.glTranslatef((float)this.widths[i1], 0.0f, 0.0f);
+            GL11.glTranslatef((float) this.widths[i1], 0.0f, 0.0f);
             GL11.glEndList();
         }
         for (int j1 = 0; j1 < 32; ++j1) {
@@ -93,33 +97,57 @@ public class MixinTextRenderer {
                 k3 /= 4;
             }
             GL11.glNewList(this.glList + 256 + j1, 4864);
-            GL11.glColor3f((float)l2 / 255.0f, (float)j3 / 255.0f, (float)k3 / 255.0f);
+            GL11.glColor3f((float) l2 / 255.0f, (float) j3 / 255.0f, (float) k3 / 255.0f);
             GL11.glEndList();
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void drawTextWithShadow(String text, int x, int y, int colour) {
         this.drawText(text, x + 1, y + 1, colour, true);
         this.drawTextWithoutShadow(text, x, y, colour);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void drawStringWithShadow(String s, float i, float j, int k) {
         this.renderString(s, i + 1.0f, j + 1.0f, k, true);
         this.drawString(s, i, j, k);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void drawTextWithoutShadow(String text, int x, int y, int colour) {
         this.drawText(text, x, y, colour, false);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void drawString(String s, float i, float j, int k) {
         this.renderString(s, i, j, k, false);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void drawText(String text, int x, int y, int colour, boolean shadow) {
         this.renderString(text, x, y, colour, shadow);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void renderString(String s, float x, float y, int k, boolean flag) {
         if (s == null) {
             return;
@@ -130,10 +158,10 @@ public class MixinTextRenderer {
             k += l;
         }
         GL11.glBindTexture(3553, this.imageId);
-        float f = (float)(k >> 16 & 0xFF) / 255.0f;
-        float f1 = (float)(k >> 8 & 0xFF) / 255.0f;
-        float f2 = (float)(k & 0xFF) / 255.0f;
-        float f3 = (float)(k >> 24 & 0xFF) / 255.0f;
+        float f = (float) (k >> 16 & 0xFF) / 255.0f;
+        float f1 = (float) (k >> 8 & 0xFF) / 255.0f;
+        float f2 = (float) (k & 0xFF) / 255.0f;
+        float f3 = (float) (k >> 24 & 0xFF) / 255.0f;
         if (f3 == 0.0f) {
             f3 = 1.0f;
         }
@@ -174,6 +202,10 @@ public class MixinTextRenderer {
         GL11.glPopMatrix();
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public int getTextWidth(String text) {
         if (text == null) {
             return 0;
@@ -196,6 +228,10 @@ public class MixinTextRenderer {
         return i;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void drawMultilineText(String text, int x, int y, int width, int colour) {
         String[] as = text.split("\n");
         if (as.length > 1) {
@@ -229,6 +265,10 @@ public class MixinTextRenderer {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public int getLineWidth(String text, int width) {
         String[] as = text.split("\n");
         if (as.length > 1) {

@@ -1,14 +1,12 @@
 package io.github.ryuu.adventurecraft.blocks;
 
-import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.client.Minecraft;
-import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
-import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
-public class BlockTriggeredDoor extends Tile {
+public class BlockTriggeredDoor extends MixinTile {
+
     protected BlockTriggeredDoor(int i) {
         super(i, Material.WOOD);
         this.tex = 208;
@@ -24,28 +22,33 @@ public class BlockTriggeredDoor extends Tile {
         return DebugMode.active;
     }
 
+    @Override
     public boolean shouldRender(TileView blockAccess, int i, int j, int k) {
-        return (DebugMode.active || Minecraft.minecraftInstance.level.triggerManager.isActivated(i, j, k));
+        return DebugMode.active || Minecraft.minecraftInstance.level.triggerManager.isActivated(i, j, k);
     }
 
     @Override
-    public Box getCollisionShape(Level world, int i, int j, int k) {
-        if (!world.triggerManager.isActivated(i, j, k) || DebugMode.active)
+    public Box getCollisionShape(MixinLevel level, int x, int y, int z) {
+        if (!level.triggerManager.isActivated(x, y, z) || DebugMode.active) {
             return null;
-        return super.getCollisionShape(world, i, j, k);
+        }
+        return super.getCollisionShape(level, x, y, z);
     }
 
+    @Override
     public boolean canBeTriggered() {
         return true;
     }
 
-    public void onTriggerActivated(Level world, int i, int j, int k) {
-        world.playSound(i + 0.5D, j + 0.5D, k + 0.5D, "random.door_open", 1.0F, world.rand.nextFloat() * 0.1F + 0.9F);
+    @Override
+    public void onTriggerActivated(MixinLevel world, int i, int j, int k) {
+        world.playSound((double) i + 0.5, (double) j + 0.5, (double) k + 0.5, "random.door_open", 1.0f, world.rand.nextFloat() * 0.1f + 0.9f);
         world.method_243(i, j, k);
     }
 
-    public void onTriggerDeactivated(Level world, int i, int j, int k) {
-        world.playSound(i + 0.5D, j + 0.5D, k + 0.5D, "random.door_close", 1.0F, world.rand.nextFloat() * 0.1F + 0.9F);
+    @Override
+    public void onTriggerDeactivated(MixinLevel world, int i, int j, int k) {
+        world.playSound((double) i + 0.5, (double) j + 0.5, (double) k + 0.5, "random.door_close", 1.0f, world.rand.nextFloat() * 0.1f + 0.9f);
         world.method_243(i, j, k);
     }
 }

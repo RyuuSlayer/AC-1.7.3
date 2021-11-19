@@ -2,48 +2,69 @@ package io.github.ryuu.adventurecraft.mixin;
 
 import net.minecraft.class_109;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
 import net.minecraft.level.TileView;
 import net.minecraft.tile.DoorTile;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.Int2ObjectLinkedHashMap;
-import net.minecraft.util.Vec3i;
 import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.MathsHelper;
+import net.minecraft.util.maths.Vec3i;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.LinkedList;
 
+@Mixin(class_108.class)
 public class MixinClass_108 {
+
+    private final class_109 field_334 = new class_109();
+    private final Int2ObjectLinkedHashMap field_335 = new Int2ObjectLinkedHashMap();
+    private final Vec3i[] field_336 = new Vec3i[32];
+    @Shadow()
     private TileView field_333;
-    private class_109 field_334 = new class_109();
-    private Int2ObjectLinkedHashMap field_335 = new Int2ObjectLinkedHashMap();
-    private Vec3i[] field_336 = new Vec3i[32];
 
     public MixinClass_108(TileView iblockaccess) {
         this.field_333 = iblockaccess;
     }
 
-    public MixinClass_61 method_407(Entity entity, Entity entity1, float f) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public MixinClass_61 method_407(MixinEntity entity, MixinEntity entity1, float f) {
         return this.method_402(entity, entity1.x, entity1.boundingBox.minY, entity1.z, f);
     }
 
-    public MixinClass_61 method_403(Entity entity, int i, int j, int k, float f) {
-        return this.method_402(entity, (float)i + 0.5f, (float)j + 0.5f, (float)k + 0.5f, f);
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public MixinClass_61 method_403(MixinEntity entity, int i, int j, int k, float f) {
+        return this.method_402(entity, (float) i + 0.5f, (float) j + 0.5f, (float) k + 0.5f, f);
     }
 
-    private MixinClass_61 method_402(Entity entity, double d, double d1, double d2, float f) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    private MixinClass_61 method_402(MixinEntity entity, double d, double d1, double d2, float f) {
         this.field_334.method_841();
         this.field_335.clear();
         Vec3i pathpoint = this.method_400(MathsHelper.floor(entity.boundingBox.minX), MathsHelper.floor(entity.boundingBox.minY), MathsHelper.floor(entity.boundingBox.minZ));
-        Vec3i pathpoint1 = this.method_400(MathsHelper.floor(d - (double)(entity.width / 2.0f)), MathsHelper.floor(d1), MathsHelper.floor(d2 - (double)(entity.width / 2.0f)));
+        Vec3i pathpoint1 = this.method_400(MathsHelper.floor(d - (double) (entity.width / 2.0f)), MathsHelper.floor(d1), MathsHelper.floor(d2 - (double) (entity.width / 2.0f)));
         Vec3i pathpoint2 = new Vec3i(MathsHelper.floor(entity.width + 1.25f), MathsHelper.floor(entity.height + 1.0f), MathsHelper.floor(entity.width + 1.25f));
         MixinClass_61 pathentity = this.method_406(entity, pathpoint, pathpoint1, pathpoint2, f);
         pathentity = this.simplifyPath(pathentity, pathpoint2);
         return pathentity;
     }
 
-    private MixinClass_61 method_406(Entity entity, Vec3i pathpoint, Vec3i pathpoint1, Vec3i pathpoint2, float f) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    private MixinClass_61 method_406(MixinEntity entity, Vec3i pathpoint, Vec3i pathpoint1, Vec3i pathpoint2, float f) {
         pathpoint.field_144 = 0.0f;
         pathpoint.field_146 = pathpoint.field_145 = pathpoint.getSquaredDistance(pathpoint1);
         this.field_334.method_841();
@@ -80,7 +101,11 @@ public class MixinClass_108 {
         return this.method_401(pathpoint, pathpoint3);
     }
 
-    private int method_408(Entity entity, Vec3i pathpoint, Vec3i pathpoint1, Vec3i pathpoint2, float f) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    private int method_408(MixinEntity entity, Vec3i pathpoint, Vec3i pathpoint1, Vec3i pathpoint2, float f) {
         int i = 0;
         int j = 0;
         if (this.method_404(entity, pathpoint.x, pathpoint.y + 1, pathpoint.z, pathpoint1) == 1) {
@@ -105,7 +130,11 @@ public class MixinClass_108 {
         return i;
     }
 
-    private Vec3i method_405(Entity entity, int i, int j, int k, Vec3i pathpoint, int l) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    private Vec3i method_405(MixinEntity entity, int i, int j, int k, Vec3i pathpoint, int l) {
         Vec3i pathpoint1 = null;
         if (this.method_404(entity, i, j, k, pathpoint) == 1) {
             pathpoint1 = this.method_400(i, j, k);
@@ -131,9 +160,13 @@ public class MixinClass_108 {
         return pathpoint1;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private final Vec3i method_400(int i, int j, int k) {
         int l = Vec3i.createHashcode(i, j, k);
-        Vec3i pathpoint = (Vec3i)this.field_335.getByHash(l);
+        Vec3i pathpoint = (Vec3i) this.field_335.getByHash(l);
         if (pathpoint == null) {
             pathpoint = new Vec3i(i, j, k);
             this.field_335.put(l, pathpoint);
@@ -141,7 +174,11 @@ public class MixinClass_108 {
         return pathpoint;
     }
 
-    private int method_404(Entity entity, int i, int j, int k, Vec3i pathpoint) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    private int method_404(MixinEntity entity, int i, int j, int k, Vec3i pathpoint) {
         for (int l = i; l < i + pathpoint.x; ++l) {
             for (int i1 = j; i1 < j + pathpoint.y; ++i1) {
                 for (int j1 = k; j1 < k + pathpoint.z; ++j1) {
@@ -172,6 +209,10 @@ public class MixinClass_108 {
         return 1;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private MixinClass_61 method_401(Vec3i pathpoint, Vec3i pathpoint1) {
         int i = 1;
         Vec3i pathpoint2 = pathpoint1;
@@ -189,6 +230,10 @@ public class MixinClass_108 {
         return new MixinClass_61(apathpoint);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public MixinClass_61 simplifyPath(MixinClass_61 p, Vec3i clearSize) {
         if (p == null) {
             return p;
@@ -235,13 +280,13 @@ public class MixinClass_108 {
             int dZ = point.z - prevPoint.z;
             if (Math.abs(dX) < Math.abs(dZ)) {
                 float xOffset = 0.0f;
-                float xChange = (float)dX / (float)Math.abs(dZ);
+                float xChange = (float) dX / (float) Math.abs(dZ);
                 sign = 1;
                 if (dZ < 0) {
                     sign = -1;
                 }
                 for (int zOffset = 1; zOffset < Math.abs(dZ); ++zOffset) {
-                    if (this.method_404(null, prevPoint.x + (int)xOffset, prevPoint.y, prevPoint.z + zOffset * sign, clearSize) != 1 || this.method_404(null, prevPoint.x + (int)xOffset, prevPoint.y - 1, prevPoint.z + zOffset * sign, clearSize) == 1 || this.method_404(null, prevPoint.x + (int)xOffset + 1, prevPoint.y, prevPoint.z + zOffset * sign, clearSize) != 1 || this.method_404(null, prevPoint.x + (int)xOffset + 1, prevPoint.y - 1, prevPoint.z + zOffset * sign, clearSize) == 1 || this.method_404(null, prevPoint.x + (int)xOffset - 1, prevPoint.y, prevPoint.z + zOffset * sign, clearSize) != 1 || this.method_404(null, prevPoint.x + (int)xOffset - 1, prevPoint.y - 1, prevPoint.z + zOffset * sign, clearSize) == 1) {
+                    if (this.method_404(null, prevPoint.x + (int) xOffset, prevPoint.y, prevPoint.z + zOffset * sign, clearSize) != 1 || this.method_404(null, prevPoint.x + (int) xOffset, prevPoint.y - 1, prevPoint.z + zOffset * sign, clearSize) == 1 || this.method_404(null, prevPoint.x + (int) xOffset + 1, prevPoint.y, prevPoint.z + zOffset * sign, clearSize) != 1 || this.method_404(null, prevPoint.x + (int) xOffset + 1, prevPoint.y - 1, prevPoint.z + zOffset * sign, clearSize) == 1 || this.method_404(null, prevPoint.x + (int) xOffset - 1, prevPoint.y, prevPoint.z + zOffset * sign, clearSize) != 1 || this.method_404(null, prevPoint.x + (int) xOffset - 1, prevPoint.y - 1, prevPoint.z + zOffset * sign, clearSize) == 1) {
                         points.add(potentialPoint);
                         points.add(point);
                         addRestThePoints = true;
@@ -251,13 +296,13 @@ public class MixinClass_108 {
                 }
             } else {
                 float zOffset = 0.0f;
-                float zChange = (float)dZ / (float)Math.abs((int)dX);
+                float zChange = (float) dZ / (float) Math.abs(dX);
                 sign = 1;
                 if (dX < 0) {
                     sign = -1;
                 }
-                for (int xOffset = 1; xOffset < Math.abs((int)dX); ++xOffset) {
-                    if (this.method_404(null, prevPoint.x + xOffset * sign, prevPoint.y, prevPoint.z + (int)zOffset, clearSize) != 1 || this.method_404(null, prevPoint.x + xOffset * sign, prevPoint.y - 1, prevPoint.z + (int)zOffset, clearSize) == 1 || this.method_404(null, prevPoint.x + xOffset * sign, prevPoint.y, prevPoint.z + (int)zOffset + 1, clearSize) != 1 || this.method_404(null, prevPoint.x + xOffset * sign, prevPoint.y - 1, prevPoint.z + (int)zOffset + 1, clearSize) == 1 || this.method_404(null, prevPoint.x + xOffset * sign, prevPoint.y, prevPoint.z + (int)zOffset - 1, clearSize) != 1 || this.method_404(null, prevPoint.x + xOffset * sign, prevPoint.y - 1, prevPoint.z + (int)zOffset - 1, clearSize) == 1) {
+                for (int xOffset = 1; xOffset < Math.abs(dX); ++xOffset) {
+                    if (this.method_404(null, prevPoint.x + xOffset * sign, prevPoint.y, prevPoint.z + (int) zOffset, clearSize) != 1 || this.method_404(null, prevPoint.x + xOffset * sign, prevPoint.y - 1, prevPoint.z + (int) zOffset, clearSize) == 1 || this.method_404(null, prevPoint.x + xOffset * sign, prevPoint.y, prevPoint.z + (int) zOffset + 1, clearSize) != 1 || this.method_404(null, prevPoint.x + xOffset * sign, prevPoint.y - 1, prevPoint.z + (int) zOffset + 1, clearSize) == 1 || this.method_404(null, prevPoint.x + xOffset * sign, prevPoint.y, prevPoint.z + (int) zOffset - 1, clearSize) != 1 || this.method_404(null, prevPoint.x + xOffset * sign, prevPoint.y - 1, prevPoint.z + (int) zOffset - 1, clearSize) == 1) {
                         prevPoint = potentialPoint;
                         points.add(potentialPoint);
                         points.add(point);

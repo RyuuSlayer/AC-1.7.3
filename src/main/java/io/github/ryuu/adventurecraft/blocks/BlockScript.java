@@ -1,23 +1,18 @@
 package io.github.ryuu.adventurecraft.blocks;
 
-import io.github.ryuu.adventurecraft.entities.tile.TileEntityScript;
-import io.github.ryuu.adventurecraft.gui.GuiScript;
-import io.github.ryuu.adventurecraft.util.DebugMode;
-import net.minecraft.entity.player.Player;
-import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
 import net.minecraft.tile.TileWithEntity;
-import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 public class BlockScript extends TileWithEntity {
+
     protected BlockScript(int i, int j) {
         super(i, j, Material.AIR);
     }
 
     @Override
-    protected TileEntity createTileEntity() {
+    protected MixinTileEntity createTileEntity() {
         return new TileEntityScript();
     }
 
@@ -27,10 +22,11 @@ public class BlockScript extends TileWithEntity {
     }
 
     @Override
-    public Box getCollisionShape(Level world, int i, int j, int k) {
+    public Box getCollisionShape(MixinLevel level, int x, int y, int z) {
         return null;
     }
 
+    @Override
     public boolean shouldRender(TileView blockAccess, int i, int j, int k) {
         return DebugMode.active;
     }
@@ -45,28 +41,33 @@ public class BlockScript extends TileWithEntity {
         return DebugMode.active;
     }
 
+    @Override
     public boolean canBeTriggered() {
         return true;
     }
 
-    public void onTriggerActivated(Level world, int i, int j, int k) {
+    @Override
+    public void onTriggerActivated(MixinLevel world, int i, int j, int k) {
         TileEntityScript obj = (TileEntityScript) world.getTileEntity(i, j, k);
-        if (!obj.onTriggerScriptFile.equals(""))
+        if (!obj.onTriggerScriptFile.equals((Object) "")) {
             world.scriptHandler.runScript(obj.onTriggerScriptFile, obj.scope);
+        }
         obj.isActivated = true;
     }
 
-    public void onTriggerDeactivated(Level world, int i, int j, int k) {
+    @Override
+    public void onTriggerDeactivated(MixinLevel world, int i, int j, int k) {
         TileEntityScript obj = (TileEntityScript) world.getTileEntity(i, j, k);
-        if (!obj.onDetriggerScriptFile.equals(""))
+        if (!obj.onDetriggerScriptFile.equals((Object) "")) {
             world.scriptHandler.runScript(obj.onDetriggerScriptFile, obj.scope);
+        }
         obj.isActivated = false;
     }
 
     @Override
-    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
+    public boolean activate(MixinLevel level, int x, int y, int z, MixinPlayer player) {
         if (DebugMode.active) {
-            TileEntityScript obj = (TileEntityScript) world.getTileEntity(i, j, k);
+            TileEntityScript obj = (TileEntityScript) level.getTileEntity(x, y, z);
             GuiScript.showUI(obj);
         }
         return true;

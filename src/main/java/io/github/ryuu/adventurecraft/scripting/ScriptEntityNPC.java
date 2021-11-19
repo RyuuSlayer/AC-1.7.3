@@ -1,8 +1,7 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import io.github.ryuu.adventurecraft.entities.EntityNPC;
-
 public class ScriptEntityNPC extends ScriptEntityLivingScript {
+
     EntityNPC npc;
 
     ScriptEntityNPC(EntityNPC e) {

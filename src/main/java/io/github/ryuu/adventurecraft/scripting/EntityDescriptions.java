@@ -9,14 +9,15 @@ import java.util.Properties;
 import java.util.Set;
 
 public class EntityDescriptions {
-    static final HashMap<String, ScriptEntityDescription> descriptions = new HashMap<>();
+
+    static final HashMap<String, ScriptEntityDescription> descriptions = new HashMap();
 
     public static ScriptEntityDescription getDescription(String descName) {
         return descriptions.get(descName);
     }
 
     static void addDescription(String descName, ScriptEntityDescription desc) {
-        descriptions.put(descName, desc);
+        descriptions.put((Object) descName, (Object) desc);
     }
 
     public static void clearDescriptions() {
@@ -24,12 +25,13 @@ public class EntityDescriptions {
     }
 
     public static void loadDescriptions(File dir) {
-        clearDescriptions();
-        if (dir != null && dir.exists() && dir.isDirectory())
+        EntityDescriptions.clearDescriptions();
+        if (dir != null && dir.exists() && dir.isDirectory()) {
             for (File f : dir.listFiles()) {
-                if (f.isFile() && f.getName().endsWith(".txt"))
-                    loadDescription(f);
+                if (!f.isFile() || !f.getName().endsWith(".txt")) continue;
+                EntityDescriptions.loadDescription(f);
             }
+        }
     }
 
     private static void loadDescription(File descFile) {
@@ -38,8 +40,8 @@ public class EntityDescriptions {
             p.load(new FileInputStream(descFile));
             ScriptEntityDescription desc = new ScriptEntityDescription(descFile.getName().split("\\.")[0]);
             try {
-                Integer health = Integer.valueOf(Integer.parseInt(p.getProperty("health", "10")));
-                desc.health = health.intValue();
+                Integer health = Integer.parseInt(p.getProperty("health", "10"));
+                desc.health = health;
             } catch (NumberFormatException e) {
             }
             try {
@@ -52,7 +54,7 @@ public class EntityDescriptions {
             }
             try {
                 desc.moveSpeed = Float.parseFloat(p.getProperty("moveSpeed", "0.7"));
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException numberFormatException) {
             }
             desc.texture = p.getProperty("texture", "/mob/char.png");
             desc.onCreated = p.getProperty("onCreated", "");

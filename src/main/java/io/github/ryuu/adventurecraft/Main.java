@@ -1,14 +1,16 @@
 package io.github.ryuu.adventurecraft;
 
-import java.io.IOException;
-
 import io.github.minecraftcursedlegacy.api.config.Configs;
 import io.github.minecraftcursedlegacy.api.registry.Id;
 import net.fabricmc.api.ModInitializer;
 import tk.valoeghese.zoesteriaconfig.api.container.WritableConfig;
 import tk.valoeghese.zoesteriaconfig.api.template.ConfigTemplate;
 
+import java.io.IOException;
+
 public class Main implements ModInitializer {
+    private static WritableConfig config;
+
     @Override
     public void onInitialize() {
         // This code runs as soon as Minecraft is in a mod-load-ready state.
@@ -19,10 +21,7 @@ public class Main implements ModInitializer {
 
         // example config
         try {
-            config = Configs.loadOrCreate(new Id("modid", "example"),
-                    ConfigTemplate.builder()
-                            .addContainer("exampleContainer", container -> container.addDataEntry("someData", "0.5"))
-                            .build());
+            config = Configs.loadOrCreate(new Id("modid", "example"), ConfigTemplate.builder().addContainer("exampleContainer", container -> container.addDataEntry("someData", "0.5")).build());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -30,7 +29,4 @@ public class Main implements ModInitializer {
         System.out.println(config.getDoubleValue("exampleContainer.someData"));
 
     }
-
-
-    private static WritableConfig config;
 }

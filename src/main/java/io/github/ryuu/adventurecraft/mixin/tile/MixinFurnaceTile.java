@@ -1,41 +1,76 @@
 package io.github.ryuu.adventurecraft.mixin.tile;
 
 import net.minecraft.entity.FurnaceEntity;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.Player;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
+import net.minecraft.tile.FurnaceTile;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.TileWithEntity;
-import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.MathsHelper;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.Random;
 
+@Mixin(FurnaceTile.class)
 public class MixinFurnaceTile extends TileWithEntity {
-    private Random rand = new Random();
-    private final boolean lit;
-    private static boolean SETTING_TILE = false;
 
-    protected FurnaceTile(int i, boolean flag) {
+    private static boolean SETTING_TILE = false;
+    private final boolean lit;
+    @Shadow()
+    private Random rand = new Random();
+
+    protected MixinFurnaceTile(int i, boolean flag) {
         super(i, Material.STONE);
         this.lit = flag;
         this.tex = 45;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static void method_1403(boolean flag, MixinLevel world, int i, int j, int k) {
+        int l = world.getTileMeta(i, j, k);
+        MixinTileEntity tileentity = world.getTileEntity(i, j, k);
+        SETTING_TILE = true;
+        if (flag) {
+            world.setTile(i, j, k, Tile.FURNACE_LIT.id);
+        } else {
+            world.setTile(i, j, k, Tile.FURNACE.id);
+        }
+        SETTING_TILE = false;
+        world.setTileMeta(i, j, k, l);
+        tileentity.validate();
+        world.setTileEntity(i, j, k, tileentity);
+        tileentity.validate();
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public int getDropId(int meta, Random rand) {
         return Tile.FURNACE.id;
     }
 
-    public void method_1611(Level level, int x, int y, int z) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public void method_1611(MixinLevel level, int x, int y, int z) {
         super.method_1611(level, x, y, z);
         this.method_1404(level, x, y, z);
     }
 
-    private void method_1404(Level world, int i, int j, int k) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    private void method_1404(MixinLevel world, int i, int j, int k) {
         if (world.isClient) {
             return;
         }
@@ -59,6 +94,11 @@ public class MixinFurnaceTile extends TileWithEntity {
         world.setTileMeta(i, j, k, byte0);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public int method_1626(TileView iblockaccess, int i, int j, int k, int l) {
         if (l == 1) {
             return this.tex + 17;
@@ -76,14 +116,19 @@ public class MixinFurnaceTile extends TileWithEntity {
         return this.tex - 1;
     }
 
-    public void randomDisplayTick(Level level, int x, int y, int z, Random rand) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public void randomDisplayTick(MixinLevel level, int x, int y, int z, Random rand) {
         if (!this.lit) {
             return;
         }
         int l = level.getTileMeta(x, y, z);
-        float f = (float)x + 0.5f;
-        float f1 = (float)y + 0.0f + rand.nextFloat() * 6.0f / 16.0f;
-        float f2 = (float)z + 0.5f;
+        float f = (float) x + 0.5f;
+        float f1 = (float) y + 0.0f + rand.nextFloat() * 6.0f / 16.0f;
+        float f2 = (float) z + 0.5f;
         float f3 = 0.52f;
         float f4 = rand.nextFloat() * 0.6f - 0.3f;
         if (l == 4) {
@@ -101,6 +146,11 @@ public class MixinFurnaceTile extends TileWithEntity {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public int getTextureForSide(int side) {
         if (side == 1) {
             return this.tex + 17;
@@ -114,37 +164,36 @@ public class MixinFurnaceTile extends TileWithEntity {
         return this.tex;
     }
 
-    public boolean activate(Level level, int x, int y, int z, Player player) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public boolean activate(MixinLevel level, int x, int y, int z, MixinPlayer player) {
         if (level.isClient) {
             return true;
         }
-        FurnaceEntity tileentityfurnace = (FurnaceEntity)level.getTileEntity(x, y, z);
+        FurnaceEntity tileentityfurnace = (FurnaceEntity) level.getTileEntity(x, y, z);
         player.openFurnaceScreen(tileentityfurnace);
         return true;
     }
 
-    public static void method_1403(boolean flag, Level world, int i, int j, int k) {
-        int l = world.getTileMeta(i, j, k);
-        TileEntity tileentity = world.getTileEntity(i, j, k);
-        SETTING_TILE = true;
-        if (flag) {
-            world.setTile(i, j, k, Tile.FURNACE_LIT.id);
-        } else {
-            world.setTile(i, j, k, Tile.FURNACE.id);
-        }
-        SETTING_TILE = false;
-        world.setTileMeta(i, j, k, l);
-        tileentity.validate();
-        world.setTileEntity(i, j, k, tileentity);
-        tileentity.validate();
-    }
-
-    protected TileEntity createTileEntity() {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    protected MixinTileEntity createTileEntity() {
         return new FurnaceEntity();
     }
 
-    public void afterPlaced(Level world, int i, int j, int k, LivingEntity entityliving) {
-        int l = MathsHelper.floor((double)(entityliving.yaw * 4.0f / 360.0f) + 0.5) & 3;
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public void afterPlaced(MixinLevel world, int i, int j, int k, MixinLivingEntity entityliving) {
+        int l = MathsHelper.floor((double) (entityliving.yaw * 4.0f / 360.0f) + 0.5) & 3;
         if (l == 0) {
             world.setTileMeta(i, j, k, 2);
         }
@@ -159,11 +208,16 @@ public class MixinFurnaceTile extends TileWithEntity {
         }
     }
 
-    public void onTileRemoved(Level level, int x, int y, int z) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public void onTileRemoved(MixinLevel level, int x, int y, int z) {
         if (!SETTING_TILE) {
-            FurnaceEntity tileentityfurnace = (FurnaceEntity)level.getTileEntity(x, y, z);
+            FurnaceEntity tileentityfurnace = (FurnaceEntity) level.getTileEntity(x, y, z);
             for (int l = 0; l < tileentityfurnace.getInvSize(); ++l) {
-                ItemInstance itemstack = tileentityfurnace.getInvItem(l);
+                MixinItemInstance itemstack = tileentityfurnace.getInvItem(l);
                 if (itemstack == null) continue;
                 float f = this.rand.nextFloat() * 0.8f + 0.1f;
                 float f1 = this.rand.nextFloat() * 0.8f + 0.1f;
@@ -174,11 +228,11 @@ public class MixinFurnaceTile extends TileWithEntity {
                         i1 = itemstack.count;
                     }
                     itemstack.count -= i1;
-                    ItemEntity entityitem = new ItemEntity(level, (float)x + f, (float)y + f1, (float)z + f2, new ItemInstance(itemstack.itemId, i1, itemstack.getDamage()));
+                    MixinItemEntity entityitem = new MixinItemEntity(level, (float) x + f, (float) y + f1, (float) z + f2, new MixinItemInstance(itemstack.itemId, i1, itemstack.getDamage()));
                     float f3 = 0.05f;
-                    entityitem.velocityX = (float)this.rand.nextGaussian() * f3;
-                    entityitem.velocityY = (float)this.rand.nextGaussian() * f3 + 0.2f;
-                    entityitem.velocityZ = (float)this.rand.nextGaussian() * f3;
+                    entityitem.velocityX = (float) this.rand.nextGaussian() * f3;
+                    entityitem.velocityY = (float) this.rand.nextGaussian() * f3 + 0.2f;
+                    entityitem.velocityZ = (float) this.rand.nextGaussian() * f3;
                     level.spawnEntity(entityitem);
                 }
             }

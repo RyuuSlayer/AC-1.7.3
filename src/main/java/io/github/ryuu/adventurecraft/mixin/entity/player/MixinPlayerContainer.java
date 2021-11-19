@@ -4,24 +4,31 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.container.Container;
 import net.minecraft.container.slot.CraftingResultSlot;
 import net.minecraft.container.slot.Slot;
-import net.minecraft.entity.player.Player;
-import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.PlayerContainer;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.CraftingResultInventory;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemInstance;
 import net.minecraft.recipe.RecipeRegistry;
+import net.minecraft.tile.Tile;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
+@Mixin(PlayerContainer.class)
 public class MixinPlayerContainer extends Container {
+
+    @Shadow()
     public CraftingInventory craftingInv = new CraftingInventory(this, 2, 2);
+
     public Inventory resultInv = new CraftingResultInventory();
+
     public boolean local = false;
 
-    public MixinPlayerContainer(PlayerInventory inventoryplayer) {
+    public MixinPlayerContainer(MixinPlayerInventory inventoryplayer) {
         this(inventoryplayer, true);
     }
 
-    public MixinPlayerContainer(PlayerInventory inventoryplayer, boolean local) {
+    public MixinPlayerContainer(MixinPlayerInventory inventoryplayer, boolean local) {
         this.local = local;
         if (Minecraft.minecraftInstance.level.properties.allowsInventoryCrafting) {
             this.addSlot(new CraftingResultSlot(inventoryplayer.player, this.craftingInv, this.resultInv, 0, 144, 52));
@@ -32,8 +39,31 @@ public class MixinPlayerContainer extends Container {
             }
         }
         for (int j = 0; j < 4; ++j) {
-            int j1 = j;
-            this.addSlot(new PlayerContainer$1(this, inventoryplayer, inventoryplayer.getInvSize() - 1 - j, 8, 8 + j * 18, j1));
+            final int j1 = j;
+            this.addSlot(new Slot(inventoryplayer, inventoryplayer.getInvSize() - 1 - j, 8, 8 + j * 18) {
+
+                /**
+                 * @author Ryuu, TechPizza, Phil
+                 */
+                @Overwrite()
+                public int getMaxStackCount() {
+                    return 1;
+                }
+
+                /**
+                 * @author Ryuu, TechPizza, Phil
+                 */
+                @Overwrite()
+                public boolean canInsert(MixinItemInstance itemInstance) {
+                    if (itemInstance.getType() instanceof MixinArmourItem) {
+                        return ((MixinArmourItem) itemInstance.getType()).armourSlot == j1;
+                    }
+                    if (itemInstance.getType().id == Tile.PUMPKIN.id) {
+                        return j1 == 0;
+                    }
+                    return false;
+                }
+            });
         }
         for (int k = 0; k < 3; ++k) {
             for (int k1 = 0; k1 < 9; ++k1) {
@@ -46,29 +76,49 @@ public class MixinPlayerContainer extends Container {
         this.onContentsChanged(this.craftingInv);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void onContentsChanged(Inventory iinventory) {
         this.resultInv.setInvItem(0, RecipeRegistry.getInstance().getCraftingOutput(this.craftingInv));
     }
 
-    public void onClosed(Player entityplayer) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public void onClosed(MixinPlayer entityplayer) {
         super.onClosed(entityplayer);
         for (int i = 0; i < 4; ++i) {
-            ItemInstance itemstack = this.craftingInv.getInvItem(i);
+            MixinItemInstance itemstack = this.craftingInv.getInvItem(i);
             if (itemstack == null) continue;
             entityplayer.dropItem(itemstack);
             this.craftingInv.setInvItem(i, null);
         }
     }
 
-    public boolean canUse(Player entityplayer) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public boolean canUse(MixinPlayer entityplayer) {
         return true;
     }
 
-    public ItemInstance transferSlot(int index) {
-        ItemInstance itemstack = null;
-        Slot slot = (Slot)this.slots.get(index);
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public MixinItemInstance transferSlot(int index) {
+        MixinItemInstance itemstack = null;
+        Slot slot = (Slot) this.slots.get(index);
         if (slot != null && slot.hasItem()) {
-            ItemInstance itemstack1 = slot.getItem();
+            MixinItemInstance itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             if (index == 0) {
                 this.insertItem(itemstack1, 9, 45, true);

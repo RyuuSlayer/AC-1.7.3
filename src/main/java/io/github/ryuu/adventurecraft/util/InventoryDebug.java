@@ -1,15 +1,14 @@
 package io.github.ryuu.adventurecraft.util;
 
-import io.github.ryuu.adventurecraft.blocks.Blocks;
-import net.minecraft.entity.player.Player;
-import net.minecraft.item.ItemInstance;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemType;
 import net.minecraft.tile.Tile;
 
-public class InventoryDebug implements lw {
+public class InventoryDebug implements Inventory {
+
     private final String inventoryTitle;
     private final int size;
-    private final ItemInstance[] inventoryContents;
+    private final MixinItemInstance[] inventoryContents;
     public int firstItem;
     public int lastItem;
     public boolean atEnd;
@@ -17,7 +16,7 @@ public class InventoryDebug implements lw {
     public InventoryDebug(String s, int i) {
         this.inventoryTitle = s;
         this.size = i;
-        this.inventoryContents = new ItemInstance[i];
+        this.inventoryContents = new MixinItemInstance[i];
     }
 
     private int getID(int i) {
@@ -543,37 +542,10 @@ public class InventoryDebug implements lw {
     public void fillInventory(int offset) {
         boolean filledFirst = false;
         this.atEnd = false;
-        for (int i = 0; i < this.size; i++) {
-            int id = getID(i + offset);
-            if (gm.c[id] != null) {
-                this.inventoryContents[i] = new iz(gm.c[id], -64);
-                this.inventoryContents[i].b(getSubtype(i + offset));
-                this.lastItem = i + offset;
-                if (!filledFirst) {
-                    this.firstItem = i + offset;
-                    filledFirst = true;
-                }
-            } else if (id < 31999) {
-                i--;
-                offset++;
-            } else {
-                this.atEnd = true;
-                while (i < this.size) {
-                    this.inventoryContents[i] = null;
-                    i++;
-                }
-                return;
-            }
-        }
-    }
-
-    public void fillInventory(int offset) {
-        boolean filledFirst = false;
-        this.atEnd = false;
         for (int i = 0; i < this.size; ++i) {
             int id = this.getID(i + offset);
             if (ItemType.byId[id] != null) {
-                this.inventoryContents[i] = new ItemInstance(ItemType.byId[id], -64);
+                this.inventoryContents[i] = new MixinItemInstance(ItemType.byId[id], -64);
                 this.inventoryContents[i].setDamage(this.getSubtype(i + offset));
                 this.lastItem = i + offset;
                 if (filledFirst) continue;
@@ -601,7 +573,7 @@ public class InventoryDebug implements lw {
         for (int i = 0; i < this.size; ++i) {
             int id = this.getID(offset - i);
             if (id > 0 && ItemType.byId[id] != null) {
-                this.inventoryContents[this.size - i - 1] = new ItemInstance(ItemType.byId[id], -64);
+                this.inventoryContents[this.size - i - 1] = new MixinItemInstance(ItemType.byId[id], -64);
                 this.inventoryContents[this.size - i - 1].setDamage(this.getSubtype(offset - i));
                 this.firstItem = offset - i;
                 if (filledFirst) continue;
@@ -622,38 +594,47 @@ public class InventoryDebug implements lw {
         }
     }
 
-    public ItemInstance getInvItem(int i) {
+    @Override
+    public MixinItemInstance getInvItem(int i) {
         return this.inventoryContents[i];
     }
 
-    public ItemInstance takeInvItem(int index, int j) {
+    @Override
+    public MixinItemInstance takeInvItem(int index, int j) {
         if (this.inventoryContents[index] != null) {
             return this.inventoryContents[index].copy();
         }
         return null;
     }
 
-    public void setInvItem(int i, ItemInstance itemstack) {
+    @Override
+    public void setInvItem(int i, MixinItemInstance itemstack) {
         if (this.inventoryContents[i] != null) {
             this.inventoryContents[i] = this.inventoryContents[i].copy();
         }
     }
 
+    @Override
     public int getInvSize() {
         return this.size;
     }
 
+    @Override
     public String getContainerName() {
         return this.inventoryTitle;
     }
 
+    @Override
     public int getMaxItemCount() {
         return 64;
     }
 
+    @Override
     public void markDirty() {
     }
-    public boolean canPlayerUse(Player entityplayer) {
+
+    @Override
+    public boolean canPlayerUse(MixinPlayer entityplayer) {
         return true;
     }
 }

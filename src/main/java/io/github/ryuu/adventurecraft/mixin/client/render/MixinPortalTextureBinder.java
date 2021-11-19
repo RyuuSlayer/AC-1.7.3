@@ -1,29 +1,71 @@
 package io.github.ryuu.adventurecraft.mixin.client.render;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.PortalTextureBinder;
+import net.minecraft.tile.Tile;
+import net.minecraft.util.maths.MathsHelper;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
+
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
-import io.github.ryuu.adventurecraft.util.Vec2;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.render.PortalTextureBinder;
-import net.minecraft.client.render.TextureBinder;
-import net.minecraft.tile.Tile;
-import net.minecraft.util.maths.MathsHelper;
+@Mixin(PortalTextureBinder.class)
+public class MixinPortalTextureBinder extends MixinTextureBinder {
 
-public class MixinPortalTextureBinder extends TextureBinder {
-    private int field_1091 = 0;
-    private byte[][] field_1092;
     static boolean hasImages;
     static int numFrames;
+    static int curFrame;
     private static int[] frameImages;
     private static int width;
-    static int curFrame;
+
+    static {
+        curFrame = 0;
+    }
+
+    @Shadow()
+    private int field_1091 = 0;
+    private byte[][] field_1092;
 
     public MixinPortalTextureBinder() {
         super(Tile.PORTAL.tex);
         this.generatePortalData(16, 16);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static void loadImage() {
+        PortalTextureBinder.loadImage("/custom_portal.png");
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static void loadImage(String texName) {
+        BufferedImage bufferedimage = null;
+        if (Minecraft.minecraftInstance.level != null) {
+            bufferedimage = Minecraft.minecraftInstance.level.loadMapTexture(texName);
+        }
+        curFrame = 0;
+        if (bufferedimage == null) {
+            hasImages = false;
+            return;
+        }
+        width = bufferedimage.getWidth();
+        numFrames = bufferedimage.getHeight() / bufferedimage.getWidth();
+        frameImages = new int[bufferedimage.getWidth() * bufferedimage.getHeight()];
+        bufferedimage.getRGB(0, 0, bufferedimage.getWidth(), bufferedimage.getHeight(), frameImages, 0, bufferedimage.getWidth());
+        hasImages = true;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void generatePortalData(int w, int h) {
         this.field_1092 = new byte[32][w * h * 4];
         Random random = new Random(100L);
@@ -34,8 +76,8 @@ public class MixinPortalTextureBinder extends TextureBinder {
                     for (int l = 0; l < 2; ++l) {
                         float f1 = l * w / 2;
                         float f2 = l * h / 2;
-                        float f3 = ((float)j - f1) / (float)w * 2.0f;
-                        float f4 = ((float)k - f2) / (float)h * 2.0f;
+                        float f3 = ((float) j - f1) / (float) w * 2.0f;
+                        float f4 = ((float) k - f2) / (float) h * 2.0f;
                         if (f3 < -1.0f) {
                             f3 += 2.0f;
                         }
@@ -49,24 +91,29 @@ public class MixinPortalTextureBinder extends TextureBinder {
                             f4 -= 2.0f;
                         }
                         float f5 = f3 * f3 + f4 * f4;
-                        float f6 = (float)Math.atan2(f4, f3) + ((float)i / 32.0f * 3.141593f * 2.0f - f5 * 10.0f + (float)(l * 2)) * (float)(l * 2 - 1);
+                        float f6 = (float) Math.atan2(f4, f3) + ((float) i / 32.0f * 3.141593f * 2.0f - f5 * 10.0f + (float) (l * 2)) * (float) (l * 2 - 1);
                         f6 = (MathsHelper.sin(f6) + 1.0f) / 2.0f;
                         f += (f6 /= f5 + 1.0f) * 0.5f;
                     }
-                    int i1 = (int)((f += random.nextFloat() * 0.1f) * 100.0f + 155.0f);
-                    int j1 = (int)(f * f * 200.0f + 55.0f);
-                    int k1 = (int)(f * f * f * f * 255.0f);
-                    int l1 = (int)(f * 100.0f + 155.0f);
+                    int i1 = (int) ((f += random.nextFloat() * 0.1f) * 100.0f + 155.0f);
+                    int j1 = (int) (f * f * 200.0f + 55.0f);
+                    int k1 = (int) (f * f * f * f * 255.0f);
+                    int l1 = (int) (f * 100.0f + 155.0f);
                     int i2 = k * w + j;
-                    this.field_1092[i][i2 * 4 + 0] = (byte)j1;
-                    this.field_1092[i][i2 * 4 + 1] = (byte)k1;
-                    this.field_1092[i][i2 * 4 + 2] = (byte)i1;
-                    this.field_1092[i][i2 * 4 + 3] = (byte)l1;
+                    this.field_1092[i][i2 * 4 + 0] = (byte) j1;
+                    this.field_1092[i][i2 * 4 + 1] = (byte) k1;
+                    this.field_1092[i][i2 * 4 + 2] = (byte) i1;
+                    this.field_1092[i][i2 * 4 + 3] = (byte) l1;
                 }
             }
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void onTick(Vec2 texRes) {
         int w = texRes.x / 16;
         int h = texRes.y / 16;
@@ -86,10 +133,10 @@ public class MixinPortalTextureBinder extends TextureBinder {
                         for (int x = 0; x < ratio; ++x) {
                             for (int y = 0; y < ratio; ++y) {
                                 k = j * ratio + x + (i * ratio + y) * w;
-                                this.grid[k * 4 + 0] = (byte)(curPixel >> 16 & 0xFF);
-                                this.grid[k * 4 + 1] = (byte)(curPixel >> 8 & 0xFF);
-                                this.grid[k * 4 + 2] = (byte)(curPixel & 0xFF);
-                                this.grid[k * 4 + 3] = (byte)(curPixel >> 24 & 0xFF);
+                                this.grid[k * 4 + 0] = (byte) (curPixel >> 16 & 0xFF);
+                                this.grid[k * 4 + 1] = (byte) (curPixel >> 8 & 0xFF);
+                                this.grid[k * 4 + 2] = (byte) (curPixel & 0xFF);
+                                this.grid[k * 4 + 3] = (byte) (curPixel >> 24 & 0xFF);
                             }
                         }
                     }
@@ -110,10 +157,10 @@ public class MixinPortalTextureBinder extends TextureBinder {
                                 a += curPixel >> 24 & 0xFF;
                             }
                         }
-                        this.grid[k * 4 + 0] = (byte)(r / ratio / ratio);
-                        this.grid[k * 4 + 1] = (byte)(g / ratio / ratio);
-                        this.grid[k * 4 + 2] = (byte)(b / ratio / ratio);
-                        this.grid[k * 4 + 3] = (byte)(a / ratio / ratio);
+                        this.grid[k * 4 + 0] = (byte) (r / ratio / ratio);
+                        this.grid[k * 4 + 1] = (byte) (g / ratio / ratio);
+                        this.grid[k * 4 + 2] = (byte) (b / ratio / ratio);
+                        this.grid[k * 4 + 3] = (byte) (a / ratio / ratio);
                         ++k;
                     }
                 }
@@ -140,35 +187,10 @@ public class MixinPortalTextureBinder extends TextureBinder {
                 k = k1;
                 l = l1;
             }
-            this.grid[i * 4 + 0] = (byte)j;
-            this.grid[i * 4 + 1] = (byte)k;
-            this.grid[i * 4 + 2] = (byte)l;
-            this.grid[i * 4 + 3] = (byte)i1;
+            this.grid[i * 4 + 0] = (byte) j;
+            this.grid[i * 4 + 1] = (byte) k;
+            this.grid[i * 4 + 2] = (byte) l;
+            this.grid[i * 4 + 3] = (byte) i1;
         }
-    }
-
-    public static void loadImage() {
-        PortalTextureBinder.loadImage("/custom_portal.png");
-    }
-
-    public static void loadImage(String texName) {
-        BufferedImage bufferedimage = null;
-        if (Minecraft.minecraftInstance.level != null) {
-            bufferedimage = Minecraft.minecraftInstance.level.loadMapTexture(texName);
-        }
-        curFrame = 0;
-        if (bufferedimage == null) {
-            hasImages = false;
-            return;
-        }
-        width = bufferedimage.getWidth();
-        numFrames = bufferedimage.getHeight() / bufferedimage.getWidth();
-        frameImages = new int[bufferedimage.getWidth() * bufferedimage.getHeight()];
-        bufferedimage.getRGB(0, 0, bufferedimage.getWidth(), bufferedimage.getHeight(), frameImages, 0, bufferedimage.getWidth());
-        hasImages = true;
-    }
-
-    static {
-        curFrame = 0;
     }
 }

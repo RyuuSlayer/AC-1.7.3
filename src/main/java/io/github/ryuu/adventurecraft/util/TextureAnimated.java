@@ -1,10 +1,11 @@
 package io.github.ryuu.adventurecraft.util;
 
-import java.awt.image.BufferedImage;
-
 import net.minecraft.client.Minecraft;
 
+import java.awt.image.BufferedImage;
+
 public class TextureAnimated {
+
     public byte[] imageData;
 
     public int x;
@@ -32,25 +33,26 @@ public class TextureAnimated {
         this.height = _height;
         this.imageData = new byte[this.width * this.height * 4];
         this.texName = _texName;
-        loadImage(animatedTex);
+        this.loadImage(animatedTex);
     }
 
     public void loadImage(String animatedTex) {
         this.hasImages = false;
         BufferedImage bufferedimage = null;
-        if (Minecraft.minecraftInstance.f != null)
-            bufferedimage = Minecraft.minecraftInstance.f.loadMapTexture(animatedTex);
+        if (Minecraft.minecraftInstance.level != null) {
+            bufferedimage = Minecraft.minecraftInstance.level.loadMapTexture(animatedTex);
+        }
         this.curFrame = 0;
         if (bufferedimage == null) {
-            Minecraft.minecraftInstance.v.a(String.format("Unable to load texture '%s'", new Object[]{animatedTex}));
+            Minecraft.minecraftInstance.overlay.addChatMessage(String.format("Unable to load texture '%s'", new Object[]{animatedTex}));
             return;
         }
         if (this.width != bufferedimage.getWidth()) {
-            Minecraft.minecraftInstance.v.a(String.format("Animated texture width of %d didn't match the specified width of %d", new Object[]{Integer.valueOf(bufferedimage.getWidth()), Integer.valueOf(this.width)}));
+            Minecraft.minecraftInstance.overlay.addChatMessage(String.format("Animated texture width of %d didn't match the specified width of %d", new Object[]{bufferedimage.getWidth(), this.width}));
             return;
         }
         if (0 != bufferedimage.getHeight() % this.height) {
-            Minecraft.minecraftInstance.v.a(String.format("Animated texture height of %d isn't a multiple of the specified height of %d", new Object[]{Integer.valueOf(bufferedimage.getHeight()), Integer.valueOf(this.height)}));
+            Minecraft.minecraftInstance.overlay.addChatMessage(String.format("Animated texture height of %d isn't a multiple of the specified height of %d", new Object[]{bufferedimage.getHeight(), this.height}));
             return;
         }
         this.numFrames = bufferedimage.getHeight() / this.height;
@@ -63,8 +65,8 @@ public class TextureAnimated {
         if (this.hasImages) {
             int frameOffset = this.curFrame * this.width * this.height;
             int k = 0;
-            for (int i = 0; i < this.height; i++) {
-                for (int j = 0; j < this.width; j++) {
+            for (int i = 0; i < this.height; ++i) {
+                for (int j = 0; j < this.width; ++j) {
                     int curPixel = this.frameImages[j + i * this.width + frameOffset];
                     this.imageData[k + 0] = (byte) (curPixel >> 16 & 0xFF);
                     this.imageData[k + 1] = (byte) (curPixel >> 8 & 0xFF);

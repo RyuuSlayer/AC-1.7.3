@@ -1,11 +1,10 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import net.minecraft.entity.player.Player;
-
 public class ScriptEntityPlayer extends ScriptEntityLiving {
-    Player entityPlayer;
 
-    ScriptEntityPlayer(Player e) {
+    MixinPlayer entityPlayer;
+
+    ScriptEntityPlayer(MixinPlayer e) {
         super(e);
         this.entityPlayer = e;
     }

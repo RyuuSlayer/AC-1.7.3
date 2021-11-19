@@ -1,20 +1,35 @@
 package io.github.ryuu.adventurecraft.mixin.entity;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.level.Level;
+import net.minecraft.entity.FlyingEntity;
 import net.minecraft.tile.Tile;
 import net.minecraft.util.maths.MathsHelper;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
-public class MixinFlyingEntity extends LivingEntity {
+@Mixin(FlyingEntity.class)
+public class MixinFlyingEntity extends MixinLivingEntity {
+
+    @Shadow()
     public int attackStrength = 1;
 
-    public MixinFlyingEntity(Level world) {
+    public MixinFlyingEntity(MixinLevel world) {
         super(world);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     protected void handleFallDamage(float f) {
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void travel(float f, float f1) {
         if (this.method_1334()) {
             this.movementInputToVelocity(f, f1, 0.02f);
@@ -63,6 +78,11 @@ public class MixinFlyingEntity extends LivingEntity {
         this.field_1050 += this.limbDistance;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public boolean isOnLadder() {
         return false;
     }

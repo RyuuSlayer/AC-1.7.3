@@ -1,10 +1,9 @@
 package io.github.ryuu.adventurecraft.util;
 
-import net.minecraft.level.Level;
 import net.minecraft.tile.entity.TileEntity;
-import net.minecraft.util.io.CompoundTag;
 
 class EditAction {
+
     EditAction nextAction;
 
     int x;
@@ -17,15 +16,15 @@ class EditAction {
 
     int prevMetadata;
 
-    CompoundTag prevNBT;
+    MixinCompoundTag prevNBT;
 
     int newBlockID;
 
     int newMetadata;
 
-    CompoundTag newNBT;
+    MixinCompoundTag newNBT;
 
-    EditAction(int i, int j, int k, int pID, int pMeta, CompoundTag pNBT, int nID, int nMeta, CompoundTag nNBT) {
+    EditAction(int i, int j, int k, int pID, int pMeta, MixinCompoundTag pNBT, int nID, int nMeta, MixinCompoundTag nNBT) {
         this.x = i;
         this.y = j;
         this.z = k;
@@ -38,23 +37,25 @@ class EditAction {
         this.nextAction = null;
     }
 
-    void undo(Level world) {
-        world.b(this.x, this.y, this.z, this.prevBlockID, this.prevMetadata);
+    void undo(MixinLevel world) {
+        world.method_201(this.x, this.y, this.z, this.prevBlockID, this.prevMetadata);
         if (this.prevNBT != null) {
-            TileEntity te = TileEntity.c(this.prevNBT);
-            world.a(te.e, te.f, te.g, te);
+            MixinTileEntity te = TileEntity.method_1068(this.prevNBT);
+            world.setTileEntity(te.x, te.y, te.z, te);
         }
-        if (this.nextAction != null)
+        if (this.nextAction != null) {
             this.nextAction.undo(world);
+        }
     }
 
-    void redo(Level world) {
-        world.b(this.x, this.y, this.z, this.newBlockID, this.newMetadata);
+    void redo(MixinLevel world) {
+        world.method_201(this.x, this.y, this.z, this.newBlockID, this.newMetadata);
         if (this.newNBT != null) {
-            TileEntity te = TileEntity.c(this.newNBT);
-            world.a(te.e, te.f, te.g, te);
+            MixinTileEntity te = TileEntity.method_1068(this.newNBT);
+            world.setTileEntity(te.x, te.y, te.z, te);
         }
-        if (this.nextAction != null)
+        if (this.nextAction != null) {
             this.nextAction.redo(world);
+        }
     }
 }

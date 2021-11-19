@@ -1,21 +1,18 @@
 package io.github.ryuu.adventurecraft.gui;
 
-import io.github.ryuu.adventurecraft.entities.tile.TileEntityHealDamage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Screen;
-import net.minecraft.level.Level;
 
-public class GuiHealDamage extends Screen {
+public class GuiHealDamage extends MixinScreen {
+
     private final TileEntityHealDamage tileEnt;
-
     GuiSlider2 healDamage;
 
     public GuiHealDamage(TileEntityHealDamage t) {
         this.tileEnt = t;
     }
 
-    public static void showUI(Level worldArg, TileEntityHealDamage w) {
-        Minecraft.minecraftInstance.a(new GuiHealDamage(w));
+    public static void showUI(MixinLevel worldArg, TileEntityHealDamage w) {
+        Minecraft.minecraftInstance.openScreen(new GuiHealDamage(w));
     }
 
     @Override
@@ -24,22 +21,19 @@ public class GuiHealDamage extends Screen {
 
     @Override
     public void init() {
-        this.healDamage = new GuiSlider2(4, 4, 4, 10, String.format("Heal: %d", this.tileEnt.healDamage), (this.tileEnt.healDamage + 40) / 80.0F);
-        if (this.tileEnt.healDamage < 0)
-            this.healDamage.text = String.format("Damage: %d", -this.tileEnt.healDamage);
-        this.buttons.add(this.healDamage);
+        this.healDamage = new GuiSlider2(4, 4, 4, 10, String.format("Heal: %d", new Object[]{this.tileEnt.healDamage}), (float) (this.tileEnt.healDamage + 40) / 80.0f);
+        if (this.tileEnt.healDamage < 0) {
+            this.healDamage.text = String.format("Damage: %d", new Object[]{-this.tileEnt.healDamage});
+        }
+        this.buttons.add((Object) this.healDamage);
     }
 
     @Override
-    public void render(int i, int j, float f) {
-        fill(0, 0, this.width, this.height, -2147483648);
-        this.tileEnt.healDamage = (int) (this.healDamage.sliderValue * 80.0D - 40.0D);
-        if (this.tileEnt.healDamage < 0) {
-            this.healDamage.text = String.format("Damage: %d", -this.tileEnt.healDamage);
-        } else {
-            this.healDamage.text = String.format("Heal: %d", this.tileEnt.healDamage);
-        }
-        super.render(i, j, f);
+    public void render(int mouseX, int mouseY, float delta) {
+        this.fill(0, 0, this.width, this.height, Integer.MIN_VALUE);
+        this.tileEnt.healDamage = (int) ((double) this.healDamage.sliderValue * 80.0 - 40.0);
+        this.healDamage.text = this.tileEnt.healDamage < 0 ? String.format("Damage: %d", new Object[]{-this.tileEnt.healDamage}) : String.format("Heal: %d", new Object[]{this.tileEnt.healDamage});
+        super.render(mouseX, mouseY, delta);
         this.tileEnt.level.getChunk(this.tileEnt.x, this.tileEnt.z).method_885();
     }
 

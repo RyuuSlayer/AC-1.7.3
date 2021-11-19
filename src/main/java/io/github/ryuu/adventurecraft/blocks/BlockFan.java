@@ -1,20 +1,15 @@
 package io.github.ryuu.adventurecraft.blocks;
 
-import java.util.List;
-import java.util.Random;
-
-import io.github.ryuu.adventurecraft.entities.EntityAirFX;
-import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.FallingTile;
-import net.minecraft.entity.player.Player;
-import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
-public class BlockFan extends Tile {
+import java.util.List;
+import java.util.Random;
+
+public class BlockFan extends MixinTile {
+
     private final boolean fanOn;
 
     public BlockFan(int i, int j, boolean f) {
@@ -23,9 +18,10 @@ public class BlockFan extends Tile {
     }
 
     @Override
-    public int getTextureForSide(int i, int j) {
-        if (i == j)
+    public int getTextureForSide(int side, int meta) {
+        if (side == meta) {
             return this.tex;
+        }
         return 74;
     }
 
@@ -35,131 +31,127 @@ public class BlockFan extends Tile {
     }
 
     @Override
-    public void onPlaced(Level world, int i, int j, int k, int l) {
-        world.setTileMeta(i, j, k, l);
-        if (this.fanOn)
-            world.method_216(i, j, k, this.id, getTickrate());
+    public void onPlaced(MixinLevel level, int x, int y, int z, int facing) {
+        level.setTileMeta(x, y, z, facing);
+        if (this.fanOn) {
+            level.method_216(x, y, z, this.id, this.getTickrate());
+        }
     }
 
     private boolean canGoThroughBlock(int blockID) {
-        return (Tile.BY_ID[blockID] != null &&
-                (Tile.BY_ID[blockID]).material != Material.AIR &&
-                (Tile.BY_ID[blockID]).material != Material.WATER &&
-                (Tile.BY_ID[blockID]).material != Material.LAVA);
+        return Tile.BY_ID[blockID] != null && Tile.BY_ID[blockID].material != Material.AIR && Tile.BY_ID[blockID].material != Material.WATER && Tile.BY_ID[blockID].material != Material.LAVA;
     }
 
     @Override
-    public void onScheduledTick(Level world, int i, int j, int k, Random random) {
-        if (!this.fanOn)
+    public void onScheduledTick(MixinLevel level, int x, int y, int z, Random rand) {
+        if (!this.fanOn) {
             return;
-        world.method_216(i, j, k, this.id, getTickrate());
+        }
+        level.method_216(x, y, z, this.id, this.getTickrate());
         if (!DebugMode.active) {
-            int direction = world.getTileMeta(i, j, k);
+            double dist;
+            MixinEntity e;
+            int blockID;
+            int direction = level.getTileMeta(x, y, z);
             int xOffset = 0;
             int yOffset = 0;
             int zOffset = 0;
             if (direction == 0) {
-                for (yOffset = -1; yOffset >= -4; yOffset--) {
-                    int blockID = world.getTileId(i, j + yOffset, k);
-                    if (canGoThroughBlock(blockID)) {
-                        yOffset++;
-                        break;
-                    }
+                for (yOffset = -1; yOffset >= -4; --yOffset) {
+                    blockID = level.getTileId(x, y + yOffset, z);
+                    if (!this.canGoThroughBlock(blockID)) continue;
+                    ++yOffset;
+                    break;
                 }
             } else if (direction == 1) {
-                for (yOffset = 1; yOffset <= 4; yOffset++) {
-                    int blockID = world.getTileId(i, j + yOffset, k);
-                    if (canGoThroughBlock(blockID)) {
-                        yOffset--;
-                        break;
-                    }
+                for (yOffset = 1; yOffset <= 4; ++yOffset) {
+                    blockID = level.getTileId(x, y + yOffset, z);
+                    if (!this.canGoThroughBlock(blockID)) continue;
+                    --yOffset;
+                    break;
                 }
             } else if (direction == 2) {
-                for (zOffset = -1; zOffset >= -4; zOffset--) {
-                    int blockID = world.getTileId(i, j, k + zOffset);
-                    if (canGoThroughBlock(blockID)) {
-                        zOffset++;
-                        break;
-                    }
+                for (zOffset = -1; zOffset >= -4; --zOffset) {
+                    blockID = level.getTileId(x, y, z + zOffset);
+                    if (!this.canGoThroughBlock(blockID)) continue;
+                    ++zOffset;
+                    break;
                 }
             } else if (direction == 3) {
-                for (zOffset = 1; zOffset <= 4; zOffset++) {
-                    int blockID = world.getTileId(i, j, k + zOffset);
-                    if (canGoThroughBlock(blockID)) {
-                        zOffset--;
-                        break;
-                    }
+                for (zOffset = 1; zOffset <= 4; ++zOffset) {
+                    blockID = level.getTileId(x, y, z + zOffset);
+                    if (!this.canGoThroughBlock(blockID)) continue;
+                    --zOffset;
+                    break;
                 }
             } else if (direction == 4) {
-                for (xOffset = -1; xOffset >= -4; xOffset--) {
-                    int blockID = world.getTileId(i + xOffset, j, k);
-                    if (canGoThroughBlock(blockID)) {
-                        xOffset++;
-                        break;
-                    }
+                for (xOffset = -1; xOffset >= -4; --xOffset) {
+                    blockID = level.getTileId(x + xOffset, y, z);
+                    if (!this.canGoThroughBlock(blockID)) continue;
+                    ++xOffset;
+                    break;
                 }
             } else if (direction == 5) {
-                for (xOffset = 1; xOffset <= 4; xOffset++) {
-                    int blockID = world.getTileId(i + xOffset, j, k);
-                    if (canGoThroughBlock(blockID)) {
-                        xOffset--;
-                        break;
-                    }
+                for (xOffset = 1; xOffset <= 4; ++xOffset) {
+                    blockID = level.getTileId(x + xOffset, y, z);
+                    if (!this.canGoThroughBlock(blockID)) continue;
+                    --xOffset;
+                    break;
                 }
             }
-            Box aabb = getCollisionShape(world, i, j, k).add(xOffset, yOffset, zOffset);
-            List entities = world.getEntities(Entity.class, aabb);
+            Box aabb = this.getCollisionShape(level, x, y, z).add(xOffset, yOffset, zOffset);
+            List entities = level.getEntities(MixinEntity.class, aabb);
             for (Object obj : entities) {
-                Entity e = (Entity) obj;
-                if (!(e instanceof FallingTile)) {
-                    double dist = e.method_1350(i + 0.5D, j + 0.5D, k + 0.5D) * Math.abs(xOffset + yOffset + zOffset) / 4.0D;
-                    e.method_1322(0.07D * xOffset / dist, 0.07D * yOffset / dist, 0.07D * zOffset / dist);
-                    if (e instanceof Player && ((Player) e).usingUmbrella())
-                        e.method_1322(0.07D * xOffset / dist, 0.07D * yOffset / dist, 0.07D * zOffset / dist);
-                }
+                e = (MixinEntity) obj;
+                if (e instanceof MixinFallingTile) continue;
+                dist = e.method_1350((double) x + 0.5, (double) y + 0.5, (double) z + 0.5) * (double) Math.abs(xOffset + yOffset + zOffset) / 4.0;
+                e.method_1322(0.07 * (double) xOffset / dist, 0.07 * (double) yOffset / dist, 0.07 * (double) zOffset / dist);
+                if (!(e instanceof MixinPlayer) || !((MixinPlayer) e).usingUmbrella()) continue;
+                e.method_1322(0.07 * (double) xOffset / dist, 0.07 * (double) yOffset / dist, 0.07 * (double) zOffset / dist);
             }
             entities = Minecraft.minecraftInstance.particleManager.getEffectsWithinAABB(aabb);
             for (Object obj : entities) {
-                Entity e = (Entity) obj;
-                if (!(e instanceof FallingTile)) {
-                    double dist = e.method_1350(i + 0.5D, j + 0.5D, k + 0.5D) * Math.abs(xOffset + yOffset + zOffset) / 4.0D;
-                    e.method_1322(0.03D * xOffset / dist, 0.03D * yOffset / dist, 0.03D * zOffset / dist);
-                }
+                e = (MixinEntity) obj;
+                if (e instanceof MixinFallingTile) continue;
+                dist = e.method_1350((double) x + 0.5, (double) y + 0.5, (double) z + 0.5) * (double) Math.abs(xOffset + yOffset + zOffset) / 4.0;
+                e.method_1322(0.03 * (double) xOffset / dist, 0.03 * (double) yOffset / dist, 0.03 * (double) zOffset / dist);
             }
-            Minecraft.minecraftInstance.particleManager.addParticle(new EntityAirFX(world, i + random.nextDouble(), j + random.nextDouble(), k + random.nextDouble()));
+            Minecraft.minecraftInstance.particleManager.addParticle(new EntityAirFX(level, (double) x + rand.nextDouble(), (double) y + rand.nextDouble(), (double) z + rand.nextDouble()));
         }
     }
 
     @Override
-    public void randomDisplayTick(Level world, int i, int j, int k, Random random) {
-        if (this.fanOn)
-            world.method_216(i, j, k, this.id, getTickrate());
+    public void randomDisplayTick(MixinLevel level, int x, int y, int z, Random rand) {
+        if (this.fanOn) {
+            level.method_216(x, y, z, this.id, this.getTickrate());
+        }
     }
 
     @Override
-    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
+    public boolean activate(MixinLevel level, int x, int y, int z, MixinPlayer player) {
         if (DebugMode.active) {
-            world.setTileMeta(i, j, k, (world.getTileMeta(i, j, k) + 1) % 6);
-            world.method_246(i, j, k);
+            level.setTileMeta(x, y, z, (level.getTileMeta(x, y, z) + 1) % 6);
+            level.method_246(x, y, z);
             return true;
         }
         return false;
     }
 
     @Override
-    public void method_1609(Level world, int i, int j, int k, int l) {
-        if (world.isClient)
+    public void method_1609(MixinLevel level, int x, int y, int z, int id) {
+        if (level.isClient) {
             return;
-        if (world.hasRedstonePower(i, j, k)) {
+        }
+        if (level.hasRedstonePower(x, y, z)) {
             if (this.fanOn) {
-                int m = world.getTileMeta(i, j, k);
-                world.method_201(i, j, k, Blocks.fanOff.id, m);
+                int m = level.getTileMeta(x, y, z);
+                level.method_201(x, y, z, Blocks.fanOff.id, m);
             }
         } else if (!this.fanOn) {
-            int m = world.getTileMeta(i, j, k);
-            world.method_201(i, j, k, Blocks.fan.id, m);
-            world.method_216(i, j, k, Blocks.fan.id, getTickrate());
+            int m = level.getTileMeta(x, y, z);
+            level.method_201(x, y, z, Blocks.fan.id, m);
+            level.method_216(x, y, z, Blocks.fan.id, this.getTickrate());
         }
-        super.method_1609(world, i, j, k, l);
+        super.method_1609(level, x, y, z, id);
     }
 }

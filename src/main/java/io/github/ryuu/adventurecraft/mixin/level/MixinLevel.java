@@ -1,50 +1,37 @@
 package io.github.ryuu.adventurecraft.mixin.level;
 
-import io.github.ryuu.adventurecraft.blocks.BlockStairMulti;
-import io.github.ryuu.adventurecraft.blocks.Blocks;
-import io.github.ryuu.adventurecraft.entities.tile.TileEntityNpcPath;
-import io.github.ryuu.adventurecraft.items.ItemCustom;
-import io.github.ryuu.adventurecraft.scripting.EntityDescriptions;
-import io.github.ryuu.adventurecraft.scripting.ScopeTag;
-import io.github.ryuu.adventurecraft.scripting.Script;
-import io.github.ryuu.adventurecraft.scripting.ScriptModel;
-import io.github.ryuu.adventurecraft.util.*;
-import net.minecraft.class_108;
 import net.minecraft.class_366;
-import net.minecraft.class_61;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.colour.FoliageColour;
 import net.minecraft.client.colour.GrassColour;
 import net.minecraft.client.render.*;
 import net.minecraft.client.resource.language.TranslationStorage;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.Lightning;
-import net.minecraft.entity.player.Player;
 import net.minecraft.level.*;
-import net.minecraft.level.biome.Biome;
-import net.minecraft.level.chunk.Chunk;
 import net.minecraft.level.chunk.ChunkIO;
-import net.minecraft.level.chunk.ClientChunkCache;
 import net.minecraft.level.dimension.Dimension;
 import net.minecraft.level.dimension.DimensionData;
 import net.minecraft.level.dimension.McRegionDimensionFile;
-import net.minecraft.level.gen.BiomeSource;
 import net.minecraft.level.source.LevelSource;
 import net.minecraft.level.storage.MapStorageBase;
+import net.minecraft.script.EntityDescriptions;
+import net.minecraft.script.ScopeTag;
+import net.minecraft.script.Script;
+import net.minecraft.script.ScriptModel;
 import net.minecraft.tile.FluidTile;
 import net.minecraft.tile.LadderTile;
 import net.minecraft.tile.Tile;
-import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.ProgressListener;
 import net.minecraft.util.Vec3i;
 import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.MathsHelper;
 import net.minecraft.util.maths.Vec3f;
 import org.mozilla.javascript.Scriptable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -53,71 +40,75 @@ import java.util.*;
 
 @Mixin(Level.class)
 public class MixinLevel implements TileView {
+
+    static int field_179 = 0;
+    public final MixinDimension dimension;
+    protected final int unusedIncrement = 1013904223;
+    protected final DimensionData dimensionData;
+    protected final DimensionData mapHandler;
+    private final List field_181;
+    private final List field_182;
+    private final TreeSet field_183;
+    private final Set field_184;
+    private final List field_185;
+    private final long field_186;
+    private final ArrayList field_189;
+    private final List field_196;
+    @Shadow()
     public boolean field_197;
-    private List field_181;
-    public List<net.minecraft.src.Entity> entities;
-    private List field_182;
-    private TreeSet field_183;
-    private Set field_184;
+    public List<MixinEntity> entities;
     public List tileEntities;
-    private List field_185;
     public List players;
     public List field_201;
-    private long field_186;
     public int field_202;
+    public int field_210;
+    public boolean field_211;
+    public int difficulty;
+    public Random rand;
+    public boolean generating;
+    public MixinLevelProperties properties;
+    public boolean forceLoadChunks;
+    public LevelData data;
+    public boolean isClient;
+    public File levelDir;
+    public String[] musicList;
+    public String[] soundList;
+    public TriggerManager triggerManager;
+    public Script script;
+    public JScriptHandler scriptHandler;
+    public MusicScripts musicScripts;
+    public boolean fogColorOverridden;
+    public boolean fogDensityOverridden;
+    public Scriptable scope;
+    public UndoStack undoStack;
     protected int field_203;
-    protected final int unusedIncrement = 1013904223;
     protected float prevRainGradient;
     protected float rainGradient;
     protected float prevThunderGradient;
     protected float thunderGradient;
     protected int field_209;
-    public int field_210;
-    public boolean field_211;
-    private long time;
     protected int field_212;
-    public int difficulty;
-    public Random rand;
-    public boolean generating;
-    public final Dimension dimension;
     protected List listeners;
     protected LevelSource cache;
-    protected final DimensionData dimensionData;
-    public LevelProperties properties;
-    public boolean forceLoadChunks;
+    boolean firstTick;
+    boolean newSave;
+    private long time;
     private boolean allPlayersSleeping;
-    public LevelData data;
-    private ArrayList field_189;
     private boolean field_190;
     private int field_191;
     private boolean field_192;
     private boolean field_193;
-    static int field_179 = 0;
+    private Set field_194;
     private int field_195;
-    private List field_196;
-    public boolean isClient;
-    public File levelDir;
     private int[] coordOrder;
-    public String[] musicList;
-    public String[] soundList;
-    protected final DimensionData mapHandler;
-    public TriggerManager triggerManager = new TriggerManager(this);
-    public Script script;
-    public JScriptHandler scriptHandler;
-    public MusicScripts musicScripts;
-    public boolean fogColorOverridden = false;
-    public boolean fogDensityOverridden = false;
-    public Scriptable scope;
-    boolean firstTick = true;
-    boolean newSave = false;
-    public UndoStack undoStack;
 
-    @Override
-    public BiomeSource getBiomeSource() {
-        return this.dimension.biomeSource;
-    }
-
-    public MixinLevel(DimensionData dimensionData, String name, Dimension dimension, long seed) {
+    public MixinLevel(DimensionData dimensionData, String name, MixinDimension dimension, long seed) {
+        this.unusedIncrement = 1013904223;
+        this.fogColorOverridden = false;
+        this.fogDensityOverridden = false;
+        this.firstTick = true;
+        this.newSave = false;
+        this.triggerManager = new TriggerManager(this);
         this.field_197 = false;
         this.field_181 = new ArrayList();
         this.entities = new ArrayList();
@@ -147,7 +138,7 @@ public class MixinLevel implements TileView {
         this.field_196 = new ArrayList();
         this.isClient = false;
         this.dimensionData = dimensionData;
-        this.properties = new LevelProperties(seed, name);
+        this.properties = new MixinLevelProperties(seed, name);
         this.dimension = dimension;
         this.data = new LevelData(dimensionData);
         dimension.setLevel(this);
@@ -158,7 +149,13 @@ public class MixinLevel implements TileView {
         this.script = new Script(this);
     }
 
-    public MixinLevel(Level level, Dimension dimension) {
+    public MixinLevel(MixinLevel level, MixinDimension dimension) {
+        this.unusedIncrement = 1013904223;
+        this.fogColorOverridden = false;
+        this.fogDensityOverridden = false;
+        this.firstTick = true;
+        this.newSave = false;
+        this.triggerManager = new TriggerManager(this);
         this.field_197 = false;
         this.field_181 = new ArrayList();
         this.entities = new ArrayList();
@@ -189,7 +186,7 @@ public class MixinLevel implements TileView {
         this.isClient = false;
         this.time = level.time;
         this.dimensionData = level.dimensionData;
-        this.properties = new LevelProperties(level.properties);
+        this.properties = new MixinLevelProperties(level.properties);
         this.data = new LevelData(this.dimensionData);
         this.dimension = dimension;
         dimension.setLevel(this);
@@ -208,7 +205,13 @@ public class MixinLevel implements TileView {
         this(levelName, isavehandler, s, l, null);
     }
 
-    public MixinLevel(String levelName, DimensionData isavehandler, String s, long l, Dimension worldprovider) {
+    public MixinLevel(String levelName, DimensionData isavehandler, String s, long l, MixinDimension worldprovider) {
+        this.unusedIncrement = 1013904223;
+        this.fogColorOverridden = false;
+        this.fogDensityOverridden = false;
+        this.firstTick = true;
+        this.newSave = false;
+        this.triggerManager = new TriggerManager(this);
         File mcDir = Minecraft.getGameDirectory();
         File mapDir = new File(mcDir, "../maps");
         File levelFile = new File(mapDir, levelName);
@@ -261,12 +264,12 @@ public class MixinLevel implements TileView {
         this.dimension = worldprovider != null ? worldprovider : (this.properties != null && this.properties.getDimensionId() == -1 ? Dimension.getByID(-1) : Dimension.getByID(0));
         boolean flag = false;
         if (this.properties == null) {
-            this.properties = new LevelProperties(l, s);
+            this.properties = new MixinLevelProperties(l, s);
             flag = true;
         } else {
             this.properties.setName(s);
         }
-        this.properties.useImages = AC_TerrainImage.isLoaded;
+        this.properties.useImages = TerrainImage.isLoaded;
         if (this.properties.triggerData != null) {
             this.triggerManager.loadFromTagCompound(this.properties.triggerData);
         }
@@ -309,16 +312,81 @@ public class MixinLevel implements TileView {
         TileEntityNpcPath.lastEntity = null;
     }
 
+    public MixinLevel(DimensionData dimensionData, String string, long l, MixinDimension dimension) {
+        this.field_197 = false;
+        this.field_181 = new ArrayList();
+        this.entities = new ArrayList();
+        this.field_182 = new ArrayList();
+        this.field_183 = new TreeSet();
+        this.field_184 = new HashSet();
+        this.tileEntities = new ArrayList();
+        this.field_185 = new ArrayList();
+        this.players = new ArrayList();
+        this.field_201 = new ArrayList();
+        this.field_186 = 0xFFFFFFL;
+        this.field_202 = 0;
+        this.field_203 = new Random().nextInt();
+        this.unusedIncrement = 1013904223;
+        this.field_209 = 0;
+        this.field_210 = 0;
+        this.field_211 = false;
+        this.time = System.currentTimeMillis();
+        this.field_212 = 40;
+        this.rand = new Random();
+        this.generating = false;
+        this.listeners = new ArrayList();
+        this.field_189 = new ArrayList();
+        this.field_191 = 0;
+        this.field_192 = true;
+        this.field_193 = true;
+        this.field_194 = new HashSet();
+        this.field_195 = this.rand.nextInt(12000);
+        this.field_196 = new ArrayList();
+        this.isClient = false;
+        this.dimensionData = dimensionData;
+        this.data = new LevelData(dimensionData);
+        this.properties = dimensionData.getLevelProperties();
+        boolean bl = this.generating = this.properties == null;
+        this.dimension = dimension != null ? dimension : (this.properties != null && this.properties.getDimensionId() == -1 ? Dimension.getByID(-1) : Dimension.getByID(0));
+        boolean bl2 = false;
+        if (this.properties == null) {
+            this.properties = new MixinLevelProperties(l, string);
+            bl2 = true;
+        } else {
+            this.properties.setName(string);
+        }
+        this.dimension.setLevel(this);
+        this.cache = this.createChunkCache();
+        if (bl2) {
+            this.computeSpawnPosition();
+        }
+        this.method_237();
+        this.initWeatherGradients();
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public MixinBiomeSource getBiomeSource() {
+        return this.dimension.biomeSource;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void loadMapTextures() {
         Minecraft.minecraftInstance.textureManager.reload();
         for (Object obj : Minecraft.minecraftInstance.textureManager.TEXTURE_ID_MAP.entrySet()) {
-            Map.Entry entry = (Map.Entry)obj;
-            String texName = (String)entry.getKey();
-            int texID = (Integer)entry.getValue();
+            Map.Entry entry = (Map.Entry) obj;
+            String texName = (String) entry.getKey();
+            int texID = (Integer) entry.getValue();
             try {
                 Minecraft.minecraftInstance.textureManager.loadTexture(texID, texName);
+            } catch (IllegalArgumentException ignoreNulls) {
             }
-            catch (IllegalArgumentException ignoreNulls) {}
         }
         this.loadTextureAnimations();
         TextureFanFX.loadImage();
@@ -333,11 +401,10 @@ public class MixinLevel implements TileView {
         this.properties.loadTextureReplacements(this);
     }
 
-    /*
-     * Enabled aggressive block sorting
-     * Enabled unnecessary exception pruning
-     * Enabled aggressive exception aggregation
+    /**
+     * @author Ryuu, TechPizza, Phil
      */
+    @Overwrite()
     private void loadTextureAnimations() {
         Minecraft.minecraftInstance.textureManager.clearTextureAnimations();
         File animationFile = new File(this.levelDir, "animations.txt");
@@ -358,40 +425,47 @@ public class MixinLevel implements TileView {
                         int h = Integer.parseInt(parts[6].trim());
                         TextureAnimated t = new TextureAnimated(texName, animTex, x, y, w, h);
                         Minecraft.minecraftInstance.textureManager.registerTextureAnimation(parts[0].trim(), t);
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                     }
                 }
                 return;
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
                 return;
             }
-        }
-        catch (FileNotFoundException e1) {
+        } catch (FileNotFoundException e1) {
             e1.printStackTrace();
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public BufferedImage loadMapTexture(String texName) {
         File terrainTexture = new File(this.levelDir, texName);
         if (terrainTexture.exists()) {
             try {
-                BufferedImage bufferedimage = ImageIO.read((File)terrainTexture);
+                BufferedImage bufferedimage = ImageIO.read(terrainTexture);
                 return bufferedimage;
-            }
-            catch (Exception exception) {
-                // empty catch block
+            } catch (Exception exception) {
             }
         }
         return null;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void updateChunkProvider() {
         this.cache = this.createChunkCache();
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     protected LevelSource createChunkCache() {
         ChunkIO ichunkloader;
         if (this.dimensionData == null) {
@@ -402,9 +476,13 @@ public class MixinLevel implements TileView {
                 ichunkloader = new MapChunkLoader(this.mapHandler.getChunkIO(this.dimension), ichunkloader);
             }
         }
-        return new ClientChunkCache(this, ichunkloader, this.dimension.createLevelSource());
+        return new MixinClientChunkCache(this, ichunkloader, this.dimension.createLevelSource());
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     protected void computeSpawnPosition() {
         this.forceLoadChunks = true;
         int i = 0;
@@ -418,6 +496,10 @@ public class MixinLevel implements TileView {
         this.forceLoadChunks = false;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void revalidateSpawnPos() {
         if (this.properties.getSpawnY() <= 0) {
             this.properties.setSpawnY(64);
@@ -433,6 +515,10 @@ public class MixinLevel implements TileView {
         this.properties.setSpawnZ(j);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public int getFirstUncoveredBlockY(int i, int j) {
         int k;
         for (k = 127; this.isAir(i, k, j) && k > 0; --k) {
@@ -440,6 +526,10 @@ public class MixinLevel implements TileView {
         return k;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public int getTileAtSurface(int x, int z) {
         int k;
         for (k = 127; this.isAir(x, k, z) && k > 0; --k) {
@@ -447,29 +537,40 @@ public class MixinLevel implements TileView {
         return this.getTileId(x, k, z);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_285() {
     }
 
-    public void addPlayer(Player player) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public void addPlayer(MixinPlayer player) {
         try {
-            CompoundTag nbttagcompound = this.properties.getPlayerData();
+            MixinCompoundTag nbttagcompound = this.properties.getPlayerData();
             if (nbttagcompound != null) {
                 player.fromTag(nbttagcompound);
                 this.properties.setPlayerData(null);
             }
-            if (this.cache instanceof ClientChunkCache) {
-                ClientChunkCache chunkproviderloadorgenerate = (ClientChunkCache)this.cache;
-                int i = MathsHelper.floor((int)player.x) >> 4;
-                int j = MathsHelper.floor((int)player.z) >> 4;
+            if (this.cache instanceof MixinClientChunkCache) {
+                MixinClientChunkCache chunkproviderloadorgenerate = (MixinClientChunkCache) this.cache;
+                int i = MathsHelper.floor((int) player.x) >> 4;
+                int j = MathsHelper.floor((int) player.z) >> 4;
                 chunkproviderloadorgenerate.setSpawnChunk(i, j);
             }
             this.spawnEntity(player);
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             exception.printStackTrace();
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void saveLevel(boolean flag, ProgressListener listener) {
         if (!this.cache.isClean()) {
             return;
@@ -484,6 +585,10 @@ public class MixinLevel implements TileView {
         this.cache.saveChunks(flag, listener);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void prepareSaveLevel() {
         this.checkSessionLock();
         this.properties.globalScope = ScopeTag.getTagFromScope(this.script.globalScope);
@@ -498,6 +603,10 @@ public class MixinLevel implements TileView {
         this.data.flush();
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean method_274(int i) {
         if (!this.cache.isClean()) {
             return true;
@@ -508,7 +617,11 @@ public class MixinLevel implements TileView {
         return this.cache.saveChunks(false, null);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
     @Override
+    @Overwrite()
     public int getTileId(int x, int y, int z) {
         if (x < -32000000 || z < -32000000 || x >= 32000000 || z > 32000000) {
             return 0;
@@ -522,10 +635,18 @@ public class MixinLevel implements TileView {
         return this.getChunkFromCache(x >> 4, z >> 4).getTileId(x & 0xF, y, z & 0xF);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean isAir(int x, int y, int z) {
         return this.getTileId(x, y, z) == 0;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean isTileLoaded(int x, int y, int z) {
         if (y < 0 || y >= 128) {
             return false;
@@ -533,10 +654,18 @@ public class MixinLevel implements TileView {
         return this.isChunkLoaded(x >> 4, z >> 4);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean isRegionLoaded(int x, int y, int z, int radius) {
         return this.isRegionLoaded(x - radius, y - radius, z - radius, x + radius, y + radius, z + radius);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean isRegionLoaded(int startX, int startY, int startZ, int endX, int endY, int endZ) {
         if (endY < 0 || startY >= 128) {
             return false;
@@ -556,18 +685,34 @@ public class MixinLevel implements TileView {
         return true;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private boolean isChunkLoaded(int chunkX, int chunkY) {
         return this.cache.isChunkLoaded(chunkX, chunkY);
     }
 
-    public Chunk getChunk(int x, int z) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public MixinChunk getChunk(int x, int z) {
         return this.getChunkFromCache(x >> 4, z >> 4);
     }
 
-    public Chunk getChunkFromCache(int x, int z) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public MixinChunk getChunkFromCache(int x, int z) {
         return this.cache.getChunk(x, z);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean setTileWithMetadata(int x, int y, int z, int tileId, int metadata) {
         if (x < -32000000 || z < -32000000 || x >= 32000000 || z > 32000000) {
             return false;
@@ -578,10 +723,14 @@ public class MixinLevel implements TileView {
         if (y >= 128) {
             return false;
         }
-        Chunk chunk = this.getChunkFromCache(x >> 4, z >> 4);
+        MixinChunk chunk = this.getChunkFromCache(x >> 4, z >> 4);
         return chunk.setTileWithMetadata(x & 0xF, y, z & 0xF, tileId, metadata);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean setBlockAndMetadataTemp(int i, int j, int k, int l, int i1) {
         if (i < -32000000 || k < -32000000 || i >= 32000000 || k > 32000000) {
             return false;
@@ -592,10 +741,14 @@ public class MixinLevel implements TileView {
         if (j >= 128) {
             return false;
         }
-        Chunk chunk = this.getChunkFromCache(i >> 4, k >> 4);
+        MixinChunk chunk = this.getChunkFromCache(i >> 4, k >> 4);
         return chunk.setBlockIDWithMetadataTemp(i & 0xF, j, k & 0xF, l, i1);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean setTileInChunk(int x, int y, int z, int tileId) {
         if (x < -32000000 || z < -32000000 || x >= 32000000 || z > 32000000) {
             return false;
@@ -606,10 +759,15 @@ public class MixinLevel implements TileView {
         if (y >= 128) {
             return false;
         }
-        Chunk chunk = this.getChunkFromCache(x >> 4, z >> 4);
+        MixinChunk chunk = this.getChunkFromCache(x >> 4, z >> 4);
         return chunk.setTile(x & 0xF, y, z & 0xF, tileId);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public Material getMaterial(int x, int y, int z) {
         int l = this.getTileId(x, y, z);
         if (l == 0) {
@@ -618,6 +776,11 @@ public class MixinLevel implements TileView {
         return Tile.BY_ID[l].material;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public int getTileMeta(int x, int y, int z) {
         if (x < -32000000 || z < -32000000 || x >= 32000000 || z > 32000000) {
             return 0;
@@ -628,10 +791,14 @@ public class MixinLevel implements TileView {
         if (y >= 128) {
             return 0;
         }
-        Chunk chunk = this.getChunkFromCache(x >> 4, z >> 4);
+        MixinChunk chunk = this.getChunkFromCache(x >> 4, z >> 4);
         return chunk.getMetadata(x &= 0xF, y, z &= 0xF);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void setTileMeta(int x, int y, int z, int meta) {
         if (this.method_223(x, y, z, meta)) {
             int i1 = this.getTileId(x, y, z);
@@ -643,6 +810,10 @@ public class MixinLevel implements TileView {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean method_223(int i, int j, int k, int l) {
         if (i < -32000000 || k < -32000000 || i >= 32000000 || k > 32000000) {
             return false;
@@ -653,11 +824,15 @@ public class MixinLevel implements TileView {
         if (j >= 128) {
             return false;
         }
-        Chunk chunk = this.getChunkFromCache(i >> 4, k >> 4);
+        MixinChunk chunk = this.getChunkFromCache(i >> 4, k >> 4);
         chunk.setMetadata(i &= 0xF, j, k &= 0xF, l);
         return true;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean setTile(int i, int j, int k, int l) {
         if (this.setTileInChunk(i, j, k, l)) {
             this.method_235(i, j, k, l);
@@ -666,6 +841,10 @@ public class MixinLevel implements TileView {
         return false;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean method_201(int i, int j, int k, int l, int i1) {
         if (this.setTileWithMetadata(i, j, k, l, i1)) {
             this.method_235(i, j, k, l);
@@ -674,17 +853,29 @@ public class MixinLevel implements TileView {
         return false;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_243(int i, int j, int k) {
         for (int l = 0; l < this.listeners.size(); ++l) {
-            ((LevelListener)this.listeners.get(l)).method_1149(i, j, k);
+            ((LevelListener) this.listeners.get(l)).method_1149(i, j, k);
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     protected void method_235(int i, int j, int k, int l) {
         this.method_243(i, j, k);
         this.method_244(i, j, k, l);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_240(int i, int j, int k, int l) {
         if (k > l) {
             int i1 = l;
@@ -694,18 +885,30 @@ public class MixinLevel implements TileView {
         this.updateRedstone(i, k, j, i, l, j);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_246(int i, int j, int k) {
         for (int l = 0; l < this.listeners.size(); ++l) {
-            ((LevelListener)this.listeners.get(l)).method_1150(i, j, k, i, j, k);
+            ((LevelListener) this.listeners.get(l)).method_1150(i, j, k, i, j, k);
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void updateRedstone(int i, int j, int k, int l, int i1, int j1) {
         for (int k1 = 0; k1 < this.listeners.size(); ++k1) {
-            ((LevelListener)this.listeners.get(k1)).method_1150(i, j, k, l, i1, j1);
+            ((LevelListener) this.listeners.get(k1)).method_1150(i, j, k, l, i1, j1);
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_244(int i, int j, int k, int l) {
         this.method_253(i - 1, j, k, l);
         this.method_253(i + 1, j, k, l);
@@ -715,20 +918,32 @@ public class MixinLevel implements TileView {
         this.method_253(i, j, k + 1, l);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void method_253(int i, int j, int k, int l) {
         if (this.field_211 || this.isClient) {
             return;
         }
-        Tile block = Tile.BY_ID[this.getTileId(i, j, k)];
+        MixinTile block = Tile.BY_ID[this.getTileId(i, j, k)];
         if (block != null) {
             block.method_1609(this, i, j, k, l);
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean isAboveGroundCached(int x, int y, int z) {
         return this.getChunkFromCache(x >> 4, z >> 4).isAboveGround(x & 0xF, y, z & 0xF);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public int method_252(int i, int j, int k) {
         if (j < 0) {
             return 0;
@@ -739,10 +954,18 @@ public class MixinLevel implements TileView {
         return this.getChunkFromCache(i >> 4, k >> 4).getAbsoluteLight(i & 0xF, j, k & 0xF, 0);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public int getLightLevel(int i, int j, int k) {
         return this.placeTile(i, j, k, true);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public int placeTile(int x, int y, int z, boolean flag) {
         int l;
         if (x < -32000000 || z < -32000000 || x >= 32000000 || z > 32000000) {
@@ -774,10 +997,14 @@ public class MixinLevel implements TileView {
         if (y >= 128) {
             y = 127;
         }
-        Chunk chunk = this.getChunkFromCache(x >> 4, z >> 4);
+        MixinChunk chunk = this.getChunkFromCache(x >> 4, z >> 4);
         return chunk.getAbsoluteLight(x &= 0xF, y, z &= 0xF, this.field_202);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean isAboveGround(int x, int y, int z) {
         if (x < -32000000 || z < -32000000 || x >= 32000000 || z > 32000000) {
             return false;
@@ -791,10 +1018,14 @@ public class MixinLevel implements TileView {
         if (!this.isChunkLoaded(x >> 4, z >> 4)) {
             return false;
         }
-        Chunk chunk = this.getChunkFromCache(x >> 4, z >> 4);
+        MixinChunk chunk = this.getChunkFromCache(x >> 4, z >> 4);
         return chunk.isAboveGround(x &= 0xF, y, z &= 0xF);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public int getHeight(int x, int z) {
         if (x < -32000000 || z < -32000000 || x >= 32000000 || z > 32000000) {
             return 0;
@@ -802,10 +1033,14 @@ public class MixinLevel implements TileView {
         if (!this.isChunkLoaded(x >> 4, z >> 4)) {
             return 0;
         }
-        Chunk chunk = this.getChunkFromCache(x >> 4, z >> 4);
+        MixinChunk chunk = this.getChunkFromCache(x >> 4, z >> 4);
         return chunk.getHeight(x & 0xF, z & 0xF);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_165(LightType tpe, int i, int j, int k, int l) {
         int i1;
         if (this.dimension.fixedSpawnPos && tpe == LightType.Sky) {
@@ -826,6 +1061,10 @@ public class MixinLevel implements TileView {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public int getLightLevel(LightType enumskyblock, int i, int j, int k) {
         if (j < 0) {
             j = 0;
@@ -841,10 +1080,14 @@ public class MixinLevel implements TileView {
         if (!this.isChunkLoaded(l, i1)) {
             return 0;
         }
-        Chunk chunk = this.getChunkFromCache(l, i1);
+        MixinChunk chunk = this.getChunkFromCache(l, i1);
         return chunk.getLightLevel(enumskyblock, i & 0xF, j, k & 0xF);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void setLightLevel(LightType type, int x, int y, int z, int light) {
         if (x < -32000000 || z < -32000000 || x >= 32000000 || z > 32000000) {
             return;
@@ -858,66 +1101,108 @@ public class MixinLevel implements TileView {
         if (!this.isChunkLoaded(x >> 4, z >> 4)) {
             return;
         }
-        Chunk chunk = this.getChunkFromCache(x >> 4, z >> 4);
+        MixinChunk chunk = this.getChunkFromCache(x >> 4, z >> 4);
         chunk.setLightLevel(type, x & 0xF, y, z & 0xF, light);
         for (int i1 = 0; i1 < this.listeners.size(); ++i1) {
-            ((LevelListener)this.listeners.get(i1)).method_1149(x, y, z);
+            ((LevelListener) this.listeners.get(i1)).method_1149(x, y, z);
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public float getLightValue(int i, int j, int k) {
         float torchLight;
         int lightValue = this.getLightLevel(i, j, k);
-        if ((float)lightValue < (torchLight = PlayerTorch.getTorchLight(this, i, j, k))) {
+        if ((float) lightValue < (torchLight = PlayerTorch.getTorchLight(this, i, j, k))) {
             return Math.min(torchLight, 15.0f);
         }
         return lightValue;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private float getBrightnessLevel(float lightValue) {
-        int floorValue = (int)Math.floor(lightValue);
-        if ((float)floorValue != lightValue) {
-            int ceilValue = (int)Math.ceil(lightValue);
-            float lerpValue = lightValue - (float)floorValue;
+        int floorValue = (int) Math.floor(lightValue);
+        if ((float) floorValue != lightValue) {
+            int ceilValue = (int) Math.ceil(lightValue);
+            float lerpValue = lightValue - (float) floorValue;
             return (1.0f - lerpValue) * this.dimension.field_2178[floorValue] + lerpValue * this.dimension.field_2178[ceilValue];
         }
         return this.dimension.field_2178[floorValue];
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public float method_1784(int i, int j, int k, int l) {
         float lightValue = this.getLightValue(i, j, k);
-        if (lightValue < (float)l) {
+        if (lightValue < (float) l) {
             lightValue = l;
         }
         return this.getBrightnessLevel(lightValue);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public float getBrightness(int i, int j, int k) {
         float lightValue = this.getLightValue(i, j, k);
         return this.getBrightnessLevel(lightValue);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public float getDayLight() {
         int lightValue = 15 - this.field_202;
         return this.dimension.field_2178[lightValue];
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean isDaylight() {
         return this.field_202 < 4;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public HitResult raycast(Vec3f vec3d, Vec3f vec3d1) {
         return this.raycast(vec3d, vec3d1, false, false);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public HitResult raycast(Vec3f vec3d, Vec3f vec3d1, boolean flag) {
         return this.raycast(vec3d, vec3d1, flag, false);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public HitResult raycast(Vec3f vec3d, Vec3f vec3d1, boolean flag, boolean flag1) {
         return this.rayTraceBlocks2(vec3d, vec3d1, flag, flag1, true);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public HitResult rayTraceBlocks2(Vec3f vec3d, Vec3f vec3d1, boolean flag, boolean flag1, boolean collideWithClip) {
         HitResult movingobjectposition;
         if (Double.isNaN(vec3d.x) || Double.isNaN(vec3d.y) || Double.isNaN(vec3d.z)) {
@@ -934,7 +1219,7 @@ public class MixinLevel implements TileView {
         int j1 = MathsHelper.floor(vec3d.z);
         int k1 = this.getTileId(l, i1, j1);
         int i2 = this.getTileMeta(l, i1, j1);
-        Tile block = Tile.BY_ID[k1];
+        MixinTile block = Tile.BY_ID[k1];
         if ((!flag1 || block == null || block.getCollisionShape(this, l, i1, j1) != null) && k1 > 0 && block.method_1571(i2, flag) && (collideWithClip || k1 != Blocks.clipBlock.id && !LadderTile.isLadderID(k1)) && (movingobjectposition = block.raycast(this, l, i1, j1, vec3d, vec3d1)) != null) {
             return movingobjectposition;
         }
@@ -954,23 +1239,23 @@ public class MixinLevel implements TileView {
             double d1 = 999.0;
             double d2 = 999.0;
             if (i > l) {
-                d = (double)l + 1.0;
+                d = (double) l + 1.0;
             } else if (i < l) {
-                d = (double)l + 0.0;
+                d = (double) l + 0.0;
             } else {
                 flag2 = false;
             }
             if (j > i1) {
-                d1 = (double)i1 + 1.0;
+                d1 = (double) i1 + 1.0;
             } else if (j < i1) {
-                d1 = (double)i1 + 0.0;
+                d1 = (double) i1 + 0.0;
             } else {
                 flag3 = false;
             }
             if (k > j1) {
-                d2 = (double)j1 + 1.0;
+                d2 = (double) j1 + 1.0;
             } else if (k < j1) {
-                d2 = (double)j1 + 0.0;
+                d2 = (double) j1 + 0.0;
             } else {
                 flag4 = false;
             }
@@ -1008,77 +1293,99 @@ public class MixinLevel implements TileView {
             }
             Vec3f vec3d2 = Vec3f.from(vec3d.x, vec3d.y, vec3d.z);
             vec3d2.x = MathsHelper.floor(vec3d.x);
-            l = (int)vec3d2.x;
+            l = (int) vec3d2.x;
             if (byte0 == 5) {
                 --l;
                 vec3d2.x += 1.0;
             }
             vec3d2.y = MathsHelper.floor(vec3d.y);
-            i1 = (int)vec3d2.y;
+            i1 = (int) vec3d2.y;
             if (byte0 == 1) {
                 --i1;
                 vec3d2.y += 1.0;
             }
             vec3d2.z = MathsHelper.floor(vec3d.z);
-            j1 = (int)vec3d2.z;
+            j1 = (int) vec3d2.z;
             if (byte0 == 3) {
                 --j1;
                 vec3d2.z += 1.0;
             }
             int j2 = this.getTileId(l, i1, j1);
             int k2 = this.getTileMeta(l, i1, j1);
-            Tile block1 = Tile.BY_ID[j2];
-            if (flag1 && block1 != null && block1.getCollisionShape(this, l, i1, j1) == null || j2 <= 0 || !block1.method_1571(k2, flag) || !block1.shouldRender(this, l, i1, j1) || (movingobjectposition1 = block1.raycast(this, l, i1, j1, vec3d, vec3d1)) == null || !collideWithClip && (block1.id == AC_Blocks.clipBlock.id || LadderTile.isLadderID(block1.id))) continue;
+            MixinTile block1 = Tile.BY_ID[j2];
+            if (flag1 && block1 != null && block1.getCollisionShape(this, l, i1, j1) == null || j2 <= 0 || !block1.method_1571(k2, flag) || !block1.shouldRender(this, l, i1, j1) || (movingobjectposition1 = block1.raycast(this, l, i1, j1, vec3d, vec3d1)) == null || !collideWithClip && (block1.id == Blocks.clipBlock.id || LadderTile.isLadderID(block1.id)))
+                continue;
             return movingobjectposition1;
         }
         return null;
     }
 
-    public void playSound(Entity entity, String sound, float f, float f1) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public void playSound(net.minecraft.entity.MixinEntity entity, String sound, float f, float f1) {
         for (int i = 0; i < this.listeners.size(); ++i) {
-            ((LevelListener)this.listeners.get(i)).playSound(sound, entity.x, entity.y - (double)entity.standingEyeHeight, entity.z, f, f1);
+            ((LevelListener) this.listeners.get(i)).playSound(sound, entity.x, entity.y - (double) entity.standingEyeHeight, entity.z, f, f1);
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void playSound(double x, double y, double z, String sound, float f, float f1) {
         for (int i = 0; i < this.listeners.size(); ++i) {
-            ((LevelListener)this.listeners.get(i)).playSound(sound, x, y, z, f, f1);
+            ((LevelListener) this.listeners.get(i)).playSound(sound, x, y, z, f, f1);
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_179(String s, int i, int j, int k) {
         for (int l = 0; l < this.listeners.size(); ++l) {
-            ((LevelListener)this.listeners.get(l)).method_1155(s, i, j, k);
+            ((LevelListener) this.listeners.get(l)).method_1155(s, i, j, k);
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void addParticle(String particle, double d, double d1, double d2, double d3, double d4, double d5) {
         for (int i = 0; i < this.listeners.size(); ++i) {
-            ((LevelListener)this.listeners.get(i)).addParticle(particle, d, d1, d2, d3, d4, d5);
+            ((LevelListener) this.listeners.get(i)).addParticle(particle, d, d1, d2, d3, d4, d5);
         }
     }
 
-    public boolean method_184(Entity entity) {
-        this.field_201.add((Object)entity);
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public boolean method_184(net.minecraft.entity.MixinEntity entity) {
+        this.field_201.add((Object) entity);
         return true;
     }
 
-    public boolean spawnEntity(Entity entity) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public boolean spawnEntity(net.minecraft.entity.MixinEntity entity) {
         int i = MathsHelper.floor(entity.x / 16.0);
         int j = MathsHelper.floor(entity.z / 16.0);
-        boolean flag = false;
-        if (entity instanceof Player) {
-            flag = true;
-        }
+        boolean flag = entity instanceof MixinPlayer;
         if (flag || this.isChunkLoaded(i, j)) {
-            if (entity instanceof Player) {
-                Player entityplayer = (Player)entity;
-                this.players.add(entityplayer);
+            if (entity instanceof MixinPlayer) {
+                MixinPlayer entityplayer = (MixinPlayer) entity;
+                this.players.add((Object) entityplayer);
                 this.areAllPlayersSleeping();
             }
             this.getChunkFromCache(i, j).addEntity(entity);
-            if (!this.entities.contains((Object)entity)) {
-                this.entities.add((Object)entity);
+            if (!this.entities.contains((Object) entity)) {
+                this.entities.add(entity);
             }
             this.onEntityAdded(entity);
             return true;
@@ -1086,19 +1393,31 @@ public class MixinLevel implements TileView {
         return false;
     }
 
-    protected void onEntityAdded(Entity entity) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    protected void onEntityAdded(net.minecraft.entity.MixinEntity entity) {
         for (int i = 0; i < this.listeners.size(); ++i) {
-            ((LevelListener)this.listeners.get(i)).onEntityAdded(entity);
+            ((LevelListener) this.listeners.get(i)).onEntityAdded(entity);
         }
     }
 
-    protected void onEntityRemoved(Entity entity) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    protected void onEntityRemoved(net.minecraft.entity.MixinEntity entity) {
         for (int i = 0; i < this.listeners.size(); ++i) {
-            ((LevelListener)this.listeners.get(i)).onEntityRemoved(entity);
+            ((LevelListener) this.listeners.get(i)).onEntityRemoved(entity);
         }
     }
 
-    public void removeEntity(Entity entity) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public void removeEntity(net.minecraft.entity.MixinEntity entity) {
         if (entity.passenger != null) {
             entity.passenger.startRiding(null);
         }
@@ -1106,21 +1425,52 @@ public class MixinLevel implements TileView {
             entity.startRiding(null);
         }
         entity.remove();
-        if (entity instanceof Player) {
-            this.players.remove((Object)((Player)entity));
+        if (entity instanceof MixinPlayer) {
+            this.players.remove((Object) ((MixinPlayer) entity));
             this.areAllPlayersSleeping();
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public void removeEntityFromChunk(net.minecraft.entity.MixinEntity entity) {
+        entity.remove();
+        if (entity instanceof MixinPlayer) {
+            this.players.remove((Object) ((MixinPlayer) entity));
+            this.areAllPlayersSleeping();
+        }
+        int n = entity.chunkX;
+        int n2 = entity.chunkZ;
+        if (entity.shouldTick && this.isChunkLoaded(n, n2)) {
+            this.getChunkFromCache(n, n2).removeEntity(entity);
+        }
+        this.entities.remove((Object) entity);
+        this.onEntityRemoved(entity);
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void addListener(LevelListener listener) {
-        this.listeners.add((Object)listener);
+        this.listeners.add(listener);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void removeListener(LevelListener listener) {
-        this.listeners.remove((Object)listener);
+        this.listeners.remove(listener);
     }
 
-    public List method_190(Entity entity, Box axisalignedbb) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public List method_190(net.minecraft.entity.MixinEntity entity, Box axisalignedbb) {
         this.field_189.clear();
         int i = MathsHelper.floor(axisalignedbb.minX);
         int j = MathsHelper.floor(axisalignedbb.maxX + 1.0);
@@ -1132,8 +1482,9 @@ public class MixinLevel implements TileView {
             for (int l1 = i1; l1 < j1; ++l1) {
                 if (!this.isTileLoaded(k1, 64, l1)) continue;
                 for (int i2 = k - 1; i2 < l; ++i2) {
-                    Tile block = Tile.BY_ID[this.getTileId(k1, i2, l1)];
-                    if (block == null || !entity.collidesWithClipBlocks && (block.id == Blocks.clipBlock.id || LadderTile.isLadderID(block.id))) continue;
+                    MixinTile block = Tile.BY_ID[this.getTileId(k1, i2, l1)];
+                    if (block == null || !entity.collidesWithClipBlocks && (block.id == Blocks.clipBlock.id || LadderTile.isLadderID(block.id)))
+                        continue;
                     block.intersectsInLevel(this, k1, i2, l1, axisalignedbb, this.field_189);
                 }
             }
@@ -1141,16 +1492,21 @@ public class MixinLevel implements TileView {
         double d = 0.25;
         List list = this.getEntities(entity, axisalignedbb.expand(d, d, d));
         for (int j2 = 0; j2 < list.size(); ++j2) {
-            Box axisalignedbb1 = ((Entity)list.get(j2)).method_1381();
+            Box axisalignedbb1 = ((net.minecraft.entity.MixinEntity) list.get(j2)).method_1381();
             if (axisalignedbb1 != null && axisalignedbb1.intersects(axisalignedbb)) {
                 this.field_189.add(axisalignedbb1);
             }
-            if ((axisalignedbb1 = entity.method_1379((Entity)list.get(j2))) == null || !axisalignedbb1.intersects(axisalignedbb)) continue;
+            if ((axisalignedbb1 = entity.method_1379((net.minecraft.entity.MixinEntity) list.get(j2))) == null || !axisalignedbb1.intersects(axisalignedbb))
+                continue;
             this.field_189.add(axisalignedbb1);
         }
         return this.field_189;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public int computeWeatherGradients(float f) {
         float f1 = this.method_198(f);
         float f2 = 1.0f - (MathsHelper.cos(f1 * 3.141593f * 2.0f) * 2.0f + 0.5f);
@@ -1161,13 +1517,17 @@ public class MixinLevel implements TileView {
             f2 = 1.0f;
         }
         f2 = 1.0f - f2;
-        f2 = (float)((double)f2 * (1.0 - (double)(this.getRainGradient(f) * 5.0f) / 16.0));
-        f2 = (float)((double)f2 * (1.0 - (double)(this.getThunderGradient(f) * 5.0f) / 16.0));
+        f2 = (float) ((double) f2 * (1.0 - (double) (this.getRainGradient(f) * 5.0f) / 16.0));
+        f2 = (float) ((double) f2 * (1.0 - (double) (this.getThunderGradient(f) * 5.0f) / 16.0));
         f2 = 1.0f - f2;
-        return (int)(f2 * 11.0f);
+        return (int) (f2 * 11.0f);
     }
 
-    public Vec3f method_279(Entity entity, float f) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public Vec3f method_279(net.minecraft.entity.MixinEntity entity, float f) {
         float f9;
         float f1 = this.method_198(f);
         float f2 = MathsHelper.cos(f1 * 3.141593f * 2.0f) * 2.0f + 0.5f;
@@ -1179,11 +1539,11 @@ public class MixinLevel implements TileView {
         }
         int i = MathsHelper.floor(entity.x);
         int j = MathsHelper.floor(entity.z);
-        float f3 = (float)this.getBiomeSource().getTemperature(i, j);
+        float f3 = (float) this.getBiomeSource().getTemperature(i, j);
         int k = this.getBiomeSource().getBiome(i, j).getSkyColour(f3);
-        float f4 = (float)(k >> 16 & 0xFF) / 255.0f;
-        float f5 = (float)(k >> 8 & 0xFF) / 255.0f;
-        float f6 = (float)(k & 0xFF) / 255.0f;
+        float f4 = (float) (k >> 16 & 0xFF) / 255.0f;
+        float f5 = (float) (k >> 8 & 0xFF) / 255.0f;
+        float f6 = (float) (k & 0xFF) / 255.0f;
         f4 *= f2;
         f5 *= f2;
         f6 *= f2;
@@ -1203,7 +1563,7 @@ public class MixinLevel implements TileView {
             f6 = f6 * f13 + f11 * (1.0f - f13);
         }
         if (this.field_210 > 0) {
-            float f12 = (float)this.field_210 - f;
+            float f12 = (float) this.field_210 - f;
             if (f12 > 1.0f) {
                 f12 = 1.0f;
             }
@@ -1214,10 +1574,18 @@ public class MixinLevel implements TileView {
         return Vec3f.from(f4, f5, f6);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public float method_198(float f) {
         return this.dimension.method_1771(this.properties.getTimeOfDay(), f * this.properties.getTimeRate());
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public Vec3f method_282(float f) {
         float f1 = this.method_198(f);
         float f2 = MathsHelper.cos(f1 * 3.141593f * 2.0f) * 2.0f + 0.5f;
@@ -1227,9 +1595,9 @@ public class MixinLevel implements TileView {
         if (f2 > 1.0f) {
             f2 = 1.0f;
         }
-        float f3 = (float)(this.field_186 >> 16 & 0xFFL) / 255.0f;
-        float f4 = (float)(this.field_186 >> 8 & 0xFFL) / 255.0f;
-        float f5 = (float)(this.field_186 & 0xFFL) / 255.0f;
+        float f3 = (float) (this.field_186 >> 16 & 0xFFL) / 255.0f;
+        float f4 = (float) (this.field_186 >> 8 & 0xFFL) / 255.0f;
+        float f5 = (float) (this.field_186 & 0xFFL) / 255.0f;
         float f6 = this.getRainGradient(f);
         if (f6 > 0.0f) {
             float f7 = (f3 * 0.3f + f4 * 0.59f + f5 * 0.11f) * 0.6f;
@@ -1252,6 +1620,10 @@ public class MixinLevel implements TileView {
         return Vec3f.from(f3, f4, f5);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public Vec3f getSkyColour(float f) {
         float f1 = this.method_198(f);
         Vec3f returnColor = this.dimension.getSkyColour(f1, f);
@@ -1261,14 +1633,18 @@ public class MixinLevel implements TileView {
                 returnColor.y = this.properties.fogG;
                 returnColor.z = this.properties.fogB;
             } else {
-                returnColor.x = (double)(1.0f - f) * returnColor.x + (double)(f * this.properties.fogR);
-                returnColor.y = (double)(1.0f - f) * returnColor.y + (double)(f * this.properties.fogG);
-                returnColor.z = (double)(1.0f - f) * returnColor.z + (double)(f * this.properties.fogB);
+                returnColor.x = (double) (1.0f - f) * returnColor.x + (double) (f * this.properties.fogR);
+                returnColor.y = (double) (1.0f - f) * returnColor.y + (double) (f * this.properties.fogG);
+                returnColor.z = (double) (1.0f - f) * returnColor.z + (double) (f * this.properties.fogB);
             }
         }
         return returnColor;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public float getFogStart(float start, float f) {
         if (this.properties.overrideFogDensity) {
             if (this.fogDensityOverridden) {
@@ -1279,6 +1655,10 @@ public class MixinLevel implements TileView {
         return start;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public float getFogEnd(float end, float f) {
         if (this.properties.overrideFogDensity) {
             if (this.fogDensityOverridden) {
@@ -1289,9 +1669,13 @@ public class MixinLevel implements TileView {
         return end;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public int getOceanFloorHeight(int x, int z) {
         int k;
-        Chunk chunk = this.getChunk(x, z);
+        MixinChunk chunk = this.getChunk(x, z);
         for (k = 127; this.getMaterial(x, k, z).blocksMovement() && k > 0; --k) {
         }
         x &= 0xF;
@@ -1309,6 +1693,10 @@ public class MixinLevel implements TileView {
         return -1;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public float method_286(float f) {
         float f1 = this.method_198(f);
         float f2 = 1.0f - (MathsHelper.cos(f1 * 3.141593f * 2.0f) * 2.0f + 0.75f);
@@ -1321,6 +1709,28 @@ public class MixinLevel implements TileView {
         return f2 * f2 * 0.5f;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public int getSurfaceHeight(int n, int n2) {
+        MixinChunk chunk = this.getChunk(n, n2);
+        n &= 0xF;
+        n2 &= 0xF;
+        for (int i = 127; i > 0; --i) {
+            int n3 = chunk.getTileId(n, i, n2);
+            if (n3 == 0 || !Tile.BY_ID[n3].material.blocksMovement()) {
+                continue;
+            }
+            return i + 1;
+        }
+        return -1;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_216(int i, int j, int k, int l, int i1) {
         class_366 nextticklistentry = new class_366(i, j, k, l);
         int byte0 = 8;
@@ -1333,7 +1743,7 @@ public class MixinLevel implements TileView {
         }
         if (this.isRegionLoaded(i - byte0, j - byte0, k - byte0, i + byte0, j + byte0, k + byte0)) {
             if (l > 0) {
-                nextticklistentry.method_1197((long)i1 + this.properties.getTime());
+                nextticklistentry.method_1197((long) i1 + this.properties.getTime());
             }
             if (!this.field_184.contains(nextticklistentry)) {
                 this.field_184.add(nextticklistentry);
@@ -1342,40 +1752,46 @@ public class MixinLevel implements TileView {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void cancelBlockUpdate(int i, int j, int k, int l) {
         class_366 nextticklistentry = new class_366(i, j, k, l);
-        if (this.field_184.contains(nextticklistentry)) {
-            this.field_184.remove(nextticklistentry);
-        }
+        this.field_184.remove(nextticklistentry);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_227() {
         for (int i = 0; i < this.field_201.size(); ++i) {
-            Entity entity = (Entity)this.field_201.get(i);
+            net.minecraft.entity.MixinEntity entity = (net.minecraft.entity.MixinEntity) this.field_201.get(i);
             entity.tick();
             if (!entity.removed) continue;
             this.field_201.remove(i--);
         }
-        this.entities.removeAll((Collection)this.field_182);
+        this.entities.removeAll((Collection) this.field_182);
         for (int j = 0; j < this.field_182.size(); ++j) {
-            Entity entity1 = (Entity)this.field_182.get(j);
+            net.minecraft.entity.MixinEntity entity1 = (net.minecraft.entity.MixinEntity) this.field_182.get(j);
             int i1 = entity1.chunkX;
             int k1 = entity1.chunkZ;
             if (!entity1.shouldTick || !this.isChunkLoaded(i1, k1)) continue;
             this.getChunkFromCache(i1, k1).removeEntity(entity1);
         }
         for (int k = 0; k < this.field_182.size(); ++k) {
-            this.onEntityRemoved((Entity)this.field_182.get(k));
+            this.onEntityRemoved((net.minecraft.entity.MixinEntity) this.field_182.get(k));
         }
         this.field_182.clear();
         for (int l = 0; l < this.entities.size(); ++l) {
-            Entity entity2 = (Entity)this.entities.get(l);
+            net.minecraft.entity.MixinEntity entity2 = this.entities.get(l);
             if (entity2.vehicle != null) {
                 if (!entity2.vehicle.removed && entity2.vehicle.passenger == entity2) continue;
                 entity2.vehicle.passenger = null;
                 entity2.vehicle = null;
             }
-            if (!(entity2.removed || Minecraft.minecraftInstance.cameraActive && Minecraft.minecraftInstance.cameraPause || DebugMode.active && !(entity2 instanceof Player))) {
+            if (!(entity2.removed || Minecraft.minecraftInstance.cameraActive && Minecraft.minecraftInstance.cameraPause || DebugMode.active && !(entity2 instanceof MixinPlayer))) {
                 this.forceUpdatePosition(entity2);
                 Box.method_85();
             }
@@ -1391,23 +1807,24 @@ public class MixinLevel implements TileView {
         this.field_190 = true;
         Iterator iterator = this.tileEntities.iterator();
         while (iterator.hasNext()) {
-            Chunk chunk;
-            TileEntity tileentity = (TileEntity)iterator.next();
+            MixinChunk chunk;
+            MixinTileEntity tileentity = (MixinTileEntity) iterator.next();
             if (!tileentity.isInvalid()) {
                 tileentity.tick();
             }
             if (!tileentity.isInvalid()) continue;
             iterator.remove();
-            if (tileentity.killedFromSaving || (chunk = this.getChunkFromCache(tileentity.x >> 4, tileentity.z >> 4)) == null) continue;
+            if (tileentity.killedFromSaving || (chunk = this.getChunkFromCache(tileentity.x >> 4, tileentity.z >> 4)) == null)
+                continue;
             chunk.removeTileEntity(tileentity.x & 0xF, tileentity.y, tileentity.z & 0xF);
         }
         this.field_190 = false;
         if (!this.field_185.isEmpty()) {
-            for (TileEntity tileentity1 : this.field_185) {
-                Chunk chunk1;
+            for (MixinTileEntity tileentity1 : this.field_185) {
+                MixinChunk chunk1;
                 if (tileentity1.isInvalid()) continue;
-                if (!this.tileEntities.contains(tileentity1)) {
-                    this.tileEntities.add(tileentity1);
+                if (!this.tileEntities.contains((Object) tileentity1)) {
+                    this.tileEntities.add((Object) tileentity1);
                 }
                 if ((chunk1 = this.getChunkFromCache(tileentity1.x >> 4, tileentity1.z >> 4)) != null) {
                     chunk1.placeTileEntity(tileentity1.x & 0xF, tileentity1.y, tileentity1.z & 0xF, tileentity1);
@@ -1418,6 +1835,10 @@ public class MixinLevel implements TileView {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_181(Collection collection) {
         if (this.field_190) {
             this.field_185.addAll(collection);
@@ -1426,11 +1847,19 @@ public class MixinLevel implements TileView {
         }
     }
 
-    public void forceUpdatePosition(Entity entity) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public void forceUpdatePosition(net.minecraft.entity.MixinEntity entity) {
         this.updatePosition(entity, true);
     }
 
-    public void updatePosition(Entity entity, boolean flag) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public void updatePosition(net.minecraft.entity.MixinEntity entity, boolean flag) {
         int i = MathsHelper.floor(entity.x);
         int j = MathsHelper.floor(entity.z);
         int byte0 = 32;
@@ -1451,19 +1880,19 @@ public class MixinLevel implements TileView {
                 entity.tick();
             }
         }
-        if (Double.isNaN(entity.x) || Double.isInfinite(entity.x)) {
+        if (Double.isNaN((double) entity.x) || Double.isInfinite((double) entity.x)) {
             entity.x = entity.prevRenderX;
         }
-        if (Double.isNaN(entity.y) || Double.isInfinite(entity.y)) {
+        if (Double.isNaN((double) entity.y) || Double.isInfinite((double) entity.y)) {
             entity.y = entity.prevRenderY;
         }
-        if (Double.isNaN(entity.z) || Double.isInfinite(entity.z)) {
+        if (Double.isNaN((double) entity.z) || Double.isInfinite((double) entity.z)) {
             entity.z = entity.prevRenderZ;
         }
-        if (Double.isNaN(entity.pitch) || Double.isInfinite(entity.pitch)) {
+        if (Double.isNaN((double) entity.pitch) || Double.isInfinite((double) entity.pitch)) {
             entity.pitch = entity.prevPitch;
         }
-        if (Double.isNaN(entity.yaw) || Double.isInfinite(entity.yaw)) {
+        if (Double.isNaN((double) entity.yaw) || Double.isInfinite((double) entity.yaw)) {
             entity.yaw = entity.prevYaw;
         }
         int k = MathsHelper.floor(entity.x / 16.0);
@@ -1490,16 +1919,56 @@ public class MixinLevel implements TileView {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean canSpawnEntity(Box box) {
-        List list = this.getEntities((Entity)null, box);
+        List list = this.getEntities((net.minecraft.entity.MixinEntity) null, box);
         for (int i = 0; i < list.size(); ++i) {
-            Entity entity = (Entity)list.get(i);
+            net.minecraft.entity.MixinEntity entity = (net.minecraft.entity.MixinEntity) list.get(i);
             if (entity.removed || !entity.field_1593) continue;
             return false;
         }
         return true;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public boolean method_206(Box box) {
+        int n = MathsHelper.floor(box.minX);
+        int n2 = MathsHelper.floor(box.maxX + 1.0);
+        int n3 = MathsHelper.floor(box.minY);
+        int n4 = MathsHelper.floor(box.maxY + 1.0);
+        int n5 = MathsHelper.floor(box.minZ);
+        int n6 = MathsHelper.floor(box.maxZ + 1.0);
+        if (box.minX < 0.0) {
+            --n;
+        }
+        if (box.minY < 0.0) {
+            --n3;
+        }
+        if (box.minZ < 0.0) {
+            --n5;
+        }
+        for (int i = n; i < n2; ++i) {
+            for (int j = n3; j < n4; ++j) {
+                for (int k = n5; k < n6; ++k) {
+                    MixinTile tile = Tile.BY_ID[this.getTileId(i, j, k)];
+                    if (tile == null) continue;
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean method_218(Box axisalignedbb) {
         int i = MathsHelper.floor(axisalignedbb.minX);
         int j = MathsHelper.floor(axisalignedbb.maxX + 1.0);
@@ -1519,7 +1988,7 @@ public class MixinLevel implements TileView {
         for (int k1 = i; k1 < j; ++k1) {
             for (int l1 = k; l1 < l; ++l1) {
                 for (int i2 = i1; i2 < j1; ++i2) {
-                    Tile block = Tile.BY_ID[this.getTileId(k1, l1, i2)];
+                    MixinTile block = Tile.BY_ID[this.getTileId(k1, l1, i2)];
                     if (block == null || !block.material.isLiquid()) continue;
                     return true;
                 }
@@ -1528,6 +1997,10 @@ public class MixinLevel implements TileView {
         return false;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean method_225(Box axisalignedbb) {
         int j1;
         int i = MathsHelper.floor(axisalignedbb.minX);
@@ -1549,7 +2022,11 @@ public class MixinLevel implements TileView {
         return false;
     }
 
-    public boolean method_170(Box axisalignedbb, Material material, Entity entity) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public boolean method_170(Box axisalignedbb, Material material, net.minecraft.entity.MixinEntity entity) {
         int j1;
         int i = MathsHelper.floor(axisalignedbb.minX);
         int j = MathsHelper.floor(axisalignedbb.maxX + 1.0);
@@ -1565,8 +2042,9 @@ public class MixinLevel implements TileView {
             for (int l1 = k; l1 < l; ++l1) {
                 for (int i2 = i1; i2 < j1; ++i2) {
                     double d1;
-                    Tile block = Tile.BY_ID[this.getTileId(k1, l1, i2)];
-                    if (block == null || block.material != material || !((double)l >= (d1 = (double)((float)(l1 + 1) - FluidTile.method_1218(this.getTileMeta(k1, l1, i2)))))) continue;
+                    MixinTile block = Tile.BY_ID[this.getTileId(k1, l1, i2)];
+                    if (block == null || block.material != material || !((double) l >= (d1 = (float) (l1 + 1) - FluidTile.method_1218(this.getTileMeta(k1, l1, i2)))))
+                        continue;
                     flag = true;
                     block.method_1572(this, k1, l1, i2, entity, vec3d);
                 }
@@ -1582,6 +2060,10 @@ public class MixinLevel implements TileView {
         return flag;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean method_169(Box axisalignedbb, Material material) {
         int i = MathsHelper.floor(axisalignedbb.minX);
         int j = MathsHelper.floor(axisalignedbb.maxX + 1.0);
@@ -1592,7 +2074,7 @@ public class MixinLevel implements TileView {
         for (int k1 = i; k1 < j; ++k1) {
             for (int l1 = k; l1 < l; ++l1) {
                 for (int i2 = i1; i2 < j1; ++i2) {
-                    Tile block = Tile.BY_ID[this.getTileId(k1, l1, i2)];
+                    MixinTile block = Tile.BY_ID[this.getTileId(k1, l1, i2)];
                     if (block == null || block.material != material) continue;
                     return true;
                 }
@@ -1601,6 +2083,10 @@ public class MixinLevel implements TileView {
         return false;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean method_207(Box axisalignedbb, Material material) {
         int i = MathsHelper.floor(axisalignedbb.minX);
         int j = MathsHelper.floor(axisalignedbb.maxX + 1.0);
@@ -1611,12 +2097,12 @@ public class MixinLevel implements TileView {
         for (int k1 = i; k1 < j; ++k1) {
             for (int l1 = k; l1 < l; ++l1) {
                 for (int i2 = i1; i2 < j1; ++i2) {
-                    Tile block = Tile.BY_ID[this.getTileId(k1, l1, i2)];
+                    MixinTile block = Tile.BY_ID[this.getTileId(k1, l1, i2)];
                     if (block == null || block.material != material) continue;
                     int j2 = this.getTileMeta(k1, l1, i2);
                     double d = l1 + 1;
                     if (j2 < 8) {
-                        d = (double)(l1 + 1) - (double)j2 / 8.0;
+                        d = (double) (l1 + 1) - (double) j2 / 8.0;
                     }
                     if (!(d >= axisalignedbb.minY)) continue;
                     return true;
@@ -1626,11 +2112,19 @@ public class MixinLevel implements TileView {
         return false;
     }
 
-    public Explosion createExplosion(Entity cause, double x, double y, double z, float power) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public Explosion createExplosion(net.minecraft.entity.MixinEntity cause, double x, double y, double z, float power) {
         return this.createExplosion(cause, x, y, z, power, false);
     }
 
-    public Explosion createExplosion(Entity cause, double x, double y, double z, float power, boolean flag) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public Explosion createExplosion(net.minecraft.entity.MixinEntity cause, double x, double y, double z, float power, boolean flag) {
         Explosion explosion = new Explosion(this, cause, x, y, z, power);
         explosion.causeFires = flag;
         explosion.kaboomPhase1();
@@ -1638,6 +2132,10 @@ public class MixinLevel implements TileView {
         return explosion;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public float method_163(Vec3f vec3d, Box axisalignedbb) {
         double d = 1.0 / ((axisalignedbb.maxX - axisalignedbb.minX) * 2.0 + 1.0);
         double d1 = 1.0 / ((axisalignedbb.maxY - axisalignedbb.minY) * 2.0 + 1.0);
@@ -1650,23 +2148,27 @@ public class MixinLevel implements TileView {
             while (f1 <= 1.0f) {
                 float f2 = 0.0f;
                 while (f2 <= 1.0f) {
-                    double d3 = axisalignedbb.minX + (axisalignedbb.maxX - axisalignedbb.minX) * (double)f;
-                    double d4 = axisalignedbb.minY + (axisalignedbb.maxY - axisalignedbb.minY) * (double)f1;
-                    double d5 = axisalignedbb.minZ + (axisalignedbb.maxZ - axisalignedbb.minZ) * (double)f2;
+                    double d3 = axisalignedbb.minX + (axisalignedbb.maxX - axisalignedbb.minX) * (double) f;
+                    double d4 = axisalignedbb.minY + (axisalignedbb.maxY - axisalignedbb.minY) * (double) f1;
+                    double d5 = axisalignedbb.minZ + (axisalignedbb.maxZ - axisalignedbb.minZ) * (double) f2;
                     if (this.raycast(Vec3f.from(d3, d4, d5), vec3d) == null) {
                         ++i;
                     }
                     ++j;
-                    f2 = (float)((double)f2 + d2);
+                    f2 = (float) ((double) f2 + d2);
                 }
-                f1 = (float)((double)f1 + d1);
+                f1 = (float) ((double) f1 + d1);
             }
-            f = (float)((double)f + d);
+            f = (float) ((double) f + d);
         }
-        return (float)i / (float)j;
+        return (float) i / (float) j;
     }
 
-    public void method_172(Player entityplayer, int i, int j, int k, int l) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public void method_172(MixinPlayer entityplayer, int i, int j, int k, int l) {
         if (l == 0) {
             --j;
         }
@@ -1691,46 +2193,70 @@ public class MixinLevel implements TileView {
         }
     }
 
-    public Entity method_278(Class class1) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public net.minecraft.entity.MixinEntity method_278(Class class1) {
         return null;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public String method_288() {
         return "All: " + this.entities.size();
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public String method_290() {
         return this.cache.toString();
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
     @Override
-    public TileEntity getTileEntity(int i, int j, int k) {
-        Chunk chunk = this.getChunkFromCache(i >> 4, k >> 4);
+    @Overwrite()
+    public MixinTileEntity getTileEntity(int i, int j, int k) {
+        MixinChunk chunk = this.getChunkFromCache(i >> 4, k >> 4);
         if (chunk != null) {
             return chunk.getTileEntity(i & 0xF, j, k & 0xF);
         }
         return null;
     }
 
-    public TileEntity getBlockTileEntityDontCreate(int i, int j, int k) {
-        Chunk chunk = this.getChunkFromCache(i >> 4, k >> 4);
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public MixinTileEntity getBlockTileEntityDontCreate(int i, int j, int k) {
+        MixinChunk chunk = this.getChunkFromCache(i >> 4, k >> 4);
         if (chunk != null) {
             return chunk.getChunkBlockTileEntityDontCreate(i & 0xF, j, k & 0xF);
         }
         return null;
     }
 
-    public void setTileEntity(int i, int j, int k, TileEntity tileentity) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public void setTileEntity(int i, int j, int k, MixinTileEntity tileentity) {
         if (!tileentity.isInvalid()) {
             this.removeTileEntity(i, j, k);
             if (this.field_190) {
                 tileentity.x = i;
                 tileentity.y = j;
                 tileentity.z = k;
-                this.field_185.add(tileentity);
+                this.field_185.add((Object) tileentity);
             } else {
-                this.tileEntities.add(tileentity);
-                Chunk chunk = this.getChunkFromCache(i >> 4, k >> 4);
+                this.tileEntities.add((Object) tileentity);
+                MixinChunk chunk = this.getChunkFromCache(i >> 4, k >> 4);
                 if (chunk != null) {
                     chunk.placeTileEntity(i & 0xF, j, k & 0xF, tileentity);
                 }
@@ -1738,14 +2264,18 @@ public class MixinLevel implements TileView {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void removeTileEntity(int i, int j, int k) {
-        TileEntity tileentity = this.getBlockTileEntityDontCreate(i, j, k);
+        MixinTileEntity tileentity = this.getBlockTileEntityDontCreate(i, j, k);
         if (tileentity != null && this.field_190) {
             tileentity.invalidate();
         } else {
-            Chunk chunk;
+            MixinChunk chunk;
             if (tileentity != null) {
-                this.tileEntities.remove(tileentity);
+                this.tileEntities.remove((Object) tileentity);
             }
             if ((chunk = this.getChunkFromCache(i >> 4, k >> 4)) != null) {
                 chunk.removeTileEntity(i & 0xF, j, k & 0xF);
@@ -1753,29 +2283,44 @@ public class MixinLevel implements TileView {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public boolean isFullOpaque(int i, int j, int k) {
-        Tile block = Tile.BY_ID[this.getTileId(i, j, k)];
+        MixinTile block = Tile.BY_ID[this.getTileId(i, j, k)];
         if (block == null) {
             return false;
         }
         return block.isFullOpaque();
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public boolean canSuffocate(int i, int j, int k) {
-        Tile block = Tile.BY_ID[this.getTileId(i, j, k)];
+        MixinTile block = Tile.BY_ID[this.getTileId(i, j, k)];
         if (block == null) {
             return false;
         }
         return block.material.method_897() && block.isFullCube();
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_280(ProgressListener iprogressupdate) {
         this.saveLevel(true, iprogressupdate);
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
+    /**
+     * @author Ryuu, TechPizza, Phil
      */
+    @Overwrite()
     public boolean method_232() {
         if (this.field_191 >= 50) {
             return false;
@@ -1790,23 +2335,27 @@ public class MixinLevel implements TileView {
                     boolean bl = flag = true;
                     return bl;
                 }
-                ((LightCalculator)this.field_181.remove(this.field_181.size() - 1)).calculateLight(this);
+                ((MixinLightCalculator) this.field_181.remove(this.field_181.size() - 1)).calculateLight(this);
             }
             boolean bl = flag1 = false;
             return bl;
-        }
-        finally {
+        } finally {
             --this.field_191;
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_166(LightType enumskyblock, int i, int j, int k, int l, int i1, int j1) {
         this.method_167(enumskyblock, i, j, k, l, i1, j1, true);
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
+    /**
+     * @author Ryuu, TechPizza, Phil
      */
+    @Overwrite()
     public void method_167(LightType enumskyblock, int i, int j, int k, int l, int i1, int j1, boolean flag) {
         if (this.dimension.fixedSpawnPos && enumskyblock == LightType.Sky) {
             return;
@@ -1831,23 +2380,27 @@ public class MixinLevel implements TileView {
                     j2 = i2;
                 }
                 for (int l2 = 0; l2 < j2; ++l2) {
-                    LightCalculator metadatachunkblock = (LightCalculator)this.field_181.get(this.field_181.size() - l2 - 1);
-                    if (metadatachunkblock.type != enumskyblock || !metadatachunkblock.propagateLight(i, j, k, l, i1, j1)) continue;
+                    MixinLightCalculator metadatachunkblock = (MixinLightCalculator) this.field_181.get(this.field_181.size() - l2 - 1);
+                    if (metadatachunkblock.type != enumskyblock || !metadatachunkblock.propagateLight(i, j, k, l, i1, j1))
+                        continue;
                     return;
                 }
             }
-            this.field_181.add(new LightCalculator(enumskyblock, i, j, k, l, i1, j1));
+            this.field_181.add(new MixinLightCalculator(enumskyblock, i, j, k, l, i1, j1));
             int k2 = 1000000;
             if (this.field_181.size() > 1000000) {
                 System.out.println("More than " + k2 + " updates, aborting lighting updates");
                 this.field_181.clear();
             }
-        }
-        finally {
+        } finally {
             --field_179;
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_237() {
         int i = this.computeWeatherGradients(1.0f);
         if (i != this.field_202) {
@@ -1855,24 +2408,32 @@ public class MixinLevel implements TileView {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_196(boolean flag, boolean flag1) {
         this.field_192 = flag;
         this.field_193 = flag1;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_242() {
         long l1;
         if (this.firstTick) {
-            if (this.newSave && !this.properties.onNewSaveScript.equals((Object)"")) {
+            if (this.newSave && !this.properties.onNewSaveScript.equals("")) {
                 this.scriptHandler.runScript(this.properties.onNewSaveScript, this.scope);
             }
-            if (!this.properties.onLoadScript.equals((Object)"")) {
+            if (!this.properties.onLoadScript.equals("")) {
                 this.scriptHandler.runScript(this.properties.onLoadScript, this.scope);
             }
             this.firstTick = false;
         }
         ScriptModel.updateAll();
-        if (!this.properties.onUpdateScript.equals((Object)"")) {
+        if (!this.properties.onUpdateScript.equals("")) {
             this.scriptHandler.runScript(this.properties.onUpdateScript, this.scope);
         }
         this.fogColorOverridden = this.properties.overrideFogColor;
@@ -1883,10 +2444,10 @@ public class MixinLevel implements TileView {
         if (i != this.field_202) {
             this.field_202 = i;
             for (int j = 0; j < this.listeners.size(); ++j) {
-                ((LevelListener)this.listeners.get(j)).method_1148();
+                ((LevelListener) this.listeners.get(j)).method_1148();
             }
         }
-        if ((l1 = this.properties.getTime() + 1L) % (long)this.field_212 == 0L) {
+        if ((l1 = this.properties.getTime() + 1L) % (long) this.field_212 == 0L) {
             this.saveLevel(false, null);
         }
         this.properties.setTime(l1);
@@ -1899,6 +2460,10 @@ public class MixinLevel implements TileView {
         this.script.wakeupScripts(l1);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void initWeatherGradients() {
         if (this.properties.isRaining()) {
             this.rainGradient = 1.0f;
@@ -1908,6 +2473,10 @@ public class MixinLevel implements TileView {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     protected void method_245() {
         if (this.dimension.fixedSpawnPos) {
             return;
@@ -1916,7 +2485,7 @@ public class MixinLevel implements TileView {
             --this.field_209;
         }
         this.prevRainGradient = this.rainGradient;
-        this.rainGradient = this.properties.isRaining() ? (float)((double)this.rainGradient + 0.01) : (float)((double)this.rainGradient - 0.01);
+        this.rainGradient = this.properties.isRaining() ? (float) ((double) this.rainGradient + 0.01) : (float) ((double) this.rainGradient - 0.01);
         if (this.rainGradient < 0.0f) {
             this.rainGradient = 0.0f;
         }
@@ -1924,7 +2493,7 @@ public class MixinLevel implements TileView {
             this.rainGradient = 1.0f;
         }
         this.prevThunderGradient = this.thunderGradient;
-        this.thunderGradient = this.properties.isThundering() ? (float)((double)this.thunderGradient + 0.01) : (float)((double)this.thunderGradient - 0.01);
+        this.thunderGradient = this.properties.isThundering() ? (float) ((double) this.thunderGradient + 0.01) : (float) ((double) this.thunderGradient - 0.01);
         if (this.thunderGradient < 0.0f) {
             this.thunderGradient = 0.0f;
         }
@@ -1933,6 +2502,10 @@ public class MixinLevel implements TileView {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void resetWeather() {
         this.properties.setRainTime(0);
         this.properties.setRaining(false);
@@ -1940,6 +2513,10 @@ public class MixinLevel implements TileView {
         this.properties.setThundering(false);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void DoSnowModUpdate() {
         if (this.isClient) {
             return;
@@ -1949,30 +2526,34 @@ public class MixinLevel implements TileView {
             this.initCoordOrder();
         }
         for (int i = 0; i < this.players.size(); ++i) {
-            Player entityplayer = (Player)this.players.get(i);
+            MixinPlayer entityplayer = (MixinPlayer) this.players.get(i);
             int pcx = MathsHelper.floor(entityplayer.x / 16.0);
             int pcz = MathsHelper.floor(entityplayer.z / 16.0);
             int radius = 9;
             for (int cx = -radius; cx <= radius; ++cx) {
                 for (int cz = -radius; cz <= radius; ++cz) {
-                    long iteration = (long)(cx + cz * 2) + this.getLevelTime();
+                    long iteration = (long) (cx + cz * 2) + this.getLevelTime();
                     if (iteration % 14L != 0L || !this.isChunkLoaded(cx + pcx, cz + pcz)) continue;
                     iteration /= 14L;
                     int chunkX = cx + pcx;
                     int chunkZ = cz + pcz;
                     iteration += chunkX * chunkX * 3121 + chunkX * 45238971 + chunkZ * chunkZ * 418711 + chunkZ * 13761;
                     iteration = Math.abs(iteration);
-                    int x = chunkX * 16 + this.coordOrder[(int)(iteration % 256L)] % 16;
-                    int z = chunkZ * 16 + this.coordOrder[(int)(iteration % 256L)] / 16;
+                    int x = chunkX * 16 + this.coordOrder[(int) (iteration % 256L)] % 16;
+                    int z = chunkZ * 16 + this.coordOrder[(int) (iteration % 256L)] / 16;
                     this.SnowModUpdate(x, z);
                 }
             }
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     protected void method_248() {
         for (int i = 0; i < this.players.size(); ++i) {
-            Player entityplayer = (Player)this.players.get(i);
+            MixinPlayer entityplayer = (MixinPlayer) this.players.get(i);
             int j = MathsHelper.floor(entityplayer.x / 16.0);
             int l = MathsHelper.floor(entityplayer.z / 16.0);
             int byte0 = 9;
@@ -1987,8 +2568,12 @@ public class MixinLevel implements TileView {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     protected void updateChunk(int chunkX, int chunkZ) {
-        Chunk chunk = this.getChunkFromCache(chunkX, chunkZ);
+        MixinChunk chunk = this.getChunkFromCache(chunkX, chunkZ);
         if (chunk.lastUpdated == this.getLevelTime()) {
             return;
         }
@@ -2018,6 +2603,10 @@ public class MixinLevel implements TileView {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean method_194(boolean flag) {
         int i = this.field_183.size();
         if (i > 1000) {
@@ -2026,16 +2615,21 @@ public class MixinLevel implements TileView {
         for (int j = 0; j < i; ++j) {
             int k;
             int byte0;
-            class_366 nextticklistentry = (class_366)this.field_183.first();
+            class_366 nextticklistentry = (class_366) this.field_183.first();
             if (!flag && nextticklistentry.field_1404 > this.properties.getTime()) break;
             this.field_183.remove(nextticklistentry);
-            if (!this.field_184.remove(nextticklistentry) || !this.isRegionLoaded(nextticklistentry.field_1400 - (byte0 = 8), nextticklistentry.field_1401 - byte0, nextticklistentry.field_1402 - byte0, nextticklistentry.field_1400 + byte0, nextticklistentry.field_1401 + byte0, nextticklistentry.field_1402 + byte0) || (k = this.getTileId(nextticklistentry.field_1400, nextticklistentry.field_1401, nextticklistentry.field_1402)) != nextticklistentry.field_1403 || k <= 0) continue;
+            if (!this.field_184.remove(nextticklistentry) || !this.isRegionLoaded(nextticklistentry.field_1400 - (byte0 = 8), nextticklistentry.field_1401 - byte0, nextticklistentry.field_1402 - byte0, nextticklistentry.field_1400 + byte0, nextticklistentry.field_1401 + byte0, nextticklistentry.field_1402 + byte0) || (k = this.getTileId(nextticklistentry.field_1400, nextticklistentry.field_1401, nextticklistentry.field_1402)) != nextticklistentry.field_1403 || k <= 0)
+                continue;
             Tile.BY_ID[k].onScheduledTick(this, nextticklistentry.field_1400, nextticklistentry.field_1401, nextticklistentry.field_1402, this.rand);
             Box.method_85();
         }
         return this.field_183.size() != 0;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_294(int i, int j, int k) {
         int byte0 = 16;
         Random random = new Random();
@@ -2049,7 +2643,11 @@ public class MixinLevel implements TileView {
         }
     }
 
-    public List getEntities(Entity entity, Box axisalignedbb) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public List getEntities(net.minecraft.entity.MixinEntity entity, Box axisalignedbb) {
         this.field_196.clear();
         int i = MathsHelper.floor((axisalignedbb.minX - 2.0) / 16.0);
         int j = MathsHelper.floor((axisalignedbb.maxX + 2.0) / 16.0);
@@ -2064,6 +2662,10 @@ public class MixinLevel implements TileView {
         return this.field_196;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public List getEntities(Class class1, Box axisalignedbb) {
         int i = MathsHelper.floor((axisalignedbb.minX - 2.0) / 16.0);
         int j = MathsHelper.floor((axisalignedbb.maxX + 2.0) / 16.0);
@@ -2073,55 +2675,83 @@ public class MixinLevel implements TileView {
         for (int i1 = i; i1 <= j; ++i1) {
             for (int j1 = k; j1 <= l; ++j1) {
                 if (!this.isChunkLoaded(i1, j1)) continue;
-                this.getChunkFromCache(i1, j1).appendEntities(class1, axisalignedbb, arraylist);
+                this.getChunkFromCache(i1, j1).appendEntities(class1, axisalignedbb, (List) arraylist);
             }
         }
         return arraylist;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public List method_291() {
         return this.entities;
     }
 
-    public void method_203(int i, int j, int k, TileEntity tileentity) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public void method_203(int i, int j, int k, MixinTileEntity tileentity) {
         if (this.isTileLoaded(i, j, k)) {
             this.getChunk(i, k).method_885();
         }
         for (int l = 0; l < this.listeners.size(); ++l) {
-            ((LevelListener)this.listeners.get(l)).method_1151(i, j, k, tileentity);
+            ((LevelListener) this.listeners.get(l)).method_1151(i, j, k, tileentity);
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public int method_174(Class class1) {
         int i = 0;
         for (int j = 0; j < this.entities.size(); ++j) {
-            Entity entity = (Entity)this.entities.get(j);
+            net.minecraft.entity.MixinEntity entity = this.entities.get(j);
             if (!class1.isAssignableFrom(entity.getClass())) continue;
             ++i;
         }
         return i;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void addEntities(List entities) {
-        this.entities.addAll((Collection)entities);
+        this.entities.addAll(entities);
         for (int i = 0; i < entities.size(); ++i) {
-            this.onEntityAdded((Entity)entities.get(i));
+            this.onEntityAdded((net.minecraft.entity.MixinEntity) entities.get(i));
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_209(List list) {
-        this.field_182.addAll((Collection)list);
+        this.field_182.addAll(list);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_292() {
         while (this.cache.method_1801()) {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean canPlaceTile(int id, int x, int y, int z, boolean flag, int meta) {
         int j1 = this.getTileId(x, y, z);
-        Tile block = Tile.BY_ID[j1];
-        Tile block1 = Tile.BY_ID[id];
+        MixinTile block = Tile.BY_ID[j1];
+        MixinTile block1 = Tile.BY_ID[id];
         Box axisalignedbb = block1.getCollisionShape(this, x, y, z);
         if (flag) {
             axisalignedbb = null;
@@ -2135,36 +2765,48 @@ public class MixinLevel implements TileView {
         return id > 0 && block == null && block1.canPlaceAt(this, x, y, z, meta);
     }
 
-    public class_61 method_192(Entity entity, Entity entity1, float f) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public MixinClass_61 method_192(net.minecraft.entity.MixinEntity entity, net.minecraft.entity.MixinEntity entity1, float f) {
         int i = MathsHelper.floor(entity.x);
         int j = MathsHelper.floor(entity.y);
         int k = MathsHelper.floor(entity.z);
-        int l = (int)(f + 16.0f);
+        int l = (int) (f + 16.0f);
         int i1 = i - l;
         int j1 = j - l;
         int k1 = k - l;
         int l1 = i + l;
         int i2 = j + l;
         int j2 = k + l;
-        WorldPopulationRegion chunkcache = new WorldPopulationRegion(this, i1, j1, k1, l1, i2, j2);
-        return new class_108(chunkcache).method_407(entity, entity1, f);
+        MixinWorldPopulationRegion chunkcache = new MixinWorldPopulationRegion(this, i1, j1, k1, l1, i2, j2);
+        return new MixinClass_108(chunkcache).method_407(entity, entity1, f);
     }
 
-    public class_61 method_189(Entity entity, int i, int j, int k, float f) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public MixinClass_61 method_189(net.minecraft.entity.MixinEntity entity, int i, int j, int k, float f) {
         int l = MathsHelper.floor(entity.x);
         int i1 = MathsHelper.floor(entity.y);
         int j1 = MathsHelper.floor(entity.z);
-        int k1 = (int)(f + 8.0f);
+        int k1 = (int) (f + 8.0f);
         int l1 = l - k1;
         int i2 = i1 - k1;
         int j2 = j1 - k1;
         int k2 = l + k1;
         int l2 = i1 + k1;
         int i3 = j1 + k1;
-        WorldPopulationRegion chunkcache = new WorldPopulationRegion(this, l1, i2, j2, k2, l2, i3);
-        return new class_108(chunkcache).method_403(entity, i, j, k, f);
+        MixinWorldPopulationRegion chunkcache = new MixinWorldPopulationRegion(this, l1, i2, j2, k2, l2, i3);
+        return new MixinClass_108(chunkcache).method_403(entity, i, j, k, f);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean method_247(int i, int j, int k, int l) {
         int i1 = this.getTileId(i, j, k);
         if (i1 == 0) {
@@ -2173,6 +2815,10 @@ public class MixinLevel implements TileView {
         return Tile.BY_ID[i1].method_1570(this, i, j, k, l);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean method_263(int i, int j, int k) {
         if (this.method_247(i, j - 1, k, 0)) {
             return true;
@@ -2192,6 +2838,10 @@ public class MixinLevel implements TileView {
         return this.method_247(i + 1, j, k, 5);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean method_250(int i, int j, int k, int l) {
         if (this.canSuffocate(i, j, k)) {
             return this.method_263(i, j, k);
@@ -2203,6 +2853,10 @@ public class MixinLevel implements TileView {
         return Tile.BY_ID[i1].method_1568(this, i, j, k, l);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean hasRedstonePower(int x, int y, int z) {
         if (this.method_250(x, y - 1, z, 0)) {
             return true;
@@ -2222,15 +2876,23 @@ public class MixinLevel implements TileView {
         return this.method_250(x + 1, y, z, 5);
     }
 
-    public Player getClosestPlayerTo(Entity entity, double d) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public MixinPlayer getClosestPlayerTo(net.minecraft.entity.MixinEntity entity, double d) {
         return this.getClosestPlayer(entity.x, entity.y, entity.z, d);
     }
 
-    public Player getClosestPlayer(double d, double d1, double d2, double d3) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public MixinPlayer getClosestPlayer(double d, double d1, double d2, double d3) {
         double d4 = -1.0;
-        Player entityplayer = null;
+        MixinPlayer entityplayer = null;
         for (int i = 0; i < this.players.size(); ++i) {
-            Player entityplayer1 = (Player)this.players.get(i);
+            MixinPlayer entityplayer1 = (MixinPlayer) this.players.get(i);
             double d5 = entityplayer1.squaredDistanceTo(d, d1, d2);
             if (!(d3 < 0.0) && !(d5 < d3 * d3) || d4 != -1.0 && !(d5 < d4)) continue;
             d4 = d5;
@@ -2239,14 +2901,22 @@ public class MixinLevel implements TileView {
         return entityplayer;
     }
 
-    public Player getPlayerByName(String s) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public MixinPlayer getPlayerByName(String s) {
         for (int i = 0; i < this.players.size(); ++i) {
-            if (!s.equals((Object)((Player)this.players.get((int)i)).name)) continue;
-            return (Player)this.players.get(i);
+            if (!s.equals((Object) ((MixinPlayer) this.players.get(i)).name)) continue;
+            return (MixinPlayer) this.players.get(i);
         }
         return null;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_275(int i, int j, int k, int l, int i1, int j1, byte[] abyte0) {
         int k1 = i >> 4;
         int l1 = k >> 4;
@@ -2285,9 +2955,60 @@ public class MixinLevel implements TileView {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void disconnect() {
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public byte[] method_217(int n, int n2, int n3, int n4, int n5, int n6) {
+        byte[] byArray = new byte[n4 * n5 * n6 * 5 / 2];
+        int n7 = n >> 4;
+        int n8 = n3 >> 4;
+        int n9 = n + n4 - 1 >> 4;
+        int n10 = n3 + n6 - 1 >> 4;
+        int n11 = 0;
+        int n12 = n2;
+        int n13 = n2 + n5;
+        if (n12 < 0) {
+            n12 = 0;
+        }
+        if (n13 > 128) {
+            n13 = 128;
+        }
+        for (int i = n7; i <= n9; ++i) {
+            int n14 = n - i * 16;
+            int n15 = n + n4 - i * 16;
+            if (n14 < 0) {
+                n14 = 0;
+            }
+            if (n15 > 16) {
+                n15 = 16;
+            }
+            for (int j = n8; j <= n10; ++j) {
+                int n16 = n3 - j * 16;
+                int n17 = n3 + n6 - j * 16;
+                if (n16 < 0) {
+                    n16 = 0;
+                }
+                if (n17 > 16) {
+                    n17 = 16;
+                }
+                n11 = this.getChunkFromCache(i, j).fillChunkData(byArray, n14, n12, n16, n15, n13, n17, n11);
+            }
+        }
+        return byArray;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void checkSessionLock() {
         if (this.dimensionData != null) {
             this.dimensionData.checkSessionLock();
@@ -2296,43 +3017,95 @@ public class MixinLevel implements TileView {
         }
     }
 
-    public void setLevelTime(long time) {
-        this.properties.setTime(time);
-    }
-
-    public void setTimeOfDay(long l) {
-        this.properties.setTimeOfDay(l);
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public float getTimeOfDay() {
         return this.properties.getTimeOfDay();
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public void setTimeOfDay(long l) {
+        this.properties.setTimeOfDay(l);
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public void method_204(long l) {
+        long l2 = l - this.properties.getTime();
+        for (class_366 class_3662 : this.field_184) {
+            class_3662.field_1404 += l2;
+        }
+        this.setLevelTime(l);
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public long getSeed() {
         return this.properties.getSeed();
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public long getLevelTime() {
         return this.properties.getTime();
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public void setLevelTime(long time) {
+        this.properties.setTime(time);
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public Vec3i getSpawnPosition() {
         return new Vec3i(this.properties.getSpawnX(), this.properties.getSpawnY(), this.properties.getSpawnZ());
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void setSpawnPosition(Vec3i chunkcoordinates) {
         this.properties.setSpawnPosition(chunkcoordinates.x, chunkcoordinates.y, chunkcoordinates.z);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public float getSpawnYaw() {
         return this.properties.spawnYaw;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void setSpawnYaw(float y) {
         this.properties.spawnYaw = y;
     }
 
-    public void method_287(Entity entity) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public void method_287(net.minecraft.entity.MixinEntity entity) {
         int i = MathsHelper.floor(entity.x / 16.0);
         int j = MathsHelper.floor(entity.z / 16.0);
         int byte0 = 2;
@@ -2341,33 +3114,45 @@ public class MixinLevel implements TileView {
                 this.getChunkFromCache(k, l);
             }
         }
-        if (!this.entities.contains((Object)entity)) {
-            this.entities.add((Object)entity);
+        if (!this.entities.contains((Object) entity)) {
+            this.entities.add(entity);
         }
     }
 
-    public boolean method_171(Player entityplayer, int i, int j, int k) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public boolean method_171(MixinPlayer entityplayer, int i, int j, int k) {
         return true;
     }
 
-    public void method_185(Entity entity, byte byte0) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public void method_185(net.minecraft.entity.MixinEntity entity, byte byte0) {
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_295() {
-        this.entities.removeAll((Collection)this.field_182);
+        this.entities.removeAll((Collection) this.field_182);
         for (int i = 0; i < this.field_182.size(); ++i) {
-            Entity entity = (Entity)this.field_182.get(i);
+            net.minecraft.entity.MixinEntity entity = (net.minecraft.entity.MixinEntity) this.field_182.get(i);
             int l = entity.chunkX;
             int j1 = entity.chunkZ;
             if (!entity.shouldTick || !this.isChunkLoaded(l, j1)) continue;
             this.getChunkFromCache(l, j1).removeEntity(entity);
         }
         for (int j = 0; j < this.field_182.size(); ++j) {
-            this.onEntityRemoved((Entity)this.field_182.get(j));
+            this.onEntityRemoved((net.minecraft.entity.MixinEntity) this.field_182.get(j));
         }
         this.field_182.clear();
         for (int k = 0; k < this.entities.size(); ++k) {
-            Entity entity1 = (Entity)this.entities.get(k);
+            net.minecraft.entity.MixinEntity entity1 = this.entities.get(k);
             if (entity1.vehicle != null) {
                 if (!entity1.vehicle.removed && entity1.vehicle.passenger == entity1) continue;
                 entity1.vehicle.passenger = null;
@@ -2384,10 +3169,18 @@ public class MixinLevel implements TileView {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public LevelSource getLevelSource() {
         return this.cache;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_224(int i, int j, int k, int l, int i1) {
         int j1 = this.getTileId(i, j, k);
         if (j1 > 0) {
@@ -2395,31 +3188,55 @@ public class MixinLevel implements TileView {
         }
     }
 
-    public LevelProperties getProperties() {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public DimensionData getDimensionData() {
+        return this.dimensionData;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public MixinLevelProperties getProperties() {
         return this.properties;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void areAllPlayersSleeping() {
         this.allPlayersSleeping = !this.players.isEmpty();
-        for (Player entityplayer : this.players) {
+        for (MixinPlayer entityplayer : this.players) {
             if (entityplayer.isSleeping()) continue;
             this.allPlayersSleeping = false;
             break;
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     protected void wakeUpSleepingPlayers() {
         this.allPlayersSleeping = false;
-        for (Player entityplayer : this.players) {
+        for (MixinPlayer entityplayer : this.players) {
             if (!entityplayer.isSleeping()) continue;
             entityplayer.wakeUp(false, false, true);
         }
         this.resetWeather();
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean canSkipNight() {
         if (this.allPlayersSleeping && !this.isClient) {
-            for (Player entityplayer : this.players) {
+            for (MixinPlayer entityplayer : this.players) {
                 if (entityplayer.hasSleptEnough()) continue;
                 return false;
             }
@@ -2428,27 +3245,51 @@ public class MixinLevel implements TileView {
         return false;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public float getThunderGradient(float tickProgress) {
         return (this.prevThunderGradient + (this.thunderGradient - this.prevThunderGradient) * tickProgress) * this.getRainGradient(tickProgress);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public float getRainGradient(float tickProgress) {
         return this.prevRainGradient + (this.rainGradient - this.prevRainGradient) * tickProgress;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void setRainGradient(float gradient) {
         this.prevRainGradient = gradient;
         this.rainGradient = gradient;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean thundering() {
-        return (double)this.getThunderGradient(1.0f) > 0.9;
+        return (double) this.getThunderGradient(1.0f) > 0.9;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean raining() {
-        return (double)this.getRainGradient(1.0f) > 0.2;
+        return (double) this.getRainGradient(1.0f) > 0.2;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean canRainAt(int x, int y, int z) {
         if (!this.raining()) {
             return false;
@@ -2459,35 +3300,59 @@ public class MixinLevel implements TileView {
         if (this.getOceanFloorHeight(x, z) > y) {
             return false;
         }
-        Biome biomegenbase = this.getBiomeSource().getBiome(x, z);
+        MixinBiome biomegenbase = this.getBiomeSource().getBiome(x, z);
         if (biomegenbase.canSnow()) {
             return false;
         }
         return biomegenbase.canRain();
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void putMapStorage(String name, MapStorageBase mapdatabase) {
         this.data.putMapStorage(name, mapdatabase);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public MapStorageBase getOrCreateMapStorage(Class clazz, String name) {
         return this.data.getOrCreateMapStorage(clazz, name);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public int method_208(String s) {
         return this.data.writeIdCount(s);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void playLevelEvent(int i, int j, int k, int l, int i1) {
         this.playLevelEvent(null, i, j, k, l, i1);
     }
 
-    public void playLevelEvent(Player entityplayer, int i, int j, int k, int l, int i1) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public void playLevelEvent(MixinPlayer entityplayer, int i, int j, int k, int l, int i1) {
         for (int j1 = 0; j1 < this.listeners.size(); ++j1) {
-            ((LevelListener)this.listeners.get(j1)).playLevelEvent(entityplayer, i, j, k, l, i1);
+            ((LevelListener) this.listeners.get(j1)).playLevelEvent(entityplayer, i, j, k, l, i1);
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public double getTemperatureValue(int x, int z) {
         if (x < -32000000 || z < -32000000 || x >= 32000000 || z > 32000000) {
             return 0.0;
@@ -2495,21 +3360,33 @@ public class MixinLevel implements TileView {
         return this.getChunkFromCache(x >> 4, z >> 4).getTemperatureValue(x & 0xF, z & 0xF) + this.properties.tempOffset;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void setTemperatureValue(int x, int z, double temp) {
         if (x < -32000000 || z < -32000000 || x >= 32000000 || z > 32000000) {
             return;
         }
-        Chunk c = this.getChunkFromCache(x >> 4, z >> 4);
+        MixinChunk c = this.getChunkFromCache(x >> 4, z >> 4);
         if (c.getTemperatureValue(x & 0xF, z & 0xF) == temp) {
             return;
         }
         c.setTemperatureValue(x & 0xF, z & 0xF, temp);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void resetCoordOrder() {
         this.coordOrder = null;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void initCoordOrder() {
         int i;
         Random r = new Random();
@@ -2526,6 +3403,10 @@ public class MixinLevel implements TileView {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean SnowModUpdate(int x, int z) {
         int height = this.getOceanFloorHeight(x, z);
         if (height < 0) {
@@ -2568,6 +3449,10 @@ public class MixinLevel implements TileView {
         return false;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void loadMapMusic() {
         File musicDir = new File(this.levelDir, "music");
         if (musicDir.exists() && musicDir.isDirectory()) {
@@ -2584,17 +3469,21 @@ public class MixinLevel implements TileView {
             musicCount = 0;
             for (File musicFile : musicFiles) {
                 if (!musicFile.isFile() || !musicFile.getName().endsWith(".ogg")) continue;
-                this.musicList[musicCount] = String.format("music.%s", musicFile.getName().toLowerCase().replace(".ogg", ""));
+                this.musicList[musicCount] = streamName = String.format("music.%s", new Object[]{musicFile.getName().toLowerCase().replace(".ogg", "")});
                 ++musicCount;
             }
         } else {
             this.musicList = new String[0];
         }
-        if (!this.properties.playingMusic.equals((Object)"")) {
+        if (!this.properties.playingMusic.equals("")) {
             Minecraft.minecraftInstance.soundHelper.playMusicFromStreaming(this.properties.playingMusic, 0, 0);
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void loadMapSounds() {
         File soundDir = new File(this.levelDir, "sound");
         if (soundDir.exists() && soundDir.isDirectory()) {
@@ -2611,7 +3500,7 @@ public class MixinLevel implements TileView {
             soundCount = 0;
             for (File soundFile : soundFiles) {
                 if (!soundFile.isFile() || !soundFile.getName().endsWith(".ogg")) continue;
-                this.soundList[soundCount] = streamName = String.format("sound.%s", soundFile.getName().toLowerCase().replace(".ogg", ""));
+                this.soundList[soundCount] = streamName = String.format("sound.%s", new Object[]{soundFile.getName().toLowerCase().replace(".ogg", "")});
                 ++soundCount;
             }
         } else {
@@ -2619,6 +3508,10 @@ public class MixinLevel implements TileView {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void loadSoundOverrides() {
         Minecraft.minecraftInstance.resourceDownloadThread.method_107();
         File soundDir = new File(this.levelDir, "soundOverrides");
@@ -2627,22 +3520,38 @@ public class MixinLevel implements TileView {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void loadBrightness() {
         for (int i = 0; i < 16; ++i) {
             this.dimension.field_2178[i] = this.properties.brightness[i];
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void undo() {
         this.undoStack.undo(this);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void redo() {
         this.undoStack.redo(this);
     }
 
-    public Entity getEntityByID(int entityID) {
-        for (Entity e : this.entities) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public net.minecraft.entity.MixinEntity getEntityByID(int entityID) {
+        for (net.minecraft.entity.MixinEntity e : this.entities) {
             if (e.id != entityID) continue;
             return e;
         }

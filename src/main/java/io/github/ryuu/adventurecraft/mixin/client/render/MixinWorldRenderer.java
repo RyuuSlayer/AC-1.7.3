@@ -1,21 +1,8 @@
 package io.github.ryuu.adventurecraft.mixin.client.render;
 
-import java.nio.IntBuffer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Random;
-
-import io.github.ryuu.adventurecraft.items.ItemCursor;
-import io.github.ryuu.adventurecraft.items.Items;
-import io.github.ryuu.adventurecraft.scripting.ScriptModel;
-import io.github.ryuu.adventurecraft.util.CutsceneCameraPoint;
-import io.github.ryuu.adventurecraft.util.DebugMode;
-import io.github.ryuu.adventurecraft.util.IEntityPather;
-import io.github.ryuu.adventurecraft.util.PlayerTorch;
-import net.minecraft.*;
+import net.minecraft.class_430;
+import net.minecraft.class_472;
+import net.minecraft.class_68;
 import net.minecraft.client.GLAllocator;
 import net.minecraft.client.ImageProcessorImpl;
 import net.minecraft.client.Minecraft;
@@ -23,23 +10,15 @@ import net.minecraft.client.particle.*;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.RenderHelper;
 import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.TileRenderer;
+import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.render.tile.TileEntityRenderDispatcher;
 import net.minecraft.client.sortme.ReverseEntityComparatorThing;
-import net.minecraft.client.texture.TextureManager;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.WalkingEntity;
-import net.minecraft.entity.player.Player;
-import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.item.RecordItem;
-import net.minecraft.level.Level;
 import net.minecraft.level.LevelListener;
-import net.minecraft.level.chunk.ClientChunkCache;
+import net.minecraft.script.ScriptModel;
 import net.minecraft.tile.Tile;
-import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.hit.HitType;
 import net.minecraft.util.maths.Box;
@@ -48,26 +27,46 @@ import net.minecraft.util.maths.Vec3f;
 import net.minecraft.util.maths.Vec3i;
 import org.lwjgl.opengl.ARBOcclusionQuery;
 import org.lwjgl.opengl.GL11;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
+import java.nio.IntBuffer;
+import java.util.*;
+
+@Mixin(WorldRenderer.class)
 public class MixinWorldRenderer implements LevelListener {
+
+    private final MixinTextureManager textureManager;
+    private final List field_1807;
+    private final int field_1813;
+    private final Minecraft client;
+    private final int field_1819;
+    private final int field_1820;
+    private final int field_1775;
+    private final List field_1793;
+    private final class_472[] field_1794 = new class_472[]{new class_472(), new class_472(), new class_472(), new class_472()};
+    @Shadow()
     public List field_1795;
-    private Level level;
-    private TextureManager textureManager;
-    private List field_1807;
-    private class_66[] field_1808;
-    private class_66[] field_1809;
+    public float field_1803;
+    int[] field_1796;
+    IntBuffer field_1797;
+    int field_1798 = 0;
+    int field_1799;
+    double field_1800 = -9999.0;
+    double field_1801 = -9999.0;
+    double field_1802 = -9999.0;
+    int field_1804 = 0;
+    private MixinLevel level;
+    private MixinClass_66[] field_1808;
+    private MixinClass_66[] field_1809;
     private int field_1810;
     private int field_1811;
     private int field_1812;
-    private int field_1813;
-    private Minecraft client;
-    private TileRenderer tileRenderer;
+    private MixinTileRenderer tileRenderer;
     private IntBuffer field_1816;
     private boolean field_1817 = false;
     private int field_1818 = 0;
-    private int field_1819;
-    private int field_1820;
-    private int field_1775;
     private int field_1776;
     private int field_1777;
     private int field_1778;
@@ -79,25 +78,14 @@ public class MixinWorldRenderer implements LevelListener {
     private int field_1784;
     private int field_1785;
     private int field_1786;
-    int[] field_1796;
-    IntBuffer field_1797;
     private int field_1787;
     private int field_1788;
     private int field_1789;
     private int field_1790;
     private int field_1791;
     private int field_1792;
-    private List field_1793;
-    private class_472[] field_1794 = new class_472[]{new class_472(), new class_472(), new class_472(), new class_472()};
-    int field_1798 = 0;
-    int field_1799;
-    double field_1800 = -9999.0;
-    double field_1801 = -9999.0;
-    double field_1802 = -9999.0;
-    public float field_1803;
-    int field_1804 = 0;
 
-    public MixinWorldRenderer(Minecraft minecraft, TextureManager renderengine) {
+    public MixinWorldRenderer(Minecraft minecraft, MixinTextureManager renderengine) {
         this.field_1795 = new ArrayList();
         this.field_1807 = new ArrayList();
         this.field_1796 = new int[50000];
@@ -156,6 +144,10 @@ public class MixinWorldRenderer implements LevelListener {
         GL11.glEndList();
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void renderStars() {
         Random random = new Random(10842L);
         Tessellator tessellator = Tessellator.INSTANCE;
@@ -183,8 +175,8 @@ public class MixinWorldRenderer implements LevelListener {
             for (int j = 0; j < 4; ++j) {
                 double d22;
                 double d17 = 0.0;
-                double d18 = (double)((j & 2) - 1) * d3;
-                double d19 = (double)((j + 1 & 2) - 1) * d3;
+                double d18 = (double) ((j & 2) - 1) * d3;
+                double d19 = (double) ((j + 1 & 2) - 1) * d3;
                 double d20 = d17;
                 double d21 = d18 * d16 - d19 * d15;
                 double d23 = d22 = d19 * d16 + d18 * d15;
@@ -199,7 +191,11 @@ public class MixinWorldRenderer implements LevelListener {
         tessellator.draw();
     }
 
-    public void method_1546(Level world) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public void method_1546(MixinLevel world) {
         if (this.level != null) {
             this.level.removeListener(this);
         }
@@ -208,15 +204,19 @@ public class MixinWorldRenderer implements LevelListener {
         this.field_1802 = -9999.0;
         EntityRenderDispatcher.INSTANCE.setLevel(world);
         this.level = world;
-        this.tileRenderer = new TileRenderer(world);
+        this.tileRenderer = new MixinTileRenderer(world);
         if (world != null) {
             world.addListener(this);
             this.method_1537();
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_1537() {
-        LivingEntity entityliving;
+        MixinLivingEntity entityliving;
         Tile.LEAVES.setFastGraphics(this.client.options.fancyGraphics);
         this.field_1782 = this.client.options.viewDistance;
         if (this.field_1809 != null) {
@@ -235,8 +235,8 @@ public class MixinWorldRenderer implements LevelListener {
         this.field_1810 = j / 16 + 1;
         this.field_1811 = 8;
         this.field_1812 = j / 16 + 1;
-        this.field_1809 = new class_66[this.field_1810 * this.field_1811 * this.field_1812];
-        this.field_1808 = new class_66[this.field_1810 * this.field_1811 * this.field_1812];
+        this.field_1809 = new MixinClass_66[this.field_1810 * this.field_1811 * this.field_1812];
+        this.field_1808 = new MixinClass_66[this.field_1810 * this.field_1811 * this.field_1812];
         int k = 0;
         int l = 0;
         this.field_1776 = 0;
@@ -246,14 +246,14 @@ public class MixinWorldRenderer implements LevelListener {
         this.field_1780 = this.field_1811;
         this.field_1781 = this.field_1812;
         for (int i1 = 0; i1 < this.field_1807.size(); ++i1) {
-            ((class_66)this.field_1807.get(i1)).field_249 = false;
+            ((MixinClass_66) this.field_1807.get(i1)).field_249 = false;
         }
         this.field_1807.clear();
         this.field_1795.clear();
         for (int j1 = 0; j1 < this.field_1810; ++j1) {
             for (int k1 = 0; k1 < this.field_1811; ++k1) {
                 for (int l1 = 0; l1 < this.field_1812; ++l1) {
-                    this.field_1809[(l1 * this.field_1811 + k1) * this.field_1810 + j1] = new class_66(this.level, this.field_1795, j1 * 16, k1 * 16, l1 * 16, 16, this.field_1813 + k);
+                    this.field_1809[(l1 * this.field_1811 + k1) * this.field_1810 + j1] = new MixinClass_66(this.level, this.field_1795, j1 * 16, k1 * 16, l1 * 16, 16, this.field_1813 + k);
                     if (this.field_1817) {
                         this.field_1809[(l1 * this.field_1811 + k1) * this.field_1810 + j1].field_254 = this.field_1816.get(l);
                     }
@@ -263,18 +263,22 @@ public class MixinWorldRenderer implements LevelListener {
                     this.field_1809[(l1 * this.field_1811 + k1) * this.field_1810 + j1].field_251 = l++;
                     this.field_1809[(l1 * this.field_1811 + k1) * this.field_1810 + j1].method_305();
                     this.field_1808[(l1 * this.field_1811 + k1) * this.field_1810 + j1] = this.field_1809[(l1 * this.field_1811 + k1) * this.field_1810 + j1];
-                    this.field_1807.add(this.field_1809[(l1 * this.field_1811 + k1) * this.field_1810 + j1]);
+                    this.field_1807.add((Object) this.field_1809[(l1 * this.field_1811 + k1) * this.field_1810 + j1]);
                     k += 3;
                 }
             }
         }
         if (this.level != null && (entityliving = this.client.field_2807) != null) {
             this.method_1553(MathsHelper.floor(entityliving.x), MathsHelper.floor(entityliving.y), MathsHelper.floor(entityliving.z));
-            Arrays.sort((Object[])this.field_1808, new ReverseEntityComparatorThing(entityliving));
+            Arrays.sort((Object[]) this.field_1808, new ReverseEntityComparatorThing(entityliving));
         }
         this.field_1783 = 2;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_1544(Vec3f vec3d, class_68 icamera, float f) {
         if (this.field_1783 > 0) {
             --this.field_1783;
@@ -285,24 +289,25 @@ public class MixinWorldRenderer implements LevelListener {
         this.field_1784 = 0;
         this.field_1785 = 0;
         this.field_1786 = 0;
-        LivingEntity entityliving = this.client.field_2807;
-        EntityRenderDispatcher.field_2490 = entityliving.prevRenderX + (entityliving.x - entityliving.prevRenderX) * (double)f;
-        EntityRenderDispatcher.field_2491 = entityliving.prevRenderY + (entityliving.y - entityliving.prevRenderY) * (double)f;
-        EntityRenderDispatcher.field_2492 = entityliving.prevRenderZ + (entityliving.z - entityliving.prevRenderZ) * (double)f;
-        TileEntityRenderDispatcher.renderOffsetX = entityliving.prevRenderX + (entityliving.x - entityliving.prevRenderX) * (double)f;
-        TileEntityRenderDispatcher.renderOffsetY = entityliving.prevRenderY + (entityliving.y - entityliving.prevRenderY) * (double)f;
-        TileEntityRenderDispatcher.renderOffsetZ = entityliving.prevRenderZ + (entityliving.z - entityliving.prevRenderZ) * (double)f;
+        MixinLivingEntity entityliving = this.client.field_2807;
+        EntityRenderDispatcher.field_2490 = entityliving.prevRenderX + (entityliving.x - entityliving.prevRenderX) * (double) f;
+        EntityRenderDispatcher.field_2491 = entityliving.prevRenderY + (entityliving.y - entityliving.prevRenderY) * (double) f;
+        EntityRenderDispatcher.field_2492 = entityliving.prevRenderZ + (entityliving.z - entityliving.prevRenderZ) * (double) f;
+        TileEntityRenderDispatcher.renderOffsetX = entityliving.prevRenderX + (entityliving.x - entityliving.prevRenderX) * (double) f;
+        TileEntityRenderDispatcher.renderOffsetY = entityliving.prevRenderY + (entityliving.y - entityliving.prevRenderY) * (double) f;
+        TileEntityRenderDispatcher.renderOffsetZ = entityliving.prevRenderZ + (entityliving.z - entityliving.prevRenderZ) * (double) f;
         List list = this.level.method_291();
         this.field_1784 = list.size();
         for (int i = 0; i < this.level.field_201.size(); ++i) {
-            Entity entity = (Entity)this.level.field_201.get(i);
+            MixinEntity entity = (MixinEntity) this.level.field_201.get(i);
             ++this.field_1785;
             if (!entity.shouldRenderFrom(vec3d)) continue;
             EntityRenderDispatcher.INSTANCE.method_1921(entity, f);
         }
         for (int j = 0; j < list.size(); ++j) {
-            Entity entity1 = (Entity)list.get(j);
-            if (!entity1.shouldRenderFrom(vec3d) || !entity1.field_1622 && !icamera.method_2007(entity1.boundingBox) || entity1 == this.client.field_2807 && !this.client.options.thirdPerson && !this.client.field_2807.isSleeping()) continue;
+            MixinEntity entity1 = (MixinEntity) list.get(j);
+            if (!entity1.shouldRenderFrom(vec3d) || !entity1.field_1622 && !icamera.method_2007(entity1.boundingBox) || entity1 == this.client.field_2807 && !this.client.options.thirdPerson && !this.client.field_2807.isSleeping())
+                continue;
             int l = MathsHelper.floor(entity1.y);
             if (l < 0) {
                 l = 0;
@@ -312,7 +317,7 @@ public class MixinWorldRenderer implements LevelListener {
             }
             if (!this.level.isTileLoaded(MathsHelper.floor(entity1.x), l, MathsHelper.floor(entity1.z))) continue;
             ++this.field_1785;
-            if (this.client.cameraActive && this.client.cameraPause || DebugMode.active && !(entity1 instanceof Player) || entity1.stunned > 0) {
+            if (this.client.cameraActive && this.client.cameraPause || DebugMode.active && !(entity1 instanceof MixinPlayer) || entity1.stunned > 0) {
                 EntityRenderDispatcher.INSTANCE.method_1921(entity1, 1.0f);
                 continue;
             }
@@ -323,18 +328,30 @@ public class MixinWorldRenderer implements LevelListener {
         ScriptModel.renderAll(f);
         GL11.glPopMatrix();
         for (int k = 0; k < this.field_1795.size(); ++k) {
-            TileEntityRenderDispatcher.INSTANCE.renderTileEntity((TileEntity)this.field_1795.get(k), f);
+            TileEntityRenderDispatcher.INSTANCE.renderTileEntity((MixinTileEntity) this.field_1795.get(k), f);
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public String getDebugFirstLine() {
         return "C: " + this.field_1790 + "/" + this.field_1787 + ". F: " + this.field_1788 + ", O: " + this.field_1789 + ", E: " + this.field_1791;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public String getDebugSecondLine() {
         return "E: " + this.field_1785 + "/" + this.field_1784 + ". B: " + this.field_1786 + ", I: " + (this.field_1784 - this.field_1786 - this.field_1785);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void method_1553(int i, int j, int k) {
         i -= 8;
         j -= 8;
@@ -379,25 +396,29 @@ public class MixinWorldRenderer implements LevelListener {
                     if (i3 > this.field_1780) {
                         this.field_1780 = i3;
                     }
-                    class_66 worldrenderer = this.field_1809[(i2 * this.field_1811 + l2) * this.field_1810 + j1];
+                    MixinClass_66 worldrenderer = this.field_1809[(i2 * this.field_1811 + l2) * this.field_1810 + j1];
                     boolean flag = worldrenderer.field_249;
                     worldrenderer.method_298(k1, i3, j2);
                     if (flag || !worldrenderer.field_249) continue;
-                    this.field_1807.add(worldrenderer);
+                    this.field_1807.add((Object) worldrenderer);
                 }
             }
         }
     }
 
-    public int method_1548(LivingEntity entityliving, int i, double d) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public int method_1548(MixinLivingEntity entityliving, int i, double d) {
         for (int j = 0; j < 10; ++j) {
             this.field_1792 = (this.field_1792 + 1) % this.field_1809.length;
-            class_66 worldrenderer = this.field_1809[this.field_1792];
-            if (!worldrenderer.field_249 || this.field_1807.contains(worldrenderer)) continue;
-            this.field_1807.add(worldrenderer);
+            MixinClass_66 worldrenderer = this.field_1809[this.field_1792];
+            if (!worldrenderer.field_249 || this.field_1807.contains((Object) worldrenderer)) continue;
+            this.field_1807.add((Object) worldrenderer);
         }
         if (this.client.options.viewDistance != this.field_1782) {
-            ((ClientChunkCache)this.level.cache).updateVeryFar();
+            ((MixinClientChunkCache) this.level.cache).updateVeryFar();
             this.method_1537();
         }
         if (i == 0) {
@@ -418,7 +439,7 @@ public class MixinWorldRenderer implements LevelListener {
             this.field_1801 = entityliving.y;
             this.field_1802 = entityliving.z;
             this.method_1553(MathsHelper.floor(entityliving.x), MathsHelper.floor(entityliving.y), MathsHelper.floor(entityliving.z));
-            Arrays.sort((Object[])this.field_1808, new ReverseEntityComparatorThing(entityliving));
+            Arrays.sort((Object[]) this.field_1808, new ReverseEntityComparatorThing(entityliving));
         }
         RenderHelper.disableLighting();
         int k = 0;
@@ -460,11 +481,12 @@ public class MixinWorldRenderer implements LevelListener {
                     if (this.field_1808[k1].field_252) {
                         boolean bl = this.field_1808[k1].field_252 = this.field_1808[k1].method_299(entityliving) > farPlane;
                     }
-                    if (!this.field_1808[k1].field_243 || this.field_1808[k1].field_253 || this.field_1818 % (l1 = (int)(1.0f + MathsHelper.sqrt(this.field_1808[k1].method_299(entityliving)) / 128.0f)) != k1 % l1) continue;
-                    class_66 worldrenderer1 = this.field_1808[k1];
-                    float f4 = (float)((double)worldrenderer1.field_237 - d1);
-                    float f5 = (float)((double)worldrenderer1.field_238 - d2);
-                    float f6 = (float)((double)worldrenderer1.field_239 - d3);
+                    if (!this.field_1808[k1].field_243 || this.field_1808[k1].field_253 || this.field_1818 % (l1 = (int) (1.0f + (f3 = MathsHelper.sqrt(this.field_1808[k1].method_299(entityliving))) / 128.0f)) != k1 % l1)
+                        continue;
+                    MixinClass_66 worldrenderer1 = this.field_1808[k1];
+                    float f4 = (float) ((double) worldrenderer1.field_237 - d1);
+                    float f5 = (float) ((double) worldrenderer1.field_238 - d2);
+                    float f6 = (float) ((double) worldrenderer1.field_239 - d3);
                     float f7 = f4 - f;
                     float f8 = f5 - f1;
                     float f9 = f6 - f2;
@@ -474,7 +496,7 @@ public class MixinWorldRenderer implements LevelListener {
                         f1 += f8;
                         f2 += f9;
                     }
-                    ARBOcclusionQuery.glBeginQueryARB(35092, this.field_1808[k1].field_254);
+                    ARBOcclusionQuery.glBeginQueryARB(35092, (int) this.field_1808[k1].field_254);
                     this.field_1808[k1].method_303();
                     ARBOcclusionQuery.glEndQueryARB(35092);
                     this.field_1808[k1].field_253 = true;
@@ -501,19 +523,27 @@ public class MixinWorldRenderer implements LevelListener {
         return k;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void method_1541(int i, int j) {
         for (int k = i; k < j; ++k) {
             if (!this.field_1808[k].field_253) continue;
             this.field_1797.clear();
-            ARBOcclusionQuery.glGetQueryObjectuARB(this.field_1808[k].field_254, 34919, this.field_1797);
+            ARBOcclusionQuery.glGetQueryObjectuARB((int) this.field_1808[k].field_254, 34919, this.field_1797);
             if (this.field_1797.get(0) == 0) continue;
             this.field_1808[k].field_253 = false;
             this.field_1797.clear();
-            ARBOcclusionQuery.glGetQueryObjectuARB(this.field_1808[k].field_254, 34918, this.field_1797);
+            ARBOcclusionQuery.glGetQueryObjectuARB((int) this.field_1808[k].field_254, 34918, this.field_1797);
             this.field_1808[k].field_252 = this.field_1797.get(0) != 0;
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private int method_1542(int i, int j, int k, double d) {
         this.field_1793.clear();
         int l = 0;
@@ -531,11 +561,12 @@ public class MixinWorldRenderer implements LevelListener {
                     ++this.field_1790;
                 }
             }
-            if (this.field_1808[i1].field_244[k] || !this.field_1808[i1].field_243 || this.field_1817 && !this.field_1808[i1].field_252 || (j1 = this.field_1808[i1].method_297(k)) < 0) continue;
-            this.field_1793.add(this.field_1808[i1]);
+            if (this.field_1808[i1].field_244[k] || !this.field_1808[i1].field_243 || this.field_1817 && !this.field_1808[i1].field_252 || (j1 = this.field_1808[i1].method_297(k)) < 0)
+                continue;
+            this.field_1793.add((Object) this.field_1808[i1]);
             ++l;
         }
-        LivingEntity entityliving = this.client.field_2807;
+        MixinLivingEntity entityliving = this.client.field_2807;
         double d1 = entityliving.prevRenderX + (entityliving.x - entityliving.prevRenderX) * d;
         double d2 = entityliving.prevRenderY + (entityliving.y - entityliving.prevRenderY) * d;
         double d3 = entityliving.prevRenderZ + (entityliving.z - entityliving.prevRenderZ) * d;
@@ -544,10 +575,11 @@ public class MixinWorldRenderer implements LevelListener {
             this.field_1794[l1].method_1913();
         }
         for (int i2 = 0; i2 < this.field_1793.size(); ++i2) {
-            class_66 worldrenderer = (class_66)this.field_1793.get(i2);
+            MixinClass_66 worldrenderer = (MixinClass_66) this.field_1793.get(i2);
             int j2 = -1;
             for (int k2 = 0; k2 < k1; ++k2) {
-                if (!this.field_1794[k2].method_1911(worldrenderer.field_237, worldrenderer.field_238, worldrenderer.field_239)) continue;
+                if (!this.field_1794[k2].method_1911(worldrenderer.field_237, worldrenderer.field_238, worldrenderer.field_239))
+                    continue;
                 j2 = k2;
             }
             if (j2 < 0) {
@@ -560,25 +592,37 @@ public class MixinWorldRenderer implements LevelListener {
         return l;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_1540(int i, double d) {
         for (int j = 0; j < this.field_1794.length; ++j) {
             this.field_1794[j].method_1909();
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_1557() {
         ++this.field_1818;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void renderSky(float f) {
         if (this.client.level.dimension.hasFog) {
             return;
         }
         GL11.glDisable(3553);
         Vec3f vec3d = this.level.method_279(this.client.field_2807, f);
-        float f1 = (float)vec3d.x;
-        float f2 = (float)vec3d.y;
-        float f3 = (float)vec3d.z;
+        float f1 = (float) vec3d.x;
+        float f2 = (float) vec3d.y;
+        float f3 = (float) vec3d.z;
         if (this.client.options.anaglyph3d) {
             float f4 = (f1 * 30.0f + f2 * 59.0f + f3 * 11.0f) / 100.0f;
             float f5 = (f1 * 30.0f + f2 * 70.0f) / 100.0f;
@@ -623,7 +667,7 @@ public class MixinWorldRenderer implements LevelListener {
             int i = 16;
             tessellator.colour(af[0], af[1], af[2], 0.0f);
             for (int j = 0; j <= i; ++j) {
-                float f20 = (float)j * 3.141593f * 2.0f / (float)i;
+                float f20 = (float) j * 3.141593f * 2.0f / (float) i;
                 float f21 = MathsHelper.sin(f20);
                 float f22 = MathsHelper.cos(f20);
                 tessellator.pos(f21 * 120.0f, f22 * 120.0f, -f22 * 40.0f * af[3]);
@@ -642,9 +686,9 @@ public class MixinWorldRenderer implements LevelListener {
         GL11.glColor4f(1.0f, 1.0f, 1.0f, f6);
         GL11.glTranslatef(f9, f11, f13);
         GL11.glRotatef(0.0f, 0.0f, 0.0f, 1.0f);
-        GL11.glRotatef(this.level.method_198(f) * 360.0f, 1.0f, 0.0f, 0.0f);
+        GL11.glRotatef((float) (this.level.method_198(f) * 360.0f), 1.0f, 0.0f, 0.0f);
         float f15 = 30.0f;
-        GL11.glBindTexture(3553, this.textureManager.getTextureId("/terrain/sun.png"));
+        GL11.glBindTexture(3553, (int) this.textureManager.getTextureId("/terrain/sun.png"));
         tessellator.start();
         tessellator.vertex(-f15, 100.0, -f15, 0.0, 0.0);
         tessellator.vertex(f15, 100.0, -f15, 1.0, 0.0);
@@ -652,7 +696,7 @@ public class MixinWorldRenderer implements LevelListener {
         tessellator.vertex(-f15, 100.0, f15, 0.0, 1.0);
         tessellator.draw();
         f15 = 20.0f;
-        GL11.glBindTexture(3553, this.textureManager.getTextureId("/terrain/moon.png"));
+        GL11.glBindTexture(3553, (int) this.textureManager.getTextureId("/terrain/moon.png"));
         tessellator.start();
         tessellator.vertex(-f15, -100.0, f15, 1.0, 1.0);
         tessellator.vertex(f15, -100.0, f15, 0.0, 1.0);
@@ -681,6 +725,10 @@ public class MixinWorldRenderer implements LevelListener {
         GL11.glDepthMask(true);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_1552(float f) {
         if (this.client.level.dimension.hasFog) {
             return;
@@ -689,26 +737,26 @@ public class MixinWorldRenderer implements LevelListener {
             this.renderClouds(f);
             return;
         }
-        GL11.glDisable((int)2884);
-        float f1 = (float)(this.client.field_2807.prevRenderY + (this.client.field_2807.y - this.client.field_2807.prevRenderY) * (double)f);
-        double d = this.client.field_2807.prevX + (this.client.field_2807.x - this.client.field_2807.prevX) * (double)f + (double)(((float)this.field_1818 + f) * 0.03f);
-        double d1 = this.client.field_2807.prevZ + (this.client.field_2807.z - this.client.field_2807.prevZ) * (double)f;
+        GL11.glDisable(2884);
+        float f1 = (float) (this.client.field_2807.prevRenderY + (this.client.field_2807.y - this.client.field_2807.prevRenderY) * (double) f);
+        double d = this.client.field_2807.prevX + (this.client.field_2807.x - this.client.field_2807.prevX) * (double) f + (double) (((float) this.field_1818 + f) * 0.03f);
+        double d1 = this.client.field_2807.prevZ + (this.client.field_2807.z - this.client.field_2807.prevZ) * (double) f;
         if (this.client.cameraActive) {
             CutsceneCameraPoint p = this.client.cutsceneCamera.getCurrentPoint(f);
             f1 = p.posY;
-            d = (double)p.posX + (double)(((float)this.field_1818 + f) * 0.03f);
+            d = (double) p.posX + (double) (((float) this.field_1818 + f) * 0.03f);
             d1 = p.posZ;
         }
         int byte0 = 32;
         int i = 256 / byte0;
         Tessellator tessellator = Tessellator.INSTANCE;
-        GL11.glBindTexture(3553, this.textureManager.getTextureId("/environment/clouds.png"));
+        GL11.glBindTexture(3553, (int) this.textureManager.getTextureId("/environment/clouds.png"));
         GL11.glEnable(3042);
         GL11.glBlendFunc(770, 771);
         Vec3f vec3d = this.level.method_282(f);
-        float f2 = (float)vec3d.x;
-        float f3 = (float)vec3d.y;
-        float f4 = (float)vec3d.z;
+        float f2 = (float) vec3d.x;
+        float f3 = (float) vec3d.y;
+        float f4 = (float) vec3d.z;
         if (this.client.options.anaglyph3d) {
             float f5 = (f2 * 30.0f + f3 * 59.0f + f4 * 11.0f) / 100.0f;
             float f7 = (f2 * 30.0f + f3 * 70.0f) / 100.0f;
@@ -721,16 +769,16 @@ public class MixinWorldRenderer implements LevelListener {
         int j = MathsHelper.floor(d / 2048.0);
         int k = MathsHelper.floor(d1 / 2048.0);
         float f9 = this.level.dimension.getCloudHeight() - f1 + 0.33f;
-        float f10 = (float)((d -= j * 2048) * (double)f6);
-        float f11 = (float)((d1 -= k * 2048) * (double)f6);
+        float f10 = (float) ((d -= j * 2048) * (double) f6);
+        float f11 = (float) ((d1 -= k * 2048) * (double) f6);
         tessellator.start();
         tessellator.colour(f2, f3, f4, 0.8f);
         for (int l = -byte0 * i; l < byte0 * i; l += byte0) {
             for (int i1 = -byte0 * i; i1 < byte0 * i; i1 += byte0) {
-                tessellator.vertex(l + 0, f9, i1 + byte0, (float)(l + 0) * f6 + f10, (float)(i1 + byte0) * f6 + f11);
-                tessellator.vertex(l + byte0, f9, i1 + byte0, (float)(l + byte0) * f6 + f10, (float)(i1 + byte0) * f6 + f11);
-                tessellator.vertex(l + byte0, f9, i1 + 0, (float)(l + byte0) * f6 + f10, (float)(i1 + 0) * f6 + f11);
-                tessellator.vertex(l + 0, f9, i1 + 0, (float)(l + 0) * f6 + f10, (float)(i1 + 0) * f6 + f11);
+                tessellator.vertex(l + 0, f9, i1 + byte0, (float) (l + 0) * f6 + f10, (float) (i1 + byte0) * f6 + f11);
+                tessellator.vertex(l + byte0, f9, i1 + byte0, (float) (l + byte0) * f6 + f10, (float) (i1 + byte0) * f6 + f11);
+                tessellator.vertex(l + byte0, f9, i1 + 0, (float) (l + byte0) * f6 + f10, (float) (i1 + 0) * f6 + f11);
+                tessellator.vertex(l + 0, f9, i1 + 0, (float) (l + 0) * f6 + f10, (float) (i1 + 0) * f6 + f11);
             }
         }
         tessellator.draw();
@@ -739,30 +787,38 @@ public class MixinWorldRenderer implements LevelListener {
         GL11.glEnable(2884);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean method_1538(double d, double d1, double d2, float f) {
         return false;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void renderClouds(float f) {
         GL11.glDisable(2884);
-        float f1 = (float)(this.client.field_2807.prevRenderY + (this.client.field_2807.y - this.client.field_2807.prevRenderY) * (double)f);
+        float f1 = (float) (this.client.field_2807.prevRenderY + (this.client.field_2807.y - this.client.field_2807.prevRenderY) * (double) f);
         Tessellator tessellator = Tessellator.INSTANCE;
         float f2 = 12.0f;
         float f3 = 4.0f;
-        double d = (this.client.field_2807.prevX + (this.client.field_2807.x - this.client.field_2807.prevX) * (double)f + (double)(((float)this.field_1818 + f) * 0.03f)) / (double)f2;
-        double d1 = (this.client.field_2807.prevZ + (this.client.field_2807.z - this.client.field_2807.prevZ) * (double)f) / (double)f2 + (double)0.33f;
+        double d = (this.client.field_2807.prevX + (this.client.field_2807.x - this.client.field_2807.prevX) * (double) f + (double) (((float) this.field_1818 + f) * 0.03f)) / (double) f2;
+        double d1 = (this.client.field_2807.prevZ + (this.client.field_2807.z - this.client.field_2807.prevZ) * (double) f) / (double) f2 + (double) 0.33f;
         float f4 = this.level.dimension.getCloudHeight() - f1 + 0.33f;
         int i = MathsHelper.floor(d / 2048.0);
         int j = MathsHelper.floor(d1 / 2048.0);
         d -= i * 2048;
         d1 -= j * 2048;
-        GL11.glBindTexture(3553, this.textureManager.getTextureId("/environment/clouds.png"));
+        GL11.glBindTexture(3553, (int) this.textureManager.getTextureId("/environment/clouds.png"));
         GL11.glEnable(3042);
         GL11.glBlendFunc(770, 771);
         Vec3f vec3d = this.level.method_282(f);
-        float f5 = (float)vec3d.x;
-        float f6 = (float)vec3d.y;
-        float f7 = (float)vec3d.z;
+        float f5 = (float) vec3d.x;
+        float f6 = (float) vec3d.y;
+        float f7 = (float) vec3d.z;
         if (this.client.options.anaglyph3d) {
             float f8 = (f5 * 30.0f + f6 * 59.0f + f7 * 11.0f) / 100.0f;
             float f10 = (f5 * 30.0f + f6 * 70.0f) / 100.0f;
@@ -771,13 +827,13 @@ public class MixinWorldRenderer implements LevelListener {
             f6 = f10;
             f7 = f12;
         }
-        float f9;
-        float f11;
+        float f9 = (float) (d * 0.0);
+        float f11 = (float) (d1 * 0.0);
         float f13 = 0.00390625f;
-        f9 = (float)MathsHelper.floor(d) * f13;
-        f11 = (float)MathsHelper.floor(d1) * f13;
-        float f14 = (float)(d - (double)MathsHelper.floor(d));
-        float f15 = (float)(d1 - (double)MathsHelper.floor(d1));
+        f9 = (float) MathsHelper.floor(d) * f13;
+        f11 = (float) MathsHelper.floor(d1) * f13;
+        float f14 = (float) (d - (double) MathsHelper.floor(d));
+        float f15 = (float) (d1 - (double) MathsHelper.floor(d1));
         int k = 8;
         int byte0 = 3;
         float f16 = 9.765625E-4f;
@@ -804,55 +860,55 @@ public class MixinWorldRenderer implements LevelListener {
                     if (f4 > -f3 - 1.0f) {
                         tessellator.colour(f5 * 0.7f, f6 * 0.7f, f7 * 0.7f, 0.8f);
                         tessellator.method_1697(0.0f, -1.0f, 0.0f);
-                        tessellator.vertex(f19 + 0.0f, f4 + 0.0f, f20 + (float)k, (f17 + 0.0f) * f13 + f9, (f18 + (float)k) * f13 + f11);
-                        tessellator.vertex(f19 + (float)k, f4 + 0.0f, f20 + (float)k, (f17 + (float)k) * f13 + f9, (f18 + (float)k) * f13 + f11);
-                        tessellator.vertex(f19 + (float)k, f4 + 0.0f, f20 + 0.0f, (f17 + (float)k) * f13 + f9, (f18 + 0.0f) * f13 + f11);
+                        tessellator.vertex(f19 + 0.0f, f4 + 0.0f, f20 + (float) k, (f17 + 0.0f) * f13 + f9, (f18 + (float) k) * f13 + f11);
+                        tessellator.vertex(f19 + (float) k, f4 + 0.0f, f20 + (float) k, (f17 + (float) k) * f13 + f9, (f18 + (float) k) * f13 + f11);
+                        tessellator.vertex(f19 + (float) k, f4 + 0.0f, f20 + 0.0f, (f17 + (float) k) * f13 + f9, (f18 + 0.0f) * f13 + f11);
                         tessellator.vertex(f19 + 0.0f, f4 + 0.0f, f20 + 0.0f, (f17 + 0.0f) * f13 + f9, (f18 + 0.0f) * f13 + f11);
                     }
                     if (f4 <= f3 + 1.0f) {
                         tessellator.colour(f5, f6, f7, 0.8f);
                         tessellator.method_1697(0.0f, 1.0f, 0.0f);
-                        tessellator.vertex(f19 + 0.0f, f4 + f3 - f16, f20 + (float)k, (f17 + 0.0f) * f13 + f9, (f18 + (float)k) * f13 + f11);
-                        tessellator.vertex(f19 + (float)k, f4 + f3 - f16, f20 + (float)k, (f17 + (float)k) * f13 + f9, (f18 + (float)k) * f13 + f11);
-                        tessellator.vertex(f19 + (float)k, f4 + f3 - f16, f20 + 0.0f, (f17 + (float)k) * f13 + f9, (f18 + 0.0f) * f13 + f11);
+                        tessellator.vertex(f19 + 0.0f, f4 + f3 - f16, f20 + (float) k, (f17 + 0.0f) * f13 + f9, (f18 + (float) k) * f13 + f11);
+                        tessellator.vertex(f19 + (float) k, f4 + f3 - f16, f20 + (float) k, (f17 + (float) k) * f13 + f9, (f18 + (float) k) * f13 + f11);
+                        tessellator.vertex(f19 + (float) k, f4 + f3 - f16, f20 + 0.0f, (f17 + (float) k) * f13 + f9, (f18 + 0.0f) * f13 + f11);
                         tessellator.vertex(f19 + 0.0f, f4 + f3 - f16, f20 + 0.0f, (f17 + 0.0f) * f13 + f9, (f18 + 0.0f) * f13 + f11);
                     }
                     tessellator.colour(f5 * 0.9f, f6 * 0.9f, f7 * 0.9f, 0.8f);
                     if (i1 > -1) {
                         tessellator.method_1697(-1.0f, 0.0f, 0.0f);
                         for (int k1 = 0; k1 < k; ++k1) {
-                            tessellator.vertex(f19 + (float)k1 + 0.0f, f4 + 0.0f, f20 + (float)k, (f17 + (float)k1 + 0.5f) * f13 + f9, (f18 + (float)k) * f13 + f11);
-                            tessellator.vertex(f19 + (float)k1 + 0.0f, f4 + f3, f20 + (float)k, (f17 + (float)k1 + 0.5f) * f13 + f9, (f18 + (float)k) * f13 + f11);
-                            tessellator.vertex(f19 + (float)k1 + 0.0f, f4 + f3, f20 + 0.0f, (f17 + (float)k1 + 0.5f) * f13 + f9, (f18 + 0.0f) * f13 + f11);
-                            tessellator.vertex(f19 + (float)k1 + 0.0f, f4 + 0.0f, f20 + 0.0f, (f17 + (float)k1 + 0.5f) * f13 + f9, (f18 + 0.0f) * f13 + f11);
+                            tessellator.vertex(f19 + (float) k1 + 0.0f, f4 + 0.0f, f20 + (float) k, (f17 + (float) k1 + 0.5f) * f13 + f9, (f18 + (float) k) * f13 + f11);
+                            tessellator.vertex(f19 + (float) k1 + 0.0f, f4 + f3, f20 + (float) k, (f17 + (float) k1 + 0.5f) * f13 + f9, (f18 + (float) k) * f13 + f11);
+                            tessellator.vertex(f19 + (float) k1 + 0.0f, f4 + f3, f20 + 0.0f, (f17 + (float) k1 + 0.5f) * f13 + f9, (f18 + 0.0f) * f13 + f11);
+                            tessellator.vertex(f19 + (float) k1 + 0.0f, f4 + 0.0f, f20 + 0.0f, (f17 + (float) k1 + 0.5f) * f13 + f9, (f18 + 0.0f) * f13 + f11);
                         }
                     }
                     if (i1 <= 1) {
                         tessellator.method_1697(1.0f, 0.0f, 0.0f);
                         for (int l1 = 0; l1 < k; ++l1) {
-                            tessellator.vertex(f19 + (float)l1 + 1.0f - f16, f4 + 0.0f, f20 + (float)k, (f17 + (float)l1 + 0.5f) * f13 + f9, (f18 + (float)k) * f13 + f11);
-                            tessellator.vertex(f19 + (float)l1 + 1.0f - f16, f4 + f3, f20 + (float)k, (f17 + (float)l1 + 0.5f) * f13 + f9, (f18 + (float)k) * f13 + f11);
-                            tessellator.vertex(f19 + (float)l1 + 1.0f - f16, f4 + f3, f20 + 0.0f, (f17 + (float)l1 + 0.5f) * f13 + f9, (f18 + 0.0f) * f13 + f11);
-                            tessellator.vertex(f19 + (float)l1 + 1.0f - f16, f4 + 0.0f, f20 + 0.0f, (f17 + (float)l1 + 0.5f) * f13 + f9, (f18 + 0.0f) * f13 + f11);
+                            tessellator.vertex(f19 + (float) l1 + 1.0f - f16, f4 + 0.0f, f20 + (float) k, (f17 + (float) l1 + 0.5f) * f13 + f9, (f18 + (float) k) * f13 + f11);
+                            tessellator.vertex(f19 + (float) l1 + 1.0f - f16, f4 + f3, f20 + (float) k, (f17 + (float) l1 + 0.5f) * f13 + f9, (f18 + (float) k) * f13 + f11);
+                            tessellator.vertex(f19 + (float) l1 + 1.0f - f16, f4 + f3, f20 + 0.0f, (f17 + (float) l1 + 0.5f) * f13 + f9, (f18 + 0.0f) * f13 + f11);
+                            tessellator.vertex(f19 + (float) l1 + 1.0f - f16, f4 + 0.0f, f20 + 0.0f, (f17 + (float) l1 + 0.5f) * f13 + f9, (f18 + 0.0f) * f13 + f11);
                         }
                     }
                     tessellator.colour(f5 * 0.8f, f6 * 0.8f, f7 * 0.8f, 0.8f);
                     if (j1 > -1) {
                         tessellator.method_1697(0.0f, 0.0f, -1.0f);
                         for (int i2 = 0; i2 < k; ++i2) {
-                            tessellator.vertex(f19 + 0.0f, f4 + f3, f20 + (float)i2 + 0.0f, (f17 + 0.0f) * f13 + f9, (f18 + (float)i2 + 0.5f) * f13 + f11);
-                            tessellator.vertex(f19 + (float)k, f4 + f3, f20 + (float)i2 + 0.0f, (f17 + (float)k) * f13 + f9, (f18 + (float)i2 + 0.5f) * f13 + f11);
-                            tessellator.vertex(f19 + (float)k, f4 + 0.0f, f20 + (float)i2 + 0.0f, (f17 + (float)k) * f13 + f9, (f18 + (float)i2 + 0.5f) * f13 + f11);
-                            tessellator.vertex(f19 + 0.0f, f4 + 0.0f, f20 + (float)i2 + 0.0f, (f17 + 0.0f) * f13 + f9, (f18 + (float)i2 + 0.5f) * f13 + f11);
+                            tessellator.vertex(f19 + 0.0f, f4 + f3, f20 + (float) i2 + 0.0f, (f17 + 0.0f) * f13 + f9, (f18 + (float) i2 + 0.5f) * f13 + f11);
+                            tessellator.vertex(f19 + (float) k, f4 + f3, f20 + (float) i2 + 0.0f, (f17 + (float) k) * f13 + f9, (f18 + (float) i2 + 0.5f) * f13 + f11);
+                            tessellator.vertex(f19 + (float) k, f4 + 0.0f, f20 + (float) i2 + 0.0f, (f17 + (float) k) * f13 + f9, (f18 + (float) i2 + 0.5f) * f13 + f11);
+                            tessellator.vertex(f19 + 0.0f, f4 + 0.0f, f20 + (float) i2 + 0.0f, (f17 + 0.0f) * f13 + f9, (f18 + (float) i2 + 0.5f) * f13 + f11);
                         }
                     }
                     if (j1 <= 1) {
                         tessellator.method_1697(0.0f, 0.0f, 1.0f);
                         for (int j2 = 0; j2 < k; ++j2) {
-                            tessellator.vertex(f19 + 0.0f, f4 + f3, f20 + (float)j2 + 1.0f - f16, (f17 + 0.0f) * f13 + f9, (f18 + (float)j2 + 0.5f) * f13 + f11);
-                            tessellator.vertex(f19 + (float)k, f4 + f3, f20 + (float)j2 + 1.0f - f16, (f17 + (float)k) * f13 + f9, (f18 + (float)j2 + 0.5f) * f13 + f11);
-                            tessellator.vertex(f19 + (float)k, f4 + 0.0f, f20 + (float)j2 + 1.0f - f16, (f17 + (float)k) * f13 + f9, (f18 + (float)j2 + 0.5f) * f13 + f11);
-                            tessellator.vertex(f19 + 0.0f, f4 + 0.0f, f20 + (float)j2 + 1.0f - f16, (f17 + 0.0f) * f13 + f9, (f18 + (float)j2 + 0.5f) * f13 + f11);
+                            tessellator.vertex(f19 + 0.0f, f4 + f3, f20 + (float) j2 + 1.0f - f16, (f17 + 0.0f) * f13 + f9, (f18 + (float) j2 + 0.5f) * f13 + f11);
+                            tessellator.vertex(f19 + (float) k, f4 + f3, f20 + (float) j2 + 1.0f - f16, (f17 + (float) k) * f13 + f9, (f18 + (float) j2 + 0.5f) * f13 + f11);
+                            tessellator.vertex(f19 + (float) k, f4 + 0.0f, f20 + (float) j2 + 1.0f - f16, (f17 + (float) k) * f13 + f9, (f18 + (float) j2 + 0.5f) * f13 + f11);
+                            tessellator.vertex(f19 + 0.0f, f4 + 0.0f, f20 + (float) j2 + 1.0f - f16, (f17 + 0.0f) * f13 + f9, (f18 + (float) j2 + 0.5f) * f13 + f11);
                         }
                     }
                     tessellator.draw();
@@ -864,7 +920,11 @@ public class MixinWorldRenderer implements LevelListener {
         GL11.glEnable(2884);
     }
 
-    public boolean method_1549(LivingEntity entityliving, boolean flag) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public boolean method_1549(MixinLivingEntity entityliving, boolean flag) {
         int j2;
         boolean flag1 = false;
         if (flag1) {
@@ -872,21 +932,21 @@ public class MixinWorldRenderer implements LevelListener {
             int i = this.field_1807.size() - 1;
             int j = this.field_1807.size();
             for (int k = 0; k < j; ++k) {
-                class_66 worldrenderer = (class_66)this.field_1807.get(i - k);
+                MixinClass_66 worldrenderer = (MixinClass_66) this.field_1807.get(i - k);
                 if (!flag) {
                     if (worldrenderer.method_299(entityliving) > 256.0f && (worldrenderer.field_243 ? k >= 3 : k >= 1)) {
                         return false;
                     }
                 } else if (!worldrenderer.field_243) continue;
                 worldrenderer.method_296();
-                this.field_1807.remove(worldrenderer);
+                this.field_1807.remove((Object) worldrenderer);
                 worldrenderer.field_249 = false;
             }
             return this.field_1807.size() == 0;
         }
         int byte0 = 2;
         class_430 rendersorter = new class_430(entityliving);
-        class_66[] aworldrenderer = new class_66[byte0];
+        MixinClass_66[] aworldrenderer = new MixinClass_66[byte0];
         ArrayList arraylist = null;
         int l = this.field_1807.size();
         int i1 = 0;
@@ -895,7 +955,7 @@ public class MixinWorldRenderer implements LevelListener {
             avgTime = Minecraft.minecraftInstance.getAvgFrameTime();
         }
         for (int j1 = 0; j1 < l; ++j1) {
-            class_66 worldrenderer1 = (class_66)this.field_1807.get(j1);
+            MixinClass_66 worldrenderer1 = (MixinClass_66) this.field_1807.get(j1);
             if (!flag) {
                 if (worldrenderer1.method_299(entityliving) > 256.0f) {
                     int k2;
@@ -913,23 +973,24 @@ public class MixinWorldRenderer implements LevelListener {
             if (arraylist == null) {
                 arraylist = new ArrayList();
             }
-            arraylist.add((Object)worldrenderer1);
+            arraylist.add((Object) worldrenderer1);
             this.field_1807.set(j1, null);
-            if (PlayerTorch.isTorchActive() && (++i1 >= 3 || avgTime > 40000000L || i1 >= 2 && avgTime > 16666666L)) break;
+            if (PlayerTorch.isTorchActive() && (++i1 >= 3 || avgTime > 40000000L || i1 >= 2 && avgTime > 16666666L))
+                break;
         }
         if (arraylist != null) {
             if (arraylist.size() > 1) {
-                Collections.sort(arraylist, (Comparator)rendersorter);
+                Collections.sort(arraylist, rendersorter);
             }
             for (int k1 = arraylist.size() - 1; k1 >= 0; --k1) {
-                class_66 worldrenderer2 = (class_66)arraylist.get(k1);
+                MixinClass_66 worldrenderer2 = (MixinClass_66) arraylist.get(k1);
                 worldrenderer2.method_296();
                 worldrenderer2.field_249 = false;
             }
         }
         int l1 = 0;
         for (int i2 = byte0 - 1; i2 >= 0; --i2) {
-            class_66 worldrenderer3 = aworldrenderer[i2];
+            MixinClass_66 worldrenderer3 = aworldrenderer[i2];
             if (worldrenderer3 == null) continue;
             if (!worldrenderer3.field_243 && i2 != byte0 - 1) {
                 aworldrenderer[i2] = null;
@@ -943,7 +1004,7 @@ public class MixinWorldRenderer implements LevelListener {
         int l2 = 0;
         int j3 = this.field_1807.size();
         for (j2 = 0; j2 != j3; ++j2) {
-            class_66 worldrenderer4 = (class_66)this.field_1807.get(j2);
+            MixinClass_66 worldrenderer4 = (MixinClass_66) this.field_1807.get(j2);
             if (worldrenderer4 == null) continue;
             boolean flag2 = false;
             for (int k3 = 0; k3 < byte0 && !flag2; ++k3) {
@@ -952,7 +1013,7 @@ public class MixinWorldRenderer implements LevelListener {
             }
             if (flag2) continue;
             if (l2 != j2) {
-                this.field_1807.set(l2, worldrenderer4);
+                this.field_1807.set(l2, (Object) worldrenderer4);
             }
             ++l2;
         }
@@ -962,12 +1023,16 @@ public class MixinWorldRenderer implements LevelListener {
         return l == i1 + l1;
     }
 
-    public void method_1547(Player player, HitResult movingobjectposition, int i, ItemInstance itemstack, float f) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public void method_1547(MixinPlayer player, HitResult movingobjectposition, int i, MixinItemInstance itemstack, float f) {
         Tessellator tessellator = Tessellator.INSTANCE;
         GL11.glEnable(3042);
         GL11.glEnable(3008);
         GL11.glBlendFunc(770, 1);
-        GL11.glColor4f(1.0f, 1.0f, 1.0f, (MathsHelper.sin((float)System.currentTimeMillis() / 100.0f) * 0.2f + 0.4f) * 0.5f);
+        GL11.glColor4f(1.0f, 1.0f, 1.0f, (MathsHelper.sin((float) System.currentTimeMillis() / 100.0f) * 0.2f + 0.4f) * 0.5f);
         if (i == 0) {
             if (this.field_1803 > 0.0f) {
                 GL11.glBlendFunc(774, 768);
@@ -976,13 +1041,13 @@ public class MixinWorldRenderer implements LevelListener {
                 GL11.glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
                 GL11.glPushMatrix();
                 int k = this.level.getTileId(movingobjectposition.x, movingobjectposition.y, movingobjectposition.z);
-                Tile block = k <= 0 ? null : Tile.BY_ID[k];
+                MixinTile block = k <= 0 ? null : Tile.BY_ID[k];
                 GL11.glDisable(3008);
                 GL11.glPolygonOffset(-3.0f, -3.0f);
                 GL11.glEnable(32823);
-                double d = player.prevRenderX + (player.x - player.prevRenderX) * (double)f;
-                double d1 = player.prevRenderY + (player.y - player.prevRenderY) * (double)f;
-                double d2 = player.prevRenderZ + (player.z - player.prevRenderZ) * (double)f;
+                double d = player.prevRenderX + (player.x - player.prevRenderX) * (double) f;
+                double d1 = player.prevRenderY + (player.y - player.prevRenderY) * (double) f;
+                double d2 = player.prevRenderZ + (player.z - player.prevRenderZ) * (double) f;
                 if (block == null) {
                     block = Tile.STONE;
                 }
@@ -990,7 +1055,7 @@ public class MixinWorldRenderer implements LevelListener {
                 tessellator.start();
                 tessellator.prevPos(-d, -d1, -d2);
                 tessellator.method_1699();
-                this.tileRenderer.method_51(block, movingobjectposition.x, movingobjectposition.y, movingobjectposition.z, 240 + (int)(this.field_1803 * 10.0f));
+                this.tileRenderer.method_51(block, movingobjectposition.x, movingobjectposition.y, movingobjectposition.z, 240 + (int) (this.field_1803 * 10.0f));
                 tessellator.draw();
                 tessellator.prevPos(0.0, 0.0, 0.0);
                 GL11.glDisable(3008);
@@ -1002,8 +1067,8 @@ public class MixinWorldRenderer implements LevelListener {
             }
         } else if (itemstack != null) {
             GL11.glBlendFunc(770, 771);
-            float f1 = MathsHelper.sin((float)System.currentTimeMillis() / 100.0f) * 0.2f + 0.8f;
-            GL11.glColor4f(f1, f1, f1, MathsHelper.sin((float)System.currentTimeMillis() / 200.0f) * 0.2f + 0.5f);
+            float f1 = MathsHelper.sin((float) System.currentTimeMillis() / 100.0f) * 0.2f + 0.8f;
+            GL11.glColor4f(f1, f1, f1, MathsHelper.sin((float) System.currentTimeMillis() / 200.0f) * 0.2f + 0.5f);
             int l = this.textureManager.getTextureId("/terrain.png");
             GL11.glBindTexture(3553, l);
             int i1 = movingobjectposition.x;
@@ -1028,11 +1093,15 @@ public class MixinWorldRenderer implements LevelListener {
                 ++i1;
             }
         }
-        GL11.glDisable((int)3042);
-        GL11.glDisable((int)3008);
+        GL11.glDisable(3042);
+        GL11.glDisable(3008);
     }
 
-    public void method_1554(Player entityplayer, HitResult movingobjectposition, int i, ItemInstance itemstack, float f) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public void method_1554(MixinPlayer entityplayer, HitResult movingobjectposition, int i, MixinItemInstance itemstack, float f) {
         if (i == 0 && movingobjectposition.type == HitType.TILE) {
             GL11.glEnable(3042);
             GL11.glBlendFunc(770, 771);
@@ -1044,9 +1113,9 @@ public class MixinWorldRenderer implements LevelListener {
             int j = this.level.getTileId(movingobjectposition.x, movingobjectposition.y, movingobjectposition.z);
             if (j > 0) {
                 Tile.BY_ID[j].method_1616(this.level, movingobjectposition.x, movingobjectposition.y, movingobjectposition.z);
-                double d = entityplayer.prevRenderX + (entityplayer.x - entityplayer.prevRenderX) * (double)f;
-                double d1 = entityplayer.prevRenderY + (entityplayer.y - entityplayer.prevRenderY) * (double)f;
-                double d2 = entityplayer.prevRenderZ + (entityplayer.z - entityplayer.prevRenderZ) * (double)f;
+                double d = entityplayer.prevRenderX + (entityplayer.x - entityplayer.prevRenderX) * (double) f;
+                double d1 = entityplayer.prevRenderY + (entityplayer.y - entityplayer.prevRenderY) * (double) f;
+                double d2 = entityplayer.prevRenderZ + (entityplayer.z - entityplayer.prevRenderZ) * (double) f;
                 this.method_1545(Tile.BY_ID[j].getOutlineShape(this.level, movingobjectposition.x, movingobjectposition.y, movingobjectposition.z).expand(f1, f1, f1).move(-d, -d1, -d2));
             }
             GL11.glDepthMask(true);
@@ -1055,48 +1124,52 @@ public class MixinWorldRenderer implements LevelListener {
         }
     }
 
-    public void drawCursorSelection(LivingEntity entityplayer, ItemInstance itemstack, float f) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public void drawCursorSelection(MixinLivingEntity entityplayer, MixinItemInstance itemstack, float f) {
         if (ItemCursor.bothSet && itemstack != null && itemstack.itemId >= Items.cursor.id && itemstack.itemId <= Items.cursor.id + 20) {
             GL11.glEnable(3042);
             GL11.glBlendFunc(770, 771);
             GL11.glColor4f(1.0f, 0.6f, 0.0f, 0.4f);
             GL11.glLineWidth(3.0f);
             GL11.glDisable(3553);
-            int minX = Math.min(ItemCursor.oneX, ItemCursor.twoX);
-            int maxX = Math.max(ItemCursor.oneX, ItemCursor.twoX) + 1;
-            int minY = Math.min(ItemCursor.oneY, ItemCursor.twoY);
-            int maxY = Math.max(ItemCursor.oneY, ItemCursor.twoY) + 1;
-            int minZ = Math.min(ItemCursor.oneZ, ItemCursor.twoZ);
-            int maxZ = Math.max(ItemCursor.oneZ, ItemCursor.twoZ) + 1;
-            double offX = entityplayer.prevRenderX + (entityplayer.x - entityplayer.prevRenderX) * (double)f;
-            double offY = entityplayer.prevRenderY + (entityplayer.y - entityplayer.prevRenderY) * (double)f;
-            double offZ = entityplayer.prevRenderZ + (entityplayer.z - entityplayer.prevRenderZ) * (double)f;
+            int minX = Math.min((int) ItemCursor.oneX, (int) ItemCursor.twoX);
+            int maxX = Math.max((int) ItemCursor.oneX, (int) ItemCursor.twoX) + 1;
+            int minY = Math.min((int) ItemCursor.oneY, (int) ItemCursor.twoY);
+            int maxY = Math.max((int) ItemCursor.oneY, (int) ItemCursor.twoY) + 1;
+            int minZ = Math.min((int) ItemCursor.oneZ, (int) ItemCursor.twoZ);
+            int maxZ = Math.max((int) ItemCursor.oneZ, (int) ItemCursor.twoZ) + 1;
+            double offX = entityplayer.prevRenderX + (entityplayer.x - entityplayer.prevRenderX) * (double) f;
+            double offY = entityplayer.prevRenderY + (entityplayer.y - entityplayer.prevRenderY) * (double) f;
+            double offZ = entityplayer.prevRenderZ + (entityplayer.z - entityplayer.prevRenderZ) * (double) f;
             Tessellator tessellator = Tessellator.INSTANCE;
             for (int x = minX; x <= maxX; ++x) {
                 tessellator.start(3);
-                tessellator.pos((double)x - offX, (double)minY - offY, (double)minZ - offZ);
-                tessellator.pos((double)x - offX, (double)maxY - offY, (double)minZ - offZ);
-                tessellator.pos((double)x - offX, (double)maxY - offY, (double)maxZ - offZ);
-                tessellator.pos((double)x - offX, (double)minY - offY, (double)maxZ - offZ);
-                tessellator.pos((double)x - offX, (double)minY - offY, (double)minZ - offZ);
+                tessellator.pos((double) x - offX, (double) minY - offY, (double) minZ - offZ);
+                tessellator.pos((double) x - offX, (double) maxY - offY, (double) minZ - offZ);
+                tessellator.pos((double) x - offX, (double) maxY - offY, (double) maxZ - offZ);
+                tessellator.pos((double) x - offX, (double) minY - offY, (double) maxZ - offZ);
+                tessellator.pos((double) x - offX, (double) minY - offY, (double) minZ - offZ);
                 tessellator.draw();
             }
             for (int y = minY; y <= maxY; ++y) {
                 tessellator.start(3);
-                tessellator.pos((double)minX - offX, (double)y - offY, (double)minZ - offZ);
-                tessellator.pos((double)maxX - offX, (double)y - offY, (double)minZ - offZ);
-                tessellator.pos((double)maxX - offX, (double)y - offY, (double)maxZ - offZ);
-                tessellator.pos((double)minX - offX, (double)y - offY, (double)maxZ - offZ);
-                tessellator.pos((double)minX - offX, (double)y - offY, (double)minZ - offZ);
+                tessellator.pos((double) minX - offX, (double) y - offY, (double) minZ - offZ);
+                tessellator.pos((double) maxX - offX, (double) y - offY, (double) minZ - offZ);
+                tessellator.pos((double) maxX - offX, (double) y - offY, (double) maxZ - offZ);
+                tessellator.pos((double) minX - offX, (double) y - offY, (double) maxZ - offZ);
+                tessellator.pos((double) minX - offX, (double) y - offY, (double) minZ - offZ);
                 tessellator.draw();
             }
             for (int z = minZ; z <= maxZ; ++z) {
                 tessellator.start(3);
-                tessellator.pos((double)minX - offX, (double)minY - offY, (double)z - offZ);
-                tessellator.pos((double)maxX - offX, (double)minY - offY, (double)z - offZ);
-                tessellator.pos((double)maxX - offX, (double)maxY - offY, (double)z - offZ);
-                tessellator.pos((double)minX - offX, (double)maxY - offY, (double)z - offZ);
-                tessellator.pos((double)minX - offX, (double)minY - offY, (double)z - offZ);
+                tessellator.pos((double) minX - offX, (double) minY - offY, (double) z - offZ);
+                tessellator.pos((double) maxX - offX, (double) minY - offY, (double) z - offZ);
+                tessellator.pos((double) maxX - offX, (double) maxY - offY, (double) z - offZ);
+                tessellator.pos((double) minX - offX, (double) maxY - offY, (double) z - offZ);
+                tessellator.pos((double) minX - offX, (double) minY - offY, (double) z - offZ);
                 tessellator.draw();
             }
             GL11.glLineWidth(1.0f);
@@ -1105,29 +1178,33 @@ public class MixinWorldRenderer implements LevelListener {
         }
     }
 
-    public void drawEntityPath(Entity e, LivingEntity entityplayer, float f) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public void drawEntityPath(MixinEntity e, MixinLivingEntity entityplayer, float f) {
         if (e instanceof IEntityPather) {
-            IEntityPather ent = (IEntityPather) e;
-            class_61 path = ent.getCurrentPath();
-            double offX = entityplayer.prevRenderX + (entityplayer.x - entityplayer.prevRenderX) * (double)f;
-            double offY = entityplayer.prevRenderY + (entityplayer.y - entityplayer.prevRenderY) * (double)f;
-            double offZ = entityplayer.prevRenderZ + (entityplayer.z - entityplayer.prevRenderZ) * (double)f;
+            IEntityPather ent = (IEntityPather) ((Object) e);
+            MixinClass_61 path = ent.getCurrentPath();
+            double offX = entityplayer.prevRenderX + (entityplayer.x - entityplayer.prevRenderX) * (double) f;
+            double offY = entityplayer.prevRenderY + (entityplayer.y - entityplayer.prevRenderY) * (double) f;
+            double offZ = entityplayer.prevRenderZ + (entityplayer.z - entityplayer.prevRenderZ) * (double) f;
             if (path != null) {
                 Tessellator tessellator = Tessellator.INSTANCE;
                 tessellator.start(3);
                 GL11.glEnable(3042);
                 GL11.glBlendFunc(770, 771);
-                if (e instanceof WalkingEntity && ((WalkingEntity)e).method_634() != null) {
+                if (e instanceof MixinWalkingEntity && ((MixinWalkingEntity) e).method_634() != null) {
                     GL11.glColor4f(1.0f, 0.0f, 0.0f, 0.4f);
                 } else {
                     GL11.glColor4f(1.0f, 1.0f, 0.0f, 0.4f);
                 }
-                GL11.glLineWidth((float)5.0f);
-                GL11.glDisable((int)3553);
+                GL11.glLineWidth(5.0f);
+                GL11.glDisable(3553);
                 tessellator.pos(e.x - offX, e.y - offY, e.z - offZ);
                 for (int i = path.field_2692; i < path.field_2690; ++i) {
                     Vec3i p = path.field_2691[i];
-                    tessellator.pos((double)p.x - offX + 0.5, (double)p.y - offY + 0.5, (double)p.z - offZ + 0.5);
+                    tessellator.pos((double) p.x - offX + 0.5, (double) p.y - offY + 0.5, (double) p.z - offZ + 0.5);
                 }
                 tessellator.draw();
                 GL11.glLineWidth(1.0f);
@@ -1137,13 +1214,17 @@ public class MixinWorldRenderer implements LevelListener {
         }
     }
 
-    public void drawEntityFOV(LivingEntity e, LivingEntity entityplayer, float f) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public void drawEntityFOV(MixinLivingEntity e, MixinLivingEntity entityplayer, float f) {
         if (e == entityplayer) {
             return;
         }
-        double offX = entityplayer.prevRenderX + (entityplayer.x - entityplayer.prevRenderX) * (double)f;
-        double offY = entityplayer.prevRenderY + (entityplayer.y - entityplayer.prevRenderY) * (double)f;
-        double offZ = entityplayer.prevRenderZ + (entityplayer.z - entityplayer.prevRenderZ) * (double)f;
+        double offX = entityplayer.prevRenderX + (entityplayer.x - entityplayer.prevRenderX) * (double) f;
+        double offY = entityplayer.prevRenderY + (entityplayer.y - entityplayer.prevRenderY) * (double) f;
+        double offZ = entityplayer.prevRenderZ + (entityplayer.z - entityplayer.prevRenderZ) * (double) f;
         Tessellator tessellator = Tessellator.INSTANCE;
         tessellator.start(3);
         GL11.glEnable(3042);
@@ -1155,20 +1236,24 @@ public class MixinWorldRenderer implements LevelListener {
         }
         GL11.glLineWidth(5.0f);
         GL11.glDisable(3553);
-        float fov = Math.min((float)(e.fov / 2.0f + e.extraFov), 180.0f);
-        double xFov = 5.0 * Math.sin(-Math.PI * (double)(e.yaw - fov) / 180.0) + e.x;
-        double zFov = 5.0 * Math.cos(-Math.PI * (double)(e.yaw - fov) / 180.0) + e.z;
-        tessellator.pos(xFov - offX, e.y - offY + (double)e.getStandingEyeHeight(), zFov - offZ);
-        tessellator.pos(e.x - offX, e.y - offY + (double)e.getStandingEyeHeight(), e.z - offZ);
-        xFov = 5.0 * Math.sin(-Math.PI * (double)(e.yaw + fov) / 180.0) + e.x;
-        zFov = 5.0 * Math.cos(-Math.PI * (double)(e.yaw + fov) / 180.0) + e.z;
-        tessellator.pos(xFov - offX, e.y - offY + (double)e.getStandingEyeHeight(), zFov - offZ);
+        float fov = Math.min((float) (e.fov / 2.0f + e.extraFov), 180.0f);
+        double xFov = 5.0 * Math.sin(-Math.PI * (double) (e.yaw - fov) / 180.0) + e.x;
+        double zFov = 5.0 * Math.cos(-Math.PI * (double) (e.yaw - fov) / 180.0) + e.z;
+        tessellator.pos(xFov - offX, e.y - offY + (double) e.getStandingEyeHeight(), zFov - offZ);
+        tessellator.pos(e.x - offX, e.y - offY + (double) e.getStandingEyeHeight(), e.z - offZ);
+        xFov = 5.0 * Math.sin(-Math.PI * (double) (e.yaw + fov) / 180.0) + e.x;
+        zFov = 5.0 * Math.cos(-Math.PI * (double) (e.yaw + fov) / 180.0) + e.z;
+        tessellator.pos(xFov - offX, e.y - offY + (double) e.getStandingEyeHeight(), zFov - offZ);
         tessellator.draw();
         GL11.glLineWidth(1.0f);
         GL11.glEnable(3553);
         GL11.glDisable(3042);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void method_1545(Box axisalignedbb) {
         Tessellator tessellator = Tessellator.INSTANCE;
         tessellator.start(3);
@@ -1197,6 +1282,10 @@ public class MixinWorldRenderer implements LevelListener {
         tessellator.draw();
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_1543(int i, int j, int k, int l, int i1, int j1) {
         int k1 = MathsHelper.method_650(i, 16);
         int l1 = MathsHelper.method_650(j, 16);
@@ -1220,31 +1309,51 @@ public class MixinWorldRenderer implements LevelListener {
                         j4 += this.field_1812;
                     }
                     int k4 = (j4 * this.field_1811 + l3) * this.field_1810 + j3;
-                    class_66 worldrenderer = this.field_1809[k4];
+                    MixinClass_66 worldrenderer = this.field_1809[k4];
                     if (worldrenderer.field_249) continue;
-                    this.field_1807.add(worldrenderer);
+                    this.field_1807.add((Object) worldrenderer);
                     worldrenderer.method_305();
                 }
             }
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void method_1149(int i, int j, int k) {
         this.method_1543(i - 1, j - 1, k - 1, i + 1, j + 1, k + 1);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void method_1150(int i, int j, int k, int l, int i1, int j1) {
         this.method_1543(i - 1, j - 1, k - 1, l + 1, i1 + 1, j1 + 1);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_1550(class_68 icamera, float f) {
         for (int i = 0; i < this.field_1809.length; ++i) {
-            if (this.field_1809[i].method_304() || this.field_1809[i].field_243 && (i + this.field_1804 & 0xF) != 0) continue;
+            if (this.field_1809[i].method_304() || this.field_1809[i].field_243 && (i + this.field_1804 & 0xF) != 0)
+                continue;
             this.field_1809[i].method_300(icamera);
         }
         ++this.field_1804;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void method_1155(String s, int i, int j, int k) {
         if (s != null) {
             this.client.overlay.method_1952("C418 - " + s);
@@ -1252,20 +1361,34 @@ public class MixinWorldRenderer implements LevelListener {
         this.client.soundHelper.method_2010(s, i, j, k, 1.0f, 1.0f);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void playSound(String sound, double x, double y, double z, float f, float f1) {
         float f2 = 16.0f;
         if (f > 1.0f) {
             f2 *= f;
         }
-        if (this.client.field_2807.squaredDistanceTo(x, y, z) < (double)(f2 * f2)) {
-            this.client.soundHelper.playSound(sound, (float)x, (float)y, (float)z, f, f1);
+        if (this.client.field_2807.squaredDistanceTo(x, y, z) < (double) (f2 * f2)) {
+            this.client.soundHelper.playSound(sound, (float) x, (float) y, (float) z, f, f1);
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void addParticle(String particle, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
         this.spawnParticleR(particle, x, y, z, velocityX, velocityY, velocityZ);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public Particle spawnParticleR(String s, double d, double d1, double d2, double d3, double d4, double d5) {
         if (this.client == null || this.client.field_2807 == null || this.client.particleManager == null) {
             return null;
@@ -1293,13 +1416,13 @@ public class MixinWorldRenderer implements LevelListener {
         } else if (s.equals("lava")) {
             particle = new LavaParticle(this.level, d, d1, d2);
         } else if (s.equals("footstep")) {
-            particle = new FootstepParticle(this.textureManager, this.level, d, d1, d2);
+            particle = new MixinFootstepParticle(this.textureManager, this.level, d, d1, d2);
         } else if (s.equals("splash")) {
             particle = new SplashParticle(this.level, d, d1, d2, d3, d4, d5);
         } else if (s.equals("largesmoke")) {
             particle = new SmokeParticle(this.level, d, d1, d2, d3, d4, d5, 2.5f);
         } else if (s.equals("reddust")) {
-            particle = new RedDustParticle(this.level, d, d1, d2, (float)d3, (float)d4, (float)d5);
+            particle = new RedDustParticle(this.level, d, d1, d2, (float) d3, (float) d4, (float) d5);
         } else if (s.equals("snowballpoof")) {
             particle = new PoofParticle(this.level, d, d1, d2, ItemType.snowball);
         } else if (s.equals("snowshovel")) {
@@ -1315,7 +1438,12 @@ public class MixinWorldRenderer implements LevelListener {
         return particle;
     }
 
-    public void onEntityAdded(Entity entity) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public void onEntityAdded(MixinEntity entity) {
         entity.initCloak();
         if (entity.skinUrl != null) {
             this.textureManager.getImageDownloader(entity.skinUrl, new ImageProcessorImpl());
@@ -1325,7 +1453,12 @@ public class MixinWorldRenderer implements LevelListener {
         }
     }
 
-    public void onEntityRemoved(Entity entity) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public void onEntityRemoved(MixinEntity entity) {
         if (entity.skinUrl != null) {
             this.textureManager.removeDownloaded(entity.skinUrl);
         }
@@ -1334,31 +1467,54 @@ public class MixinWorldRenderer implements LevelListener {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void method_1148() {
         for (int i = 0; i < this.field_1809.length; ++i) {
             if (!this.field_1809[i].field_223 || this.field_1809[i].field_249) continue;
-            this.field_1807.add(this.field_1809[i]);
+            this.field_1807.add((Object) this.field_1809[i]);
             this.field_1809[i].method_305();
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void updateAllTheRenderers() {
         for (int i = 0; i < this.field_1809.length; ++i) {
             if (!this.field_1809[i].field_249) {
-                this.field_1807.add(this.field_1809[i]);
+                this.field_1807.add((Object) this.field_1809[i]);
             }
             this.field_1809[i].method_305();
         }
     }
 
-    public void method_1151(int i, int j, int k, TileEntity tileentity) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public void method_1151(int i, int j, int k, MixinTileEntity tileentity) {
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_1558() {
         GLAllocator.deletePointer(this.field_1813);
     }
 
-    public void playLevelEvent(Player entityplayer, int i, int j, int k, int l, int i1) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public void playLevelEvent(MixinPlayer entityplayer, int i, int j, int k, int l, int i1) {
         Random random = this.level.rand;
         switch (i) {
             default: {
@@ -1379,17 +1535,17 @@ public class MixinWorldRenderer implements LevelListener {
             case 2000: {
                 int j1 = i1 % 3 - 1;
                 int k1 = i1 / 3 % 3 - 1;
-                double d = (double)j + (double)j1 * 0.6 + 0.5;
-                double d1 = (double)k + 0.5;
-                double d2 = (double)l + (double)k1 * 0.6 + 0.5;
+                double d = (double) j + (double) j1 * 0.6 + 0.5;
+                double d1 = (double) k + 0.5;
+                double d2 = (double) l + (double) k1 * 0.6 + 0.5;
                 for (int l1 = 0; l1 < 10; ++l1) {
                     double d3 = random.nextDouble() * 0.2 + 0.01;
-                    double d4 = d + (double)j1 * 0.01 + (random.nextDouble() - 0.5) * (double)k1 * 0.5;
+                    double d4 = d + (double) j1 * 0.01 + (random.nextDouble() - 0.5) * (double) k1 * 0.5;
                     double d5 = d1 + (random.nextDouble() - 0.5) * 0.5;
-                    double d6 = d2 + (double)k1 * 0.01 + (random.nextDouble() - 0.5) * (double)j1 * 0.5;
-                    double d7 = (double)j1 * d3 + random.nextGaussian() * 0.01;
+                    double d6 = d2 + (double) k1 * 0.01 + (random.nextDouble() - 0.5) * (double) j1 * 0.5;
+                    double d7 = (double) j1 * d3 + random.nextGaussian() * 0.01;
                     double d8 = -0.03 + random.nextGaussian() * 0.01;
-                    double d9 = (double)k1 * d3 + random.nextGaussian() * 0.01;
+                    double d9 = (double) k1 * d3 + random.nextGaussian() * 0.01;
                     this.addParticle("smoke", d4, d5, d6, d7, d8, d9);
                 }
                 break;
@@ -1397,27 +1553,27 @@ public class MixinWorldRenderer implements LevelListener {
             case 2001: {
                 int i2 = i1 & 0xFF;
                 if (i2 > 0) {
-                    Tile block = Tile.BY_ID[i2];
-                    this.client.soundHelper.playSound(block.sounds.getBreakSound(), (float)j + 0.5f, (float)k + 0.5f, (float)l + 0.5f, (block.sounds.getVolume() + 1.0f) / 2.0f, block.sounds.getPitch() * 0.8f);
+                    MixinTile block = Tile.BY_ID[i2];
+                    this.client.soundHelper.playSound(block.sounds.getBreakSound(), (float) j + 0.5f, (float) k + 0.5f, (float) l + 0.5f, (block.sounds.getVolume() + 1.0f) / 2.0f, block.sounds.getPitch() * 0.8f);
                 }
                 this.client.particleManager.addTileBreakParticles(j, k, l, i1 & 0xFF, i1 >> 8 & 0xFF);
                 break;
             }
             case 1003: {
                 if (Math.random() < 0.5) {
-                    this.level.playSound((double)j + 0.5, (double)k + 0.5, (double)l + 0.5, "random.door_open", 1.0f, this.level.rand.nextFloat() * 0.1f + 0.9f);
+                    this.level.playSound((double) j + 0.5, (double) k + 0.5, (double) l + 0.5, "random.door_open", 1.0f, this.level.rand.nextFloat() * 0.1f + 0.9f);
                     break;
                 }
-                this.level.playSound((double)j + 0.5, (double)k + 0.5, (double)l + 0.5, "random.door_close", 1.0f, this.level.rand.nextFloat() * 0.1f + 0.9f);
+                this.level.playSound((double) j + 0.5, (double) k + 0.5, (double) l + 0.5, "random.door_close", 1.0f, this.level.rand.nextFloat() * 0.1f + 0.9f);
                 break;
             }
             case 1004: {
-                this.level.playSound((float)j + 0.5f, (float)k + 0.5f, (float)l + 0.5f, "random.fizz", 0.5f, 2.6f + (random.nextFloat() - random.nextFloat()) * 0.8f);
+                this.level.playSound((float) j + 0.5f, (float) k + 0.5f, (float) l + 0.5f, "random.fizz", 0.5f, 2.6f + (random.nextFloat() - random.nextFloat()) * 0.8f);
                 break;
             }
             case 1005: {
                 if (ItemType.byId[i1] instanceof RecordItem) {
-                    this.level.method_179(((RecordItem)ItemType.byId[i1]).record, j, k, l);
+                    this.level.method_179(((RecordItem) ItemType.byId[i1]).record, j, k, l);
                     break;
                 }
                 this.level.method_179(null, j, k, l);
@@ -1425,21 +1581,34 @@ public class MixinWorldRenderer implements LevelListener {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void resetAll() {
         this.doReset(false);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void resetForDeath() {
         this.doReset(true);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void doReset(boolean forDeath) {
         Tile.resetActive = true;
         for (int i = 0; i < this.field_1809.length; ++i) {
             int xOffset = this.field_1809[i].field_231;
             int yOffset = this.field_1809[i].field_232;
             int zOffset = this.field_1809[i].field_233;
-            if (!this.level.isRegionLoaded(xOffset, yOffset, zOffset, xOffset + 15, yOffset + 15, zOffset + 15)) continue;
+            if (!this.level.isRegionLoaded(xOffset, yOffset, zOffset, xOffset + 15, yOffset + 15, zOffset + 15))
+                continue;
             for (int x = 0; x < 16; ++x) {
                 for (int y = 0; y < 16; ++y) {
                     for (int z = 0; z < 16; ++z) {

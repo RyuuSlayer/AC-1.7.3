@@ -1,24 +1,23 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import net.minecraft.item.ItemInstance;
-
 public class ScriptItem {
-    public ItemInstance item;
 
-    public ScriptItem(ItemInstance i) {
+    public MixinItemInstance item;
+
+    public ScriptItem(MixinItemInstance i) {
         this.item = i;
     }
 
     public ScriptItem(int itemID) {
-        this.item = new ItemInstance(itemID, 1, 0);
+        this.item = new MixinItemInstance(itemID, 1, 0);
     }
 
     public ScriptItem(int itemID, int quantity) {
-        this.item = new ItemInstance(itemID, quantity, 0);
+        this.item = new MixinItemInstance(itemID, quantity, 0);
     }
 
     public ScriptItem(int itemID, int quantity, int damage) {
-        this.item = new ItemInstance(itemID, quantity, damage);
+        this.item = new MixinItemInstance(itemID, quantity, damage);
     }
 
     public int getItemID() {
