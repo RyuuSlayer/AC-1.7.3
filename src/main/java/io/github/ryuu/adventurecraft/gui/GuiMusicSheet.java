@@ -1,31 +1,17 @@
-package io.github.ryuu.adventurecraft.gui;/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Integer
- *  java.lang.Object
- *  java.lang.Override
- *  java.lang.String
- *  java.lang.System
- *  java.util.ArrayList
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- *  org.lwjgl.input.Keyboard
- *  org.lwjgl.opengl.GL11
- */
+package io.github.ryuu.adventurecraft.gui;
+
 import java.util.ArrayList;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+
+import io.github.ryuu.adventurecraft.util.MusicPlayer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Screen;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 public class GuiMusicSheet extends Screen {
+    private final String instrument;
 
-    private String instrument;
-
-    private ArrayList<Integer> notesPlayed;
+    private final ArrayList<Integer> notesPlayed;
 
     private String notesPlayedString;
 
@@ -37,9 +23,13 @@ public class GuiMusicSheet extends Screen {
 
     public GuiMusicSheet(String i) {
         this.instrument = i;
-        this.notesPlayed = new ArrayList();
+        this.notesPlayed = new ArrayList<>();
         this.notesPlayedString = "";
         this.songPlayed = null;
+    }
+
+    public static void showUI(String i) {
+        Minecraft.minecraftInstance.a(new GuiMusicSheet(i));
     }
 
     @Override
@@ -51,18 +41,17 @@ public class GuiMusicSheet extends Screen {
     }
 
     @Override
-    protected void keyPressed(char character, int key) {
-        super.keyPressed(character, key);
-        if (this.songPlayed == null && key >= 2 && key <= 11) {
-            boolean isSharp;
-            boolean bl = isSharp = Keyboard.isKeyDown((int) 42) || Keyboard.isKeyDown((int) 54);
-            if (isSharp && (key == 2 || key == 4 || key == 5 || key == 6 || key == 8 || key == 9 || key == 11)) {
+    protected void keyPressed(char c, int i) {
+        super.keyPressed(c, i);
+        if (this.songPlayed == null && i >= 2 && i <= 11) {
+            boolean isSharp = (Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54));
+            if (isSharp && (i == 2 || i == 4 || i == 5 || i == 6 || i == 8 || i == 9 || i == 11)) {
                 if (this.spaceTaken + 25 >= 168) {
                     this.notesPlayed.clear();
                     this.notesPlayedString = "";
                     this.spaceTaken = 0;
                 }
-                this.notesPlayed.add((Object) new Integer(-key));
+                this.notesPlayed.add(-i);
                 this.spaceTaken += 14;
             }
             if (this.spaceTaken + 11 >= 168) {
@@ -71,37 +60,37 @@ public class GuiMusicSheet extends Screen {
                 this.spaceTaken = 0;
             }
             this.spaceTaken += 11;
-            this.notesPlayed.add((Object) new Integer(key));
-            if (key == 2) {
-                MusicPlayer.playNoteFromEntity(this.minecraft.level, this.minecraft.player, this.instrument, 'D', isSharp, 0.5f, 1.0f);
-                this.notesPlayedString = this.notesPlayedString + character;
-            } else if (key == 3) {
-                MusicPlayer.playNoteFromEntity(this.minecraft.level, this.minecraft.player, this.instrument, 'E', false, 0.5f, 1.0f);
-                this.notesPlayedString = this.notesPlayedString + "2";
-            } else if (key == 4) {
-                MusicPlayer.playNoteFromEntity(this.minecraft.level, this.minecraft.player, this.instrument, 'F', isSharp, 0.5f, 1.0f);
-                this.notesPlayedString = this.notesPlayedString + character;
-            } else if (key == 5) {
-                MusicPlayer.playNoteFromEntity(this.minecraft.level, this.minecraft.player, this.instrument, 'G', isSharp, 0.5f, 1.0f);
-                this.notesPlayedString = this.notesPlayedString + character;
-            } else if (key == 6) {
-                MusicPlayer.playNoteFromEntity(this.minecraft.level, this.minecraft.player, this.instrument, 'A', isSharp, 1.0f, 1.0f);
-                this.notesPlayedString = this.notesPlayedString + character;
-            } else if (key == 7) {
-                MusicPlayer.playNoteFromEntity(this.minecraft.level, this.minecraft.player, this.instrument, 'B', false, 1.0f, 1.0f);
-                this.notesPlayedString = this.notesPlayedString + "6";
-            } else if (key == 8) {
-                MusicPlayer.playNoteFromEntity(this.minecraft.level, this.minecraft.player, this.instrument, 'C', isSharp, 1.0f, 1.0f);
-                this.notesPlayedString = this.notesPlayedString + character;
-            } else if (key == 9) {
-                MusicPlayer.playNoteFromEntity(this.minecraft.level, this.minecraft.player, this.instrument, 'D', isSharp, 1.0f, 1.0f);
-                this.notesPlayedString = this.notesPlayedString + character;
-            } else if (key == 10) {
-                MusicPlayer.playNoteFromEntity(this.minecraft.level, this.minecraft.player, this.instrument, 'E', false, 1.0f, 1.0f);
-                this.notesPlayedString = this.notesPlayedString + "9";
-            } else if (key == 11) {
-                MusicPlayer.playNoteFromEntity(this.minecraft.level, this.minecraft.player, this.instrument, 'F', isSharp, 1.0f, 1.0f);
-                this.notesPlayedString = this.notesPlayedString + character;
+            this.notesPlayed.add(i);
+            if (i == 2) {
+                MusicPlayer.playNoteFromEntity(this.minecraft.level, this.minecraft.player, this.instrument, 'D', isSharp, 0.5F, 1.0F);
+                this.notesPlayedString += c;
+            } else if (i == 3) {
+                MusicPlayer.playNoteFromEntity(this.minecraft.level, this.minecraft.player, this.instrument, 'E', false, 0.5F, 1.0F);
+                this.notesPlayedString += "2";
+            } else if (i == 4) {
+                MusicPlayer.playNoteFromEntity(this.minecraft.level, this.minecraft.player, this.instrument, 'F', isSharp, 0.5F, 1.0F);
+                this.notesPlayedString += c;
+            } else if (i == 5) {
+                MusicPlayer.playNoteFromEntity(this.minecraft.level, this.minecraft.player, this.instrument, 'G', isSharp, 0.5F, 1.0F);
+                this.notesPlayedString += c;
+            } else if (i == 6) {
+                MusicPlayer.playNoteFromEntity(this.minecraft.level, this.minecraft.player, this.instrument, 'A', isSharp, 1.0F, 1.0F);
+                this.notesPlayedString += c;
+            } else if (i == 7) {
+                MusicPlayer.playNoteFromEntity(this.minecraft.level, this.minecraft.player, this.instrument, 'B', false, 1.0F, 1.0F);
+                this.notesPlayedString += "6";
+            } else if (i == 8) {
+                MusicPlayer.playNoteFromEntity(this.minecraft.level, this.minecraft.player, this.instrument, 'C', isSharp, 1.0F, 1.0F);
+                this.notesPlayedString += c;
+            } else if (i == 9) {
+                MusicPlayer.playNoteFromEntity(this.minecraft.level, this.minecraft.player, this.instrument, 'D', isSharp, 1.0F, 1.0F);
+                this.notesPlayedString += c;
+            } else if (i == 10) {
+                MusicPlayer.playNoteFromEntity(this.minecraft.level, this.minecraft.player, this.instrument, 'E', false, 1.0F, 1.0F);
+                this.notesPlayedString += "9";
+            } else if (i == 11) {
+                MusicPlayer.playNoteFromEntity(this.minecraft.level, this.minecraft.player, this.instrument, 'F', isSharp, 1.0F, 1.0F);
+                this.notesPlayedString += c;
             }
             String songName = this.minecraft.level.musicScripts.executeMusic(this.notesPlayedString);
             if (songName != null) {
@@ -115,57 +104,54 @@ public class GuiMusicSheet extends Screen {
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float delta) {
-        float timeDelta;
-        float alpha = 1.0f;
+    public void render(int i, int j, float f) {
+        float alpha = 1.0F;
         int alpha2 = Integer.MIN_VALUE;
         int alpha3 = -16777216;
-        if (this.songPlayed != null && (timeDelta = (float) (this.timeToFade - System.currentTimeMillis()) / 1000.0f) < 1.0f) {
-            alpha = timeDelta;
-            alpha2 = (int) (128.0f * timeDelta) << 24;
-            alpha3 = (int) (255.0f * timeDelta) << 24;
-            if ((double) timeDelta < 0.004) {
-                this.minecraft.openScreen(null);
-                return;
+        if (this.songPlayed != null) {
+            float timeDelta = (float) (this.timeToFade - System.currentTimeMillis()) / 1000.0F;
+            if (timeDelta < 1.0F) {
+                alpha = timeDelta;
+                alpha2 = (int) (128.0F * timeDelta) << 24;
+                alpha3 = (int) (255.0F * timeDelta) << 24;
+                if (timeDelta < 0.004D) {
+                    this.minecraft.openScreen(null);
+                    return;
+                }
             }
         }
-        this.fill((this.width - 215) / 2, this.height - 59 - 4 - 48, (this.width + 215) / 2, this.height - 48, alpha2);
-        GL11.glEnable((int) 3042);
-        GL11.glBlendFunc((int) 770, (int) 771);
-        GL11.glDisable((int) 3008);
-        if (this.songPlayed != null) {
-            this.drawTextWithShadowCentred(this.textManager, this.songPlayed, this.width / 2, this.height - 59 - 48, 0xE0E0E0 + alpha3);
-        }
+        fill((this.width - 215) / 2, this.height - 59 - 4 - 48, (this.width + 215) / 2, this.height - 48, alpha2);
+        GL11.glEnable(3042);
+        GL11.glBlendFunc(770, 771);
+        GL11.glDisable(3008);
+        if (this.songPlayed != null)
+            drawTextWithShadowCentred(this.textManager, this.songPlayed, this.width / 2, this.height - 59 - 48, 14737632 + alpha3);
         int t = this.minecraft.textureManager.getTextureId("/gui/musicSheet.png");
-        GL11.glColor4f((float) 0.9f, (float) 0.1f, (float) 0.1f, (float) alpha);
+        GL11.glColor4f(0.9F, 0.1F, 0.1F, alpha);
         this.minecraft.textureManager.bindTexture(t);
-        this.blit((this.width - 205) / 2, this.height - 59 - 2 - 48, 0, 0, 205, 59);
+        blit((this.width - 205) / 2, this.height - 59 - 2 - 48, 0, 0, 205, 59);
         int x = 0;
-        GL11.glColor4f((float) 1.0f, (float) 1.0f, (float) 1.0f, (float) alpha);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, alpha);
         for (Integer note : this.notesPlayed) {
             if (note > 0) {
-                this.drawNote(x, note);
+                drawNote(x, note);
                 x += 11;
                 continue;
             }
-            this.drawSharp(x, -note.intValue());
+            drawSharp(x, -note);
             x += 14;
         }
-        GL11.glEnable((int) 3008);
-        GL11.glDisable((int) 3042);
-        super.render(mouseX, mouseY, delta);
+        GL11.glEnable(3008);
+        GL11.glDisable(3042);
+        super.render(i, j, f);
     }
 
     private void drawNote(int x, int note) {
-        this.blit((this.width - 205) / 2 + 36 + x, this.height - 59 - 2 - 48 + 46 - (note - 2) * 4, 0, 64, 9, 7);
+        blit((this.width - 205) / 2 + 36 + x, this.height - 59 - 2 - 48 + 46 - (note - 2) * 4, 0, 64, 9, 7);
     }
 
     private void drawSharp(int x, int note) {
-        this.blit((this.width - 205) / 2 + 36 + x, this.height - 59 - 2 - 48 + 46 - (note - 2) * 4 - 5, 16, 64, 12, 17);
-    }
-
-    public static void showUI(String i) {
-        Minecraft.minecraftInstance.openScreen(new GuiMusicSheet(i));
+        blit((this.width - 205) / 2 + 36 + x, this.height - 59 - 2 - 48 + 46 - (note - 2) * 4 - 5, 16, 64, 12, 17);
     }
 
     @Override

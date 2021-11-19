@@ -1,32 +1,17 @@
-package io.github.ryuu.adventurecraft.entities;/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Boolean
- *  java.lang.Float
- *  java.lang.Integer
- *  java.lang.Math
- *  java.lang.Object
- *  java.lang.Override
- *  java.lang.String
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- *  org.mozilla.javascript.Context
- *  org.mozilla.javascript.Scriptable
- *  org.mozilla.javascript.ScriptableObject
- */
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+package io.github.ryuu.adventurecraft.entities;
+
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityNpcPath;
+import io.github.ryuu.adventurecraft.scripting.EntityDescriptions;
+import io.github.ryuu.adventurecraft.scripting.ScopeTag;
+import io.github.ryuu.adventurecraft.scripting.ScriptEntity;
+import io.github.ryuu.adventurecraft.scripting.ScriptEntityDescription;
+import io.github.ryuu.adventurecraft.util.CoordBlock;
+import io.github.ryuu.adventurecraft.util.IEntityPather;
 import net.minecraft.class_61;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
-import net.minecraft.script.EntityDescriptions;
-import net.minecraft.script.ScopeTag;
-import net.minecraft.script.ScriptEntity;
-import net.minecraft.script.ScriptEntityDescription;
-import net.minecraft.util.io.AbstractTag;
 import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.MathsHelper;
 import net.minecraft.util.maths.Vec3f;
@@ -35,52 +20,45 @@ import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
 public class EntityLivingScript extends LivingEntity implements IEntityPather {
-
-    String initDescTo;
-
-    String descriptionName;
-
-    float prevWidth = 0.6f;
-
-    float prevHeight = 1.8f;
-
+    public String onCreated;
+    public String onUpdate;
+    public String onPathReached;
+    public String onAttacked;
+    public String onDeath;
+    public String onInteraction;
+    public Float maxPathDistance;
+    public TileEntityNpcPath triggerOnPath;
     protected Scriptable scope;
-
-    public String onCreated = "";
-
-    public String onUpdate = "";
-
-    public String onPathReached = "";
-
-    public String onAttacked = "";
-
-    public String onDeath = "";
-
-    public String onInteraction = "";
-
+    String initDescTo;
+    String descriptionName;
+    float prevWidth;
+    float prevHeight;
     private class_61 path;
-
     private Entity pathToEntity;
-
     private CoordBlock pathToVec;
-
-    public Float maxPathDistance = Float.valueOf((float) 64.0f);
-
     private int nextPathIn;
-
-    private double prevDistToPoint = 999999.0;
-
-    TileEntityNpcPath triggerOnPath = null;
+    private double prevDistToPoint;
 
     public EntityLivingScript(Level w) {
         super(w);
+        this.prevWidth = 0.6F;
+        this.prevHeight = 1.8F;
+        this.onCreated = "";
+        this.onUpdate = "";
+        this.onPathReached = "";
+        this.onAttacked = "";
+        this.onDeath = "";
+        this.onInteraction = "";
+        this.maxPathDistance = Float.valueOf(64.0F);
+        this.prevDistToPoint = 999999.0D;
+        this.triggerOnPath = null;
         this.scope = w.script.getNewScope();
-        Object wrappedOut = Context.javaToJS((Object) ScriptEntity.getEntityClass(this), (Scriptable) this.scope);
-        ScriptableObject.putProperty((Scriptable) this.scope, (String) "entity", (Object) wrappedOut);
+        Object wrappedOut = Context.javaToJS(ScriptEntity.getEntityClass(this), this.scope);
+        ScriptableObject.putProperty(this.scope, "entity", wrappedOut);
     }
 
     public void setEntityDescription(String descName) {
-        this.setEntityDescription(descName, true);
+        setEntityDescription(descName, true);
     }
 
     private void setEntityDescription(String descName, boolean setHealth) {
@@ -101,7 +79,7 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
             this.height = description.height;
             this.texture = description.texture;
             this.movementSpeed = description.moveSpeed;
-            this.runCreatedScript();
+            runCreatedScript();
         }
     }
 
@@ -112,143 +90,126 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
     @Override
     public void tick() {
         if (this.initDescTo != null) {
-            if (!this.initDescTo.equals((Object) "")) {
-                this.setEntityDescription(this.initDescTo, false);
-            }
+            if (!this.initDescTo.equals(""))
+                setEntityDescription(this.initDescTo, false);
             this.initDescTo = null;
         }
         this.prevWidth = this.width;
         this.prevHeight = this.height;
-        this.continuePathing();
-        this.runUpdateScript();
+        continuePathing();
+        runUpdateScript();
         super.tick();
     }
 
     @Override
-    public boolean damage(Entity target, int amount) {
-        Object wrappedOut = Context.javaToJS((Object) ScriptEntity.getEntityClass(target), (Scriptable) this.scope);
-        ScriptableObject.putProperty((Scriptable) this.scope, (String) "attackingEntity", (Object) wrappedOut);
-        wrappedOut = Context.javaToJS((Object) new Integer(amount), (Scriptable) this.scope);
-        ScriptableObject.putProperty((Scriptable) this.scope, (String) "attackingDamage", (Object) wrappedOut);
-        if (this.runOnAttackedScript()) {
-            return super.damage(target, amount);
-        }
+    public boolean damage(Entity entity, int i) {
+        Object wrappedOut = Context.javaToJS(ScriptEntity.getEntityClass(entity), this.scope);
+        ScriptableObject.putProperty(this.scope, "attackingEntity", wrappedOut);
+        wrappedOut = Context.javaToJS(new Integer(i), this.scope);
+        ScriptableObject.putProperty(this.scope, "attackingDamage", wrappedOut);
+        if (runOnAttackedScript())
+            return super.damage(entity, i);
         return false;
     }
 
-    @Override
+    @Override // TODO: put in mixin
     public boolean attackEntityFromMulti(Entity entity, int i) {
-        Object wrappedOut = Context.javaToJS((Object) ScriptEntity.getEntityClass(entity), (Scriptable) this.scope);
-        ScriptableObject.putProperty((Scriptable) this.scope, (String) "attackingEntity", (Object) wrappedOut);
-        wrappedOut = Context.javaToJS((Object) new Integer(i), (Scriptable) this.scope);
-        ScriptableObject.putProperty((Scriptable) this.scope, (String) "attackingDamage", (Object) wrappedOut);
-        if (this.runOnAttackedScript()) {
+        Object wrappedOut = Context.javaToJS(ScriptEntity.getEntityClass(entity), this.scope);
+        ScriptableObject.putProperty(this.scope, "attackingEntity", wrappedOut);
+        wrappedOut = Context.javaToJS(new Integer(i), this.scope);
+        ScriptableObject.putProperty(this.scope, "attackingDamage", wrappedOut);
+        if (runOnAttackedScript())
             return super.attackEntityFromMulti(entity, i);
-        }
         return false;
     }
 
     @Override
     public void remove() {
         super.remove();
-        this.runDeathScript();
+        runDeathScript();
     }
 
     @Override
     public boolean interact(Player entityplayer) {
-        return this.runOnInteractionScript();
+        return runOnInteractionScript();
     }
 
     @Override
-    public void writeCustomDataToTag(CompoundTag tag) {
-        super.writeCustomDataToTag(tag);
-        if (this.descriptionName != null && !this.descriptionName.equals((Object) "")) {
-            tag.put("descriptionName", this.descriptionName);
-        }
-        if (!this.onCreated.equals((Object) "")) {
-            tag.put("onCreated", this.onCreated);
-        }
-        if (!this.onUpdate.equals((Object) "")) {
-            tag.put("onUpdate", this.onUpdate);
-        }
-        if (!this.onPathReached.equals((Object) "")) {
-            tag.put("onPathReached", this.onPathReached);
-        }
-        if (!this.onAttacked.equals((Object) "")) {
-            tag.put("onAttacked", this.onAttacked);
-        }
-        if (!this.onDeath.equals((Object) "")) {
-            tag.put("onDeath", this.onDeath);
-        }
-        if (!this.onInteraction.equals((Object) "")) {
-            tag.put("onInteraction", this.onInteraction);
-        }
-        if (tag.containsKey("scope")) {
-            ScopeTag.loadScopeFromTag(this.scope, tag.getCompoundTag("scope"));
-        }
+    public void writeCustomDataToTag(CompoundTag nbttagcompound) {
+        super.writeCustomDataToTag(nbttagcompound);
+        if (this.descriptionName != null && !this.descriptionName.equals(""))
+            nbttagcompound.put("descriptionName", this.descriptionName);
+        if (!this.onCreated.equals(""))
+            nbttagcompound.put("onCreated", this.onCreated);
+        if (!this.onUpdate.equals(""))
+            nbttagcompound.put("onUpdate", this.onUpdate);
+        if (!this.onPathReached.equals(""))
+            nbttagcompound.put("onPathReached", this.onPathReached);
+        if (!this.onAttacked.equals(""))
+            nbttagcompound.put("onAttacked", this.onAttacked);
+        if (!this.onDeath.equals(""))
+            nbttagcompound.put("onDeath", this.onDeath);
+        if (!this.onInteraction.equals(""))
+            nbttagcompound.put("onInteraction", this.onInteraction);
+        if (nbttagcompound.containsKey("scope"))
+            ScopeTag.loadScopeFromTag(this.scope, nbttagcompound.getCompoundTag("scope"));
     }
 
     @Override
-    public void readCustomDataFromTag(CompoundTag tag) {
-        super.readCustomDataFromTag(tag);
-        this.initDescTo = tag.getString("descriptionName");
-        this.onCreated = tag.getString("onCreated");
-        this.onUpdate = tag.getString("onUpdate");
-        this.onPathReached = tag.getString("onPathReached");
-        this.onAttacked = tag.getString("onAttacked");
-        this.onDeath = tag.getString("onDeath");
-        this.onInteraction = tag.getString("onInteraction");
-        tag.put("scope", (AbstractTag) ScopeTag.getTagFromScope(this.scope));
+    public void readCustomDataFromTag(CompoundTag nbttagcompound) {
+        super.readCustomDataFromTag(nbttagcompound);
+        this.initDescTo = nbttagcompound.getString("descriptionName");
+        this.onCreated = nbttagcompound.getString("onCreated");
+        this.onUpdate = nbttagcompound.getString("onUpdate");
+        this.onPathReached = nbttagcompound.getString("onPathReached");
+        this.onAttacked = nbttagcompound.getString("onAttacked");
+        this.onDeath = nbttagcompound.getString("onDeath");
+        this.onInteraction = nbttagcompound.getString("onInteraction");
+        nbttagcompound.put("scope", ScopeTag.getTagFromScope(this.scope));
     }
 
     public void runCreatedScript() {
-        if (!this.onCreated.equals((Object) "")) {
+        if (!this.onCreated.equals(""))
             this.level.scriptHandler.runScript(this.onCreated, this.scope);
-        }
     }
 
     private void runUpdateScript() {
-        if (!this.onUpdate.equals((Object) "")) {
+        if (!this.onUpdate.equals(""))
             this.level.scriptHandler.runScript(this.onUpdate, this.scope);
-        }
     }
 
     private void runPathCompletedScript() {
-        if (!this.onPathReached.equals((Object) "")) {
+        if (!this.onPathReached.equals(""))
             this.level.scriptHandler.runScript(this.onPathReached, this.scope);
-        }
     }
 
     private boolean runOnAttackedScript() {
-        if (!this.onAttacked.equals((Object) "")) {
+        if (!this.onAttacked.equals("")) {
             Object obj = this.level.scriptHandler.runScript(this.onAttacked, this.scope);
-            if (obj == null || !(obj instanceof Boolean)) {
+            if (obj == null || !(obj instanceof Boolean))
                 return true;
-            }
-            return (Boolean) obj;
+            return ((Boolean) obj).booleanValue();
         }
         return true;
     }
 
     private void runDeathScript() {
-        if (!this.onDeath.equals((Object) "")) {
+        if (!this.onDeath.equals(""))
             this.level.scriptHandler.runScript(this.onDeath, this.scope);
-        }
     }
 
     private boolean runOnInteractionScript() {
-        if (!this.onInteraction.equals((Object) "")) {
+        if (!this.onInteraction.equals("")) {
             Object obj = this.level.scriptHandler.runScript(this.onInteraction, this.scope);
-            if (obj == null || !(obj instanceof Boolean)) {
+            if (obj == null || !(obj instanceof Boolean))
                 return true;
-            }
-            return (Boolean) obj;
+            return ((Boolean) obj).booleanValue();
         }
         return true;
     }
 
     public boolean isPathing() {
-        return this.pathToEntity != null || this.pathToVec != null || this.path != null;
+        return (this.pathToEntity != null || this.pathToVec != null || this.path != null);
     }
 
     public void pathToEntity(Entity p) {
@@ -256,7 +217,7 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
         this.pathToVec = null;
         this.path = this.level.method_192(this, this.pathToEntity, this.maxPathDistance.floatValue());
         this.nextPathIn = this.level.rand.nextInt(40) + 60;
-        this.prevDistToPoint = 999999.0;
+        this.prevDistToPoint = 999999.0D;
         this.triggerOnPath = null;
     }
 
@@ -265,7 +226,7 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
         this.pathToVec = new CoordBlock(x, y, z);
         this.path = this.level.method_189(this, x, y, z, this.maxPathDistance.floatValue());
         this.nextPathIn = this.level.rand.nextInt(40) + 60;
-        this.prevDistToPoint = 999999.0;
+        this.prevDistToPoint = 999999.0D;
         this.triggerOnPath = null;
     }
 
@@ -277,64 +238,54 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
     }
 
     private void continuePathing() {
-        if (this.isPathing()) {
-            if (this.path == null || --this.nextPathIn <= 0 && this.pathToEntity != null && this.path.needNewPath(this.pathToEntity)) {
+        if (isPathing()) {
+            if (this.path == null || (--this.nextPathIn <= 0 && this.pathToEntity != null && this.path.needNewPath(this.pathToEntity))) {
                 if (this.pathToEntity != null) {
                     this.path = this.level.method_192(this, this.pathToEntity, this.maxPathDistance.floatValue());
                 } else if (this.pathToVec != null) {
                     this.path = this.level.method_189(this, this.pathToVec.x, this.pathToVec.y, this.pathToVec.z, this.maxPathDistance.floatValue());
                 }
                 this.nextPathIn = this.level.rand.nextInt(40) + 10;
-                this.prevDistToPoint = 999999.0;
+                this.prevDistToPoint = 999999.0D;
             }
-            if (this.path == null) {
+            if (this.path == null)
                 return;
-            }
             Vec3f vec3d = this.path.method_2041(this);
-            this.parallelMovement = 0.0f;
+            this.parallelMovement = 0.0F;
             this.jumping = false;
             double dist = vec3d.method_1303(this.x, vec3d.y, this.z);
-            if (dist >= this.prevDistToPoint && this.nextPathIn > 5) {
+            if (dist >= this.prevDistToPoint && this.nextPathIn > 5)
                 this.nextPathIn = this.level.rand.nextInt(5) + 1;
-            }
             this.prevDistToPoint = dist;
-            double d = (double) this.width * 1.1;
-            while (vec3d != null && vec3d.method_1303(this.x, vec3d.y, this.z) < d * d) {
+            for (double d = this.width * 1.1D; vec3d != null && vec3d.method_1303(this.x, vec3d.y, this.z) < d * d; ) {
                 this.path.method_2040();
                 if (this.path.method_2042()) {
                     vec3d = null;
                     this.path = null;
-                    this.runPathCompletedScript();
-                    if (this.triggerOnPath != null) {
+                    runPathCompletedScript();
+                    if (this.triggerOnPath != null)
                         this.triggerOnPath.pathFinished();
-                    }
                     return;
                 }
                 vec3d = this.path.method_2041(this);
-                this.prevDistToPoint = 999999.0;
+                this.prevDistToPoint = 999999.0D;
             }
             if (vec3d != null) {
-                float yawDelta;
                 double dX = vec3d.x - this.x;
                 double dZ = vec3d.z - this.z;
-                double dY = vec3d.y - (double) MathsHelper.floor(this.boundingBox.minY + 0.5);
-                float yawDir = (float) (Math.atan2((double) dZ, (double) dX) * 180.0 / 3.1415927410125732) - 90.0f;
+                double dY = vec3d.y - MathsHelper.floor(this.boundingBox.minY + 0.5D);
+                float yawDir = (float) (Math.atan2(dZ, dX) * 180.0D / 3.1415927410125732D) - 90.0F;
+                float yawDelta = yawDir - this.yaw;
                 this.parallelMovement = this.movementSpeed;
-                for (yawDelta = yawDir - this.yaw; yawDelta < -180.0f; yawDelta += 360.0f) {
-                }
-                while (yawDelta >= 180.0f) {
-                    yawDelta -= 360.0f;
-                }
-                if (yawDelta > 30.0f) {
-                    yawDelta = 30.0f;
-                }
-                if (yawDelta < -30.0f) {
-                    yawDelta = -30.0f;
-                }
+                for (; yawDelta < -180.0F; yawDelta += 360.0F) ;
+                for (; yawDelta >= 180.0F; yawDelta -= 360.0F) ;
+                if (yawDelta > 30.0F)
+                    yawDelta = 30.0F;
+                if (yawDelta < -30.0F)
+                    yawDelta = -30.0F;
                 this.yaw += yawDelta;
-                if (dY > 0.0) {
+                if (dY > 0.0D)
                     this.jumping = true;
-                }
             }
         }
     }

@@ -1,49 +1,28 @@
-/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Boolean
- *  java.lang.Double
- *  java.lang.Float
- *  java.lang.Integer
- *  java.lang.Long
- *  java.lang.Number
- *  java.lang.Object
- *  java.lang.Short
- *  java.lang.String
- *  java.lang.System
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- *  org.mozilla.javascript.Scriptable
- */
 package io.github.ryuu.adventurecraft.scripting;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+
 import net.minecraft.util.io.CompoundTag;
 import org.mozilla.javascript.Scriptable;
-import io.github.ryuu.adventurecraft.mixin.item.MixinCompoundTag;
 
 public class ScopeTag {
-
-    public static MixinCompoundTag getTagFromScope(Scriptable scope) {
-        MixinCompoundTag tag = new MixinCompoundTag();
+    public static CompoundTag getTagFromScope(Scriptable scope) {
+        CompoundTag tag = new CompoundTag();
         for (Object id : scope.getIds()) {
-            if (!(id instanceof String))
-                continue;
-            String key = (String) id;
-            Object value = scope.get(key, scope);
-            ScopeTag.saveProperty(tag, key, value);
+            if (id instanceof String) {
+                String key = (String) id;
+                Object value = scope.get(key, scope);
+                saveProperty(tag, key, value);
+            }
         }
         return tag;
     }
 
-    private static void saveProperty(MixinCompoundTag tag, String key, Object value) {
+    private static void saveProperty(CompoundTag tag, String key, Object value) {
         if (value instanceof String) {
             String strValue = (String) value;
             tag.put("String_" + key, strValue);
         } else if (value instanceof Boolean) {
-            boolean bValue = (Boolean) value;
+            boolean bValue = ((Boolean) value).booleanValue();
             tag.put("Boolean_" + key, bValue);
         } else if (value instanceof Number) {
             Number nValue = (Number) value;
@@ -52,11 +31,11 @@ public class ScopeTag {
             long lValue = nValue.longValue();
             int iValue = nValue.intValue();
             short sValue = nValue.shortValue();
-            if (dValue != (double) fValue) {
+            if (dValue != fValue) {
                 tag.put("Double_" + key, dValue);
             } else if (fValue != (float) lValue) {
                 tag.put("Float_" + key, fValue);
-            } else if (lValue != (long) iValue) {
+            } else if (lValue != iValue) {
                 tag.put("Long_" + key, lValue);
             } else if (iValue != sValue) {
                 tag.put("Integer_" + key, iValue);
@@ -66,51 +45,51 @@ public class ScopeTag {
         }
     }
 
-    public static void loadScopeFromTag(Scriptable scope, MixinCompoundTag tag) {
+    public static void loadScopeFromTag(Scriptable scope, CompoundTag tag) {
         for (String varKey : tag.getKeys()) {
             String[] parts = varKey.split("_", 2);
             if (parts.length != 2) {
-                System.out.printf("Unknown key in tag: %s %d\n", new Object[] { varKey, parts.length });
+                System.out.printf("Unknown key in tag: %s %d\n", varKey, Integer.valueOf(parts.length));
                 continue;
             }
             String type = parts[0];
             String key = parts[1];
-            if (type.equals((Object) "String")) {
+            if (type.equals("String")) {
                 String value = tag.getString(varKey);
-                scope.put(key, scope, (Object) value);
+                scope.put(key, scope, value);
                 continue;
             }
-            if (type.equals((Object) "Boolean")) {
+            if (type.equals("Boolean")) {
                 boolean value = tag.getBoolean(varKey);
-                scope.put(key, scope, (Object) new Boolean(value));
+                scope.put(key, scope, new Boolean(value));
                 continue;
             }
-            if (type.equals((Object) "Double")) {
+            if (type.equals("Double")) {
                 double value = tag.getDouble(varKey);
-                scope.put(key, scope, (Object) new Double(value));
+                scope.put(key, scope, new Double(value));
                 continue;
             }
-            if (type.equals((Object) "Float")) {
+            if (type.equals("Float")) {
                 float value = tag.getFloat(varKey);
-                scope.put(key, scope, (Object) new Float(value));
+                scope.put(key, scope, new Float(value));
                 continue;
             }
-            if (type.equals((Object) "Long")) {
+            if (type.equals("Long")) {
                 long value = tag.getLong(varKey);
-                scope.put(key, scope, (Object) new Long(value));
+                scope.put(key, scope, new Long(value));
                 continue;
             }
-            if (type.equals((Object) "Integer")) {
+            if (type.equals("Integer")) {
                 int value = tag.getInt(varKey);
-                scope.put(key, scope, (Object) new Integer(value));
+                scope.put(key, scope, new Integer(value));
                 continue;
             }
-            if (type.equals((Object) "Short")) {
+            if (type.equals("Short")) {
                 short value = tag.getShort(varKey);
-                scope.put(key, scope, (Object) new Short(value));
+                scope.put(key, scope, new Short(value));
                 continue;
             }
-            System.out.printf("Unknown type: %s\n", new Object[] { type });
+            System.out.printf("Unknown type: %s\n", type);
         }
     }
 }

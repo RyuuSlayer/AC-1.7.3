@@ -1,30 +1,14 @@
-/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Object
- *  java.lang.String
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- */
 package io.github.ryuu.adventurecraft.scripting;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import io.github.ryuu.adventurecraft.util.UtilBullet;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.script.ScriptEntity;
-import net.minecraft.script.ScriptItem;
-import net.minecraft.script.ScriptVec3;
 import net.minecraft.util.maths.Vec3f;
-import io.github.ryuu.adventurecraft.mixin.item.MixinLivingEntity;
-import io.github.ryuu.adventurecraft.mixin.item.MixinEntity;
 
 public class ScriptEntityLiving extends ScriptEntity {
+    LivingEntity entityLiving;
 
-    MixinLivingEntity entityLiving;
-
-    ScriptEntityLiving(MixinLivingEntity e) {
+    ScriptEntityLiving(LivingEntity e) {
         super(e);
         this.entityLiving = e;
     }
@@ -46,7 +30,7 @@ public class ScriptEntityLiving extends ScriptEntity {
     }
 
     public ScriptEntity getLookTarget() {
-        MixinEntity e = this.entityLiving.method_922();
+        Entity e = this.entityLiving.method_922();
         return ScriptEntity.getEntityClass(e);
     }
 
@@ -87,12 +71,12 @@ public class ScriptEntityLiving extends ScriptEntity {
         return this.entityLiving.hurtTime;
     }
 
-    public int getHurtTimeResistance() {
-        return this.entityLiving.field_1058;
-    }
-
     public void setHurtTime(int i) {
         this.entityLiving.hurtTime = i;
+    }
+
+    public int getHurtTimeResistance() {
+        return this.entityLiving.field_1058;
     }
 
     public void setHurtTimeResistance(int i) {

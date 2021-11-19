@@ -1,16 +1,7 @@
-/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Math
- *  java.lang.Object
- *  java.lang.Override
- */
 package io.github.ryuu.adventurecraft.mixin.entity;
 
 import net.minecraft.achievement.Achievements;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
@@ -19,74 +10,43 @@ import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.MathsHelper;
-import io.github.ryuu.adventurecraft.mixin.item.MixinPlayer;
-import io.github.ryuu.adventurecraft.mixin.item.MixinLevel;
-import io.github.ryuu.adventurecraft.mixin.item.MixinCompoundTag;
-import io.github.ryuu.adventurecraft.mixin.item.MixinEntity;
-import io.github.ryuu.adventurecraft.mixin.item.MixinItemInstance;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
 
-@Mixin(ItemEntity.class)
-public class MixinItemEntity extends MixinEntity {
-
-    @Shadow()
-    public MixinItemInstance item;
-
+public class MixinItemEntity extends Entity {
+    public ItemInstance item;
     private int field_568;
-
     public int age = 0;
-
     public int pickupDelay;
-
     private int health = 5;
+    public float field_567 = (float)(Math.random() * Math.PI * 2.0);
 
-    public float field_567 = (float) (Math.random() * Math.PI * 2.0);
-
-    public MixinItemEntity(MixinLevel world, double d, double d1, double d2, MixinItemInstance itemstack) {
+    public MixinItemEntity(Level world, double d, double d1, double d2, ItemInstance itemstack) {
         super(world);
         this.setSize(0.25f, 0.25f);
         this.standingEyeHeight = this.height / 2.0f;
         this.setPosition(d, d1, d2);
         this.item = itemstack;
-        this.yaw = (float) (Math.random() * 360.0);
-        this.velocityX = (float) (Math.random() * (double) 0.2f - (double) 0.1f);
+        this.yaw = (float)(Math.random() * 360.0);
+        this.velocityX = (float)(Math.random() * (double)0.2f - (double)0.1f);
         this.velocityY = 0.2f;
-        this.velocityZ = (float) (Math.random() * (double) 0.2f - (double) 0.1f);
+        this.velocityZ = (float)(Math.random() * (double)0.2f - (double)0.1f);
         if (ItemType.byId[this.item.itemId] == null) {
             this.remove();
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
     protected boolean canClimb() {
         return false;
     }
 
-    public MixinItemEntity(MixinLevel world) {
+    public MixinItemEntity(Level world) {
         super(world);
         this.setSize(0.25f, 0.25f);
         this.standingEyeHeight = this.height / 2.0f;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
     protected void initDataTracker() {
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
     public void tick() {
         super.tick();
         if (this.pickupDelay > 0) {
@@ -95,7 +55,7 @@ public class MixinItemEntity extends MixinEntity {
         this.prevX = this.x;
         this.prevY = this.y;
         this.prevZ = this.z;
-        this.velocityY -= (double) 0.04f;
+        this.velocityY -= 0.04f;
         if (this.level.getMaterial(MathsHelper.floor(this.x), MathsHelper.floor(this.y), MathsHelper.floor(this.z)) == Material.LAVA) {
             this.velocityY = 0.2f;
             this.velocityX = (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2f;
@@ -112,9 +72,9 @@ public class MixinItemEntity extends MixinEntity {
                 f = Tile.BY_ID[i].field_1901 * 0.98f;
             }
         }
-        this.velocityX *= (double) f;
-        this.velocityY *= (double) 0.98f;
-        this.velocityZ *= (double) f;
+        this.velocityX *= f;
+        this.velocityY *= 0.98f;
+        this.velocityZ *= f;
         if (this.onGround) {
             this.velocityY *= -0.5;
         }
@@ -125,30 +85,15 @@ public class MixinItemEntity extends MixinEntity {
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
     public boolean method_1393() {
         return this.level.method_170(this.boundingBox, Material.WATER, this);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
     protected void method_1392(int i) {
         this.damage(null, i);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public boolean damage(MixinEntity target, int amount) {
+    public boolean damage(Entity target, int amount) {
         this.method_1336();
         this.health -= amount;
         if (this.health <= 0) {
@@ -157,35 +102,20 @@ public class MixinItemEntity extends MixinEntity {
         return false;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public void writeCustomDataToTag(MixinCompoundTag tag) {
-        tag.put("Health", (short) ((byte) this.health));
-        tag.put("Age", (short) this.age);
-        tag.put("Item", this.item.toTag(new MixinCompoundTag()));
+    public void writeCustomDataToTag(CompoundTag tag) {
+        tag.put("Health", (short)((byte)this.health));
+        tag.put("Age", (short)this.age);
+        tag.put("Item", this.item.toTag(new CompoundTag()));
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public void readCustomDataFromTag(MixinCompoundTag tag) {
+    public void readCustomDataFromTag(CompoundTag tag) {
         this.health = tag.getShort("Health") & 0xFF;
         this.age = tag.getShort("Age");
-        MixinCompoundTag nbttagcompound1 = tag.getCompoundTag("Item");
-        this.item = new MixinItemInstance(nbttagcompound1);
+        CompoundTag nbttagcompound1 = tag.getCompoundTag("Item");
+        this.item = new ItemInstance(nbttagcompound1);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public void onPlayerCollision(MixinPlayer entityplayer) {
+    public void onPlayerCollision(Player entityplayer) {
         if (this.level.isClient) {
             return;
         }

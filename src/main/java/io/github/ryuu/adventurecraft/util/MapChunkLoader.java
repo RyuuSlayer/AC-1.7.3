@@ -1,26 +1,13 @@
-package io.github.ryuu.adventurecraft.util;/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.io.IOException
- *  java.lang.Object
- *  java.lang.Override
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- */
-import java.io.IOException;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+package io.github.ryuu.adventurecraft.util;
+
 import net.minecraft.level.Level;
 import net.minecraft.level.chunk.Chunk;
 import net.minecraft.level.chunk.ChunkIO;
-import io.github.ryuu.adventurecraft.mixin.item.MixinLevel;
-import io.github.ryuu.adventurecraft.mixin.item.MixinChunk;
+
+import java.io.IOException;
 
 public class MapChunkLoader implements ChunkIO {
-
-    private final ChunkIO mapRegion;
-
+    private final ChunkIO mapRegion;;
     private final ChunkIO saveRegion;
 
     public MapChunkLoader(ChunkIO mapR, ChunkIO saveR) {
@@ -28,36 +15,29 @@ public class MapChunkLoader implements ChunkIO {
         this.saveRegion = saveR;
     }
 
-    @Override
-    public MixinChunk getChunk(MixinLevel level, int xPos, int zPos) throws IOException {
-        MixinChunk returnChunk = this.saveRegion.getChunk(level, xPos, zPos);
-        if (returnChunk == null) {
-            returnChunk = this.mapRegion.getChunk(level, xPos, zPos);
-        }
+    public Chunk getChunk(Level world, int i, int j) throws IOException {
+        Chunk returnChunk = this.saveRegion.getChunk(world, i, j);
+        if (returnChunk == null)
+            returnChunk = this.mapRegion.getChunk(world, i, j);
         return returnChunk;
     }
 
-    @Override
-    public void saveChunk(MixinLevel level, MixinChunk chunk) {
+    public void saveChunk(Level world, Chunk chunk) {
         try {
-            this.saveRegion.saveChunk(level, chunk);
-            if (DebugMode.levelEditing) {
-                this.mapRegion.saveChunk(level, chunk);
-            }
+            this.saveRegion.saveChunk(world, chunk);
+            if (DebugMode.levelEditing)
+                this.mapRegion.saveChunk(world, chunk);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    @Override
-    public void prepareChunk(MixinLevel level, MixinChunk chunk) {
+    public void prepareChunk(Level world, Chunk chunk) {
     }
 
-    @Override
     public void method_810() {
     }
 
-    @Override
     public void method_813() {
     }
 }

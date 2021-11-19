@@ -1,36 +1,24 @@
-/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Object
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- */
 package io.github.ryuu.adventurecraft.scripting;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.item.ItemInstance;
-import io.github.ryuu.adventurecraft.mixin.item.MixinItemInstance;
 
 public class ScriptItem {
+    public ItemInstance item;
 
-    public MixinItemInstance item;
-
-    public ScriptItem(MixinItemInstance i) {
+    public ScriptItem(ItemInstance i) {
         this.item = i;
     }
 
     public ScriptItem(int itemID) {
-        this.item = new MixinItemInstance(itemID, 1, 0);
+        this.item = new ItemInstance(itemID, 1, 0);
     }
 
     public ScriptItem(int itemID, int quantity) {
-        this.item = new MixinItemInstance(itemID, quantity, 0);
+        this.item = new ItemInstance(itemID, quantity, 0);
     }
 
     public ScriptItem(int itemID, int quantity, int damage) {
-        this.item = new MixinItemInstance(itemID, quantity, damage);
+        this.item = new ItemInstance(itemID, quantity, damage);
     }
 
     public int getItemID() {

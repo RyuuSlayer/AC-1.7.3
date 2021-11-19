@@ -1,22 +1,8 @@
-/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Object
- *  java.lang.String
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- */
 package io.github.ryuu.adventurecraft.mixin.client.options;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
+import net.minecraft.client.options.Option;
 
-public enum Option {
-
+public enum MixinOption {
     MUSIC("MUSIC", 0, "options.music", true, false),
     SOUND("SOUND", 1, "options.sound", true, false),
     INVERT_MOUSE("INVERT_MOUSE", 2, "options.invertMouse", false, true),
@@ -33,23 +19,14 @@ public enum Option {
     AUTO_FAR_CLIP("AUTO_FAR_CLIP", 13, "options.adjustFarClip", false, true),
     GRASS_3D("GRASS_3D", 14, "options.grass3d", false, true);
 
-    @Shadow()
     private final boolean slider;
-
     private final boolean field_1111;
-
     private final String translationKey;
-
     private static final Option[] field_1113;
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public static Option getById(int id) {
         for (Option enumoptions : Option.values()) {
-            if (enumoptions.getId() != id)
-                continue;
+            if (enumoptions.getId() != id) continue;
             return enumoptions;
         }
         return null;
@@ -61,39 +38,23 @@ public enum Option {
         this.field_1111 = flag1;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public boolean isSlider() {
         return this.slider;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public boolean isToggle() {
         return this.field_1111;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public int getId() {
         return this.ordinal();
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public String getTranslationKey() {
         return this.translationKey;
     }
 
     static {
-        field_1113 = new Option[] { MUSIC, SOUND, INVERT_MOUSE, SENSITIVITY, RENDER_DISTANCE, VIEW_BOBBING, ANAGLYPH, ADVANCED_OPENGL, FRAMERATE_LIMIT, DIFFICULTY, GRAPHICS, AMBIENT_OCCLUSION, GUI_SCALE };
+        field_1113 = new Option[]{MUSIC, SOUND, INVERT_MOUSE, SENSITIVITY, RENDER_DISTANCE, VIEW_BOBBING, ANAGLYPH, ADVANCED_OPENGL, FRAMERATE_LIMIT, DIFFICULTY, GRAPHICS, AMBIENT_OCCLUSION, GUI_SCALE};
     }
 }

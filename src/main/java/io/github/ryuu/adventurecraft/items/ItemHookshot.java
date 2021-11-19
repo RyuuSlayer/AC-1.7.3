@@ -1,56 +1,49 @@
-package io.github.ryuu.adventurecraft.items;/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Object
- *  java.lang.Override
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- */
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+package io.github.ryuu.adventurecraft.items;
+
+import io.github.ryuu.adventurecraft.entities.EntityHookshot;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 
 class ItemHookshot extends ItemType {
+    public EntityHookshot mainHookshot;
 
-    public EntityHookshot mainHookshot = null;
+    public EntityHookshot offHookshot;
 
-    public EntityHookshot offHookshot = null;
+    ItemInstance mainActiveHookshot;
 
-    ItemInstance mainActiveHookshot = null;
+    ItemInstance offActiveHookshot;
 
-    ItemInstance offActiveHookshot = null;
+    Player player;
 
-    Player player = null;
-
-    public ItemHookshot(int id) {
-        super(id);
-        this.setTexturePosition(3, 10);
+    public ItemHookshot(int itemIndex) {
+        super(itemIndex);
+        this.mainHookshot = null;
+        this.offHookshot = null;
+        this.mainActiveHookshot = null;
+        this.offActiveHookshot = null;
+        this.player = null;
+        setTexturePosition(3, 10);
         this.maxStackSize = 1;
     }
 
-    @Override
-    public boolean shouldRotate180() {
+    public boolean c() {
         return true;
     }
 
     @Override
-    public int getTexturePosition(int damage) {
-        if (damage == 1) {
+    public int getTexturePosition(int i) {
+        if (i == 1)
             return this.texturePosition + 1;
-        }
         return this.texturePosition;
     }
 
     @Override
-    public ItemInstance use(ItemInstance item, Level level, Player player) {
-        EntityHookshot other;
-        EntityHookshot hookshot;
+    public ItemInstance use(ItemInstance itemstack, Level world, Player entityplayer) {
+        EntityHookshot hookshot, other;
         boolean main = true;
-        if (!player.swappedItems) {
+        if (!entityplayer.swappedItems) {
             hookshot = this.mainHookshot;
             other = this.offHookshot;
         } else {
@@ -58,33 +51,32 @@ class ItemHookshot extends ItemType {
             other = this.mainHookshot;
             main = false;
         }
-        if ((hookshot == null || hookshot.removed) && (other != null && other.attachedToSurface || player.onGround || player.method_1335() || player.method_1393())) {
-            hookshot = new EntityHookshot(level, player, main, item);
-            level.spawnEntity(hookshot);
-            player.swingHand();
+        if ((hookshot == null || hookshot.removed) && ((other != null && other.attachedToSurface) || entityplayer.onGround || entityplayer.method_1335() || entityplayer.method_1393())) {
+            hookshot = new EntityHookshot(world, entityplayer, main, itemstack);
+            world.spawnEntity(hookshot);
+            entityplayer.swingHand();
             if (main) {
-                this.mainActiveHookshot = item;
+                this.mainActiveHookshot = itemstack;
                 this.mainActiveHookshot.setDamage(1);
             } else {
-                this.offActiveHookshot = item;
+                this.offActiveHookshot = itemstack;
                 this.offActiveHookshot.setDamage(1);
             }
-            this.player = player;
+            this.player = entityplayer;
         } else {
-            this.releaseHookshot(hookshot);
+            releaseHookshot(hookshot);
         }
         if (main) {
             this.mainHookshot = hookshot;
         } else {
             this.offHookshot = hookshot;
         }
-        return item;
+        return itemstack;
     }
 
     public void releaseHookshot(EntityHookshot hookshot) {
-        if (hookshot == null) {
+        if (hookshot == null)
             return;
-        }
         hookshot.turningAround = true;
         hookshot.attachedToSurface = false;
         hookshot.entityGrabbed = null;

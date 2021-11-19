@@ -1,50 +1,39 @@
-package io.github.ryuu.adventurecraft.blocks;/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Object
- *  java.lang.Override
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- */
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+package io.github.ryuu.adventurecraft.blocks;
+
 import net.minecraft.level.Level;
 import net.minecraft.util.maths.Box;
 
 public class BlockRope extends BlockPlant {
-
     protected BlockRope(int i, int j) {
         super(i, j);
-        float f = 0.2f;
-        this.setBoundingBox(0.5f - f, 0.0f, 0.5f - f, 0.5f + f, 1.0f, 0.5f + f);
+        float f = 0.2F;
+        setBoundingBox(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 1.0F, 0.5F + f);
     }
 
     @Override
-    public Box getOutlineShape(Level level, int x, int y, int z) {
-        this.updateBounds(level, x, y, z);
-        return super.getOutlineShape(level, x, y, z);
+    public Box getOutlineShape(Level world, int i, int j, int k) {
+        updateBounds(world, i, j, k);
+        return super.getOutlineShape(world, i, j, k);
     }
 
     @Override
-    public Box getCollisionShape(Level level, int x, int y, int z) {
-        int m = level.getTileMeta(x, y, z) % 3;
-        if (m == 0) {
+    public Box getCollisionShape(Level world, int i, int j, int k) {
+        int m = world.getTileMeta(i, j, k) % 3;
+        if (m == 0)
             return null;
-        }
-        this.updateBounds(level, x, y, z);
-        return Box.getOrCreate((double) x + this.minX, (double) y + this.minY, (double) z + this.minZ, (double) x + this.maxX, (double) y + this.maxY, (double) z + this.maxZ);
+        updateBounds(world, i, j, k);
+        return Box.getOrCreate(i + this.minX, j + this.minY, k + this.minZ, i + this.maxX, j + this.maxY, k + this.maxZ);
     }
 
     private void updateBounds(Level world, int i, int j, int k) {
         int m = world.getTileMeta(i, j, k) % 3;
-        float f = 0.2f;
+        float f = 0.2F;
         if (m == 0) {
-            this.setBoundingBox(0.5f - f, 0.0f, 0.5f - f, 0.5f + f, 1.0f, 0.5f + f);
+            setBoundingBox(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 1.0F, 0.5F + f);
         } else if (m == 1) {
-            this.setBoundingBox(0.0f, 0.5f - f, 0.5f - f, 1.0f, 0.5f + f, 0.5f + f);
+            setBoundingBox(0.0F, 0.5F - f, 0.5F - f, 1.0F, 0.5F + f, 0.5F + f);
         } else {
-            this.setBoundingBox(0.5f - f, 0.5f - f, 0.0f, 0.5f + f, 0.5f + f, 1.0f);
+            setBoundingBox(0.5F - f, 0.5F - f, 0.0F, 0.5F + f, 0.5F + f, 1.0F);
         }
     }
 
@@ -54,7 +43,7 @@ public class BlockRope extends BlockPlant {
     }
 
     @Override
-    public int getTextureForSide(int side, int meta) {
-        return this.tex + meta / 3;
+    public int getTextureForSide(int i, int j) {
+        return this.tex + j / 3;
     }
 }

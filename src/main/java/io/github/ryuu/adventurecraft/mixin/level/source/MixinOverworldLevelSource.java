@@ -1,122 +1,56 @@
-/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Math
- *  java.lang.Object
- *  java.lang.Override
- *  java.lang.String
- *  java.util.Random
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- */
 package io.github.ryuu.adventurecraft.mixin.level.source;
 
-import java.util.Random;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.level.Level;
 import net.minecraft.level.biome.Biome;
 import net.minecraft.level.chunk.Chunk;
 import net.minecraft.level.gen.Cave;
 import net.minecraft.level.gen.OverworldCave;
 import net.minecraft.level.source.LevelSource;
-import net.minecraft.level.source.OverworldLevelSource;
-import net.minecraft.level.structure.CactusPatch;
-import net.minecraft.level.structure.ClayDisk;
-import net.minecraft.level.structure.DeadbushPatch;
-import net.minecraft.level.structure.Feature;
-import net.minecraft.level.structure.Lake;
-import net.minecraft.level.structure.MobSpawnerRoom;
-import net.minecraft.level.structure.MushroomPatch;
-import net.minecraft.level.structure.Ore;
-import net.minecraft.level.structure.PumpkinPatch;
-import net.minecraft.level.structure.ReedsPatch;
-import net.minecraft.level.structure.Spring;
-import net.minecraft.level.structure.TallgrassPatch;
+import net.minecraft.level.structure.*;
 import net.minecraft.tile.SandTile;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.ProgressListener;
 import net.minecraft.util.noise.PerlinOctaveNoise;
-import io.github.ryuu.adventurecraft.mixin.item.MixinLevel;
-import io.github.ryuu.adventurecraft.mixin.item.MixinChunk;
-import io.github.ryuu.adventurecraft.mixin.item.MixinBiome;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
 
-@Mixin(OverworldLevelSource.class)
+import java.util.Random;
+
 public class MixinOverworldLevelSource implements LevelSource {
-
-    @Shadow()
     private Random rand;
-
     private PerlinOctaveNoise upperInterpolationNoise;
-
     private PerlinOctaveNoise lowerInterpolationNoise;
-
     private PerlinOctaveNoise interpolationNoise;
-
     private PerlinOctaveNoise beachNoise;
-
     private PerlinOctaveNoise surfaceDepthNoise;
-
     public PerlinOctaveNoise biomeNoise;
-
     public PerlinOctaveNoise depthNoise;
-
     public PerlinOctaveNoise treeNoise;
-
-    private MixinLevel level;
-
+    private Level level;
     private double[] noises;
-
     private double[] sandNoises = new double[256];
-
     private double[] gravelNoises = new double[256];
-
     private double[] surfaceDepthNoises = new double[256];
-
     private Cave cave = new OverworldCave();
-
-    private MixinBiome[] biomes;
-
+    private Biome[] biomes;
     double[] interpolationNoises;
-
     double[] upperInterpolationNoises;
-
     double[] lowerInterpolationNoises;
-
     double[] biomeNoises;
-
     double[] depthNoises;
-
     int[][] unusedVals = new int[32][32];
-
     private double[] temperatureNoises;
-
     public double mapSize = 250.0;
-
     public int waterLevel = 64;
-
     public double fractureHorizontal = 1.0;
-
     public double fractureVertical = 1.0;
-
     public double maxAvgDepth = 0.0;
-
     public double maxAvgHeight = 0.0;
-
     public double volatility1 = 1.0;
-
     public double volatility2 = 1.0;
-
     public double volatilityWeight1 = 0.0;
-
     public double volatilityWeight2 = 1.0;
 
-    public MixinOverworldLevelSource(MixinLevel level, long seed) {
+    public MixinOverworldLevelSource(Level level, long seed) {
         this.level = level;
         this.rand = new Random(seed);
         this.upperInterpolationNoise = new PerlinOctaveNoise(this.rand, 16);
@@ -129,11 +63,7 @@ public class MixinOverworldLevelSource implements LevelSource {
         this.treeNoise = new PerlinOctaveNoise(this.rand, 8);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void shapeChunk(int chunkX, int chunkZ, byte[] tiles, MixinBiome[] biomes, double[] temperatures) {
+    public void shapeChunk(int chunkX, int chunkZ, byte[] tiles, Biome[] biomes, double[] temperatures) {
         int byte0 = 4;
         int k = byte0 + 1;
         int byte2 = 17;
@@ -164,9 +94,9 @@ public class MixinOverworldLevelSource implements LevelSource {
                             double d15 = d10;
                             double d16 = (d11 - d10) * d14;
                             for (int zInner = 0; zInner < 4; ++zInner) {
-                                int x = Math.abs((int) (chunkX * 16 + (xOuter * 4 + xInner)));
-                                int y = Math.abs((int) (chunkZ * 16 + (zOuter * 4 + zInner)));
-                                double reduceBy = Math.max((double) (Math.sqrt((double) (x * x + y * y)) - this.mapSize), (double) 0.0) / 2.0;
+                                int x = Math.abs(chunkX * 16 + (xOuter * 4 + xInner));
+                                int y = Math.abs(chunkZ * 16 + (zOuter * 4 + zInner));
+                                double reduceBy = Math.max(Math.sqrt(x * x + y * y) - this.mapSize, 0.0) / 2.0;
                                 double d17 = temperatures[(xOuter * 4 + xInner) * 16 + (zOuter * 4 + zInner)];
                                 int l2 = 0;
                                 if (yOuter * 8 + yInner < this.waterLevel) {
@@ -175,7 +105,7 @@ public class MixinOverworldLevelSource implements LevelSource {
                                 if (d15 - reduceBy > 0.0) {
                                     l2 = Tile.STONE.id;
                                 }
-                                tiles[j2] = (byte) l2;
+                                tiles[j2] = (byte)l2;
                                 j2 += c;
                                 d15 += d16;
                             }
@@ -192,21 +122,17 @@ public class MixinOverworldLevelSource implements LevelSource {
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void buildSurface(int chunkX, int chunkZ, byte[] tiles, MixinBiome[] biomes) {
+    public void buildSurface(int chunkX, int chunkZ, byte[] tiles, Biome[] biomes) {
         double d = 0.03125;
         this.sandNoises = this.beachNoise.sample(this.sandNoises, chunkX * 16, chunkZ * 16, 0.0, 16, 16, 1, d, d, 1.0);
         this.gravelNoises = this.beachNoise.sample(this.gravelNoises, chunkX * 16, 109.0134, chunkZ * 16, 16, 1, 16, d, 1.0, d);
         this.surfaceDepthNoises = this.surfaceDepthNoise.sample(this.surfaceDepthNoises, chunkX * 16, chunkZ * 16, 0.0, 16, 16, 1, d * 2.0, d * 2.0, d * 2.0);
         for (int k = 0; k < 16; ++k) {
             for (int l = 0; l < 16; ++l) {
-                MixinBiome biomegenbase = biomes[k + l * 16];
+                Biome biomegenbase = biomes[k + l * 16];
                 boolean flag = this.sandNoises[k + l * 16] + this.rand.nextDouble() * 0.2 > 0.0;
                 boolean flag1 = this.gravelNoises[k + l * 16] + this.rand.nextDouble() * 0.2 > 3.0;
-                int i1 = (int) (this.surfaceDepthNoises[k + l * 16] / 3.0 + 3.0 + this.rand.nextDouble() * 0.25);
+                int i1 = (int)(this.surfaceDepthNoises[k + l * 16] / 3.0 + 3.0 + this.rand.nextDouble() * 0.25);
                 int j1 = -1;
                 byte byte1 = biomegenbase.topTileId;
                 byte byte2 = biomegenbase.underTileId;
@@ -217,12 +143,11 @@ public class MixinOverworldLevelSource implements LevelSource {
                         j1 = -1;
                         continue;
                     }
-                    if (byte3 != Tile.STONE.id)
-                        continue;
+                    if (byte3 != Tile.STONE.id) continue;
                     if (j1 == -1) {
                         if (i1 <= 0) {
                             byte1 = 0;
-                            byte2 = (byte) Tile.STONE.id;
+                            byte2 = (byte)Tile.STONE.id;
                         } else if (k1 >= this.waterLevel - 4 && k1 <= this.waterLevel + 1) {
                             byte1 = biomegenbase.topTileId;
                             byte2 = biomegenbase.underTileId;
@@ -230,17 +155,17 @@ public class MixinOverworldLevelSource implements LevelSource {
                                 byte1 = 0;
                             }
                             if (flag1) {
-                                byte2 = (byte) Tile.GRAVEL.id;
+                                byte2 = (byte)Tile.GRAVEL.id;
                             }
                             if (flag) {
-                                byte1 = (byte) Tile.SAND.id;
+                                byte1 = (byte)Tile.SAND.id;
                             }
                             if (flag) {
-                                byte2 = (byte) Tile.SAND.id;
+                                byte2 = (byte)Tile.SAND.id;
                             }
                         }
                         if (k1 < this.waterLevel && byte1 == 0) {
-                            byte1 = (byte) Tile.STILL_WATER.id;
+                            byte1 = (byte)Tile.STILL_WATER.id;
                         }
                         j1 = i1;
                         if (k1 >= this.waterLevel - 1) {
@@ -250,36 +175,24 @@ public class MixinOverworldLevelSource implements LevelSource {
                         tiles[l1] = byte2;
                         continue;
                     }
-                    if (j1 <= 0)
-                        continue;
+                    if (j1 <= 0) continue;
                     tiles[l1] = byte2;
-                    if (--j1 != 0 || byte2 != Tile.SAND.id)
-                        continue;
+                    if (--j1 != 0 || byte2 != Tile.SAND.id) continue;
                     j1 = this.rand.nextInt(4);
-                    byte2 = (byte) Tile.SANDSTONE.id;
+                    byte2 = (byte)Tile.SANDSTONE.id;
                 }
             }
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public MixinChunk loadChunk(int x, int z) {
+    public Chunk loadChunk(int x, int z) {
         return this.getChunk(x, z);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public MixinChunk getChunk(int x, int z) {
-        this.rand.setSeed((long) x * 341873128712L + (long) z * 132897987541L);
+    public Chunk getChunk(int x, int z) {
+        this.rand.setSeed((long)x * 341873128712L + (long)z * 132897987541L);
         byte[] abyte0 = new byte[32768];
-        MixinChunk chunk = new MixinChunk(this.level, abyte0, x, z);
+        Chunk chunk = new Chunk(this.level, abyte0, x, z);
         this.biomes = this.level.getBiomeSource().getBiomes(this.biomes, x * 16, z * 16, 16, 16);
         double[] ad = this.level.getBiomeSource().temperatureNoises;
         this.shapeChunk(x, z, abyte0, this.biomes, ad);
@@ -290,10 +203,6 @@ public class MixinOverworldLevelSource implements LevelSource {
         return chunk;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     private double[] calculateNoise(double[] noises, int chunkX, int chunkY, int chunkZ, int noiseResolutionX, int noiseResolutionY, int noiseResolutionZ) {
         if (noises == null) {
             noises = new double[noiseResolutionX * noiseResolutionY * noiseResolutionZ];
@@ -347,12 +256,12 @@ public class MixinOverworldLevelSource implements LevelSource {
                     d5 = 0.0;
                 }
                 d5 += 0.5;
-                d6 = d6 * (double) noiseResolutionY / 16.0;
-                double d7 = (double) noiseResolutionY / 2.0 + d6 * 4.0;
+                d6 = d6 * (double)noiseResolutionY / 16.0;
+                double d7 = (double)noiseResolutionY / 2.0 + d6 * 4.0;
                 ++l1;
                 for (int j3 = 0; j3 < noiseResolutionY; ++j3) {
                     double d8 = 0.0;
-                    double d9 = ((double) j3 - d7) * 12.0 / d5;
+                    double d9 = ((double)j3 - d7) * 12.0 / d5;
                     if (d9 < 0.0) {
                         d9 *= 4.0;
                     }
@@ -362,7 +271,7 @@ public class MixinOverworldLevelSource implements LevelSource {
                     d8 = d12 < this.volatilityWeight1 ? d10 : (d12 > this.volatilityWeight2 ? d11 : d10 + (d11 - d10) * d12);
                     d8 -= d9;
                     if (j3 > noiseResolutionY - 4) {
-                        double d13 = (float) (j3 - (noiseResolutionY - 4)) / 3.0f;
+                        double d13 = (float)(j3 - (noiseResolutionY - 4)) / 3.0f;
                         d8 = d8 * (1.0 - d13) + -10.0 * d13;
                     }
                     noises[k1] = d8;
@@ -373,29 +282,19 @@ public class MixinOverworldLevelSource implements LevelSource {
         return noises;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
     public boolean isChunkLoaded(int chunkX, int chunkZ) {
         return true;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
     public void decorate(LevelSource levelSource, int chunkX, int chunkZ) {
         SandTile.fallInstantly = true;
         int k = chunkX * 16;
         int l = chunkZ * 16;
-        MixinBiome biomegenbase = this.level.getBiomeSource().getBiome(k + 16, l + 16);
+        Biome biomegenbase = this.level.getBiomeSource().getBiome(k + 16, l + 16);
         this.rand.setSeed(this.level.getSeed());
         long l1 = this.rand.nextLong() / 2L * 2L + 1L;
         long l2 = this.rand.nextLong() / 2L * 2L + 1L;
-        this.rand.setSeed((long) chunkX * l1 + (long) chunkZ * l2 ^ this.level.getSeed());
+        this.rand.setSeed((long)chunkX * l1 + (long)chunkZ * l2 ^ this.level.getSeed());
         double d = 0.25;
         if (this.rand.nextInt(4) == 0) {
             int i1 = k + this.rand.nextInt(16) + 8;
@@ -472,7 +371,7 @@ public class MixinOverworldLevelSource implements LevelSource {
             new Ore(Tile.LAPIS_LAZULI_ORE.id, 6).generate(this.level, this.rand, k7, l10, k13);
         }
         d = 0.5;
-        int k4 = (int) ((this.treeNoise.sample((double) k * d, (double) l * d) / 8.0 + this.rand.nextDouble() * 4.0 + 4.0) / 3.0);
+        int k4 = (int)((this.treeNoise.sample((double)k * d, (double)l * d) / 8.0 + this.rand.nextDouble() * 4.0 + 4.0) / 3.0);
         int l7 = 0;
         if (this.rand.nextInt(10) == 0) {
             ++l7;
@@ -618,47 +517,26 @@ public class MixinOverworldLevelSource implements LevelSource {
                 int i24 = j19 - (k + 8);
                 int j25 = j22 - (l + 8);
                 int k25 = this.level.getOceanFloorHeight(j19, j22);
-                double d1 = this.temperatureNoises[i24 * 16 + j25] - (double) (k25 - 64) / 64.0 * 0.3;
-                if (!(d1 < 0.5) || k25 <= 0 || k25 >= 128 || !this.level.isAir(j19, k25, j22) || !this.level.getMaterial(j19, k25 - 1, j22).blocksMovement() || this.level.getMaterial(j19, k25 - 1, j22) == Material.ICE)
-                    continue;
+                double d1 = this.temperatureNoises[i24 * 16 + j25] - (double)(k25 - 64) / 64.0 * 0.3;
+                if (!(d1 < 0.5) || k25 <= 0 || k25 >= 128 || !this.level.isAir(j19, k25, j22) || !this.level.getMaterial(j19, k25 - 1, j22).blocksMovement() || this.level.getMaterial(j19, k25 - 1, j22) == Material.ICE) continue;
                 this.level.setTile(j19, k25, j22, Tile.SNOW.id);
             }
         }
         SandTile.fallInstantly = false;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
     public boolean saveChunks(boolean flag, ProgressListener listener) {
         return true;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
     public boolean method_1801() {
         return false;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
     public boolean isClean() {
         return true;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
     public String toString() {
         return "RandomLevelSource";
     }

@@ -1,16 +1,5 @@
-/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Object
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- */
 package io.github.ryuu.adventurecraft.mixin.client;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.client.ClientInteractionManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ClientPlayer;
@@ -18,55 +7,28 @@ import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
-import io.github.ryuu.adventurecraft.mixin.item.MixinClientPlayer;
-import io.github.ryuu.adventurecraft.mixin.item.MixinPlayer;
-import io.github.ryuu.adventurecraft.mixin.item.MixinLevel;
-import io.github.ryuu.adventurecraft.mixin.item.MixinTile;
-import io.github.ryuu.adventurecraft.mixin.item.MixinEntity;
-import io.github.ryuu.adventurecraft.mixin.item.MixinItemInstance;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
 
-@Mixin(ClientInteractionManager.class)
 public class MixinClientInteractionManager {
-
-    @Shadow()
     protected final Minecraft minecraft;
-
     public boolean field_2105 = false;
-
     public int destroyExtraWidth = 0;
-
     public int destroyExtraDepth = 0;
 
     public MixinClientInteractionManager(Minecraft minecraft) {
         this.minecraft = minecraft;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_1710(MixinLevel world) {
+    public void method_1710(Level world) {
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void method_1707(int i, int j, int k, int l) {
         this.minecraft.level.method_172(this.minecraft.player, i, j, k, l);
         this.method_1716(i, j, k, l);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public boolean method_1716(int i, int j, int k, int l) {
-        MixinLevel world = this.minecraft.level;
-        MixinTile block = Tile.BY_ID[world.getTileId(i, j, k)];
+        Level world = this.minecraft.level;
+        Tile block = Tile.BY_ID[world.getTileId(i, j, k)];
         world.playLevelEvent(2001, i, j, k, block.id + world.getTileMeta(i, j, k) * 256);
         int i1 = world.getTileMeta(i, j, k);
         boolean flag = world.setTile(i, j, k, 0);
@@ -76,42 +38,22 @@ public class MixinClientInteractionManager {
         return flag;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void method_1721(int i, int j, int k, int l) {
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void method_1705() {
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void method_1706(float f) {
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public float method_1715() {
         return 5.0f;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean useItem(MixinPlayer player, MixinLevel level, MixinItemInstance item) {
+    public boolean useItem(Player player, Level level, ItemInstance item) {
         int i = item.count;
-        MixinItemInstance itemstack1 = item.use(level, player);
+        ItemInstance itemstack1 = item.use(level, player);
         if (itemstack1 != item || itemstack1 != null && itemstack1.count != i) {
             player.inventory.main[player.inventory.selectedHotbarSlot] = itemstack1;
             if (itemstack1.count == 0) {
@@ -122,40 +64,20 @@ public class MixinClientInteractionManager {
         return false;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_1711(MixinPlayer entityplayer) {
+    public void method_1711(Player entityplayer) {
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void tick() {
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public boolean method_1722() {
         return true;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_1718(MixinPlayer player) {
+    public void method_1718(Player player) {
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean activateTile(MixinPlayer player, MixinLevel level, MixinItemInstance item, int x, int y, int z, int l) {
+    public boolean activateTile(Player player, Level level, ItemInstance item, int x, int y, int z, int l) {
         int i1 = level.getTileId(x, y, z);
         if (i1 > 0 && Tile.BY_ID[i1].activate(level, x, y, z, player)) {
             return true;
@@ -166,43 +88,23 @@ public class MixinClientInteractionManager {
         return item.useOnTile(player, level, x, y, z, l);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public MixinPlayer createPlayer(MixinLevel level) {
-        return new MixinClientPlayer(this.minecraft, level, this.minecraft.session, level.dimension.id);
+    public Player createPlayer(Level level) {
+        return new ClientPlayer(this.minecraft, level, this.minecraft.session, level.dimension.id);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void interactWith(MixinPlayer player, MixinEntity target) {
+    public void interactWith(Player player, Entity target) {
         player.interactWith(target);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void attack(MixinPlayer player, MixinEntity target) {
+    public void attack(Player player, Entity target) {
         player.attack(target);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public MixinItemInstance method_1708(int i, int j, int k, boolean flag, MixinPlayer entityplayer) {
+    public ItemInstance method_1708(int i, int j, int k, boolean flag, Player entityplayer) {
         return entityplayer.container.method_2078(j, k, flag, entityplayer);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void closeContainer(int i, MixinPlayer player) {
+    public void closeContainer(int i, Player player) {
         player.container.onClosed(player);
         player.container = player.playerContainer;
     }

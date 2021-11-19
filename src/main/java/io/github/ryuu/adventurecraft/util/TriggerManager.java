@@ -1,163 +1,132 @@
-package io.github.ryuu.adventurecraft.util;/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Integer
- *  java.lang.Object
- *  java.lang.String
- *  java.util.ArrayList
- *  java.util.HashMap
- *  java.util.Map$Entry
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- *  net.minecraft.src.CoordBlock
- *  net.minecraft.src.TriggerArea
- */
+package io.github.ryuu.adventurecraft.util;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.level.Level;
-import net.minecraft.src.TriggerArea;
 import net.minecraft.tile.Tile;
-import net.minecraft.util.io.AbstractTag;
 import net.minecraft.util.io.CompoundTag;
 
 public class TriggerManager {
-
     Level world;
 
-    HashMap<net.minecraft.src.CoordBlock, HashMap<Integer, TriggerArea>> triggerAreas;
+    HashMap<CoordBlock, HashMap<Integer, TriggerArea>> triggerAreas;
 
     TriggerManager(Level w) {
         this.world = w;
-        this.triggerAreas = new HashMap();
+        this.triggerAreas = new HashMap<>();
     }
 
     public void addArea(int x, int y, int z, TriggerArea newArea) {
-        this.addArea(x, y, z, 0, newArea);
+        addArea(x, y, z, 0, newArea);
     }
 
     public void addArea(int x, int y, int z, int areaID, TriggerArea newArea) {
         CoordBlock coord = new CoordBlock(x, y, z);
-        HashMap areas = (HashMap) this.triggerAreas.get((Object) coord);
+        HashMap<Integer, TriggerArea> areas = this.triggerAreas.get(coord);
         if (areas == null) {
-            areas = new HashMap();
-            this.triggerAreas.put((Object) coord, (Object) areas);
+            areas = new HashMap<>();
+            this.triggerAreas.put(coord, areas);
         }
-        TriggerArea prevArea = (TriggerArea) areas.get((Object) areaID);
-        ArrayList blocks = this.findBlocksToActivate(newArea);
-        areas.put((Object) areaID, (Object) newArea);
-        this.activateBlocks((ArrayList<net.minecraft.src.CoordBlock>) blocks);
-        if (prevArea != null) {
-            this.deactivateArea(prevArea);
-        }
+        TriggerArea prevArea = areas.get(Integer.valueOf(areaID));
+        ArrayList<CoordBlock> blocks = findBlocksToActivate(newArea);
+        areas.put(Integer.valueOf(areaID), newArea);
+        activateBlocks(blocks);
+        if (prevArea != null)
+            deactivateArea(prevArea);
     }
 
     public void removeArea(int x, int y, int z) {
         CoordBlock coord = new CoordBlock(x, y, z);
-        HashMap areas = (HashMap) this.triggerAreas.get((Object) coord);
-        if (areas != null) {
-            for (Integer i : ((HashMap) areas.clone()).keySet()) {
-                this.removeArea(coord, areas, (int) i);
-            }
-        }
+        HashMap<Integer, TriggerArea> areas = this.triggerAreas.get(coord);
+        if (areas != null)
+            for (Integer i : ((HashMap) areas.clone()).keySet())
+                removeArea(coord, areas, i.intValue());
     }
 
     public void removeArea(int x, int y, int z, int areaID) {
         CoordBlock coord = new CoordBlock(x, y, z);
-        HashMap areas = (HashMap) this.triggerAreas.get((Object) coord);
-        if (areas != null) {
-            this.removeArea(coord, areas, areaID);
-        }
+        HashMap<Integer, TriggerArea> areas = this.triggerAreas.get(coord);
+        if (areas != null)
+            removeArea(coord, areas, areaID);
     }
 
-    /*
-     * Ignored method signature, as it can't be verified against descriptor
-     */
-    private void removeArea(CoordBlock coord, HashMap areas, int areaID) {
-        TriggerArea prevArea = (TriggerArea) areas.get((Object) areaID);
+    private void removeArea(CoordBlock coord, HashMap<Integer, TriggerArea> areas, int areaID) {
+        TriggerArea prevArea = areas.get(Integer.valueOf(areaID));
         if (prevArea != null) {
-            areas.remove((Object) areaID);
-            if (areas.isEmpty()) {
-                this.triggerAreas.remove((Object) coord);
-            }
-            this.deactivateArea(prevArea);
+            areas.remove(Integer.valueOf(areaID));
+            if (areas.isEmpty())
+                this.triggerAreas.remove(coord);
+            deactivateArea(prevArea);
         }
     }
 
     int getTriggerAmount(int x, int y, int z) {
         int count = 0;
-        for (HashMap areas : this.triggerAreas.values()) {
+        for (HashMap<Integer, TriggerArea> areas : this.triggerAreas.values()) {
             for (TriggerArea aabb : areas.values()) {
-                if (!aabb.isPointInside(x, y, z))
-                    continue;
-                ++count;
+                if (aabb.isPointInside(x, y, z))
+                    count++;
             }
         }
         return count;
     }
 
     boolean isActivated(int x, int y, int z) {
-        for (HashMap areas : this.triggerAreas.values()) {
+        for (HashMap<Integer, TriggerArea> areas : this.triggerAreas.values()) {
             for (TriggerArea aabb : areas.values()) {
-                if (!aabb.isPointInside(x, y, z))
-                    continue;
-                return true;
+                if (aabb.isPointInside(x, y, z))
+                    return true;
             }
         }
         return false;
     }
 
     void outputTriggerSources(int x, int y, int z) {
-        Minecraft.minecraftInstance.overlay.addChatMessage(String.format((String) "Outputting active triggerings for (%d, %d, %d)", (Object[]) new Object[] { x, y, z }));
-        for (Map.Entry e : this.triggerAreas.entrySet()) {
-            HashMap areas = (HashMap) e.getValue();
+        Minecraft.minecraftInstance.v.a(String.format("Outputting active triggerings for (%d, %d, %d)", new Object[]{Integer.valueOf(x), Integer.valueOf(y), Integer.valueOf(z)}));
+        for (Map.Entry<CoordBlock, HashMap<Integer, TriggerArea>> e : this.triggerAreas.entrySet()) {
+            HashMap<Integer, TriggerArea> areas = e.getValue();
             for (TriggerArea aabb : areas.values()) {
-                if (!aabb.isPointInside(x, y, z))
-                    continue;
-                CoordBlock c = (CoordBlock) e.getKey();
-                Minecraft.minecraftInstance.overlay.addChatMessage(String.format((String) "Triggered by (%d, %d, %d)", (Object[]) new Object[] { c.x, c.y, c.z }));
+                if (aabb.isPointInside(x, y, z)) {
+                    CoordBlock c = e.getKey();
+                    Minecraft.minecraftInstance.v.a(String.format("Triggered by (%d, %d, %d)", new Object[]{Integer.valueOf(c.x), Integer.valueOf(c.y), Integer.valueOf(c.z)}));
+                }
             }
         }
     }
 
-    /*
-     * Ignored method signature, as it can't be verified against descriptor
-     */
-    private ArrayList findBlocksToActivate(TriggerArea area) {
-        ArrayList blocksToActivate = new ArrayList();
-        for (int x = area.minX; x <= area.maxX; ++x) {
-            for (int y = area.minY; y <= area.maxY; ++y) {
-                for (int z = area.minZ; z <= area.maxZ; ++z) {
-                    if (this.getTriggerAmount(x, y, z) != 0)
-                        continue;
-                    blocksToActivate.add((Object) new CoordBlock(x, y, z));
+    private ArrayList<CoordBlock> findBlocksToActivate(TriggerArea area) {
+        ArrayList<CoordBlock> blocksToActivate = new ArrayList<>();
+        for (int x = area.minX; x <= area.maxX; x++) {
+            for (int y = area.minY; y <= area.maxY; y++) {
+                for (int z = area.minZ; z <= area.maxZ; z++) {
+                    if (getTriggerAmount(x, y, z) == 0)
+                        blocksToActivate.add(new CoordBlock(x, y, z));
                 }
             }
         }
         return blocksToActivate;
     }
 
-    private void activateBlocks(ArrayList<net.minecraft.src.CoordBlock> blocksToActivate) {
+    private void activateBlocks(ArrayList<CoordBlock> blocksToActivate) {
         for (CoordBlock c : blocksToActivate) {
-            int blockID = this.world.getTileId(c.x, c.y, c.z);
-            if (blockID == 0 || !Tile.BY_ID[blockID].canBeTriggered())
-                continue;
-            Tile.BY_ID[blockID].onTriggerActivated(this.world, c.x, c.y, c.z);
+            int blockID = this.world.a(c.x, c.y, c.z);
+            if (blockID != 0 && Tile.m[blockID].canBeTriggered())
+                Tile.m[blockID].onTriggerActivated(this.world, c.x, c.y, c.z);
         }
     }
 
     private void deactivateArea(TriggerArea area) {
-        for (int x = area.minX; x <= area.maxX; ++x) {
-            for (int y = area.minY; y <= area.maxY; ++y) {
-                for (int z = area.minZ; z <= area.maxZ; ++z) {
-                    int blockID;
-                    if (this.getTriggerAmount(x, y, z) != 0 || (blockID = this.world.getTileId(x, y, z)) == 0 || !Tile.BY_ID[blockID].canBeTriggered())
-                        continue;
-                    Tile.BY_ID[blockID].onTriggerDeactivated(this.world, x, y, z);
+        for (int x = area.minX; x <= area.maxX; x++) {
+            for (int y = area.minY; y <= area.maxY; y++) {
+                for (int z = area.minZ; z <= area.maxZ; z++) {
+                    if (getTriggerAmount(x, y, z) == 0) {
+                        int blockID = this.world.a(x, y, z);
+                        if (blockID != 0 && Tile.m[blockID].canBeTriggered())
+                            Tile.m[blockID].onTriggerDeactivated(this.world, x, y, z);
+                    }
                 }
             }
         }
@@ -166,38 +135,38 @@ public class TriggerManager {
     CompoundTag getTagCompound() {
         CompoundTag tag = new CompoundTag();
         int numCoords = 0;
-        for (Map.Entry e : this.triggerAreas.entrySet()) {
+        for (Map.Entry<CoordBlock, HashMap<Integer, TriggerArea>> e : this.triggerAreas.entrySet()) {
             CompoundTag coordTag = new CompoundTag();
-            CoordBlock c = (CoordBlock) e.getKey();
-            coordTag.put("x", c.x);
-            coordTag.put("y", c.y);
-            coordTag.put("z", c.z);
+            CoordBlock c = e.getKey();
+            coordTag.a("x", c.x);
+            coordTag.a("y", c.y);
+            coordTag.a("z", c.z);
             int numAreas = 0;
-            for (Map.Entry te : ((HashMap) e.getValue()).entrySet()) {
-                CompoundTag areaTag = ((TriggerArea) te.getValue()).getTagCompound();
-                areaTag.put("areaID", (Integer) te.getKey());
-                coordTag.put(String.format((String) "area%d", (Object[]) new Object[] { numAreas++ }), (AbstractTag) areaTag);
+            for (Map.Entry<Integer, TriggerArea> te : (Iterable<Map.Entry<Integer, TriggerArea>>) ((HashMap) e.getValue()).entrySet()) {
+                CompoundTag areaTag = te.getValue().getTagCompound();
+                areaTag.a("areaID", te.getKey().intValue());
+                coordTag.a(String.format("area%d", new Object[]{Integer.valueOf(numAreas++)}), areaTag);
             }
-            coordTag.put("numAreas", numAreas);
-            tag.put(String.format((String) "coord%d", (Object[]) new Object[] { numCoords++ }), (AbstractTag) coordTag);
+            coordTag.a("numAreas", numAreas);
+            tag.a(String.format("coord%d", new Object[]{Integer.valueOf(numCoords++)}), coordTag);
         }
-        tag.put("numCoords", numCoords);
+        tag.a("numCoords", numCoords);
         return tag;
     }
 
     void loadFromTagCompound(CompoundTag tag) {
         this.triggerAreas.clear();
-        int numCoords = tag.getInt("numCoords");
-        for (int i = 0; i < numCoords; ++i) {
-            CompoundTag coordTag = tag.getCompoundTag(String.format((String) "coord%d", (Object[]) new Object[] { i }));
-            CoordBlock coord = new CoordBlock(coordTag.getInt("x"), coordTag.getInt("y"), coordTag.getInt("z"));
-            HashMap areas = new HashMap();
-            this.triggerAreas.put((Object) coord, (Object) areas);
-            int numAreas = coordTag.getInt("numAreas");
-            for (int j = 0; j < numAreas; ++j) {
-                CompoundTag areaTag = coordTag.getCompoundTag(String.format((String) "area%d", (Object[]) new Object[] { j }));
+        int numCoords = tag.e("numCoords");
+        for (int i = 0; i < numCoords; i++) {
+            CompoundTag coordTag = tag.k(String.format("coord%d", new Object[]{Integer.valueOf(i)}));
+            CoordBlock coord = new CoordBlock(coordTag.e("x"), coordTag.e("y"), coordTag.e("z"));
+            HashMap<Integer, TriggerArea> areas = new HashMap<>();
+            this.triggerAreas.put(coord, areas);
+            int numAreas = coordTag.e("numAreas");
+            for (int j = 0; j < numAreas; j++) {
+                CompoundTag areaTag = coordTag.k(String.format("area%d", new Object[]{Integer.valueOf(j)}));
                 TriggerArea area = TriggerArea.getFromTagCompound(areaTag);
-                areas.put((Object) coordTag.getInt("areaID"), (Object) area);
+                areas.put(Integer.valueOf(coordTag.e("areaID")), area);
             }
         }
     }

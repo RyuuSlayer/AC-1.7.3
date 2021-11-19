@@ -5,12 +5,9 @@ import java.io.IOException;
 import io.github.minecraftcursedlegacy.api.config.Configs;
 import io.github.minecraftcursedlegacy.api.registry.Id;
 import net.fabricmc.api.ModInitializer;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
 import tk.valoeghese.zoesteriaconfig.api.container.WritableConfig;
 import tk.valoeghese.zoesteriaconfig.api.template.ConfigTemplate;
 
-@Mix
 public class Main implements ModInitializer {
     @Override
     public void onInitialize() {
@@ -33,6 +30,7 @@ public class Main implements ModInitializer {
         System.out.println(config.getDoubleValue("exampleContainer.someData"));
 
     }
+
 
     private static WritableConfig config;
 }

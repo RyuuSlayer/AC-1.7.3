@@ -1,32 +1,6 @@
-/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.io.File
- *  java.io.FileInputStream
- *  java.io.FileOutputStream
- *  java.io.IOException
- *  java.io.InputStream
- *  java.io.OutputStream
- *  java.lang.Exception
- *  java.lang.Integer
- *  java.lang.Object
- *  java.lang.Override
- *  java.lang.String
- *  java.lang.System
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- */
 package io.github.ryuu.adventurecraft.mixin.level.chunk;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import io.github.ryuu.adventurecraft.blocks.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityRegistry;
 import net.minecraft.level.Level;
@@ -40,24 +14,12 @@ import net.minecraft.util.io.AbstractTag;
 import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.io.ListTag;
 import net.minecraft.util.io.NBTIO;
-import io.github.ryuu.adventurecraft.mixin.item.MixinLevel;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
-import io.github.ryuu.adventurecraft.mixin.item.MixinCompoundTag;
-import io.github.ryuu.adventurecraft.mixin.item.MixinTileEntity;
-import io.github.ryuu.adventurecraft.mixin.item.MixinEntity;
-import io.github.ryuu.adventurecraft.mixin.item.MixinChunk;
-import io.github.ryuu.adventurecraft.mixin.item.MixinLevelProperties;
 
-@Mixin(DimensionFileChunkIO.class)
+import java.io.*;
+
 public class MixinDimensionFileChunkIO implements ChunkIO {
-
-    @Shadow()
     private File field_1701;
-
     private File levelDir;
-
     private boolean field_1702;
 
     public MixinDimensionFileChunkIO(File file, boolean flag) {
@@ -72,14 +34,10 @@ public class MixinDimensionFileChunkIO implements ChunkIO {
         this.field_1702 = flag;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     private File method_1478(int i, int j) {
-        String s = "c." + Integer.toString((int) i, (int) 36) + "." + Integer.toString((int) j, (int) 36) + ".dat";
-        String s1 = Integer.toString((int) (i & 0x3F), (int) 36);
-        String s2 = Integer.toString((int) (j & 0x3F), (int) 36);
+        String s = "c." + Integer.toString(i, 36) + "." + Integer.toString(j, 36) + ".dat";
+        String s1 = Integer.toString(i & 0x3F, 36);
+        String s2 = Integer.toString(j & 0x3F, 36);
         File file = new File(this.field_1701, s1);
         if (!file.exists()) {
             if (this.field_1702) {
@@ -101,17 +59,12 @@ public class MixinDimensionFileChunkIO implements ChunkIO {
         return file;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public MixinChunk getChunk(MixinLevel level, int xPos, int zPos) throws IOException {
+    public Chunk getChunk(Level level, int xPos, int zPos) throws IOException {
         File file = this.method_1478(xPos, zPos);
         if (file != null && file.exists()) {
             try {
                 FileInputStream fileinputstream = new FileInputStream(file);
-                MixinCompoundTag nbttagcompound = NBTIO.readGzipped((InputStream) fileinputstream);
+                CompoundTag nbttagcompound = NBTIO.readGzipped(fileinputstream);
                 if (!nbttagcompound.containsKey("Level")) {
                     System.out.println("Chunk file at " + xPos + "," + zPos + " is missing level data, skipping");
                     return null;
@@ -120,7 +73,7 @@ public class MixinDimensionFileChunkIO implements ChunkIO {
                     System.out.println("Chunk file at " + xPos + "," + zPos + " is missing block data, skipping");
                     return null;
                 }
-                MixinChunk chunk = DimensionFileChunkIO.loadChunk(level, nbttagcompound.getCompoundTag("Level"));
+                Chunk chunk = DimensionFileChunkIO.loadChunk(level, nbttagcompound.getCompoundTag("Level"));
                 if (!chunk.equals(xPos, zPos)) {
                     System.out.println("Chunk file at " + xPos + "," + zPos + " is in the wrong location; relocating. (Expected " + xPos + ", " + zPos + ", got " + chunk.x + ", " + chunk.z + ")");
                     nbttagcompound.put("xPos", xPos);
@@ -129,50 +82,43 @@ public class MixinDimensionFileChunkIO implements ChunkIO {
                 }
                 chunk.method_890();
                 return chunk;
-            } catch (Exception exception) {
+            }
+            catch (Exception exception) {
                 exception.printStackTrace();
             }
         }
         return null;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public void saveChunk(MixinLevel level, MixinChunk chunk) throws IOException {
+    public void saveChunk(Level level, Chunk chunk) throws IOException {
         level.checkSessionLock();
         File file = this.method_1478(chunk.x, chunk.z);
         if (file.exists()) {
-            MixinLevelProperties worldinfo = level.getProperties();
+            LevelProperties worldinfo = level.getProperties();
             worldinfo.setSizeOnDisk(worldinfo.getSizeOnDisk() - file.length());
         }
         try {
             File file1 = new File(this.field_1701, "tmp_chunk.dat");
             FileOutputStream fileoutputstream = new FileOutputStream(file1);
-            MixinCompoundTag nbttagcompound = new MixinCompoundTag();
-            MixinCompoundTag nbttagcompound1 = new MixinCompoundTag();
-            nbttagcompound.put("Level", (AbstractTag) nbttagcompound1);
+            CompoundTag nbttagcompound = new CompoundTag();
+            CompoundTag nbttagcompound1 = new CompoundTag();
+            nbttagcompound.put("Level", (AbstractTag)nbttagcompound1);
             DimensionFileChunkIO.method_1480(chunk, level, nbttagcompound1);
-            NBTIO.writeGzipped(nbttagcompound, (OutputStream) fileoutputstream);
+            NBTIO.writeGzipped(nbttagcompound, fileoutputstream);
             fileoutputstream.close();
             if (file.exists()) {
                 file.delete();
             }
             file1.renameTo(file);
-            MixinLevelProperties worldinfo1 = level.getProperties();
+            LevelProperties worldinfo1 = level.getProperties();
             worldinfo1.setSizeOnDisk(worldinfo1.getSizeOnDisk() + file.length());
-        } catch (Exception exception) {
+        }
+        catch (Exception exception) {
             exception.printStackTrace();
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public static void method_1480(MixinChunk chunk, MixinLevel level, MixinCompoundTag tag) {
+    public static void method_1480(Chunk chunk, Level level, CompoundTag tag) {
         level.checkSessionLock();
         tag.put("xPos", chunk.x);
         tag.put("zPos", chunk.z);
@@ -187,34 +133,29 @@ public class MixinDimensionFileChunkIO implements ChunkIO {
         chunk.field_969 = false;
         ListTag nbttaglist = new ListTag();
         for (int i = 0; i < chunk.entities.length; ++i) {
-            for (MixinEntity entity : chunk.entities[i]) {
+            for (Entity entity : chunk.entities[i]) {
                 chunk.field_969 = true;
-                MixinCompoundTag nbttagcompound1 = new MixinCompoundTag();
-                if (!entity.method_1343(nbttagcompound1))
-                    continue;
+                CompoundTag nbttagcompound1 = new CompoundTag();
+                if (!entity.method_1343(nbttagcompound1)) continue;
                 nbttaglist.add(nbttagcompound1);
             }
         }
         tag.put("Entities", nbttaglist);
         ListTag nbttaglist1 = new ListTag();
-        for (MixinTileEntity tileentity : chunk.tileEntities.values()) {
-            MixinCompoundTag nbttagcompound2 = new MixinCompoundTag();
+        for (TileEntity tileentity : chunk.tileEntities.values()) {
+            CompoundTag nbttagcompound2 = new CompoundTag();
             tileentity.writeIdentifyingData(nbttagcompound2);
             nbttaglist1.add(nbttagcompound2);
         }
         tag.put("TileEntities", nbttaglist1);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public static MixinChunk loadChunk(MixinLevel level, MixinCompoundTag tag) {
+    public static Chunk loadChunk(Level level, CompoundTag tag) {
         ListTag nbttaglist1;
         ListTag nbttaglist;
         int i = tag.getInt("xPos");
         int j = tag.getInt("zPos");
-        MixinChunk chunk = new MixinChunk(level, i, j, false);
+        Chunk chunk = new Chunk(level, i, j, false);
         chunk.tiles = tag.getByteArray("Blocks");
         chunk.meta = new ChunkSubData(tag.getByteArray("Data"));
         chunk.skylight = new ChunkSubData(tag.getByteArray("SkyLight"));
@@ -238,47 +179,30 @@ public class MixinDimensionFileChunkIO implements ChunkIO {
         }
         if ((nbttaglist = tag.getListTag("Entities")) != null) {
             for (int k = 0; k < nbttaglist.size(); ++k) {
-                MixinCompoundTag nbttagcompound1 = (MixinCompoundTag) nbttaglist.get(k);
-                MixinEntity entity = EntityRegistry.create(nbttagcompound1, level);
+                CompoundTag nbttagcompound1 = (CompoundTag)nbttaglist.get(k);
+                Entity entity = EntityRegistry.create(nbttagcompound1, level);
                 chunk.field_969 = true;
-                if (entity == null)
-                    continue;
+                if (entity == null) continue;
                 chunk.addEntity(entity);
             }
         }
         if ((nbttaglist1 = tag.getListTag("TileEntities")) != null) {
             for (int l = 0; l < nbttaglist1.size(); ++l) {
-                MixinCompoundTag nbttagcompound2 = (MixinCompoundTag) nbttaglist1.get(l);
-                MixinTileEntity tileentity = TileEntity.method_1068(nbttagcompound2);
-                if (tileentity == null)
-                    continue;
+                CompoundTag nbttagcompound2 = (CompoundTag)nbttaglist1.get(l);
+                TileEntity tileentity = TileEntity.method_1068(nbttagcompound2);
+                if (tileentity == null) continue;
                 chunk.addTileEntity(tileentity);
             }
         }
         return chunk;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
     public void method_810() {
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
     public void method_813() {
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public void prepareChunk(MixinLevel level, MixinChunk chunk) throws IOException {
+    public void prepareChunk(Level level, Chunk chunk) throws IOException {
     }
 }

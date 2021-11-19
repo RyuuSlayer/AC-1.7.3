@@ -1,15 +1,9 @@
-package io.github.ryuu.adventurecraft.blocks;/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Object
- *  java.lang.Override
- *  java.lang.String
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- */
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+package io.github.ryuu.adventurecraft.blocks;
+
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityTeleport;
+import io.github.ryuu.adventurecraft.items.ItemCursor;
+import io.github.ryuu.adventurecraft.items.Items;
+import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
@@ -20,7 +14,6 @@ import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 public class BlockTeleport extends TileWithEntity {
-
     protected BlockTeleport(int i, int j) {
         super(i, j, Material.AIR);
     }
@@ -36,33 +29,31 @@ public class BlockTeleport extends TileWithEntity {
     }
 
     @Override
-    public Box getCollisionShape(Level level, int x, int y, int z) {
+    public Box getCollisionShape(Level world, int i, int j, int k) {
         return null;
     }
 
-    @Override
     public boolean shouldRender(TileView blockAccess, int i, int j, int k) {
         return DebugMode.active;
     }
 
-    @Override
     public boolean canBeTriggered() {
         return true;
     }
 
-    @Override
     public void onTriggerActivated(Level world, int i, int j, int k) {
-        int y;
         TileEntityTeleport tileEnt = (TileEntityTeleport) world.getTileEntity(i, j, k);
-        for (y = tileEnt.y; y < 128 && world.getMaterial(tileEnt.x, y, tileEnt.z) != Material.AIR; ++y) {
+        int y;
+        for (y = tileEnt.y; y < 128; y++) {
+            if (world.getMaterial(tileEnt.x, y, tileEnt.z) == Material.AIR)
+                break;
         }
         for (Object obj : world.players) {
             Player p = (Player) obj;
-            p.setPosition((double) tileEnt.x + 0.5, y, (double) tileEnt.z + 0.5);
+            p.setPosition(tileEnt.x + 0.5D, y, tileEnt.z + 0.5D);
         }
     }
 
-    @Override
     public void onTriggerDeactivated(Level world, int i, int j, int k) {
     }
 
@@ -72,13 +63,13 @@ public class BlockTeleport extends TileWithEntity {
     }
 
     @Override
-    public boolean activate(Level level, int x, int y, int z, Player player) {
-        if (DebugMode.active && player.getHeldItem() != null && player.getHeldItem().itemId == Items.cursor.id) {
-            TileEntityTeleport obj = (TileEntityTeleport) level.getTileEntity(x, y, z);
+    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
+        if (DebugMode.active && entityplayer.getHeldItem() != null && (entityplayer.getHeldItem()).itemId == Items.cursor.id) {
+            TileEntityTeleport obj = (TileEntityTeleport) world.getTileEntity(i, j, k);
             obj.x = ItemCursor.minX;
             obj.y = ItemCursor.minY;
             obj.z = ItemCursor.minZ;
-            Minecraft.minecraftInstance.overlay.addChatMessage(String.format((String) "Setting Teleport (%d, %d, %d)", (Object[]) new Object[] { obj.x, obj.y, obj.z }));
+            Minecraft.minecraftInstance.overlay.addChatMessage(String.format("Setting Teleport (%d, %d, %d)", obj.x, obj.y, obj.z));
             return true;
         }
         return false;

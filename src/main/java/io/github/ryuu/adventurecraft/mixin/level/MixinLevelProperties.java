@@ -1,23 +1,10 @@
-/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Object
- *  java.lang.String
- *  java.lang.System
- *  java.util.HashMap
- *  java.util.List
- *  java.util.Map$Entry
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- */
 package io.github.ryuu.adventurecraft.mixin.level;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+
+import io.github.ryuu.adventurecraft.blocks.BlockEffect;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.Player;
@@ -25,127 +12,64 @@ import net.minecraft.level.Level;
 import net.minecraft.level.LevelProperties;
 import net.minecraft.util.io.AbstractTag;
 import net.minecraft.util.io.CompoundTag;
-import io.github.ryuu.adventurecraft.mixin.item.MixinPlayer;
-import io.github.ryuu.adventurecraft.mixin.item.MixinLevel;
-import io.github.ryuu.adventurecraft.mixin.item.MixinCompoundTag;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
-import io.github.ryuu.adventurecraft.mixin.item.MixinLevelProperties;
 
-@Mixin(LevelProperties.class)
 public class MixinLevelProperties {
-
-    @Shadow()
     private long randomSeed;
-
     private int spawnX;
-
     private int spawnY;
-
     private int spawnZ;
-
     private long time;
-
     private long lastPlayed;
-
     private long sizeOnDisk;
-
-    private MixinCompoundTag playerData;
-
+    private CompoundTag playerData;
     private int dimensionId;
-
     private String levelName;
-
     private int version;
-
     private boolean raining;
-
     private int rainTime;
-
     private boolean thundering;
-
     private int thunderTime;
-
     public double tempOffset;
-
     public boolean useImages = true;
-
     public double mapSize = 250.0;
-
     public int waterLevel = 64;
-
     public double fractureHorizontal = 1.0;
-
     public double fractureVertical = 1.0;
-
     public double maxAvgDepth = 0.0;
-
     public double maxAvgHeight = 0.0;
-
     public double volatility1 = 1.0;
-
     public double volatility2 = 1.0;
-
     public double volatilityWeight1 = 0.0;
-
     public double volatilityWeight2 = 1.0;
-
     public boolean iceMelts = true;
-
-    public MixinCompoundTag triggerData = null;
-
+    public CompoundTag triggerData = null;
     float timeOfDay;
-
     float timeRate;
-
     public String playingMusic = "";
-
     public boolean mobsBurn = true;
-
     public boolean overrideFogColor = false;
-
     public float fogR;
-
     public float fogG;
-
     public float fogB;
-
     public boolean overrideFogDensity = false;
-
     public float fogStart;
-
     public float fogEnd;
-
     public String overlay = "";
-
-    MixinCompoundTag replacementTag = null;
-
+    CompoundTag replacementTag = null;
     public HashMap<String, String> replacementTextures;
-
     public String onNewSaveScript = "";
-
     public String onLoadScript = "";
-
     public String onUpdateScript = "";
-
     public String playerName = "ACPlayer";
-
     public float[] brightness;
-
     public float spawnYaw;
-
-    public MixinCompoundTag globalScope = null;
-
-    public MixinCompoundTag worldScope = null;
-
-    public MixinCompoundTag musicScope = null;
-
+    public CompoundTag globalScope = null;
+    public CompoundTag worldScope = null;
+    public CompoundTag musicScope = null;
     public boolean originallyFromAC = false;
-
     public boolean allowsInventoryCrafting = false;
 
-    public MixinLevelProperties(MixinCompoundTag tag) {
+    public MixinLevelProperties(CompoundTag tag) {
         this.brightness = new float[16];
         this.randomSeed = tag.getLong("RandomSeed");
         this.spawnX = tag.getInt("SpawnX");
@@ -189,7 +113,7 @@ public class MixinLevelProperties {
             this.triggerData = tag.getCompoundTag("triggerAreas");
         }
         this.timeRate = tag.containsKey("timeRate") ? tag.getFloat("timeRate") : 1.0f;
-        this.timeOfDay = tag.containsKey("timeOfDay") ? tag.getFloat("timeOfDay") : (float) this.time;
+        this.timeOfDay = tag.containsKey("timeOfDay") ? tag.getFloat("timeOfDay") : (float)this.time;
         this.playingMusic = tag.getString("playingMusic");
         if (tag.containsKey("mobsBurn")) {
             this.mobsBurn = tag.getBoolean("mobsBurn");
@@ -207,12 +131,12 @@ public class MixinLevelProperties {
         }
         float f = 0.05f;
         for (int i = 0; i < 16; ++i) {
-            String key = String.format((String) "brightness%d", (Object[]) new Object[] { i });
+            String key = String.format((String)"brightness%d", (Object[])new Object[]{i});
             if (tag.containsKey(key)) {
                 this.brightness[i] = tag.getFloat(key);
                 continue;
             }
-            float f1 = 1.0f - (float) i / 15.0f;
+            float f1 = 1.0f - (float)i / 15.0f;
             this.brightness[i] = (1.0f - f1) / (f1 * 3.0f + 1.0f) * (1.0f - f) + f;
         }
         if (tag.containsKey("globalScope")) {
@@ -236,12 +160,12 @@ public class MixinLevelProperties {
         this.replacementTextures = new HashMap();
         float f = 0.05f;
         for (int i = 0; i < 16; ++i) {
-            float f1 = 1.0f - (float) i / 15.0f;
+            float f1 = 1.0f - (float)i / 15.0f;
             this.brightness[i] = (1.0f - f1) / (f1 * 3.0f + 1.0f) * (1.0f - f) + f;
         }
     }
 
-    public MixinLevelProperties(MixinLevelProperties properties) {
+    public LevelProperties(LevelProperties properties) {
         this.randomSeed = properties.randomSeed;
         this.spawnX = properties.spawnX;
         this.spawnY = properties.spawnY;
@@ -264,40 +188,28 @@ public class MixinLevelProperties {
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public MixinCompoundTag toTag() {
-        MixinCompoundTag nbttagcompound = new MixinCompoundTag();
+    public CompoundTag toTag() {
+        CompoundTag nbttagcompound = new CompoundTag();
         this.updateProperties(nbttagcompound, this.playerData);
         return nbttagcompound;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public MixinCompoundTag method_9(List list) {
-        MixinCompoundTag nbttagcompound = new MixinCompoundTag();
-        MixinPlayer entityplayer = null;
-        MixinCompoundTag nbttagcompound1 = null;
+    public CompoundTag method_9(List list) {
+        CompoundTag nbttagcompound = new CompoundTag();
+        Player entityplayer = null;
+        CompoundTag nbttagcompound1 = null;
         if (list.size() > 0) {
-            entityplayer = (MixinPlayer) list.get(0);
+            entityplayer = (Player)list.get(0);
         }
         if (entityplayer != null) {
-            nbttagcompound1 = new MixinCompoundTag();
+            nbttagcompound1 = new CompoundTag();
             entityplayer.toTag(nbttagcompound1);
         }
         this.updateProperties(nbttagcompound, nbttagcompound1);
         return nbttagcompound;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    private void updateProperties(MixinCompoundTag tag, MixinCompoundTag playerData) {
+    private void updateProperties(CompoundTag tag, CompoundTag playerData) {
         tag.put("RandomSeed", this.randomSeed);
         tag.put("SpawnX", this.spawnX);
         tag.put("SpawnY", this.spawnY);
@@ -318,7 +230,7 @@ public class MixinLevelProperties {
         tag.put("nextEntityID", Entity.field_1590);
         tag.put("useImages", this.useImages);
         tag.put("mapSize", this.mapSize);
-        tag.put("waterLevel", (short) this.waterLevel);
+        tag.put("waterLevel", (short)this.waterLevel);
         tag.put("fractureHorizontal", this.fractureHorizontal);
         tag.put("fractureVertical", this.fractureVertical);
         tag.put("maxAvgDepth", this.maxAvgDepth);
@@ -329,99 +241,71 @@ public class MixinLevelProperties {
         tag.put("volatilityWeight2", this.volatilityWeight2);
         tag.put("iceMelts", this.iceMelts);
         if (Minecraft.minecraftInstance.level != null && Minecraft.minecraftInstance.level.triggerManager != null) {
-            tag.put("triggerAreas", (AbstractTag) Minecraft.minecraftInstance.level.triggerManager.getTagCompound());
+            tag.put("triggerAreas", (AbstractTag)Minecraft.minecraftInstance.level.triggerManager.getTagCompound());
         }
         tag.put("timeOfDay", this.timeOfDay);
         tag.put("timeRate", this.timeRate);
-        if (!this.playingMusic.equals((Object) "")) {
+        if (!this.playingMusic.equals("")) {
             tag.put("playingMusic", this.playingMusic);
         }
         tag.put("mobsBurn", this.mobsBurn);
-        if (!this.overlay.equals((Object) "")) {
+        if (!this.overlay.equals("")) {
             tag.put("overlay", this.overlay);
         }
         tag.put("textureReplacements", this.getTextureReplacementTags());
-        if (!this.onNewSaveScript.equals((Object) "")) {
+        if (!this.onNewSaveScript.equals("")) {
             tag.put("onNewSaveScript", this.onNewSaveScript);
         }
-        if (!this.onLoadScript.equals((Object) "")) {
+        if (!this.onLoadScript.equals("")) {
             tag.put("onLoadScript", this.onLoadScript);
         }
-        if (!this.onUpdateScript.equals((Object) "")) {
+        if (!this.onUpdateScript.equals("")) {
             tag.put("onUpdateScript", this.onUpdateScript);
         }
-        if (!this.playerName.equals((Object) "")) {
+        if (!this.playerName.equals("")) {
             tag.put("playerName", this.playerName);
         }
         for (int i = 0; i < 16; ++i) {
-            String key = String.format((String) "brightness%d", (Object[]) new Object[] { i });
+            String key = String.format("brightness%d", new Object[]{i});
             tag.put(key, this.brightness[i]);
         }
         if (this.globalScope != null) {
-            tag.put("globalScope", (AbstractTag) this.globalScope);
+            tag.put("globalScope", (AbstractTag)this.globalScope);
         }
         if (this.worldScope != null) {
-            tag.put("worldScope", (AbstractTag) this.worldScope);
+            tag.put("worldScope", (AbstractTag)this.worldScope);
         }
         if (this.musicScope != null) {
-            tag.put("musicScope", (AbstractTag) this.musicScope);
+            tag.put("musicScope", (AbstractTag)this.musicScope);
         }
         tag.put("originallyFromAC", this.originallyFromAC);
         tag.put("allowsInventoryCrafting", this.allowsInventoryCrafting);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public long getSeed() {
         return this.randomSeed;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public int getSpawnX() {
         return this.spawnX;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public int getSpawnY() {
         return this.spawnY;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public int getSpawnZ() {
         return this.spawnZ;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public long getTime() {
         return this.time;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public long getTimeOfDay() {
-        return (long) this.timeOfDay;
+        return (long)this.timeOfDay;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void addToTimeOfDay(float t) {
         this.timeOfDay += t;
         while (this.timeOfDay < 0.0f) {
@@ -432,10 +316,6 @@ public class MixinLevelProperties {
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void setTimeOfDay(float l) {
         this.timeOfDay = l;
         while (this.timeOfDay < 0.0f) {
@@ -446,247 +326,131 @@ public class MixinLevelProperties {
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public float getTimeRate() {
         return this.timeRate;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void setTimeRate(float t) {
         this.timeRate = t;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public long getSizeOnDisk() {
         return this.sizeOnDisk;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public MixinCompoundTag getPlayerData() {
+    public CompoundTag getPlayerData() {
         return this.playerData;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public int getDimensionId() {
         return this.dimensionId;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void setSpawnX(int spawnX) {
         this.spawnX = spawnX;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void setSpawnY(int spawnY) {
         this.spawnY = spawnY;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void setSpawnZ(int spawnZ) {
         this.spawnZ = spawnZ;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void setTime(long time) {
         this.time = time;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void setSizeOnDisk(long sizeOnDisk) {
         this.sizeOnDisk = sizeOnDisk;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void setPlayerData(MixinCompoundTag playerData) {
+    public void setPlayerData(CompoundTag playerData) {
         this.playerData = playerData;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void setSpawnPosition(int spawnX, int spawnY, int spawnZ) {
         this.spawnX = spawnX;
         this.spawnY = spawnY;
         this.spawnZ = spawnZ;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public String getName() {
         return this.levelName;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void setName(String levelName) {
         this.levelName = levelName;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public int getVersion() {
         return this.version;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void setVersion(int version) {
         this.version = version;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public long getLastPlayed() {
         return this.lastPlayed;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public boolean isThundering() {
         return this.thundering;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void setThundering(boolean thundering) {
         this.thundering = thundering;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public int getThunderTime() {
         return this.thunderTime;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void setThunderTime(int thunderTime) {
         this.thunderTime = thunderTime;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public boolean isRaining() {
         return this.raining;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void setRaining(boolean raining) {
         this.raining = raining;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public int getRainTime() {
         return this.rainTime;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void setRainTime(int rainTime) {
         this.rainTime = rainTime;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     boolean addReplacementTexture(String replace, String newTexture) {
-        String prevReplacement = (String) this.replacementTextures.get((Object) replace);
-        if (prevReplacement != null && prevReplacement.equals((Object) newTexture)) {
+        String prevReplacement = this.replacementTextures.get(replace);
+        if (prevReplacement != null && prevReplacement.equals(newTexture)) {
             return false;
         }
-        this.replacementTextures.put((Object) replace, (Object) newTexture);
+        this.replacementTextures.put((Object)replace, (Object)newTexture);
         return true;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     void revertTextures() {
         this.replacementTextures.clear();
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    MixinCompoundTag getTextureReplacementTags() {
+    CompoundTag getTextureReplacementTags() {
         boolean i = false;
-        MixinCompoundTag t = new MixinCompoundTag();
+        CompoundTag t = new CompoundTag();
         for (Map.Entry e : this.replacementTextures.entrySet()) {
-            t.put((String) e.getKey(), (String) e.getValue());
+            t.put((String)e.getKey(), (String)e.getValue());
         }
         return t;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    void loadTextureReplacements(MixinLevel w) {
+    void loadTextureReplacements(Level w) {
         if (this.replacementTag != null) {
             this.replacementTextures.clear();
             for (String key : this.replacementTag.getKeys()) {
@@ -694,4 +458,4 @@ public class MixinLevelProperties {
             }
         }
     }
-}
+}}

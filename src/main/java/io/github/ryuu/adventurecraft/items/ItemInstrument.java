@@ -1,15 +1,6 @@
-package io.github.ryuu.adventurecraft.items;/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Object
- *  java.lang.Override
- *  java.lang.String
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- */
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+package io.github.ryuu.adventurecraft.items;
+
+import io.github.ryuu.adventurecraft.gui.GuiMusicSheet;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
@@ -18,7 +9,6 @@ import net.minecraft.tile.Tile;
 import net.minecraft.tile.entity.Sign;
 
 public class ItemInstrument extends ItemType {
-
     String instrument;
 
     protected ItemInstrument(int i, String instrumentToUse) {
@@ -26,18 +16,16 @@ public class ItemInstrument extends ItemType {
         this.instrument = instrumentToUse;
     }
 
-    @Override
-    public boolean useOnTile(ItemInstance item, Player player, Level level, int x, int y, int z, int facing) {
-        if (level.getTileId(x, y, z) == Tile.STANDING_SIGN.id) {
-            Sign sign = (Sign) level.getTileEntity(x, y, z);
+    public boolean useOnTile(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
+        if (world.getTileId(i, j, k) == Tile.STANDING_SIGN.id) {
+            Sign sign = (Sign) world.getTileEntity(i, j, k);
             sign.playSong(this.instrument);
         }
         return false;
     }
 
-    @Override
-    public ItemInstance use(ItemInstance item, Level level, Player player) {
+    public ItemInstance use(ItemInstance itemstack, Level world, Player entityplayer) {
         GuiMusicSheet.showUI(this.instrument);
-        return item;
+        return itemstack;
     }
 }

@@ -1,16 +1,8 @@
-package io.github.ryuu.adventurecraft.blocks;/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Object
- *  java.lang.Override
- *  java.util.Random
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- */
-import java.util.Random;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+package io.github.ryuu.adventurecraft.blocks;
+
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityMobSpawner;
+import io.github.ryuu.adventurecraft.gui.GuiMobSpawner;
+import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
@@ -20,8 +12,9 @@ import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
-public class BlockMobSpawner extends TileWithEntity {
+import java.util.Random;
 
+public class BlockMobSpawner extends TileWithEntity {
     protected BlockMobSpawner(int i, int j) {
         super(i, j, Material.AIR);
     }
@@ -32,12 +25,12 @@ public class BlockMobSpawner extends TileWithEntity {
     }
 
     @Override
-    public int getDropId(int meta, Random rand) {
+    public int getDropId(int i, Random random) {
         return 0;
     }
 
     @Override
-    public int getDropCount(Random rand) {
+    public int getDropCount(Random random) {
         return 0;
     }
 
@@ -47,44 +40,38 @@ public class BlockMobSpawner extends TileWithEntity {
     }
 
     @Override
-    public Box getCollisionShape(Level level, int x, int y, int z) {
+    public Box getCollisionShape(Level world, int i, int j, int k) {
         return null;
     }
 
     @Override
-    public boolean activate(Level level, int x, int y, int z, Player player) {
+    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
         if (DebugMode.active) {
-            TileEntityMobSpawner obj = (TileEntityMobSpawner) level.getTileEntity(x, y, z);
+            TileEntityMobSpawner obj = (TileEntityMobSpawner) world.getTileEntity(i, j, k);
             GuiMobSpawner.showUI(obj);
             return true;
         }
         return false;
     }
 
-    @Override
     public boolean shouldRender(TileView blockAccess, int i, int j, int k) {
         return DebugMode.active;
     }
 
-    @Override
     public boolean canBeTriggered() {
         return true;
     }
 
-    @Override
     public void onTriggerActivated(Level world, int i, int j, int k) {
         TileEntityMobSpawner obj = (TileEntityMobSpawner) world.getTileEntity(i, j, k);
-        if (obj.spawnOnTrigger && !Tile.resetActive) {
+        if (obj.spawnOnTrigger && !Tile.resetActive)
             obj.spawnMobs();
-        }
     }
 
-    @Override
     public void onTriggerDeactivated(Level world, int i, int j, int k) {
         TileEntityMobSpawner obj = (TileEntityMobSpawner) world.getTileEntity(i, j, k);
-        if (obj.spawnOnDetrigger && !Tile.resetActive) {
+        if (obj.spawnOnDetrigger && !Tile.resetActive)
             obj.spawnMobs();
-        }
     }
 
     @Override
@@ -92,12 +79,10 @@ public class BlockMobSpawner extends TileWithEntity {
         return DebugMode.active;
     }
 
-    @Override
     public void reset(Level world, int i, int j, int k, boolean death) {
         TileEntityMobSpawner obj = (TileEntityMobSpawner) world.getTileEntity(i, j, k);
-        if (!death) {
+        if (!death)
             obj.hasDroppedItem = false;
-        }
         obj.resetMobs();
         obj.delay = 0;
     }

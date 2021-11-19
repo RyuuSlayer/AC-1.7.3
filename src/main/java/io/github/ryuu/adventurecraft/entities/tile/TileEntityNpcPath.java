@@ -1,43 +1,35 @@
-package io.github.ryuu.adventurecraft.entities.tile;/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Object
- *  java.lang.Override
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- */
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+package io.github.ryuu.adventurecraft.entities.tile;
+
+import io.github.ryuu.adventurecraft.entities.EntityNPC;
+import io.github.ryuu.adventurecraft.util.TriggerArea;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.io.CompoundTag;
 
 public class TileEntityNpcPath extends TileEntityMinMax {
-
+    public static EntityNPC lastEntity = null;
     private int entityID;
-
     private EntityNPC npc = null;
 
-    public static EntityNPC lastEntity = null;
-
     @Override
-    public void readIdentifyingData(CompoundTag tag) {
-        super.readIdentifyingData(tag);
-        this.entityID = tag.getInt("entityID");
+    public void readIdentifyingData(CompoundTag nbttagcompound) {
+        super.readIdentifyingData(nbttagcompound);
+        this.entityID = nbttagcompound.getInt("entityID");
     }
 
     @Override
-    public void writeIdentifyingData(CompoundTag tag) {
-        super.writeIdentifyingData(tag);
-        tag.put("entityID", this.entityID);
+    public void writeIdentifyingData(CompoundTag nbttagcompound) {
+        super.writeIdentifyingData(nbttagcompound);
+        nbttagcompound.put("entityID", this.entityID);
     }
 
     public EntityNPC getNPC() {
         if (this.npc == null || this.npc.id != this.entityID) {
-            Entity e;
-            if (this.level != null && (e = this.level.getEntityByID(this.entityID)) instanceof EntityNPC) {
-                this.npc = (EntityNPC) e;
-                return this.npc;
+            if (this.level != null) {
+                Entity e = this.level.getEntityByID(this.entityID);
+                if (e instanceof EntityNPC) {
+                    this.npc = (EntityNPC) e;
+                    return this.npc;
+                }
             }
         } else {
             return this.npc;
@@ -47,23 +39,22 @@ public class TileEntityNpcPath extends TileEntityMinMax {
 
     public void setEntityToLastSelected() {
         if (lastEntity != null) {
-            this.entityID = TileEntityNpcPath.lastEntity.id;
+            this.entityID = lastEntity.id;
             this.npc = lastEntity;
         }
     }
 
-    void pathEntity() {
-        EntityNPC ent = this.getNPC();
+    public void pathEntity() {
+        EntityNPC ent = getNPC();
         if (ent != null) {
             this.npc.pathToPosition(this.x, this.y, this.z);
-            if (this.isSet()) {
+            if (isSet())
                 this.npc.triggerOnPath = this;
-            }
         }
     }
 
-    void pathFinished() {
-        if (this.isSet()) {
+    public void pathFinished() {
+        if (isSet()) {
             this.level.triggerManager.addArea(this.x, this.y, this.z, new TriggerArea(this.minX, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ));
             this.level.triggerManager.removeArea(this.x, this.y, this.z);
         }

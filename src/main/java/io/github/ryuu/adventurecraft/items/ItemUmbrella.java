@@ -1,18 +1,10 @@
-package io.github.ryuu.adventurecraft.items;/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Math
- *  java.lang.Object
- *  java.lang.Override
- *  java.util.List
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- */
+package io.github.ryuu.adventurecraft.items;
+
 import java.util.List;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+
+import io.github.ryuu.adventurecraft.entities.EntityAirFX;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.FallingTile;
 import net.minecraft.entity.player.Player;
@@ -23,73 +15,71 @@ import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.Vec3f;
 
 class ItemUmbrella extends ItemType {
-
-    public ItemUmbrella(int id) {
-        super(id);
+    public ItemUmbrella(int itemIndex) {
+        super(itemIndex);
         this.maxStackSize = 1;
         this.decrementDamage = true;
     }
 
     @Override
-    public int getTexturePosition(int damage) {
-        if (damage > 0) {
+    public int getTexturePosition(int i) {
+        if (i > 0)
             return this.texturePosition - 1;
-        }
         return this.texturePosition;
     }
 
     @Override
-    public ItemInstance use(ItemInstance item, Level level, Player player) {
-        double dotProduct;
-        double dZ;
-        double dY;
-        double dX;
-        double dist;
-        Entity e;
-        if (!player.onGround || item.getDamage() > 0) {
-            return item;
-        }
-        Vec3f lookVec = player.method_1320();
-        lookVec.method_1296();
-        Box aabb = Box.getOrCreate(player.x, player.y, player.z, player.x, player.y, player.z).expand(6.0, 6.0, 6.0);
-        List entities = level.getEntities(player, aabb);
+    public ItemInstance use(ItemInstance itemstack, Level world, Player entityplayer) {
+        if (!entityplayer.onGround || itemstack.getDamage() > 0)
+            return itemstack;
+        Vec3f lookVec = entityplayer.method_1320();
+        lookVec.c();
+        Box aabb = Box.create(entityplayer.x, entityplayer.y, entityplayer.z, entityplayer.x, entityplayer.y, entityplayer.z).b(6.0D, 6.0D, 6.0D);
+        List entities = world.getEntities(entityplayer, aabb);
         for (Object obj : entities) {
-            e = (Entity) obj;
-            dist = e.method_1352(player);
-            if (!(dist < 36.0) || e instanceof FallingTile)
-                continue;
-            dX = e.x - player.x;
-            dY = e.y - player.y;
-            dZ = e.z - player.z;
-            dotProduct = (dX /= (dist = Math.sqrt((double) dist))) * lookVec.x + (dY /= dist) * lookVec.y + (dZ /= dist) * lookVec.z;
-            if (!(dotProduct > 0.0) || !(Math.acos((double) dotProduct) < 1.5707963267948966))
-                continue;
-            dist = Math.max((double) dist, (double) 3.0);
-            e.method_1322(3.0 * dX / dist, 3.0 * dY / dist, 3.0 * dZ / dist);
+            Entity e = (Entity) obj;
+            double dist = e.method_1352(entityplayer);
+            if (dist < 36.0D && !(e instanceof FallingTile)) {
+                double dX = e.x - entityplayer.x;
+                double dY = e.y - entityplayer.y;
+                double dZ = e.z - entityplayer.z;
+                dist = Math.sqrt(dist);
+                dX /= dist;
+                dY /= dist;
+                dZ /= dist;
+                double dotProduct = dX * lookVec.x + dY * lookVec.y + dZ * lookVec.z;
+                if (dotProduct > 0.0D && Math.acos(dotProduct) < 1.5707963267948966D) {
+                    dist = Math.max(dist, 3.0D);
+                    e.method_1322(3.0D * dX / dist, 3.0D * dY / dist, 3.0D * dZ / dist); // not sure if it's method_1322
+                }
+            }
         }
-        entities = Minecraft.minecraftInstance.particleManager.getEffectsWithinAABB(aabb);
+        entities = Minecraft.minecraftInstance.j.getEffectsWithinAABB(aabb);
         for (Object obj : entities) {
-            e = (Entity) obj;
-            dist = e.method_1352(player);
-            if (!(dist < 36.0))
-                continue;
-            dX = e.x - player.x;
-            dY = e.y - player.y;
-            dZ = e.z - player.z;
-            dotProduct = (dX /= (dist = Math.sqrt((double) dist))) * lookVec.x + (dY /= dist) * lookVec.y + (dZ /= dist) * lookVec.z;
-            if (!(dotProduct > 0.0) || !(Math.acos((double) dotProduct) < 1.5707963267948966))
-                continue;
-            e.method_1322(6.0 * dX / dist, 6.0 * dY / dist, 6.0 * dZ / dist);
+            Entity e = (Entity) obj;
+            double dist = e.distanceTo(entityplayer);
+            if (dist < 36.0D) {
+                double dX = e.x - entityplayer.x;
+                double dY = e.y - entityplayer.y;
+                double dZ = e.z - entityplayer.z;
+                dist = Math.sqrt(dist);
+                dX /= dist;
+                dY /= dist;
+                dZ /= dist;
+                double dotProduct = dX * lookVec.x + dY * lookVec.y + dZ * lookVec.z;
+                if (dotProduct > 0.0D && Math.acos(dotProduct) < 1.5707963267948966D)
+                    e.method_1322(6.0D * dX / dist, 6.0D * dY / dist, 6.0D * dZ / dist); // not sure if it's method_1322
+            }
         }
-        for (int i = 0; i < 25; ++i) {
-            EntityAirFX fx = new EntityAirFX(level, player.x, player.y, player.z);
-            fx.velocityX = lookVec.x * (1.0 + 0.05 * level.rand.nextGaussian()) + 0.2 * level.rand.nextGaussian();
-            fx.velocityY = lookVec.y * (1.0 + 0.05 * level.rand.nextGaussian()) + 0.2 * level.rand.nextGaussian();
-            fx.velocityZ = lookVec.z * (1.0 + 0.05 * level.rand.nextGaussian()) + 0.2 * level.rand.nextGaussian();
-            Minecraft.minecraftInstance.particleManager.addParticle(fx);
+        for (int i = 0; i < 25; i++) {
+            EntityAirFX fx = new EntityAirFX(world, entityplayer.x, entityplayer.y, entityplayer.z);
+            fx.velocityX = lookVec.x * (1.0D + 0.05D * world.rand.nextGaussian()) + 0.2D * world.rand.nextGaussian();
+            fx.velocityY = lookVec.y * (1.0D + 0.05D * world.rand.nextGaussian()) + 0.2D * world.rand.nextGaussian();
+            fx.velocityZ = lookVec.z * (1.0D + 0.05D * world.rand.nextGaussian()) + 0.2D * world.rand.nextGaussian();
+            Minecraft.minecraftInstance.j.a((Particle) fx);
         }
-        player.swingHand();
-        item.setDamage(10);
-        return item;
+        entityplayer.swingHand();
+        itemstack.setDamage(10);
+        return itemstack;
     }
 }

@@ -1,184 +1,90 @@
-/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Math
- *  java.lang.Object
- *  java.util.Random
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- *  org.lwjgl.opengl.GL11
- */
 package io.github.ryuu.adventurecraft.mixin.client.render;
 
 import java.util.Random;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+
+import io.github.ryuu.adventurecraft.blocks.BlockOverlay;
+import io.github.ryuu.adventurecraft.blocks.Blocks;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityTree;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.TileRenderer;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
 import net.minecraft.sortme.MagicBedNumbers;
-import net.minecraft.tile.BedTile;
-import net.minecraft.tile.DoorTile;
-import net.minecraft.tile.FluidTile;
-import net.minecraft.tile.PistonHead;
-import net.minecraft.tile.PistonTile;
-import net.minecraft.tile.RailTile;
-import net.minecraft.tile.RedstoneDustTile;
-import net.minecraft.tile.RedstoneRepeaterTile;
-import net.minecraft.tile.Tile;
+import net.minecraft.tile.*;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.MathsHelper;
 import net.minecraft.util.maths.Vec3f;
 import org.lwjgl.opengl.GL11;
-import io.github.ryuu.adventurecraft.mixin.item.MixinDoorTile;
-import io.github.ryuu.adventurecraft.mixin.item.MixinLevel;
-import io.github.ryuu.adventurecraft.mixin.item.MixinTile;
-import io.github.ryuu.adventurecraft.mixin.item.MixinTileEntity;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
 
-@Mixin(TileRenderer.class)
 public class MixinTileRenderer {
-
-    @Shadow()
     public TileView field_82;
-
     private int field_83 = -1;
-
     private boolean field_84 = false;
-
     private boolean field_85 = false;
-
     public static boolean field_67 = true;
-
     public boolean field_81 = true;
-
     private int field_86 = 0;
-
     private int field_87 = 0;
-
     private int field_88 = 0;
-
     private int field_89 = 0;
-
     private int field_90 = 0;
-
     private int field_91 = 0;
-
     private boolean field_92;
-
     private float field_93;
-
     private float field_94;
-
     private float field_95;
-
     private float field_96;
-
     private float field_97;
-
     private float field_98;
-
     private float field_99;
-
     private float field_100;
-
     private float field_101;
-
     private float field_102;
-
     private float field_103;
-
     private float field_104;
-
     private float field_105;
-
     private float field_41;
-
     private float field_42;
-
     private float field_43;
-
     private float field_44;
-
     private float field_45;
-
     private float field_46;
-
     private float field_47;
-
     private float field_48;
-
     private float field_49;
-
     private float field_50;
-
     private float field_51;
-
     private float field_52;
-
     private float field_53;
-
     private float field_54;
-
     private int field_55 = 1;
-
     private float field_56;
-
     private float field_57;
-
     private float field_58;
-
     private float field_59;
-
     private float field_60;
-
     private float field_61;
-
     private float field_62;
-
     private float field_63;
-
     private float field_64;
-
     private float field_65;
-
     private float field_66;
-
     private float field_68;
-
     private boolean field_69;
-
     private boolean field_70;
-
     private boolean field_71;
-
     private boolean field_72;
-
     private boolean field_73;
-
     private boolean field_74;
-
     private boolean field_75;
-
     private boolean field_76;
-
     private boolean field_77;
-
     private boolean field_78;
-
     private boolean field_79;
-
     private boolean field_80;
-
     private Random rand;
-
     private int curTextureNum = -1;
 
     public MixinTileRenderer(TileView iblockaccess) {
@@ -190,31 +96,19 @@ public class MixinTileRenderer {
         this.rand = new Random();
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_51(MixinTile block, int i, int j, int k, int l) {
+    public void method_51(Tile block, int i, int j, int k, int l) {
         this.field_83 = l;
         this.method_57(block, i, j, k);
         this.field_83 = -1;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_49(MixinTile block, int i, int j, int k) {
+    public void method_49(Tile block, int i, int j, int k) {
         this.field_85 = true;
         this.method_57(block, i, j, k);
         this.field_85 = false;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean method_57(MixinTile block, int i, int j, int k) {
+    public boolean method_57(Tile block, int i, int j, int k) {
         int l = block.method_1621();
         if (!block.shouldRender(this.field_82, i, j, k)) {
             return false;
@@ -251,7 +145,7 @@ public class MixinTileRenderer {
             return this.method_80(block, i, j, k);
         }
         if (l == 9) {
-            return this.method_44((RailTile) block, i, j, k);
+            return this.method_44((RailTile)block, i, j, k);
         }
         if (l == 10) {
             return this.method_79(block, i, j, k);
@@ -289,7 +183,7 @@ public class MixinTileRenderer {
             } else {
                 this.field_83 = 115;
             }
-            this.method_45(block, i, (double) j + 0.25, k, 0.0, 0.0);
+            this.method_45(block, i, (double)j + 0.25, k, 0.0, 0.0);
             this.field_83 = -1;
             return rendered;
         }
@@ -317,11 +211,7 @@ public class MixinTileRenderer {
         return false;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    private boolean method_81(MixinTile block, int i, int j, int k) {
+    private boolean method_81(Tile block, int i, int j, int k) {
         Tessellator tessellator = Tessellator.INSTANCE;
         int l = this.field_82.getTileMeta(i, j, k);
         int i1 = BedTile.orientationOnly(l);
@@ -347,15 +237,15 @@ public class MixinTileRenderer {
         int f17 = block.method_1626(this.field_82, i, j, k, 0);
         int j1 = (f17 & 0xF) << 4;
         int k1 = f17 & 0xF0;
-        double d = (float) j1 / 256.0f;
-        double d2 = ((double) (j1 + 16) - 0.01) / 256.0;
-        double d4 = (float) k1 / 256.0f;
-        double d6 = ((double) (k1 + 16) - 0.01) / 256.0;
-        double d8 = (double) i + block.minX;
-        double d10 = (double) i + block.maxX;
-        double d12 = (double) j + block.minY + 0.1875;
-        double d14 = (double) k + block.minZ;
-        double d16 = (double) k + block.maxZ;
+        double d = (float)j1 / 256.0f;
+        double d2 = ((double)(j1 + 16) - 0.01) / 256.0;
+        double d4 = (float)k1 / 256.0f;
+        double d6 = ((double)(k1 + 16) - 0.01) / 256.0;
+        double d8 = (double)i + block.minX;
+        double d10 = (double)i + block.maxX;
+        double d12 = (double)j + block.minY + 0.1875;
+        double d14 = (double)k + block.minZ;
+        double d16 = (double)k + block.maxZ;
         tessellator.vertex(d8, d12, d16, d, d6);
         tessellator.vertex(d8, d12, d14, d, d4);
         tessellator.vertex(d10, d12, d14, d2, d4);
@@ -365,9 +255,9 @@ public class MixinTileRenderer {
         j1 = block.method_1626(this.field_82, i, j, k, 1);
         k1 = (j1 & 0xF) << 4;
         d = j1 & 0xF0;
-        double d1 = (float) k1 / 256.0f;
-        double d3 = ((double) (k1 + 16) - 0.01) / 256.0;
-        double d5 = (float) d / 256.0f;
+        double d1 = (float)k1 / 256.0f;
+        double d3 = ((double)(k1 + 16) - 0.01) / 256.0;
+        double d5 = (float)d / 256.0f;
         double d7 = (d + 16.0 - 0.01) / 256.0;
         double d9 = d1;
         double d11 = d3;
@@ -397,11 +287,11 @@ public class MixinTileRenderer {
             d17 = d3;
             d20 = d5;
         }
-        double d21 = (double) i + block.minX;
-        double d22 = (double) i + block.maxX;
-        double d23 = (double) j + block.maxY;
-        double d24 = (double) k + block.minZ;
-        double d25 = (double) k + block.maxZ;
+        double d21 = (double)i + block.minX;
+        double d22 = (double)i + block.maxX;
+        double d23 = (double)j + block.maxY;
+        double d24 = (double)k + block.minZ;
+        double d25 = (double)k + block.maxZ;
         tessellator.vertex(d22, d23, d25, d17, d19);
         tessellator.vertex(d22, d23, d24, d9, d13);
         tessellator.vertex(d21, d23, d24, d11, d15);
@@ -411,21 +301,18 @@ public class MixinTileRenderer {
             f17 = MagicBedNumbers.field_792[MagicBedNumbers.field_793[i1]];
         }
         j1 = 4;
-        switch(i1) {
-            case 0:
-                {
-                    j1 = 5;
-                    break;
-                }
-            case 3:
-                {
-                    j1 = 2;
-                    break;
-                }
-            case 1:
-                {
-                    j1 = 3;
-                }
+        switch (i1) {
+            case 0: {
+                j1 = 5;
+                break;
+            }
+            case 3: {
+                j1 = 2;
+                break;
+            }
+            case 1: {
+                j1 = 3;
+            }
         }
         if (f17 != 2 && (this.field_85 || block.method_1618(this.field_82, i, j, k - 1, 2))) {
             float f18 = block.method_1604(this.field_82, i, j, k - 1);
@@ -467,11 +354,7 @@ public class MixinTileRenderer {
         return true;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean method_62(MixinTile block, int i, int j, int k) {
+    public boolean method_62(Tile block, int i, int j, int k) {
         int l = this.field_82.getTileMeta(i, j, k);
         Tessellator tessellator = Tessellator.INSTANCE;
         float f = block.method_1604(this.field_82, i, j, k);
@@ -483,24 +366,20 @@ public class MixinTileRenderer {
         double d1 = 0.5 - d;
         double d2 = 0.2f;
         if (l == 1) {
-            this.method_45(block, (double) i - d1, (double) j + d2, k, -d, 0.0);
+            this.method_45(block, (double)i - d1, (double)j + d2, k, -d, 0.0);
         } else if (l == 2) {
-            this.method_45(block, (double) i + d1, (double) j + d2, k, d, 0.0);
+            this.method_45(block, (double)i + d1, (double)j + d2, k, d, 0.0);
         } else if (l == 3) {
-            this.method_45(block, i, (double) j + d2, (double) k - d1, 0.0, -d);
+            this.method_45(block, i, (double)j + d2, (double)k - d1, 0.0, -d);
         } else if (l == 4) {
-            this.method_45(block, i, (double) j + d2, (double) k + d1, 0.0, d);
+            this.method_45(block, i, (double)j + d2, (double)k + d1, 0.0, d);
         } else {
             this.method_45(block, i, j, k, 0.0, 0.0);
         }
         return true;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    private boolean method_82(MixinTile block, int i, int j, int k) {
+    private boolean method_82(Tile block, int i, int j, int k) {
         int l = this.field_82.getTileMeta(i, j, k);
         int i1 = l & 3;
         int j1 = (l & 0xC) >> 2;
@@ -516,40 +395,36 @@ public class MixinTileRenderer {
         double d2 = 0.0;
         double d3 = 0.0;
         double d4 = 0.0;
-        switch(i1) {
-            case 0:
-                {
-                    d4 = -0.3125;
-                    d2 = RedstoneRepeaterTile.field_2123[j1];
-                    break;
-                }
-            case 2:
-                {
-                    d4 = 0.3125;
-                    d2 = -RedstoneRepeaterTile.field_2123[j1];
-                    break;
-                }
-            case 3:
-                {
-                    d3 = -0.3125;
-                    d1 = RedstoneRepeaterTile.field_2123[j1];
-                    break;
-                }
-            case 1:
-                {
-                    d3 = 0.3125;
-                    d1 = -RedstoneRepeaterTile.field_2123[j1];
-                }
+        switch (i1) {
+            case 0: {
+                d4 = -0.3125;
+                d2 = RedstoneRepeaterTile.field_2123[j1];
+                break;
+            }
+            case 2: {
+                d4 = 0.3125;
+                d2 = -RedstoneRepeaterTile.field_2123[j1];
+                break;
+            }
+            case 3: {
+                d3 = -0.3125;
+                d1 = RedstoneRepeaterTile.field_2123[j1];
+                break;
+            }
+            case 1: {
+                d3 = 0.3125;
+                d1 = -RedstoneRepeaterTile.field_2123[j1];
+            }
         }
-        this.method_45(block, (double) i + d1, (double) j + d, (double) k + d2, 0.0, 0.0);
-        this.method_45(block, (double) i + d3, (double) j + d, (double) k + d4, 0.0, 0.0);
+        this.method_45(block, (double)i + d1, (double)j + d, (double)k + d2, 0.0, 0.0);
+        this.method_45(block, (double)i + d3, (double)j + d, (double)k + d4, 0.0, 0.0);
         int k1 = block.getTextureForSide(1);
         int l1 = (k1 & 0xF) << 4;
         int i2 = k1 & 0xF0;
-        double d5 = (float) l1 / 256.0f;
-        double d6 = ((float) l1 + 15.99f) / 256.0f;
-        double d7 = (float) i2 / 256.0f;
-        double d8 = ((float) i2 + 15.99f) / 256.0f;
+        double d5 = (float)l1 / 256.0f;
+        double d6 = ((float)l1 + 15.99f) / 256.0f;
+        double d7 = (float)i2 / 256.0f;
+        double d8 = ((float)i2 + 15.99f) / 256.0f;
         float f1 = 0.125f;
         float f2 = i + 1;
         float f3 = i + 1;
@@ -559,22 +434,22 @@ public class MixinTileRenderer {
         float f7 = k + 1;
         float f8 = k + 1;
         float f9 = k + 0;
-        float f10 = (float) j + f1;
+        float f10 = (float)j + f1;
         if (i1 == 2) {
-            f2 = f3 = (float) (i + 0);
-            f4 = f5 = (float) (i + 1);
-            f6 = f9 = (float) (k + 1);
-            f7 = f8 = (float) (k + 0);
+            f2 = f3 = (float)(i + 0);
+            f4 = f5 = (float)(i + 1);
+            f6 = f9 = (float)(k + 1);
+            f7 = f8 = (float)(k + 0);
         } else if (i1 == 3) {
-            f2 = f5 = (float) (i + 0);
-            f3 = f4 = (float) (i + 1);
-            f6 = f7 = (float) (k + 0);
-            f8 = f9 = (float) (k + 1);
+            f2 = f5 = (float)(i + 0);
+            f3 = f4 = (float)(i + 1);
+            f6 = f7 = (float)(k + 0);
+            f8 = f9 = (float)(k + 1);
         } else if (i1 == 1) {
-            f2 = f5 = (float) (i + 1);
-            f3 = f4 = (float) (i + 0);
-            f6 = f7 = (float) (k + 1);
-            f8 = f9 = (float) (k + 0);
+            f2 = f5 = (float)(i + 1);
+            f3 = f4 = (float)(i + 0);
+            f6 = f7 = (float)(k + 1);
+            f8 = f9 = (float)(k + 0);
         }
         tessellator.vertex(f5, f10, f9, d5, d7);
         tessellator.vertex(f4, f10, f8, d5, d8);
@@ -583,73 +458,59 @@ public class MixinTileRenderer {
         return true;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_66(MixinTile block, int i, int j, int k) {
+    public void method_66(Tile block, int i, int j, int k) {
         this.field_85 = true;
         this.method_59(block, i, j, k, true);
         this.field_85 = false;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    private boolean method_59(MixinTile block, int i, int j, int k, boolean flag) {
+    private boolean method_59(Tile block, int i, int j, int k, boolean flag) {
         int l = this.field_82.getTileMeta(i, j, k);
         boolean flag1 = flag || (l & 8) != 0;
         int i1 = PistonTile.method_760(l);
         if (flag1) {
-            switch(i1) {
-                case 0:
-                    {
-                        this.field_86 = 3;
-                        this.field_87 = 3;
-                        this.field_88 = 3;
-                        this.field_89 = 3;
-                        block.setBoundingBox(0.0f, 0.25f, 0.0f, 1.0f, 1.0f, 1.0f);
-                        break;
-                    }
-                case 1:
-                    {
-                        block.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 0.75f, 1.0f);
-                        break;
-                    }
-                case 2:
-                    {
-                        this.field_88 = 1;
-                        this.field_89 = 2;
-                        block.setBoundingBox(0.0f, 0.0f, 0.25f, 1.0f, 1.0f, 1.0f);
-                        break;
-                    }
-                case 3:
-                    {
-                        this.field_88 = 2;
-                        this.field_89 = 1;
-                        this.field_90 = 3;
-                        this.field_91 = 3;
-                        block.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.75f);
-                        break;
-                    }
-                case 4:
-                    {
-                        this.field_86 = 1;
-                        this.field_87 = 2;
-                        this.field_90 = 2;
-                        this.field_91 = 1;
-                        block.setBoundingBox(0.25f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
-                        break;
-                    }
-                case 5:
-                    {
-                        this.field_86 = 2;
-                        this.field_87 = 1;
-                        this.field_90 = 1;
-                        this.field_91 = 2;
-                        block.setBoundingBox(0.0f, 0.0f, 0.0f, 0.75f, 1.0f, 1.0f);
-                    }
+            switch (i1) {
+                case 0: {
+                    this.field_86 = 3;
+                    this.field_87 = 3;
+                    this.field_88 = 3;
+                    this.field_89 = 3;
+                    block.setBoundingBox(0.0f, 0.25f, 0.0f, 1.0f, 1.0f, 1.0f);
+                    break;
+                }
+                case 1: {
+                    block.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 0.75f, 1.0f);
+                    break;
+                }
+                case 2: {
+                    this.field_88 = 1;
+                    this.field_89 = 2;
+                    block.setBoundingBox(0.0f, 0.0f, 0.25f, 1.0f, 1.0f, 1.0f);
+                    break;
+                }
+                case 3: {
+                    this.field_88 = 2;
+                    this.field_89 = 1;
+                    this.field_90 = 3;
+                    this.field_91 = 3;
+                    block.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.75f);
+                    break;
+                }
+                case 4: {
+                    this.field_86 = 1;
+                    this.field_87 = 2;
+                    this.field_90 = 2;
+                    this.field_91 = 1;
+                    block.setBoundingBox(0.25f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
+                    break;
+                }
+                case 5: {
+                    this.field_86 = 2;
+                    this.field_87 = 1;
+                    this.field_90 = 1;
+                    this.field_91 = 2;
+                    block.setBoundingBox(0.0f, 0.0f, 0.0f, 0.75f, 1.0f, 1.0f);
+                }
             }
             this.method_76(block, i, j, k);
             this.field_86 = 0;
@@ -660,44 +521,39 @@ public class MixinTileRenderer {
             this.field_91 = 0;
             block.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
         } else {
-            switch(i1) {
-                case 0:
-                    {
-                        this.field_86 = 3;
-                        this.field_87 = 3;
-                        this.field_88 = 3;
-                        this.field_89 = 3;
-                        break;
-                    }
-                case 2:
-                    {
-                        this.field_88 = 1;
-                        this.field_89 = 2;
-                        break;
-                    }
-                case 3:
-                    {
-                        this.field_88 = 2;
-                        this.field_89 = 1;
-                        this.field_90 = 3;
-                        this.field_91 = 3;
-                        break;
-                    }
-                case 4:
-                    {
-                        this.field_86 = 1;
-                        this.field_87 = 2;
-                        this.field_90 = 2;
-                        this.field_91 = 1;
-                        break;
-                    }
-                case 5:
-                    {
-                        this.field_86 = 2;
-                        this.field_87 = 1;
-                        this.field_90 = 1;
-                        this.field_91 = 2;
-                    }
+            switch (i1) {
+                case 0: {
+                    this.field_86 = 3;
+                    this.field_87 = 3;
+                    this.field_88 = 3;
+                    this.field_89 = 3;
+                    break;
+                }
+                case 2: {
+                    this.field_88 = 1;
+                    this.field_89 = 2;
+                    break;
+                }
+                case 3: {
+                    this.field_88 = 2;
+                    this.field_89 = 1;
+                    this.field_90 = 3;
+                    this.field_91 = 3;
+                    break;
+                }
+                case 4: {
+                    this.field_86 = 1;
+                    this.field_87 = 2;
+                    this.field_90 = 2;
+                    this.field_91 = 1;
+                    break;
+                }
+                case 5: {
+                    this.field_86 = 2;
+                    this.field_87 = 1;
+                    this.field_90 = 1;
+                    this.field_91 = 2;
+                }
             }
             this.method_76(block, i, j, k);
             this.field_86 = 0;
@@ -710,10 +566,6 @@ public class MixinTileRenderer {
         return true;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     private void method_41(double d, double d1, double d2, double d3, double d4, double d5, float f, double d6) {
         int i = 108;
         if (this.field_83 >= 0) {
@@ -722,10 +574,10 @@ public class MixinTileRenderer {
         int j = (i & 0xF) << 4;
         int k = i & 0xF0;
         Tessellator tessellator = Tessellator.INSTANCE;
-        double d7 = (float) (j + 0) / 256.0f;
-        double d8 = (float) (k + 0) / 256.0f;
-        double d9 = ((double) j + d6 - 0.01) / 256.0;
-        double d10 = ((double) ((float) k + 4.0f) - 0.01) / 256.0;
+        double d7 = (float)(j + 0) / 256.0f;
+        double d8 = (float)(k + 0) / 256.0f;
+        double d9 = ((double)j + d6 - 0.01) / 256.0;
+        double d10 = ((double)((float)k + 4.0f) - 0.01) / 256.0;
         tessellator.colour(f, f, f);
         tessellator.vertex(d, d3, d4, d9, d8);
         tessellator.vertex(d, d2, d4, d7, d8);
@@ -733,10 +585,6 @@ public class MixinTileRenderer {
         tessellator.vertex(d1, d3, d5, d9, d10);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     private void method_54(double d, double d1, double d2, double d3, double d4, double d5, float f, double d6) {
         int i = 108;
         if (this.field_83 >= 0) {
@@ -745,10 +593,10 @@ public class MixinTileRenderer {
         int j = (i & 0xF) << 4;
         int k = i & 0xF0;
         Tessellator tessellator = Tessellator.INSTANCE;
-        double d7 = (float) (j + 0) / 256.0f;
-        double d8 = (float) (k + 0) / 256.0f;
-        double d9 = ((double) j + d6 - 0.01) / 256.0;
-        double d10 = ((double) ((float) k + 4.0f) - 0.01) / 256.0;
+        double d7 = (float)(j + 0) / 256.0f;
+        double d8 = (float)(k + 0) / 256.0f;
+        double d9 = ((double)j + d6 - 0.01) / 256.0;
+        double d10 = ((double)((float)k + 4.0f) - 0.01) / 256.0;
         tessellator.colour(f, f, f);
         tessellator.vertex(d, d2, d5, d9, d8);
         tessellator.vertex(d, d2, d4, d7, d8);
@@ -756,10 +604,6 @@ public class MixinTileRenderer {
         tessellator.vertex(d1, d3, d5, d9, d10);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     private void method_60(double d, double d1, double d2, double d3, double d4, double d5, float f, double d6) {
         int i = 108;
         if (this.field_83 >= 0) {
@@ -768,10 +612,10 @@ public class MixinTileRenderer {
         int j = (i & 0xF) << 4;
         int k = i & 0xF0;
         Tessellator tessellator = Tessellator.INSTANCE;
-        double d7 = (float) (j + 0) / 256.0f;
-        double d8 = (float) (k + 0) / 256.0f;
-        double d9 = ((double) j + d6 - 0.01) / 256.0;
-        double d10 = ((double) ((float) k + 4.0f) - 0.01) / 256.0;
+        double d7 = (float)(j + 0) / 256.0f;
+        double d8 = (float)(k + 0) / 256.0f;
+        double d9 = ((double)j + d6 - 0.01) / 256.0;
+        double d10 = ((double)((float)k + 4.0f) - 0.01) / 256.0;
         tessellator.colour(f, f, f);
         tessellator.vertex(d1, d2, d4, d9, d8);
         tessellator.vertex(d, d2, d4, d7, d8);
@@ -779,104 +623,90 @@ public class MixinTileRenderer {
         tessellator.vertex(d1, d3, d5, d9, d10);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_52(MixinTile block, int i, int j, int k, boolean flag) {
+    public void method_52(Tile block, int i, int j, int k, boolean flag) {
         this.field_85 = true;
         this.method_64(block, i, j, k, flag);
         this.field_85 = false;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    private boolean method_64(MixinTile block, int i, int j, int k, boolean flag) {
+    private boolean method_64(Tile block, int i, int j, int k, boolean flag) {
         int l = this.field_82.getTileMeta(i, j, k);
         int i1 = PistonHead.method_727(l);
         float f = block.method_1604(this.field_82, i, j, k);
         float f1 = flag ? 1.0f : 0.5f;
         double d = flag ? 16.0 : 8.0;
-        switch(i1) {
-            case 0:
-                {
-                    this.field_86 = 3;
-                    this.field_87 = 3;
-                    this.field_88 = 3;
-                    this.field_89 = 3;
-                    block.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 0.25f, 1.0f);
-                    this.method_76(block, i, j, k);
-                    this.method_41((float) i + 0.375f, (float) i + 0.625f, (float) j + 0.25f, (float) j + 0.25f + f1, (float) k + 0.625f, (float) k + 0.625f, f * 0.8f, d);
-                    this.method_41((float) i + 0.625f, (float) i + 0.375f, (float) j + 0.25f, (float) j + 0.25f + f1, (float) k + 0.375f, (float) k + 0.375f, f * 0.8f, d);
-                    this.method_41((float) i + 0.375f, (float) i + 0.375f, (float) j + 0.25f, (float) j + 0.25f + f1, (float) k + 0.375f, (float) k + 0.625f, f * 0.6f, d);
-                    this.method_41((float) i + 0.625f, (float) i + 0.625f, (float) j + 0.25f, (float) j + 0.25f + f1, (float) k + 0.625f, (float) k + 0.375f, f * 0.6f, d);
-                    break;
-                }
-            case 1:
-                {
-                    block.setBoundingBox(0.0f, 0.75f, 0.0f, 1.0f, 1.0f, 1.0f);
-                    this.method_76(block, i, j, k);
-                    this.method_41((float) i + 0.375f, (float) i + 0.625f, (float) j - 0.25f + 1.0f - f1, (float) j - 0.25f + 1.0f, (float) k + 0.625f, (float) k + 0.625f, f * 0.8f, d);
-                    this.method_41((float) i + 0.625f, (float) i + 0.375f, (float) j - 0.25f + 1.0f - f1, (float) j - 0.25f + 1.0f, (float) k + 0.375f, (float) k + 0.375f, f * 0.8f, d);
-                    this.method_41((float) i + 0.375f, (float) i + 0.375f, (float) j - 0.25f + 1.0f - f1, (float) j - 0.25f + 1.0f, (float) k + 0.375f, (float) k + 0.625f, f * 0.6f, d);
-                    this.method_41((float) i + 0.625f, (float) i + 0.625f, (float) j - 0.25f + 1.0f - f1, (float) j - 0.25f + 1.0f, (float) k + 0.625f, (float) k + 0.375f, f * 0.6f, d);
-                    break;
-                }
-            case 2:
-                {
-                    this.field_88 = 1;
-                    this.field_89 = 2;
-                    block.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.25f);
-                    this.method_76(block, i, j, k);
-                    this.method_54((float) i + 0.375f, (float) i + 0.375f, (float) j + 0.625f, (float) j + 0.375f, (float) k + 0.25f, (float) k + 0.25f + f1, f * 0.6f, d);
-                    this.method_54((float) i + 0.625f, (float) i + 0.625f, (float) j + 0.375f, (float) j + 0.625f, (float) k + 0.25f, (float) k + 0.25f + f1, f * 0.6f, d);
-                    this.method_54((float) i + 0.375f, (float) i + 0.625f, (float) j + 0.375f, (float) j + 0.375f, (float) k + 0.25f, (float) k + 0.25f + f1, f * 0.5f, d);
-                    this.method_54((float) i + 0.625f, (float) i + 0.375f, (float) j + 0.625f, (float) j + 0.625f, (float) k + 0.25f, (float) k + 0.25f + f1, f, d);
-                    break;
-                }
-            case 3:
-                {
-                    this.field_88 = 2;
-                    this.field_89 = 1;
-                    this.field_90 = 3;
-                    this.field_91 = 3;
-                    block.setBoundingBox(0.0f, 0.0f, 0.75f, 1.0f, 1.0f, 1.0f);
-                    this.method_76(block, i, j, k);
-                    this.method_54((float) i + 0.375f, (float) i + 0.375f, (float) j + 0.625f, (float) j + 0.375f, (float) k - 0.25f + 1.0f - f1, (float) k - 0.25f + 1.0f, f * 0.6f, d);
-                    this.method_54((float) i + 0.625f, (float) i + 0.625f, (float) j + 0.375f, (float) j + 0.625f, (float) k - 0.25f + 1.0f - f1, (float) k - 0.25f + 1.0f, f * 0.6f, d);
-                    this.method_54((float) i + 0.375f, (float) i + 0.625f, (float) j + 0.375f, (float) j + 0.375f, (float) k - 0.25f + 1.0f - f1, (float) k - 0.25f + 1.0f, f * 0.5f, d);
-                    this.method_54((float) i + 0.625f, (float) i + 0.375f, (float) j + 0.625f, (float) j + 0.625f, (float) k - 0.25f + 1.0f - f1, (float) k - 0.25f + 1.0f, f, d);
-                    break;
-                }
-            case 4:
-                {
-                    this.field_86 = 1;
-                    this.field_87 = 2;
-                    this.field_90 = 2;
-                    this.field_91 = 1;
-                    block.setBoundingBox(0.0f, 0.0f, 0.0f, 0.25f, 1.0f, 1.0f);
-                    this.method_76(block, i, j, k);
-                    this.method_60((float) i + 0.25f, (float) i + 0.25f + f1, (float) j + 0.375f, (float) j + 0.375f, (float) k + 0.625f, (float) k + 0.375f, f * 0.5f, d);
-                    this.method_60((float) i + 0.25f, (float) i + 0.25f + f1, (float) j + 0.625f, (float) j + 0.625f, (float) k + 0.375f, (float) k + 0.625f, f, d);
-                    this.method_60((float) i + 0.25f, (float) i + 0.25f + f1, (float) j + 0.375f, (float) j + 0.625f, (float) k + 0.375f, (float) k + 0.375f, f * 0.6f, d);
-                    this.method_60((float) i + 0.25f, (float) i + 0.25f + f1, (float) j + 0.625f, (float) j + 0.375f, (float) k + 0.625f, (float) k + 0.625f, f * 0.6f, d);
-                    break;
-                }
-            case 5:
-                {
-                    this.field_86 = 2;
-                    this.field_87 = 1;
-                    this.field_90 = 1;
-                    this.field_91 = 2;
-                    block.setBoundingBox(0.75f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
-                    this.method_76(block, i, j, k);
-                    this.method_60((float) i - 0.25f + 1.0f - f1, (float) i - 0.25f + 1.0f, (float) j + 0.375f, (float) j + 0.375f, (float) k + 0.625f, (float) k + 0.375f, f * 0.5f, d);
-                    this.method_60((float) i - 0.25f + 1.0f - f1, (float) i - 0.25f + 1.0f, (float) j + 0.625f, (float) j + 0.625f, (float) k + 0.375f, (float) k + 0.625f, f, d);
-                    this.method_60((float) i - 0.25f + 1.0f - f1, (float) i - 0.25f + 1.0f, (float) j + 0.375f, (float) j + 0.625f, (float) k + 0.375f, (float) k + 0.375f, f * 0.6f, d);
-                    this.method_60((float) i - 0.25f + 1.0f - f1, (float) i - 0.25f + 1.0f, (float) j + 0.625f, (float) j + 0.375f, (float) k + 0.625f, (float) k + 0.625f, f * 0.6f, d);
-                }
+        switch (i1) {
+            case 0: {
+                this.field_86 = 3;
+                this.field_87 = 3;
+                this.field_88 = 3;
+                this.field_89 = 3;
+                block.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 0.25f, 1.0f);
+                this.method_76(block, i, j, k);
+                this.method_41((float)i + 0.375f, (float)i + 0.625f, (float)j + 0.25f, (float)j + 0.25f + f1, (float)k + 0.625f, (float)k + 0.625f, f * 0.8f, d);
+                this.method_41((float)i + 0.625f, (float)i + 0.375f, (float)j + 0.25f, (float)j + 0.25f + f1, (float)k + 0.375f, (float)k + 0.375f, f * 0.8f, d);
+                this.method_41((float)i + 0.375f, (float)i + 0.375f, (float)j + 0.25f, (float)j + 0.25f + f1, (float)k + 0.375f, (float)k + 0.625f, f * 0.6f, d);
+                this.method_41((float)i + 0.625f, (float)i + 0.625f, (float)j + 0.25f, (float)j + 0.25f + f1, (float)k + 0.625f, (float)k + 0.375f, f * 0.6f, d);
+                break;
+            }
+            case 1: {
+                block.setBoundingBox(0.0f, 0.75f, 0.0f, 1.0f, 1.0f, 1.0f);
+                this.method_76(block, i, j, k);
+                this.method_41((float)i + 0.375f, (float)i + 0.625f, (float)j - 0.25f + 1.0f - f1, (float)j - 0.25f + 1.0f, (float)k + 0.625f, (float)k + 0.625f, f * 0.8f, d);
+                this.method_41((float)i + 0.625f, (float)i + 0.375f, (float)j - 0.25f + 1.0f - f1, (float)j - 0.25f + 1.0f, (float)k + 0.375f, (float)k + 0.375f, f * 0.8f, d);
+                this.method_41((float)i + 0.375f, (float)i + 0.375f, (float)j - 0.25f + 1.0f - f1, (float)j - 0.25f + 1.0f, (float)k + 0.375f, (float)k + 0.625f, f * 0.6f, d);
+                this.method_41((float)i + 0.625f, (float)i + 0.625f, (float)j - 0.25f + 1.0f - f1, (float)j - 0.25f + 1.0f, (float)k + 0.625f, (float)k + 0.375f, f * 0.6f, d);
+                break;
+            }
+            case 2: {
+                this.field_88 = 1;
+                this.field_89 = 2;
+                block.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.25f);
+                this.method_76(block, i, j, k);
+                this.method_54((float)i + 0.375f, (float)i + 0.375f, (float)j + 0.625f, (float)j + 0.375f, (float)k + 0.25f, (float)k + 0.25f + f1, f * 0.6f, d);
+                this.method_54((float)i + 0.625f, (float)i + 0.625f, (float)j + 0.375f, (float)j + 0.625f, (float)k + 0.25f, (float)k + 0.25f + f1, f * 0.6f, d);
+                this.method_54((float)i + 0.375f, (float)i + 0.625f, (float)j + 0.375f, (float)j + 0.375f, (float)k + 0.25f, (float)k + 0.25f + f1, f * 0.5f, d);
+                this.method_54((float)i + 0.625f, (float)i + 0.375f, (float)j + 0.625f, (float)j + 0.625f, (float)k + 0.25f, (float)k + 0.25f + f1, f, d);
+                break;
+            }
+            case 3: {
+                this.field_88 = 2;
+                this.field_89 = 1;
+                this.field_90 = 3;
+                this.field_91 = 3;
+                block.setBoundingBox(0.0f, 0.0f, 0.75f, 1.0f, 1.0f, 1.0f);
+                this.method_76(block, i, j, k);
+                this.method_54((float)i + 0.375f, (float)i + 0.375f, (float)j + 0.625f, (float)j + 0.375f, (float)k - 0.25f + 1.0f - f1, (float)k - 0.25f + 1.0f, f * 0.6f, d);
+                this.method_54((float)i + 0.625f, (float)i + 0.625f, (float)j + 0.375f, (float)j + 0.625f, (float)k - 0.25f + 1.0f - f1, (float)k - 0.25f + 1.0f, f * 0.6f, d);
+                this.method_54((float)i + 0.375f, (float)i + 0.625f, (float)j + 0.375f, (float)j + 0.375f, (float)k - 0.25f + 1.0f - f1, (float)k - 0.25f + 1.0f, f * 0.5f, d);
+                this.method_54((float)i + 0.625f, (float)i + 0.375f, (float)j + 0.625f, (float)j + 0.625f, (float)k - 0.25f + 1.0f - f1, (float)k - 0.25f + 1.0f, f, d);
+                break;
+            }
+            case 4: {
+                this.field_86 = 1;
+                this.field_87 = 2;
+                this.field_90 = 2;
+                this.field_91 = 1;
+                block.setBoundingBox(0.0f, 0.0f, 0.0f, 0.25f, 1.0f, 1.0f);
+                this.method_76(block, i, j, k);
+                this.method_60((float)i + 0.25f, (float)i + 0.25f + f1, (float)j + 0.375f, (float)j + 0.375f, (float)k + 0.625f, (float)k + 0.375f, f * 0.5f, d);
+                this.method_60((float)i + 0.25f, (float)i + 0.25f + f1, (float)j + 0.625f, (float)j + 0.625f, (float)k + 0.375f, (float)k + 0.625f, f, d);
+                this.method_60((float)i + 0.25f, (float)i + 0.25f + f1, (float)j + 0.375f, (float)j + 0.625f, (float)k + 0.375f, (float)k + 0.375f, f * 0.6f, d);
+                this.method_60((float)i + 0.25f, (float)i + 0.25f + f1, (float)j + 0.625f, (float)j + 0.375f, (float)k + 0.625f, (float)k + 0.625f, f * 0.6f, d);
+                break;
+            }
+            case 5: {
+                this.field_86 = 2;
+                this.field_87 = 1;
+                this.field_90 = 1;
+                this.field_91 = 2;
+                block.setBoundingBox(0.75f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
+                this.method_76(block, i, j, k);
+                this.method_60((float)i - 0.25f + 1.0f - f1, (float)i - 0.25f + 1.0f, (float)j + 0.375f, (float)j + 0.375f, (float)k + 0.625f, (float)k + 0.375f, f * 0.5f, d);
+                this.method_60((float)i - 0.25f + 1.0f - f1, (float)i - 0.25f + 1.0f, (float)j + 0.625f, (float)j + 0.625f, (float)k + 0.375f, (float)k + 0.625f, f, d);
+                this.method_60((float)i - 0.25f + 1.0f - f1, (float)i - 0.25f + 1.0f, (float)j + 0.375f, (float)j + 0.625f, (float)k + 0.375f, (float)k + 0.375f, f * 0.6f, d);
+                this.method_60((float)i - 0.25f + 1.0f - f1, (float)i - 0.25f + 1.0f, (float)j + 0.625f, (float)j + 0.375f, (float)k + 0.625f, (float)k + 0.625f, f * 0.6f, d);
+            }
         }
         this.field_86 = 0;
         this.field_87 = 0;
@@ -888,11 +718,7 @@ public class MixinTileRenderer {
         return true;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean method_68(MixinTile block, int i, int j, int k) {
+    public boolean method_68(Tile block, int i, int j, int k) {
         boolean flag1;
         int l = this.field_82.getTileMeta(i, j, k);
         int i1 = l & 7;
@@ -933,10 +759,10 @@ public class MixinTileRenderer {
         }
         int k1 = (j1 & 0xF) << 4;
         int l1 = j1 & 0xF0;
-        float f4 = (float) k1 / 256.0f;
-        float f5 = ((float) k1 + 15.99f) / 256.0f;
-        float f6 = (float) l1 / 256.0f;
-        float f7 = ((float) l1 + 15.99f) / 256.0f;
+        float f4 = (float)k1 / 256.0f;
+        float f5 = ((float)k1 + 15.99f) / 256.0f;
+        float f6 = (float)l1 / 256.0f;
+        float f7 = ((float)l1 + 15.99f) / 256.0f;
         Vec3f[] avec3d = new Vec3f[8];
         float f8 = 0.0625f;
         float f9 = 0.0625f;
@@ -975,14 +801,14 @@ public class MixinTileRenderer {
                 if (i1 == 1) {
                     avec3d[i2].method_1308(-1.570796f);
                 }
-                avec3d[i2].x += (double) i + 0.5;
-                avec3d[i2].y += (double) ((float) j + 0.5f);
-                avec3d[i2].z += (double) k + 0.5;
+                avec3d[i2].x += (double)i + 0.5;
+                avec3d[i2].y += (double)((float)j + 0.5f);
+                avec3d[i2].z += (double)k + 0.5;
                 continue;
             }
-            avec3d[i2].x += (double) i + 0.5;
-            avec3d[i2].y += (double) ((float) j + 0.125f);
-            avec3d[i2].z += (double) k + 0.5;
+            avec3d[i2].x += (double)i + 0.5;
+            avec3d[i2].y += (double)((float)j + 0.125f);
+            avec3d[i2].z += (double)k + 0.5;
         }
         Vec3f vec3d = null;
         Vec3f vec3d1 = null;
@@ -990,15 +816,15 @@ public class MixinTileRenderer {
         Vec3f vec3d3 = null;
         for (int j2 = 0; j2 < 6; ++j2) {
             if (j2 == 0) {
-                f4 = (float) (k1 + 7) / 256.0f;
-                f5 = ((float) (k1 + 9) - 0.01f) / 256.0f;
-                f6 = (float) (l1 + 6) / 256.0f;
-                f7 = ((float) (l1 + 8) - 0.01f) / 256.0f;
+                f4 = (float)(k1 + 7) / 256.0f;
+                f5 = ((float)(k1 + 9) - 0.01f) / 256.0f;
+                f6 = (float)(l1 + 6) / 256.0f;
+                f7 = ((float)(l1 + 8) - 0.01f) / 256.0f;
             } else if (j2 == 2) {
-                f4 = (float) (k1 + 7) / 256.0f;
-                f5 = ((float) (k1 + 9) - 0.01f) / 256.0f;
-                f6 = (float) (l1 + 6) / 256.0f;
-                f7 = ((float) (l1 + 16) - 0.01f) / 256.0f;
+                f4 = (float)(k1 + 7) / 256.0f;
+                f5 = ((float)(k1 + 9) - 0.01f) / 256.0f;
+                f6 = (float)(l1 + 6) / 256.0f;
+                f7 = ((float)(l1 + 16) - 0.01f) / 256.0f;
             }
             if (j2 == 0) {
                 vec3d = avec3d[0];
@@ -1039,11 +865,7 @@ public class MixinTileRenderer {
         return true;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean method_70(MixinTile block, int i, int j, int k) {
+    public boolean method_70(Tile block, int i, int j, int k) {
         Tessellator tessellator = Tessellator.INSTANCE;
         int l = block.getTextureForSide(0);
         if (this.field_83 >= 0) {
@@ -1053,76 +875,76 @@ public class MixinTileRenderer {
         tessellator.colour(f, f, f);
         int i1 = (l & 0xF) << 4;
         int j1 = l & 0xF0;
-        double d = (float) i1 / 256.0f;
-        double d2 = ((float) i1 + 15.99f) / 256.0f;
-        double d4 = (float) j1 / 256.0f;
-        double d6 = ((float) j1 + 15.99f) / 256.0f;
+        double d = (float)i1 / 256.0f;
+        double d2 = ((float)i1 + 15.99f) / 256.0f;
+        double d4 = (float)j1 / 256.0f;
+        double d6 = ((float)j1 + 15.99f) / 256.0f;
         float f1 = 1.4f;
         if (this.field_82.canSuffocate(i, j - 1, k) || Tile.FIRE.method_1824(this.field_82, i, j - 1, k)) {
-            double d8 = (double) i + 0.5 + 0.2;
-            double d9 = (double) i + 0.5 - 0.2;
-            double d12 = (double) k + 0.5 + 0.2;
-            double d14 = (double) k + 0.5 - 0.2;
-            double d16 = (double) i + 0.5 - 0.3;
-            double d18 = (double) i + 0.5 + 0.3;
-            double d20 = (double) k + 0.5 - 0.3;
-            double d22 = (double) k + 0.5 + 0.3;
-            tessellator.vertex(d16, (float) j + f1, k + 1, d2, d4);
+            double d8 = (double)i + 0.5 + 0.2;
+            double d9 = (double)i + 0.5 - 0.2;
+            double d12 = (double)k + 0.5 + 0.2;
+            double d14 = (double)k + 0.5 - 0.2;
+            double d16 = (double)i + 0.5 - 0.3;
+            double d18 = (double)i + 0.5 + 0.3;
+            double d20 = (double)k + 0.5 - 0.3;
+            double d22 = (double)k + 0.5 + 0.3;
+            tessellator.vertex(d16, (float)j + f1, k + 1, d2, d4);
             tessellator.vertex(d8, j + 0, k + 1, d2, d6);
             tessellator.vertex(d8, j + 0, k + 0, d, d6);
-            tessellator.vertex(d16, (float) j + f1, k + 0, d, d4);
-            tessellator.vertex(d18, (float) j + f1, k + 0, d2, d4);
+            tessellator.vertex(d16, (float)j + f1, k + 0, d, d4);
+            tessellator.vertex(d18, (float)j + f1, k + 0, d2, d4);
             tessellator.vertex(d9, j + 0, k + 0, d2, d6);
             tessellator.vertex(d9, j + 0, k + 1, d, d6);
-            tessellator.vertex(d18, (float) j + f1, k + 1, d, d4);
-            d = (float) i1 / 256.0f;
-            d2 = ((float) i1 + 15.99f) / 256.0f;
-            d4 = (float) (j1 + 16) / 256.0f;
-            d6 = ((float) j1 + 15.99f + 16.0f) / 256.0f;
-            tessellator.vertex(i + 1, (float) j + f1, d22, d2, d4);
+            tessellator.vertex(d18, (float)j + f1, k + 1, d, d4);
+            d = (float)i1 / 256.0f;
+            d2 = ((float)i1 + 15.99f) / 256.0f;
+            d4 = (float)(j1 + 16) / 256.0f;
+            d6 = ((float)j1 + 15.99f + 16.0f) / 256.0f;
+            tessellator.vertex(i + 1, (float)j + f1, d22, d2, d4);
             tessellator.vertex(i + 1, j + 0, d14, d2, d6);
             tessellator.vertex(i + 0, j + 0, d14, d, d6);
-            tessellator.vertex(i + 0, (float) j + f1, d22, d, d4);
-            tessellator.vertex(i + 0, (float) j + f1, d20, d2, d4);
+            tessellator.vertex(i + 0, (float)j + f1, d22, d, d4);
+            tessellator.vertex(i + 0, (float)j + f1, d20, d2, d4);
             tessellator.vertex(i + 0, j + 0, d12, d2, d6);
             tessellator.vertex(i + 1, j + 0, d12, d, d6);
-            tessellator.vertex(i + 1, (float) j + f1, d20, d, d4);
-            d8 = (double) i + 0.5 - 0.5;
-            d9 = (double) i + 0.5 + 0.5;
-            d12 = (double) k + 0.5 - 0.5;
-            d14 = (double) k + 0.5 + 0.5;
-            d16 = (double) i + 0.5 - 0.4;
-            d18 = (double) i + 0.5 + 0.4;
-            d20 = (double) k + 0.5 - 0.4;
-            d22 = (double) k + 0.5 + 0.4;
-            tessellator.vertex(d16, (float) j + f1, k + 0, d, d4);
+            tessellator.vertex(i + 1, (float)j + f1, d20, d, d4);
+            d8 = (double)i + 0.5 - 0.5;
+            d9 = (double)i + 0.5 + 0.5;
+            d12 = (double)k + 0.5 - 0.5;
+            d14 = (double)k + 0.5 + 0.5;
+            d16 = (double)i + 0.5 - 0.4;
+            d18 = (double)i + 0.5 + 0.4;
+            d20 = (double)k + 0.5 - 0.4;
+            d22 = (double)k + 0.5 + 0.4;
+            tessellator.vertex(d16, (float)j + f1, k + 0, d, d4);
             tessellator.vertex(d8, j + 0, k + 0, d, d6);
             tessellator.vertex(d8, j + 0, k + 1, d2, d6);
-            tessellator.vertex(d16, (float) j + f1, k + 1, d2, d4);
-            tessellator.vertex(d18, (float) j + f1, k + 1, d, d4);
+            tessellator.vertex(d16, (float)j + f1, k + 1, d2, d4);
+            tessellator.vertex(d18, (float)j + f1, k + 1, d, d4);
             tessellator.vertex(d9, j + 0, k + 1, d, d6);
             tessellator.vertex(d9, j + 0, k + 0, d2, d6);
-            tessellator.vertex(d18, (float) j + f1, k + 0, d2, d4);
-            d = (float) i1 / 256.0f;
-            d2 = ((float) i1 + 15.99f) / 256.0f;
-            d4 = (float) j1 / 256.0f;
-            d6 = ((float) j1 + 15.99f) / 256.0f;
-            tessellator.vertex(i + 0, (float) j + f1, d22, d, d4);
+            tessellator.vertex(d18, (float)j + f1, k + 0, d2, d4);
+            d = (float)i1 / 256.0f;
+            d2 = ((float)i1 + 15.99f) / 256.0f;
+            d4 = (float)j1 / 256.0f;
+            d6 = ((float)j1 + 15.99f) / 256.0f;
+            tessellator.vertex(i + 0, (float)j + f1, d22, d, d4);
             tessellator.vertex(i + 0, j + 0, d14, d, d6);
             tessellator.vertex(i + 1, j + 0, d14, d2, d6);
-            tessellator.vertex(i + 1, (float) j + f1, d22, d2, d4);
-            tessellator.vertex(i + 1, (float) j + f1, d20, d, d4);
+            tessellator.vertex(i + 1, (float)j + f1, d22, d2, d4);
+            tessellator.vertex(i + 1, (float)j + f1, d20, d, d4);
             tessellator.vertex(i + 1, j + 0, d12, d, d6);
             tessellator.vertex(i + 0, j + 0, d12, d2, d6);
-            tessellator.vertex(i + 0, (float) j + f1, d20, d2, d4);
+            tessellator.vertex(i + 0, (float)j + f1, d20, d2, d4);
         } else {
             float f3 = 0.2f;
             float f4 = 0.0625f;
             if ((i + j + k & 1) == 1) {
-                d = (float) i1 / 256.0f;
-                d2 = ((float) i1 + 15.99f) / 256.0f;
-                d4 = (float) (j1 + 16) / 256.0f;
-                d6 = ((float) j1 + 15.99f + 16.0f) / 256.0f;
+                d = (float)i1 / 256.0f;
+                d2 = ((float)i1 + 15.99f) / 256.0f;
+                d4 = (float)(j1 + 16) / 256.0f;
+                d6 = ((float)j1 + 15.99f + 16.0f) / 256.0f;
             }
             if ((i / 2 + j / 2 + k / 2 & 1) == 1) {
                 double d10 = d2;
@@ -1130,96 +952,92 @@ public class MixinTileRenderer {
                 d = d10;
             }
             if (Tile.FIRE.method_1824(this.field_82, i - 1, j, k)) {
-                tessellator.vertex((float) i + f3, (float) j + f1 + f4, k + 1, d2, d4);
-                tessellator.vertex(i + 0, (float) (j + 0) + f4, k + 1, d2, d6);
-                tessellator.vertex(i + 0, (float) (j + 0) + f4, k + 0, d, d6);
-                tessellator.vertex((float) i + f3, (float) j + f1 + f4, k + 0, d, d4);
-                tessellator.vertex((float) i + f3, (float) j + f1 + f4, k + 0, d, d4);
-                tessellator.vertex(i + 0, (float) (j + 0) + f4, k + 0, d, d6);
-                tessellator.vertex(i + 0, (float) (j + 0) + f4, k + 1, d2, d6);
-                tessellator.vertex((float) i + f3, (float) j + f1 + f4, k + 1, d2, d4);
+                tessellator.vertex((float)i + f3, (float)j + f1 + f4, k + 1, d2, d4);
+                tessellator.vertex(i + 0, (float)(j + 0) + f4, k + 1, d2, d6);
+                tessellator.vertex(i + 0, (float)(j + 0) + f4, k + 0, d, d6);
+                tessellator.vertex((float)i + f3, (float)j + f1 + f4, k + 0, d, d4);
+                tessellator.vertex((float)i + f3, (float)j + f1 + f4, k + 0, d, d4);
+                tessellator.vertex(i + 0, (float)(j + 0) + f4, k + 0, d, d6);
+                tessellator.vertex(i + 0, (float)(j + 0) + f4, k + 1, d2, d6);
+                tessellator.vertex((float)i + f3, (float)j + f1 + f4, k + 1, d2, d4);
             }
             if (Tile.FIRE.method_1824(this.field_82, i + 1, j, k)) {
-                tessellator.vertex((float) (i + 1) - f3, (float) j + f1 + f4, k + 0, d, d4);
-                tessellator.vertex(i + 1 - 0, (float) (j + 0) + f4, k + 0, d, d6);
-                tessellator.vertex(i + 1 - 0, (float) (j + 0) + f4, k + 1, d2, d6);
-                tessellator.vertex((float) (i + 1) - f3, (float) j + f1 + f4, k + 1, d2, d4);
-                tessellator.vertex((float) (i + 1) - f3, (float) j + f1 + f4, k + 1, d2, d4);
-                tessellator.vertex(i + 1 - 0, (float) (j + 0) + f4, k + 1, d2, d6);
-                tessellator.vertex(i + 1 - 0, (float) (j + 0) + f4, k + 0, d, d6);
-                tessellator.vertex((float) (i + 1) - f3, (float) j + f1 + f4, k + 0, d, d4);
+                tessellator.vertex((float)(i + 1) - f3, (float)j + f1 + f4, k + 0, d, d4);
+                tessellator.vertex(i + 1 - 0, (float)(j + 0) + f4, k + 0, d, d6);
+                tessellator.vertex(i + 1 - 0, (float)(j + 0) + f4, k + 1, d2, d6);
+                tessellator.vertex((float)(i + 1) - f3, (float)j + f1 + f4, k + 1, d2, d4);
+                tessellator.vertex((float)(i + 1) - f3, (float)j + f1 + f4, k + 1, d2, d4);
+                tessellator.vertex(i + 1 - 0, (float)(j + 0) + f4, k + 1, d2, d6);
+                tessellator.vertex(i + 1 - 0, (float)(j + 0) + f4, k + 0, d, d6);
+                tessellator.vertex((float)(i + 1) - f3, (float)j + f1 + f4, k + 0, d, d4);
             }
             if (Tile.FIRE.method_1824(this.field_82, i, j, k - 1)) {
-                tessellator.vertex(i + 0, (float) j + f1 + f4, (float) k + f3, d2, d4);
-                tessellator.vertex(i + 0, (float) (j + 0) + f4, k + 0, d2, d6);
-                tessellator.vertex(i + 1, (float) (j + 0) + f4, k + 0, d, d6);
-                tessellator.vertex(i + 1, (float) j + f1 + f4, (float) k + f3, d, d4);
-                tessellator.vertex(i + 1, (float) j + f1 + f4, (float) k + f3, d, d4);
-                tessellator.vertex(i + 1, (float) (j + 0) + f4, k + 0, d, d6);
-                tessellator.vertex(i + 0, (float) (j + 0) + f4, k + 0, d2, d6);
-                tessellator.vertex(i + 0, (float) j + f1 + f4, (float) k + f3, d2, d4);
+                tessellator.vertex(i + 0, (float)j + f1 + f4, (float)k + f3, d2, d4);
+                tessellator.vertex(i + 0, (float)(j + 0) + f4, k + 0, d2, d6);
+                tessellator.vertex(i + 1, (float)(j + 0) + f4, k + 0, d, d6);
+                tessellator.vertex(i + 1, (float)j + f1 + f4, (float)k + f3, d, d4);
+                tessellator.vertex(i + 1, (float)j + f1 + f4, (float)k + f3, d, d4);
+                tessellator.vertex(i + 1, (float)(j + 0) + f4, k + 0, d, d6);
+                tessellator.vertex(i + 0, (float)(j + 0) + f4, k + 0, d2, d6);
+                tessellator.vertex(i + 0, (float)j + f1 + f4, (float)k + f3, d2, d4);
             }
             if (Tile.FIRE.method_1824(this.field_82, i, j, k + 1)) {
-                tessellator.vertex(i + 1, (float) j + f1 + f4, (float) (k + 1) - f3, d, d4);
-                tessellator.vertex(i + 1, (float) (j + 0) + f4, k + 1 - 0, d, d6);
-                tessellator.vertex(i + 0, (float) (j + 0) + f4, k + 1 - 0, d2, d6);
-                tessellator.vertex(i + 0, (float) j + f1 + f4, (float) (k + 1) - f3, d2, d4);
-                tessellator.vertex(i + 0, (float) j + f1 + f4, (float) (k + 1) - f3, d2, d4);
-                tessellator.vertex(i + 0, (float) (j + 0) + f4, k + 1 - 0, d2, d6);
-                tessellator.vertex(i + 1, (float) (j + 0) + f4, k + 1 - 0, d, d6);
-                tessellator.vertex(i + 1, (float) j + f1 + f4, (float) (k + 1) - f3, d, d4);
+                tessellator.vertex(i + 1, (float)j + f1 + f4, (float)(k + 1) - f3, d, d4);
+                tessellator.vertex(i + 1, (float)(j + 0) + f4, k + 1 - 0, d, d6);
+                tessellator.vertex(i + 0, (float)(j + 0) + f4, k + 1 - 0, d2, d6);
+                tessellator.vertex(i + 0, (float)j + f1 + f4, (float)(k + 1) - f3, d2, d4);
+                tessellator.vertex(i + 0, (float)j + f1 + f4, (float)(k + 1) - f3, d2, d4);
+                tessellator.vertex(i + 0, (float)(j + 0) + f4, k + 1 - 0, d2, d6);
+                tessellator.vertex(i + 1, (float)(j + 0) + f4, k + 1 - 0, d, d6);
+                tessellator.vertex(i + 1, (float)j + f1 + f4, (float)(k + 1) - f3, d, d4);
             }
             if (Tile.FIRE.method_1824(this.field_82, i, j + 1, k)) {
-                double d11 = (double) i + 0.5 + 0.5;
-                double d13 = (double) i + 0.5 - 0.5;
-                double d15 = (double) k + 0.5 + 0.5;
-                double d17 = (double) k + 0.5 - 0.5;
-                double d19 = (double) i + 0.5 - 0.5;
-                double d21 = (double) i + 0.5 + 0.5;
-                double d23 = (double) k + 0.5 - 0.5;
-                double d24 = (double) k + 0.5 + 0.5;
-                double d1 = (float) i1 / 256.0f;
-                double d3 = ((float) i1 + 15.99f) / 256.0f;
-                double d5 = (float) j1 / 256.0f;
-                double d7 = ((float) j1 + 15.99f) / 256.0f;
+                double d11 = (double)i + 0.5 + 0.5;
+                double d13 = (double)i + 0.5 - 0.5;
+                double d15 = (double)k + 0.5 + 0.5;
+                double d17 = (double)k + 0.5 - 0.5;
+                double d19 = (double)i + 0.5 - 0.5;
+                double d21 = (double)i + 0.5 + 0.5;
+                double d23 = (double)k + 0.5 - 0.5;
+                double d24 = (double)k + 0.5 + 0.5;
+                double d1 = (float)i1 / 256.0f;
+                double d3 = ((float)i1 + 15.99f) / 256.0f;
+                double d5 = (float)j1 / 256.0f;
+                double d7 = ((float)j1 + 15.99f) / 256.0f;
                 float f2 = -0.2f;
                 if ((i + ++j + k & 1) == 0) {
-                    tessellator.vertex(d19, (float) j + f2, k + 0, d3, d5);
+                    tessellator.vertex(d19, (float)j + f2, k + 0, d3, d5);
                     tessellator.vertex(d11, j + 0, k + 0, d3, d7);
                     tessellator.vertex(d11, j + 0, k + 1, d1, d7);
-                    tessellator.vertex(d19, (float) j + f2, k + 1, d1, d5);
-                    d1 = (float) i1 / 256.0f;
-                    d3 = ((float) i1 + 15.99f) / 256.0f;
-                    d5 = (float) (j1 + 16) / 256.0f;
-                    d7 = ((float) j1 + 15.99f + 16.0f) / 256.0f;
-                    tessellator.vertex(d21, (float) j + f2, k + 1, d3, d5);
+                    tessellator.vertex(d19, (float)j + f2, k + 1, d1, d5);
+                    d1 = (float)i1 / 256.0f;
+                    d3 = ((float)i1 + 15.99f) / 256.0f;
+                    d5 = (float)(j1 + 16) / 256.0f;
+                    d7 = ((float)j1 + 15.99f + 16.0f) / 256.0f;
+                    tessellator.vertex(d21, (float)j + f2, k + 1, d3, d5);
                     tessellator.vertex(d13, j + 0, k + 1, d3, d7);
                     tessellator.vertex(d13, j + 0, k + 0, d1, d7);
-                    tessellator.vertex(d21, (float) j + f2, k + 0, d1, d5);
+                    tessellator.vertex(d21, (float)j + f2, k + 0, d1, d5);
                 } else {
-                    tessellator.vertex(i + 0, (float) j + f2, d24, d3, d5);
+                    tessellator.vertex(i + 0, (float)j + f2, d24, d3, d5);
                     tessellator.vertex(i + 0, j + 0, d17, d3, d7);
                     tessellator.vertex(i + 1, j + 0, d17, d1, d7);
-                    tessellator.vertex(i + 1, (float) j + f2, d24, d1, d5);
-                    d1 = (float) i1 / 256.0f;
-                    d3 = ((float) i1 + 15.99f) / 256.0f;
-                    d5 = (float) (j1 + 16) / 256.0f;
-                    d7 = ((float) j1 + 15.99f + 16.0f) / 256.0f;
-                    tessellator.vertex(i + 1, (float) j + f2, d23, d3, d5);
+                    tessellator.vertex(i + 1, (float)j + f2, d24, d1, d5);
+                    d1 = (float)i1 / 256.0f;
+                    d3 = ((float)i1 + 15.99f) / 256.0f;
+                    d5 = (float)(j1 + 16) / 256.0f;
+                    d7 = ((float)j1 + 15.99f + 16.0f) / 256.0f;
+                    tessellator.vertex(i + 1, (float)j + f2, d23, d3, d5);
                     tessellator.vertex(i + 1, j + 0, d15, d3, d7);
                     tessellator.vertex(i + 0, j + 0, d15, d1, d7);
-                    tessellator.vertex(i + 0, (float) j + f2, d23, d1, d5);
+                    tessellator.vertex(i + 0, (float)j + f2, d23, d1, d5);
                 }
             }
         }
         return true;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean method_71(MixinTile block, int i, int j, int k) {
+    public boolean method_71(Tile block, int i, int j, int k) {
         boolean flag3;
         Tessellator tessellator = Tessellator.INSTANCE;
         int l = this.field_82.getTileMeta(i, j, k);
@@ -1228,7 +1046,7 @@ public class MixinTileRenderer {
             i1 = this.field_83;
         }
         float f = block.method_1604(this.field_82, i, j, k);
-        float f1 = (float) l / 15.0f;
+        float f1 = (float)l / 15.0f;
         float f2 = f1 * 0.6f + 0.4f;
         if (l == 0) {
             f2 = 0.3f;
@@ -1244,10 +1062,10 @@ public class MixinTileRenderer {
         tessellator.colour(f * f2, f * f3, f * f4);
         int j1 = (i1 & 0xF) << 4;
         int k1 = i1 & 0xF0;
-        double d = (float) j1 / 256.0f;
-        double d2 = ((float) j1 + 15.99f) / 256.0f;
-        double d4 = (float) k1 / 256.0f;
-        double d6 = ((float) k1 + 15.99f) / 256.0f;
+        double d = (float)j1 / 256.0f;
+        double d2 = ((float)j1 + 15.99f) / 256.0f;
+        double d4 = (float)k1 / 256.0f;
+        double d6 = ((float)k1 + 15.99f) / 256.0f;
         boolean flag = RedstoneDustTile.method_1287(this.field_82, i - 1, j, k, 1) || !this.field_82.canSuffocate(i - 1, j, k) && RedstoneDustTile.method_1287(this.field_82, i - 1, j - 1, k, -1);
         boolean flag1 = RedstoneDustTile.method_1287(this.field_82, i + 1, j, k, 3) || !this.field_82.canSuffocate(i + 1, j, k) && RedstoneDustTile.method_1287(this.field_82, i + 1, j - 1, k, -1);
         boolean flag2 = RedstoneDustTile.method_1287(this.field_82, i, j, k - 1, 2) || !this.field_82.canSuffocate(i, j, k - 1) && RedstoneDustTile.method_1287(this.field_82, i, j - 1, k - 1, -1);
@@ -1278,10 +1096,10 @@ public class MixinTileRenderer {
             byte0 = 2;
         }
         if (byte0 != 0) {
-            d = (float) (j1 + 16) / 256.0f;
-            d2 = ((float) (j1 + 16) + 15.99f) / 256.0f;
-            d4 = (float) k1 / 256.0f;
-            d6 = ((float) k1 + 15.99f) / 256.0f;
+            d = (float)(j1 + 16) / 256.0f;
+            d2 = ((float)(j1 + 16) + 15.99f) / 256.0f;
+            d4 = (float)k1 / 256.0f;
+            d6 = ((float)k1 + 15.99f) / 256.0f;
         }
         if (byte0 == 0) {
             if (flag1 || flag2 || flag3 || flag) {
@@ -1310,97 +1128,93 @@ public class MixinTileRenderer {
                     d6 -= 0.01953125;
                 }
             }
-            tessellator.vertex(f6, (float) j + 0.015625f, f8, d2, d6);
-            tessellator.vertex(f6, (float) j + 0.015625f, f7, d2, d4);
-            tessellator.vertex(f5, (float) j + 0.015625f, f7, d, d4);
-            tessellator.vertex(f5, (float) j + 0.015625f, f8, d, d6);
+            tessellator.vertex(f6, (float)j + 0.015625f, f8, d2, d6);
+            tessellator.vertex(f6, (float)j + 0.015625f, f7, d2, d4);
+            tessellator.vertex(f5, (float)j + 0.015625f, f7, d, d4);
+            tessellator.vertex(f5, (float)j + 0.015625f, f8, d, d6);
             tessellator.colour(f, f, f);
-            tessellator.vertex(f6, (float) j + 0.015625f, f8, d2, d6 + 0.0625);
-            tessellator.vertex(f6, (float) j + 0.015625f, f7, d2, d4 + 0.0625);
-            tessellator.vertex(f5, (float) j + 0.015625f, f7, d, d4 + 0.0625);
-            tessellator.vertex(f5, (float) j + 0.015625f, f8, d, d6 + 0.0625);
+            tessellator.vertex(f6, (float)j + 0.015625f, f8, d2, d6 + 0.0625);
+            tessellator.vertex(f6, (float)j + 0.015625f, f7, d2, d4 + 0.0625);
+            tessellator.vertex(f5, (float)j + 0.015625f, f7, d, d4 + 0.0625);
+            tessellator.vertex(f5, (float)j + 0.015625f, f8, d, d6 + 0.0625);
         } else if (byte0 == 1) {
-            tessellator.vertex(f6, (float) j + 0.015625f, f8, d2, d6);
-            tessellator.vertex(f6, (float) j + 0.015625f, f7, d2, d4);
-            tessellator.vertex(f5, (float) j + 0.015625f, f7, d, d4);
-            tessellator.vertex(f5, (float) j + 0.015625f, f8, d, d6);
+            tessellator.vertex(f6, (float)j + 0.015625f, f8, d2, d6);
+            tessellator.vertex(f6, (float)j + 0.015625f, f7, d2, d4);
+            tessellator.vertex(f5, (float)j + 0.015625f, f7, d, d4);
+            tessellator.vertex(f5, (float)j + 0.015625f, f8, d, d6);
             tessellator.colour(f, f, f);
-            tessellator.vertex(f6, (float) j + 0.015625f, f8, d2, d6 + 0.0625);
-            tessellator.vertex(f6, (float) j + 0.015625f, f7, d2, d4 + 0.0625);
-            tessellator.vertex(f5, (float) j + 0.015625f, f7, d, d4 + 0.0625);
-            tessellator.vertex(f5, (float) j + 0.015625f, f8, d, d6 + 0.0625);
+            tessellator.vertex(f6, (float)j + 0.015625f, f8, d2, d6 + 0.0625);
+            tessellator.vertex(f6, (float)j + 0.015625f, f7, d2, d4 + 0.0625);
+            tessellator.vertex(f5, (float)j + 0.015625f, f7, d, d4 + 0.0625);
+            tessellator.vertex(f5, (float)j + 0.015625f, f8, d, d6 + 0.0625);
         } else if (byte0 == 2) {
-            tessellator.vertex(f6, (float) j + 0.015625f, f8, d2, d6);
-            tessellator.vertex(f6, (float) j + 0.015625f, f7, d, d6);
-            tessellator.vertex(f5, (float) j + 0.015625f, f7, d, d4);
-            tessellator.vertex(f5, (float) j + 0.015625f, f8, d2, d4);
+            tessellator.vertex(f6, (float)j + 0.015625f, f8, d2, d6);
+            tessellator.vertex(f6, (float)j + 0.015625f, f7, d, d6);
+            tessellator.vertex(f5, (float)j + 0.015625f, f7, d, d4);
+            tessellator.vertex(f5, (float)j + 0.015625f, f8, d2, d4);
             tessellator.colour(f, f, f);
-            tessellator.vertex(f6, (float) j + 0.015625f, f8, d2, d6 + 0.0625);
-            tessellator.vertex(f6, (float) j + 0.015625f, f7, d, d6 + 0.0625);
-            tessellator.vertex(f5, (float) j + 0.015625f, f7, d, d4 + 0.0625);
-            tessellator.vertex(f5, (float) j + 0.015625f, f8, d2, d4 + 0.0625);
+            tessellator.vertex(f6, (float)j + 0.015625f, f8, d2, d6 + 0.0625);
+            tessellator.vertex(f6, (float)j + 0.015625f, f7, d, d6 + 0.0625);
+            tessellator.vertex(f5, (float)j + 0.015625f, f7, d, d4 + 0.0625);
+            tessellator.vertex(f5, (float)j + 0.015625f, f8, d2, d4 + 0.0625);
         }
         if (!this.field_82.canSuffocate(i, j + 1, k)) {
-            double d1 = (float) (j1 + 16) / 256.0f;
-            double d3 = ((float) (j1 + 16) + 15.99f) / 256.0f;
-            double d5 = (float) k1 / 256.0f;
-            double d7 = ((float) k1 + 15.99f) / 256.0f;
+            double d1 = (float)(j1 + 16) / 256.0f;
+            double d3 = ((float)(j1 + 16) + 15.99f) / 256.0f;
+            double d5 = (float)k1 / 256.0f;
+            double d7 = ((float)k1 + 15.99f) / 256.0f;
             if (this.field_82.canSuffocate(i - 1, j, k) && this.field_82.getTileId(i - 1, j + 1, k) == Tile.REDSTONE_DUST.id) {
                 tessellator.colour(f * f2, f * f3, f * f4);
-                tessellator.vertex((float) i + 0.015625f, (float) (j + 1) + 0.021875f, k + 1, d3, d5);
-                tessellator.vertex((float) i + 0.015625f, j + 0, k + 1, d1, d5);
-                tessellator.vertex((float) i + 0.015625f, j + 0, k + 0, d1, d7);
-                tessellator.vertex((float) i + 0.015625f, (float) (j + 1) + 0.021875f, k + 0, d3, d7);
+                tessellator.vertex((float)i + 0.015625f, (float)(j + 1) + 0.021875f, k + 1, d3, d5);
+                tessellator.vertex((float)i + 0.015625f, j + 0, k + 1, d1, d5);
+                tessellator.vertex((float)i + 0.015625f, j + 0, k + 0, d1, d7);
+                tessellator.vertex((float)i + 0.015625f, (float)(j + 1) + 0.021875f, k + 0, d3, d7);
                 tessellator.colour(f, f, f);
-                tessellator.vertex((float) i + 0.015625f, (float) (j + 1) + 0.021875f, k + 1, d3, d5 + 0.0625);
-                tessellator.vertex((float) i + 0.015625f, j + 0, k + 1, d1, d5 + 0.0625);
-                tessellator.vertex((float) i + 0.015625f, j + 0, k + 0, d1, d7 + 0.0625);
-                tessellator.vertex((float) i + 0.015625f, (float) (j + 1) + 0.021875f, k + 0, d3, d7 + 0.0625);
+                tessellator.vertex((float)i + 0.015625f, (float)(j + 1) + 0.021875f, k + 1, d3, d5 + 0.0625);
+                tessellator.vertex((float)i + 0.015625f, j + 0, k + 1, d1, d5 + 0.0625);
+                tessellator.vertex((float)i + 0.015625f, j + 0, k + 0, d1, d7 + 0.0625);
+                tessellator.vertex((float)i + 0.015625f, (float)(j + 1) + 0.021875f, k + 0, d3, d7 + 0.0625);
             }
             if (this.field_82.canSuffocate(i + 1, j, k) && this.field_82.getTileId(i + 1, j + 1, k) == Tile.REDSTONE_DUST.id) {
                 tessellator.colour(f * f2, f * f3, f * f4);
-                tessellator.vertex((float) (i + 1) - 0.015625f, j + 0, k + 1, d1, d7);
-                tessellator.vertex((float) (i + 1) - 0.015625f, (float) (j + 1) + 0.021875f, k + 1, d3, d7);
-                tessellator.vertex((float) (i + 1) - 0.015625f, (float) (j + 1) + 0.021875f, k + 0, d3, d5);
-                tessellator.vertex((float) (i + 1) - 0.015625f, j + 0, k + 0, d1, d5);
+                tessellator.vertex((float)(i + 1) - 0.015625f, j + 0, k + 1, d1, d7);
+                tessellator.vertex((float)(i + 1) - 0.015625f, (float)(j + 1) + 0.021875f, k + 1, d3, d7);
+                tessellator.vertex((float)(i + 1) - 0.015625f, (float)(j + 1) + 0.021875f, k + 0, d3, d5);
+                tessellator.vertex((float)(i + 1) - 0.015625f, j + 0, k + 0, d1, d5);
                 tessellator.colour(f, f, f);
-                tessellator.vertex((float) (i + 1) - 0.015625f, j + 0, k + 1, d1, d7 + 0.0625);
-                tessellator.vertex((float) (i + 1) - 0.015625f, (float) (j + 1) + 0.021875f, k + 1, d3, d7 + 0.0625);
-                tessellator.vertex((float) (i + 1) - 0.015625f, (float) (j + 1) + 0.021875f, k + 0, d3, d5 + 0.0625);
-                tessellator.vertex((float) (i + 1) - 0.015625f, j + 0, k + 0, d1, d5 + 0.0625);
+                tessellator.vertex((float)(i + 1) - 0.015625f, j + 0, k + 1, d1, d7 + 0.0625);
+                tessellator.vertex((float)(i + 1) - 0.015625f, (float)(j + 1) + 0.021875f, k + 1, d3, d7 + 0.0625);
+                tessellator.vertex((float)(i + 1) - 0.015625f, (float)(j + 1) + 0.021875f, k + 0, d3, d5 + 0.0625);
+                tessellator.vertex((float)(i + 1) - 0.015625f, j + 0, k + 0, d1, d5 + 0.0625);
             }
             if (this.field_82.canSuffocate(i, j, k - 1) && this.field_82.getTileId(i, j + 1, k - 1) == Tile.REDSTONE_DUST.id) {
                 tessellator.colour(f * f2, f * f3, f * f4);
-                tessellator.vertex(i + 1, j + 0, (float) k + 0.015625f, d1, d7);
-                tessellator.vertex(i + 1, (float) (j + 1) + 0.021875f, (float) k + 0.015625f, d3, d7);
-                tessellator.vertex(i + 0, (float) (j + 1) + 0.021875f, (float) k + 0.015625f, d3, d5);
-                tessellator.vertex(i + 0, j + 0, (float) k + 0.015625f, d1, d5);
+                tessellator.vertex(i + 1, j + 0, (float)k + 0.015625f, d1, d7);
+                tessellator.vertex(i + 1, (float)(j + 1) + 0.021875f, (float)k + 0.015625f, d3, d7);
+                tessellator.vertex(i + 0, (float)(j + 1) + 0.021875f, (float)k + 0.015625f, d3, d5);
+                tessellator.vertex(i + 0, j + 0, (float)k + 0.015625f, d1, d5);
                 tessellator.colour(f, f, f);
-                tessellator.vertex(i + 1, j + 0, (float) k + 0.015625f, d1, d7 + 0.0625);
-                tessellator.vertex(i + 1, (float) (j + 1) + 0.021875f, (float) k + 0.015625f, d3, d7 + 0.0625);
-                tessellator.vertex(i + 0, (float) (j + 1) + 0.021875f, (float) k + 0.015625f, d3, d5 + 0.0625);
-                tessellator.vertex(i + 0, j + 0, (float) k + 0.015625f, d1, d5 + 0.0625);
+                tessellator.vertex(i + 1, j + 0, (float)k + 0.015625f, d1, d7 + 0.0625);
+                tessellator.vertex(i + 1, (float)(j + 1) + 0.021875f, (float)k + 0.015625f, d3, d7 + 0.0625);
+                tessellator.vertex(i + 0, (float)(j + 1) + 0.021875f, (float)k + 0.015625f, d3, d5 + 0.0625);
+                tessellator.vertex(i + 0, j + 0, (float)k + 0.015625f, d1, d5 + 0.0625);
             }
             if (this.field_82.canSuffocate(i, j, k + 1) && this.field_82.getTileId(i, j + 1, k + 1) == Tile.REDSTONE_DUST.id) {
                 tessellator.colour(f * f2, f * f3, f * f4);
-                tessellator.vertex(i + 1, (float) (j + 1) + 0.021875f, (float) (k + 1) - 0.015625f, d3, d5);
-                tessellator.vertex(i + 1, j + 0, (float) (k + 1) - 0.015625f, d1, d5);
-                tessellator.vertex(i + 0, j + 0, (float) (k + 1) - 0.015625f, d1, d7);
-                tessellator.vertex(i + 0, (float) (j + 1) + 0.021875f, (float) (k + 1) - 0.015625f, d3, d7);
+                tessellator.vertex(i + 1, (float)(j + 1) + 0.021875f, (float)(k + 1) - 0.015625f, d3, d5);
+                tessellator.vertex(i + 1, j + 0, (float)(k + 1) - 0.015625f, d1, d5);
+                tessellator.vertex(i + 0, j + 0, (float)(k + 1) - 0.015625f, d1, d7);
+                tessellator.vertex(i + 0, (float)(j + 1) + 0.021875f, (float)(k + 1) - 0.015625f, d3, d7);
                 tessellator.colour(f, f, f);
-                tessellator.vertex(i + 1, (float) (j + 1) + 0.021875f, (float) (k + 1) - 0.015625f, d3, d5 + 0.0625);
-                tessellator.vertex(i + 1, j + 0, (float) (k + 1) - 0.015625f, d1, d5 + 0.0625);
-                tessellator.vertex(i + 0, j + 0, (float) (k + 1) - 0.015625f, d1, d7 + 0.0625);
-                tessellator.vertex(i + 0, (float) (j + 1) + 0.021875f, (float) (k + 1) - 0.015625f, d3, d7 + 0.0625);
+                tessellator.vertex(i + 1, (float)(j + 1) + 0.021875f, (float)(k + 1) - 0.015625f, d3, d5 + 0.0625);
+                tessellator.vertex(i + 1, j + 0, (float)(k + 1) - 0.015625f, d1, d5 + 0.0625);
+                tessellator.vertex(i + 0, j + 0, (float)(k + 1) - 0.015625f, d1, d7 + 0.0625);
+                tessellator.vertex(i + 0, (float)(j + 1) + 0.021875f, (float)(k + 1) - 0.015625f, d3, d7 + 0.0625);
             }
         }
         return true;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public boolean method_44(RailTile blockrail, int i, int j, int k) {
         Tessellator tessellator = Tessellator.INSTANCE;
         int l = this.field_82.getTileMeta(i, j, k);
@@ -1415,10 +1229,10 @@ public class MixinTileRenderer {
         tessellator.colour(f, f, f);
         int j1 = (i1 & 0xF) << 4;
         int k1 = i1 & 0xF0;
-        double d = (float) j1 / 256.0f;
-        double d1 = ((float) j1 + 15.99f) / 256.0f;
-        double d2 = (float) k1 / 256.0f;
-        double d3 = ((float) k1 + 15.99f) / 256.0f;
+        double d = (float)j1 / 256.0f;
+        double d1 = ((float)j1 + 15.99f) / 256.0f;
+        double d2 = (float)k1 / 256.0f;
+        double d3 = ((float)k1 + 15.99f) / 256.0f;
         float f1 = 0.0625f;
         float f2 = i + 1;
         float f3 = i + 1;
@@ -1428,25 +1242,25 @@ public class MixinTileRenderer {
         float f7 = k + 1;
         float f8 = k + 1;
         float f9 = k + 0;
-        float f10 = (float) j + f1;
-        float f11 = (float) j + f1;
-        float f12 = (float) j + f1;
-        float f13 = (float) j + f1;
+        float f10 = (float)j + f1;
+        float f11 = (float)j + f1;
+        float f12 = (float)j + f1;
+        float f13 = (float)j + f1;
         if (l == 1 || l == 2 || l == 3 || l == 7) {
-            f2 = f5 = (float) (i + 1);
-            f3 = f4 = (float) (i + 0);
-            f6 = f7 = (float) (k + 1);
-            f8 = f9 = (float) (k + 0);
+            f2 = f5 = (float)(i + 1);
+            f3 = f4 = (float)(i + 0);
+            f6 = f7 = (float)(k + 1);
+            f8 = f9 = (float)(k + 0);
         } else if (l == 8) {
-            f2 = f3 = (float) (i + 0);
-            f4 = f5 = (float) (i + 1);
-            f6 = f9 = (float) (k + 1);
-            f7 = f8 = (float) (k + 0);
+            f2 = f3 = (float)(i + 0);
+            f4 = f5 = (float)(i + 1);
+            f6 = f9 = (float)(k + 1);
+            f7 = f8 = (float)(k + 0);
         } else if (l == 9) {
-            f2 = f5 = (float) (i + 0);
-            f3 = f4 = (float) (i + 1);
-            f6 = f7 = (float) (k + 0);
-            f8 = f9 = (float) (k + 1);
+            f2 = f5 = (float)(i + 0);
+            f3 = f4 = (float)(i + 1);
+            f6 = f7 = (float)(k + 0);
+            f8 = f9 = (float)(k + 1);
         }
         if (l == 2 || l == 4) {
             f10 += 1.0f;
@@ -1466,11 +1280,7 @@ public class MixinTileRenderer {
         return true;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean method_72(MixinTile block, int i, int j, int k) {
+    public boolean method_72(Tile block, int i, int j, int k) {
         Tessellator tessellator = Tessellator.INSTANCE;
         int m = this.field_82.getTileMeta(i, j, k);
         int l = block.getTextureForSide(0, m);
@@ -1481,67 +1291,63 @@ public class MixinTileRenderer {
         tessellator.colour(f, f, f);
         int i1 = (l & 0xF) << 4;
         int j1 = l & 0xF0;
-        double d = (float) i1 / 256.0f;
-        double d1 = ((float) i1 + 15.99f) / 256.0f;
-        double d2 = (float) j1 / 256.0f;
-        double d3 = ((float) j1 + 15.99f) / 256.0f;
+        double d = (float)i1 / 256.0f;
+        double d1 = ((float)i1 + 15.99f) / 256.0f;
+        double d2 = (float)j1 / 256.0f;
+        double d3 = ((float)j1 + 15.99f) / 256.0f;
         int k1 = m % 4 + 2;
         float f1 = 0.0f;
         float f2 = 0.025f;
         if (k1 == 5) {
-            tessellator.vertex((float) i + f2, (float) (j + 1) + f1, (float) (k + 1) + f1, d, d2);
-            tessellator.vertex((float) i + f2, (float) (j + 0) - f1, (float) (k + 1) + f1, d, d3);
-            tessellator.vertex((float) i + f2, (float) (j + 0) - f1, (float) (k + 0) - f1, d1, d3);
-            tessellator.vertex((float) i + f2, (float) (j + 1) + f1, (float) (k + 0) - f1, d1, d2);
-            tessellator.vertex((float) i + f2, (float) (j + 0) - f1, (float) (k + 1) + f1, d, d3);
-            tessellator.vertex((float) i + f2, (float) (j + 1) + f1, (float) (k + 1) + f1, d, d2);
-            tessellator.vertex((float) i + f2, (float) (j + 1) + f1, (float) (k + 0) - f1, d1, d2);
-            tessellator.vertex((float) i + f2, (float) (j + 0) - f1, (float) (k + 0) - f1, d1, d3);
+            tessellator.vertex((float)i + f2, (float)(j + 1) + f1, (float)(k + 1) + f1, d, d2);
+            tessellator.vertex((float)i + f2, (float)(j + 0) - f1, (float)(k + 1) + f1, d, d3);
+            tessellator.vertex((float)i + f2, (float)(j + 0) - f1, (float)(k + 0) - f1, d1, d3);
+            tessellator.vertex((float)i + f2, (float)(j + 1) + f1, (float)(k + 0) - f1, d1, d2);
+            tessellator.vertex((float)i + f2, (float)(j + 0) - f1, (float)(k + 1) + f1, d, d3);
+            tessellator.vertex((float)i + f2, (float)(j + 1) + f1, (float)(k + 1) + f1, d, d2);
+            tessellator.vertex((float)i + f2, (float)(j + 1) + f1, (float)(k + 0) - f1, d1, d2);
+            tessellator.vertex((float)i + f2, (float)(j + 0) - f1, (float)(k + 0) - f1, d1, d3);
         }
         if (k1 == 4) {
-            tessellator.vertex((float) (i + 1) - f2, (float) (j + 0) - f1, (float) (k + 1) + f1, d1, d3);
-            tessellator.vertex((float) (i + 1) - f2, (float) (j + 1) + f1, (float) (k + 1) + f1, d1, d2);
-            tessellator.vertex((float) (i + 1) - f2, (float) (j + 1) + f1, (float) (k + 0) - f1, d, d2);
-            tessellator.vertex((float) (i + 1) - f2, (float) (j + 0) - f1, (float) (k + 0) - f1, d, d3);
-            tessellator.vertex((float) (i + 1) - f2, (float) (j + 0) - f1, (float) (k + 0) - f1, d, d3);
-            tessellator.vertex((float) (i + 1) - f2, (float) (j + 1) + f1, (float) (k + 0) - f1, d, d2);
-            tessellator.vertex((float) (i + 1) - f2, (float) (j + 1) + f1, (float) (k + 1) + f1, d1, d2);
-            tessellator.vertex((float) (i + 1) - f2, (float) (j + 0) - f1, (float) (k + 1) + f1, d1, d3);
+            tessellator.vertex((float)(i + 1) - f2, (float)(j + 0) - f1, (float)(k + 1) + f1, d1, d3);
+            tessellator.vertex((float)(i + 1) - f2, (float)(j + 1) + f1, (float)(k + 1) + f1, d1, d2);
+            tessellator.vertex((float)(i + 1) - f2, (float)(j + 1) + f1, (float)(k + 0) - f1, d, d2);
+            tessellator.vertex((float)(i + 1) - f2, (float)(j + 0) - f1, (float)(k + 0) - f1, d, d3);
+            tessellator.vertex((float)(i + 1) - f2, (float)(j + 0) - f1, (float)(k + 0) - f1, d, d3);
+            tessellator.vertex((float)(i + 1) - f2, (float)(j + 1) + f1, (float)(k + 0) - f1, d, d2);
+            tessellator.vertex((float)(i + 1) - f2, (float)(j + 1) + f1, (float)(k + 1) + f1, d1, d2);
+            tessellator.vertex((float)(i + 1) - f2, (float)(j + 0) - f1, (float)(k + 1) + f1, d1, d3);
         }
         if (k1 == 3) {
-            tessellator.vertex((float) (i + 1) + f1, (float) (j + 0) - f1, (float) k + f2, d1, d3);
-            tessellator.vertex((float) (i + 1) + f1, (float) (j + 1) + f1, (float) k + f2, d1, d2);
-            tessellator.vertex((float) (i + 0) - f1, (float) (j + 1) + f1, (float) k + f2, d, d2);
-            tessellator.vertex((float) (i + 0) - f1, (float) (j + 0) - f1, (float) k + f2, d, d3);
-            tessellator.vertex((float) (i + 0) - f1, (float) (j + 0) - f1, (float) k + f2, d, d3);
-            tessellator.vertex((float) (i + 0) - f1, (float) (j + 1) + f1, (float) k + f2, d, d2);
-            tessellator.vertex((float) (i + 1) + f1, (float) (j + 1) + f1, (float) k + f2, d1, d2);
-            tessellator.vertex((float) (i + 1) + f1, (float) (j + 0) - f1, (float) k + f2, d1, d3);
+            tessellator.vertex((float)(i + 1) + f1, (float)(j + 0) - f1, (float)k + f2, d1, d3);
+            tessellator.vertex((float)(i + 1) + f1, (float)(j + 1) + f1, (float)k + f2, d1, d2);
+            tessellator.vertex((float)(i + 0) - f1, (float)(j + 1) + f1, (float)k + f2, d, d2);
+            tessellator.vertex((float)(i + 0) - f1, (float)(j + 0) - f1, (float)k + f2, d, d3);
+            tessellator.vertex((float)(i + 0) - f1, (float)(j + 0) - f1, (float)k + f2, d, d3);
+            tessellator.vertex((float)(i + 0) - f1, (float)(j + 1) + f1, (float)k + f2, d, d2);
+            tessellator.vertex((float)(i + 1) + f1, (float)(j + 1) + f1, (float)k + f2, d1, d2);
+            tessellator.vertex((float)(i + 1) + f1, (float)(j + 0) - f1, (float)k + f2, d1, d3);
         }
         if (k1 == 2) {
-            tessellator.vertex((float) (i + 1) + f1, (float) (j + 1) + f1, (float) (k + 1) - f2, d, d2);
-            tessellator.vertex((float) (i + 1) + f1, (float) (j + 0) - f1, (float) (k + 1) - f2, d, d3);
-            tessellator.vertex((float) (i + 0) - f1, (float) (j + 0) - f1, (float) (k + 1) - f2, d1, d3);
-            tessellator.vertex((float) (i + 0) - f1, (float) (j + 1) + f1, (float) (k + 1) - f2, d1, d2);
-            tessellator.vertex((float) (i + 0) - f1, (float) (j + 1) + f1, (float) (k + 1) - f2, d1, d2);
-            tessellator.vertex((float) (i + 0) - f1, (float) (j + 0) - f1, (float) (k + 1) - f2, d1, d3);
-            tessellator.vertex((float) (i + 1) + f1, (float) (j + 0) - f1, (float) (k + 1) - f2, d, d3);
-            tessellator.vertex((float) (i + 1) + f1, (float) (j + 1) + f1, (float) (k + 1) - f2, d, d2);
+            tessellator.vertex((float)(i + 1) + f1, (float)(j + 1) + f1, (float)(k + 1) - f2, d, d2);
+            tessellator.vertex((float)(i + 1) + f1, (float)(j + 0) - f1, (float)(k + 1) - f2, d, d3);
+            tessellator.vertex((float)(i + 0) - f1, (float)(j + 0) - f1, (float)(k + 1) - f2, d1, d3);
+            tessellator.vertex((float)(i + 0) - f1, (float)(j + 1) + f1, (float)(k + 1) - f2, d1, d2);
+            tessellator.vertex((float)(i + 0) - f1, (float)(j + 1) + f1, (float)(k + 1) - f2, d1, d2);
+            tessellator.vertex((float)(i + 0) - f1, (float)(j + 0) - f1, (float)(k + 1) - f2, d1, d3);
+            tessellator.vertex((float)(i + 1) + f1, (float)(j + 0) - f1, (float)(k + 1) - f2, d, d3);
+            tessellator.vertex((float)(i + 1) + f1, (float)(j + 1) + f1, (float)(k + 1) - f2, d, d2);
         }
         return true;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean method_73(MixinTile block, int i, int j, int k) {
+    public boolean method_73(Tile block, int i, int j, int k) {
         Tessellator tessellator = Tessellator.INSTANCE;
         float f = block.method_1604(this.field_82, i, j, k);
         int l = block.getTint(this.field_82, i, j, k);
-        float f1 = (float) (l >> 16 & 0xFF) / 255.0f;
-        float f2 = (float) (l >> 8 & 0xFF) / 255.0f;
-        float f3 = (float) (l & 0xFF) / 255.0f;
+        float f1 = (float)(l >> 16 & 0xFF) / 255.0f;
+        float f2 = (float)(l >> 8 & 0xFF) / 255.0f;
+        float f3 = (float)(l & 0xFF) / 255.0f;
         if (GameRenderer.field_2340) {
             float f4 = (f1 * 30.0f + f2 * 59.0f + f3 * 11.0f) / 100.0f;
             float f5 = (f1 * 30.0f + f2 * 70.0f) / 100.0f;
@@ -1555,33 +1361,25 @@ public class MixinTileRenderer {
         double d1 = j;
         double d2 = k;
         if (block == Tile.TALLGRASS) {
-            long l1 = (long) (i * 3129871) ^ (long) k * 116129781L ^ (long) j;
+            long l1 = (long)(i * 3129871) ^ (long)k * 116129781L ^ (long)j;
             l1 = l1 * l1 * 42317861L + l1 * 11L;
-            d += ((double) ((float) (l1 >> 16 & 0xFL) / 15.0f) - 0.5) * 0.5;
-            d1 += ((double) ((float) (l1 >> 20 & 0xFL) / 15.0f) - 1.0) * 0.2;
-            d2 += ((double) ((float) (l1 >> 24 & 0xFL) / 15.0f) - 0.5) * 0.5;
+            d += ((double)((float)(l1 >> 16 & 0xFL) / 15.0f) - 0.5) * 0.5;
+            d1 += ((double)((float)(l1 >> 20 & 0xFL) / 15.0f) - 1.0) * 0.2;
+            d2 += ((double)((float)(l1 >> 24 & 0xFL) / 15.0f) - 0.5) * 0.5;
         }
         this.method_47(block, this.field_82.getTileMeta(i, j, k), d, d1, d2);
         return true;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean method_74(MixinTile block, int i, int j, int k) {
+    public boolean method_74(Tile block, int i, int j, int k) {
         Tessellator tessellator = Tessellator.INSTANCE;
         float f = block.method_1604(this.field_82, i, j, k);
         tessellator.colour(f, f, f);
-        this.method_56(block, this.field_82.getTileMeta(i, j, k), i, (float) j - 0.0625f, k);
+        this.method_56(block, this.field_82.getTileMeta(i, j, k), i, (float)j - 0.0625f, k);
         return true;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_45(MixinTile block, double d, double d1, double d2, double d3, double d4) {
+    public void method_45(Tile block, double d, double d1, double d2, double d3, double d4) {
         Tessellator tessellator = Tessellator.INSTANCE;
         int i = block.getTextureForSide(0);
         if (this.field_83 >= 0) {
@@ -1589,14 +1387,14 @@ public class MixinTileRenderer {
         }
         int j = (i & 0xF) << 4;
         int k = i & 0xF0;
-        float f = (float) j / 256.0f;
-        float f1 = ((float) j + 15.99f) / 256.0f;
-        float f2 = (float) k / 256.0f;
-        float f3 = ((float) k + 15.99f) / 256.0f;
-        double d5 = (double) f + 0.02734375;
-        double d6 = (double) f2 + 0.0234375;
-        double d7 = (double) f + 0.03515625;
-        double d8 = (double) f2 + 0.03125;
+        float f = (float)j / 256.0f;
+        float f1 = ((float)j + 15.99f) / 256.0f;
+        float f2 = (float)k / 256.0f;
+        float f3 = ((float)k + 15.99f) / 256.0f;
+        double d5 = (double)f + 0.02734375;
+        double d6 = (double)f2 + 0.0234375;
+        double d7 = (double)f + 0.03515625;
+        double d8 = (double)f2 + 0.03125;
         double d9 = (d += 0.5) - 0.5;
         double d10 = d + 0.5;
         double d11 = (d2 += 0.5) - 0.5;
@@ -1625,11 +1423,7 @@ public class MixinTileRenderer {
         tessellator.vertex(d9, d1 + 1.0, d2 - d13, f1, f2);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_47(MixinTile block, int i, double d, double d1, double d2) {
+    public void method_47(Tile block, int i, double d, double d1, double d2) {
         Tessellator tessellator = Tessellator.INSTANCE;
         int j = block.getTextureForSide(0, i);
         if (this.field_83 >= 0) {
@@ -1637,14 +1431,14 @@ public class MixinTileRenderer {
         }
         int k = (j & 0xF) << 4;
         int l = j & 0xF0;
-        double d3 = (float) k / 256.0f;
-        double d4 = ((float) k + 15.99f) / 256.0f;
-        double d5 = (float) l / 256.0f;
-        double d6 = ((float) l + 15.99f) / 256.0f;
-        double d7 = d + 0.5 - (double) 0.45f;
-        double d8 = d + 0.5 + (double) 0.45f;
-        double d9 = d2 + 0.5 - (double) 0.45f;
-        double d10 = d2 + 0.5 + (double) 0.45f;
+        double d3 = (float)k / 256.0f;
+        double d4 = ((float)k + 15.99f) / 256.0f;
+        double d5 = (float)l / 256.0f;
+        double d6 = ((float)l + 15.99f) / 256.0f;
+        double d7 = d + 0.5 - (double)0.45f;
+        double d8 = d + 0.5 + (double)0.45f;
+        double d9 = d2 + 0.5 - (double)0.45f;
+        double d10 = d2 + 0.5 + (double)0.45f;
         tessellator.vertex(d7, d1 + 1.0, d9, d3, d5);
         tessellator.vertex(d7, d1 + 0.0, d9, d3, d6);
         tessellator.vertex(d8, d1 + 0.0, d10, d4, d6);
@@ -1657,10 +1451,10 @@ public class MixinTileRenderer {
             j = block.getTextureForSide(1, i);
             k = (j & 0xF) << 4;
             l = j & 0xF0;
-            d3 = (float) k / 256.0f;
-            d4 = ((float) k + 15.99f) / 256.0f;
-            d5 = (float) l / 256.0f;
-            d6 = ((float) l + 15.99f) / 256.0f;
+            d3 = (float)k / 256.0f;
+            d4 = ((float)k + 15.99f) / 256.0f;
+            d5 = (float)l / 256.0f;
+            d6 = ((float)l + 15.99f) / 256.0f;
         }
         tessellator.vertex(d7, d1 + 1.0, d10, d3, d5);
         tessellator.vertex(d7, d1 + 0.0, d10, d3, d6);
@@ -1672,11 +1466,7 @@ public class MixinTileRenderer {
         tessellator.vertex(d7, d1 + 1.0, d10, d4, d5);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void renderCrossedSquaresUpsideDown(MixinTile block, int i, double d, double d1, double d2) {
+    public void renderCrossedSquaresUpsideDown(Tile block, int i, double d, double d1, double d2) {
         Tessellator tessellator = Tessellator.INSTANCE;
         int j = block.getTextureForSide(0, i);
         if (this.field_83 >= 0) {
@@ -1684,14 +1474,14 @@ public class MixinTileRenderer {
         }
         int k = (j & 0xF) << 4;
         int l = j & 0xF0;
-        double d3 = (float) k / 256.0f;
-        double d4 = ((float) k + 15.99f) / 256.0f;
-        double d5 = (float) l / 256.0f;
-        double d6 = ((float) l + 15.99f) / 256.0f;
-        double d7 = d + 0.5 - (double) 0.45f;
-        double d8 = d + 0.5 + (double) 0.45f;
-        double d9 = d2 + 0.5 - (double) 0.45f;
-        double d10 = d2 + 0.5 + (double) 0.45f;
+        double d3 = (float)k / 256.0f;
+        double d4 = ((float)k + 15.99f) / 256.0f;
+        double d5 = (float)l / 256.0f;
+        double d6 = ((float)l + 15.99f) / 256.0f;
+        double d7 = d + 0.5 - (double)0.45f;
+        double d8 = d + 0.5 + (double)0.45f;
+        double d9 = d2 + 0.5 - (double)0.45f;
+        double d10 = d2 + 0.5 + (double)0.45f;
         tessellator.vertex(d7, d1 + 0.0, d9, d3, d5);
         tessellator.vertex(d7, d1 + 1.0, d9, d3, d6);
         tessellator.vertex(d8, d1 + 1.0, d10, d4, d6);
@@ -1704,10 +1494,10 @@ public class MixinTileRenderer {
             j = block.getTextureForSide(1, i);
             k = (j & 0xF) << 4;
             l = j & 0xF0;
-            d3 = (float) k / 256.0f;
-            d4 = ((float) k + 15.99f) / 256.0f;
-            d5 = (float) l / 256.0f;
-            d6 = ((float) l + 15.99f) / 256.0f;
+            d3 = (float)k / 256.0f;
+            d4 = ((float)k + 15.99f) / 256.0f;
+            d5 = (float)l / 256.0f;
+            d6 = ((float)l + 15.99f) / 256.0f;
         }
         tessellator.vertex(d7, d1 + 0.0, d10, d3, d5);
         tessellator.vertex(d7, d1 + 1.0, d10, d3, d6);
@@ -1719,11 +1509,7 @@ public class MixinTileRenderer {
         tessellator.vertex(d7, d1 + 0.0, d10, d4, d5);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void renderCrossedSquaresEast(MixinTile block, int i, double d, double d1, double d2) {
+    public void renderCrossedSquaresEast(Tile block, int i, double d, double d1, double d2) {
         Tessellator tessellator = Tessellator.INSTANCE;
         int j = block.getTextureForSide(0, i);
         if (this.field_83 >= 0) {
@@ -1731,14 +1517,14 @@ public class MixinTileRenderer {
         }
         int k = (j & 0xF) << 4;
         int l = j & 0xF0;
-        double d3 = (float) k / 256.0f;
-        double d4 = ((float) k + 15.99f) / 256.0f;
-        double d5 = (float) l / 256.0f;
-        double d6 = ((float) l + 15.99f) / 256.0f;
-        double d7 = d1 + 0.5 - (double) 0.45f;
-        double d8 = d1 + 0.5 + (double) 0.45f;
-        double d9 = d2 + 0.5 - (double) 0.45f;
-        double d10 = d2 + 0.5 + (double) 0.45f;
+        double d3 = (float)k / 256.0f;
+        double d4 = ((float)k + 15.99f) / 256.0f;
+        double d5 = (float)l / 256.0f;
+        double d6 = ((float)l + 15.99f) / 256.0f;
+        double d7 = d1 + 0.5 - (double)0.45f;
+        double d8 = d1 + 0.5 + (double)0.45f;
+        double d9 = d2 + 0.5 - (double)0.45f;
+        double d10 = d2 + 0.5 + (double)0.45f;
         tessellator.vertex(d + 1.0, d7, d9, d3, d5);
         tessellator.vertex(d + 0.0, d7, d9, d3, d6);
         tessellator.vertex(d + 0.0, d8, d10, d4, d6);
@@ -1750,10 +1536,10 @@ public class MixinTileRenderer {
             j = block.getTextureForSide(1, i);
             k = (j & 0xF) << 4;
             l = j & 0xF0;
-            d3 = (float) k / 256.0f;
-            d4 = ((float) k + 15.99f) / 256.0f;
-            d5 = (float) l / 256.0f;
-            d6 = ((float) l + 15.99f) / 256.0f;
+            d3 = (float)k / 256.0f;
+            d4 = ((float)k + 15.99f) / 256.0f;
+            d5 = (float)l / 256.0f;
+            d6 = ((float)l + 15.99f) / 256.0f;
         }
         tessellator.vertex(d + 1.0, d7, d9, d4, d5);
         tessellator.vertex(d + 1.0, d7, d10, d3, d5);
@@ -1766,11 +1552,7 @@ public class MixinTileRenderer {
         tessellator.vertex(d + 1.0, d7, d10, d4, d5);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void renderCrossedSquaresWest(MixinTile block, int i, double d, double d1, double d2) {
+    public void renderCrossedSquaresWest(Tile block, int i, double d, double d1, double d2) {
         Tessellator tessellator = Tessellator.INSTANCE;
         int j = block.getTextureForSide(0, i);
         if (this.field_83 >= 0) {
@@ -1778,14 +1560,14 @@ public class MixinTileRenderer {
         }
         int k = (j & 0xF) << 4;
         int l = j & 0xF0;
-        double d3 = (float) k / 256.0f;
-        double d4 = ((float) k + 15.99f) / 256.0f;
-        double d5 = (float) l / 256.0f;
-        double d6 = ((float) l + 15.99f) / 256.0f;
-        double d7 = d1 + 0.5 - (double) 0.45f;
-        double d8 = d1 + 0.5 + (double) 0.45f;
-        double d9 = d2 + 0.5 - (double) 0.45f;
-        double d10 = d2 + 0.5 + (double) 0.45f;
+        double d3 = (float)k / 256.0f;
+        double d4 = ((float)k + 15.99f) / 256.0f;
+        double d5 = (float)l / 256.0f;
+        double d6 = ((float)l + 15.99f) / 256.0f;
+        double d7 = d1 + 0.5 - (double)0.45f;
+        double d8 = d1 + 0.5 + (double)0.45f;
+        double d9 = d2 + 0.5 - (double)0.45f;
+        double d10 = d2 + 0.5 + (double)0.45f;
         tessellator.vertex(d + 0.0, d7, d9, d3, d5);
         tessellator.vertex(d + 1.0, d7, d9, d3, d6);
         tessellator.vertex(d + 1.0, d8, d10, d4, d6);
@@ -1798,10 +1580,10 @@ public class MixinTileRenderer {
             j = block.getTextureForSide(1, i);
             k = (j & 0xF) << 4;
             l = j & 0xF0;
-            d3 = (float) k / 256.0f;
-            d4 = ((float) k + 15.99f) / 256.0f;
-            d5 = (float) l / 256.0f;
-            d6 = ((float) l + 15.99f) / 256.0f;
+            d3 = (float)k / 256.0f;
+            d4 = ((float)k + 15.99f) / 256.0f;
+            d5 = (float)l / 256.0f;
+            d6 = ((float)l + 15.99f) / 256.0f;
         }
         tessellator.vertex(d + 0.0, d7, d10, d3, d5);
         tessellator.vertex(d + 1.0, d7, d10, d3, d6);
@@ -1813,11 +1595,7 @@ public class MixinTileRenderer {
         tessellator.vertex(d + 0.0, d7, d10, d4, d5);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void renderCrossedSquaresNorth(MixinTile block, int i, double d, double d1, double d2) {
+    public void renderCrossedSquaresNorth(Tile block, int i, double d, double d1, double d2) {
         Tessellator tessellator = Tessellator.INSTANCE;
         int j = block.getTextureForSide(0, i);
         if (this.field_83 >= 0) {
@@ -1825,14 +1603,14 @@ public class MixinTileRenderer {
         }
         int k = (j & 0xF) << 4;
         int l = j & 0xF0;
-        double d3 = (float) k / 256.0f;
-        double d4 = ((float) k + 15.99f) / 256.0f;
-        double d5 = (float) l / 256.0f;
-        double d6 = ((float) l + 15.99f) / 256.0f;
-        double d7 = d1 + 0.5 - (double) 0.45f;
-        double d8 = d1 + 0.5 + (double) 0.45f;
-        double d9 = d + 0.5 - (double) 0.45f;
-        double d10 = d + 0.5 + (double) 0.45f;
+        double d3 = (float)k / 256.0f;
+        double d4 = ((float)k + 15.99f) / 256.0f;
+        double d5 = (float)l / 256.0f;
+        double d6 = ((float)l + 15.99f) / 256.0f;
+        double d7 = d1 + 0.5 - (double)0.45f;
+        double d8 = d1 + 0.5 + (double)0.45f;
+        double d9 = d + 0.5 - (double)0.45f;
+        double d10 = d + 0.5 + (double)0.45f;
         tessellator.vertex(d9, d7, d2 + 1.0, d3, d5);
         tessellator.vertex(d9, d7, d2 + 0.0, d3, d6);
         tessellator.vertex(d10, d8, d2 + 0.0, d4, d6);
@@ -1845,10 +1623,10 @@ public class MixinTileRenderer {
             j = block.getTextureForSide(1, i);
             k = (j & 0xF) << 4;
             l = j & 0xF0;
-            d3 = (float) k / 256.0f;
-            d4 = ((float) k + 15.99f) / 256.0f;
-            d5 = (float) l / 256.0f;
-            d6 = ((float) l + 15.99f) / 256.0f;
+            d3 = (float)k / 256.0f;
+            d4 = ((float)k + 15.99f) / 256.0f;
+            d5 = (float)l / 256.0f;
+            d6 = ((float)l + 15.99f) / 256.0f;
         }
         tessellator.vertex(d10, d7, d2 + 1.0, d3, d5);
         tessellator.vertex(d10, d7, d2 + 0.0, d3, d6);
@@ -1860,11 +1638,7 @@ public class MixinTileRenderer {
         tessellator.vertex(d10, d7, d2 + 1.0, d4, d5);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void renderCrossedSquaresSouth(MixinTile block, int i, double d, double d1, double d2) {
+    public void renderCrossedSquaresSouth(Tile block, int i, double d, double d1, double d2) {
         Tessellator tessellator = Tessellator.INSTANCE;
         int j = block.getTextureForSide(0, i);
         if (this.field_83 >= 0) {
@@ -1872,14 +1646,14 @@ public class MixinTileRenderer {
         }
         int k = (j & 0xF) << 4;
         int l = j & 0xF0;
-        double d3 = (float) k / 256.0f;
-        double d4 = ((float) k + 15.99f) / 256.0f;
-        double d5 = (float) l / 256.0f;
-        double d6 = ((float) l + 15.99f) / 256.0f;
-        double d7 = d1 + 0.5 - (double) 0.45f;
-        double d8 = d1 + 0.5 + (double) 0.45f;
-        double d9 = d + 0.5 - (double) 0.45f;
-        double d10 = d + 0.5 + (double) 0.45f;
+        double d3 = (float)k / 256.0f;
+        double d4 = ((float)k + 15.99f) / 256.0f;
+        double d5 = (float)l / 256.0f;
+        double d6 = ((float)l + 15.99f) / 256.0f;
+        double d7 = d1 + 0.5 - (double)0.45f;
+        double d8 = d1 + 0.5 + (double)0.45f;
+        double d9 = d + 0.5 - (double)0.45f;
+        double d10 = d + 0.5 + (double)0.45f;
         tessellator.vertex(d9, d7, d2 + 0.0, d3, d5);
         tessellator.vertex(d9, d7, d2 + 1.0, d3, d6);
         tessellator.vertex(d10, d8, d2 + 1.0, d4, d6);
@@ -1892,10 +1666,10 @@ public class MixinTileRenderer {
             j = block.getTextureForSide(1, i);
             k = (j & 0xF) << 4;
             l = j & 0xF0;
-            d3 = (float) k / 256.0f;
-            d4 = ((float) k + 15.99f) / 256.0f;
-            d5 = (float) l / 256.0f;
-            d6 = ((float) l + 15.99f) / 256.0f;
+            d3 = (float)k / 256.0f;
+            d4 = ((float)k + 15.99f) / 256.0f;
+            d5 = (float)l / 256.0f;
+            d6 = ((float)l + 15.99f) / 256.0f;
         }
         tessellator.vertex(d10, d7, d2 + 0.0, d3, d5);
         tessellator.vertex(d10, d7, d2 + 1.0, d3, d6);
@@ -1907,11 +1681,7 @@ public class MixinTileRenderer {
         tessellator.vertex(d10, d7, d2 + 0.0, d4, d5);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_56(MixinTile block, int i, double d, double d1, double d2) {
+    public void method_56(Tile block, int i, double d, double d1, double d2) {
         Tessellator tessellator = Tessellator.INSTANCE;
         int j = block.getTextureForSide(0, i);
         if (this.field_83 >= 0) {
@@ -1919,10 +1689,10 @@ public class MixinTileRenderer {
         }
         int k = (j & 0xF) << 4;
         int l = j & 0xF0;
-        double d3 = (float) k / 256.0f;
-        double d4 = ((float) k + 15.99f) / 256.0f;
-        double d5 = (float) l / 256.0f;
-        double d6 = ((float) l + 15.99f) / 256.0f;
+        double d3 = (float)k / 256.0f;
+        double d4 = ((float)k + 15.99f) / 256.0f;
+        double d5 = (float)l / 256.0f;
+        double d6 = ((float)l + 15.99f) / 256.0f;
         double d7 = d + 0.5 - 0.25;
         double d8 = d + 0.5 + 0.25;
         double d9 = d2 + 0.5 - 0.5;
@@ -1965,22 +1735,18 @@ public class MixinTileRenderer {
         tessellator.vertex(d8, d1 + 1.0, d10, d4, d5);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean method_75(MixinTile block, int i, int j, int k) {
+    public boolean method_75(Tile block, int i, int j, int k) {
         Tessellator tessellator = Tessellator.INSTANCE;
         boolean flag = block.method_1618(this.field_82, i, j + 1, k, 1);
         boolean flag1 = block.method_1618(this.field_82, i, j - 1, k, 0);
-        boolean[] aflag = new boolean[] { block.method_1618(this.field_82, i, j, k - 1, 2), block.method_1618(this.field_82, i, j, k + 1, 3), block.method_1618(this.field_82, i - 1, j, k, 4), block.method_1618(this.field_82, i + 1, j, k, 5) };
+        boolean[] aflag = new boolean[]{block.method_1618(this.field_82, i, j, k - 1, 2), block.method_1618(this.field_82, i, j, k + 1, 3), block.method_1618(this.field_82, i - 1, j, k, 4), block.method_1618(this.field_82, i + 1, j, k, 5)};
         if (!(flag || flag1 || aflag[0] || aflag[1] || aflag[2] || aflag[3])) {
             return false;
         }
         int color = block.getTint(this.field_82, i, j, k);
-        float red = (float) (color >> 16 & 0xFF) / 255.0f;
-        float green = (float) (color >> 8 & 0xFF) / 255.0f;
-        float blue = (float) (color & 0xFF) / 255.0f;
+        float red = (float)(color >> 16 & 0xFF) / 255.0f;
+        float green = (float)(color >> 8 & 0xFF) / 255.0f;
+        float blue = (float)(color & 0xFF) / 255.0f;
         boolean flag2 = false;
         float f3 = 0.5f;
         float f4 = 1.0f;
@@ -1997,28 +1763,28 @@ public class MixinTileRenderer {
         if (this.field_85 || flag) {
             flag2 = true;
             int j1 = block.getTextureForSide(1, i1);
-            float f12 = (float) FluidTile.method_1223(this.field_82, i, j, k, material);
+            float f12 = (float)FluidTile.method_1223(this.field_82, i, j, k, material);
             if (f12 > -999.0f) {
                 j1 = block.getTextureForSide(2, i1);
             }
             int i2 = (j1 & 0xF) << 4;
             int k2 = j1 & 0xF0;
-            double d2 = ((double) i2 + 8.0) / 256.0;
-            double d3 = ((double) k2 + 8.0) / 256.0;
+            double d2 = ((double)i2 + 8.0) / 256.0;
+            double d3 = ((double)k2 + 8.0) / 256.0;
             if (f12 < -999.0f) {
                 f12 = 0.0f;
             } else {
-                d2 = (float) (i2 + 16) / 256.0f;
-                d3 = (float) (k2 + 16) / 256.0f;
+                d2 = (float)(i2 + 16) / 256.0f;
+                d3 = (float)(k2 + 16) / 256.0f;
             }
             float f14 = MathsHelper.sin(f12) * 8.0f / 256.0f;
             float f16 = MathsHelper.cos(f12) * 8.0f / 256.0f;
             float f18 = block.method_1604(this.field_82, i, j, k);
             tessellator.colour(f4 * f18 * red, f4 * f18 * green, f4 * f18 * blue);
-            tessellator.vertex(i + 0, (float) j + f7, k + 0, d2 - (double) f16 - (double) f14, d3 - (double) f16 + (double) f14);
-            tessellator.vertex(i + 0, (float) j + f8, k + 1, d2 - (double) f16 + (double) f14, d3 + (double) f16 + (double) f14);
-            tessellator.vertex(i + 1, (float) j + f9, k + 1, d2 + (double) f16 + (double) f14, d3 + (double) f16 - (double) f14);
-            tessellator.vertex(i + 1, (float) j + f10, k + 0, d2 + (double) f16 - (double) f14, d3 - (double) f16 - (double) f14);
+            tessellator.vertex(i + 0, (float)j + f7, k + 0, d2 - (double)f16 - (double)f14, d3 - (double)f16 + (double)f14);
+            tessellator.vertex(i + 0, (float)j + f8, k + 1, d2 - (double)f16 + (double)f14, d3 + (double)f16 + (double)f14);
+            tessellator.vertex(i + 1, (float)j + f9, k + 1, d2 + (double)f16 + (double)f14, d3 + (double)f16 - (double)f14);
+            tessellator.vertex(i + 1, (float)j + f10, k + 0, d2 + (double)f16 - (double)f14, d3 - (double)f16 - (double)f14);
         }
         if (this.field_85 || flag1) {
             float f11 = block.method_1604(this.field_82, i, j - 1, k);
@@ -2051,8 +1817,7 @@ public class MixinTileRenderer {
             int i3 = block.getTextureForSide(k1 + 2, i1);
             int j3 = (i3 & 0xF) << 4;
             int k3 = i3 & 0xF0;
-            if (!this.field_85 && !aflag[k1])
-                continue;
+            if (!this.field_85 && !aflag[k1]) continue;
             if (k1 == 0) {
                 f13 = f7;
                 f15 = f10;
@@ -2083,16 +1848,16 @@ public class MixinTileRenderer {
                 f21 = k + 1;
             }
             flag2 = true;
-            double d4 = (float) (j3 + 0) / 256.0f;
-            double d5 = ((double) (j3 + 16) - 0.01) / 256.0;
-            double d6 = ((float) k3 + (1.0f - f13) * 16.0f) / 256.0f;
-            double d7 = ((float) k3 + (1.0f - f15) * 16.0f) / 256.0f;
-            double d8 = ((double) (k3 + 16) - 0.01) / 256.0;
+            double d4 = (float)(j3 + 0) / 256.0f;
+            double d5 = ((double)(j3 + 16) - 0.01) / 256.0;
+            double d6 = ((float)k3 + (1.0f - f13) * 16.0f) / 256.0f;
+            double d7 = ((float)k3 + (1.0f - f15) * 16.0f) / 256.0f;
+            double d8 = ((double)(k3 + 16) - 0.01) / 256.0;
             float f22 = block.method_1604(this.field_82, l1, j2, l2);
             f22 = k1 < 2 ? (f22 *= f5) : (f22 *= f6);
             tessellator.colour(f4 * f22 * red, f4 * f22 * green, f4 * f22 * blue);
-            tessellator.vertex(f17, (float) j + f13, f19, d4, d6);
-            tessellator.vertex(f20, (float) j + f15, f21, d5, d7);
+            tessellator.vertex(f17, (float)j + f13, f19, d4, d6);
+            tessellator.vertex(f20, (float)j + f15, f21, d5, d7);
             tessellator.vertex(f20, j + 0, f21, d5, d8);
             tessellator.vertex(f17, j + 0, f19, d4, d8);
         }
@@ -2101,10 +1866,6 @@ public class MixinTileRenderer {
         return flag2;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     private float method_43(int i, int j, int k, Material material) {
         int l = 0;
         float f = 0.0f;
@@ -2126,61 +1887,44 @@ public class MixinTileRenderer {
                 ++l;
                 continue;
             }
-            if (material1.isSolid())
-                continue;
+            if (material1.isSolid()) continue;
             f += 1.0f;
             ++l;
         }
-        return 1.0f - f / (float) l;
+        return 1.0f - f / (float)l;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_53(MixinTile block, MixinLevel world, int i, int j, int k) {
-        GL11.glTranslatef((float) (-i), (float) (-j), (float) (-k));
-        GL11.glTranslatef((float) -0.5f, (float) -0.5f, (float) -0.5f);
+    public void method_53(Tile block, Level world, int i, int j, int k) {
+        GL11.glTranslatef((float)(-i), (float)(-j), (float)(-k));
+        GL11.glTranslatef(-0.5f, -0.5f, -0.5f);
         this.startRenderingBlocks(world);
         this.method_57(block, i, j, k);
         this.stopRenderingBlocks();
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void startRenderingBlocks(MixinLevel world) {
+    public void startRenderingBlocks(Level world) {
         this.field_82 = world;
         if (Minecraft.isSmoothLightingEnabled()) {
-            GL11.glShadeModel((int) 7425);
+            GL11.glShadeModel(7425);
         }
         Tessellator.INSTANCE.start();
         this.field_85 = true;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void stopRenderingBlocks() {
         this.field_85 = false;
         Tessellator.INSTANCE.draw();
         if (Minecraft.isSmoothLightingEnabled()) {
-            GL11.glShadeModel((int) 7424);
+            GL11.glShadeModel(7424);
         }
         this.field_82 = null;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean method_76(MixinTile block, int i, int j, int k) {
+    public boolean method_76(Tile block, int i, int j, int k) {
         int l = block.getTint(this.field_82, i, j, k);
-        float f = (float) (l >> 16 & 0xFF) / 255.0f;
-        float f1 = (float) (l >> 8 & 0xFF) / 255.0f;
-        float f2 = (float) (l & 0xFF) / 255.0f;
+        float f = (float)(l >> 16 & 0xFF) / 255.0f;
+        float f1 = (float)(l >> 8 & 0xFF) / 255.0f;
+        float f2 = (float)(l & 0xFF) / 255.0f;
         if (GameRenderer.field_2340) {
             float f3 = (f * 30.0f + f1 * 59.0f + f2 * 11.0f) / 100.0f;
             float f4 = (f * 30.0f + f1 * 70.0f) / 100.0f;
@@ -2195,11 +1939,7 @@ public class MixinTileRenderer {
         return this.method_58(block, i, j, k, f, f1, f2);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean method_50(MixinTile block, int i, int j, int k, float f, float f1, float f2) {
+    public boolean method_50(Tile block, int i, int j, int k, float f, float f1, float f2) {
         float bottomRight;
         float topRight;
         float bottomLeft;
@@ -2281,10 +2021,10 @@ public class MixinTileRenderer {
             this.field_66 = this.field_68 = (flag1 ? f2 : 1.0f) * 0.5f;
             this.field_65 = this.field_68;
             this.field_64 = this.field_68;
-            lerpLeft = 1.0f - (float) Math.max((double) block.minX, (double) 0.0);
-            lerpRight = 1.0f - (float) Math.min((double) block.maxX, (double) 1.0);
-            lerpTop = (float) Math.min((double) block.maxZ, (double) 1.0);
-            lerpBottom = (float) Math.max((double) block.minZ, (double) 0.0);
+            lerpLeft = 1.0f - (float)Math.max(block.minX, 0.0);
+            lerpRight = 1.0f - (float)Math.min(block.maxX, 1.0);
+            lerpTop = (float)Math.min(block.maxZ, 1.0);
+            lerpBottom = (float)Math.max(block.minZ, 0.0);
             topLeft = lerpTop * (lerpLeft * f4 + (1.0f - lerpLeft) * f25) + (1.0f - lerpTop) * (lerpLeft * f11 + (1.0f - lerpLeft) * f18);
             bottomLeft = lerpBottom * (lerpLeft * f4 + (1.0f - lerpLeft) * f25) + (1.0f - lerpBottom) * (lerpLeft * f11 + (1.0f - lerpLeft) * f18);
             topRight = lerpTop * (lerpRight * f4 + (1.0f - lerpRight) * f25) + (1.0f - lerpTop) * (lerpRight * f11 + (1.0f - lerpRight) * f18);
@@ -2344,10 +2084,10 @@ public class MixinTileRenderer {
             this.field_66 = this.field_68;
             this.field_65 = this.field_68;
             this.field_64 = this.field_68;
-            lerpLeft = 1.0f - (float) Math.max((double) block.minX, (double) 0.0);
-            lerpRight = 1.0f - (float) Math.min((double) block.maxX, (double) 1.0);
-            lerpTop = (float) Math.max((double) block.minZ, (double) 0.0);
-            lerpBottom = (float) Math.min((double) block.maxZ, (double) 1.0);
+            lerpLeft = 1.0f - (float)Math.max(block.minX, 0.0);
+            lerpRight = 1.0f - (float)Math.min(block.maxX, 1.0);
+            lerpTop = (float)Math.max(block.minZ, 0.0);
+            lerpBottom = (float)Math.min(block.maxZ, 1.0);
             topLeft = lerpTop * (lerpLeft * f26 + (1.0f - lerpLeft) * f5) + (1.0f - lerpTop) * (lerpLeft * f19 + (1.0f - lerpLeft) * f12);
             float topRight2 = lerpTop * (lerpRight * f26 + (1.0f - lerpRight) * f5) + (1.0f - lerpTop) * (lerpRight * f19 + (1.0f - lerpRight) * f12);
             float bottomLeft2 = lerpBottom * (lerpLeft * f26 + (1.0f - lerpLeft) * f5) + (1.0f - lerpBottom) * (lerpLeft * f19 + (1.0f - lerpLeft) * f12);
@@ -2404,10 +2144,10 @@ public class MixinTileRenderer {
             this.field_66 = this.field_68 = (flag3 ? f2 : 1.0f) * 0.8f;
             this.field_65 = this.field_68;
             this.field_64 = this.field_68;
-            lerpLeft = (float) Math.min((double) block.maxX, (double) 1.0);
-            lerpRight = (float) Math.max((double) block.minX, (double) 0.0);
-            lerpTop = (float) Math.min((double) block.maxY, (double) 1.0);
-            lerpBottom = (float) Math.max((double) block.minY, (double) 0.0);
+            lerpLeft = (float)Math.min(block.maxX, 1.0);
+            lerpRight = (float)Math.max(block.minX, 0.0);
+            lerpTop = (float)Math.min(block.maxY, 1.0);
+            lerpBottom = (float)Math.max(block.minY, 0.0);
             topLeft = lerpTop * (lerpLeft * f13 + (1.0f - lerpLeft) * f6) + (1.0f - lerpTop) * (lerpLeft * f20 + (1.0f - lerpLeft) * f27);
             bottomLeft = lerpBottom * (lerpLeft * f13 + (1.0f - lerpLeft) * f6) + (1.0f - lerpBottom) * (lerpLeft * f20 + (1.0f - lerpLeft) * f27);
             topRight = lerpTop * (lerpRight * f13 + (1.0f - lerpRight) * f6) + (1.0f - lerpTop) * (lerpRight * f20 + (1.0f - lerpRight) * f27);
@@ -2480,10 +2220,10 @@ public class MixinTileRenderer {
             this.field_66 = this.field_68 = (flag4 ? f2 : 1.0f) * 0.8f;
             this.field_65 = this.field_68;
             this.field_64 = this.field_68;
-            lerpLeft = (float) Math.min((double) (1.0 - block.minX), (double) 1.0);
-            lerpRight = (float) Math.max((double) (1.0 - block.maxX), (double) 0.0);
-            lerpTop = (float) Math.min((double) block.maxY, (double) 1.0);
-            lerpBottom = (float) Math.max((double) block.minY, (double) 0.0);
+            lerpLeft = (float)Math.min(1.0 - block.minX, 1.0);
+            lerpRight = (float)Math.max(1.0 - block.maxX, 0.0);
+            lerpTop = (float)Math.min(block.maxY, 1.0);
+            lerpBottom = (float)Math.max(block.minY, 0.0);
             topLeft = lerpTop * (lerpLeft * f7 + (1.0f - lerpLeft) * f28) + (1.0f - lerpTop) * (lerpLeft * f14 + (1.0f - lerpLeft) * f21);
             bottomLeft = lerpBottom * (lerpLeft * f7 + (1.0f - lerpLeft) * f28) + (1.0f - lerpBottom) * (lerpLeft * f14 + (1.0f - lerpLeft) * f21);
             topRight = lerpTop * (lerpRight * f7 + (1.0f - lerpRight) * f28) + (1.0f - lerpTop) * (lerpRight * f14 + (1.0f - lerpRight) * f21);
@@ -2556,10 +2296,10 @@ public class MixinTileRenderer {
             this.field_66 = this.field_68 = (flag5 ? f2 : 1.0f) * 0.6f;
             this.field_65 = this.field_68;
             this.field_64 = this.field_68;
-            lerpLeft = (float) Math.min((double) (1.0 - block.minZ), (double) 1.0);
-            lerpRight = (float) Math.max((double) (1.0 - block.maxZ), (double) 0.0);
-            lerpTop = (float) Math.min((double) block.maxY, (double) 1.0);
-            lerpBottom = (float) Math.max((double) block.minY, (double) 0.0);
+            lerpLeft = (float)Math.min(1.0 - block.minZ, 1.0);
+            lerpRight = (float)Math.max(1.0 - block.maxZ, 0.0);
+            lerpTop = (float)Math.min(block.maxY, 1.0);
+            lerpBottom = (float)Math.max(block.minY, 0.0);
             topLeft = lerpTop * (lerpLeft * f15 + (1.0f - lerpLeft) * f8) + (1.0f - lerpTop) * (lerpLeft * f22 + (1.0f - lerpLeft) * f29);
             bottomLeft = lerpBottom * (lerpLeft * f15 + (1.0f - lerpLeft) * f8) + (1.0f - lerpBottom) * (lerpLeft * f22 + (1.0f - lerpLeft) * f29);
             topRight = lerpTop * (lerpRight * f15 + (1.0f - lerpRight) * f8) + (1.0f - lerpTop) * (lerpRight * f22 + (1.0f - lerpRight) * f29);
@@ -2632,10 +2372,10 @@ public class MixinTileRenderer {
             this.field_66 = this.field_68 = (flag6 ? f2 : 1.0f) * 0.6f;
             this.field_65 = this.field_68;
             this.field_64 = this.field_68;
-            lerpLeft = (float) Math.min((double) (1.0 - block.minZ), (double) 1.0);
-            lerpRight = (float) Math.max((double) (1.0 - block.maxZ), (double) 0.0);
-            lerpTop = (float) Math.min((double) block.maxY, (double) 1.0);
-            lerpBottom = (float) Math.max((double) block.minY, (double) 0.0);
+            lerpLeft = (float)Math.min(1.0 - block.minZ, 1.0);
+            lerpRight = (float)Math.max(1.0 - block.maxZ, 0.0);
+            lerpTop = (float)Math.min(block.maxY, 1.0);
+            lerpBottom = (float)Math.max(block.minY, 0.0);
             topLeft = lerpTop * (lerpLeft * f23 + (1.0f - lerpLeft) * f30) + (1.0f - lerpTop) * (lerpLeft * f16 + (1.0f - lerpLeft) * f9);
             bottomLeft = lerpBottom * (lerpLeft * f23 + (1.0f - lerpLeft) * f30) + (1.0f - lerpBottom) * (lerpLeft * f16 + (1.0f - lerpLeft) * f9);
             topRight = lerpTop * (lerpRight * f23 + (1.0f - lerpRight) * f30) + (1.0f - lerpTop) * (lerpRight * f16 + (1.0f - lerpRight) * f9);
@@ -2678,11 +2418,7 @@ public class MixinTileRenderer {
         return flag;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean method_58(MixinTile block, int i, int j, int k, float f, float f1, float f2) {
+    public boolean method_58(Tile block, int i, int j, int k, float f, float f1, float f2) {
         boolean isGrass;
         this.field_92 = false;
         Tessellator tessellator = Tessellator.INSTANCE;
@@ -2790,15 +2526,11 @@ public class MixinTileRenderer {
         return flag;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean method_77(MixinTile block, int i, int j, int k) {
+    public boolean method_77(Tile block, int i, int j, int k) {
         int l = block.getTint(this.field_82, i, j, k);
-        float f = (float) (l >> 16 & 0xFF) / 255.0f;
-        float f1 = (float) (l >> 8 & 0xFF) / 255.0f;
-        float f2 = (float) (l & 0xFF) / 255.0f;
+        float f = (float)(l >> 16 & 0xFF) / 255.0f;
+        float f1 = (float)(l >> 8 & 0xFF) / 255.0f;
+        float f2 = (float)(l & 0xFF) / 255.0f;
         if (GameRenderer.field_2340) {
             float f3 = (f * 30.0f + f1 * 59.0f + f2 * 11.0f) / 100.0f;
             float f4 = (f * 30.0f + f1 * 70.0f) / 100.0f;
@@ -2810,11 +2542,7 @@ public class MixinTileRenderer {
         return this.method_63(block, i, j, k, f, f1, f2);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean method_63(MixinTile block, int i, int j, int k, float f, float f1, float f2) {
+    public boolean method_63(Tile block, int i, int j, int k, float f, float f1, float f2) {
         Tessellator tessellator = Tessellator.INSTANCE;
         boolean flag = false;
         float f3 = 0.5f;
@@ -2897,11 +2625,7 @@ public class MixinTileRenderer {
         return flag;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean method_78(MixinTile block, int i, int j, int k) {
+    public boolean method_78(Tile block, int i, int j, int k) {
         float b2;
         float b1;
         double v2;
@@ -2972,68 +2696,68 @@ public class MixinTileRenderer {
             texture = block.method_1626(this.field_82, i, j, k, 0);
             u = (texture & 0xF) << 4;
             v = texture & 0xF0;
-            u1 = (double) u / 256.0;
-            u2 = ((double) u + 16.0 - 0.01) / 256.0;
-            v1 = ((double) v + 16.0 * (double) f3 - 1.0) / 256.0;
-            v2 = ((double) v + 16.0 * (double) f2 - 1.0 - 0.01) / 256.0;
+            u1 = (double)u / 256.0;
+            u2 = ((double)u + 16.0 - 0.01) / 256.0;
+            v1 = ((double)v + 16.0 * (double)f3 - 1.0) / 256.0;
+            v2 = ((double)v + 16.0 * (double)f2 - 1.0 - 0.01) / 256.0;
             b1 = this.field_82.getBrightness(i, j, k);
             b2 = this.field_82.getBrightness(i - 1, j, k + 1);
             tessellator.colour(b1 * 0.7f, b1 * 0.7f, b1 * 0.7f);
-            tessellator.vertex(f1 + (float) i, f2 + (float) j, f1 + (float) k, u1, v2);
-            tessellator.vertex(f1 + (float) i, f3 + (float) j, f1 + (float) k, u1, v1);
+            tessellator.vertex(f1 + (float)i, f2 + (float)j, f1 + (float)k, u1, v2);
+            tessellator.vertex(f1 + (float)i, f3 + (float)j, f1 + (float)k, u1, v1);
             tessellator.colour(b2 * 0.7f, b2 * 0.7f, b2 * 0.7f);
-            tessellator.vertex(f1 + (float) i - 1.0f, f3 + (float) j, f1 + (float) k + 1.0f, u2, v1);
-            tessellator.vertex(f1 + (float) i - 1.0f, f2 + (float) j, f1 + (float) k + 1.0f, u2, v2);
+            tessellator.vertex(f1 + (float)i - 1.0f, f3 + (float)j, f1 + (float)k + 1.0f, u2, v1);
+            tessellator.vertex(f1 + (float)i - 1.0f, f2 + (float)j, f1 + (float)k + 1.0f, u2, v2);
             tessellator.colour(b2 * 0.7f, b2 * 0.7f, b2 * 0.7f);
-            tessellator.vertex(f + (float) i - 1.0f, f2 + (float) j, f + (float) k + 1.0f, u2, v2);
-            tessellator.vertex(f + (float) i - 1.0f, f3 + (float) j, f + (float) k + 1.0f, u2, v1);
+            tessellator.vertex(f + (float)i - 1.0f, f2 + (float)j, f + (float)k + 1.0f, u2, v2);
+            tessellator.vertex(f + (float)i - 1.0f, f3 + (float)j, f + (float)k + 1.0f, u2, v1);
             tessellator.colour(b1 * 0.7f, b1 * 0.7f, b1 * 0.7f);
-            tessellator.vertex(f + (float) i, f3 + (float) j, f + (float) k, u1, v1);
-            tessellator.vertex(f + (float) i, f2 + (float) j, f + (float) k, u1, v2);
-            v1 = ((double) v + 16.0 * (double) f3) / 256.0;
-            v2 = ((double) v + 16.0 * (double) f3 + 2.0 - 0.01) / 256.0;
+            tessellator.vertex(f + (float)i, f3 + (float)j, f + (float)k, u1, v1);
+            tessellator.vertex(f + (float)i, f2 + (float)j, f + (float)k, u1, v2);
+            v1 = ((double)v + 16.0 * (double)f3) / 256.0;
+            v2 = ((double)v + 16.0 * (double)f3 + 2.0 - 0.01) / 256.0;
             tessellator.colour(b2 * 0.5f, b2 * 0.5f, b2 * 0.5f);
-            tessellator.vertex(f1 + (float) i - 1.0f, f2 + (float) j, f1 + (float) k + 1.0f, u2, v1);
-            tessellator.vertex(f + (float) i - 1.0f, f2 + (float) j, f + (float) k + 1.0f, u2, v2);
+            tessellator.vertex(f1 + (float)i - 1.0f, f2 + (float)j, f1 + (float)k + 1.0f, u2, v1);
+            tessellator.vertex(f + (float)i - 1.0f, f2 + (float)j, f + (float)k + 1.0f, u2, v2);
             tessellator.colour(b1 * 0.5f, b1 * 0.5f, b1 * 0.5f);
-            tessellator.vertex(f + (float) i, f2 + (float) j, f + (float) k, u1, v2);
-            tessellator.vertex(f1 + (float) i, f2 + (float) j, f1 + (float) k, u1, v1);
+            tessellator.vertex(f + (float)i, f2 + (float)j, f + (float)k, u1, v2);
+            tessellator.vertex(f1 + (float)i, f2 + (float)j, f1 + (float)k, u1, v1);
             tessellator.colour(b2, b2, b2);
-            tessellator.vertex(f + (float) i - 1.0f, f3 + (float) j, f + (float) k + 1.0f, u2, v1);
-            tessellator.vertex(f1 + (float) i - 1.0f, f3 + (float) j, f1 + (float) k + 1.0f, u2, v2);
+            tessellator.vertex(f + (float)i - 1.0f, f3 + (float)j, f + (float)k + 1.0f, u2, v1);
+            tessellator.vertex(f1 + (float)i - 1.0f, f3 + (float)j, f1 + (float)k + 1.0f, u2, v2);
             tessellator.colour(b1, b1, b1);
-            tessellator.vertex(f1 + (float) i, f3 + (float) j, f1 + (float) k, u1, v2);
-            tessellator.vertex(f + (float) i, f3 + (float) j, f + (float) k, u1, v1);
+            tessellator.vertex(f1 + (float)i, f3 + (float)j, f1 + (float)k, u1, v2);
+            tessellator.vertex(f + (float)i, f3 + (float)j, f + (float)k, u1, v1);
             f2 = 0.75f;
             f3 = 0.9375f;
-            v1 = ((double) v + 16.0 * (double) f3 - 1.0) / 256.0;
-            v2 = ((double) v + 16.0 * (double) f2 - 1.0 - 0.01) / 256.0;
+            v1 = ((double)v + 16.0 * (double)f3 - 1.0) / 256.0;
+            v2 = ((double)v + 16.0 * (double)f2 - 1.0 - 0.01) / 256.0;
             tessellator.colour(b1 * 0.7f, b1 * 0.7f, b1 * 0.7f);
-            tessellator.vertex(f1 + (float) i, f2 + (float) j, f1 + (float) k, u1, v2);
-            tessellator.vertex(f1 + (float) i, f3 + (float) j, f1 + (float) k, u1, v1);
+            tessellator.vertex(f1 + (float)i, f2 + (float)j, f1 + (float)k, u1, v2);
+            tessellator.vertex(f1 + (float)i, f3 + (float)j, f1 + (float)k, u1, v1);
             tessellator.colour(b2 * 0.7f, b2 * 0.7f, b2 * 0.7f);
-            tessellator.vertex(f1 + (float) i - 1.0f, f3 + (float) j, f1 + (float) k + 1.0f, u2, v1);
-            tessellator.vertex(f1 + (float) i - 1.0f, f2 + (float) j, f1 + (float) k + 1.0f, u2, v2);
+            tessellator.vertex(f1 + (float)i - 1.0f, f3 + (float)j, f1 + (float)k + 1.0f, u2, v1);
+            tessellator.vertex(f1 + (float)i - 1.0f, f2 + (float)j, f1 + (float)k + 1.0f, u2, v2);
             tessellator.colour(b2 * 0.7f, b2 * 0.7f, b2 * 0.7f);
-            tessellator.vertex(f + (float) i - 1.0f, f2 + (float) j, f + (float) k + 1.0f, u2, v2);
-            tessellator.vertex(f + (float) i - 1.0f, f3 + (float) j, f + (float) k + 1.0f, u2, v1);
+            tessellator.vertex(f + (float)i - 1.0f, f2 + (float)j, f + (float)k + 1.0f, u2, v2);
+            tessellator.vertex(f + (float)i - 1.0f, f3 + (float)j, f + (float)k + 1.0f, u2, v1);
             tessellator.colour(b1 * 0.7f, b1 * 0.7f, b1 * 0.7f);
-            tessellator.vertex(f + (float) i, f3 + (float) j, f + (float) k, u1, v1);
-            tessellator.vertex(f + (float) i, f2 + (float) j, f + (float) k, u1, v2);
-            v1 = ((double) v + 16.0 * (double) f3) / 256.0;
-            v2 = ((double) v + 16.0 * (double) f3 - 2.0 - 0.01) / 256.0;
+            tessellator.vertex(f + (float)i, f3 + (float)j, f + (float)k, u1, v1);
+            tessellator.vertex(f + (float)i, f2 + (float)j, f + (float)k, u1, v2);
+            v1 = ((double)v + 16.0 * (double)f3) / 256.0;
+            v2 = ((double)v + 16.0 * (double)f3 - 2.0 - 0.01) / 256.0;
             tessellator.colour(b2 * 0.5f, b2 * 0.5f, b2 * 0.5f);
-            tessellator.vertex(f1 + (float) i - 1.0f, f2 + (float) j, f1 + (float) k + 1.0f, u2, v1);
-            tessellator.vertex(f + (float) i - 1.0f, f2 + (float) j, f + (float) k + 1.0f, u2, v2);
+            tessellator.vertex(f1 + (float)i - 1.0f, f2 + (float)j, f1 + (float)k + 1.0f, u2, v1);
+            tessellator.vertex(f + (float)i - 1.0f, f2 + (float)j, f + (float)k + 1.0f, u2, v2);
             tessellator.colour(b1 * 0.5f, b1 * 0.5f, b1 * 0.5f);
-            tessellator.vertex(f + (float) i, f2 + (float) j, f + (float) k, u1, v2);
-            tessellator.vertex(f1 + (float) i, f2 + (float) j, f1 + (float) k, u1, v1);
+            tessellator.vertex(f + (float)i, f2 + (float)j, f + (float)k, u1, v2);
+            tessellator.vertex(f1 + (float)i, f2 + (float)j, f1 + (float)k, u1, v1);
             tessellator.colour(b2, b2, b2);
-            tessellator.vertex(f + (float) i - 1.0f, f3 + (float) j, f + (float) k + 1.0f, u2, v1);
-            tessellator.vertex(f1 + (float) i - 1.0f, f3 + (float) j, f1 + (float) k + 1.0f, u2, v2);
+            tessellator.vertex(f + (float)i - 1.0f, f3 + (float)j, f + (float)k + 1.0f, u2, v1);
+            tessellator.vertex(f1 + (float)i - 1.0f, f3 + (float)j, f1 + (float)k + 1.0f, u2, v2);
             tessellator.colour(b1, b1, b1);
-            tessellator.vertex(f1 + (float) i, f3 + (float) j, f1 + (float) k, u1, v2);
-            tessellator.vertex(f + (float) i, f3 + (float) j, f + (float) k, u1, v1);
+            tessellator.vertex(f1 + (float)i, f3 + (float)j, f1 + (float)k, u1, v2);
+            tessellator.vertex(f + (float)i, f3 + (float)j, f + (float)k, u1, v1);
         }
         if (this.field_82.getTileId(i + 1, j, k + 1) == block.id && !flag6 && !flag4) {
             f2 = 0.375f;
@@ -3042,85 +2766,81 @@ public class MixinTileRenderer {
             texture = block.method_1626(this.field_82, i, j, k, 0);
             u = (texture & 0xF) << 4;
             v = texture & 0xF0;
-            u1 = (double) u / 256.0;
-            u2 = ((double) u + 16.0 - 0.01) / 256.0;
-            v1 = ((double) v + 16.0 * (double) f3 - 1.0) / 256.0;
-            v2 = ((double) v + 16.0 * (double) f2 - 1.0 - 0.01) / 256.0;
+            u1 = (double)u / 256.0;
+            u2 = ((double)u + 16.0 - 0.01) / 256.0;
+            v1 = ((double)v + 16.0 * (double)f3 - 1.0) / 256.0;
+            v2 = ((double)v + 16.0 * (double)f2 - 1.0 - 0.01) / 256.0;
             b1 = this.field_82.getBrightness(i, j, k);
             b2 = this.field_82.getBrightness(i - 1, j, k + 1);
             tessellator.colour(b1 * 0.7f, b1 * 0.7f, b1 * 0.7f);
-            tessellator.vertex(f1 + (float) i, f2 + (float) j, f + (float) k, u1, v2);
-            tessellator.vertex(f1 + (float) i, f3 + (float) j, f + (float) k, u1, v1);
+            tessellator.vertex(f1 + (float)i, f2 + (float)j, f + (float)k, u1, v2);
+            tessellator.vertex(f1 + (float)i, f3 + (float)j, f + (float)k, u1, v1);
             tessellator.colour(b2 * 0.7f, b2 * 0.7f, b2 * 0.7f);
-            tessellator.vertex(f1 + (float) i + 1.0f, f3 + (float) j, f + (float) k + 1.0f, u2, v1);
-            tessellator.vertex(f1 + (float) i + 1.0f, f2 + (float) j, f + (float) k + 1.0f, u2, v2);
+            tessellator.vertex(f1 + (float)i + 1.0f, f3 + (float)j, f + (float)k + 1.0f, u2, v1);
+            tessellator.vertex(f1 + (float)i + 1.0f, f2 + (float)j, f + (float)k + 1.0f, u2, v2);
             tessellator.colour(b2 * 0.7f, b2 * 0.7f, b2 * 0.7f);
-            tessellator.vertex(f + (float) i + 1.0f, f2 + (float) j, f1 + (float) k + 1.0f, u2, v2);
-            tessellator.vertex(f + (float) i + 1.0f, f3 + (float) j, f1 + (float) k + 1.0f, u2, v1);
+            tessellator.vertex(f + (float)i + 1.0f, f2 + (float)j, f1 + (float)k + 1.0f, u2, v2);
+            tessellator.vertex(f + (float)i + 1.0f, f3 + (float)j, f1 + (float)k + 1.0f, u2, v1);
             tessellator.colour(b1 * 0.7f, b1 * 0.7f, b1 * 0.7f);
-            tessellator.vertex(f + (float) i, f3 + (float) j, f1 + (float) k, u1, v1);
-            tessellator.vertex(f + (float) i, f2 + (float) j, f1 + (float) k, u1, v2);
-            v1 = ((double) v + 16.0 * (double) f3) / 256.0;
-            v2 = ((double) v + 16.0 * (double) f3 + 2.0 - 0.01) / 256.0;
+            tessellator.vertex(f + (float)i, f3 + (float)j, f1 + (float)k, u1, v1);
+            tessellator.vertex(f + (float)i, f2 + (float)j, f1 + (float)k, u1, v2);
+            v1 = ((double)v + 16.0 * (double)f3) / 256.0;
+            v2 = ((double)v + 16.0 * (double)f3 + 2.0 - 0.01) / 256.0;
             tessellator.colour(b2 * 0.5f, b2 * 0.5f, b2 * 0.5f);
-            tessellator.vertex(f1 + (float) i + 1.0f, f2 + (float) j, f + (float) k + 1.0f, u2, v1);
-            tessellator.vertex(f + (float) i + 1.0f, f2 + (float) j, f1 + (float) k + 1.0f, u2, v2);
+            tessellator.vertex(f1 + (float)i + 1.0f, f2 + (float)j, f + (float)k + 1.0f, u2, v1);
+            tessellator.vertex(f + (float)i + 1.0f, f2 + (float)j, f1 + (float)k + 1.0f, u2, v2);
             tessellator.colour(b1 * 0.5f, b1 * 0.5f, b1 * 0.5f);
-            tessellator.vertex(f + (float) i, f2 + (float) j, f1 + (float) k, u1, v2);
-            tessellator.vertex(f1 + (float) i, f2 + (float) j, f + (float) k, u1, v1);
+            tessellator.vertex(f + (float)i, f2 + (float)j, f1 + (float)k, u1, v2);
+            tessellator.vertex(f1 + (float)i, f2 + (float)j, f + (float)k, u1, v1);
             tessellator.colour(b2, b2, b2);
-            tessellator.vertex(f + (float) i + 1.0f, f3 + (float) j, f1 + (float) k + 1.0f, u2, v1);
-            tessellator.vertex(f1 + (float) i + 1.0f, f3 + (float) j, f + (float) k + 1.0f, u2, v2);
+            tessellator.vertex(f + (float)i + 1.0f, f3 + (float)j, f1 + (float)k + 1.0f, u2, v1);
+            tessellator.vertex(f1 + (float)i + 1.0f, f3 + (float)j, f + (float)k + 1.0f, u2, v2);
             tessellator.colour(b1, b1, b1);
-            tessellator.vertex(f1 + (float) i, f3 + (float) j, f + (float) k, u1, v2);
-            tessellator.vertex(f + (float) i, f3 + (float) j, f1 + (float) k, u1, v1);
+            tessellator.vertex(f1 + (float)i, f3 + (float)j, f + (float)k, u1, v2);
+            tessellator.vertex(f + (float)i, f3 + (float)j, f1 + (float)k, u1, v1);
             f2 = 0.75f;
             f3 = 0.9375f;
-            v1 = ((double) v + 16.0 * (double) f3 - 1.0) / 256.0;
-            v2 = ((double) v + 16.0 * (double) f2 - 1.0 - 0.01) / 256.0;
+            v1 = ((double)v + 16.0 * (double)f3 - 1.0) / 256.0;
+            v2 = ((double)v + 16.0 * (double)f2 - 1.0 - 0.01) / 256.0;
             tessellator.colour(b1 * 0.7f, b1 * 0.7f, b1 * 0.7f);
-            tessellator.vertex(f1 + (float) i, f2 + (float) j, f + (float) k, u1, v2);
-            tessellator.vertex(f1 + (float) i, f3 + (float) j, f + (float) k, u1, v1);
+            tessellator.vertex(f1 + (float)i, f2 + (float)j, f + (float)k, u1, v2);
+            tessellator.vertex(f1 + (float)i, f3 + (float)j, f + (float)k, u1, v1);
             tessellator.colour(b2 * 0.7f, b2 * 0.7f, b2 * 0.7f);
-            tessellator.vertex(f1 + (float) i + 1.0f, f3 + (float) j, f + (float) k + 1.0f, u2, v1);
-            tessellator.vertex(f1 + (float) i + 1.0f, f2 + (float) j, f + (float) k + 1.0f, u2, v2);
+            tessellator.vertex(f1 + (float)i + 1.0f, f3 + (float)j, f + (float)k + 1.0f, u2, v1);
+            tessellator.vertex(f1 + (float)i + 1.0f, f2 + (float)j, f + (float)k + 1.0f, u2, v2);
             tessellator.colour(b2 * 0.7f, b2 * 0.7f, b2 * 0.7f);
-            tessellator.vertex(f + (float) i + 1.0f, f2 + (float) j, f1 + (float) k + 1.0f, u2, v2);
-            tessellator.vertex(f + (float) i + 1.0f, f3 + (float) j, f1 + (float) k + 1.0f, u2, v1);
+            tessellator.vertex(f + (float)i + 1.0f, f2 + (float)j, f1 + (float)k + 1.0f, u2, v2);
+            tessellator.vertex(f + (float)i + 1.0f, f3 + (float)j, f1 + (float)k + 1.0f, u2, v1);
             tessellator.colour(b1 * 0.7f, b1 * 0.7f, b1 * 0.7f);
-            tessellator.vertex(f + (float) i, f3 + (float) j, f1 + (float) k, u1, v1);
-            tessellator.vertex(f + (float) i, f2 + (float) j, f1 + (float) k, u1, v2);
-            v1 = ((double) v + 16.0 * (double) f3) / 256.0;
-            v2 = ((double) v + 16.0 * (double) f3 - 2.0 - 0.01) / 256.0;
+            tessellator.vertex(f + (float)i, f3 + (float)j, f1 + (float)k, u1, v1);
+            tessellator.vertex(f + (float)i, f2 + (float)j, f1 + (float)k, u1, v2);
+            v1 = ((double)v + 16.0 * (double)f3) / 256.0;
+            v2 = ((double)v + 16.0 * (double)f3 - 2.0 - 0.01) / 256.0;
             tessellator.colour(b2 * 0.5f, b2 * 0.5f, b2 * 0.5f);
-            tessellator.vertex(f1 + (float) i + 1.0f, f2 + (float) j, f + (float) k + 1.0f, u2, v1);
-            tessellator.vertex(f + (float) i + 1.0f, f2 + (float) j, f1 + (float) k + 1.0f, u2, v2);
+            tessellator.vertex(f1 + (float)i + 1.0f, f2 + (float)j, f + (float)k + 1.0f, u2, v1);
+            tessellator.vertex(f + (float)i + 1.0f, f2 + (float)j, f1 + (float)k + 1.0f, u2, v2);
             tessellator.colour(b1 * 0.5f, b1 * 0.5f, b1 * 0.5f);
-            tessellator.vertex(f + (float) i, f2 + (float) j, f1 + (float) k, u1, v2);
-            tessellator.vertex(f1 + (float) i, f2 + (float) j, f + (float) k, u1, v1);
+            tessellator.vertex(f + (float)i, f2 + (float)j, f1 + (float)k, u1, v2);
+            tessellator.vertex(f1 + (float)i, f2 + (float)j, f + (float)k, u1, v1);
             tessellator.colour(b2, b2, b2);
-            tessellator.vertex(f + (float) i + 1.0f, f3 + (float) j, f1 + (float) k + 1.0f, u2, v1);
-            tessellator.vertex(f1 + (float) i + 1.0f, f3 + (float) j, f + (float) k + 1.0f, u2, v2);
+            tessellator.vertex(f + (float)i + 1.0f, f3 + (float)j, f1 + (float)k + 1.0f, u2, v1);
+            tessellator.vertex(f1 + (float)i + 1.0f, f3 + (float)j, f + (float)k + 1.0f, u2, v2);
             tessellator.colour(b1, b1, b1);
-            tessellator.vertex(f1 + (float) i, f3 + (float) j, f + (float) k, u1, v2);
-            tessellator.vertex(f + (float) i, f3 + (float) j, f1 + (float) k, u1, v1);
+            tessellator.vertex(f1 + (float)i, f3 + (float)j, f + (float)k, u1, v2);
+            tessellator.vertex(f + (float)i, f3 + (float)j, f1 + (float)k, u1, v1);
         }
         block.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
         return flag;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean method_79(MixinTile block, int i, int j, int k) {
+    public boolean method_79(Tile block, int i, int j, int k) {
         boolean flag = false;
         int l = this.field_82.getTileMeta(i, j, k) & 3;
         block.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 0.5f, 1.0f);
         this.method_76(block, i, j, k);
         if (l == 0) {
             int m;
-            MixinTile b = Tile.BY_ID[this.field_82.getTileId(i - 1, j, k)];
+            Tile b = Tile.BY_ID[this.field_82.getTileId(i - 1, j, k)];
             if (b != null && b.method_1621() == 10) {
                 m = this.field_82.getTileMeta(i - 1, j, k) & 3;
                 if (m == 2) {
@@ -3148,7 +2868,7 @@ public class MixinTileRenderer {
             flag = true;
         } else if (l == 1) {
             int m = this.field_82.getTileMeta(i - 1, j, k) & 3;
-            MixinTile b = Tile.BY_ID[this.field_82.getTileId(i - 1, j, k)];
+            Tile b = Tile.BY_ID[this.field_82.getTileId(i - 1, j, k)];
             if (b != null && b.method_1621() == 10 && (m == 2 || m == 3)) {
                 if (m == 3) {
                     block.setBoundingBox(0.0f, 0.5f, 0.0f, 0.5f, 1.0f, 0.5f);
@@ -3175,7 +2895,7 @@ public class MixinTileRenderer {
             flag = true;
         } else if (l == 2) {
             int m;
-            MixinTile b = Tile.BY_ID[this.field_82.getTileId(i, j, k - 1)];
+            Tile b = Tile.BY_ID[this.field_82.getTileId(i, j, k - 1)];
             if (b != null && b.method_1621() == 10) {
                 m = this.field_82.getTileMeta(i, j, k - 1) & 3;
                 if (m == 1) {
@@ -3203,7 +2923,7 @@ public class MixinTileRenderer {
             flag = true;
         } else if (l == 3) {
             int m;
-            MixinTile b = Tile.BY_ID[this.field_82.getTileId(i, j, k + 1)];
+            Tile b = Tile.BY_ID[this.field_82.getTileId(i, j, k + 1)];
             if (b != null && b.method_1621() == 10) {
                 m = this.field_82.getTileMeta(i, j, k + 1) & 3;
                 if (m == 1) {
@@ -3234,20 +2954,16 @@ public class MixinTileRenderer {
         return flag;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean renderBlockSlope(MixinTile block, int i, int j, int k) {
+    public boolean renderBlockSlope(Tile block, int i, int j, int k) {
         Tessellator tessellator = Tessellator.INSTANCE;
         int l = this.field_82.getTileMeta(i, j, k) & 3;
         int texture = block.method_1626(this.field_82, i, j, k, 0);
         int u = (texture & 0xF) << 4;
         int v = texture & 0xF0;
-        double u1 = (double) u / 256.0;
-        double u2 = ((double) u + 16.0 - 0.01) / 256.0;
-        double v1 = (double) v / 256.0;
-        double v2 = ((double) v + 16.0 - 0.01) / 256.0;
+        double u1 = (double)u / 256.0;
+        double u2 = ((double)u + 16.0 - 0.01) / 256.0;
+        double v1 = (double)v / 256.0;
+        double v2 = ((double)v + 16.0 - 0.01) / 256.0;
         float b = block.method_1604(this.field_82, i, j, k);
         tessellator.colour(0.5f * b, 0.5f * b, 0.5f * b);
         block.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
@@ -3256,7 +2972,7 @@ public class MixinTileRenderer {
         tessellator.vertex(i + 1, j, k + 1, u2, v2);
         tessellator.vertex(i, j, k + 1, u1, v2);
         if (l == 0) {
-            MixinTile nB = Tile.BY_ID[this.field_82.getTileId(i - 1, j, k)];
+            Tile nB = Tile.BY_ID[this.field_82.getTileId(i - 1, j, k)];
             int m = this.field_82.getTileMeta(i - 1, j, k) & 3;
             if (nB != null && nB.method_1621() == 38 && (m == 2 || m == 3)) {
                 if (m == 2) {
@@ -3357,7 +3073,7 @@ public class MixinTileRenderer {
                 }
             }
         } else if (l == 1) {
-            MixinTile nB = Tile.BY_ID[this.field_82.getTileId(i + 1, j, k)];
+            Tile nB = Tile.BY_ID[this.field_82.getTileId(i + 1, j, k)];
             int m = this.field_82.getTileMeta(i + 1, j, k) & 3;
             if (nB != null && nB.method_1621() == 38 && (m == 2 || m == 3)) {
                 if (m == 2) {
@@ -3460,7 +3176,7 @@ public class MixinTileRenderer {
             }
         } else if (l == 2) {
             int m = this.field_82.getTileMeta(i, j, k - 1) & 3;
-            MixinTile nB = Tile.BY_ID[this.field_82.getTileId(i, j, k - 1)];
+            Tile nB = Tile.BY_ID[this.field_82.getTileId(i, j, k - 1)];
             if (nB != null && nB.method_1621() == 38 && (m == 0 || m == 1)) {
                 if (m == 1) {
                     tessellator.colour(0.8f * b, 0.8f * b, 0.8f * b);
@@ -3566,7 +3282,7 @@ public class MixinTileRenderer {
             }
         } else if (l == 3) {
             int m = this.field_82.getTileMeta(i, j, k + 1) & 3;
-            MixinTile nB = Tile.BY_ID[this.field_82.getTileId(i, j, k + 1)];
+            Tile nB = Tile.BY_ID[this.field_82.getTileId(i, j, k + 1)];
             if (nB != null && nB.method_1621() == 38 && (m == 0 || m == 1)) {
                 if (m == 1) {
                     tessellator.colour(0.6f * b, 0.6f * b, 0.6f * b);
@@ -3674,13 +3390,9 @@ public class MixinTileRenderer {
         return true;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean method_80(MixinTile block, int i, int j, int k) {
+    public boolean method_80(Tile block, int i, int j, int k) {
         Tessellator tessellator = Tessellator.INSTANCE;
-        MixinDoorTile blockdoor = (MixinDoorTile) block;
+        DoorTile blockdoor = (DoorTile)block;
         boolean flag = false;
         float f = 0.5f;
         float f1 = 1.0f;
@@ -3774,38 +3486,34 @@ public class MixinTileRenderer {
         return flag;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_46(MixinTile block, double d, double d1, double d2, int i) {
+    public void method_46(Tile block, double d, double d1, double d2, int i) {
         Tessellator tessellator = Tessellator.INSTANCE;
         if (this.field_83 >= 0) {
             i = this.field_83;
         }
         int j = (i & 0xF) << 4;
         int k = i & 0xF0;
-        double d3 = ((double) j + block.minX * 16.0) / 256.0;
-        double d4 = ((double) j + block.maxX * 16.0 - 0.01) / 256.0;
-        double d5 = ((double) k + block.minZ * 16.0) / 256.0;
-        double d6 = ((double) k + block.maxZ * 16.0 - 0.01) / 256.0;
+        double d3 = ((double)j + block.minX * 16.0) / 256.0;
+        double d4 = ((double)j + block.maxX * 16.0 - 0.01) / 256.0;
+        double d5 = ((double)k + block.minZ * 16.0) / 256.0;
+        double d6 = ((double)k + block.maxZ * 16.0 - 0.01) / 256.0;
         if (block.minX < 0.0 || block.maxX > 1.0) {
-            d3 = ((float) j + 0.0f) / 256.0f;
-            d4 = ((float) j + 15.99f) / 256.0f;
+            d3 = ((float)j + 0.0f) / 256.0f;
+            d4 = ((float)j + 15.99f) / 256.0f;
         }
         if (block.minZ < 0.0 || block.maxZ > 1.0) {
-            d5 = ((float) k + 0.0f) / 256.0f;
-            d6 = ((float) k + 15.99f) / 256.0f;
+            d5 = ((float)k + 0.0f) / 256.0f;
+            d6 = ((float)k + 15.99f) / 256.0f;
         }
         double d7 = d4;
         double d8 = d3;
         double d9 = d5;
         double d10 = d6;
         if (this.field_91 == 2) {
-            d3 = ((double) j + block.minZ * 16.0) / 256.0;
-            d5 = ((double) (k + 16) - block.maxX * 16.0) / 256.0;
-            d4 = ((double) j + block.maxZ * 16.0) / 256.0;
-            d6 = ((double) (k + 16) - block.minX * 16.0) / 256.0;
+            d3 = ((double)j + block.minZ * 16.0) / 256.0;
+            d5 = ((double)(k + 16) - block.maxX * 16.0) / 256.0;
+            d4 = ((double)j + block.maxZ * 16.0) / 256.0;
+            d6 = ((double)(k + 16) - block.minX * 16.0) / 256.0;
             d7 = d4;
             d8 = d3;
             d9 = d5;
@@ -3815,10 +3523,10 @@ public class MixinTileRenderer {
             d5 = d6;
             d6 = d9;
         } else if (this.field_91 == 1) {
-            d3 = ((double) (j + 16) - block.maxZ * 16.0) / 256.0;
-            d5 = ((double) k + block.minX * 16.0) / 256.0;
-            d4 = ((double) (j + 16) - block.minZ * 16.0) / 256.0;
-            d6 = ((double) k + block.maxX * 16.0) / 256.0;
+            d3 = ((double)(j + 16) - block.maxZ * 16.0) / 256.0;
+            d5 = ((double)k + block.minX * 16.0) / 256.0;
+            d4 = ((double)(j + 16) - block.minZ * 16.0) / 256.0;
+            d6 = ((double)k + block.maxX * 16.0) / 256.0;
             d7 = d4;
             d8 = d3;
             d9 = d5;
@@ -3828,10 +3536,10 @@ public class MixinTileRenderer {
             d9 = d6;
             d10 = d5;
         } else if (this.field_91 == 3) {
-            d3 = ((double) (j + 16) - block.minX * 16.0) / 256.0;
-            d4 = ((double) (j + 16) - block.maxX * 16.0 - 0.01) / 256.0;
-            d5 = ((double) (k + 16) - block.minZ * 16.0) / 256.0;
-            d6 = ((double) (k + 16) - block.maxZ * 16.0 - 0.01) / 256.0;
+            d3 = ((double)(j + 16) - block.minX * 16.0) / 256.0;
+            d4 = ((double)(j + 16) - block.maxX * 16.0 - 0.01) / 256.0;
+            d5 = ((double)(k + 16) - block.minZ * 16.0) / 256.0;
+            d6 = ((double)(k + 16) - block.maxZ * 16.0 - 0.01) / 256.0;
             d7 = d4;
             d8 = d3;
             d9 = d5;
@@ -3859,38 +3567,34 @@ public class MixinTileRenderer {
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_55(MixinTile block, double d, double d1, double d2, int i) {
+    public void method_55(Tile block, double d, double d1, double d2, int i) {
         Tessellator tessellator = Tessellator.INSTANCE;
         if (this.field_83 >= 0) {
             i = this.field_83;
         }
         int j = (i & 0xF) << 4;
         int k = i & 0xF0;
-        double d3 = ((double) j + block.minX * 16.0) / 256.0;
-        double d4 = ((double) j + block.maxX * 16.0 - 0.01) / 256.0;
-        double d5 = ((double) k + block.minZ * 16.0) / 256.0;
-        double d6 = ((double) k + block.maxZ * 16.0 - 0.01) / 256.0;
+        double d3 = ((double)j + block.minX * 16.0) / 256.0;
+        double d4 = ((double)j + block.maxX * 16.0 - 0.01) / 256.0;
+        double d5 = ((double)k + block.minZ * 16.0) / 256.0;
+        double d6 = ((double)k + block.maxZ * 16.0 - 0.01) / 256.0;
         if (block.minX < 0.0 || block.maxX > 1.0) {
-            d3 = ((float) j + 0.0f) / 256.0f;
-            d4 = ((float) j + 15.99f) / 256.0f;
+            d3 = ((float)j + 0.0f) / 256.0f;
+            d4 = ((float)j + 15.99f) / 256.0f;
         }
         if (block.minZ < 0.0 || block.maxZ > 1.0) {
-            d5 = ((float) k + 0.0f) / 256.0f;
-            d6 = ((float) k + 15.99f) / 256.0f;
+            d5 = ((float)k + 0.0f) / 256.0f;
+            d6 = ((float)k + 15.99f) / 256.0f;
         }
         double d7 = d4;
         double d8 = d3;
         double d9 = d5;
         double d10 = d6;
         if (this.field_90 == 1) {
-            d3 = ((double) j + block.minZ * 16.0) / 256.0;
-            d5 = ((double) (k + 16) - block.maxX * 16.0) / 256.0;
-            d4 = ((double) j + block.maxZ * 16.0) / 256.0;
-            d6 = ((double) (k + 16) - block.minX * 16.0) / 256.0;
+            d3 = ((double)j + block.minZ * 16.0) / 256.0;
+            d5 = ((double)(k + 16) - block.maxX * 16.0) / 256.0;
+            d4 = ((double)j + block.maxZ * 16.0) / 256.0;
+            d6 = ((double)(k + 16) - block.minX * 16.0) / 256.0;
             d7 = d4;
             d8 = d3;
             d9 = d5;
@@ -3900,10 +3604,10 @@ public class MixinTileRenderer {
             d5 = d6;
             d6 = d9;
         } else if (this.field_90 == 2) {
-            d3 = ((double) (j + 16) - block.maxZ * 16.0) / 256.0;
-            d5 = ((double) k + block.minX * 16.0) / 256.0;
-            d4 = ((double) (j + 16) - block.minZ * 16.0) / 256.0;
-            d6 = ((double) k + block.maxX * 16.0) / 256.0;
+            d3 = ((double)(j + 16) - block.maxZ * 16.0) / 256.0;
+            d5 = ((double)k + block.minX * 16.0) / 256.0;
+            d4 = ((double)(j + 16) - block.minZ * 16.0) / 256.0;
+            d6 = ((double)k + block.maxX * 16.0) / 256.0;
             d7 = d4;
             d8 = d3;
             d9 = d5;
@@ -3913,10 +3617,10 @@ public class MixinTileRenderer {
             d9 = d6;
             d10 = d5;
         } else if (this.field_90 == 3) {
-            d3 = ((double) (j + 16) - block.minX * 16.0) / 256.0;
-            d4 = ((double) (j + 16) - block.maxX * 16.0 - 0.01) / 256.0;
-            d5 = ((double) (k + 16) - block.minZ * 16.0) / 256.0;
-            d6 = ((double) (k + 16) - block.maxZ * 16.0 - 0.01) / 256.0;
+            d3 = ((double)(j + 16) - block.minX * 16.0) / 256.0;
+            d4 = ((double)(j + 16) - block.maxX * 16.0 - 0.01) / 256.0;
+            d5 = ((double)(k + 16) - block.minZ * 16.0) / 256.0;
+            d6 = ((double)(k + 16) - block.maxZ * 16.0 - 0.01) / 256.0;
             d7 = d4;
             d8 = d3;
             d9 = d5;
@@ -3944,43 +3648,39 @@ public class MixinTileRenderer {
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_61(MixinTile block, double d, double d1, double d2, int i) {
+    public void method_61(Tile block, double d, double d1, double d2, int i) {
         Tessellator tessellator = Tessellator.INSTANCE;
         if (this.field_83 >= 0) {
             i = this.field_83;
         }
         int j = (i & 0xF) << 4;
         int k = i & 0xF0;
-        double d3 = ((double) j + block.minX * 16.0) / 256.0;
-        double d4 = ((double) j + block.maxX * 16.0 - 0.01) / 256.0;
-        double d5 = ((double) (k + 16) - block.maxY * 16.0) / 256.0;
-        double d6 = ((double) (k + 16) - block.minY * 16.0 - 0.01) / 256.0;
+        double d3 = ((double)j + block.minX * 16.0) / 256.0;
+        double d4 = ((double)j + block.maxX * 16.0 - 0.01) / 256.0;
+        double d5 = ((double)(k + 16) - block.maxY * 16.0) / 256.0;
+        double d6 = ((double)(k + 16) - block.minY * 16.0 - 0.01) / 256.0;
         if (this.field_84) {
             double d7 = d3;
             d3 = d4;
             d4 = d7;
         }
         if (block.minX < 0.0 || block.maxX > 1.0) {
-            d3 = ((float) j + 0.0f) / 256.0f;
-            d4 = ((float) j + 15.99f) / 256.0f;
+            d3 = ((float)j + 0.0f) / 256.0f;
+            d4 = ((float)j + 15.99f) / 256.0f;
         }
         if (block.minY < 0.0 || block.maxY > 1.0) {
-            d5 = ((float) k + 0.0f) / 256.0f;
-            d6 = ((float) k + 15.99f) / 256.0f;
+            d5 = ((float)k + 0.0f) / 256.0f;
+            d6 = ((float)k + 15.99f) / 256.0f;
         }
         double d8 = d4;
         double d9 = d3;
         double d10 = d5;
         double d11 = d6;
         if (this.field_86 == 2) {
-            d3 = ((double) j + block.minY * 16.0) / 256.0;
-            d5 = ((double) (k + 16) - block.minX * 16.0) / 256.0;
-            d4 = ((double) j + block.maxY * 16.0) / 256.0;
-            d6 = ((double) (k + 16) - block.maxX * 16.0) / 256.0;
+            d3 = ((double)j + block.minY * 16.0) / 256.0;
+            d5 = ((double)(k + 16) - block.minX * 16.0) / 256.0;
+            d4 = ((double)j + block.maxY * 16.0) / 256.0;
+            d6 = ((double)(k + 16) - block.maxX * 16.0) / 256.0;
             d8 = d4;
             d9 = d3;
             d10 = d5;
@@ -3990,10 +3690,10 @@ public class MixinTileRenderer {
             d5 = d6;
             d6 = d10;
         } else if (this.field_86 == 1) {
-            d3 = ((double) (j + 16) - block.maxY * 16.0) / 256.0;
-            d5 = ((double) k + block.maxX * 16.0) / 256.0;
-            d4 = ((double) (j + 16) - block.minY * 16.0) / 256.0;
-            d6 = ((double) k + block.minX * 16.0) / 256.0;
+            d3 = ((double)(j + 16) - block.maxY * 16.0) / 256.0;
+            d5 = ((double)k + block.maxX * 16.0) / 256.0;
+            d4 = ((double)(j + 16) - block.minY * 16.0) / 256.0;
+            d6 = ((double)k + block.minX * 16.0) / 256.0;
             d8 = d4;
             d9 = d3;
             d10 = d5;
@@ -4003,10 +3703,10 @@ public class MixinTileRenderer {
             d10 = d6;
             d11 = d5;
         } else if (this.field_86 == 3) {
-            d3 = ((double) (j + 16) - block.minX * 16.0) / 256.0;
-            d4 = ((double) (j + 16) - block.maxX * 16.0 - 0.01) / 256.0;
-            d5 = ((double) k + block.maxY * 16.0) / 256.0;
-            d6 = ((double) k + block.minY * 16.0 - 0.01) / 256.0;
+            d3 = ((double)(j + 16) - block.minX * 16.0) / 256.0;
+            d4 = ((double)(j + 16) - block.maxX * 16.0 - 0.01) / 256.0;
+            d5 = ((double)k + block.maxY * 16.0) / 256.0;
+            d6 = ((double)k + block.minY * 16.0 - 0.01) / 256.0;
             d8 = d4;
             d9 = d3;
             d10 = d5;
@@ -4034,43 +3734,39 @@ public class MixinTileRenderer {
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_65(MixinTile block, double d, double d1, double d2, int i) {
+    public void method_65(Tile block, double d, double d1, double d2, int i) {
         Tessellator tessellator = Tessellator.INSTANCE;
         if (this.field_83 >= 0) {
             i = this.field_83;
         }
         int j = (i & 0xF) << 4;
         int k = i & 0xF0;
-        double d3 = ((double) j + block.minX * 16.0) / 256.0;
-        double d4 = ((double) j + block.maxX * 16.0 - 0.01) / 256.0;
-        double d5 = ((double) (k + 16) - block.maxY * 16.0) / 256.0;
-        double d6 = ((double) (k + 16) - block.minY * 16.0 - 0.01) / 256.0;
+        double d3 = ((double)j + block.minX * 16.0) / 256.0;
+        double d4 = ((double)j + block.maxX * 16.0 - 0.01) / 256.0;
+        double d5 = ((double)(k + 16) - block.maxY * 16.0) / 256.0;
+        double d6 = ((double)(k + 16) - block.minY * 16.0 - 0.01) / 256.0;
         if (this.field_84) {
             double d7 = d3;
             d3 = d4;
             d4 = d7;
         }
         if (block.minX < 0.0 || block.maxX > 1.0) {
-            d3 = ((float) j + 0.0f) / 256.0f;
-            d4 = ((float) j + 15.99f) / 256.0f;
+            d3 = ((float)j + 0.0f) / 256.0f;
+            d4 = ((float)j + 15.99f) / 256.0f;
         }
         if (block.minY < 0.0 || block.maxY > 1.0) {
-            d5 = ((float) k + 0.0f) / 256.0f;
-            d6 = ((float) k + 15.99f) / 256.0f;
+            d5 = ((float)k + 0.0f) / 256.0f;
+            d6 = ((float)k + 15.99f) / 256.0f;
         }
         double d8 = d4;
         double d9 = d3;
         double d10 = d5;
         double d11 = d6;
         if (this.field_87 == 1) {
-            d3 = ((double) j + block.minY * 16.0) / 256.0;
-            d6 = ((double) (k + 16) - block.minX * 16.0) / 256.0;
-            d4 = ((double) j + block.maxY * 16.0) / 256.0;
-            d5 = ((double) (k + 16) - block.maxX * 16.0) / 256.0;
+            d3 = ((double)j + block.minY * 16.0) / 256.0;
+            d6 = ((double)(k + 16) - block.minX * 16.0) / 256.0;
+            d4 = ((double)j + block.maxY * 16.0) / 256.0;
+            d5 = ((double)(k + 16) - block.maxX * 16.0) / 256.0;
             d8 = d4;
             d9 = d3;
             d10 = d5;
@@ -4080,10 +3776,10 @@ public class MixinTileRenderer {
             d5 = d6;
             d6 = d10;
         } else if (this.field_87 == 2) {
-            d3 = ((double) (j + 16) - block.maxY * 16.0) / 256.0;
-            d5 = ((double) k + block.minX * 16.0) / 256.0;
-            d4 = ((double) (j + 16) - block.minY * 16.0) / 256.0;
-            d6 = ((double) k + block.maxX * 16.0) / 256.0;
+            d3 = ((double)(j + 16) - block.maxY * 16.0) / 256.0;
+            d5 = ((double)k + block.minX * 16.0) / 256.0;
+            d4 = ((double)(j + 16) - block.minY * 16.0) / 256.0;
+            d6 = ((double)k + block.maxX * 16.0) / 256.0;
             d8 = d4;
             d9 = d3;
             d10 = d5;
@@ -4093,10 +3789,10 @@ public class MixinTileRenderer {
             d10 = d6;
             d11 = d5;
         } else if (this.field_87 == 3) {
-            d3 = ((double) (j + 16) - block.minX * 16.0) / 256.0;
-            d4 = ((double) (j + 16) - block.maxX * 16.0 - 0.01) / 256.0;
-            d5 = ((double) k + block.maxY * 16.0) / 256.0;
-            d6 = ((double) k + block.minY * 16.0 - 0.01) / 256.0;
+            d3 = ((double)(j + 16) - block.minX * 16.0) / 256.0;
+            d4 = ((double)(j + 16) - block.maxX * 16.0 - 0.01) / 256.0;
+            d5 = ((double)k + block.maxY * 16.0) / 256.0;
+            d6 = ((double)k + block.minY * 16.0 - 0.01) / 256.0;
             d8 = d4;
             d9 = d3;
             d10 = d5;
@@ -4124,43 +3820,39 @@ public class MixinTileRenderer {
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_67(MixinTile block, double d, double d1, double d2, int i) {
+    public void method_67(Tile block, double d, double d1, double d2, int i) {
         Tessellator tessellator = Tessellator.INSTANCE;
         if (this.field_83 >= 0) {
             i = this.field_83;
         }
         int j = (i & 0xF) << 4;
         int k = i & 0xF0;
-        double d3 = ((double) j + block.minZ * 16.0) / 256.0;
-        double d4 = ((double) j + block.maxZ * 16.0 - 0.01) / 256.0;
-        double d5 = ((double) k + (1.0 - block.maxY) * 16.0) / 256.0;
-        double d6 = ((double) k + (1.0 - block.minY) * 16.0 - 0.01) / 256.0;
+        double d3 = ((double)j + block.minZ * 16.0) / 256.0;
+        double d4 = ((double)j + block.maxZ * 16.0 - 0.01) / 256.0;
+        double d5 = ((double)k + (1.0 - block.maxY) * 16.0) / 256.0;
+        double d6 = ((double)k + (1.0 - block.minY) * 16.0 - 0.01) / 256.0;
         if (this.field_84) {
             double d7 = d3;
             d3 = d4;
             d4 = d7;
         }
         if (block.minZ < 0.0 || block.maxZ > 1.0) {
-            d3 = ((float) j + 0.0f) / 256.0f;
-            d4 = ((float) j + 15.99f) / 256.0f;
+            d3 = ((float)j + 0.0f) / 256.0f;
+            d4 = ((float)j + 15.99f) / 256.0f;
         }
         if (block.minY < 0.0 || block.maxY > 1.0) {
-            d5 = ((float) k + 0.0f) / 256.0f;
-            d6 = ((float) k + 15.99f) / 256.0f;
+            d5 = ((float)k + 0.0f) / 256.0f;
+            d6 = ((float)k + 15.99f) / 256.0f;
         }
         double d8 = d4;
         double d9 = d3;
         double d10 = d5;
         double d11 = d6;
         if (this.field_89 == 1) {
-            d3 = ((double) j + block.minY * 16.0) / 256.0;
-            d5 = ((double) (k + 16) - block.maxZ * 16.0) / 256.0;
-            d4 = ((double) j + block.maxY * 16.0) / 256.0;
-            d6 = ((double) (k + 16) - block.minZ * 16.0) / 256.0;
+            d3 = ((double)j + block.minY * 16.0) / 256.0;
+            d5 = ((double)(k + 16) - block.maxZ * 16.0) / 256.0;
+            d4 = ((double)j + block.maxY * 16.0) / 256.0;
+            d6 = ((double)(k + 16) - block.minZ * 16.0) / 256.0;
             d8 = d4;
             d9 = d3;
             d10 = d5;
@@ -4170,10 +3862,10 @@ public class MixinTileRenderer {
             d5 = d6;
             d6 = d10;
         } else if (this.field_89 == 2) {
-            d3 = ((double) (j + 16) - block.maxY * 16.0) / 256.0;
-            d5 = ((double) k + block.minZ * 16.0) / 256.0;
-            d4 = ((double) (j + 16) - block.minY * 16.0) / 256.0;
-            d6 = ((double) k + block.maxZ * 16.0) / 256.0;
+            d3 = ((double)(j + 16) - block.maxY * 16.0) / 256.0;
+            d5 = ((double)k + block.minZ * 16.0) / 256.0;
+            d4 = ((double)(j + 16) - block.minY * 16.0) / 256.0;
+            d6 = ((double)k + block.maxZ * 16.0) / 256.0;
             d8 = d4;
             d9 = d3;
             d10 = d5;
@@ -4183,10 +3875,10 @@ public class MixinTileRenderer {
             d10 = d6;
             d11 = d5;
         } else if (this.field_89 == 3) {
-            d3 = ((double) (j + 16) - block.minZ * 16.0) / 256.0;
-            d4 = ((double) (j + 16) - block.maxZ * 16.0 - 0.01) / 256.0;
-            d5 = ((double) k + block.maxY * 16.0) / 256.0;
-            d6 = ((double) k + block.minY * 16.0 - 0.01) / 256.0;
+            d3 = ((double)(j + 16) - block.minZ * 16.0) / 256.0;
+            d4 = ((double)(j + 16) - block.maxZ * 16.0 - 0.01) / 256.0;
+            d5 = ((double)k + block.maxY * 16.0) / 256.0;
+            d6 = ((double)k + block.minY * 16.0 - 0.01) / 256.0;
             d8 = d4;
             d9 = d3;
             d10 = d5;
@@ -4214,43 +3906,39 @@ public class MixinTileRenderer {
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_69(MixinTile block, double d, double d1, double d2, int i) {
+    public void method_69(Tile block, double d, double d1, double d2, int i) {
         Tessellator tessellator = Tessellator.INSTANCE;
         if (this.field_83 >= 0) {
             i = this.field_83;
         }
         int j = (i & 0xF) << 4;
         int k = i & 0xF0;
-        double d3 = ((double) j + block.minZ * 16.0) / 256.0;
-        double d4 = ((double) j + block.maxZ * 16.0 - 0.01) / 256.0;
-        double d5 = ((double) k + (1.0 - block.maxY) * 16.0) / 256.0;
-        double d6 = ((double) k + (1.0 - block.minY) * 16.0 - 0.01) / 256.0;
+        double d3 = ((double)j + block.minZ * 16.0) / 256.0;
+        double d4 = ((double)j + block.maxZ * 16.0 - 0.01) / 256.0;
+        double d5 = ((double)k + (1.0 - block.maxY) * 16.0) / 256.0;
+        double d6 = ((double)k + (1.0 - block.minY) * 16.0 - 0.01) / 256.0;
         if (this.field_84) {
             double d7 = d3;
             d3 = d4;
             d4 = d7;
         }
         if (block.minZ < 0.0 || block.maxZ > 1.0) {
-            d3 = ((float) j + 0.0f) / 256.0f;
-            d4 = ((float) j + 15.99f) / 256.0f;
+            d3 = ((float)j + 0.0f) / 256.0f;
+            d4 = ((float)j + 15.99f) / 256.0f;
         }
         if (block.minY < 0.0 || block.maxY > 1.0) {
-            d5 = ((float) k + 0.0f) / 256.0f;
-            d6 = ((float) k + 15.99f) / 256.0f;
+            d5 = ((float)k + 0.0f) / 256.0f;
+            d6 = ((float)k + 15.99f) / 256.0f;
         }
         double d8 = d4;
         double d9 = d3;
         double d10 = d5;
         double d11 = d6;
         if (this.field_88 == 2) {
-            d3 = ((double) j + block.minY * 16.0) / 256.0;
-            d5 = ((double) (k + 16) - block.minZ * 16.0) / 256.0;
-            d4 = ((double) j + block.maxY * 16.0) / 256.0;
-            d6 = ((double) (k + 16) - block.maxZ * 16.0) / 256.0;
+            d3 = ((double)j + block.minY * 16.0) / 256.0;
+            d5 = ((double)(k + 16) - block.minZ * 16.0) / 256.0;
+            d4 = ((double)j + block.maxY * 16.0) / 256.0;
+            d6 = ((double)(k + 16) - block.maxZ * 16.0) / 256.0;
             d8 = d4;
             d9 = d3;
             d10 = d5;
@@ -4260,10 +3948,10 @@ public class MixinTileRenderer {
             d5 = d6;
             d6 = d10;
         } else if (this.field_88 == 1) {
-            d3 = ((double) (j + 16) - block.maxY * 16.0) / 256.0;
-            d5 = ((double) k + block.maxZ * 16.0) / 256.0;
-            d4 = ((double) (j + 16) - block.minY * 16.0) / 256.0;
-            d6 = ((double) k + block.minZ * 16.0) / 256.0;
+            d3 = ((double)(j + 16) - block.maxY * 16.0) / 256.0;
+            d5 = ((double)k + block.maxZ * 16.0) / 256.0;
+            d4 = ((double)(j + 16) - block.minY * 16.0) / 256.0;
+            d6 = ((double)k + block.minZ * 16.0) / 256.0;
             d8 = d4;
             d9 = d3;
             d10 = d5;
@@ -4273,10 +3961,10 @@ public class MixinTileRenderer {
             d10 = d6;
             d11 = d5;
         } else if (this.field_88 == 3) {
-            d3 = ((double) (j + 16) - block.minZ * 16.0) / 256.0;
-            d4 = ((double) (j + 16) - block.maxZ * 16.0 - 0.01) / 256.0;
-            d5 = ((double) k + block.maxY * 16.0) / 256.0;
-            d6 = ((double) k + block.minY * 16.0 - 0.01) / 256.0;
+            d3 = ((double)(j + 16) - block.minZ * 16.0) / 256.0;
+            d4 = ((double)(j + 16) - block.maxZ * 16.0 - 0.01) / 256.0;
+            d5 = ((double)k + block.maxY * 16.0) / 256.0;
+            d6 = ((double)k + block.minY * 16.0 - 0.01) / 256.0;
             d8 = d4;
             d9 = d3;
             d10 = d5;
@@ -4304,26 +3992,22 @@ public class MixinTileRenderer {
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_48(MixinTile block, int i, float f) {
+    public void method_48(Tile block, int i, float f) {
         int k;
         Tessellator tessellator = Tessellator.INSTANCE;
         if (this.field_81) {
             int j = block.method_1589(i);
-            float f1 = (float) (j >> 16 & 0xFF) / 255.0f;
-            float f3 = (float) (j >> 8 & 0xFF) / 255.0f;
-            float f5 = (float) (j & 0xFF) / 255.0f;
-            GL11.glColor4f((float) (f1 * f), (float) (f3 * f), (float) (f5 * f), (float) 1.0f);
+            float f1 = (float)(j >> 16 & 0xFF) / 255.0f;
+            float f3 = (float)(j >> 8 & 0xFF) / 255.0f;
+            float f5 = (float)(j & 0xFF) / 255.0f;
+            GL11.glColor4f(f1 * f, f3 * f, f5 * f, 1.0f);
         }
         if ((k = block.method_1621()) == 0 || k == 16) {
             if (k == 16) {
                 i = 1;
             }
             block.method_1605();
-            GL11.glTranslatef((float) -0.5f, (float) -0.5f, (float) -0.5f);
+            GL11.glTranslatef(-0.5f, -0.5f, -0.5f);
             tessellator.start();
             tessellator.method_1697(0.0f, -1.0f, 0.0f);
             this.method_46(block, 0.0, 0.0, 0.0, block.getTextureForSide(0, i));
@@ -4348,7 +4032,7 @@ public class MixinTileRenderer {
             tessellator.method_1697(1.0f, 0.0f, 0.0f);
             this.method_69(block, 0.0, 0.0, 0.0, block.getTextureForSide(5, i));
             tessellator.draw();
-            GL11.glTranslatef((float) 0.5f, (float) 0.5f, (float) 0.5f);
+            GL11.glTranslatef(0.5f, 0.5f, 0.5f);
         } else if (k == 1) {
             tessellator.start();
             tessellator.method_1697(0.0f, -1.0f, 0.0f);
@@ -4356,7 +4040,7 @@ public class MixinTileRenderer {
             tessellator.draw();
         } else if (k == 13) {
             block.method_1605();
-            GL11.glTranslatef((float) -0.5f, (float) -0.5f, (float) -0.5f);
+            GL11.glTranslatef(-0.5f, -0.5f, -0.5f);
             float f2 = 0.0625f;
             tessellator.start();
             tessellator.method_1697(0.0f, -1.0f, 0.0f);
@@ -4390,7 +4074,7 @@ public class MixinTileRenderer {
             this.method_69(block, 0.0, 0.0, 0.0, block.getTextureForSide(5, i));
             tessellator.changePrevPos(f2, 0.0f, 0.0f);
             tessellator.draw();
-            GL11.glTranslatef((float) 0.5f, (float) 0.5f, (float) 0.5f);
+            GL11.glTranslatef(0.5f, 0.5f, 0.5f);
         } else if (k == 6) {
             tessellator.start();
             tessellator.method_1697(0.0f, -1.0f, 0.0f);
@@ -4409,7 +4093,7 @@ public class MixinTileRenderer {
                 if (l == 1) {
                     block.setBoundingBox(0.0f, 0.0f, 0.5f, 1.0f, 0.5f, 1.0f);
                 }
-                GL11.glTranslatef((float) -0.5f, (float) -0.5f, (float) -0.5f);
+                GL11.glTranslatef(-0.5f, -0.5f, -0.5f);
                 tessellator.start();
                 tessellator.method_1697(0.0f, -1.0f, 0.0f);
                 this.method_46(block, 0.0, 0.0, 0.0, block.getTextureForSide(0, i));
@@ -4434,7 +4118,7 @@ public class MixinTileRenderer {
                 tessellator.method_1697(1.0f, 0.0f, 0.0f);
                 this.method_69(block, 0.0, 0.0, 0.0, block.getTextureForSide(5, i));
                 tessellator.draw();
-                GL11.glTranslatef((float) 0.5f, (float) 0.5f, (float) 0.5f);
+                GL11.glTranslatef(0.5f, 0.5f, 0.5f);
             }
         } else if (k == 11) {
             for (int i1 = 0; i1 < 4; ++i1) {
@@ -4452,7 +4136,7 @@ public class MixinTileRenderer {
                 if (i1 == 3) {
                     block.setBoundingBox(0.5f - f4, 0.5f - f4 * 3.0f, -f4 * 2.0f, 0.5f + f4, 0.5f - f4, 1.0f + f4 * 2.0f);
                 }
-                GL11.glTranslatef((float) -0.5f, (float) -0.5f, (float) -0.5f);
+                GL11.glTranslatef(-0.5f, -0.5f, -0.5f);
                 tessellator.start();
                 tessellator.method_1697(0.0f, -1.0f, 0.0f);
                 this.method_46(block, 0.0, 0.0, 0.0, block.getTextureForSide(0));
@@ -4477,16 +4161,12 @@ public class MixinTileRenderer {
                 tessellator.method_1697(1.0f, 0.0f, 0.0f);
                 this.method_69(block, 0.0, 0.0, 0.0, block.getTextureForSide(5));
                 tessellator.draw();
-                GL11.glTranslatef((float) 0.5f, (float) 0.5f, (float) 0.5f);
+                GL11.glTranslatef((float)0.5f, (float)0.5f, (float)0.5f);
             }
             block.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public static boolean method_42(int i) {
         if (i == 0) {
             return true;
@@ -4503,17 +4183,13 @@ public class MixinTileRenderer {
         return i == 16;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean renderGrass(MixinTile block, int i, int j, int k) {
+    public boolean renderGrass(Tile block, int i, int j, int k) {
         Tessellator tessellator = Tessellator.INSTANCE;
         float f = block.method_1604(this.field_82, i, j + 1, k);
         int l = block.getTint(this.field_82, i, j, k);
-        float r = (float) (l >> 16 & 0xFF) / 255.0f;
-        float g = (float) (l >> 8 & 0xFF) / 255.0f;
-        float b = (float) (l & 0xFF) / 255.0f;
+        float r = (float)(l >> 16 & 0xFF) / 255.0f;
+        float g = (float)(l >> 8 & 0xFF) / 255.0f;
+        float b = (float)(l & 0xFF) / 255.0f;
         int metadata = this.field_82.getTileMeta(i, j, k);
         float multiplier = Tile.GRASS.grassMultiplier(metadata);
         if (multiplier < 0.0f) {
@@ -4521,20 +4197,20 @@ public class MixinTileRenderer {
         }
         tessellator.colour(f * (r *= multiplier), f * (g *= multiplier), f * (b *= multiplier));
         double d = i;
-        double d1 = (float) j - 0.0625f + 1.0f;
+        double d1 = (float)j - 0.0625f + 1.0f;
         double d2 = k;
-        this.rand.setSeed((long) (i * i * 3121 + i * 45238971 + k * k * 418711 + k * 13761 + j));
+        this.rand.setSeed((long)(i * i * 3121 + i * 45238971 + k * k * 418711 + k * 13761 + j));
         j = 168;
         int u = (j & 0xF) << 4;
         int v = j & 0xF0;
-        double d3 = (float) (u += this.rand.nextInt(32)) / 256.0f;
-        double d4 = ((float) u + 15.99f) / 256.0f;
-        double d5 = (float) v / 256.0f;
-        double d6 = ((float) v + 15.99f) / 256.0f;
-        double d7 = d + 0.5 - (double) 0.45f;
-        double d8 = d + 0.5 + (double) 0.45f;
-        double d9 = d2 + 0.5 - (double) 0.45f;
-        double d10 = d2 + 0.5 + (double) 0.45f;
+        double d3 = (float)(u += this.rand.nextInt(32)) / 256.0f;
+        double d4 = ((float)u + 15.99f) / 256.0f;
+        double d5 = (float)v / 256.0f;
+        double d6 = ((float)v + 15.99f) / 256.0f;
+        double d7 = d + 0.5 - (double)0.45f;
+        double d8 = d + 0.5 + (double)0.45f;
+        double d9 = d2 + 0.5 - (double)0.45f;
+        double d10 = d2 + 0.5 + (double)0.45f;
         tessellator.vertex(d7, d1 + 1.0, d9, d3, d5);
         tessellator.vertex(d7, d1 + 0.0, d9, d3, d6);
         tessellator.vertex(d8, d1 + 0.0, d10, d4, d6);
@@ -4545,10 +4221,10 @@ public class MixinTileRenderer {
         tessellator.vertex(d7, d1 + 1.0, d9, d4, d5);
         u = (j & 0xF) << 4;
         v = j & 0xF0;
-        d3 = (float) (u += this.rand.nextInt(32)) / 256.0f;
-        d4 = ((float) u + 15.99f) / 256.0f;
-        d5 = (float) v / 256.0f;
-        d6 = ((float) v + 15.99f) / 256.0f;
+        d3 = (float)(u += this.rand.nextInt(32)) / 256.0f;
+        d4 = ((float)u + 15.99f) / 256.0f;
+        d5 = (float)v / 256.0f;
+        d6 = ((float)v + 15.99f) / 256.0f;
         tessellator.vertex(d7, d1 + 1.0, d10, d3, d5);
         tessellator.vertex(d7, d1 + 0.0, d10, d3, d6);
         tessellator.vertex(d8, d1 + 0.0, d9, d4, d6);
@@ -4560,11 +4236,7 @@ public class MixinTileRenderer {
         return true;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean renderSpikes(MixinTile block, int i, int j, int k) {
+    public boolean renderSpikes(Tile block, int i, int j, int k) {
         Tessellator tessellator = Tessellator.INSTANCE;
         float f = block.method_1604(this.field_82, i, j, k);
         tessellator.colour(f, f, f);
@@ -4586,11 +4258,7 @@ public class MixinTileRenderer {
         return true;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean renderTable(MixinTile block, int i, int j, int k) {
+    public boolean renderTable(Tile block, int i, int j, int k) {
         boolean east;
         boolean rendered = this.method_76(block, i, j, k);
         boolean north = this.field_82.getTileId(i, j, k + 1) != Blocks.tableBlocks.id;
@@ -4617,37 +4285,29 @@ public class MixinTileRenderer {
         return rendered;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean renderChair(MixinTile block, int i, int j, int k) {
+    public boolean renderChair(Tile block, int i, int j, int k) {
         boolean rendered = this.method_76(block, i, j, k);
         int side = this.field_82.getTileMeta(i, j, k) % 4;
-        switch(side) {
-            case 0:
-                {
-                    block.setBoundingBox(0.125f, 0.625f, 0.125f, 0.25f, 1.25f, 0.875f);
-                    rendered |= this.method_76(block, i, j, k);
-                    break;
-                }
-            case 1:
-                {
-                    block.setBoundingBox(0.125f, 0.625f, 0.125f, 0.875f, 1.25f, 0.25f);
-                    rendered |= this.method_76(block, i, j, k);
-                    break;
-                }
-            case 2:
-                {
-                    block.setBoundingBox(0.75f, 0.625f, 0.125f, 0.875f, 1.25f, 0.875f);
-                    rendered |= this.method_76(block, i, j, k);
-                    break;
-                }
-            case 3:
-                {
-                    block.setBoundingBox(0.125f, 0.625f, 0.75f, 0.875f, 1.25f, 0.875f);
-                    rendered |= this.method_76(block, i, j, k);
-                }
+        switch (side) {
+            case 0: {
+                block.setBoundingBox(0.125f, 0.625f, 0.125f, 0.25f, 1.25f, 0.875f);
+                rendered |= this.method_76(block, i, j, k);
+                break;
+            }
+            case 1: {
+                block.setBoundingBox(0.125f, 0.625f, 0.125f, 0.875f, 1.25f, 0.25f);
+                rendered |= this.method_76(block, i, j, k);
+                break;
+            }
+            case 2: {
+                block.setBoundingBox(0.75f, 0.625f, 0.125f, 0.875f, 1.25f, 0.875f);
+                rendered |= this.method_76(block, i, j, k);
+                break;
+            }
+            case 3: {
+                block.setBoundingBox(0.125f, 0.625f, 0.75f, 0.875f, 1.25f, 0.875f);
+                rendered |= this.method_76(block, i, j, k);
+            }
         }
         block.setBoundingBox(0.125f, 0.0f, 0.125f, 0.25f, 0.5f, 0.25f);
         rendered |= this.method_76(block, i, j, k);
@@ -4660,11 +4320,7 @@ public class MixinTileRenderer {
         return rendered |= this.method_76(block, i, j, k);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean renderRope(MixinTile block, int i, int j, int k) {
+    public boolean renderRope(Tile block, int i, int j, int k) {
         Tessellator tessellator = Tessellator.INSTANCE;
         float f = block.method_1604(this.field_82, i, j, k);
         tessellator.colour(f, f, f);
@@ -4679,18 +4335,14 @@ public class MixinTileRenderer {
         return true;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean renderBlockTree(MixinTile block, int i, int j, int k) {
+    public boolean renderBlockTree(Tile block, int i, int j, int k) {
         Tessellator tessellator = Tessellator.INSTANCE;
         float f = block.method_1604(this.field_82, i, j, k);
         tessellator.colour(f, f, f);
-        MixinTileEntity o = this.field_82.getTileEntity(i, j, k);
+        TileEntity o = this.field_82.getTileEntity(i, j, k);
         TileEntityTree obj = null;
         if (o instanceof TileEntityTree) {
-            obj = (TileEntityTree) o;
+            obj = (TileEntityTree)o;
         }
         double d = i;
         double d1 = j;
@@ -4702,18 +4354,18 @@ public class MixinTileRenderer {
         }
         int u = (t & 0xF) << 4;
         int v = t & 0xF0;
-        double d3 = (float) u / 256.0f;
-        double d4 = ((float) u + 15.99f) / 256.0f;
-        double d5 = (float) v / 256.0f;
-        double d6 = ((float) v + 15.99f) / 256.0f;
+        double d3 = (float)u / 256.0f;
+        double d4 = ((float)u + 15.99f) / 256.0f;
+        double d5 = (float)v / 256.0f;
+        double d6 = ((float)v + 15.99f) / 256.0f;
         double size = 1.0;
         if (obj != null) {
             size = obj.size;
         }
-        double d7 = d + 0.5 - (double) 0.45f * size;
-        double d8 = d + 0.5 + (double) 0.45f * size;
-        double d9 = d2 + 0.5 - (double) 0.45f * size;
-        double d10 = d2 + 0.5 + (double) 0.45f * size;
+        double d7 = d + 0.5 - (double)0.45f * size;
+        double d8 = d + 0.5 + (double)0.45f * size;
+        double d9 = d2 + 0.5 - (double)0.45f * size;
+        double d10 = d2 + 0.5 + (double)0.45f * size;
         tessellator.vertex(d7, d1 + size, d9, d3, d5);
         tessellator.vertex(d7, d1 + 0.0, d9, d3, d6);
         tessellator.vertex(d8, d1 + 0.0, d10, d4, d6);
@@ -4726,10 +4378,10 @@ public class MixinTileRenderer {
             t = block.getTextureForSide(1, m);
             u = (t & 0xF) << 4;
             v = t & 0xF0;
-            d3 = (float) u / 256.0f;
-            d4 = ((float) u + 15.99f) / 256.0f;
-            d5 = (float) v / 256.0f;
-            d6 = ((float) v + 15.99f) / 256.0f;
+            d3 = (float)u / 256.0f;
+            d4 = ((float)u + 15.99f) / 256.0f;
+            d5 = (float)v / 256.0f;
+            d6 = ((float)v + 15.99f) / 256.0f;
         }
         tessellator.vertex(d7, d1 + size, d10, d3, d5);
         tessellator.vertex(d7, d1 + 0.0, d10, d3, d6);
@@ -4742,17 +4394,13 @@ public class MixinTileRenderer {
         return true;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean renderBlockOverlay(MixinTile block, int i, int j, int k) {
+    public boolean renderBlockOverlay(Tile block, int i, int j, int k) {
         Tessellator tessellator = Tessellator.INSTANCE;
         float f = block.method_1604(this.field_82, i, j, k);
         tessellator.colour(f, f, f);
         int m = this.field_82.getTileMeta(i, j, k);
         int t = block.getTextureForSide(0, m);
-        ((BlockOverlay) block).updateBounds(this.field_82, i, j, k);
+        ((BlockOverlay)block).updateBounds(this.field_82, i, j, k);
         if (this.field_82.isFullOpaque(i, j - 1, k)) {
             this.method_55(block, i, j, k, t);
         } else if (this.field_82.isFullOpaque(i, j + 1, k)) {

@@ -1,32 +1,18 @@
-/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Object
- *  java.lang.String
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- */
 package io.github.ryuu.adventurecraft.scripting;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import io.github.ryuu.adventurecraft.util.TriggerArea;
+import io.github.ryuu.adventurecraft.util.UtilBullet;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityRegistry;
 import net.minecraft.level.Level;
-import net.minecraft.script.ScriptEntity;
-import net.minecraft.script.ScriptVec3;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.hit.HitType;
 import net.minecraft.util.maths.Vec3f;
-import io.github.ryuu.adventurecraft.mixin.item.MixinLevel;
-import io.github.ryuu.adventurecraft.mixin.item.MixinEntity;
 
 public class ScriptWorld {
+    Level worldObj;
 
-    MixinLevel worldObj;
-
-    ScriptWorld(MixinLevel w) {
+    ScriptWorld(Level w) {
         this.worldObj = w;
     }
 
@@ -47,7 +33,7 @@ public class ScriptWorld {
     }
 
     public void setBlockIDAndMetadata(int x, int y, int z, int id, int m) {
-        this.worldObj.method_201(x, y, z, id, m);
+        this.worldObj.setTileWithMetadata(x, y, z, id, m);
     }
 
     public float getLightValue(int x, int y, int z) {
@@ -55,7 +41,7 @@ public class ScriptWorld {
     }
 
     public void triggerBlock(int blockX, int blockY, int blockZ) {
-        this.triggerArea(blockX, blockY, blockZ, blockX, blockY, blockZ);
+        triggerArea(blockX, blockY, blockZ, blockX, blockY, blockZ);
     }
 
     public void triggerArea(int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
@@ -80,10 +66,10 @@ public class ScriptWorld {
     }
 
     public ScriptEntity spawnEntity(String entityType, double x, double y, double z) {
-        MixinEntity e = EntityRegistry.create(entityType, this.worldObj);
+        Entity e = EntityRegistry.create(entityType, this.worldObj);
         if (e != null) {
             e.setPosition(x, y, z);
-            this.worldObj.method_287(e);
+            this.worldObj.spawnEntity(e);
         }
         return ScriptEntity.getEntityClass(e);
     }
@@ -93,7 +79,7 @@ public class ScriptWorld {
     }
 
     public Object[] rayTraceBlocks(ScriptVec3 start, ScriptVec3 end) {
-        return this.rayTraceBlocks(start.x, start.y, start.z, end.x, end.y, end.z);
+        return rayTraceBlocks(start.x, start.y, start.z, end.x, end.y, end.z);
     }
 
     public Object[] rayTraceBlocks(double startX, double startY, double startZ, double endX, double endY, double endZ) {
@@ -107,7 +93,7 @@ public class ScriptWorld {
     }
 
     public Object[] rayTrace(ScriptVec3 start, ScriptVec3 end) {
-        return this.rayTrace(start.x, start.y, start.z, end.x, end.y, end.z);
+        return rayTrace(start.x, start.y, start.z, end.x, end.y, end.z);
     }
 
     public Object[] rayTrace(double startX, double startY, double startZ, double endX, double endY, double endZ) {

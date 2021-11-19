@@ -1,59 +1,37 @@
-/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Object
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- */
 package io.github.ryuu.adventurecraft.scripting;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.TextRenderer;
 import net.minecraft.client.texture.TextureManager;
-import net.minecraft.script.ScriptUIContainer;
-import io.github.ryuu.adventurecraft.mixin.item.MixinTextRenderer;
-import io.github.ryuu.adventurecraft.mixin.item.MixinTextureManager;
 
 public class UIElement {
-
-    public float curX = 0.0f;
-
-    public float curY = 0.0f;
-
-    public float prevX = 0.0f;
-
-    public float prevY = 0.0f;
-
+    public float curX = 0.0F;
+    public float curY = 0.0F;
+    public float prevX = 0.0F;
+    public float prevY = 0.0F;
     protected ScriptUIContainer parent;
 
     public void addToScreen() {
-        if (Minecraft.minecraftInstance.overlay != null) {
-            Minecraft.minecraftInstance.overlay.scriptUI.add(this);
-        }
+        if (Minecraft.minecraftInstance.v != null)
+            Minecraft.minecraftInstance.v.scriptUI.add(this);
     }
 
     public void removeFromScreen() {
-        if (this.parent != null) {
+        if (this.parent != null)
             this.parent.remove(this);
-        }
     }
 
     public void pushToFront() {
-        if (this.parent != null) {
+        if (this.parent != null)
             this.parent.add(this);
-        }
     }
 
     public void pushToBack() {
-        if (this.parent != null) {
+        if (this.parent != null)
             this.parent.addToBack(this);
-        }
     }
 
-    public void render(MixinTextRenderer fontRenderer, MixinTextureManager renderEngine, float partialTickTime) {
+    public void render(TextRenderer fontRenderer, TextureManager renderEngine, float partialTickTime) {
     }
 
     public void onUpdate() {
@@ -78,11 +56,11 @@ public class UIElement {
     }
 
     protected float getXAtTime(float partialTickTime) {
-        return (1.0f - partialTickTime) * this.prevX + partialTickTime * this.curX;
+        return (1.0F - partialTickTime) * this.prevX + partialTickTime * this.curX;
     }
 
     protected float getYAtTime(float partialTickTime) {
-        return (1.0f - partialTickTime) * this.prevY + partialTickTime * this.curY;
+        return (1.0F - partialTickTime) * this.prevY + partialTickTime * this.curY;
     }
 
     public void moveTo(float x, float y) {

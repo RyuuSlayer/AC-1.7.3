@@ -1,33 +1,37 @@
-package io.github.ryuu.adventurecraft.blocks;/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Object
- *  java.lang.Override
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- */
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+package io.github.ryuu.adventurecraft.blocks;
+
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 
 class BlockColor extends Tile implements IBlockColor {
-
     static final int numColors = 7;
+    protected int defaultColor;
 
-    protected int defaultColor = 0xCCCCCC;
-
-    protected BlockColor(int id, int tex, Material material) {
-        super(id, tex, material);
+    protected BlockColor(int i, int j, Material material) {
+        super(i, j, material);
+        this.defaultColor = 13421772;
     }
 
     @Override
     public int getTint(TileView iblockaccess, int i, int j, int k) {
-        int color = this.getColorMetaData(iblockaccess, i, j, k);
-        color = color == 1 ? 0xFFF799 : (color == 2 ? 0xFFDAAF : (color == 3 ? 10736540 : (color == 4 ? 9755639 : (color == 5 ? 8880573 : (color == 6 ? 15539236 : this.defaultColor)))));
+        int color = getColorMetaData(iblockaccess, i, j, k);
+        if (color == 1) {
+            color = 16775065;
+        } else if (color == 2) {
+            color = 16767663;
+        } else if (color == 3) {
+            color = 10736540;
+        } else if (color == 4) {
+            color = 9755639;
+        } else if (color == 5) {
+            color = 8880573;
+        } else if (color == 6) {
+            color = 15539236;
+        } else {
+            color = this.defaultColor;
+        }
         return color;
     }
 
@@ -41,7 +45,7 @@ class BlockColor extends Tile implements IBlockColor {
 
     @Override
     public void incrementColor(Level world, int i, int j, int k) {
-        int color = (this.getColorMetaData(world, i, j, k) + 1) % numColors;
-        this.setColorMetaData(world, i, j, k, color);
+        int color = (getColorMetaData(world, i, j, k) + 1) % numColors;
+        setColorMetaData(world, i, j, k, color);
     }
 }

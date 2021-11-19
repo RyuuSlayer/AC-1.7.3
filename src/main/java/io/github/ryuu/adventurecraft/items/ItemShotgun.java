@@ -1,60 +1,46 @@
-package io.github.ryuu.adventurecraft.items;/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Object
- *  java.lang.Override
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- */
-import io.github.ryuu.adventurecraft.mixin.item.MixinItemType;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+package io.github.ryuu.adventurecraft.items;
+
+import io.github.ryuu.adventurecraft.util.UtilBullet;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 
-class ItemShotgun extends MixinItemType implements IItemReload {
-
-    public ItemShotgun(int id) {
-        super(id);
+class ItemShotgun extends ItemType implements IItemReload {
+    public ItemShotgun(int itemIndex) {
+        super(itemIndex);
         this.maxStackSize = 1;
         this.itemUseDelay = 1;
     }
 
     @Override
-    public ItemInstance use(ItemInstance item, Level level, Player player) {
-        if (item.timeLeft > 0) {
-            if (item.isReloading && item.getDamage() > 0) {
-                item.isReloading = false;
-                return item;
+    public ItemInstance use(ItemInstance itemstack, Level world, Player entityplayer) {
+        if (itemstack.timeLeft > 0) {
+            if (itemstack.isReloading && itemstack.i() > 0) {
+                itemstack.isReloading = false;
+                return itemstack;
             }
-            return item;
+            return itemstack;
         }
-        if (item.getDamage() == item.method_723()) {
-            item.isReloading = true;
-            item.timeLeft = 0;
-            return item;
+        if (itemstack.getDamage() == itemstack.method_723()) {
+            itemstack.isReloading = true;
+            itemstack.timeLeft = 0;
+            return itemstack;
         }
-        level.playSound(player, "items.shotgun.fire_and_pump", 1.0f, 1.0f);
-        for (int i = 0; i < 14; ++i) {
-            UtilBullet.fireBullet(level, player, 0.12f, 2);
-        }
-        item.setDamage(item.getDamage() + 1);
-        item.timeLeft = 40;
-        if (item.getDamage() == item.method_723()) {
-            item.isReloading = true;
-        }
-        return item;
+        world.playSound(entityplayer, "items.shotgun.fire_and_pump", 1.0F, 1.0F);
+        for (int i = 0; i < 14; i++)
+            UtilBullet.fireBullet(world, entityplayer, 0.12F, 2);
+        itemstack.setDamage(itemstack.getDamage() + 1);
+        itemstack.timeLeft = 40;
+        if (itemstack.getDamage() == itemstack.method_723())
+            itemstack.isReloading = true;
+        return itemstack;
     }
 
-    @Override
     public boolean isLighting(ItemInstance itemstack) {
         return itemstack.timeLeft > 42;
     }
 
-    @Override
     public boolean isMuzzleFlash(ItemInstance itemstack) {
         return itemstack.timeLeft > 35;
     }
@@ -64,10 +50,9 @@ class ItemShotgun extends MixinItemType implements IItemReload {
         if (itemstack.getDamage() > 0 && entityplayer.inventory.decreaseAmountOfItem(Items.shotgunAmmo.id)) {
             itemstack.setDamage(itemstack.getDamage() - 1);
             itemstack.timeLeft = 20;
-            world.playSound(entityplayer, "items.shotgun.reload", 1.0f, 1.0f);
-            if (itemstack.getDamage() == 0) {
+            world.playSound(entityplayer, "items.shotgun.reload", 1.0F, 1.0F);
+            if (itemstack.getDamage() == 0)
                 itemstack.isReloading = false;
-            }
         } else {
             itemstack.isReloading = false;
         }

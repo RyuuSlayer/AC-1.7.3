@@ -1,16 +1,5 @@
-package io.github.ryuu.adventurecraft.items;/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Math
- *  java.lang.Object
- *  java.lang.Override
- *  java.lang.String
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- */
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+package io.github.ryuu.adventurecraft.items;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
@@ -18,70 +7,54 @@ import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 
 public class ItemCursor extends ItemType {
-
+    public static int minX;
+    public static int minY;
+    public static int minZ;
+    public static int maxX;
+    public static int maxY;
+    public static int maxZ;
     static boolean bothSet;
-
-    static boolean firstPosition;
-
+    static boolean firstPosition = true;
     static int oneX;
-
     static int oneY;
-
     static int oneZ;
-
     static int twoX;
-
     static int twoY;
-
     static int twoZ;
 
-    static int minX;
-
-    static int minY;
-
-    static int minZ;
-
-    static int maxX;
-
-    static int maxY;
-
-    static int maxZ;
-
-    protected ItemCursor(int id) {
-        super(id);
+    static {
+        bothSet = false;
     }
 
-    @Override
+    protected ItemCursor(int i) {
+        super(i);
+    }
+
     public boolean onItemUseLeftClick(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
-        return this.useOnTile(itemstack, entityplayer, world, i, j, k, l);
+        return useOnTile(itemstack, entityplayer, world, i, j, k, l);
     }
 
     @Override
-    public boolean useOnTile(ItemInstance item, Player player, Level level, int x, int y, int z, int facing) {
+    public boolean useOnTile(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
         if (firstPosition) {
-            Minecraft.minecraftInstance.overlay.addChatMessage(String.format((String) "Setting Cursor Position 1 (%d, %d, %d)", (Object[]) new Object[] { x, y, z }));
-            oneX = x;
-            oneY = y;
-            oneZ = z;
+            Minecraft.minecraftInstance.v.a(String.format("Setting Cursor Position 1 (%d, %d, %d)", new Object[]{Integer.valueOf(i), Integer.valueOf(j), Integer.valueOf(k)}));
+            oneX = i;
+            oneY = j;
+            oneZ = k;
         } else {
-            Minecraft.minecraftInstance.overlay.addChatMessage(String.format((String) "Setting Cursor Position 2 (%d, %d, %d)", (Object[]) new Object[] { x, y, z }));
-            twoX = x;
-            twoY = y;
-            twoZ = z;
+            Minecraft.minecraftInstance.v.a(String.format("Setting Cursor Position 2 (%d, %d, %d)", new Object[]{Integer.valueOf(i), Integer.valueOf(j), Integer.valueOf(k)}));
+            twoX = i;
+            twoY = j;
+            twoZ = k;
             bothSet = true;
         }
-        minX = Math.min((int) oneX, (int) twoX);
-        minY = Math.min((int) oneY, (int) twoY);
-        minZ = Math.min((int) oneZ, (int) twoZ);
-        maxX = Math.max((int) oneX, (int) twoX);
-        maxY = Math.max((int) oneY, (int) twoY);
-        maxZ = Math.max((int) oneZ, (int) twoZ);
+        minX = Math.min(oneX, twoX);
+        minY = Math.min(oneY, twoY);
+        minZ = Math.min(oneZ, twoZ);
+        maxX = Math.max(oneX, twoX);
+        maxY = Math.max(oneY, twoY);
+        maxZ = Math.max(oneZ, twoZ);
         firstPosition = !firstPosition;
         return false;
-    }
-
-    static {
-        firstPosition = true;
-        bothSet = false;
     }
 }

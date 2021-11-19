@@ -1,32 +1,22 @@
-package io.github.ryuu.adventurecraft.rendering;/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Object
- *  java.lang.Override
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- *  org.lwjgl.opengl.GL11
- */
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+package io.github.ryuu.adventurecraft.rendering;
+
+import io.github.ryuu.adventurecraft.entities.EntityLivingScript;
 import net.minecraft.client.render.entity.BipedEntityRenderer;
 import net.minecraft.client.render.entity.model.BipedModel;
 import net.minecraft.entity.LivingEntity;
 import org.lwjgl.opengl.GL11;
 
 public class RenderBipedScaledScripted extends BipedEntityRenderer {
-
     public RenderBipedScaledScripted(BipedModel modelbase) {
-        super(modelbase, 0.5f);
+        super(modelbase, 0.5F);
     }
 
-    @Override
-    protected void method_823(LivingEntity entityliving, float f) {
+    protected void a(LivingEntity entityliving, float f) {
         EntityLivingScript e = (EntityLivingScript) entityliving;
-        float width = (1.0f - f) * e.prevWidth + f * e.width;
-        float height = (1.0f - f) * e.prevHeight + f * e.height;
-        this.field_2678 = (width /= 0.6f) * 0.5f;
-        GL11.glScalef((float) width, (float) (height / 1.8f), (float) width);
+        float width = (1.0F - f) * e.prevWidth + f * e.width;
+        float height = (1.0F - f) * e.prevHeight + f * e.height;
+        width /= 0.6F;
+        this.field_2678 = width * 0.5F;
+        GL11.glScalef(width, height / 1.8F, width);
     }
 }

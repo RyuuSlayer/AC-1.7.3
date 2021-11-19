@@ -1,19 +1,10 @@
-package io.github.ryuu.adventurecraft.util;/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Object
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- */
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+package io.github.ryuu.adventurecraft.util;
+
 import net.minecraft.level.Level;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.io.CompoundTag;
 
 class EditAction {
-
     EditAction nextAction;
 
     int x;
@@ -48,24 +39,22 @@ class EditAction {
     }
 
     void undo(Level world) {
-        world.method_201(this.x, this.y, this.z, this.prevBlockID, this.prevMetadata);
+        world.b(this.x, this.y, this.z, this.prevBlockID, this.prevMetadata);
         if (this.prevNBT != null) {
-            TileEntity te = TileEntity.method_1068(this.prevNBT);
-            world.setTileEntity(te.x, te.y, te.z, te);
+            TileEntity te = TileEntity.c(this.prevNBT);
+            world.a(te.e, te.f, te.g, te);
         }
-        if (this.nextAction != null) {
+        if (this.nextAction != null)
             this.nextAction.undo(world);
-        }
     }
 
     void redo(Level world) {
-        world.method_201(this.x, this.y, this.z, this.newBlockID, this.newMetadata);
+        world.b(this.x, this.y, this.z, this.newBlockID, this.newMetadata);
         if (this.newNBT != null) {
-            TileEntity te = TileEntity.method_1068(this.newNBT);
-            world.setTileEntity(te.x, te.y, te.z, te);
+            TileEntity te = TileEntity.c(this.newNBT);
+            world.a(te.e, te.f, te.g, te);
         }
-        if (this.nextAction != null) {
+        if (this.nextAction != null)
             this.nextAction.redo(world);
-        }
     }
 }

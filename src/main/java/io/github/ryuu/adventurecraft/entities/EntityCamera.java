@@ -1,27 +1,18 @@
-package io.github.ryuu.adventurecraft.entities;/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Object
- *  java.lang.Override
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- */
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
+package io.github.ryuu.adventurecraft.entities;
+
+import io.github.ryuu.adventurecraft.mixin.client.MixinMinecraft;
+import io.github.ryuu.adventurecraft.gui.GuiCamera;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.util.io.CompoundTag;
 
 public class EntityCamera extends LivingEntity {
+    public float time;
 
-    float time;
+    public int type;
 
-    int type;
-
-    int cameraID;
+    public int cameraID;
 
     EntityCamera(Level world, float t, int ty, int id) {
         super(world);
@@ -35,16 +26,16 @@ public class EntityCamera extends LivingEntity {
     }
 
     public void deleteCameraPoint() {
-        Minecraft.minecraftInstance.activeCutsceneCamera.deletePoint(this.cameraID);
-        Minecraft.minecraftInstance.activeCutsceneCamera.loadCameraEntities();
+        MixinMinecraft.minecraftInstance.activeCutsceneCamera.deletePoint(this.cameraID);
+        MixinMinecraft.minecraftInstance.activeCutsceneCamera.loadCameraEntities();
     }
 
     @Override
-    public void readCustomDataFromTag(CompoundTag tag) {
+    public void readCustomDataFromTag(CompoundTag nbttagcompound) {
     }
 
     @Override
-    public void writeCustomDataToTag(CompoundTag tag) {
+    public void writeCustomDataToTag(CompoundTag nbttagcompound) {
     }
 
     @Override

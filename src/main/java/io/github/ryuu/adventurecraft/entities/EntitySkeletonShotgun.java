@@ -1,24 +1,15 @@
-package io.github.ryuu.adventurecraft.entities;/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Math
- *  java.lang.Object
- *  java.lang.Override
- *  java.util.Random
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- */
-import java.util.Random;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+package io.github.ryuu.adventurecraft.entities;
+
+import io.github.ryuu.adventurecraft.items.Items;
+import io.github.ryuu.adventurecraft.util.UtilBullet;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.Skeleton;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
 
-public class EntitySkeletonShotgun extends Skeleton {
+import java.util.Random;
 
+public class EntitySkeletonShotgun extends Skeleton {
     private static final Random bs = new Random();
 
     public EntitySkeletonShotgun(Level world) {
@@ -28,22 +19,21 @@ public class EntitySkeletonShotgun extends Skeleton {
     }
 
     @Override
-    protected void method_637(Entity entity, float f) {
-        if ((double) f < 10.0 && bs.nextBoolean()) {
-            this.method_924(entity, 30.0f, 30.0f);
+    protected void method_637(Entity entity, float f) { // method_637 is probably for damaging and shooting
+        if (f < 10.0D && bs.nextBoolean()) {
+            a(entity, 30.0F, 30.0F);
             if (this.attackTime == 0) {
-                this.method_924(entity, 60.0f, 90.0f);
-                this.yaw = (float) ((double) this.yaw + 12.0 * bs.nextGaussian());
-                this.pitch = (float) ((double) this.pitch + 6.0 * bs.nextGaussian());
-                for (int i = 0; i < 8; ++i) {
-                    UtilBullet.fireBullet(this.level, this, 0.12f, this.attackDamage);
-                }
+                a(entity, 60.0F, 90.0F);
+                this.yaw = (float) (this.yaw + 12.0D * bs.nextGaussian());
+                this.pitch = (float) (this.pitch + 6.0D * bs.nextGaussian());
+                for (int i = 0; i < 8; i++)
+                    UtilBullet.fireBullet(this.level, this, 0.12F, this.attackDamage);
                 this.attackTime = 50;
-                this.level.playSound(this, "items.shotgun.fire_and_pump", 1.0f, 1.0f);
+                this.level.playSound(this, "items.shotgun.fire_and_pump", 1.0F, 1.0F);
             }
             double d = entity.x - this.x;
             double d1 = entity.z - this.z;
-            this.yaw = (float) (Math.atan2((double) d1, (double) d) * 180.0 / 3.1415927410125732) - 90.0f;
+            this.yaw = (float) (Math.atan2(d1, d) * 180.0D / 3.1415927410125732D) - 90.0F;
             this.field_663 = true;
         }
     }
@@ -51,7 +41,11 @@ public class EntitySkeletonShotgun extends Skeleton {
     @Override
     public void tick() {
         super.tick();
-        this.heldItem.timeLeft = this.health <= 0 ? 0 : this.attackTime;
+        if (this.health <= 0) {
+            this.heldItem.timeLeft = 0;
+        } else {
+            this.heldItem.timeLeft = this.attackTime;
+        }
     }
 
     @Override

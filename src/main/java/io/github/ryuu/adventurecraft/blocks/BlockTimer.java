@@ -1,14 +1,10 @@
-package io.github.ryuu.adventurecraft.blocks;/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Object
- *  java.lang.Override
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- */
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+package io.github.ryuu.adventurecraft.blocks;
+
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityMinMax;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityTimer;
+import io.github.ryuu.adventurecraft.gui.GuiTimer;
+import io.github.ryuu.adventurecraft.items.ItemCursor;
+import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
@@ -18,7 +14,6 @@ import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 public class BlockTimer extends TileWithEntity {
-
     protected BlockTimer(int i, int j) {
         super(i, j, Material.AIR);
     }
@@ -34,25 +29,22 @@ public class BlockTimer extends TileWithEntity {
     }
 
     @Override
-    public Box getCollisionShape(Level level, int x, int y, int z) {
+    public Box getCollisionShape(Level world, int i, int j, int k) {
         return null;
     }
 
-    @Override
     public boolean shouldRender(TileView blockAccess, int i, int j, int k) {
         return DebugMode.active;
     }
 
-    @Override
     public boolean canBeTriggered() {
         return true;
     }
 
     public void setTriggerToSelection(Level world, int i, int j, int k) {
         TileEntityMinMax obj = (TileEntityMinMax) world.getTileEntity(i, j, k);
-        if (obj.minX == ItemCursor.minX && obj.minY == ItemCursor.minY && obj.minZ == ItemCursor.minZ && obj.maxX == ItemCursor.maxX && obj.maxY == ItemCursor.maxY && obj.maxZ == ItemCursor.maxZ) {
+        if (obj.minX == ItemCursor.minX && obj.minY == ItemCursor.minY && obj.minZ == ItemCursor.minZ && obj.maxX == ItemCursor.maxX && obj.maxY == ItemCursor.maxY && obj.maxZ == ItemCursor.maxZ)
             return;
-        }
         obj.minX = ItemCursor.minX;
         obj.minY = ItemCursor.minY;
         obj.minZ = ItemCursor.minZ;
@@ -61,29 +53,25 @@ public class BlockTimer extends TileWithEntity {
         obj.maxZ = ItemCursor.maxZ;
     }
 
-    @Override
     public void onTriggerActivated(Level world, int i, int j, int k) {
         TileEntityTimer obj = (TileEntityTimer) world.getTileEntity(i, j, k);
-        if (obj.canActivate && !obj.active) {
+        if (obj.canActivate && !obj.active)
             obj.startActive();
-        }
     }
 
     @Override
-    public boolean activate(Level level, int x, int y, int z, Player player) {
+    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
         if (DebugMode.active) {
-            TileEntityTimer obj = (TileEntityTimer) level.getTileEntity(x, y, z);
-            GuiTimer.showUI(level, x, y, z, obj);
+            TileEntityTimer obj = (TileEntityTimer) world.getTileEntity(i, j, k);
+            GuiTimer.showUI(world, i, j, k, obj);
         }
         return true;
     }
 
-    @Override
     public boolean method_1576() {
         return DebugMode.active;
     }
 
-    @Override
     public void reset(Level world, int i, int j, int k, boolean death) {
         TileEntityTimer obj = (TileEntityTimer) world.getTileEntity(i, j, k);
         obj.active = false;

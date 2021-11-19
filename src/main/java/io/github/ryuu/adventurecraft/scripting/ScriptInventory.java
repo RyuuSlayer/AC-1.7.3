@@ -1,23 +1,9 @@
-/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Object
- *  java.lang.String
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- */
 package io.github.ryuu.adventurecraft.scripting;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemInstance;
-import net.minecraft.script.ScriptItem;
-import io.github.ryuu.adventurecraft.mixin.item.MixinItemInstance;
 
 public class ScriptInventory {
-
     Inventory inv;
 
     ScriptInventory(Inventory i) {
@@ -37,18 +23,16 @@ public class ScriptInventory {
     }
 
     public ScriptItem getItemInSlot(int i) {
-        MixinItemInstance item = this.inv.getInvItem(i);
-        if (item == null || item.itemId == 0) {
+        ItemInstance item = this.inv.getInvItem(i);
+        if (item == null || item.itemId == 0)
             return null;
-        }
         return new ScriptItem(item);
     }
 
     public ScriptItem decrementItem(int slot, int amount) {
-        MixinItemInstance item = this.inv.takeInvItem(slot, amount);
-        if (item == null || item.itemId == 0) {
+        ItemInstance item = this.inv.takeInvItem(slot, amount);
+        if (item == null || item.itemId == 0)
             return null;
-        }
         return new ScriptItem(item);
     }
 

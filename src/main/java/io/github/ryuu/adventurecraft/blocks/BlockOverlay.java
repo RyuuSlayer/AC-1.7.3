@@ -1,14 +1,6 @@
-package io.github.ryuu.adventurecraft.blocks;/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Object
- *  java.lang.Override
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- */
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+package io.github.ryuu.adventurecraft.blocks;
+
+import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
 import net.minecraft.tile.Tile;
@@ -16,44 +8,43 @@ import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 public class BlockOverlay extends Tile implements IBlockColor {
-
     protected BlockOverlay(int i, int j) {
         super(i, j, Material.PLANT);
-        this.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 0.1f, 1.0f);
+        setBoundingBox(0.0F, 0.0F, 0.0F, 1.0F, 0.1F, 1.0F);
     }
 
     @Override
-    public int getTextureForSide(int side, int meta) {
-        return this.tex + meta;
+    public int getTextureForSide(int i, int j) {
+        return this.tex + j;
     }
 
     @Override
-    public Box getCollisionShape(Level level, int x, int y, int z) {
-        this.updateBounds(level, x, y, z);
+    public Box getCollisionShape(Level world, int i, int j, int k) {
+        updateBounds(world, i, j, k);
         return null;
     }
 
     @Override
-    public Box getOutlineShape(Level level, int x, int y, int z) {
-        this.updateBounds(level, x, y, z);
-        return super.getOutlineShape(level, x, y, z);
+    public Box getOutlineShape(Level world, int i, int j, int k) {
+        updateBounds(world, i, j, k);
+        return super.getOutlineShape(world, i, j, k);
     }
 
     public void updateBounds(TileView world, int i, int j, int k) {
         if (world.isFullOpaque(i, j - 1, k)) {
-            this.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 0.01f, 1.0f);
+            setBoundingBox(0.0F, 0.0F, 0.0F, 1.0F, 0.01F, 1.0F);
         } else if (world.isFullOpaque(i, j + 1, k)) {
-            this.setBoundingBox(0.0f, 0.99f, 0.0f, 1.0f, 1.0f, 1.0f);
+            setBoundingBox(0.0F, 0.99F, 0.0F, 1.0F, 1.0F, 1.0F);
         } else if (world.isFullOpaque(i - 1, j, k)) {
-            this.setBoundingBox(0.0f, 0.0f, 0.0f, 0.01f, 1.0f, 1.0f);
+            setBoundingBox(0.0F, 0.0F, 0.0F, 0.01F, 1.0F, 1.0F);
         } else if (world.isFullOpaque(i + 1, j, k)) {
-            this.setBoundingBox(0.99f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
+            setBoundingBox(0.99F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
         } else if (world.isFullOpaque(i, j, k - 1)) {
-            this.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.01f);
+            setBoundingBox(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 0.01F);
         } else if (world.isFullOpaque(i, j, k + 1)) {
-            this.setBoundingBox(0.0f, 0.0f, 0.99f, 1.0f, 1.0f, 1.0f);
+            setBoundingBox(0.0F, 0.0F, 0.99F, 1.0F, 1.0F, 1.0F);
         } else {
-            this.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 0.01f, 1.0f);
+            setBoundingBox(0.0F, 0.0F, 0.0F, 1.0F, 0.01F, 1.0F);
         }
     }
 

@@ -1,21 +1,8 @@
-/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Object
- *  java.lang.String
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- */
 package io.github.ryuu.adventurecraft.scripting;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.script.ScriptEntity;
-import net.minecraft.script.ScriptEntityLiving;
+import io.github.ryuu.adventurecraft.entities.EntityLivingScript;
 
 public class ScriptEntityLivingScript extends ScriptEntityLiving {
-
     EntityLivingScript entityLivingScript;
 
     ScriptEntityLivingScript(EntityLivingScript e) {

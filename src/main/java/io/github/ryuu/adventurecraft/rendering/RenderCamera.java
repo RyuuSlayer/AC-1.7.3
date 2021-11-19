@@ -1,39 +1,24 @@
-package io.github.ryuu.adventurecraft.rendering;/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Float
- *  java.lang.Object
- *  java.lang.Override
- *  java.lang.String
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- */
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+package io.github.ryuu.adventurecraft.rendering;
+
+import io.github.ryuu.adventurecraft.entities.EntityCamera;
+import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import io.github.ryuu.adventurecraft.mixin.item.MixinLivingEntity;
-import io.github.ryuu.adventurecraft.mixin.item.MixinEntity;
 
 public class RenderCamera extends LivingEntityRenderer {
-
     public RenderCamera(EntityModel modelbase, float f) {
         super(modelbase, f);
     }
 
-    @Override
-    protected void method_821(MixinLivingEntity entityliving, double d, double d1, double d2) {
+    protected void a(LivingEntity entityliving, double d, double d1, double d2) {
         EntityCamera e = (EntityCamera) entityliving;
-        this.method_818(entityliving, String.format((String) "%.2f", (Object[]) new Object[] { Float.valueOf((float) e.time) }), d, d1 - 1.5, d2, 64);
+        this.method_818(entityliving, String.format("%.2f", new Object[]{Float.valueOf(e.time)}), d, d1 - 1.5D, d2, 64);
     }
 
-    @Override
-    public void render(MixinEntity entity, double x, double y, double z, float f, float f1) {
-        if (DebugMode.active) {
-            super.render(entity, x, y, z, f, f1);
-        }
+    public void a(Entity entity, double d, double d1, double d2, float f, float f1) {
+        if (DebugMode.active)
+            super.render(entity, d, d1, d2, f, f1);
     }
 }

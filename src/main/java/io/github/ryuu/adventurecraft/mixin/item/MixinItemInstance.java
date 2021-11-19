@@ -1,16 +1,6 @@
-/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Object
- *  java.lang.String
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- */
 package io.github.ryuu.adventurecraft.mixin.item;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import io.github.ryuu.adventurecraft.items.Items;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
@@ -20,57 +10,37 @@ import net.minecraft.level.Level;
 import net.minecraft.stat.Stats;
 import net.minecraft.tile.Tile;
 import net.minecraft.util.io.CompoundTag;
-import io.github.ryuu.adventurecraft.mixin.item.MixinPlayer;
-import io.github.ryuu.adventurecraft.mixin.item.MixinItemType;
-import io.github.ryuu.adventurecraft.mixin.item.MixinLevel;
-import io.github.ryuu.adventurecraft.mixin.item.MixinLivingEntity;
-import io.github.ryuu.adventurecraft.mixin.item.MixinTile;
-import io.github.ryuu.adventurecraft.mixin.item.MixinCompoundTag;
-import io.github.ryuu.adventurecraft.mixin.item.MixinEntity;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
-import io.github.ryuu.adventurecraft.mixin.item.MixinItemInstance;
 
-@Mixin(ItemInstance.class)
 public final class MixinItemInstance {
-
-    @Shadow()
     public int count = 0;
-
     public int cooldown;
-
     public int itemId;
-
     private int damage;
-
     public int timeLeft;
-
     public boolean isReloading = false;
-
     public boolean justReloaded = false;
 
-    public MixinItemInstance(MixinTile tile) {
+    public MixinItemInstance(Tile tile) {
         this(tile, 1);
     }
 
-    public MixinItemInstance(MixinTile tile, int count) {
+    public MixinItemInstance(Tile tile, int count) {
         this(tile.id, count, 0);
     }
 
-    public MixinItemInstance(MixinTile tile, int count, int damage) {
+    public MixinItemInstance(Tile tile, int count, int damage) {
         this(tile.id, count, damage);
     }
 
-    public MixinItemInstance(MixinItemType itemType) {
+    public MixinItemInstance(ItemType itemType) {
         this(itemType.id, 1, 0);
     }
 
-    public MixinItemInstance(MixinItemType itemType, int count) {
+    public MixinItemInstance(ItemType itemType, int count) {
         this(itemType.id, count, 0);
     }
 
-    public MixinItemInstance(MixinItemType itemType, int count, int damage) {
+    public MixinItemInstance(ItemType itemType, int count, int damage) {
         this(itemType.id, count, damage);
     }
 
@@ -80,40 +50,24 @@ public final class MixinItemInstance {
         this.damage = damage;
     }
 
-    public MixinItemInstance(MixinCompoundTag tag) {
+    public MixinItemInstance(CompoundTag tag) {
         this.fromTag(tag);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public MixinItemInstance split(int countToTake) {
+    public ItemInstance split(int countToTake) {
         this.count -= countToTake;
-        return new MixinItemInstance(this.itemId, countToTake, this.damage);
+        return new ItemInstance(this.itemId, countToTake, this.damage);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public MixinItemType getType() {
+    public ItemType getType() {
         return ItemType.byId[this.itemId];
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public int getTexturePosition() {
         return this.getType().getTexturePosition(this);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean useOnTile(MixinPlayer entityplayer, MixinLevel world, int x, int y, int z, int l) {
+    public boolean useOnTile(Player entityplayer, Level world, int x, int y, int z, int l) {
         boolean flag = this.getType().useOnTile(this, entityplayer, world, x, y, z, l);
         if (flag) {
             entityplayer.increaseStat(Stats.useItem[this.itemId], 1);
@@ -121,46 +75,26 @@ public final class MixinItemInstance {
         return flag;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean useItemLeftClick(MixinPlayer entityplayer, MixinLevel world, int i, int j, int k, int l) {
+    public boolean useItemLeftClick(Player entityplayer, Level world, int i, int j, int k, int l) {
         return this.getType().onItemUseLeftClick(this, entityplayer, world, i, j, k, l);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public float method_708(MixinTile block) {
+    public float method_708(Tile block) {
         return this.getType().method_438(this, block);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public MixinItemInstance use(MixinLevel world, MixinPlayer entityplayer) {
+    public ItemInstance use(Level world, Player entityplayer) {
         return this.getType().use(this, world, entityplayer);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public MixinCompoundTag toTag(MixinCompoundTag tag) {
-        tag.put("id", (short) this.itemId);
+    public CompoundTag toTag(CompoundTag tag) {
+        tag.put("id", (short)this.itemId);
         tag.put("Count", this.count);
-        tag.put("Damage", (short) this.damage);
+        tag.put("Damage", (short)this.damage);
         return tag;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void fromTag(MixinCompoundTag tag) {
+    public void fromTag(CompoundTag tag) {
         this.itemId = tag.getShort("id");
         this.count = tag.getInt("Count");
         this.damage = tag.getShort("Damage");
@@ -169,90 +103,50 @@ public final class MixinItemInstance {
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public int method_709() {
         return this.getType().method_459();
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public boolean method_715() {
         return this.method_709() > 1 && (!this.method_717() || !this.method_720());
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public boolean method_717() {
         return ItemType.byId[this.itemId].method_464() > 0;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public boolean method_719() {
         return ItemType.byId[this.itemId].method_462();
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public boolean method_720() {
         return this.method_717() && this.damage > 0;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public int method_721() {
         return this.damage;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public int getDamage() {
         return this.damage;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void setDamage(int i) {
         this.damage = i;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public int method_723() {
         return ItemType.byId[this.itemId].method_464();
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void applyDamage(int i, MixinEntity entity) {
+    public void applyDamage(int i, Entity entity) {
         if (!this.method_717()) {
             return;
         }
         this.damage += i;
         if (this.damage > this.method_723()) {
-            if (entity instanceof MixinPlayer) {
-                ((MixinPlayer) entity).increaseStat(Stats.breakItem[this.itemId], 1);
+            if (entity instanceof Player) {
+                ((Player)entity).increaseStat(Stats.breakItem[this.itemId], 1);
             }
             --this.count;
             if (this.count < 0) {
@@ -262,72 +156,40 @@ public final class MixinItemInstance {
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void postHit(MixinLivingEntity entityliving, MixinPlayer entityplayer) {
+    public void postHit(LivingEntity entityliving, Player entityplayer) {
         boolean flag = ItemType.byId[this.itemId].postHit(this, entityliving, entityplayer);
         if (flag) {
             entityplayer.increaseStat(Stats.useItem[this.itemId], 1);
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void postMine(int i, int j, int k, int l, MixinPlayer entityplayer) {
+    public void postMine(int i, int j, int k, int l, Player entityplayer) {
         boolean flag = ItemType.byId[this.itemId].postMine(this, i, j, k, l, entityplayer);
         if (flag) {
             entityplayer.increaseStat(Stats.useItem[this.itemId], 1);
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public int method_707(MixinEntity entity) {
+    public int method_707(Entity entity) {
         return ItemType.byId[this.itemId].method_447(entity);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean isEffectiveOn(MixinTile block) {
+    public boolean isEffectiveOn(Tile block) {
         return ItemType.byId[this.itemId].isEffectiveOn(block);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_700(MixinPlayer entityplayer) {
+    public void method_700(Player entityplayer) {
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void interactWithEntity(MixinLivingEntity entityliving) {
+    public void interactWithEntity(LivingEntity entityliving) {
         ItemType.byId[this.itemId].interactWithEntity(this, entityliving);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public MixinItemInstance copy() {
-        return new MixinItemInstance(this.itemId, this.count, this.damage);
+    public ItemInstance copy() {
+        return new ItemInstance(this.itemId, this.count, this.damage);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public static boolean method_703(MixinItemInstance itemstack, MixinItemInstance itemstack1) {
+    public static boolean method_703(ItemInstance itemstack, ItemInstance itemstack1) {
         if (itemstack == null && itemstack1 == null) {
             return true;
         }
@@ -337,11 +199,7 @@ public final class MixinItemInstance {
         return itemstack.method_718(itemstack1);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    private boolean method_718(MixinItemInstance itemstack) {
+    private boolean method_718(ItemInstance itemstack) {
         if (this.count != itemstack.count) {
             return false;
         }
@@ -351,63 +209,35 @@ public final class MixinItemInstance {
         return this.damage == itemstack.damage;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean isEqualIgnoreFlags(MixinItemInstance itemstack) {
+    public boolean isEqualIgnoreFlags(ItemInstance itemstack) {
         return this.itemId == itemstack.itemId && this.damage == itemstack.damage;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public String getTranslationKey() {
         return ItemType.byId[this.itemId].getTranslationKey(this);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public static MixinItemInstance copy(MixinItemInstance itemstack) {
+    public static ItemInstance copy(ItemInstance itemstack) {
         return itemstack != null ? itemstack.copy() : null;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public String toString() {
         return this.count + "x" + ItemType.byId[this.itemId].getTranslationKey() + "@" + this.damage;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void inventoryTick(MixinLevel world, MixinEntity entity, int i, boolean flag) {
+    public void inventoryTick(Level world, Entity entity, int i, boolean flag) {
         if (this.cooldown > 0) {
             --this.cooldown;
         }
         ItemType.byId[this.itemId].inventoryTick(this, world, entity, i, flag);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void onCrafted(MixinLevel world, MixinPlayer entityplayer) {
+    public void onCrafted(Level world, Player entityplayer) {
         entityplayer.increaseStat(Stats.field_809[this.itemId], this.count);
         ItemType.byId[this.itemId].method_461(this, world, entityplayer);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean isItemEqualIgnoreDamage(MixinItemInstance itemstack) {
+    public boolean isItemEqualIgnoreDamage(ItemInstance itemstack) {
         return this.itemId == itemstack.itemId && this.count == itemstack.count && this.damage == itemstack.damage;
     }
 }

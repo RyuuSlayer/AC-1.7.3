@@ -1,33 +1,18 @@
-/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Object
- *  java.lang.String
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- */
 package io.github.ryuu.adventurecraft.scripting;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ScreenScaler;
 
 public class ScriptUI {
-
     Minecraft mc = Minecraft.minecraftInstance;
 
-    ScriptUI() {
-    }
-
     public int getWidth() {
-        ScreenScaler scaledresolution = new ScreenScaler(this.mc.options, this.mc.actualWidth, this.mc.actualHeight);
+        ScreenScaler scaledresolution = new ScreenScaler(this.mc.z, this.mc.d, this.mc.e);
         return scaledresolution.getScaledWidth();
     }
 
     public int getHeight() {
-        ScreenScaler scaledresolution = new ScreenScaler(this.mc.options, this.mc.actualWidth, this.mc.actualHeight);
+        ScreenScaler scaledresolution = new ScreenScaler(this.mc.z, this.mc.d, this.mc.e);
         return scaledresolution.getScaledHeight();
     }
 

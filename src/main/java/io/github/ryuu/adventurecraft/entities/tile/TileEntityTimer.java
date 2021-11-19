@@ -1,34 +1,25 @@
-package io.github.ryuu.adventurecraft.entities.tile;/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Object
- *  java.lang.Override
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- */
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+package io.github.ryuu.adventurecraft.entities.tile;
+
+import io.github.ryuu.adventurecraft.util.TriggerArea;
 import net.minecraft.tile.Tile;
 import net.minecraft.util.io.CompoundTag;
 
 public class TileEntityTimer extends TileEntityMinMax {
-
-    public int ticks;
-
-    public int timeActive;
-
-    public int timeDeactive;
-
-    public int timeDelay;
-
-    public int ticksDelay;
-
-    public boolean active = false;
+    public boolean resetOnTrigger;
 
     public boolean canActivate = true;
 
-    public boolean resetOnTrigger;
+    public boolean active = false;
+
+    public int ticksDelay;
+
+    public int timeDelay;
+
+    public int timeDeactive;
+
+    public int timeActive;
+
+    public int ticks;
 
     public void startActive() {
         this.active = true;
@@ -39,7 +30,7 @@ public class TileEntityTimer extends TileEntityMinMax {
     @Override
     public void tick() {
         if (this.ticksDelay > 0) {
-            --this.ticksDelay;
+            this.ticksDelay--;
             if (this.ticksDelay == 0) {
                 if (!this.resetOnTrigger) {
                     this.level.triggerManager.addArea(this.x, this.y, this.z, new TriggerArea(this.minX, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ));
@@ -55,40 +46,39 @@ public class TileEntityTimer extends TileEntityMinMax {
                 this.active = false;
                 this.canActivate = false;
                 this.ticks = this.timeDeactive;
-                if (!this.resetOnTrigger) {
-                    this.level.triggerManager.removeArea(this.x, this.y, this.z);
-                }
+                if (!this.resetOnTrigger)
+                    this.levle.triggerManager.removeArea(this.x, this.y, this.z);
             } else {
                 this.canActivate = true;
             }
         } else {
-            --this.ticks;
+            this.ticks--;
         }
     }
 
     @Override
-    public void readIdentifyingData(CompoundTag tag) {
-        super.readIdentifyingData(tag);
-        this.resetOnTrigger = tag.getBoolean("resetOnTrigger");
-        this.timeActive = tag.getInt("timeActive");
-        this.timeDeactive = tag.getInt("timeDeactive");
-        this.timeDelay = tag.getInt("timeDelay");
-        this.ticks = tag.getInt("ticks");
-        this.ticksDelay = tag.getInt("ticksDelay");
-        this.active = tag.getBoolean("active");
-        this.canActivate = tag.getBoolean("canActivate");
+    public void readIdentifyingData(CompoundTag nbttagcompound) {
+        super.readIdentifyingData(nbttagcompound);
+        this.resetOnTrigger = nbttagcompound.getBoolean("resetOnTrigger");
+        this.timeActive = nbttagcompound.getInt("timeActive");
+        this.timeDeactive = nbttagcompound.getInt("timeDeactive");
+        this.timeDelay = nbttagcompound.getInt("timeDelay");
+        this.ticks = nbttagcompound.getInt("ticks");
+        this.ticksDelay = nbttagcompound.getInt("ticksDelay");
+        this.active = nbttagcompound.getBoolean("active");
+        this.canActivate = nbttagcompound.getBoolean("canActivate");
     }
 
     @Override
-    public void writeIdentifyingData(CompoundTag tag) {
-        super.writeIdentifyingData(tag);
-        tag.put("resetOnTrigger", this.resetOnTrigger);
-        tag.put("timeActive", this.timeActive);
-        tag.put("timeDeactive", this.timeDeactive);
-        tag.put("timeDelay", this.timeDelay);
-        tag.put("ticks", this.ticks);
-        tag.put("ticksDelay", this.ticksDelay);
-        tag.put("active", this.active);
-        tag.put("canActivate", this.canActivate);
+    public void writeIdentifyingData(CompoundTag nbttagcompound) {
+        super.writeIdentifyingData(nbttagcompound);
+        nbttagcompound.put("resetOnTrigger", this.resetOnTrigger);
+        nbttagcompound.put("timeActive", this.timeActive);
+        nbttagcompound.put("timeDeactive", this.timeDeactive);
+        nbttagcompound.put("timeDelay", this.timeDelay);
+        nbttagcompound.put("ticks", this.ticks);
+        nbttagcompound.put("ticksDelay", this.ticksDelay);
+        nbttagcompound.put("active", this.active);
+        nbttagcompound.put("canActivate", this.canActivate);
     }
 }

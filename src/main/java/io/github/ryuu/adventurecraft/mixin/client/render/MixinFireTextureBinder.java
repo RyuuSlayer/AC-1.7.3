@@ -1,56 +1,26 @@
-/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.awt.image.BufferedImage
- *  java.lang.Math
- *  java.lang.Object
- *  java.lang.Override
- *  java.lang.String
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- */
 package io.github.ryuu.adventurecraft.mixin.client.render;
 
 import java.awt.image.BufferedImage;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+
+import io.github.ryuu.adventurecraft.util.Vec2;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.FireTextureBinder;
 import net.minecraft.client.render.TextureBinder;
 import net.minecraft.tile.Tile;
-import io.github.ryuu.adventurecraft.mixin.item.MixinTextureBinder;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
 
-@Mixin(FireTextureBinder.class)
-public class MixinFireTextureBinder extends MixinTextureBinder {
-
-    @Shadow()
+public class MixinFireTextureBinder extends TextureBinder {
     protected float[] field_2459 = new float[320];
-
     protected float[] field_2460 = new float[320];
-
     static boolean hasImages;
-
     static int numFrames;
-
     private static int[] frameImages;
-
     private static int width;
-
     static int curFrame;
 
-    public MixinFireTextureBinder(int i) {
+    public FireTextureBinder(int i) {
         super(Tile.FIRE.tex + i * 16);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
     public void onTick(Vec2 texRes) {
         int t;
         int w = texRes.x / 16;
@@ -71,10 +41,10 @@ public class MixinFireTextureBinder extends MixinTextureBinder {
                         for (int x = 0; x < ratio; ++x) {
                             for (int y = 0; y < ratio; ++y) {
                                 k = j * ratio + x + (i * ratio + y) * w;
-                                this.grid[k * 4 + 0] = (byte) (curPixel >> 16 & 0xFF);
-                                this.grid[k * 4 + 1] = (byte) (curPixel >> 8 & 0xFF);
-                                this.grid[k * 4 + 2] = (byte) (curPixel & 0xFF);
-                                this.grid[k * 4 + 3] = (byte) (curPixel >> 24 & 0xFF);
+                                this.grid[k * 4 + 0] = (byte)(curPixel >> 16 & 0xFF);
+                                this.grid[k * 4 + 1] = (byte)(curPixel >> 8 & 0xFF);
+                                this.grid[k * 4 + 2] = (byte)(curPixel & 0xFF);
+                                this.grid[k * 4 + 3] = (byte)(curPixel >> 24 & 0xFF);
                             }
                         }
                     }
@@ -95,10 +65,10 @@ public class MixinFireTextureBinder extends MixinTextureBinder {
                                 a += curPixel >> 24 & 0xFF;
                             }
                         }
-                        this.grid[k * 4 + 0] = (byte) (r / ratio / ratio);
-                        this.grid[k * 4 + 1] = (byte) (g / ratio / ratio);
-                        this.grid[k * 4 + 2] = (byte) (b / ratio / ratio);
-                        this.grid[k * 4 + 3] = (byte) (a / ratio / ratio);
+                        this.grid[k * 4 + 0] = (byte)(r / ratio / ratio);
+                        this.grid[k * 4 + 1] = (byte)(g / ratio / ratio);
+                        this.grid[k * 4 + 2] = (byte)(b / ratio / ratio);
+                        this.grid[k * 4 + 3] = (byte)(a / ratio / ratio);
                         ++k;
                     }
                 }
@@ -111,7 +81,7 @@ public class MixinFireTextureBinder extends MixinTextureBinder {
             this.field_2459 = new float[w * h];
             this.field_2460 = new float[w * h];
         }
-        float reduceAmount = 1.0f + 15.36f / (float) texRes.y;
+        float reduceAmount = 1.0f + 15.36f / (float)texRes.y;
         int times = texRes.y / 256;
         int volatility = 14 + (times + 1) * (times + 1);
         times = times >= 4 ? 2 : 1;
@@ -119,7 +89,7 @@ public class MixinFireTextureBinder extends MixinTextureBinder {
             for (int j = 0; j < h; ++j) {
                 for (int i = 0; i < w; ++i) {
                     int l = volatility;
-                    float f1 = this.field_2459[i + (j + 1) % h * w] * (float) l;
+                    float f1 = this.field_2459[i + (j + 1) % h * w] * (float)l;
                     for (int i1 = i - 1; i1 <= i + 1; ++i1) {
                         for (int k1 = j; k1 <= j + 1; ++k1) {
                             int i2;
@@ -132,10 +102,9 @@ public class MixinFireTextureBinder extends MixinTextureBinder {
                             ++l;
                         }
                     }
-                    this.field_2460[i + j * w] = f1 / ((float) l * reduceAmount);
-                    if (j < h - 1)
-                        continue;
-                    this.field_2460[i + j * w] = (float) (Math.random() * Math.random() * Math.random() * 4.0 + Math.random() * (double) 0.1f + (double) 0.2f);
+                    this.field_2460[i + j * w] = f1 / ((float)l * reduceAmount);
+                    if (j < h - 1) continue;
+                    this.field_2460[i + j * w] = (float)(Math.random() * Math.random() * Math.random() * 4.0 + Math.random() * (double)0.1f + (double)0.2f);
                 }
             }
             float[] af = this.field_2460;
@@ -153,9 +122,9 @@ public class MixinFireTextureBinder extends MixinTextureBinder {
                 f = 0.0f;
             }
             float f2 = f;
-            int j1 = (int) (f2 * 155.0f + 100.0f);
-            int l1 = (int) (f2 * f2 * 255.0f);
-            int j2 = (int) (f2 * f2 * f2 * f2 * f2 * f2 * f2 * f2 * f2 * f2 * 255.0f);
+            int j1 = (int)(f2 * 155.0f + 100.0f);
+            int l1 = (int)(f2 * f2 * 255.0f);
+            int j2 = (int)(f2 * f2 * f2 * f2 * f2 * f2 * f2 * f2 * f2 * f2 * 255.0f);
             int c = 255;
             if (f2 < 0.5f) {
                 c = 0;
@@ -169,25 +138,17 @@ public class MixinFireTextureBinder extends MixinTextureBinder {
                 l1 = i3;
                 j2 = j3;
             }
-            this.grid[k * 4 + 0] = (byte) j1;
-            this.grid[k * 4 + 1] = (byte) l1;
-            this.grid[k * 4 + 2] = (byte) j2;
-            this.grid[k * 4 + 3] = (byte) c;
+            this.grid[k * 4 + 0] = (byte)j1;
+            this.grid[k * 4 + 1] = (byte)l1;
+            this.grid[k * 4 + 2] = (byte)j2;
+            this.grid[k * 4 + 3] = (byte)c;
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public static void loadImage() {
         FireTextureBinder.loadImage("/custom_fire.png");
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public static void loadImage(String texName) {
         BufferedImage bufferedimage = null;
         if (Minecraft.minecraftInstance.level != null) {

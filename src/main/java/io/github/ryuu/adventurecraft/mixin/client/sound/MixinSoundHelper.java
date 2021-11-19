@@ -1,28 +1,13 @@
-/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.io.File
- *  java.lang.Object
- *  java.lang.String
- *  java.lang.System
- *  java.lang.Throwable
- *  java.util.Random
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- */
 package io.github.ryuu.adventurecraft.mixin.client.sound;
 
 import java.io.File;
 import java.util.Random;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+
 import net.minecraft.class_266;
 import net.minecraft.class_267;
 import net.minecraft.class_309;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.options.GameOptions;
-import net.minecraft.client.sound.SoundHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.maths.MathsHelper;
 import paulscode.sound.SoundSystem;
@@ -30,42 +15,20 @@ import paulscode.sound.SoundSystemConfig;
 import paulscode.sound.codecs.CodecJOrbis;
 import paulscode.sound.codecs.CodecWav;
 import paulscode.sound.libraries.LibraryLWJGLOpenAL;
-import io.github.ryuu.adventurecraft.mixin.item.MixinLivingEntity;
-import io.github.ryuu.adventurecraft.mixin.item.MixinClass_266;
-import io.github.ryuu.adventurecraft.mixin.item.MixinGameOptions;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
 
-@Mixin(SoundHelper.class)
 public class MixinSoundHelper {
-
-    @Shadow()
     private static SoundSystem soundSystem;
-
-    private MixinClass_266 field_2668 = new MixinClass_266();
-
-    private MixinClass_266 field_2669 = new MixinClass_266();
-
-    private MixinClass_266 field_2670 = new MixinClass_266();
-
+    private class_266 field_2668 = new class_266();
+    private class_266 field_2669 = new class_266();
+    private class_266 field_2670 = new class_266();
     private int field_2671 = 0;
-
-    private MixinGameOptions gameOptions;
-
+    private GameOptions gameOptions;
     private static boolean field_2673;
-
     private Random rand = new Random();
-
     private int field_2675 = this.rand.nextInt(12000);
-
     private String currentSoundName;
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void acceptOptions(MixinGameOptions gameOptions) {
+    public void acceptOptions(GameOptions gameOptions) {
         this.field_2669.field_1087 = false;
         this.gameOptions = gameOptions;
         if (!(field_2673 || gameOptions != null && gameOptions.sound == 0.0f && gameOptions.music == 0.0f)) {
@@ -73,10 +36,6 @@ public class MixinSoundHelper {
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     private void method_2019() {
         try {
             float f = this.gameOptions.sound;
@@ -92,17 +51,14 @@ public class MixinSoundHelper {
             this.gameOptions.sound = f;
             this.gameOptions.music = f1;
             this.gameOptions.saveOptions();
-        } catch (Throwable throwable) {
+        }
+        catch (Throwable throwable) {
             throwable.printStackTrace();
             System.err.println("error linking with the LibraryJavaSound plug-in");
         }
         field_2673 = true;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void method_2008() {
         if (!(field_2673 || this.gameOptions.sound == 0.0f && this.gameOptions.music == 0.0f)) {
             this.method_2019();
@@ -116,52 +72,28 @@ public class MixinSoundHelper {
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void method_2014() {
         if (field_2673) {
             soundSystem.cleanup();
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void method_2011(String s, File file) {
         this.field_2668.method_959(s, file);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void method_2016(String s, File file) {
         this.field_2669.method_959(s, file);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void method_2018(String s, File file) {
         this.field_2670.method_959(s, file);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void playBackgroundMusic() {
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void setSoundPosition(MixinLivingEntity entity, float f) {
+    public void setSoundPosition(LivingEntity entity, float f) {
         if (!field_2673 || this.gameOptions.sound == 0.0f) {
             return;
         }
@@ -169,9 +101,9 @@ public class MixinSoundHelper {
             return;
         }
         float f1 = entity.prevYaw + (entity.yaw - entity.prevYaw) * f;
-        double d = entity.prevX + (entity.x - entity.prevX) * (double) f;
-        double d1 = entity.prevY + (entity.y - entity.prevY) * (double) f;
-        double d2 = entity.prevZ + (entity.z - entity.prevZ) * (double) f;
+        double d = entity.prevX + (entity.x - entity.prevX) * (double)f;
+        double d1 = entity.prevY + (entity.y - entity.prevY) * (double)f;
+        double d2 = entity.prevZ + (entity.z - entity.prevZ) * (double)f;
         float f2 = MathsHelper.cos(-f1 * 0.01745329f - 3.141593f);
         float f3 = MathsHelper.sin(-f1 * 0.01745329f - 3.141593f);
         float f4 = -f3;
@@ -180,15 +112,11 @@ public class MixinSoundHelper {
         float f7 = 0.0f;
         float f8 = 1.0f;
         float f9 = 0.0f;
-        soundSystem.setListenerPosition((float) d, (float) d1, (float) d2);
+        soundSystem.setListenerPosition((float)d, (float)d1, (float)d2);
         soundSystem.setListenerOrientation(f4, f5, f6, f7, f8, f9);
-        soundSystem.setPosition("BgMusic", (float) d, (float) d1, (float) d2);
+        soundSystem.setPosition("BgMusic", (float)d, (float)d1, (float)d2);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void method_2010(String s, float f, float f1, float f2, float f3, float f4) {
         if (!field_2673 || this.gameOptions.sound == 0.0f) {
             return;
@@ -212,10 +140,6 @@ public class MixinSoundHelper {
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void playSound(String s, float f, float f1, float f2, float f3, float f4) {
         if (!field_2673 || this.gameOptions.sound == 0.0f) {
             return;
@@ -238,10 +162,6 @@ public class MixinSoundHelper {
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void playSound(String s, float f, float f1) {
         if (!field_2673 || this.gameOptions.sound == 0.0f) {
             return;
@@ -260,16 +180,12 @@ public class MixinSoundHelper {
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void playMusicFromStreaming(String s, int fadeOut, int fadeIn) {
         class_267 soundpoolentry;
         if (!field_2673) {
             return;
         }
-        if (s.equals((Object) "")) {
+        if (s.equals("")) {
             this.stopMusic();
         }
         if ((soundpoolentry = this.field_2669.method_958(s)) != null) {
@@ -290,10 +206,6 @@ public class MixinSoundHelper {
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void stopMusic() {
         if (field_2673 && soundSystem != null && soundSystem.playing("BgMusic")) {
             soundSystem.stop("BgMusic");

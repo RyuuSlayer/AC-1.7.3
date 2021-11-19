@@ -1,19 +1,10 @@
-package io.github.ryuu.adventurecraft.blocks;/*
- * Decompiled with CFR 0.0.8 (FabricMC 66e13396).
- * 
- * Could not load the following classes:
- *  java.lang.Math
- *  java.lang.Object
- *  java.lang.Override
- *  java.util.List
- *  java.util.Random
- *  net.fabricmc.api.EnvType
- *  net.fabricmc.api.Environment
- */
+package io.github.ryuu.adventurecraft.blocks;
+
 import java.util.List;
 import java.util.Random;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+
+import io.github.ryuu.adventurecraft.entities.EntityAirFX;
+import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.FallingTile;
@@ -24,8 +15,7 @@ import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 public class BlockFan extends Tile {
-
-    private boolean fanOn;
+    private final boolean fanOn;
 
     public BlockFan(int i, int j, boolean f) {
         super(i, j, Material.STONE);
@@ -33,10 +23,9 @@ public class BlockFan extends Tile {
     }
 
     @Override
-    public int getTextureForSide(int side, int meta) {
-        if (side == meta) {
+    public int getTextureForSide(int i, int j) {
+        if (i == j)
             return this.tex;
-        }
         return 74;
     }
 
@@ -46,136 +35,131 @@ public class BlockFan extends Tile {
     }
 
     @Override
-    public void onPlaced(Level level, int x, int y, int z, int facing) {
-        level.setTileMeta(x, y, z, facing);
-        if (this.fanOn) {
-            level.method_216(x, y, z, this.id, this.getTickrate());
-        }
+    public void onPlaced(Level world, int i, int j, int k, int l) {
+        world.setTileMeta(i, j, k, l);
+        if (this.fanOn)
+            world.method_216(i, j, k, this.id, getTickrate());
     }
 
     private boolean canGoThroughBlock(int blockID) {
-        return Tile.BY_ID[blockID] != null && Tile.BY_ID[blockID].material != Material.AIR && Tile.BY_ID[blockID].material != Material.WATER && Tile.BY_ID[blockID].material != Material.LAVA;
+        return (Tile.BY_ID[blockID] != null &&
+                (Tile.BY_ID[blockID]).material != Material.AIR &&
+                (Tile.BY_ID[blockID]).material != Material.WATER &&
+                (Tile.BY_ID[blockID]).material != Material.LAVA);
     }
 
     @Override
-    public void onScheduledTick(Level level, int x, int y, int z, Random rand) {
-        if (!this.fanOn) {
+    public void onScheduledTick(Level world, int i, int j, int k, Random random) {
+        if (!this.fanOn)
             return;
-        }
-        level.method_216(x, y, z, this.id, this.getTickrate());
+        world.method_216(i, j, k, this.id, getTickrate());
         if (!DebugMode.active) {
-            double dist;
-            Entity e;
-            int blockID;
-            int direction = level.getTileMeta(x, y, z);
+            int direction = world.getTileMeta(i, j, k);
             int xOffset = 0;
             int yOffset = 0;
             int zOffset = 0;
             if (direction == 0) {
-                for (yOffset = -1; yOffset >= -4; --yOffset) {
-                    blockID = level.getTileId(x, y + yOffset, z);
-                    if (!this.canGoThroughBlock(blockID))
-                        continue;
-                    ++yOffset;
-                    break;
+                for (yOffset = -1; yOffset >= -4; yOffset--) {
+                    int blockID = world.getTileId(i, j + yOffset, k);
+                    if (canGoThroughBlock(blockID)) {
+                        yOffset++;
+                        break;
+                    }
                 }
             } else if (direction == 1) {
-                for (yOffset = 1; yOffset <= 4; ++yOffset) {
-                    blockID = level.getTileId(x, y + yOffset, z);
-                    if (!this.canGoThroughBlock(blockID))
-                        continue;
-                    --yOffset;
-                    break;
+                for (yOffset = 1; yOffset <= 4; yOffset++) {
+                    int blockID = world.getTileId(i, j + yOffset, k);
+                    if (canGoThroughBlock(blockID)) {
+                        yOffset--;
+                        break;
+                    }
                 }
             } else if (direction == 2) {
-                for (zOffset = -1; zOffset >= -4; --zOffset) {
-                    blockID = level.getTileId(x, y, z + zOffset);
-                    if (!this.canGoThroughBlock(blockID))
-                        continue;
-                    ++zOffset;
-                    break;
+                for (zOffset = -1; zOffset >= -4; zOffset--) {
+                    int blockID = world.getTileId(i, j, k + zOffset);
+                    if (canGoThroughBlock(blockID)) {
+                        zOffset++;
+                        break;
+                    }
                 }
             } else if (direction == 3) {
-                for (zOffset = 1; zOffset <= 4; ++zOffset) {
-                    blockID = level.getTileId(x, y, z + zOffset);
-                    if (!this.canGoThroughBlock(blockID))
-                        continue;
-                    --zOffset;
-                    break;
+                for (zOffset = 1; zOffset <= 4; zOffset++) {
+                    int blockID = world.getTileId(i, j, k + zOffset);
+                    if (canGoThroughBlock(blockID)) {
+                        zOffset--;
+                        break;
+                    }
                 }
             } else if (direction == 4) {
-                for (xOffset = -1; xOffset >= -4; --xOffset) {
-                    blockID = level.getTileId(x + xOffset, y, z);
-                    if (!this.canGoThroughBlock(blockID))
-                        continue;
-                    ++xOffset;
-                    break;
+                for (xOffset = -1; xOffset >= -4; xOffset--) {
+                    int blockID = world.getTileId(i + xOffset, j, k);
+                    if (canGoThroughBlock(blockID)) {
+                        xOffset++;
+                        break;
+                    }
                 }
             } else if (direction == 5) {
-                for (xOffset = 1; xOffset <= 4; ++xOffset) {
-                    blockID = level.getTileId(x + xOffset, y, z);
-                    if (!this.canGoThroughBlock(blockID))
-                        continue;
-                    --xOffset;
-                    break;
+                for (xOffset = 1; xOffset <= 4; xOffset++) {
+                    int blockID = world.getTileId(i + xOffset, j, k);
+                    if (canGoThroughBlock(blockID)) {
+                        xOffset--;
+                        break;
+                    }
                 }
             }
-            Box aabb = this.getCollisionShape(level, x, y, z).add(xOffset, yOffset, zOffset);
-            List entities = level.getEntities(Entity.class, aabb);
+            Box aabb = getCollisionShape(world, i, j, k).add(xOffset, yOffset, zOffset);
+            List entities = world.getEntities(Entity.class, aabb);
             for (Object obj : entities) {
-                e = (Entity) obj;
-                if (e instanceof FallingTile)
-                    continue;
-                dist = e.method_1350((double) x + 0.5, (double) y + 0.5, (double) z + 0.5) * (double) Math.abs((int) (xOffset + yOffset + zOffset)) / 4.0;
-                e.method_1322(0.07 * (double) xOffset / dist, 0.07 * (double) yOffset / dist, 0.07 * (double) zOffset / dist);
-                if (!(e instanceof Player) || !((Player) e).usingUmbrella())
-                    continue;
-                e.method_1322(0.07 * (double) xOffset / dist, 0.07 * (double) yOffset / dist, 0.07 * (double) zOffset / dist);
+                Entity e = (Entity) obj;
+                if (!(e instanceof FallingTile)) {
+                    double dist = e.method_1350(i + 0.5D, j + 0.5D, k + 0.5D) * Math.abs(xOffset + yOffset + zOffset) / 4.0D;
+                    e.method_1322(0.07D * xOffset / dist, 0.07D * yOffset / dist, 0.07D * zOffset / dist);
+                    if (e instanceof Player && ((Player) e).usingUmbrella())
+                        e.method_1322(0.07D * xOffset / dist, 0.07D * yOffset / dist, 0.07D * zOffset / dist);
+                }
             }
             entities = Minecraft.minecraftInstance.particleManager.getEffectsWithinAABB(aabb);
             for (Object obj : entities) {
-                e = (Entity) obj;
-                if (e instanceof FallingTile)
-                    continue;
-                dist = e.method_1350((double) x + 0.5, (double) y + 0.5, (double) z + 0.5) * (double) Math.abs((int) (xOffset + yOffset + zOffset)) / 4.0;
-                e.method_1322(0.03 * (double) xOffset / dist, 0.03 * (double) yOffset / dist, 0.03 * (double) zOffset / dist);
+                Entity e = (Entity) obj;
+                if (!(e instanceof FallingTile)) {
+                    double dist = e.method_1350(i + 0.5D, j + 0.5D, k + 0.5D) * Math.abs(xOffset + yOffset + zOffset) / 4.0D;
+                    e.method_1322(0.03D * xOffset / dist, 0.03D * yOffset / dist, 0.03D * zOffset / dist);
+                }
             }
-            Minecraft.minecraftInstance.particleManager.addParticle(new EntityAirFX(level, (double) x + rand.nextDouble(), (double) y + rand.nextDouble(), (double) z + rand.nextDouble()));
+            Minecraft.minecraftInstance.particleManager.addParticle(new EntityAirFX(world, i + random.nextDouble(), j + random.nextDouble(), k + random.nextDouble()));
         }
     }
 
     @Override
-    public void randomDisplayTick(Level level, int x, int y, int z, Random rand) {
-        if (this.fanOn) {
-            level.method_216(x, y, z, this.id, this.getTickrate());
-        }
+    public void randomDisplayTick(Level world, int i, int j, int k, Random random) {
+        if (this.fanOn)
+            world.method_216(i, j, k, this.id, getTickrate());
     }
 
     @Override
-    public boolean activate(Level level, int x, int y, int z, Player player) {
+    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
         if (DebugMode.active) {
-            level.setTileMeta(x, y, z, (level.getTileMeta(x, y, z) + 1) % 6);
-            level.method_246(x, y, z);
+            world.setTileMeta(i, j, k, (world.getTileMeta(i, j, k) + 1) % 6);
+            world.method_246(i, j, k);
             return true;
         }
         return false;
     }
 
     @Override
-    public void method_1609(Level level, int x, int y, int z, int id) {
-        if (level.isClient) {
+    public void method_1609(Level world, int i, int j, int k, int l) {
+        if (world.isClient)
             return;
-        }
-        if (level.hasRedstonePower(x, y, z)) {
+        if (world.hasRedstonePower(i, j, k)) {
             if (this.fanOn) {
-                int m = level.getTileMeta(x, y, z);
-                level.method_201(x, y, z, Blocks.fanOff.id, m);
+                int m = world.getTileMeta(i, j, k);
+                world.method_201(i, j, k, Blocks.fanOff.id, m);
             }
         } else if (!this.fanOn) {
-            int m = level.getTileMeta(x, y, z);
-            level.method_201(x, y, z, Blocks.fan.id, m);
-            level.method_216(x, y, z, Blocks.fan.id, this.getTickrate());
+            int m = world.getTileMeta(i, j, k);
+            world.method_201(i, j, k, Blocks.fan.id, m);
+            world.method_216(i, j, k, Blocks.fan.id, getTickrate());
         }
-        super.method_1609(level, x, y, z, id);
+        super.method_1609(world, i, j, k, l);
     }
 }
