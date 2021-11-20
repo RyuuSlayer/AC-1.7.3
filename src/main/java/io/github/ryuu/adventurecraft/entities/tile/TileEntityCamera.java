@@ -1,6 +1,10 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.util.io.CompoundTag;
 
 public class TileEntityCamera extends MixinTileEntity {
 
@@ -9,8 +13,10 @@ public class TileEntityCamera extends MixinTileEntity {
     public String sound;
 
     public CutsceneCamera camera = new CutsceneCamera();
-    public boolean pauseGame = true;
+
     int type = 2;
+
+    public boolean pauseGame = true;
 
     TileEntityCamera() {
     }
@@ -36,7 +42,7 @@ public class TileEntityCamera extends MixinTileEntity {
         super.readIdentifyingData(tag);
         int numPoints = tag.getInt("numPoints");
         for (int i = 0; i < numPoints; ++i) {
-            this.readPointTag(tag.getCompoundTag(String.format("point%d", new Object[]{i})));
+            this.readPointTag(tag.getCompoundTag(String.format((String) "point%d", (Object[]) new Object[] { i })));
         }
         if (tag.containsKey("type")) {
             this.type = tag.getByte("type");
@@ -51,7 +57,7 @@ public class TileEntityCamera extends MixinTileEntity {
         super.writeIdentifyingData(tag);
         int numPoints = 0;
         for (CutsceneCameraPoint p : this.camera.cameraPoints) {
-            tag.put(String.format("point%d", new Object[]{numPoints}), this.getPointTag(p));
+            tag.put(String.format((String) "point%d", (Object[]) new Object[] { numPoints }), this.getPointTag(p));
             ++numPoints;
         }
         tag.put("numPoints", numPoints);

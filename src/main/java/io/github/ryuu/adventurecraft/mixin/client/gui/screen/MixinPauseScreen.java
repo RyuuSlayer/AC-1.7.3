@@ -1,9 +1,12 @@
 package io.github.ryuu.adventurecraft.mixin.client.gui.screen;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.screen.AchievementsScreen;
 import net.minecraft.client.gui.screen.OptionsScreen;
-import net.minecraft.client.gui.screen.PauseScreen;
 import net.minecraft.client.gui.screen.StatsScreen;
+import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.stat.Stats;
@@ -13,7 +16,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(PauseScreen.class)
-public class MixinPauseScreen extends MixinScreen {
+public class MixinPauseScreen extends Screen {
 
     @Shadow()
     private int field_2204 = 0;
@@ -56,7 +59,7 @@ public class MixinPauseScreen extends MixinScreen {
             this.minecraft.setLevel(null);
             this.minecraft.overlay.scriptUI.clear();
             this.minecraft.cameraActive = false;
-            this.minecraft.openScreen(new MixinTitleScreen());
+            this.minecraft.openScreen(new TitleScreen());
             this.minecraft.soundHelper.stopMusic();
         }
         if (button.id == 4) {
@@ -69,16 +72,6 @@ public class MixinPauseScreen extends MixinScreen {
         if (button.id == 6) {
             this.minecraft.openScreen(new StatsScreen(this, this.minecraft.statManager));
         }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public void tick() {
-        super.tick();
-        ++this.field_2205;
     }
 
     /**

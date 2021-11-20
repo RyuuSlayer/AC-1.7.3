@@ -1,27 +1,36 @@
 package io.github.ryuu.adventurecraft.mixin.entity;
 
 import net.minecraft.achievement.Achievements;
-import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
+import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.MathsHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(ItemEntity.class)
-public class MixinItemEntity extends MixinEntity {
+public class MixinItemEntity extends Entity {
 
     @Shadow()
-    public MixinItemInstance item;
-    public int age = 0;
-    public int pickupDelay;
-    public float field_567 = (float) (Math.random() * Math.PI * 2.0);
+    public ItemInstance item;
+
     private int field_568;
+
+    public int age = 0;
+
+    public int pickupDelay;
+
     private int health = 5;
 
-    public MixinItemEntity(MixinLevel world, double d, double d1, double d2, MixinItemInstance itemstack) {
+    public float field_567 = (float) (Math.random() * Math.PI * 2.0);
+
+    public MixinItemEntity(Level world, double d, double d1, double d2, ItemInstance itemstack) {
         super(world);
         this.setSize(0.25f, 0.25f);
         this.standingEyeHeight = this.height / 2.0f;
@@ -36,27 +45,10 @@ public class MixinItemEntity extends MixinEntity {
         }
     }
 
-    public MixinItemEntity(MixinLevel world) {
+    public MixinItemEntity(Level world) {
         super(world);
         this.setSize(0.25f, 0.25f);
         this.standingEyeHeight = this.height / 2.0f;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    protected boolean canClimb() {
-        return false;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    protected void initDataTracker() {
     }
 
     /**
@@ -72,7 +64,7 @@ public class MixinItemEntity extends MixinEntity {
         this.prevX = this.x;
         this.prevY = this.y;
         this.prevZ = this.z;
-        this.velocityY -= 0.04f;
+        this.velocityY -= (double) 0.04f;
         if (this.level.getMaterial(MathsHelper.floor(this.x), MathsHelper.floor(this.y), MathsHelper.floor(this.z)) == Material.LAVA) {
             this.velocityY = 0.2f;
             this.velocityX = (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2f;
@@ -89,9 +81,9 @@ public class MixinItemEntity extends MixinEntity {
                 f = Tile.BY_ID[i].field_1901 * 0.98f;
             }
         }
-        this.velocityX *= f;
-        this.velocityY *= 0.98f;
-        this.velocityZ *= f;
+        this.velocityX *= (double) f;
+        this.velocityY *= (double) 0.98f;
+        this.velocityZ *= (double) f;
         if (this.onGround) {
             this.velocityY *= -0.5;
         }
@@ -100,15 +92,6 @@ public class MixinItemEntity extends MixinEntity {
         if (this.age >= 6000) {
             this.remove();
         }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public boolean method_1393() {
-        return this.level.method_170(this.boundingBox, Material.WATER, this);
     }
 
     /**
@@ -125,7 +108,7 @@ public class MixinItemEntity extends MixinEntity {
      */
     @Override
     @Overwrite()
-    public boolean damage(MixinEntity target, int amount) {
+    public boolean damage(Entity target, int amount) {
         this.method_1336();
         this.health -= amount;
         if (this.health <= 0) {
@@ -139,10 +122,10 @@ public class MixinItemEntity extends MixinEntity {
      */
     @Override
     @Overwrite()
-    public void writeCustomDataToTag(MixinCompoundTag tag) {
+    public void writeCustomDataToTag(CompoundTag tag) {
         tag.put("Health", (short) ((byte) this.health));
         tag.put("Age", (short) this.age);
-        tag.put("Item", this.item.toTag(new MixinCompoundTag()));
+        tag.put("Item", this.item.toTag(new CompoundTag()));
     }
 
     /**
@@ -150,11 +133,11 @@ public class MixinItemEntity extends MixinEntity {
      */
     @Override
     @Overwrite()
-    public void readCustomDataFromTag(MixinCompoundTag tag) {
+    public void readCustomDataFromTag(CompoundTag tag) {
         this.health = tag.getShort("Health") & 0xFF;
         this.age = tag.getShort("Age");
-        MixinCompoundTag nbttagcompound1 = tag.getCompoundTag("Item");
-        this.item = new MixinItemInstance(nbttagcompound1);
+        CompoundTag nbttagcompound1 = tag.getCompoundTag("Item");
+        this.item = new ItemInstance(nbttagcompound1);
     }
 
     /**
@@ -162,7 +145,7 @@ public class MixinItemEntity extends MixinEntity {
      */
     @Override
     @Overwrite()
-    public void onPlayerCollision(MixinPlayer entityplayer) {
+    public void onPlayerCollision(Player entityplayer) {
         if (this.level.isClient) {
             return;
         }

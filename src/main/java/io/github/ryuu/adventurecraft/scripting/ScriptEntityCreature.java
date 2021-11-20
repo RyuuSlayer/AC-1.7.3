@@ -1,5 +1,11 @@
 package io.github.ryuu.adventurecraft.scripting;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.entity.WalkingEntity;
+import net.minecraft.script.ScriptEntity;
+import net.minecraft.script.ScriptEntityLiving;
+
 public class ScriptEntityCreature extends ScriptEntityLiving {
 
     MixinWalkingEntity entityCreature;
@@ -9,12 +15,12 @@ public class ScriptEntityCreature extends ScriptEntityLiving {
         this.entityCreature = e;
     }
 
-    public ScriptEntity getTarget() {
-        return ScriptEntity.getEntityClass(this.entityCreature.method_634());
-    }
-
     public void setTarget(ScriptEntity e) {
         this.entityCreature.method_636(e.entity);
+    }
+
+    public ScriptEntity getTarget() {
+        return ScriptEntity.getEntityClass(this.entityCreature.method_634());
     }
 
     public boolean hasPath() {

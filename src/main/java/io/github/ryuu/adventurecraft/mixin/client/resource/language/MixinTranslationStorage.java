@@ -1,27 +1,28 @@
 package io.github.ryuu.adventurecraft.mixin.client.resource.language;
 
-import net.minecraft.client.resource.language.TranslationStorage;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(TranslationStorage.class)
 public class MixinTranslationStorage {
 
     @Shadow()
-    private static MixinTranslationStorage instance = new MixinTranslationStorage();
+    private static TranslationStorage instance = new TranslationStorage();
 
-    private final Properties translations = new Properties();
+    private Properties translations = new Properties();
 
     private MixinTranslationStorage() {
         try {
-            this.translations.load(MixinTranslationStorage.class.getResourceAsStream("/lang/en_US.lang"));
-            this.translations.load(MixinTranslationStorage.class.getResourceAsStream("/lang/stats_US.lang"));
+            this.translations.load(TranslationStorage.class.getResourceAsStream("/lang/en_US.lang"));
+            this.translations.load(TranslationStorage.class.getResourceAsStream("/lang/stats_US.lang"));
         } catch (IOException ioexception) {
             ioexception.printStackTrace();
         }
@@ -31,24 +32,16 @@ public class MixinTranslationStorage {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite()
-    public static MixinTranslationStorage getInstance() {
-        return instance;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void loadMapTranslation(File levelDir) {
         try {
-            this.translations.load(MixinTranslationStorage.class.getResourceAsStream("/lang/en_US.lang"));
+            this.translations.load(TranslationStorage.class.getResourceAsStream("/lang/en_US.lang"));
         } catch (IOException ioexception) {
         }
         try {
             File langFile = new File(levelDir, "/lang/en_US.lang");
             if (langFile.exists()) {
                 FileInputStream is = new FileInputStream(langFile);
-                this.translations.load(is);
+                this.translations.load((InputStream) is);
             }
         } catch (IOException iOException) {
         }
@@ -68,7 +61,7 @@ public class MixinTranslationStorage {
     @Overwrite()
     public String translate(String key, Object[] arg) {
         String s1 = this.translations.getProperty(key, key);
-        return String.format(s1, arg);
+        return String.format((String) s1, (Object[]) arg);
     }
 
     /**
@@ -77,7 +70,7 @@ public class MixinTranslationStorage {
     @Overwrite()
     public String method_995(String s) {
         String t = this.translations.getProperty(s + ".name", "");
-        if (t.equals("") && s != null) {
+        if (t.equals((Object) "") && s != null) {
             String[] parts = s.split("\\.");
             t = parts[parts.length - 1];
             this.translations.setProperty(s, t);

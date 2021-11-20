@@ -1,5 +1,8 @@
 package io.github.ryuu.adventurecraft.models;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.entity.model.EntityModel;
 
 public class ModelCamera extends EntityModel {

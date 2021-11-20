@@ -1,12 +1,17 @@
 package io.github.ryuu.adventurecraft.blocks;
 
+import java.util.Random;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.TileWithEntity;
+import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
-
-import java.util.Random;
 
 public class BlockTrigger extends TileWithEntity {
 
@@ -61,7 +66,8 @@ public class BlockTrigger extends TileWithEntity {
             for (int x = i - 1; x <= i + 1; ++x) {
                 for (int y = j - 1; y <= j + 1; ++y) {
                     for (int z = k - 1; z <= k + 1; ++z) {
-                        if (world.getTileId(x, y, z) != this.id) continue;
+                        if (world.getTileId(x, y, z) != this.id)
+                            continue;
                         this.setNotVisited(world, x, y, z);
                     }
                 }
@@ -86,13 +92,16 @@ public class BlockTrigger extends TileWithEntity {
             for (int x = i - 1; x <= i + 1; ++x) {
                 for (int y = j - 1; y <= j + 1; ++y) {
                     for (int z = k - 1; z <= k + 1; ++z) {
-                        if (world.getTileId(x, y, z) != this.id || !this._isAlreadyActivated(world, x, y, z)) continue;
+                        if (world.getTileId(x, y, z) != this.id || !this._isAlreadyActivated(world, x, y, z))
+                            continue;
                         isActivated = true;
                         break;
                     }
-                    if (isActivated) break;
+                    if (isActivated)
+                        break;
                 }
-                if (isActivated) break;
+                if (isActivated)
+                    break;
             }
         }
         return isActivated;
@@ -111,7 +120,8 @@ public class BlockTrigger extends TileWithEntity {
             for (int x = i - 1; x <= i + 1; ++x) {
                 for (int y = j - 1; y <= j + 1; ++y) {
                     for (int z = k - 1; z <= k + 1; ++z) {
-                        if (world.getTileId(x, y, z) != this.id) continue;
+                        if (world.getTileId(x, y, z) != this.id)
+                            continue;
                         this._removeArea(world, x, y, z);
                     }
                 }
@@ -158,7 +168,8 @@ public class BlockTrigger extends TileWithEntity {
         for (int x = i - 1; x <= i + 1; ++x) {
             for (int y = j - 1; y <= j + 1; ++y) {
                 for (int z = k - 1; z <= k + 1; ++z) {
-                    if (world.getTileId(x, y, z) != this.id) continue;
+                    if (world.getTileId(x, y, z) != this.id)
+                        continue;
                     this.setTriggerToSelection(world, x, y, z);
                 }
             }
@@ -174,7 +185,8 @@ public class BlockTrigger extends TileWithEntity {
         for (int x = i - 1; x <= i + 1; ++x) {
             for (int y = j - 1; y <= j + 1; ++y) {
                 for (int z = k - 1; z <= k + 1; ++z) {
-                    if (world.getTileId(x, y, z) != this.id) continue;
+                    if (world.getTileId(x, y, z) != this.id)
+                        continue;
                     this.setTriggerReset(world, x, y, z, resetOnTrigger);
                 }
             }

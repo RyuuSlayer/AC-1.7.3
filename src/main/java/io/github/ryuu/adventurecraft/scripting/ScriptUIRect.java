@@ -1,7 +1,13 @@
 package io.github.ryuu.adventurecraft.scripting;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.TextRenderer;
+import net.minecraft.client.texture.TextureManager;
+import net.minecraft.script.ScriptUIContainer;
+import net.minecraft.script.UIElement;
 import org.lwjgl.opengl.GL11;
 
 public class ScriptUIRect extends UIElement {
@@ -41,14 +47,14 @@ public class ScriptUIRect extends UIElement {
         float x = this.getXAtTime(partialTickTime);
         float y = this.getYAtTime(partialTickTime);
         Tessellator tessellator = Tessellator.INSTANCE;
-        GL11.glDisable(3553);
-        GL11.glColor4f(this.red, this.green, this.blue, this.alpha);
+        GL11.glDisable((int) 3553);
+        GL11.glColor4f((float) this.red, (float) this.green, (float) this.blue, (float) this.alpha);
         tessellator.start();
         tessellator.pos(x, y + this.height, 0.0);
         tessellator.pos(x + this.width, y + this.height, 0.0);
         tessellator.pos(x + this.width, y, 0.0);
         tessellator.pos(x, y, 0.0);
         tessellator.draw();
-        GL11.glEnable(3553);
+        GL11.glEnable((int) 3553);
     }
 }

@@ -1,16 +1,18 @@
 package io.github.ryuu.adventurecraft.gui;
 
+import java.util.ArrayList;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-import java.util.ArrayList;
-
 public class GuiMusicSheet extends MixinScreen {
 
-    private final String instrument;
+    private String instrument;
 
-    private final ArrayList<Integer> notesPlayed;
+    private ArrayList<Integer> notesPlayed;
 
     private String notesPlayedString;
 
@@ -27,10 +29,6 @@ public class GuiMusicSheet extends MixinScreen {
         this.songPlayed = null;
     }
 
-    public static void showUI(String i) {
-        Minecraft.minecraftInstance.openScreen(new GuiMusicSheet(i));
-    }
-
     @Override
     public void tick() {
     }
@@ -44,14 +42,14 @@ public class GuiMusicSheet extends MixinScreen {
         super.keyPressed(character, key);
         if (this.songPlayed == null && key >= 2 && key <= 11) {
             boolean isSharp;
-            boolean bl = isSharp = Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54);
+            boolean bl = isSharp = Keyboard.isKeyDown((int) 42) || Keyboard.isKeyDown((int) 54);
             if (isSharp && (key == 2 || key == 4 || key == 5 || key == 6 || key == 8 || key == 9 || key == 11)) {
                 if (this.spaceTaken + 25 >= 168) {
                     this.notesPlayed.clear();
                     this.notesPlayedString = "";
                     this.spaceTaken = 0;
                 }
-                this.notesPlayed.add(new Integer(-key));
+                this.notesPlayed.add((Object) new Integer(-key));
                 this.spaceTaken += 14;
             }
             if (this.spaceTaken + 11 >= 168) {
@@ -60,7 +58,7 @@ public class GuiMusicSheet extends MixinScreen {
                 this.spaceTaken = 0;
             }
             this.spaceTaken += 11;
-            this.notesPlayed.add(new Integer(key));
+            this.notesPlayed.add((Object) new Integer(key));
             if (key == 2) {
                 MusicPlayer.playNoteFromEntity(this.minecraft.level, this.minecraft.player, this.instrument, 'D', isSharp, 0.5f, 1.0f);
                 this.notesPlayedString = this.notesPlayedString + character;
@@ -119,18 +117,18 @@ public class GuiMusicSheet extends MixinScreen {
             }
         }
         this.fill((this.width - 215) / 2, this.height - 59 - 4 - 48, (this.width + 215) / 2, this.height - 48, alpha2);
-        GL11.glEnable(3042);
-        GL11.glBlendFunc(770, 771);
-        GL11.glDisable(3008);
+        GL11.glEnable((int) 3042);
+        GL11.glBlendFunc((int) 770, (int) 771);
+        GL11.glDisable((int) 3008);
         if (this.songPlayed != null) {
             this.drawTextWithShadowCentred(this.textManager, this.songPlayed, this.width / 2, this.height - 59 - 48, 0xE0E0E0 + alpha3);
         }
         int t = this.minecraft.textureManager.getTextureId("/gui/musicSheet.png");
-        GL11.glColor4f(0.9f, 0.1f, 0.1f, alpha);
+        GL11.glColor4f((float) 0.9f, (float) 0.1f, (float) 0.1f, (float) alpha);
         this.minecraft.textureManager.bindTexture(t);
         this.blit((this.width - 205) / 2, this.height - 59 - 2 - 48, 0, 0, 205, 59);
         int x = 0;
-        GL11.glColor4f(1.0f, 1.0f, 1.0f, alpha);
+        GL11.glColor4f((float) 1.0f, (float) 1.0f, (float) 1.0f, (float) alpha);
         for (Integer note : this.notesPlayed) {
             if (note > 0) {
                 this.drawNote(x, note);
@@ -140,8 +138,8 @@ public class GuiMusicSheet extends MixinScreen {
             this.drawSharp(x, -note.intValue());
             x += 14;
         }
-        GL11.glEnable(3008);
-        GL11.glDisable(3042);
+        GL11.glEnable((int) 3008);
+        GL11.glDisable((int) 3042);
         super.render(mouseX, mouseY, delta);
     }
 
@@ -151,6 +149,10 @@ public class GuiMusicSheet extends MixinScreen {
 
     private void drawSharp(int x, int note) {
         this.blit((this.width - 205) / 2 + 36 + x, this.height - 59 - 2 - 48 + 46 - (note - 2) * 4 - 5, 16, 64, 12, 17);
+    }
+
+    public static void showUI(String i) {
+        Minecraft.minecraftInstance.openScreen(new GuiMusicSheet(i));
     }
 
     @Override

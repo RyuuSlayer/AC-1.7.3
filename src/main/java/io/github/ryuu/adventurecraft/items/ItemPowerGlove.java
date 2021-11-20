@@ -1,5 +1,12 @@
 package io.github.ryuu.adventurecraft.items;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.entity.FallingTile;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 import org.lwjgl.input.Keyboard;
 
@@ -28,7 +35,7 @@ public class ItemPowerGlove extends MixinItemType {
         if (level.getTileId(x, y, z) != Blocks.pushableBlock.id) {
             return false;
         }
-        if (Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157)) {
+        if (Keyboard.isKeyDown((int) 29) || Keyboard.isKeyDown((int) 157)) {
             xOffset *= -1;
             zOffset *= -1;
         }

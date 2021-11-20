@@ -1,5 +1,9 @@
 package io.github.ryuu.adventurecraft.items;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.item.ItemType;
+
 public class Items {
 
     public static MixinItemType boomerang = new ItemBoomerang(200).setName("boomerang").method_466();

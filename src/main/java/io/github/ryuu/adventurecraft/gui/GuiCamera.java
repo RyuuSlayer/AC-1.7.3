@@ -1,8 +1,12 @@
 package io.github.ryuu.adventurecraft.gui;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.Textbox;
+import net.minecraft.entity.Entity;
 
 public class GuiCamera extends MixinScreen {
 
@@ -12,10 +16,6 @@ public class GuiCamera extends MixinScreen {
 
     public GuiCamera(EntityCamera c) {
         this.cam = c;
-    }
-
-    public static void showUI(EntityCamera c) {
-        Minecraft.minecraftInstance.openScreen(new GuiCamera(c));
     }
 
     @Override
@@ -29,7 +29,7 @@ public class GuiCamera extends MixinScreen {
             b.text = "Quadratic Interpolation";
         }
         this.buttons.add((Object) b);
-        this.timerText = new Textbox(this, this.textManager, 80, 46, 70, 16, String.format("%.2f", new Object[]{Float.valueOf((float) this.cam.time)}));
+        this.timerText = new Textbox(this, this.textManager, 80, 46, 70, 16, String.format((String) "%.2f", (Object[]) new Object[] { Float.valueOf((float) this.cam.time) }));
     }
 
     @Override
@@ -74,7 +74,7 @@ public class GuiCamera extends MixinScreen {
     public void render(int mouseX, int mouseY, float delta) {
         this.renderBackground();
         try {
-            Float value = Float.valueOf(this.timerText.method_1876());
+            Float value = Float.valueOf((String) this.timerText.method_1876());
             this.cam.time = value.floatValue();
             this.minecraft.activeCutsceneCamera.setTime(this.cam.cameraID, value.floatValue());
         } catch (NumberFormatException e) {
@@ -82,5 +82,9 @@ public class GuiCamera extends MixinScreen {
         this.drawTextWithShadow(this.textManager, "Active At:", 4, 49, 0xE0E0E0);
         this.timerText.method_1883();
         super.render(mouseX, mouseY, delta);
+    }
+
+    public static void showUI(EntityCamera c) {
+        Minecraft.minecraftInstance.openScreen(new GuiCamera(c));
     }
 }

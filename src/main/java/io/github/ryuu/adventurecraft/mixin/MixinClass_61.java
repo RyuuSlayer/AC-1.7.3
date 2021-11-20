@@ -1,14 +1,16 @@
 package io.github.ryuu.adventurecraft.mixin;
 
-import io.github.ryuu.adventurecraft.mixin.entity.MixinEntity;
-import net.minecraft.class_61;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.class_108;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.maths.Vec3f;
 import net.minecraft.util.maths.Vec3i;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
-@Mixin(class_61.class)
+@Mixin(Class_61.class)
 public class MixinClass_61 {
 
     @Shadow()
@@ -18,7 +20,7 @@ public class MixinClass_61 {
 
     public int field_2692;
 
-    public MixinClass_108 p;
+    public class_108 p;
 
     public Vec3i clearSize;
 
@@ -42,26 +44,7 @@ public class MixinClass_61 {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite()
-    public boolean method_2042() {
-        return this.field_2692 >= this.field_2691.length;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public Vec3i method_2043() {
-        if (this.field_2690 > 0) {
-            return this.field_2691[this.field_2690 - 1];
-        }
-        return null;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public Vec3f method_2041(MixinEntity entity) {
+    public Vec3f method_2041(Entity entity) {
         double d = (double) this.field_2691[this.field_2692].x + (double) ((int) (entity.width + 1.0f)) * 0.5;
         double d1 = this.field_2691[this.field_2692].y;
         double d2 = (double) this.field_2691[this.field_2692].z + (double) ((int) (entity.width + 1.0f)) * 0.5;
@@ -72,7 +55,7 @@ public class MixinClass_61 {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite()
-    public boolean needNewPath(MixinEntity entity) {
+    public boolean needNewPath(Entity entity) {
         if (this.field_2690 > 0) {
             double dX = entity.x - (double) this.field_2691[this.field_2690 - 1].x - 0.5;
             double dY = entity.y - (double) entity.standingEyeHeight - (double) this.field_2691[this.field_2690 - 1].y;

@@ -1,10 +1,17 @@
 package io.github.ryuu.adventurecraft.items;
 
+import java.util.List;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.FallingTile;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
 import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.Vec3f;
-
-import java.util.List;
 
 class ItemUmbrella extends MixinItemType {
 
@@ -40,25 +47,29 @@ class ItemUmbrella extends MixinItemType {
         for (Object obj : entities) {
             e = (MixinEntity) obj;
             dist = e.method_1352(player);
-            if (!(dist < 36.0) || e instanceof MixinFallingTile) continue;
+            if (!(dist < 36.0) || e instanceof MixinFallingTile)
+                continue;
             dX = e.x - player.x;
             dY = e.y - player.y;
             dZ = e.z - player.z;
-            dotProduct = (dX /= (dist = Math.sqrt(dist))) * lookVec.x + (dY /= dist) * lookVec.y + (dZ /= dist) * lookVec.z;
-            if (!(dotProduct > 0.0) || !(Math.acos(dotProduct) < 1.5707963267948966)) continue;
-            dist = Math.max(dist, 3.0);
+            dotProduct = (dX /= (dist = Math.sqrt((double) dist))) * lookVec.x + (dY /= dist) * lookVec.y + (dZ /= dist) * lookVec.z;
+            if (!(dotProduct > 0.0) || !(Math.acos((double) dotProduct) < 1.5707963267948966))
+                continue;
+            dist = Math.max((double) dist, (double) 3.0);
             e.method_1322(3.0 * dX / dist, 3.0 * dY / dist, 3.0 * dZ / dist);
         }
         entities = Minecraft.minecraftInstance.particleManager.getEffectsWithinAABB(aabb);
         for (Object obj : entities) {
             e = (MixinEntity) obj;
             dist = e.method_1352(player);
-            if (!(dist < 36.0)) continue;
+            if (!(dist < 36.0))
+                continue;
             dX = e.x - player.x;
             dY = e.y - player.y;
             dZ = e.z - player.z;
-            dotProduct = (dX /= (dist = Math.sqrt(dist))) * lookVec.x + (dY /= dist) * lookVec.y + (dZ /= dist) * lookVec.z;
-            if (!(dotProduct > 0.0) || !(Math.acos(dotProduct) < 1.5707963267948966)) continue;
+            dotProduct = (dX /= (dist = Math.sqrt((double) dist))) * lookVec.x + (dY /= dist) * lookVec.y + (dZ /= dist) * lookVec.z;
+            if (!(dotProduct > 0.0) || !(Math.acos((double) dotProduct) < 1.5707963267948966))
+                continue;
             e.method_1322(6.0 * dX / dist, 6.0 * dY / dist, 6.0 * dZ / dist);
         }
         for (int i = 0; i < 25; ++i) {

@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.mixin.util.maths;
 
-import net.minecraft.util.maths.MathsHelper;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -10,12 +11,6 @@ public class MixinMathsHelper {
 
     @Shadow()
     private static float[] TABLE = new float[65536];
-
-    static {
-        for (int i = 0; i < 65536; ++i) {
-            MathsHelper.TABLE[i] = (float) Math.sin((double) i * Math.PI * 2.0 / 65536.0);
-        }
-    }
 
     /**
      * @author Ryuu, TechPizza, Phil
@@ -38,7 +33,7 @@ public class MixinMathsHelper {
      */
     @Overwrite()
     public static final float sqrt(float value) {
-        return (float) Math.sqrt(value);
+        return (float) Math.sqrt((double) value);
     }
 
     /**
@@ -46,7 +41,7 @@ public class MixinMathsHelper {
      */
     @Overwrite()
     public static final float sqrt(double value) {
-        return (float) Math.sqrt(value);
+        return (float) Math.sqrt((double) value);
     }
 
     /**
@@ -108,11 +103,9 @@ public class MixinMathsHelper {
         return i / j;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public static boolean isStringEmpty(String string) {
-        return string == null || string.length() == 0;
+    static {
+        for (int i = 0; i < 65536; ++i) {
+            MathsHelper.TABLE[i] = (float) Math.sin((double) ((double) i * Math.PI * 2.0 / 65536.0));
+        }
     }
 }

@@ -1,12 +1,16 @@
 package io.github.ryuu.adventurecraft.mixin.item;
 
-import net.minecraft.item.RedstoneItem;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(RedstoneItem.class)
-public class MixinRedstoneItem extends MixinItemType {
+public class MixinRedstoneItem extends ItemType {
 
     public MixinRedstoneItem(int id) {
         super(id);
@@ -17,7 +21,7 @@ public class MixinRedstoneItem extends MixinItemType {
      */
     @Override
     @Overwrite()
-    public boolean useOnTile(MixinItemInstance item, MixinPlayer player, MixinLevel level, int x, int y, int z, int facing) {
+    public boolean useOnTile(ItemInstance item, Player player, Level level, int x, int y, int z, int facing) {
         if (level.getTileId(x, y, z) != Tile.SNOW.id) {
             if (facing == 0) {
                 --y;

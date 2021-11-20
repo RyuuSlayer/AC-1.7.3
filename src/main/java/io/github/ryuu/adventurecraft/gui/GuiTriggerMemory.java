@@ -1,20 +1,24 @@
 package io.github.ryuu.adventurecraft.gui;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.OptionButton;
+import net.minecraft.level.Level;
 
 public class GuiTriggerMemory extends MixinScreen {
 
-    private final TileEntityTriggerMemory trigger;
+    private TileEntityTriggerMemory trigger;
 
-    private final int blockX;
+    private int blockX;
 
-    private final int blockY;
+    private int blockY;
 
-    private final int blockZ;
+    private int blockZ;
 
-    private final MixinLevel world;
+    private MixinLevel world;
 
     public GuiTriggerMemory(MixinLevel w, int x, int y, int z, TileEntityTriggerMemory triggerClicked) {
         this.world = w;
@@ -22,10 +26,6 @@ public class GuiTriggerMemory extends MixinScreen {
         this.blockY = y;
         this.blockZ = z;
         this.trigger = triggerClicked;
-    }
-
-    public static void showUI(MixinLevel w, int x, int y, int z, TileEntityTriggerMemory triggerClicked) {
-        Minecraft.minecraftInstance.openScreen(new GuiTriggerMemory(w, x, y, z, triggerClicked));
     }
 
     @Override
@@ -67,14 +67,18 @@ public class GuiTriggerMemory extends MixinScreen {
     @Override
     public void render(int mouseX, int mouseY, float delta) {
         this.fill(0, 0, this.width, this.height, Integer.MIN_VALUE);
-        this.drawTextWithShadow(this.textManager, String.format("Min: (%d, %d, %d)", new Object[]{this.trigger.minX, this.trigger.minY, this.trigger.minZ}), 4, 4, 0xE0E0E0);
-        this.drawTextWithShadow(this.textManager, String.format("Max: (%d, %d, %d)", new Object[]{this.trigger.maxX, this.trigger.maxY, this.trigger.maxZ}), 4, 24, 0xE0E0E0);
+        this.drawTextWithShadow(this.textManager, String.format((String) "Min: (%d, %d, %d)", (Object[]) new Object[] { this.trigger.minX, this.trigger.minY, this.trigger.minZ }), 4, 4, 0xE0E0E0);
+        this.drawTextWithShadow(this.textManager, String.format((String) "Max: (%d, %d, %d)", (Object[]) new Object[] { this.trigger.maxX, this.trigger.maxY, this.trigger.maxZ }), 4, 24, 0xE0E0E0);
         if (this.trigger.isActivated) {
             this.drawTextWithShadow(this.textManager, "Memory Set", 4, 104, 0xE0E0E0);
         } else {
             this.drawTextWithShadow(this.textManager, "Memory Unset", 4, 104, 0xE0E0E0);
         }
         super.render(mouseX, mouseY, delta);
+    }
+
+    public static void showUI(MixinLevel w, int x, int y, int z, TileEntityTriggerMemory triggerClicked) {
+        Minecraft.minecraftInstance.openScreen(new GuiTriggerMemory(w, x, y, z, triggerClicked));
     }
 
     @Override

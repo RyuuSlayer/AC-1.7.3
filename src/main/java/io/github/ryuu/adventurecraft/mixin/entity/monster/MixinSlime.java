@@ -1,24 +1,32 @@
 package io.github.ryuu.adventurecraft.mixin.entity.monster;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MonsterEntityType;
-import net.minecraft.entity.monster.Slime;
+import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
+import net.minecraft.level.chunk.Chunk;
+import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.MathsHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(Slime.class)
-public class MixinSlime extends MixinLivingEntity implements MonsterEntityType {
+public class MixinSlime extends LivingEntity implements MonsterEntityType {
 
     @Shadow()
     public float field_1951;
 
     public float field_1952;
-    public int attackStrength;
+
     private int field_1953 = 0;
 
-    public MixinSlime(MixinLevel world) {
+    public int attackStrength;
+
+    public MixinSlime(Level world) {
         super(world);
         this.texture = "/mob/slime.png";
         int i = 1 << this.rand.nextInt(3);
@@ -42,14 +50,6 @@ public class MixinSlime extends MixinLivingEntity implements MonsterEntityType {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite()
-    public int getSize() {
-        return this.dataTracker.getByte(16);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void setSize(int i) {
         this.dataTracker.setData(16, new Byte((byte) i));
         this.setSize(0.6f * (float) i, 0.6f * (float) i);
@@ -62,7 +62,7 @@ public class MixinSlime extends MixinLivingEntity implements MonsterEntityType {
      */
     @Override
     @Overwrite()
-    public void writeCustomDataToTag(MixinCompoundTag tag) {
+    public void writeCustomDataToTag(CompoundTag tag) {
         super.writeCustomDataToTag(tag);
         tag.put("Size", this.getSize() - 1);
     }
@@ -72,7 +72,7 @@ public class MixinSlime extends MixinLivingEntity implements MonsterEntityType {
      */
     @Override
     @Overwrite()
-    public void readCustomDataFromTag(MixinCompoundTag tag) {
+    public void readCustomDataFromTag(CompoundTag tag) {
         super.readCustomDataFromTag(tag);
         this.setSize(tag.getInt("Size") + 1);
     }
@@ -110,7 +110,7 @@ public class MixinSlime extends MixinLivingEntity implements MonsterEntityType {
     @Overwrite()
     protected void tickHandSwing() {
         this.method_920();
-        MixinPlayer entityplayer = this.level.getClosestPlayerTo(this, 16.0);
+        Player entityplayer = this.level.getClosestPlayerTo(this, 16.0);
         if (entityplayer != null) {
             this.method_924(entityplayer, 10.0f, 20.0f);
         }
@@ -152,7 +152,7 @@ public class MixinSlime extends MixinLivingEntity implements MonsterEntityType {
      */
     @Override
     @Overwrite()
-    public void onPlayerCollision(MixinPlayer entityplayer) {
+    public void onPlayerCollision(Player entityplayer) {
         int i;
         int j = i = this.getSize();
         if (this.attackStrength != -1) {
@@ -161,54 +161,5 @@ public class MixinSlime extends MixinLivingEntity implements MonsterEntityType {
         if ((i > 1 || this.attackStrength != -1) && this.method_928(entityplayer) && (double) this.distanceTo(entityplayer) < 0.6 * (double) i && entityplayer.damage(this, j)) {
             this.level.playSound(this, "mob.slimeattack", 1.0f, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2f + 1.0f);
         }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    protected String getHurtSound() {
-        return "mob.slime";
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    protected String getDeathSound() {
-        return "mob.slime";
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    protected int getMobDrops() {
-        if (this.getSize() == 1) {
-            return ItemType.slimeball.id;
-        }
-        return 0;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public boolean canSpawn() {
-        MixinChunk chunk = this.level.getChunk(MathsHelper.floor(this.x), MathsHelper.floor(this.z));
-        return (this.getSize() == 1 || this.level.difficulty > 0) && this.rand.nextInt(10) == 0 && chunk.createRandom(987234911L).nextInt(10) == 0 && this.y < 16.0;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    protected float getSoundVolume() {
-        return 0.6f;
     }
 }

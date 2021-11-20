@@ -1,5 +1,7 @@
 package io.github.ryuu.adventurecraft.gui;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.container.DoubleChestScreen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.inventory.Inventory;
@@ -7,9 +9,12 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiPalette extends DoubleChestScreen {
 
-    private final InventoryDebug palette;
+    private InventoryDebug palette;
+
     GuiSlider2 extraWidth;
+
     GuiSlider2 extraDepth;
+
     private Button a;
 
     public GuiPalette(Inventory iinventory, InventoryDebug p) {
@@ -20,10 +25,10 @@ public class GuiPalette extends DoubleChestScreen {
     @Override
     public void init() {
         super.init();
-        this.extraDepth = new GuiSlider2(50, this.width / 2 + 2, 3, 10, String.format("Extra Depth: %d", new Object[]{this.minecraft.interactionManager.destroyExtraDepth}), (float) this.minecraft.interactionManager.destroyExtraDepth / 16.0f);
-        this.extraWidth = new GuiSlider2(50, this.width / 2 - 2 - this.extraDepth.width, 3, 10, String.format("Extra Width: %d", new Object[]{this.minecraft.interactionManager.destroyExtraWidth}), (float) this.minecraft.interactionManager.destroyExtraWidth / 5.0f);
-        this.buttons.add(this.extraDepth);
-        this.buttons.add(this.extraWidth);
+        this.extraDepth = new GuiSlider2(50, this.width / 2 + 2, 3, 10, String.format((String) "Extra Depth: %d", (Object[]) new Object[] { this.minecraft.interactionManager.destroyExtraDepth }), (float) this.minecraft.interactionManager.destroyExtraDepth / 16.0f);
+        this.extraWidth = new GuiSlider2(50, this.width / 2 - 2 - this.extraDepth.width, 3, 10, String.format((String) "Extra Width: %d", (Object[]) new Object[] { this.minecraft.interactionManager.destroyExtraWidth }), (float) this.minecraft.interactionManager.destroyExtraWidth / 5.0f);
+        this.buttons.add((Object) this.extraDepth);
+        this.buttons.add((Object) this.extraWidth);
     }
 
     @Override
@@ -40,19 +45,19 @@ public class GuiPalette extends DoubleChestScreen {
     public void render(int mouseX, int mouseY, float delta) {
         super.render(mouseX, mouseY, delta);
         GL11.glPushMatrix();
-        GL11.glDisable(2896);
-        GL11.glDisable(2929);
+        GL11.glDisable((int) 2896);
+        GL11.glDisable((int) 2929);
         for (int k = 0; k < this.buttons.size(); ++k) {
             Button guibutton = (Button) this.buttons.get(k);
             guibutton.render(this.minecraft, mouseX, mouseY);
         }
-        GL11.glEnable(2896);
-        GL11.glEnable(2929);
+        GL11.glEnable((int) 2896);
+        GL11.glEnable((int) 2929);
         GL11.glPopMatrix();
-        this.minecraft.interactionManager.destroyExtraDepth = (int) Math.min(16.0f * this.extraDepth.sliderValue, 15.0f);
-        this.minecraft.interactionManager.destroyExtraWidth = (int) Math.min(5.0f * this.extraWidth.sliderValue, 4.0f);
-        this.extraWidth.text = String.format("Extra Width: %d", new Object[]{this.minecraft.interactionManager.destroyExtraWidth});
-        this.extraDepth.text = String.format("Extra Depth: %d", new Object[]{this.minecraft.interactionManager.destroyExtraDepth});
+        this.minecraft.interactionManager.destroyExtraDepth = (int) Math.min((float) (16.0f * this.extraDepth.sliderValue), (float) 15.0f);
+        this.minecraft.interactionManager.destroyExtraWidth = (int) Math.min((float) (5.0f * this.extraWidth.sliderValue), (float) 4.0f);
+        this.extraWidth.text = String.format((String) "Extra Width: %d", (Object[]) new Object[] { this.minecraft.interactionManager.destroyExtraWidth });
+        this.extraDepth.text = String.format((String) "Extra Depth: %d", (Object[]) new Object[] { this.minecraft.interactionManager.destroyExtraDepth });
     }
 
     @Override
@@ -60,7 +65,8 @@ public class GuiPalette extends DoubleChestScreen {
         if (button == 0) {
             for (int l = 0; l < this.buttons.size(); ++l) {
                 Button guibutton = (Button) this.buttons.get(l);
-                if (!guibutton.isMouseOver(this.minecraft, mouseX, mouseY)) continue;
+                if (!guibutton.isMouseOver(this.minecraft, mouseX, mouseY))
+                    continue;
                 this.a = guibutton;
                 this.minecraft.soundHelper.playSound("random.click", 1.0f, 1.0f);
                 this.buttonClicked(guibutton);

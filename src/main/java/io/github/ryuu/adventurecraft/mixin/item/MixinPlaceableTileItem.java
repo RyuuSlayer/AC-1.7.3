@@ -1,13 +1,18 @@
 package io.github.ryuu.adventurecraft.mixin.item;
 
-import net.minecraft.item.PlaceableTileItem;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(PlaceableTileItem.class)
-public class MixinPlaceableTileItem extends MixinItemType {
+public class MixinPlaceableTileItem extends ItemType {
 
     @Shadow()
     private int tileId;
@@ -23,7 +28,7 @@ public class MixinPlaceableTileItem extends MixinItemType {
      */
     @Override
     @Overwrite()
-    public boolean useOnTile(MixinItemInstance item, MixinPlayer player, MixinLevel level, int x, int y, int z, int facing) {
+    public boolean useOnTile(ItemInstance item, Player player, Level level, int x, int y, int z, int facing) {
         if (!DebugMode.active) {
             return false;
         }
@@ -56,7 +61,7 @@ public class MixinPlaceableTileItem extends MixinItemType {
             return false;
         }
         if (level.canPlaceTile(this.tileId, x, y, z, false, facing)) {
-            MixinTile block = Tile.BY_ID[this.tileId];
+            Tile block = Tile.BY_ID[this.tileId];
             if (level.method_201(x, y, z, this.tileId, this.method_470(item.getDamage()))) {
                 Tile.BY_ID[this.tileId].onPlaced(level, x, y, z, facing);
                 Tile.BY_ID[this.tileId].afterPlaced(level, x, y, z, player);
@@ -66,23 +71,5 @@ public class MixinPlaceableTileItem extends MixinItemType {
             return true;
         }
         return false;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public String getTranslationKey(MixinItemInstance item) {
-        return Tile.BY_ID[this.tileId].getTranslationKey();
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public String getTranslationKey() {
-        return Tile.BY_ID[this.tileId].getTranslationKey();
     }
 }

@@ -1,40 +1,74 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
 import java.util.Random;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.util.io.CompoundTag;
 
 public class TileEntityEffect extends MixinTileEntity {
 
-    private static final Random rand = new Random();
     public boolean checkTrigger = true;
+
     public String particleType = "heart";
+
     public int particlesPerSpawn = 1;
+
     public int ticksBetweenParticles = 1;
+
     public boolean isActivated = false;
+
     public int ticksBeforeParticle = 0;
+
     public float offsetX = 0.0f;
+
     public float offsetY = 0.0f;
+
     public float offsetZ = 0.0f;
+
     public float randX = 0.0f;
+
     public float randY = 0.0f;
+
     public float randZ = 0.0f;
+
     public float floatArg1 = 0.0f;
+
     public float floatArg2 = 0.0f;
+
     public float floatArg3 = 0.0f;
+
     public float floatRand1 = 0.0f;
+
     public float floatRand2 = 0.0f;
+
     public float floatRand3 = 0.0f;
+
     public int changeFogColor;
+
     public float fogR;
+
     public float fogG;
+
     public float fogB;
+
     public int changeFogDensity;
+
     public float fogStart;
+
     public float fogEnd;
+
     public boolean setOverlay = false;
+
     public String overlay = "";
+
     public boolean revertTextures = false;
+
     public boolean replaceTextures = false;
+
     public String textureReplacement = "";
+
+    private static Random rand = new Random();
 
     @Override
     public void readIdentifyingData(MixinCompoundTag tag) {
@@ -72,7 +106,7 @@ public class TileEntityEffect extends MixinTileEntity {
     @Override
     public void writeIdentifyingData(MixinCompoundTag tag) {
         super.writeIdentifyingData(tag);
-        if (!this.particleType.equals("")) {
+        if (!this.particleType.equals((Object) "")) {
             tag.put("particleType", this.particleType);
         }
         tag.put("particlesPerSpawn", this.particlesPerSpawn);
@@ -115,7 +149,7 @@ public class TileEntityEffect extends MixinTileEntity {
                 --this.ticksBeforeParticle;
             } else {
                 for (int i = 0; i < this.particlesPerSpawn; ++i) {
-                    this.level.addParticle(this.particleType, this.x + 0.5 + (double) this.randX * (2.0 * rand.nextDouble() - 1.0) + (double) this.offsetX, this.y + 0.5 + (double) this.randY * (2.0 * rand.nextDouble() - 1.0) + (double) this.offsetY, this.z + 0.5 + (double) this.randZ * (2.0 * rand.nextDouble() - 1.0) + (double) this.offsetZ, (double) this.floatArg1 + (double) this.floatRand1 * (2.0 * rand.nextDouble() - 1.0), (double) this.floatArg2 + (double) this.floatRand2 * (2.0 * rand.nextDouble() - 1.0), (double) this.floatArg3 + (double) this.floatRand3 * (2.0 * rand.nextDouble() - 1.0));
+                    this.level.addParticle(this.particleType, (double) this.x + 0.5 + (double) this.randX * (2.0 * rand.nextDouble() - 1.0) + (double) this.offsetX, (double) this.y + 0.5 + (double) this.randY * (2.0 * rand.nextDouble() - 1.0) + (double) this.offsetY, (double) this.z + 0.5 + (double) this.randZ * (2.0 * rand.nextDouble() - 1.0) + (double) this.offsetZ, (double) this.floatArg1 + (double) this.floatRand1 * (2.0 * rand.nextDouble() - 1.0), (double) this.floatArg2 + (double) this.floatRand2 * (2.0 * rand.nextDouble() - 1.0), (double) this.floatArg3 + (double) this.floatRand3 * (2.0 * rand.nextDouble() - 1.0));
                     this.ticksBeforeParticle = this.ticksBetweenParticles;
                 }
             }

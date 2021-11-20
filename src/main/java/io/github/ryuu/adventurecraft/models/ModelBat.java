@@ -1,5 +1,8 @@
 package io.github.ryuu.adventurecraft.models;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.entity.model.EntityModel;
 import org.lwjgl.opengl.GL11;
 
@@ -36,7 +39,7 @@ public class ModelBat extends EntityModel {
 
     @Override
     public void render(float f, float f1, float f2, float f3, float f4, float f5) {
-        GL11.glEnable(2884);
+        GL11.glEnable((int) 2884);
         this.setAngles(f, f1, f2, f3, f4, f5);
         this.theHead.render(f5);
         this.ears.render(f5);
@@ -52,7 +55,7 @@ public class ModelBat extends EntityModel {
         this.ears.pitch = this.theHead.pitch;
         this.ears.yaw = this.theHead.yaw;
         double t = (double) (System.currentTimeMillis() % 500L) / 500.0;
-        this.leftWing.yaw = 0.3f * (float) Math.cos(2.0 * t * Math.PI);
-        this.rightWing.yaw = -0.3f * (float) Math.cos(2.0 * t * Math.PI);
+        this.leftWing.yaw = 0.3f * (float) Math.cos((double) (2.0 * t * Math.PI));
+        this.rightWing.yaw = -0.3f * (float) Math.cos((double) (2.0 * t * Math.PI));
     }
 }

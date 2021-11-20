@@ -1,10 +1,18 @@
 package io.github.ryuu.adventurecraft.entities;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.class_61;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.level.Level;
 import net.minecraft.script.EntityDescriptions;
 import net.minecraft.script.ScopeTag;
 import net.minecraft.script.ScriptEntity;
 import net.minecraft.script.ScriptEntityDescription;
 import net.minecraft.util.io.AbstractTag;
+import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.MathsHelper;
 import net.minecraft.util.maths.Vec3f;
 import org.mozilla.javascript.Context;
@@ -13,30 +21,47 @@ import org.mozilla.javascript.ScriptableObject;
 
 public class EntityLivingScript extends MixinLivingEntity implements IEntityPather {
 
-    public String onCreated = "";
-    public String onUpdate = "";
-    public String onPathReached = "";
-    public String onAttacked = "";
-    public String onDeath = "";
-    public String onInteraction = "";
-    public Float maxPathDistance = Float.valueOf(64.0f);
-    protected Scriptable scope;
     String initDescTo;
+
     String descriptionName;
+
     float prevWidth = 0.6f;
+
     float prevHeight = 1.8f;
-    TileEntityNpcPath triggerOnPath = null;
+
+    protected Scriptable scope;
+
+    public String onCreated = "";
+
+    public String onUpdate = "";
+
+    public String onPathReached = "";
+
+    public String onAttacked = "";
+
+    public String onDeath = "";
+
+    public String onInteraction = "";
+
     private MixinClass_61 path;
+
     private MixinEntity pathToEntity;
+
     private CoordBlock pathToVec;
+
+    public Float maxPathDistance = Float.valueOf((float) 64.0f);
+
     private int nextPathIn;
+
     private double prevDistToPoint = 999999.0;
+
+    TileEntityNpcPath triggerOnPath = null;
 
     public EntityLivingScript(MixinLevel w) {
         super(w);
         this.scope = w.script.getNewScope();
-        Object wrappedOut = Context.javaToJS((Object) ScriptEntity.getEntityClass(this), this.scope);
-        ScriptableObject.putProperty(this.scope, "entity", wrappedOut);
+        Object wrappedOut = Context.javaToJS((Object) ScriptEntity.getEntityClass(this), (Scriptable) this.scope);
+        ScriptableObject.putProperty((Scriptable) this.scope, (String) "entity", (Object) wrappedOut);
     }
 
     public void setEntityDescription(String descName) {
@@ -72,7 +97,7 @@ public class EntityLivingScript extends MixinLivingEntity implements IEntityPath
     @Override
     public void tick() {
         if (this.initDescTo != null) {
-            if (!this.initDescTo.equals("")) {
+            if (!this.initDescTo.equals((Object) "")) {
                 this.setEntityDescription(this.initDescTo, false);
             }
             this.initDescTo = null;
@@ -86,10 +111,10 @@ public class EntityLivingScript extends MixinLivingEntity implements IEntityPath
 
     @Override
     public boolean damage(MixinEntity target, int amount) {
-        Object wrappedOut = Context.javaToJS((Object) ScriptEntity.getEntityClass(target), this.scope);
-        ScriptableObject.putProperty(this.scope, "attackingEntity", wrappedOut);
-        wrappedOut = Context.javaToJS(new Integer(amount), this.scope);
-        ScriptableObject.putProperty(this.scope, "attackingDamage", wrappedOut);
+        Object wrappedOut = Context.javaToJS((Object) ScriptEntity.getEntityClass(target), (Scriptable) this.scope);
+        ScriptableObject.putProperty((Scriptable) this.scope, (String) "attackingEntity", (Object) wrappedOut);
+        wrappedOut = Context.javaToJS((Object) new Integer(amount), (Scriptable) this.scope);
+        ScriptableObject.putProperty((Scriptable) this.scope, (String) "attackingDamage", (Object) wrappedOut);
         if (this.runOnAttackedScript()) {
             return super.damage(target, amount);
         }
@@ -98,10 +123,10 @@ public class EntityLivingScript extends MixinLivingEntity implements IEntityPath
 
     @Override
     public boolean attackEntityFromMulti(MixinEntity entity, int i) {
-        Object wrappedOut = Context.javaToJS((Object) ScriptEntity.getEntityClass(entity), this.scope);
-        ScriptableObject.putProperty(this.scope, "attackingEntity", wrappedOut);
-        wrappedOut = Context.javaToJS(new Integer(i), this.scope);
-        ScriptableObject.putProperty(this.scope, "attackingDamage", wrappedOut);
+        Object wrappedOut = Context.javaToJS((Object) ScriptEntity.getEntityClass(entity), (Scriptable) this.scope);
+        ScriptableObject.putProperty((Scriptable) this.scope, (String) "attackingEntity", (Object) wrappedOut);
+        wrappedOut = Context.javaToJS((Object) new Integer(i), (Scriptable) this.scope);
+        ScriptableObject.putProperty((Scriptable) this.scope, (String) "attackingDamage", (Object) wrappedOut);
         if (this.runOnAttackedScript()) {
             return super.attackEntityFromMulti(entity, i);
         }
@@ -122,25 +147,25 @@ public class EntityLivingScript extends MixinLivingEntity implements IEntityPath
     @Override
     public void writeCustomDataToTag(MixinCompoundTag tag) {
         super.writeCustomDataToTag(tag);
-        if (this.descriptionName != null && !this.descriptionName.equals("")) {
+        if (this.descriptionName != null && !this.descriptionName.equals((Object) "")) {
             tag.put("descriptionName", this.descriptionName);
         }
-        if (!this.onCreated.equals("")) {
+        if (!this.onCreated.equals((Object) "")) {
             tag.put("onCreated", this.onCreated);
         }
-        if (!this.onUpdate.equals("")) {
+        if (!this.onUpdate.equals((Object) "")) {
             tag.put("onUpdate", this.onUpdate);
         }
-        if (!this.onPathReached.equals("")) {
+        if (!this.onPathReached.equals((Object) "")) {
             tag.put("onPathReached", this.onPathReached);
         }
-        if (!this.onAttacked.equals("")) {
+        if (!this.onAttacked.equals((Object) "")) {
             tag.put("onAttacked", this.onAttacked);
         }
-        if (!this.onDeath.equals("")) {
+        if (!this.onDeath.equals((Object) "")) {
             tag.put("onDeath", this.onDeath);
         }
-        if (!this.onInteraction.equals("")) {
+        if (!this.onInteraction.equals((Object) "")) {
             tag.put("onInteraction", this.onInteraction);
         }
         if (tag.containsKey("scope")) {
@@ -162,25 +187,25 @@ public class EntityLivingScript extends MixinLivingEntity implements IEntityPath
     }
 
     public void runCreatedScript() {
-        if (!this.onCreated.equals("")) {
+        if (!this.onCreated.equals((Object) "")) {
             this.level.scriptHandler.runScript(this.onCreated, this.scope);
         }
     }
 
     private void runUpdateScript() {
-        if (!this.onUpdate.equals("")) {
+        if (!this.onUpdate.equals((Object) "")) {
             this.level.scriptHandler.runScript(this.onUpdate, this.scope);
         }
     }
 
     private void runPathCompletedScript() {
-        if (!this.onPathReached.equals("")) {
+        if (!this.onPathReached.equals((Object) "")) {
             this.level.scriptHandler.runScript(this.onPathReached, this.scope);
         }
     }
 
     private boolean runOnAttackedScript() {
-        if (!this.onAttacked.equals("")) {
+        if (!this.onAttacked.equals((Object) "")) {
             Object obj = this.level.scriptHandler.runScript(this.onAttacked, this.scope);
             if (obj == null || !(obj instanceof Boolean)) {
                 return true;
@@ -191,13 +216,13 @@ public class EntityLivingScript extends MixinLivingEntity implements IEntityPath
     }
 
     private void runDeathScript() {
-        if (!this.onDeath.equals("")) {
+        if (!this.onDeath.equals((Object) "")) {
             this.level.scriptHandler.runScript(this.onDeath, this.scope);
         }
     }
 
     private boolean runOnInteractionScript() {
-        if (!this.onInteraction.equals("")) {
+        if (!this.onInteraction.equals((Object) "")) {
             Object obj = this.level.scriptHandler.runScript(this.onInteraction, this.scope);
             if (obj == null || !(obj instanceof Boolean)) {
                 return true;
@@ -278,7 +303,7 @@ public class EntityLivingScript extends MixinLivingEntity implements IEntityPath
                 double dX = vec3d.x - this.x;
                 double dZ = vec3d.z - this.z;
                 double dY = vec3d.y - (double) MathsHelper.floor(this.boundingBox.minY + 0.5);
-                float yawDir = (float) (Math.atan2(dZ, dX) * 180.0 / 3.1415927410125732) - 90.0f;
+                float yawDir = (float) (Math.atan2((double) dZ, (double) dX) * 180.0 / 3.1415927410125732) - 90.0f;
                 this.parallelMovement = this.movementSpeed;
                 for (yawDelta = yawDir - this.yaw; yawDelta < -180.0f; yawDelta += 360.0f) {
                 }

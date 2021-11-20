@@ -1,7 +1,14 @@
 package io.github.ryuu.adventurecraft.util;
 
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.TileRenderer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.hit.HitType;
@@ -13,16 +20,18 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 import org.lwjgl.util.glu.GLU;
 
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-
 class MapEditing {
 
-    private final MixinTileRenderer renderBlocks;
     Minecraft mc;
+
     MixinLevel world;
+
     HitResult cursor;
+
+    private MixinTileRenderer renderBlocks;
+
     int selectedBlockID;
+
     int selectedMetadata;
 
     MapEditing(Minecraft mcInstance, MixinLevel w) {
@@ -43,16 +52,16 @@ class MapEditing {
         }
         int x = Mouse.getX();
         int y = Mouse.getY();
-        IntBuffer viewport = BufferUtils.createIntBuffer(16);
-        FloatBuffer modelview = BufferUtils.createFloatBuffer(16);
-        FloatBuffer projection = BufferUtils.createFloatBuffer(16);
-        FloatBuffer position = BufferUtils.createFloatBuffer(3);
-        GL11.glGetFloat(2982, modelview);
-        GL11.glGetFloat(2983, projection);
-        GL11.glGetInteger(2978, viewport);
+        IntBuffer viewport = BufferUtils.createIntBuffer((int) 16);
+        FloatBuffer modelview = BufferUtils.createFloatBuffer((int) 16);
+        FloatBuffer projection = BufferUtils.createFloatBuffer((int) 16);
+        FloatBuffer position = BufferUtils.createFloatBuffer((int) 3);
+        GL11.glGetFloat((int) 2982, (FloatBuffer) modelview);
+        GL11.glGetFloat((int) 2983, (FloatBuffer) projection);
+        GL11.glGetInteger((int) 2978, (IntBuffer) viewport);
         float winX = x;
         float winY = y;
-        GLU.gluUnProject(winX, winY, 1.0f, modelview, projection, viewport, position);
+        GLU.gluUnProject((float) winX, (float) winY, (float) 1.0f, (FloatBuffer) modelview, (FloatBuffer) projection, (IntBuffer) viewport, (FloatBuffer) position);
         Vec3f pos = camera.method_931(time);
         Vec3f mouseLoc = pos.method_1301(position.get(0) * 1024.0f, position.get(1) * 1024.0f, position.get(2) * 1024.0f);
         this.cursor = this.world.raycast(pos, mouseLoc);
@@ -112,15 +121,15 @@ class MapEditing {
                 float y = (float) (camera.prevRenderY + (camera.y - camera.prevRenderY) * (double) time);
                 float z = (float) (camera.prevRenderZ + (camera.z - camera.prevRenderZ) * (double) time);
                 GL11.glPushMatrix();
-                GL11.glTranslatef(-x, -y, -z);
-                GL14.glBlendColor(1.0f, 1.0f, 1.0f, 0.4f);
-                GL11.glEnable(3042);
-                GL11.glBlendFunc(32771, 32772);
+                GL11.glTranslatef((float) (-x), (float) (-y), (float) (-z));
+                GL14.glBlendColor((float) 1.0f, (float) 1.0f, (float) 1.0f, (float) 0.4f);
+                GL11.glEnable((int) 3042);
+                GL11.glBlendFunc((int) 32771, (int) 32772);
                 this.mc.textureManager.bindTexture(this.mc.textureManager.getTextureId("/terrain.png"));
                 this.renderBlocks.startRenderingBlocks(this.world);
                 this.drawBlock(this.cursor.x + this.getCursorXOffset(), this.cursor.y + this.getCursorYOffset(), this.cursor.z + this.getCursorZOffset(), this.selectedBlockID, this.selectedMetadata);
                 this.renderBlocks.stopRenderingBlocks();
-                GL11.glDisable(3042);
+                GL11.glDisable((int) 3042);
                 GL11.glPopMatrix();
             }
         }
@@ -133,10 +142,10 @@ class MapEditing {
             float y = (float) (camera.prevRenderY + (camera.y - camera.prevRenderY) * (double) time);
             float z = (float) (camera.prevRenderZ + (camera.z - camera.prevRenderZ) * (double) time);
             GL11.glPushMatrix();
-            GL11.glTranslatef(-x, -y, -z);
-            GL14.glBlendColor(1.0f, 1.0f, 1.0f, 0.4f);
-            GL11.glEnable(3042);
-            GL11.glBlendFunc(32771, 32772);
+            GL11.glTranslatef((float) (-x), (float) (-y), (float) (-z));
+            GL14.glBlendColor((float) 1.0f, (float) 1.0f, (float) 1.0f, (float) 0.4f);
+            GL11.glEnable((int) 3042);
+            GL11.glBlendFunc((int) 32771, (int) 32772);
             Vec3f lookDir = camera.method_1320();
             int xOffset = (int) (camera.x + (double) DebugMode.reachDistance * lookDir.x) - ItemCursor.minX;
             int yOffset = (int) (camera.y + (double) DebugMode.reachDistance * lookDir.y) - ItemCursor.minY;
@@ -145,14 +154,15 @@ class MapEditing {
                 if (texNum == 0) {
                     this.mc.textureManager.bindTexture(this.mc.textureManager.getTextureId("/terrain.png"));
                 } else {
-                    this.mc.textureManager.bindTexture(this.mc.textureManager.getTextureId(String.format("/terrain%d.png", new Object[]{texNum})));
+                    this.mc.textureManager.bindTexture(this.mc.textureManager.getTextureId(String.format((String) "/terrain%d.png", (Object[]) new Object[] { texNum })));
                 }
                 this.renderBlocks.startRenderingBlocks(this.world);
                 for (int i = ItemCursor.minX; i <= ItemCursor.maxX; ++i) {
                     for (int j = ItemCursor.minY; j <= ItemCursor.maxY; ++j) {
                         for (int k = ItemCursor.minZ; k <= ItemCursor.maxZ; ++k) {
                             int blockID = this.mc.level.getTileId(i, j, k);
-                            if (Tile.BY_ID[blockID] == null || Tile.BY_ID[blockID].getTextureNum() != texNum) continue;
+                            if (Tile.BY_ID[blockID] == null || Tile.BY_ID[blockID].getTextureNum() != texNum)
+                                continue;
                             int metadata = this.mc.level.getTileMeta(i, j, k);
                             this.drawBlock(i + xOffset, j + yOffset, k + zOffset, blockID, metadata);
                         }
@@ -160,7 +170,7 @@ class MapEditing {
                 }
                 this.renderBlocks.stopRenderingBlocks();
             }
-            GL11.glDisable(3042);
+            GL11.glDisable((int) 3042);
             GL11.glPopMatrix();
         }
     }
@@ -206,12 +216,12 @@ class MapEditing {
 
     private void drawCursor(MixinLivingEntity camera, float time) {
         if (this.cursor != null && this.cursor.type == HitType.TILE) {
-            GL11.glEnable(3042);
-            GL11.glBlendFunc(770, 771);
-            GL11.glColor4f(0.0f, 0.0f, 0.0f, 0.4f);
-            GL11.glLineWidth(2.0f);
-            GL11.glDisable(3553);
-            GL11.glDepthMask(false);
+            GL11.glEnable((int) 3042);
+            GL11.glBlendFunc((int) 770, (int) 771);
+            GL11.glColor4f((float) 0.0f, (float) 0.0f, (float) 0.0f, (float) 0.4f);
+            GL11.glLineWidth((float) 2.0f);
+            GL11.glDisable((int) 3553);
+            GL11.glDepthMask((boolean) false);
             float f1 = 0.002f;
             int j = this.world.getTileId(this.cursor.x, this.cursor.y, this.cursor.z);
             if (j > 0) {
@@ -221,8 +231,8 @@ class MapEditing {
                 double d2 = camera.prevRenderZ + (camera.z - camera.prevRenderZ) * (double) time;
                 Box box = Tile.BY_ID[j].getOutlineShape(this.world, this.cursor.x, this.cursor.y, this.cursor.z).expand(f1, f1, f1).move(-d, -d1, -d2);
                 this.drawBox(box);
-                GL11.glColor4f(1.0f, 0.0f, 0.0f, 0.4f);
-                GL11.glLineWidth(4.0f);
+                GL11.glColor4f((float) 1.0f, (float) 0.0f, (float) 0.0f, (float) 0.4f);
+                GL11.glLineWidth((float) 4.0f);
                 Tessellator tessellator = Tessellator.INSTANCE;
                 tessellator.start(3);
                 if (this.cursor.field_1987 == 0) {
@@ -264,9 +274,9 @@ class MapEditing {
                 }
                 tessellator.draw();
             }
-            GL11.glDepthMask(true);
-            GL11.glEnable(3553);
-            GL11.glDisable(3042);
+            GL11.glDepthMask((boolean) true);
+            GL11.glEnable((int) 3553);
+            GL11.glDisable((int) 3042);
         }
     }
 

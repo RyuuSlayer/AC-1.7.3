@@ -1,7 +1,19 @@
 package io.github.ryuu.adventurecraft.mixin.level.biome;
 
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.entity.EntityType;
-import net.minecraft.level.biome.*;
+import net.minecraft.level.biome.Forest;
+import net.minecraft.level.biome.Hell;
+import net.minecraft.level.biome.Rainforest;
+import net.minecraft.level.biome.Sky;
+import net.minecraft.level.biome.SparseBiome;
+import net.minecraft.level.biome.Swampland;
+import net.minecraft.level.biome.Taiga;
 import net.minecraft.level.structure.Feature;
 import net.minecraft.level.structure.LargeOak;
 import net.minecraft.level.structure.OakTree;
@@ -10,56 +22,57 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 @Mixin(Biome.class)
 public class MixinBiome {
 
     @Shadow()
-    public static final MixinBiome RAINFOREST = new Rainforest().setGrassColour(588342).setName("Rainforest").setFoliageColour(2094168);
+    public static final Biome RAINFOREST = new Rainforest().setGrassColour(588342).setName("Rainforest").setFoliageColour(2094168);
 
-    public static final MixinBiome SWAMPLAND = new Swampland().setGrassColour(522674).setName("Swampland").setFoliageColour(9154376);
+    public static final Biome SWAMPLAND = new Swampland().setGrassColour(522674).setName("Swampland").setFoliageColour(9154376);
 
-    public static final MixinBiome SEASONAL_FOREST = new MixinBiome().setGrassColour(10215459).setName("Seasonal Forest");
+    public static final Biome SEASONAL_FOREST = new Biome().setGrassColour(10215459).setName("Seasonal Forest");
 
-    public static final MixinBiome FOREST = new MixinForest().setGrassColour(353825).setName("Forest").setFoliageColour(5159473);
+    public static final Biome FOREST = new Forest().setGrassColour(353825).setName("Forest").setFoliageColour(5159473);
 
-    public static final MixinBiome SAVANNA = new SparseBiome().setGrassColour(14278691).setName("Savanna");
+    public static final Biome SAVANNA = new SparseBiome().setGrassColour(14278691).setName("Savanna");
 
-    public static final MixinBiome SHRUBLAND = new MixinBiome().setGrassColour(10595616).setName("Shrubland");
+    public static final Biome SHRUBLAND = new Biome().setGrassColour(10595616).setName("Shrubland");
 
-    public static final MixinBiome TAIGA = new MixinTaiga().setGrassColour(3060051).setName("Taiga").setSnowy().setFoliageColour(8107825);
+    public static final Biome TAIGA = new Taiga().setGrassColour(3060051).setName("Taiga").setSnowy().setFoliageColour(8107825);
 
-    public static final MixinBiome DESERT = new SparseBiome().setGrassColour(16421912).setName("Desert").setRainless();
+    public static final Biome DESERT = new SparseBiome().setGrassColour(16421912).setName("Desert").setRainless();
 
-    public static final MixinBiome PLAINS = new SparseBiome().setGrassColour(16767248).setName("Plains");
+    public static final Biome PLAINS = new SparseBiome().setGrassColour(16767248).setName("Plains");
 
-    public static final MixinBiome ICE_DESERT = new SparseBiome().setGrassColour(16772499).setName("Ice Desert").setSnowy().setRainless().setFoliageColour(12899129);
+    public static final Biome ICE_DESERT = new SparseBiome().setGrassColour(16772499).setName("Ice Desert").setSnowy().setRainless().setFoliageColour(12899129);
 
-    public static final MixinBiome TUNDRA = new MixinBiome().setGrassColour(5762041).setName("Tundra").setSnowy().setFoliageColour(12899129);
+    public static final Biome TUNDRA = new Biome().setGrassColour(5762041).setName("Tundra").setSnowy().setFoliageColour(12899129);
 
-    public static final MixinBiome NETHER = new MixinHell().setGrassColour(0xFF0000).setName("Hell").setRainless();
+    public static final Biome NETHER = new Hell().setGrassColour(0xFF0000).setName("Hell").setRainless();
 
-    public static final MixinBiome SKY = new Sky().setGrassColour(0x8080FF).setName("Sky").setRainless();
-    private static final MixinBiome[] biomes = new MixinBiome[4096];
-
-    static {
-        Biome.createBiomeArray();
-    }
+    public static final Biome SKY = new Sky().setGrassColour(0x8080FF).setName("Sky").setRainless();
 
     public String biomeName;
+
     public int grassColour;
+
     public byte topTileId;
+
     public byte underTileId;
+
     public int foliageColour;
+
     protected List monsters;
+
     protected List creatures;
+
     protected List waterCreatures;
+
     private boolean snows;
+
     private boolean precipitates;
+
+    private static Biome[] biomes = new Biome[4096];
 
     protected MixinBiome() {
         this.topTileId = (byte) Tile.GRASS.id;
@@ -75,21 +88,45 @@ public class MixinBiome {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite()
-    public static void createBiomeArray() {
-        for (int i = 0; i < 64; ++i) {
-            for (int j = 0; j < 64; ++j) {
-                Biome.biomes[i + j * 64] = Biome.getClimateBiome((float) i / 63.0f, (float) j / 63.0f);
-            }
+    public Feature getTree(Random rand) {
+        if (rand.nextInt(10) == 0) {
+            return new LargeOak();
         }
-        Biome.DESERT.topTileId = Biome.DESERT.underTileId = (byte) Tile.SAND.id;
-        Biome.ICE_DESERT.topTileId = Biome.ICE_DESERT.underTileId = (byte) Tile.SAND.id;
+        return new OakTree();
     }
 
     /**
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite()
-    public static MixinBiome getBiome(double temperature, double d1) {
+    protected Biome setName(String name) {
+        this.biomeName = name;
+        return this;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    protected Biome setFoliageColour(int colour) {
+        this.foliageColour = colour;
+        return this;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    protected Biome setGrassColour(int colour) {
+        this.grassColour = colour;
+        return this;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static Biome getBiome(double temperature, double d1) {
         int i = (int) (temperature * 63.0);
         int j = (int) (d1 * 63.0);
         return biomes[i + j * 64];
@@ -99,7 +136,7 @@ public class MixinBiome {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite()
-    public static MixinBiome getClimateBiome(float temperature, float rainfall) {
+    public static Biome getClimateBiome(float temperature, float rainfall) {
         rainfall *= temperature;
         if (temperature < 0.1f) {
             return TUNDRA;
@@ -138,62 +175,6 @@ public class MixinBiome {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite()
-    private MixinBiome setRainless() {
-        this.precipitates = false;
-        return this;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public Feature getTree(Random rand) {
-        if (rand.nextInt(10) == 0) {
-            return new LargeOak();
-        }
-        return new OakTree();
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    protected MixinBiome setSnowy() {
-        this.snows = true;
-        return this;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    protected MixinBiome setName(String name) {
-        this.biomeName = name;
-        return this;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    protected MixinBiome setFoliageColour(int colour) {
-        this.foliageColour = colour;
-        return this;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    protected MixinBiome setGrassColour(int colour) {
-        this.grassColour = colour;
-        return this;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public int getSkyColour(float temperature) {
         if ((temperature /= 3.0f) < -1.0f) {
             temperature = -1.0f;
@@ -201,7 +182,7 @@ public class MixinBiome {
         if (temperature > 1.0f) {
             temperature = 1.0f;
         }
-        return Color.getHSBColor(0.6222222f - temperature * 0.05f, 0.5f + temperature * 0.1f, 1.0f).getRGB();
+        return Color.getHSBColor((float) (0.6222222f - temperature * 0.05f), (float) (0.5f + temperature * 0.1f), (float) 1.0f).getRGB();
     }
 
     /**
@@ -221,22 +202,7 @@ public class MixinBiome {
         return null;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean canSnow() {
-        return this.snows;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean canRain() {
-        if (this.snows) {
-            return false;
-        }
-        return this.precipitates;
+    static {
+        Biome.createBiomeArray();
     }
 }

@@ -1,5 +1,7 @@
 package io.github.ryuu.adventurecraft.mixin;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.class_290;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.util.maths.Vec3f;
@@ -7,13 +9,15 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
-@Mixin(class_552.class)
+@Mixin(Class_552.class)
 public class MixinClass_552 {
 
-    private final boolean field_2520 = false;
     @Shadow()
     public class_290[] field_2518;
+
     public int field_2519 = 0;
+
+    private boolean field_2520 = false;
 
     public MixinClass_552(class_290[] apositiontexturevertex) {
         this.field_2518 = apositiontexturevertex;

@@ -1,6 +1,8 @@
 package io.github.ryuu.adventurecraft.mixin.client.gui.screen;
 
-import net.minecraft.client.gui.screen.ChatScreen;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.Screen;
 import net.minecraft.util.CharacterUtils;
 import org.lwjgl.input.Keyboard;
 import org.spongepowered.asm.mixin.Mixin;
@@ -8,39 +10,14 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(ChatScreen.class)
-public class MixinChatScreen extends MixinScreen {
+public class MixinChatScreen extends Screen {
 
-    private static final String field_788 = CharacterUtils.SUPPORTED_CHARS;
     @Shadow()
     protected String field_786 = "";
+
     private int field_787 = 0;
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public void init() {
-        Keyboard.enableRepeatEvents(true);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public void onClose() {
-        Keyboard.enableRepeatEvents(false);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public void tick() {
-        ++this.field_787;
-    }
+    private static final String field_788 = CharacterUtils.SUPPORTED_CHARS;
 
     /**
      * @author Ryuu, TechPizza, Phil
@@ -48,7 +25,7 @@ public class MixinChatScreen extends MixinScreen {
     @Override
     @Overwrite()
     protected void keyPressed(char character, int key) {
-        if (Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157) || Keyboard.isKeyDown(219) || Keyboard.isKeyDown(220)) {
+        if (Keyboard.isKeyDown((int) 29) || Keyboard.isKeyDown((int) 157) || Keyboard.isKeyDown((int) 219) || Keyboard.isKeyDown((int) 220)) {
             if (key == 47) {
                 this.field_786 = ClipboardHandler.getClipboard();
                 return;
@@ -68,7 +45,7 @@ public class MixinChatScreen extends MixinScreen {
             if (s.length() > 0 && !this.minecraft.handleClientCommand(s1 = this.field_786.trim())) {
                 this.minecraft.player.sendChatMessage(s1);
             }
-            if (this.minecraft.currentScreen instanceof MixinChatScreen) {
+            if (this.minecraft.currentScreen instanceof ChatScreen) {
                 this.minecraft.openScreen(null);
             }
             return;
@@ -76,7 +53,7 @@ public class MixinChatScreen extends MixinScreen {
         if (key == 14 && this.field_786.length() > 0) {
             this.field_786 = this.field_786.substring(0, this.field_786.length() - 1);
         }
-        if (field_788.indexOf(character) >= 0 && this.field_786.length() < 100) {
+        if (field_788.indexOf((int) character) >= 0 && this.field_786.length() < 100) {
             this.field_786 = this.field_786 + character;
         }
     }

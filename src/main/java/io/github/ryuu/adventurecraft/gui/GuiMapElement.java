@@ -1,32 +1,48 @@
 package io.github.ryuu.adventurecraft.gui;
 
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.SwingUtilities;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.TextRenderer;
+import net.minecraft.client.texture.TextureManager;
 import net.minecraft.script.ScriptUIContainer;
 import net.minecraft.script.ScriptUILabel;
 import net.minecraft.script.ScriptUIRect;
 import net.minecraft.script.ScriptUISprite;
 
-import javax.swing.*;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.List;
-
 public class GuiMapElement extends ScriptUIContainer {
 
-    public String mapName;
-    public String mapURL;
     ScriptUIRect topBack;
+
     ScriptUIRect ratingBack;
+
     ScriptUISprite ratingBar;
+
     ScriptUIRect botFadeBack;
+
     ScriptUISprite background;
+
     ScriptUILabel[] descriptions;
+
     ScriptUIRect topFadeBack;
+
     ScriptUILabel[] topFadeText;
+
     long fadeTimePrev;
+
     boolean fadeIn = false;
+
     boolean fadeOut = false;
+
+    public String mapName;
+
+    public String mapURL;
+
     int mapID;
 
     int totalRating = 0;
@@ -72,7 +88,7 @@ public class GuiMapElement extends ScriptUIContainer {
             this.descriptions[i].alpha = 0.0f;
             ++i;
         }
-        if (description.equals("")) {
+        if (description.equals((Object) "")) {
             this.botFadeBack.removeFromScreen();
         }
         i = 0;
@@ -85,30 +101,30 @@ public class GuiMapElement extends ScriptUIContainer {
             this.topFadeText[i].alpha = 0.0f;
             ++i;
         }
-        if (topDescription.equals("")) {
+        if (topDescription.equals((Object) "")) {
             this.topFadeBack.removeFromScreen();
         }
         this.background.imageHeight = 100.0f;
         this.background.imageWidth = 100.0f;
-        this.mapName = mName.replace("\n", " ");
+        this.mapName = mName.replace((CharSequence) "\n", (CharSequence) " ");
         this.mapURL = mURL;
     }
 
     void updateRatingBar() {
         if (this.voted != 0) {
             float rating = 12.8f * (float) this.voted;
-            this.ratingBar.width = Math.round(rating);
+            this.ratingBar.width = Math.round((float) rating);
         } else if (this.numRatings == 0) {
             this.ratingBar.width = 0.0f;
         } else {
             float rating = 12.8f * (float) this.totalRating / (float) this.numRatings;
-            this.ratingBar.width = Math.round(rating);
+            this.ratingBar.width = Math.round((float) rating);
         }
     }
 
     void mouseMoved(int mouseX, int mouseY) {
         if (0 <= mouseX && mouseX <= 64 && 85 < mouseY && mouseY < 100) {
-            this.ratingBar.width = Math.min((mouseX / 13 + 1) * 13, 64);
+            this.ratingBar.width = Math.min((int) ((mouseX / 13 + 1) * 13), (int) 64);
             this.hoveringOverRating = true;
         } else if (this.hoveringOverRating) {
             this.updateRatingBar();
@@ -122,11 +138,11 @@ public class GuiMapElement extends ScriptUIContainer {
             --this.numRatings;
         }
         this.voted = mouseX / 13 + 1;
-        SwingUtilities.invokeLater(new Runnable() {
+        SwingUtilities.invokeLater((Runnable) new Runnable() {
 
             public void run() {
                 try {
-                    URL url = new URL(String.format("http://www.adventurecraft.org/cgi-bin/vote.py?mapID=%d&rating=%d", new Object[]{GuiMapElement.this.mapID, GuiMapElement.this.voted}));
+                    URL url = new URL(String.format((String) "http://www.adventurecraft.org/cgi-bin/vote.py?mapID=%d&rating=%d", (Object[]) new Object[] { GuiMapElement.this.mapID, GuiMapElement.this.voted }));
                     URLConnection urlconnection = url.openConnection();
                     urlconnection.connect();
                     urlconnection.getInputStream();
@@ -141,20 +157,20 @@ public class GuiMapElement extends ScriptUIContainer {
         String[] parts = text.split(" ");
         String curLine = "";
         for (String part : parts) {
-            if (curLine.equals("")) {
+            if (curLine.equals((Object) "")) {
                 curLine = part;
                 continue;
             }
             String potential = curLine + " " + part;
             if (Minecraft.minecraftInstance.textRenderer.getTextWidth(potential) > 100) {
-                lines.add(curLine);
+                lines.add((Object) curLine);
                 curLine = part;
                 continue;
             }
             curLine = potential;
         }
-        if (!curLine.equals("")) {
-            lines.add(curLine);
+        if (!curLine.equals((Object) "")) {
+            lines.add((Object) curLine);
         }
     }
 
@@ -179,11 +195,11 @@ public class GuiMapElement extends ScriptUIContainer {
             this.fadeTimePrev = fadeCurTime;
             for (ScriptUILabel desc : this.descriptions) {
                 desc.alpha = this.fadeIn ? (desc.alpha += fadeChange) : (desc.alpha -= fadeChange);
-                desc.alpha = Math.max(Math.min((float) desc.alpha, 1.0f), 0.0f);
+                desc.alpha = Math.max((float) Math.min((float) desc.alpha, (float) 1.0f), (float) 0.0f);
             }
             for (ScriptUILabel desc : this.topFadeText) {
                 desc.alpha = this.fadeIn ? (desc.alpha += fadeChange) : (desc.alpha -= fadeChange);
-                desc.alpha = Math.max(Math.min((float) desc.alpha, 1.0f), 0.0f);
+                desc.alpha = Math.max((float) Math.min((float) desc.alpha, (float) 1.0f), (float) 0.0f);
             }
             if (this.fadeIn) {
                 this.botFadeBack.alpha += fadeChange / 2.0f;
@@ -192,8 +208,8 @@ public class GuiMapElement extends ScriptUIContainer {
                 this.botFadeBack.alpha -= fadeChange / 2.0f;
                 this.topFadeBack.alpha -= fadeChange / 2.0f;
             }
-            this.botFadeBack.alpha = Math.max(Math.min((float) this.botFadeBack.alpha, 0.5f), 0.0f);
-            this.topFadeBack.alpha = Math.max(Math.min((float) this.topFadeBack.alpha, 0.5f), 0.0f);
+            this.botFadeBack.alpha = Math.max((float) Math.min((float) this.botFadeBack.alpha, (float) 0.5f), (float) 0.0f);
+            this.topFadeBack.alpha = Math.max((float) Math.min((float) this.topFadeBack.alpha, (float) 0.5f), (float) 0.0f);
             if (this.botFadeBack.alpha <= 0.0f || this.botFadeBack.alpha >= 0.5f) {
                 this.fadeIn = false;
                 this.fadeOut = false;

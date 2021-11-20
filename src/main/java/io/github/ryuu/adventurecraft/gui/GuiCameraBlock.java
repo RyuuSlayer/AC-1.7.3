@@ -1,18 +1,17 @@
 package io.github.ryuu.adventurecraft.gui;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 
 public class GuiCameraBlock extends MixinScreen {
 
-    private final TileEntityCamera cam;
+    private TileEntityCamera cam;
 
     public GuiCameraBlock(TileEntityCamera c) {
         this.cam = c;
-    }
-
-    public static void showUI(TileEntityCamera c) {
-        Minecraft.minecraftInstance.openScreen(new GuiCameraBlock(c));
     }
 
     @Override
@@ -50,5 +49,9 @@ public class GuiCameraBlock extends MixinScreen {
     public void render(int mouseX, int mouseY, float delta) {
         this.renderBackground();
         super.render(mouseX, mouseY, delta);
+    }
+
+    public static void showUI(TileEntityCamera c) {
+        Minecraft.minecraftInstance.openScreen(new GuiCameraBlock(c));
     }
 }

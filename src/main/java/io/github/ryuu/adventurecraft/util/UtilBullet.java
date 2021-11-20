@@ -1,13 +1,17 @@
 package io.github.ryuu.adventurecraft.util;
 
+import java.util.List;
+import java.util.Random;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.level.Level;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.hit.HitType;
 import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.Vec3f;
-
-import java.util.List;
-import java.util.Random;
 
 public class UtilBullet {
 
@@ -53,18 +57,20 @@ public class UtilBullet {
         double d = hitLoc.method_1294(startVec);
         MixinEntity hitEntity = null;
         float f1 = 1.0f;
-        Box aabb = Box.getOrCreate(Math.min(startVec.x, hitLoc.x), Math.min(startVec.y, hitLoc.y), Math.min(startVec.z, hitLoc.z), Math.max(startVec.x, hitLoc.x), Math.max(startVec.y, hitLoc.y), Math.max(startVec.z, hitLoc.z)).expand(f1, f1, f1);
+        Box aabb = Box.getOrCreate(Math.min((double) startVec.x, (double) hitLoc.x), Math.min((double) startVec.y, (double) hitLoc.y), Math.min((double) startVec.z, (double) hitLoc.z), Math.max((double) startVec.x, (double) hitLoc.x), Math.max((double) startVec.y, (double) hitLoc.y), Math.max((double) startVec.z, (double) hitLoc.z)).expand(f1, f1, f1);
         List list = worldObj.getEntities(ignore, aabb);
         double d2 = d;
         for (int i = 0; i < list.size(); ++i) {
             double d3;
             MixinEntity entity = (MixinEntity) list.get(i);
-            if (!entity.method_1356()) continue;
+            if (!entity.method_1356())
+                continue;
             float f2 = entity.method_1369();
             Box axisalignedbb = entity.boundingBox.expand(f2, f2, f2);
             HitResult movingobjectposition = axisalignedbb.method_89(startVec, hitLoc);
             if (axisalignedbb.method_88(startVec)) {
-                if (!(0.0 < d2)) continue;
+                if (!(0.0 < d2))
+                    continue;
                 hitEntity = entity;
                 hitLoc = startVec;
                 d2 = 0.0;

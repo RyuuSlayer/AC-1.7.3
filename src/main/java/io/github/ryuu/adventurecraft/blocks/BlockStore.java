@@ -1,7 +1,13 @@
 package io.github.ryuu.adventurecraft.blocks;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.level.Level;
 import net.minecraft.tile.TileWithEntity;
+import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
 
 public class BlockStore extends TileWithEntity {

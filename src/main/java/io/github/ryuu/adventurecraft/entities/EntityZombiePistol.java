@@ -1,5 +1,13 @@
 package io.github.ryuu.adventurecraft.entities;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.monster.Zombie;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.level.Level;
+
 public class EntityZombiePistol extends MixinZombie {
 
     int ammo = 15;

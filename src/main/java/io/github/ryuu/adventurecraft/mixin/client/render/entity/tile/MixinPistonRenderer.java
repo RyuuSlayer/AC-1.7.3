@@ -1,13 +1,17 @@
 package io.github.ryuu.adventurecraft.mixin.client.render.entity.tile;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.RenderHelper;
 import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.entity.tile.PistonRenderer;
+import net.minecraft.client.render.TileRenderer;
 import net.minecraft.client.render.entity.tile.TileEntityRenderer;
+import net.minecraft.level.Level;
 import net.minecraft.tile.PistonTile;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.entity.Piston;
+import net.minecraft.tile.entity.TileEntity;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -17,27 +21,27 @@ import org.spongepowered.asm.mixin.Shadow;
 public class MixinPistonRenderer extends TileEntityRenderer {
 
     @Shadow()
-    private MixinTileRenderer field_1131;
+    private TileRenderer field_1131;
 
     /**
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite()
     public void method_973(Piston tileentitypiston, double d, double d1, double d2, float f) {
-        MixinTile block = Tile.BY_ID[tileentitypiston.method_1518()];
+        Tile block = Tile.BY_ID[tileentitypiston.method_1518()];
         if (block != null && tileentitypiston.method_1519(f) < 1.0f) {
             Tessellator tessellator = Tessellator.INSTANCE;
             int textureNum = block.getTextureNum();
-            String textureName = textureNum == 0 ? "/terrain.png" : String.format("/terrain%d.png", new Object[]{textureNum});
+            String textureName = textureNum == 0 ? "/terrain.png" : String.format((String) "/terrain%d.png", (Object[]) new Object[] { textureNum });
             this.bindTexture(textureName);
             RenderHelper.disableLighting();
-            GL11.glBlendFunc(770, 771);
-            GL11.glEnable(3042);
-            GL11.glDisable(2884);
+            GL11.glBlendFunc((int) 770, (int) 771);
+            GL11.glEnable((int) 3042);
+            GL11.glDisable((int) 2884);
             if (Minecraft.isSmoothLightingEnabled()) {
-                GL11.glShadeModel(7425);
+                GL11.glShadeModel((int) 7425);
             } else {
-                GL11.glShadeModel(7424);
+                GL11.glShadeModel((int) 7424);
             }
             tessellator.start();
             tessellator.prevPos((float) d - (float) tileentitypiston.x + tileentitypiston.method_1524(f), (float) d1 - (float) tileentitypiston.y + tileentitypiston.method_1525(f), (float) d2 - (float) tileentitypiston.z + tileentitypiston.method_1526(f));
@@ -64,8 +68,8 @@ public class MixinPistonRenderer extends TileEntityRenderer {
      */
     @Override
     @Overwrite()
-    public void refreshLevel(MixinLevel world) {
-        this.field_1131 = new MixinTileRenderer(world);
+    public void refreshLevel(Level world) {
+        this.field_1131 = new TileRenderer(world);
     }
 
     /**
@@ -73,7 +77,7 @@ public class MixinPistonRenderer extends TileEntityRenderer {
      */
     @Override
     @Overwrite()
-    public void render(MixinTileEntity entity, double x, double y, double z, float f) {
+    public void render(TileEntity entity, double x, double y, double z, float f) {
         this.method_973((Piston) entity, x, y, z, f);
     }
 }

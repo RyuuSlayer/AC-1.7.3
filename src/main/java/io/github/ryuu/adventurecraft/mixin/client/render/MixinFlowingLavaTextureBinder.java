@@ -1,65 +1,40 @@
 package io.github.ryuu.adventurecraft.mixin.client.render;
 
+import java.awt.image.BufferedImage;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.render.FlowingLavaTextureBinder;
+import net.minecraft.client.render.TextureBinder;
 import net.minecraft.tile.Tile;
 import net.minecraft.util.maths.MathsHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
-import java.awt.image.BufferedImage;
-
 @Mixin(FlowingLavaTextureBinder.class)
-public class MixinFlowingLavaTextureBinder extends MixinTextureBinder {
-
-    static boolean hasImages;
-    static int numFrames;
-    static int curFrame;
-    private static int[] frameImages;
-    private static int width;
-
-    static {
-        curFrame = 0;
-    }
+public class MixinFlowingLavaTextureBinder extends TextureBinder {
 
     @Shadow()
     protected float[] field_2701 = new float[256];
+
     protected float[] field_2702 = new float[256];
+
     protected float[] field_2703 = new float[256];
+
     protected float[] field_2704 = new float[256];
+
+    static boolean hasImages;
+
+    static int numFrames;
+
+    private static int[] frameImages;
+
+    private static int width;
+
+    static int curFrame;
 
     public MixinFlowingLavaTextureBinder() {
         super(Tile.FLOWING_LAVA.tex);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public static void loadImage() {
-        FlowingLavaTextureBinder.loadImage("/custom_lava_still.png");
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public static void loadImage(String texName) {
-        BufferedImage bufferedimage = null;
-        if (Minecraft.minecraftInstance.level != null) {
-            bufferedimage = Minecraft.minecraftInstance.level.loadMapTexture(texName);
-        }
-        curFrame = 0;
-        if (bufferedimage == null) {
-            hasImages = false;
-            return;
-        }
-        width = bufferedimage.getWidth();
-        numFrames = bufferedimage.getHeight() / bufferedimage.getWidth();
-        frameImages = new int[bufferedimage.getWidth() * bufferedimage.getHeight()];
-        bufferedimage.getRGB(0, 0, bufferedimage.getWidth(), bufferedimage.getHeight(), frameImages, 0, bufferedimage.getWidth());
-        hasImages = true;
     }
 
     /**
@@ -128,8 +103,8 @@ public class MixinFlowingLavaTextureBinder extends MixinTextureBinder {
             this.field_2703 = new float[s];
             this.field_2704 = new float[s];
         }
-        int vw = (int) Math.sqrt(w / 16);
-        int vh = (int) Math.sqrt(h / 16);
+        int vw = (int) Math.sqrt((double) (w / 16));
+        int vh = (int) Math.sqrt((double) (h / 16));
         float totalWeight = (float) ((vw * 2 + 1) * (vh * 2 + 1)) * 1.1f;
         for (int i = 0; i < w; ++i) {
             for (int j = 0; j < h; ++j) {
@@ -151,7 +126,8 @@ public class MixinFlowingLavaTextureBinder extends MixinTextureBinder {
                 }
                 int n2 = i + j * w;
                 this.field_2704[n2] = this.field_2704[n2] - 0.06f;
-                if (!(Math.random() < 0.005)) continue;
+                if (!(Math.random() < 0.005))
+                    continue;
                 this.field_2704[i + j * w] = 1.5f;
             }
         }
@@ -183,5 +159,38 @@ public class MixinFlowingLavaTextureBinder extends MixinTextureBinder {
             this.grid[k * 4 + 2] = (byte) j2;
             this.grid[k * 4 + 3] = -1;
         }
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static void loadImage() {
+        FlowingLavaTextureBinder.loadImage("/custom_lava_still.png");
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static void loadImage(String texName) {
+        BufferedImage bufferedimage = null;
+        if (Minecraft.minecraftInstance.level != null) {
+            bufferedimage = Minecraft.minecraftInstance.level.loadMapTexture(texName);
+        }
+        curFrame = 0;
+        if (bufferedimage == null) {
+            hasImages = false;
+            return;
+        }
+        width = bufferedimage.getWidth();
+        numFrames = bufferedimage.getHeight() / bufferedimage.getWidth();
+        frameImages = new int[bufferedimage.getWidth() * bufferedimage.getHeight()];
+        bufferedimage.getRGB(0, 0, bufferedimage.getWidth(), bufferedimage.getHeight(), frameImages, 0, bufferedimage.getWidth());
+        hasImages = true;
+    }
+
+    static {
+        curFrame = 0;
     }
 }

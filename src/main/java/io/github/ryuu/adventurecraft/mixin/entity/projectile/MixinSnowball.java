@@ -1,7 +1,13 @@
 package io.github.ryuu.adventurecraft.mixin.entity.projectile;
 
-import net.minecraft.entity.projectile.Snowball;
+import java.util.List;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.level.Level;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.MathsHelper;
 import net.minecraft.util.maths.Vec3f;
@@ -9,34 +15,54 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
-import java.util.List;
-
 @Mixin(Snowball.class)
-public class MixinSnowball extends MixinEntity {
+public class MixinSnowball extends Entity {
 
-    private final float radius;
-    public int shake = 0;
-    public MixinLivingEntity field_2193;
-    public double field_2194;
-    public double field_2195;
-    public double field_2196;
     @Shadow()
     private int xTile = -1;
+
     private int yTile = -1;
+
     private int zTile = -1;
+
     private int inTile = 0;
+
     private boolean inGround = false;
+
+    public int shake = 0;
+
+    public LivingEntity field_2193;
+
     private int field_2202;
+
     private int field_2203 = 0;
 
-    public MixinSnowball(MixinLevel world) {
+    public double field_2194;
+
+    public double field_2195;
+
+    public double field_2196;
+
+    private float radius;
+
+    public MixinSnowball(Level world) {
         super(world);
         this.setSize(1.0f, 1.0f);
         this.collidesWithClipBlocks = false;
         this.radius = 1.0f;
     }
 
-    public MixinSnowball(MixinLevel level, double d, double d1, double d2, double d3, double d4, double d5) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public boolean shouldRenderAtDistance(double d) {
+        double d1 = this.boundingBox.averageDimension() * 4.0;
+        return d < (d1 *= 64.0) * d1;
+    }
+
+    public MixinSnowball(Level level, double d, double d1, double d2, double d3, double d4, double d5) {
         super(level);
         this.setSize(1.0f, 1.0f);
         this.setPositionAndAngles(d, d1, d2, this.yaw, this.pitch);
@@ -48,7 +74,7 @@ public class MixinSnowball extends MixinEntity {
         this.radius = 1.0f;
     }
 
-    public MixinSnowball(MixinLevel world, MixinLivingEntity entityliving, double d, double d1, double d2) {
+    public MixinSnowball(Level world, LivingEntity entityliving, double d, double d1, double d2) {
         super(world);
         this.field_2193 = entityliving;
         this.setSize(1.0f, 1.0f);
@@ -65,7 +91,7 @@ public class MixinSnowball extends MixinEntity {
         this.radius = 1.0f;
     }
 
-    public MixinSnowball(MixinLevel world, MixinLivingEntity entityliving, double d, double d1, double d2, float r) {
+    public MixinSnowball(Level world, LivingEntity entityliving, double d, double d1, double d2, float r) {
         super(world);
         this.field_2193 = entityliving;
         this.setSize(1.0f, 1.0f);
@@ -87,27 +113,8 @@ public class MixinSnowball extends MixinEntity {
      */
     @Override
     @Overwrite()
-    protected void initDataTracker() {
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public boolean shouldRenderAtDistance(double d) {
-        double d1 = this.boundingBox.averageDimension() * 4.0;
-        return d < (d1 *= 64.0) * d1;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
     public void tick() {
-        block17:
-        {
+        block17: {
             super.tick();
             this.fire = 10;
             if (this.shake > 0) {
@@ -141,7 +148,7 @@ public class MixinSnowball extends MixinEntity {
         if (movingobjectposition != null) {
             vec3d1 = Vec3f.from(movingobjectposition.field_1988.x, movingobjectposition.field_1988.y, movingobjectposition.field_1988.z);
         }
-        MixinEntity entity = null;
+        Entity entity = null;
         List list = this.level.getEntities(this, this.boundingBox.add(this.velocityX, this.velocityY, this.velocityZ).expand(1.0, 1.0, 1.0));
         double d = 0.0;
         for (int j = 0; j < list.size(); ++j) {
@@ -149,7 +156,7 @@ public class MixinSnowball extends MixinEntity {
             float f2;
             Box axisalignedbb;
             HitResult movingobjectposition1;
-            MixinEntity entity1 = (MixinEntity) list.get(j);
+            Entity entity1 = (Entity) list.get(j);
             if (!entity1.method_1356() || entity1 == this.field_2193 && this.field_2203 < 25 || (movingobjectposition1 = (axisalignedbb = entity1.boundingBox.expand(f2 = 0.3f, f2, f2)).method_89(vec3d, vec3d1)) == null || !((d1 = vec3d.method_1294(movingobjectposition1.field_1988)) < d) && d != 0.0)
                 continue;
             entity = entity1;
@@ -171,7 +178,7 @@ public class MixinSnowball extends MixinEntity {
         this.z += this.velocityZ;
         float f = MathsHelper.sqrt(this.velocityX * this.velocityX + this.velocityZ * this.velocityZ);
         this.yaw = (float) (Math.atan2((double) this.velocityX, (double) this.velocityZ) * 180.0 / 3.1415927410125732);
-        this.pitch = (float) (Math.atan2((double) this.velocityY, f) * 180.0 / 3.1415927410125732);
+        this.pitch = (float) (Math.atan2((double) this.velocityY, (double) f) * 180.0 / 3.1415927410125732);
         while (this.pitch - this.prevPitch < -180.0f) {
             this.prevPitch -= 360.0f;
         }
@@ -209,7 +216,7 @@ public class MixinSnowball extends MixinEntity {
      */
     @Override
     @Overwrite()
-    public void writeCustomDataToTag(MixinCompoundTag tag) {
+    public void writeCustomDataToTag(CompoundTag tag) {
         tag.put("xTile", (short) this.xTile);
         tag.put("yTile", (short) this.yTile);
         tag.put("zTile", (short) this.zTile);
@@ -223,7 +230,7 @@ public class MixinSnowball extends MixinEntity {
      */
     @Override
     @Overwrite()
-    public void readCustomDataFromTag(MixinCompoundTag tag) {
+    public void readCustomDataFromTag(CompoundTag tag) {
         this.xTile = tag.getShort("xTile");
         this.yTile = tag.getShort("yTile");
         this.zTile = tag.getShort("zTile");
@@ -237,25 +244,7 @@ public class MixinSnowball extends MixinEntity {
      */
     @Override
     @Overwrite()
-    public boolean method_1356() {
-        return true;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public float method_1369() {
-        return 1.0f;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public boolean damage(MixinEntity target, int amount) {
+    public boolean damage(Entity target, int amount) {
         this.method_1336();
         if (target != null) {
             Vec3f vec3d = target.method_1320();
@@ -270,14 +259,5 @@ public class MixinSnowball extends MixinEntity {
             return true;
         }
         return false;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public float getEyeHeight() {
-        return 0.0f;
     }
 }

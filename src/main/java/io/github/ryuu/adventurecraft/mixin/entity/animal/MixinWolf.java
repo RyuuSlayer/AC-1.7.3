@@ -1,32 +1,47 @@
 package io.github.ryuu.adventurecraft.mixin.entity.animal;
 
+import java.util.List;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.class_61;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.animal.Animal;
 import net.minecraft.entity.animal.Sheep;
-import net.minecraft.entity.animal.Wolf;
+import net.minecraft.entity.player.Player;
+import net.minecraft.entity.projectile.Arrow;
+import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.item.food.FoodItem;
+import net.minecraft.level.Level;
+import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.MathsHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
-import java.util.List;
-
 @Mixin(Wolf.class)
 public class MixinWolf extends Animal {
 
-    public int attackStrength;
     @Shadow()
     private boolean begging = false;
+
     private float begAnimationProgress;
+
     private float lastBegAnimationProgress;
+
     private boolean wet;
+
     private boolean canShakeWaterOff;
+
     private float shakeProgress;
+
     private float lastShakeProgress;
 
-    public MixinWolf(MixinLevel world) {
+    public int attackStrength;
+
+    public MixinWolf(Level world) {
         super(world);
         this.texture = "/mob/wolf.png";
         this.setSize(0.8f, 0.8f);
@@ -52,31 +67,7 @@ public class MixinWolf extends Animal {
      */
     @Override
     @Overwrite()
-    protected boolean canClimb() {
-        return false;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public String method_1314() {
-        if (this.isTamed()) {
-            return "/mob/wolf_tame.png";
-        }
-        if (this.isAngry()) {
-            return "/mob/wolf_angry.png";
-        }
-        return super.method_1314();
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public void writeCustomDataToTag(MixinCompoundTag tag) {
+    public void writeCustomDataToTag(CompoundTag tag) {
         super.writeCustomDataToTag(tag);
         tag.put("Angry", this.isAngry());
         tag.put("Sitting", this.isSitting());
@@ -92,7 +83,7 @@ public class MixinWolf extends Animal {
      */
     @Override
     @Overwrite()
-    public void readCustomDataFromTag(MixinCompoundTag tag) {
+    public void readCustomDataFromTag(CompoundTag tag) {
         super.readCustomDataFromTag(tag);
         this.setAngry(tag.getBoolean("Angry"));
         this.setSitting(tag.getBoolean("Sitting"));
@@ -108,74 +99,11 @@ public class MixinWolf extends Animal {
      */
     @Override
     @Overwrite()
-    protected boolean method_940() {
-        return !this.isTamed();
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    protected String getAmbientSound() {
-        if (this.isAngry()) {
-            return "mob.wolf.growl";
-        }
-        if (this.rand.nextInt(3) == 0) {
-            if (this.isTamed() && this.dataTracker.getInt(18) < 10) {
-                return "mob.wolf.whine";
-            }
-            return "mob.wolf.panting";
-        }
-        return "mob.wolf.bark";
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    protected String getHurtSound() {
-        return "mob.wolf.hurt";
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    protected String getDeathSound() {
-        return "mob.wolf.death";
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    protected float getSoundVolume() {
-        return 0.4f;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    protected int getMobDrops() {
-        return -1;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
     protected void tickHandSwing() {
         List list;
         super.tickHandSwing();
         if (!this.field_663 && !this.method_633() && this.isTamed() && this.vehicle == null) {
-            MixinPlayer entityplayer = this.level.getPlayerByName(this.getOwner());
+            Player entityplayer = this.level.getPlayerByName(this.getOwner());
             if (entityplayer != null) {
                 float f = entityplayer.distanceTo(this);
                 if (f > 5.0f) {
@@ -185,7 +113,7 @@ public class MixinWolf extends Animal {
                 this.setSitting(true);
             }
         } else if (!(this.entity != null || this.method_633() || this.isTamed() || this.level.rand.nextInt(100) != 0 || (list = this.level.getEntities(Sheep.class, Box.getOrCreate(this.x, this.y, this.z, this.x + 1.0, this.y + 1.0, this.z + 1.0).expand(16.0, 4.0, 16.0))).isEmpty())) {
-            this.method_636((MixinEntity) list.get(this.level.rand.nextInt(list.size())));
+            this.method_636((Entity) list.get(this.level.rand.nextInt(list.size())));
         }
         if (this.method_1334()) {
             this.setSitting(false);
@@ -201,12 +129,12 @@ public class MixinWolf extends Animal {
     @Override
     @Overwrite()
     public void updateDespawnCounter() {
-        MixinEntity entity;
+        Entity entity;
         super.updateDespawnCounter();
         this.begging = false;
-        if (this.method_921() && !this.method_633() && !this.isAngry() && (entity = this.method_922()) instanceof MixinPlayer) {
-            MixinPlayer entityplayer = (MixinPlayer) entity;
-            MixinItemInstance itemstack = entityplayer.inventory.getHeldItem();
+        if (this.method_921() && !this.method_633() && !this.isAngry() && (entity = this.method_922()) instanceof Player) {
+            Player entityplayer = (Player) entity;
+            ItemInstance itemstack = entityplayer.inventory.getHeldItem();
             if (itemstack != null) {
                 if (!this.isTamed() && itemstack.itemId == ItemType.bone.id) {
                     this.begging = true;
@@ -268,22 +196,6 @@ public class MixinWolf extends Animal {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite()
-    public boolean isWet() {
-        return this.wet;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public float getWetBrightnessMultiplier(float f) {
-        return 0.75f + (this.lastShakeProgress + (this.shakeProgress - this.lastShakeProgress) * f) / 2.0f * 0.25f;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public float getShakeAnimationProgress(float f, float f1) {
         float f2 = (this.lastShakeProgress + (this.shakeProgress - this.lastShakeProgress) * f + f1) / 1.8f;
         if (f2 < 0.0f) {
@@ -305,30 +217,9 @@ public class MixinWolf extends Animal {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Override
     @Overwrite()
-    public float getStandingEyeHeight() {
-        return this.height * 0.8f;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    protected int getLookPitchSpeed() {
-        if (this.isSitting()) {
-            return 20;
-        }
-        return super.getLookPitchSpeed();
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    private void method_429(MixinEntity entity, float f) {
-        MixinClass_61 pathentity = this.level.method_192(this, entity, 16.0f);
+    private void method_429(Entity entity, float f) {
+        class_61 pathentity = this.level.method_192(this, entity, 16.0f);
         if (pathentity == null && f > 12.0f) {
             int i = MathsHelper.floor(entity.x) - 2;
             int j = MathsHelper.floor(entity.z) - 2;
@@ -351,41 +242,34 @@ public class MixinWolf extends Animal {
      */
     @Override
     @Overwrite()
-    protected boolean method_640() {
-        return this.isSitting() || this.canShakeWaterOff;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public boolean damage(MixinEntity target, int amount) {
+    public boolean damage(Entity target, int amount) {
         this.setSitting(false);
-        if (target != null && !(target instanceof MixinPlayer) && !(target instanceof MixinArrow)) {
+        if (target != null && !(target instanceof Player) && !(target instanceof Arrow)) {
             amount = (amount + 1) / 2;
         }
         if (super.damage(target, amount)) {
             if (!this.isTamed() && !this.isAngry()) {
-                if (target instanceof MixinPlayer) {
+                if (target instanceof Player) {
                     this.setAngry(true);
                     this.entity = target;
                 }
-                if (target instanceof MixinArrow && ((MixinArrow) target).field_1576 != null) {
-                    target = ((MixinArrow) target).field_1576;
+                if (target instanceof Arrow && ((Arrow) target).field_1576 != null) {
+                    target = ((Arrow) target).field_1576;
                 }
-                if (target instanceof MixinLivingEntity) {
-                    List list = this.level.getEntities(MixinWolf.class, Box.getOrCreate(this.x, this.y, this.z, this.x + 1.0, this.y + 1.0, this.z + 1.0).expand(16.0, 4.0, 16.0));
-                    for (MixinEntity entity1 : list) {
-                        MixinWolf entitywolf = (MixinWolf) entity1;
-                        if (entitywolf.isTamed() || entitywolf.entity != null) continue;
+                if (target instanceof LivingEntity) {
+                    List list = this.level.getEntities(Wolf.class, Box.getOrCreate(this.x, this.y, this.z, this.x + 1.0, this.y + 1.0, this.z + 1.0).expand(16.0, 4.0, 16.0));
+                    for (Entity entity1 : list) {
+                        Wolf entitywolf = (Wolf) entity1;
+                        if (entitywolf.isTamed() || entitywolf.entity != null)
+                            continue;
                         entitywolf.entity = target;
-                        if (!(target instanceof MixinPlayer)) continue;
+                        if (!(target instanceof Player))
+                            continue;
                         entitywolf.setAngry(true);
                     }
                 }
             } else if (target != this && target != null) {
-                if (this.isTamed() && target instanceof MixinPlayer && ((MixinPlayer) target).name.equalsIgnoreCase(this.getOwner())) {
+                if (this.isTamed() && target instanceof Player && ((Player) target).name.equalsIgnoreCase(this.getOwner())) {
                     return true;
                 }
                 this.entity = target;
@@ -400,19 +284,7 @@ public class MixinWolf extends Animal {
      */
     @Override
     @Overwrite()
-    protected MixinEntity method_638() {
-        if (this.isAngry()) {
-            return this.level.getClosestPlayerTo(this, 16.0);
-        }
-        return null;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    protected void method_637(MixinEntity entity, float f) {
+    protected void method_637(Entity entity, float f) {
         if (f > 2.0f && f < 6.0f && this.rand.nextInt(10) == 0) {
             if (this.onGround) {
                 double d = entity.x - this.x;
@@ -440,8 +312,8 @@ public class MixinWolf extends Animal {
      */
     @Override
     @Overwrite()
-    public boolean interact(MixinPlayer entityplayer) {
-        MixinItemInstance itemstack = entityplayer.inventory.getHeldItem();
+    public boolean interact(Player entityplayer) {
+        ItemInstance itemstack = entityplayer.inventory.getHeldItem();
         if (!this.isTamed()) {
             if (itemstack != null && itemstack.itemId == ItemType.bone.id && !this.isAngry()) {
                 --itemstack.count;
@@ -539,34 +411,9 @@ public class MixinWolf extends Animal {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Override
-    @Overwrite()
-    public int getLimitPerChunk() {
-        return 8;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public String getOwner() {
-        return this.dataTracker.getString(17);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
     @Overwrite()
     public void setOwner(String s) {
         this.dataTracker.setData(17, s);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean isSitting() {
-        return (this.dataTracker.getByte(16) & 1) != 0;
     }
 
     /**
@@ -586,14 +433,6 @@ public class MixinWolf extends Animal {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite()
-    public boolean isAngry() {
-        return (this.dataTracker.getByte(16) & 2) != 0;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void setAngry(boolean flag) {
         byte byte0 = this.dataTracker.getByte(16);
         if (flag) {
@@ -601,14 +440,6 @@ public class MixinWolf extends Animal {
         } else {
             this.dataTracker.setData(16, (byte) (byte0 & 0xFFFFFFFD));
         }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean isTamed() {
-        return (this.dataTracker.getByte(16) & 4) != 0;
     }
 
     /**

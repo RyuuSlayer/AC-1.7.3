@@ -1,5 +1,10 @@
 package io.github.ryuu.adventurecraft.items;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.armour.ArmourItem;
+
 class ItemPegasusBoots extends MixinArmourItem {
 
     public ItemPegasusBoots(int id) {

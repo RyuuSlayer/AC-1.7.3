@@ -1,7 +1,8 @@
 package io.github.ryuu.adventurecraft.mixin.level;
 
-import net.minecraft.level.LightCalculator;
+import net.minecraft.level.Level;
 import net.minecraft.level.LightType;
+import net.minecraft.level.chunk.Chunk;
 import net.minecraft.tile.Tile;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -39,7 +40,7 @@ public class MixinLightCalculator {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite()
-    public void calculateLight(MixinLevel world) {
+    public void calculateLight(Level world) {
         int i = this.field_1677 - this.field_1674 + 1;
         int j = this.field_1678 - this.field_1675 + 1;
         int k = this.field_1679 - this.field_1676 + 1;
@@ -60,7 +61,7 @@ public class MixinLightCalculator {
                 if (flag && i2 == i1 && j2 == j1) {
                     flag2 = flag1;
                 } else {
-                    MixinChunk chunk;
+                    Chunk chunk;
                     flag2 = world.isRegionLoaded(k1, 0, l1, 1);
                     if (flag2 && (chunk = world.getChunkFromCache(k1 >> 4, l1 >> 4)).method_886()) {
                         flag2 = false;
@@ -69,7 +70,8 @@ public class MixinLightCalculator {
                     i1 = i2;
                     j1 = j2;
                 }
-                if (!flag2) continue;
+                if (!flag2)
+                    continue;
                 if (this.field_1675 < 0) {
                     this.field_1675 = 0;
                 }
@@ -124,7 +126,8 @@ public class MixinLightCalculator {
                             i3 = l3;
                         }
                     }
-                    if (l2 == i3) continue;
+                    if (l2 == i3)
+                        continue;
                     world.setLightLevel(this.type, k1, k2, l1, i3);
                     int j4 = i3 - 1;
                     if (j4 < 0) {
@@ -139,7 +142,8 @@ public class MixinLightCalculator {
                     if (k2 + 1 >= this.field_1678) {
                         world.method_165(this.type, k1, k2 + 1, l1, j4);
                     }
-                    if (l1 + 1 < this.field_1679) continue;
+                    if (l1 + 1 < this.field_1679)
+                        continue;
                     world.method_165(this.type, k1, k2, l1 + 1, j4);
                 }
             }

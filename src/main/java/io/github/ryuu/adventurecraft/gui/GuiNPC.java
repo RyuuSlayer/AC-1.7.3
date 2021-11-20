@@ -1,17 +1,23 @@
 package io.github.ryuu.adventurecraft.gui;
 
+import java.io.File;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.Textbox;
 
-import java.io.File;
-
 public class GuiNPC extends MixinScreen {
 
-    private final EntityNPC npc;
-    int selectedID = 0;
+    private EntityNPC npc;
+
     private Textbox npcName;
+
     private Textbox chatMsg;
+
+    int selectedID = 0;
+
     private Button setOnCreated;
 
     private Button setOnUpdate;
@@ -30,11 +36,6 @@ public class GuiNPC extends MixinScreen {
         this.npc = n;
     }
 
-    public static void showUI(EntityNPC n) {
-        TileEntityNpcPath.lastEntity = n;
-        Minecraft.minecraftInstance.openScreen(new GuiNPC(n));
-    }
-
     @Override
     public void tick() {
         if (this.page == 0) {
@@ -45,15 +46,14 @@ public class GuiNPC extends MixinScreen {
 
     @Override
     public void init() {
-        block8:
-        {
-            block7:
-            {
+        block8: {
+            block7: {
                 this.buttons.clear();
                 int buttonWidth = (this.width - 16) / 4;
                 this.buttons.add((Object) new Button(-20, 4, 0, buttonWidth, 18, "Misc"));
                 this.buttons.add((Object) new Button(-21, 4 + (4 + buttonWidth), 0, buttonWidth, 18, "Script"));
-                if (this.page != 0) break block7;
+                if (this.page != 0)
+                    break block7;
                 this.npcName = new Textbox(this, this.textManager, 4, 40, 160, 20, this.npc.npcName);
                 this.npcName.field_2420 = true;
                 this.npcName.method_1878(32);
@@ -82,7 +82,8 @@ public class GuiNPC extends MixinScreen {
                 buttonWidth = (this.width - 16) / 3;
                 b = new Button(0, 4, 124, buttonWidth, 18, "Player Skin");
                 this.buttons.add((Object) b);
-                if (!npcSkins.isDirectory()) break block8;
+                if (!npcSkins.isDirectory())
+                    break block8;
                 for (File f : npcSkins.listFiles()) {
                     b = new Button(i, 4 + (buttonWidth + 4) * (i % 3), 124 + i / 3 * 20, buttonWidth, 18, f.getName().split("\\.")[0]);
                     this.buttons.add((Object) b);
@@ -147,7 +148,7 @@ public class GuiNPC extends MixinScreen {
     @Override
     protected void buttonClicked(Button button) {
         if (button.id <= -20) {
-            this.page = Math.abs(button.id + 20);
+            this.page = Math.abs((int) (button.id + 20));
             this.init();
             return;
         }
@@ -246,5 +247,10 @@ public class GuiNPC extends MixinScreen {
             this.npc.chatMsg = this.chatMsg.method_1876();
         }
         super.render(mouseX, mouseY, delta);
+    }
+
+    public static void showUI(EntityNPC n) {
+        TileEntityNpcPath.lastEntity = n;
+        Minecraft.minecraftInstance.openScreen(new GuiNPC(n));
     }
 }

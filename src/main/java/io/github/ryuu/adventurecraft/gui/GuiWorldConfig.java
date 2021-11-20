@@ -1,20 +1,31 @@
 package io.github.ryuu.adventurecraft.gui;
 
+import java.io.File;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.Textbox;
-
-import java.io.File;
+import net.minecraft.level.Level;
 
 public class GuiWorldConfig extends MixinScreen {
 
-    private final MixinLevel world;
-    private final Textbox[] lightLevels;
-    int selectedID = 0;
     private int page = 0;
+
+    private MixinLevel world;
+
     private Textbox playerName;
+
+    int selectedID = 0;
+
     private Button setOnNewSave;
+
     private Button setOnLoad;
+
     private Button setOnUpdate;
+
+    private Textbox[] lightLevels;
+
     private boolean lightChanged = false;
 
     public GuiWorldConfig(MixinLevel w) {
@@ -73,7 +84,7 @@ public class GuiWorldConfig extends MixinScreen {
             }
         } else if (this.page == 2) {
             for (int i = 0; i < 16; ++i) {
-                this.lightLevels[i] = new Textbox(this, this.textManager, 80, 22 + 14 * i, 80, 11, String.format("%.7f", new Object[]{Float.valueOf((float) this.minecraft.level.properties.brightness[i])}));
+                this.lightLevels[i] = new Textbox(this, this.textManager, 80, 22 + 14 * i, 80, 11, String.format((String) "%.7f", (Object[]) new Object[] { Float.valueOf((float) this.minecraft.level.properties.brightness[i]) }));
             }
         } else if (this.page == 3) {
         }
@@ -189,10 +200,10 @@ public class GuiWorldConfig extends MixinScreen {
         } else if (this.page != 1) {
             if (this.page == 2) {
                 for (int k = 0; k < 16; ++k) {
-                    this.drawTextWithShadow(this.textManager, String.format("Light Level %d", new Object[]{k}), 4, 24 + 14 * k, 0xA0A0A0);
+                    this.drawTextWithShadow(this.textManager, String.format((String) "Light Level %d", (Object[]) new Object[] { k }), 4, 24 + 14 * k, 0xA0A0A0);
                     this.lightLevels[k].method_1883();
                     try {
-                        Float value = Float.valueOf(this.lightLevels[k].method_1876());
+                        Float value = Float.valueOf((String) this.lightLevels[k].method_1876());
                         if (value == null || (double) value.floatValue() == Math.floor((double) (this.minecraft.level.properties.brightness[k] * 1.0E7f)) / 1.0E7)
                             continue;
                         this.minecraft.level.properties.brightness[k] = value.floatValue();

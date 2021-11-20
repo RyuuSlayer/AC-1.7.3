@@ -1,8 +1,13 @@
 package io.github.ryuu.adventurecraft.mixin.level;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
-import net.minecraft.level.WorldPopulationRegion;
+import net.minecraft.level.chunk.Chunk;
+import net.minecraft.level.gen.BiomeSource;
 import net.minecraft.tile.Tile;
+import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -11,19 +16,22 @@ import org.spongepowered.asm.mixin.Shadow;
 @Mixin(WorldPopulationRegion.class)
 public class MixinWorldPopulationRegion implements TileView {
 
-    private final int field_167;
-    private final MixinChunk[][] chunks;
-    private final MixinLevel level;
     @Shadow()
     private int field_166;
 
-    public MixinWorldPopulationRegion(MixinLevel world, int i, int j, int k, int l, int i1, int j1) {
+    private int field_167;
+
+    private Chunk[][] chunks;
+
+    private Level level;
+
+    public MixinWorldPopulationRegion(Level world, int i, int j, int k, int l, int i1, int j1) {
         this.level = world;
         this.field_166 = i >> 4;
         this.field_167 = k >> 4;
         int k1 = l >> 4;
         int l1 = j1 >> 4;
-        this.chunks = new MixinChunk[k1 - this.field_166 + 1][l1 - this.field_167 + 1];
+        this.chunks = new Chunk[k1 - this.field_166 + 1][l1 - this.field_167 + 1];
         for (int i2 = this.field_166; i2 <= k1; ++i2) {
             for (int j2 = this.field_167; j2 <= l1; ++j2) {
                 this.chunks[i2 - this.field_166][j2 - this.field_167] = world.getChunkFromCache(i2, j2);
@@ -48,7 +56,7 @@ public class MixinWorldPopulationRegion implements TileView {
         if (l < 0 || l >= this.chunks.length || i1 < 0 || i1 >= this.chunks[l].length) {
             return 0;
         }
-        MixinChunk chunk = this.chunks[l][i1];
+        Chunk chunk = this.chunks[l][i1];
         if (chunk == null) {
             return 0;
         }
@@ -60,7 +68,7 @@ public class MixinWorldPopulationRegion implements TileView {
      */
     @Override
     @Overwrite()
-    public MixinTileEntity getTileEntity(int i, int j, int k) {
+    public TileEntity getTileEntity(int i, int j, int k) {
         int l = (i >> 4) - this.field_166;
         int i1 = (k >> 4) - this.field_167;
         return this.chunks[l][i1].getTileEntity(i & 0xF, j, k & 0xF);
@@ -82,11 +90,11 @@ public class MixinWorldPopulationRegion implements TileView {
             lightValue = l;
         }
         if ((float) lightValue < (torchLight = PlayerTorch.getTorchLight(this.level, i, j, k))) {
-            int floorValue = (int) Math.floor(torchLight);
+            int floorValue = (int) Math.floor((double) torchLight);
             if (floorValue == 15) {
                 return this.level.dimension.field_2178[15];
             }
-            int ceilValue = (int) Math.ceil(torchLight);
+            int ceilValue = (int) Math.ceil((double) torchLight);
             float lerpValue = torchLight - (float) floorValue;
             return (1.0f - lerpValue) * this.level.dimension.field_2178[floorValue] + lerpValue * this.level.dimension.field_2178[ceilValue];
         }
@@ -108,11 +116,11 @@ public class MixinWorldPopulationRegion implements TileView {
         }
         int lightValue = this.method_143(i, j, k);
         if ((float) lightValue < (torchLight = PlayerTorch.getTorchLight(this.level, i, j, k))) {
-            int floorValue = (int) Math.floor(torchLight);
+            int floorValue = (int) Math.floor((double) torchLight);
             if (floorValue == 15) {
                 return this.level.dimension.field_2178[15];
             }
-            int ceilValue = (int) Math.ceil(torchLight);
+            int ceilValue = (int) Math.ceil((double) torchLight);
             float lerpValue = torchLight - (float) floorValue;
             return (1.0f - lerpValue) * this.level.dimension.field_2178[floorValue] + lerpValue * this.level.dimension.field_2178[ceilValue];
         }
@@ -208,17 +216,8 @@ public class MixinWorldPopulationRegion implements TileView {
      */
     @Override
     @Overwrite()
-    public MixinBiomeSource getBiomeSource() {
-        return this.level.getBiomeSource();
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
     public boolean isFullOpaque(int i, int j, int k) {
-        MixinTile block = Tile.BY_ID[this.getTileId(i, j, k)];
+        Tile block = Tile.BY_ID[this.getTileId(i, j, k)];
         if (block == null) {
             return false;
         }
@@ -231,7 +230,7 @@ public class MixinWorldPopulationRegion implements TileView {
     @Override
     @Overwrite()
     public boolean canSuffocate(int i, int j, int k) {
-        MixinTile block = Tile.BY_ID[this.getTileId(i, j, k)];
+        Tile block = Tile.BY_ID[this.getTileId(i, j, k)];
         if (block == null) {
             return false;
         }

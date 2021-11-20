@@ -1,12 +1,16 @@
 package io.github.ryuu.adventurecraft.gui;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.OptionButton;
+import net.minecraft.level.Level;
 
 public class GuiWeather extends MixinScreen {
 
-    private final TileEntityWeather weather;
+    private TileEntityWeather weather;
 
     private GuiSlider2 tempOffset;
 
@@ -16,10 +20,6 @@ public class GuiWeather extends MixinScreen {
 
     public GuiWeather(MixinLevel worldArg, TileEntityWeather w) {
         this.weather = w;
-    }
-
-    public static void showUI(MixinLevel worldArg, TileEntityWeather w) {
-        Minecraft.minecraftInstance.openScreen(new GuiWeather(worldArg, w));
     }
 
     @Override
@@ -38,21 +38,21 @@ public class GuiWeather extends MixinScreen {
         if (this.weather.changeTempOffset) {
             b.text = "Change Temperature";
         }
-        this.tempOffset = new GuiSlider2(2, 4, 44, 10, String.format("Temp Offset: %.2f", new Object[]{this.weather.tempOffset}), (float) ((this.weather.tempOffset + 1.0) / 2.0));
+        this.tempOffset = new GuiSlider2(2, 4, 44, 10, String.format((String) "Temp Offset: %.2f", (Object[]) new Object[] { this.weather.tempOffset }), (float) ((this.weather.tempOffset + 1.0) / 2.0));
         this.buttons.add((Object) this.tempOffset);
         b = new OptionButton(3, 4, 66, "Don't Change Time");
         this.buttons.add((Object) b);
         if (this.weather.changeTimeOfDay) {
             b.text = "Change Time";
         }
-        this.timeOfDay = new GuiSlider2(4, 4, 88, 10, String.format("Time: %d", new Object[]{this.weather.timeOfDay}), (float) this.weather.timeOfDay / 24000.0f);
+        this.timeOfDay = new GuiSlider2(4, 4, 88, 10, String.format((String) "Time: %d", (Object[]) new Object[] { this.weather.timeOfDay }), (float) this.weather.timeOfDay / 24000.0f);
         this.buttons.add((Object) this.timeOfDay);
         b = new OptionButton(5, 4, 110, "Don't Change Time Rate");
         this.buttons.add((Object) b);
         if (this.weather.changeTimeRate) {
             b.text = "Change Time Rate";
         }
-        this.timeRate = new GuiSlider2(6, 4, 132, 10, String.format("Time Rate: %.2f", new Object[]{Float.valueOf((float) this.weather.timeRate)}), (this.weather.timeRate + 16.0f) / 32.0f);
+        this.timeRate = new GuiSlider2(6, 4, 132, 10, String.format((String) "Time Rate: %.2f", (Object[]) new Object[] { Float.valueOf((float) this.weather.timeRate) }), (this.weather.timeRate + 16.0f) / 32.0f);
         this.buttons.add((Object) this.timeRate);
         b = new OptionButton(7, 4, 152, "Don't Change Thundering");
         this.buttons.add((Object) b);
@@ -100,12 +100,16 @@ public class GuiWeather extends MixinScreen {
     public void render(int mouseX, int mouseY, float delta) {
         this.fill(0, 0, this.width, this.height, Integer.MIN_VALUE);
         this.weather.tempOffset = (double) this.tempOffset.sliderValue * 2.0 - 1.0;
-        this.tempOffset.text = String.format("Temp Offset: %.2f", new Object[]{this.weather.tempOffset});
+        this.tempOffset.text = String.format((String) "Temp Offset: %.2f", (Object[]) new Object[] { this.weather.tempOffset });
         this.weather.timeOfDay = (int) (this.timeOfDay.sliderValue * 24000.0f);
-        this.timeOfDay.text = String.format("Time: %d", new Object[]{this.weather.timeOfDay});
+        this.timeOfDay.text = String.format((String) "Time: %d", (Object[]) new Object[] { this.weather.timeOfDay });
         this.weather.timeRate = this.timeRate.sliderValue * 32.0f - 16.0f;
-        this.timeRate.text = String.format("Time Rate: %.2f", new Object[]{Float.valueOf((float) this.weather.timeRate)});
+        this.timeRate.text = String.format((String) "Time Rate: %.2f", (Object[]) new Object[] { Float.valueOf((float) this.weather.timeRate) });
         super.render(mouseX, mouseY, delta);
+    }
+
+    public static void showUI(MixinLevel worldArg, TileEntityWeather w) {
+        Minecraft.minecraftInstance.openScreen(new GuiWeather(worldArg, w));
     }
 
     @Override

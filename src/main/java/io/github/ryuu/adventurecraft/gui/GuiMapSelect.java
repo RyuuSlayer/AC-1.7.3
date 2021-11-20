@@ -1,6 +1,12 @@
 package io.github.ryuu.adventurecraft.gui;
 
+import java.io.File;
+import java.util.List;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.class_520;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.OptionButton;
 import net.minecraft.client.render.Tessellator;
@@ -8,9 +14,6 @@ import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.src.MapInfo;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
-
-import java.io.File;
-import java.util.List;
 
 public class GuiMapSelect extends MixinScreen {
 
@@ -70,13 +73,13 @@ public class GuiMapSelect extends MixinScreen {
                 this.minecraft.openScreen(this.parent);
             } else {
                 if (this.saveName != null) {
-                    if (this.saveName.equals("")) {
+                    if (this.saveName.equals((Object) "")) {
                         File worldDir;
                         File mcDir = Minecraft.getGameDirectory();
                         File saveDir = new File(mcDir, "saves");
                         int i = 1;
                         do {
-                            this.saveName = String.format("%s - Save %d", new Object[]{this.selectedMap.name, i});
+                            this.saveName = String.format((String) "%s - Save %d", (Object[]) new Object[] { this.selectedMap.name, i });
                             worldDir = new File(saveDir, this.saveName);
                             ++i;
                         } while (worldDir.exists());
@@ -109,14 +112,14 @@ public class GuiMapSelect extends MixinScreen {
             this.field_6454_o += 20;
         }
         List<MapInfo> list = this.minecraft.mapList.availableMaps();
-        if (Mouse.isButtonDown(0)) {
+        if (Mouse.isButtonDown((int) 0)) {
             if (this.field_6455_n == -1) {
                 if (mouseY >= this.field_6459_i && mouseY <= this.field_6458_j) {
                     int k = this.width / 2 - 110;
                     int i1 = this.width / 2 + 110;
                     int j1 = (mouseY - this.field_6459_i + this.field_6460_h - 2) / 36;
                     if (mouseX >= k && mouseX <= i1 && j1 >= 0 && j1 < list.size()) {
-                        this.selectedMap = list.get(j1);
+                        this.selectedMap = (MapInfo) list.get(j1);
                     }
                     this.field_6455_n = mouseY;
                 } else {
@@ -141,11 +144,11 @@ public class GuiMapSelect extends MixinScreen {
         if (this.field_6460_h > l) {
             this.field_6460_h = l;
         }
-        GL11.glDisable(2896);
-        GL11.glDisable(2912);
+        GL11.glDisable((int) 2896);
+        GL11.glDisable((int) 2912);
         Tessellator tessellator = Tessellator.INSTANCE;
-        GL11.glBindTexture(3553, (int) this.minecraft.textureManager.getTextureId("/gui/background.png"));
-        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        GL11.glBindTexture((int) 3553, (int) this.minecraft.textureManager.getTextureId("/gui/background.png"));
+        GL11.glColor4f((float) 1.0f, (float) 1.0f, (float) 1.0f, (float) 1.0f);
         float f1 = 32.0f;
         tessellator.start();
         tessellator.colour(0x202020);
@@ -155,7 +158,7 @@ public class GuiMapSelect extends MixinScreen {
         tessellator.vertex(this.field_6457_l, this.field_6459_i, 0.0, (float) this.field_6457_l / f1, (float) (this.field_6459_i + this.field_6460_h) / f1);
         tessellator.draw();
         for (int k1 = 0; k1 < list.size(); ++k1) {
-            MapInfo mInfo = list.get(k1);
+            MapInfo mInfo = (MapInfo) list.get(k1);
             int l1 = this.width / 2 - 92 - 16;
             int i2 = 36 + k1 * 36 - this.field_6460_h;
             int byte1 = 32;
@@ -163,8 +166,8 @@ public class GuiMapSelect extends MixinScreen {
             if (mInfo == this.selectedMap) {
                 int j2 = this.width / 2 - 110;
                 int k2 = this.width / 2 + 110;
-                GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-                GL11.glDisable(3553);
+                GL11.glColor4f((float) 1.0f, (float) 1.0f, (float) 1.0f, (float) 1.0f);
+                GL11.glDisable((int) 3553);
                 tessellator.start();
                 tessellator.colour(0x808080);
                 tessellator.vertex(j2, i2 + byte1 + 2, 0.0, 0.0, 1.0);
@@ -177,10 +180,10 @@ public class GuiMapSelect extends MixinScreen {
                 tessellator.vertex(k2 - 1, i2 - 1, 0.0, 1.0, 0.0);
                 tessellator.vertex(j2 + 1, i2 - 1, 0.0, 0.0, 0.0);
                 tessellator.draw();
-                GL11.glEnable(3553);
+                GL11.glEnable((int) 3553);
             }
             mInfo.bindTexture(this.minecraft);
-            GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+            GL11.glColor4f((float) 1.0f, (float) 1.0f, (float) 1.0f, (float) 1.0f);
             tessellator.start();
             tessellator.colour(0xFFFFFF);
             tessellator.vertex(l1, i2 + byte1, 0.0, 0.0, 1.0);
@@ -195,11 +198,11 @@ public class GuiMapSelect extends MixinScreen {
         int byte0 = 4;
         this.drawBackground(0, this.field_6459_i, 255, 255);
         this.drawBackground(this.field_6458_j, this.height, 255, 255);
-        GL11.glEnable(3042);
-        GL11.glBlendFunc(770, 771);
-        GL11.glDisable(3008);
-        GL11.glShadeModel(7425);
-        GL11.glDisable(3553);
+        GL11.glEnable((int) 3042);
+        GL11.glBlendFunc((int) 770, (int) 771);
+        GL11.glDisable((int) 3008);
+        GL11.glShadeModel((int) 7425);
+        GL11.glDisable((int) 3553);
         tessellator.start();
         tessellator.colour(0, 0);
         tessellator.vertex(this.field_6457_l, this.field_6459_i + byte0, 0.0, 0.0, 1.0);
@@ -216,10 +219,10 @@ public class GuiMapSelect extends MixinScreen {
         tessellator.vertex(this.field_6456_m, this.field_6458_j - byte0, 0.0, 1.0, 0.0);
         tessellator.vertex(this.field_6457_l, this.field_6458_j - byte0, 0.0, 0.0, 0.0);
         tessellator.draw();
-        GL11.glEnable(3553);
-        GL11.glShadeModel(7424);
-        GL11.glEnable(3008);
-        GL11.glDisable(3042);
+        GL11.glEnable((int) 3553);
+        GL11.glShadeModel((int) 7424);
+        GL11.glEnable((int) 3008);
+        GL11.glDisable((int) 3042);
         MixinTranslationStorage stringtranslate = TranslationStorage.getInstance();
         this.drawTextWithShadowCentred(this.textManager, stringtranslate.translate("mapList.title"), this.width / 2, 16, 0xFFFFFF);
         super.render(mouseX, mouseY, delta);
@@ -233,8 +236,8 @@ public class GuiMapSelect extends MixinScreen {
 
     public void drawBackground(int top, int bottom, int topAlpha, int bottomAlpha) {
         Tessellator tessellator = Tessellator.INSTANCE;
-        GL11.glBindTexture(3553, (int) this.minecraft.textureManager.getTextureId("/gui/background.png"));
-        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        GL11.glBindTexture((int) 3553, (int) this.minecraft.textureManager.getTextureId("/gui/background.png"));
+        GL11.glColor4f((float) 1.0f, (float) 1.0f, (float) 1.0f, (float) 1.0f);
         float f = 32.0f;
         tessellator.start();
         tessellator.colour(0x404040, bottomAlpha);

@@ -1,6 +1,9 @@
 package io.github.ryuu.adventurecraft.mixin.entity;
 
-import net.minecraft.entity.FlyingEntity;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 import net.minecraft.util.maths.MathsHelper;
 import org.spongepowered.asm.mixin.Mixin;
@@ -8,21 +11,13 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(FlyingEntity.class)
-public class MixinFlyingEntity extends MixinLivingEntity {
+public class MixinFlyingEntity extends LivingEntity {
 
     @Shadow()
     public int attackStrength = 1;
 
-    public MixinFlyingEntity(MixinLevel world) {
+    public MixinFlyingEntity(Level world) {
         super(world);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    protected void handleFallDamage(float f) {
     }
 
     /**
@@ -34,9 +29,9 @@ public class MixinFlyingEntity extends MixinLivingEntity {
         if (this.method_1334()) {
             this.movementInputToVelocity(f, f1, 0.02f);
             this.move(this.velocityX, this.velocityY, this.velocityZ);
-            this.velocityX *= 0.8f;
-            this.velocityY *= 0.8f;
-            this.velocityZ *= 0.8f;
+            this.velocityX *= (double) 0.8f;
+            this.velocityY *= (double) 0.8f;
+            this.velocityZ *= (double) 0.8f;
         } else if (this.method_1335()) {
             this.movementInputToVelocity(f, f1, 0.02f);
             this.move(this.velocityX, this.velocityY, this.velocityZ);
@@ -63,9 +58,9 @@ public class MixinFlyingEntity extends MixinLivingEntity {
                 }
             }
             this.move(this.velocityX, this.velocityY, this.velocityZ);
-            this.velocityX *= f2;
-            this.velocityY *= f2;
-            this.velocityZ *= f2;
+            this.velocityX *= (double) f2;
+            this.velocityY *= (double) f2;
+            this.velocityZ *= (double) f2;
         }
         this.field_1048 = this.limbDistance;
         double d = this.x - this.prevX;
@@ -76,14 +71,5 @@ public class MixinFlyingEntity extends MixinLivingEntity {
         }
         this.limbDistance += (f4 - this.limbDistance) * 0.4f;
         this.field_1050 += this.limbDistance;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public boolean isOnLadder() {
-        return false;
     }
 }

@@ -1,5 +1,12 @@
 package io.github.ryuu.adventurecraft.entities;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.monster.Monster;
+import net.minecraft.entity.player.Player;
+import net.minecraft.level.Level;
+
 public class EntityRat extends MixinMonster {
 
     public EntityRat(MixinLevel world) {

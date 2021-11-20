@@ -1,53 +1,48 @@
 package io.github.ryuu.adventurecraft.mixin.client.sound;
 
+import java.io.File;
+import java.util.Random;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.class_266;
 import net.minecraft.class_267;
 import net.minecraft.class_309;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.sound.SoundHelper;
+import net.minecraft.client.options.GameOptions;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.maths.MathsHelper;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
 import paulscode.sound.SoundSystem;
 import paulscode.sound.SoundSystemConfig;
 import paulscode.sound.codecs.CodecJOrbis;
 import paulscode.sound.codecs.CodecWav;
 import paulscode.sound.libraries.LibraryLWJGLOpenAL;
-
-import java.io.File;
-import java.util.Random;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(SoundHelper.class)
 public class MixinSoundHelper {
 
     @Shadow()
     private static SoundSystem soundSystem;
+
+    private class_266 field_2668 = new class_266();
+
+    private class_266 field_2669 = new class_266();
+
+    private class_266 field_2670 = new class_266();
+
+    private int field_2671 = 0;
+
+    private GameOptions gameOptions;
+
     private static boolean field_2673;
 
-    static {
-        field_2673 = false;
-    }
+    private Random rand = new Random();
 
-    private final MixinClass_266 field_2668 = new MixinClass_266();
-    private final MixinClass_266 field_2669 = new MixinClass_266();
-    private final MixinClass_266 field_2670 = new MixinClass_266();
-    private final Random rand = new Random();
-    private final int field_2675 = this.rand.nextInt(12000);
-    private int field_2671 = 0;
-    private MixinGameOptions gameOptions;
+    private int field_2675 = this.rand.nextInt(12000);
+
     private String currentSoundName;
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void acceptOptions(MixinGameOptions gameOptions) {
-        this.field_2669.field_1087 = false;
-        this.gameOptions = gameOptions;
-        if (!(field_2673 || gameOptions != null && gameOptions.sound == 0.0f && gameOptions.music == 0.0f)) {
-            this.method_2019();
-        }
-    }
 
     /**
      * @author Ryuu, TechPizza, Phil
@@ -73,33 +68,6 @@ public class MixinSoundHelper {
             System.err.println("error linking with the LibraryJavaSound plug-in");
         }
         field_2673 = true;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_2008() {
-        if (!(field_2673 || this.gameOptions.sound == 0.0f && this.gameOptions.music == 0.0f)) {
-            this.method_2019();
-        }
-        if (field_2673) {
-            if (this.gameOptions.music == 0.0f) {
-                soundSystem.stop("BgMusic");
-            } else {
-                soundSystem.setVolume("BgMusic", this.gameOptions.music);
-            }
-        }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_2014() {
-        if (field_2673) {
-            soundSystem.cleanup();
-        }
     }
 
     /**
@@ -137,7 +105,7 @@ public class MixinSoundHelper {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite()
-    public void setSoundPosition(MixinLivingEntity entity, float f) {
+    public void setSoundPosition(LivingEntity entity, float f) {
         if (!field_2673 || this.gameOptions.sound == 0.0f) {
             return;
         }
@@ -245,7 +213,7 @@ public class MixinSoundHelper {
         if (!field_2673) {
             return;
         }
-        if (s.equals("")) {
+        if (s.equals((Object) "")) {
             this.stopMusic();
         }
         if ((soundpoolentry = this.field_2669.method_958(s)) != null) {
@@ -277,5 +245,9 @@ public class MixinSoundHelper {
                 Minecraft.minecraftInstance.level.properties.playingMusic = "";
             }
         }
+    }
+
+    static {
+        field_2673 = false;
     }
 }
