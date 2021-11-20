@@ -1,9 +1,11 @@
 package io.github.ryuu.adventurecraft.mixin.level.dimension;
 
+import io.github.ryuu.adventurecraft.util.ChunkProviderHeightMapGenerate;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.level.Level;
 import net.minecraft.level.LevelProperties;
+import net.minecraft.level.dimension.Dimension;
 import net.minecraft.level.dimension.Nether;
 import net.minecraft.level.dimension.Overworld;
 import net.minecraft.level.dimension.Skylands;

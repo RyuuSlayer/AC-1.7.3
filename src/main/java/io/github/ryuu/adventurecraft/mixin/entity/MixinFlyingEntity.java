@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.mixin.entity;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.entity.FlyingEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;

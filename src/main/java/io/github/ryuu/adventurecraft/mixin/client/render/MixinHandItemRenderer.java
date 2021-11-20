@@ -1,13 +1,12 @@
 package io.github.ryuu.adventurecraft.mixin.client.render;
 
+import io.github.ryuu.adventurecraft.items.Items;
+import io.github.ryuu.adventurecraft.util.Vec2;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelPart;
-import net.minecraft.client.render.MapRenderer;
-import net.minecraft.client.render.RenderHelper;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.TileRenderer;
+import net.minecraft.client.render.*;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.PlayerRenderer;

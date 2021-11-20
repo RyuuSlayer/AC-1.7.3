@@ -2,19 +2,15 @@ package io.github.ryuu.adventurecraft.mixin.tile.entity;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import io.github.ryuu.adventurecraft.entities.tile.*;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.FurnaceEntity;
 import net.minecraft.level.Level;
 import net.minecraft.packet.AbstractPacket;
 import net.minecraft.tile.Tile;
-import net.minecraft.tile.entity.Chest;
-import net.minecraft.tile.entity.Dispenser;
-import net.minecraft.tile.entity.Jukebox;
-import net.minecraft.tile.entity.MobSpawner;
-import net.minecraft.tile.entity.Noteblock;
-import net.minecraft.tile.entity.Piston;
-import net.minecraft.tile.entity.Sign;
+import net.minecraft.tile.entity.*;
 import net.minecraft.util.io.CompoundTag;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;

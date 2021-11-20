@@ -6,6 +6,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.TileRenderer;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
 import net.minecraft.sortme.MagicBedNumbers;

@@ -1,9 +1,12 @@
 package io.github.ryuu.adventurecraft.mixin.level;
 
+import io.github.ryuu.adventurecraft.util.LightCache;
+import io.github.ryuu.adventurecraft.util.PlayerTorch;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
+import net.minecraft.level.WorldPopulationRegion;
 import net.minecraft.level.chunk.Chunk;
 import net.minecraft.level.gen.BiomeSource;
 import net.minecraft.tile.Tile;

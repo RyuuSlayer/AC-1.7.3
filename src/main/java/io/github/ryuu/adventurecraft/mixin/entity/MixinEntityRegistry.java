@@ -2,17 +2,11 @@ package io.github.ryuu.adventurecraft.mixin.entity;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import io.github.ryuu.adventurecraft.entities.*;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.entity.Boat;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.FallingTile;
-import net.minecraft.entity.FishHook;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Minecart;
-import net.minecraft.entity.Painting;
-import net.minecraft.entity.PrimedTnt;
+import net.minecraft.entity.*;
 import net.minecraft.entity.animal.Chicken;
 import net.minecraft.entity.animal.Cow;
 import net.minecraft.entity.animal.Pig;

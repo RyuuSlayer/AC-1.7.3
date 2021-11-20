@@ -2,6 +2,8 @@ package io.github.ryuu.adventurecraft.mixin.tile;
 
 import java.util.ArrayList;
 import java.util.Random;
+
+import io.github.ryuu.adventurecraft.blocks.BlockColor;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.Entity;
@@ -9,6 +11,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
+import net.minecraft.tile.StairsTile;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;

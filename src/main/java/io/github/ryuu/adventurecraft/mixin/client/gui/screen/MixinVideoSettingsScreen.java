@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.mixin.client.gui.screen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.Screen;
+import net.minecraft.client.gui.screen.VideoSettingsScreen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.OptionButton;
 import net.minecraft.client.gui.widgets.Slider;

@@ -12,8 +12,11 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import io.github.ryuu.adventurecraft.util.Version;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.applet.GameStartupErrorPanel;
 import net.minecraft.applet.LogoCanvas;
 import net.minecraft.applet.SquareCanvas;
 import net.minecraft.client.GameStartupError;

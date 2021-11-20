@@ -15,6 +15,7 @@ import net.minecraft.level.LevelProperties;
 import net.minecraft.level.chunk.Chunk;
 import net.minecraft.level.chunk.ChunkIO;
 import net.minecraft.level.chunk.ChunkSubData;
+import net.minecraft.level.chunk.DimensionFileChunkIO;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.io.AbstractTag;
 import net.minecraft.util.io.CompoundTag;

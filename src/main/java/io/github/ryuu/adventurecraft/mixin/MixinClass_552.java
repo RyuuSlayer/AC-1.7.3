@@ -3,13 +3,14 @@ package io.github.ryuu.adventurecraft.mixin;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.class_290;
+import net.minecraft.class_552;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.util.maths.Vec3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
-@Mixin(Class_552.class)
+@Mixin(class_552.class)
 public class MixinClass_552 {
 
     @Shadow()

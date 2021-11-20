@@ -1,8 +1,10 @@
 package io.github.ryuu.adventurecraft.mixin.client.gui.screen;
 
+import io.github.ryuu.adventurecraft.util.ClipboardHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.Screen;
+import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.util.CharacterUtils;
 import org.lwjgl.input.Keyboard;
 import org.spongepowered.asm.mixin.Mixin;

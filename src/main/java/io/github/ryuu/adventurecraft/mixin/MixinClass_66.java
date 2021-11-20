@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.class_66;
 import net.minecraft.class_68;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.Tessellator;
@@ -25,7 +26,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
-@Mixin(Class_66.class)
+@Mixin(class_66.class)
 public class MixinClass_66 {
 
     @Shadow()
