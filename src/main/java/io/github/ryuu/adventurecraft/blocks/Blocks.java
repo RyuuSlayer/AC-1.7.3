@@ -1,6 +1,9 @@
 package io.github.ryuu.adventurecraft.blocks;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.item.ItemType;
+import net.minecraft.item.PlaceableTileItem;
 import net.minecraft.level.chunk.Chunk;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
@@ -147,6 +150,24 @@ public class Blocks {
 
     public static final MixinTile slopes4;
 
+    private Blocks() {
+    }
+
+    static void convertACVersion(byte[] data) {
+        if (data != null) {
+            for (int i = 0; i < data.length; ++i) {
+                int blockID = Chunk.translate256(data[i]);
+                if (blockID >= 100 && blockID <= 122) {
+                    data[i] = (byte) Chunk.translate128(blockID + 50);
+                    continue;
+                }
+                if (blockID < 152 || blockID > 155)
+                    continue;
+                data[i] = (byte) Chunk.translate128(blockID + 21);
+            }
+        }
+    }
+
     static {
         newMobSpawner = new BlockMobSpawner(151, 65).hardness(5.0f).sounds(Tile.METAL_SOUNDS).name("mobSpawner2");
         spawnBlock = new BlockSpawn(152, 0).setTextureNum(2).hardness(5.0f).sounds(Tile.METAL_SOUNDS).name("spawn");
@@ -253,26 +274,10 @@ public class Blocks {
         ItemType.byId[Blocks.slopes3.id] = new ItemSubtypes(Blocks.slopes3.id - 256).setName("slopes");
         ItemType.byId[Blocks.slopes4.id] = new ItemSubtypes(Blocks.slopes4.id - 256).setName("slopes");
         for (int i = 0; i < 256; ++i) {
-            if (Tile.BY_ID[i] == null || ItemType.byId[i] != null) continue;
+            if (Tile.BY_ID[i] == null || ItemType.byId[i] != null)
+                continue;
             ItemType.byId[i] = new MixinPlaceableTileItem(i - 256);
             Tile.BY_ID[i].afterTileItemCreated();
-        }
-    }
-
-    private Blocks() {
-    }
-
-    static void convertACVersion(byte[] data) {
-        if (data != null) {
-            for (int i = 0; i < data.length; ++i) {
-                int blockID = Chunk.translate256(data[i]);
-                if (blockID >= 100 && blockID <= 122) {
-                    data[i] = (byte) Chunk.translate128(blockID + 50);
-                    continue;
-                }
-                if (blockID < 152 || blockID > 155) continue;
-                data[i] = (byte) Chunk.translate128(blockID + 21);
-            }
         }
     }
 }

@@ -1,8 +1,16 @@
 package io.github.ryuu.adventurecraft.mixin.client.particle;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.ParticleManager;
+import net.minecraft.client.particle.TileParticle;
 import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.texture.TextureManager;
+import net.minecraft.entity.Entity;
+import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.MathsHelper;
@@ -11,20 +19,19 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 @Mixin(ParticleManager.class)
 public class MixinParticleManager {
 
-    private final List[] particles = new List[6];
-    private final MixinTextureManager textureManager;
-    private final Random rand = new Random();
     @Shadow()
-    protected MixinLevel level;
+    protected Level level;
 
-    public MixinParticleManager(MixinLevel world, MixinTextureManager textureManager) {
+    private List[] particles = new List[6];
+
+    private TextureManager textureManager;
+
+    private Random rand = new Random();
+
+    public MixinParticleManager(Level world, TextureManager textureManager) {
         if (world != null) {
             this.level = world;
         }
@@ -43,7 +50,7 @@ public class MixinParticleManager {
         if (this.particles[i].size() >= 4000) {
             this.particles[i].remove(0);
         }
-        this.particles[i].add(particle);
+        this.particles[i].add((Object) particle);
     }
 
     /**
@@ -55,7 +62,8 @@ public class MixinParticleManager {
             for (int j = 0; j < this.particles[i].size(); ++j) {
                 Particle entityfx = (Particle) this.particles[i].get(j);
                 entityfx.tick();
-                if (!entityfx.removed) continue;
+                if (!entityfx.removed)
+                    continue;
                 this.particles[i].remove(j--);
             }
         }
@@ -69,7 +77,7 @@ public class MixinParticleManager {
         ArrayList arraylist = new ArrayList();
         for (int i = 0; i < 6; ++i) {
             for (Object obj : this.particles[i]) {
-                MixinEntity p = (MixinEntity) obj;
+                Entity p = (Entity) obj;
                 if (!(axisalignedbb.minX <= p.x) || !(axisalignedbb.maxX >= p.x) || !(axisalignedbb.minY <= p.y) || !(axisalignedbb.maxY >= p.y) || !(axisalignedbb.minZ <= p.z) || !(axisalignedbb.maxZ >= p.z))
                     continue;
                 arraylist.add((Object) p);
@@ -82,7 +90,7 @@ public class MixinParticleManager {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite()
-    public void method_324(MixinEntity entity, float f) {
+    public void method_324(Entity entity, float f) {
         float f1 = MathsHelper.cos(entity.yaw * 3.141593f / 180.0f);
         float f2 = MathsHelper.sin(entity.yaw * 3.141593f / 180.0f);
         float f3 = -f2 * MathsHelper.sin(entity.pitch * 3.141593f / 180.0f);
@@ -92,7 +100,8 @@ public class MixinParticleManager {
         Particle.field_2646 = entity.prevRenderY + (entity.y - entity.prevRenderY) * (double) f;
         Particle.field_2647 = entity.prevRenderZ + (entity.z - entity.prevRenderZ) * (double) f;
         for (int i = 0; i < 5; ++i) {
-            if (this.particles[i].size() == 0) continue;
+            if (this.particles[i].size() == 0)
+                continue;
             int j = 0;
             if (i == 0) {
                 j = this.textureManager.getTextureId("/particles.png");
@@ -109,7 +118,7 @@ public class MixinParticleManager {
             if (i == 4) {
                 j = this.textureManager.getTextureId("/terrain3.png");
             }
-            GL11.glBindTexture(3553, j);
+            GL11.glBindTexture((int) 3553, (int) j);
             Tessellator tessellator = Tessellator.INSTANCE;
             tessellator.start();
             for (int k = 0; k < this.particles[i].size(); ++k) {
@@ -124,7 +133,7 @@ public class MixinParticleManager {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite()
-    public void method_327(MixinEntity entity, float f) {
+    public void method_327(Entity entity, float f) {
         int byte0 = 5;
         if (this.particles[byte0].size() == 0) {
             return;
@@ -140,7 +149,7 @@ public class MixinParticleManager {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite()
-    public void method_323(MixinLevel world) {
+    public void method_323(Level world) {
         this.level = world;
         for (int i = 0; i < 6; ++i) {
             this.particles[i].clear();
@@ -155,7 +164,7 @@ public class MixinParticleManager {
         if (l == 0) {
             return;
         }
-        MixinTile block = Tile.BY_ID[l];
+        Tile block = Tile.BY_ID[l];
         int j1 = 4;
         for (int k1 = 0; k1 < j1; ++k1) {
             for (int l1 = 0; l1 < j1; ++l1) {
@@ -164,7 +173,7 @@ public class MixinParticleManager {
                     double d1 = (double) j + ((double) l1 + 0.5) / (double) j1;
                     double d2 = (double) k + ((double) i2 + 0.5) / (double) j1;
                     int j2 = this.rand.nextInt(6);
-                    this.addParticle(new MixinTileParticle(this.level, d, d1, d2, d - (double) i - 0.5, d1 - (double) j - 0.5, d2 - (double) k - 0.5, block, j2, i1).method_1856(i, j, k));
+                    this.addParticle(new TileParticle(this.level, d, d1, d2, d - (double) i - 0.5, d1 - (double) j - 0.5, d2 - (double) k - 0.5, block, j2, i1).method_1856(i, j, k));
                 }
             }
         }
@@ -179,7 +188,7 @@ public class MixinParticleManager {
         if (i1 == 0) {
             return;
         }
-        MixinTile block = Tile.BY_ID[i1];
+        Tile block = Tile.BY_ID[i1];
         float f = 0.1f;
         double d = (double) x + this.rand.nextDouble() * (block.maxX - block.minX - (double) (f * 2.0f)) + (double) f + block.minX;
         double d1 = (double) y + this.rand.nextDouble() * (block.maxY - block.minY - (double) (f * 2.0f)) + (double) f + block.minY;
@@ -202,14 +211,6 @@ public class MixinParticleManager {
         if (facing == 5) {
             d = (double) x + block.maxX + (double) f;
         }
-        this.addParticle(new MixinTileParticle(this.level, d, d1, d2, 0.0, 0.0, 0.0, block, facing, this.level.getTileMeta(x, y, z)).method_1856(x, y, z).calculateVelocity(0.2f).method_2001(0.6f));
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public String getDebugString() {
-        return "" + (this.particles[0].size() + this.particles[1].size() + this.particles[2].size());
+        this.addParticle(new TileParticle(this.level, d, d1, d2, 0.0, 0.0, 0.0, block, facing, this.level.getTileMeta(x, y, z)).method_1856(x, y, z).calculateVelocity(0.2f).method_2001(0.6f));
     }
 }

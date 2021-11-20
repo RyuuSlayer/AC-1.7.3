@@ -1,5 +1,11 @@
 package io.github.ryuu.adventurecraft.entities;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.monster.Skeleton;
+import net.minecraft.entity.projectile.Arrow;
+import net.minecraft.level.Level;
 import net.minecraft.util.maths.MathsHelper;
 
 public class EntitySkeletonBoss extends MixinSkeleton {
@@ -36,7 +42,7 @@ public class EntitySkeletonBoss extends MixinSkeleton {
                 }
                 this.attackTime = 30;
             }
-            this.yaw = (float) (Math.atan2(d1, d) * 180.0 / 3.1415927410125732) - 90.0f;
+            this.yaw = (float) (Math.atan2((double) d1, (double) d) * 180.0 / 3.1415927410125732) - 90.0f;
             if (f < 7.5f) {
                 this.field_663 = true;
             }

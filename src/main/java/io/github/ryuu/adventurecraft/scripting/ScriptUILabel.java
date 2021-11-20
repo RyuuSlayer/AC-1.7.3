@@ -1,17 +1,30 @@
 package io.github.ryuu.adventurecraft.scripting;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.TextRenderer;
+import net.minecraft.client.texture.TextureManager;
+import net.minecraft.script.ScriptUIContainer;
+import net.minecraft.script.UIElement;
 
 public class ScriptUILabel extends UIElement {
 
-    public boolean shadow = true;
-    public boolean centered = false;
-    public float red = 1.0f;
-    public float green = 1.0f;
-    public float blue = 1.0f;
-    public float alpha = 1.0f;
     private String text = "";
+
     private String[] textLines;
+
+    public boolean shadow = true;
+
+    public boolean centered = false;
+
+    public float red = 1.0f;
+
+    public float green = 1.0f;
+
+    public float blue = 1.0f;
+
+    public float alpha = 1.0f;
 
     public ScriptUILabel(String label, float xPos, float yPos) {
         this(label, xPos, yPos, Minecraft.minecraftInstance.overlay.scriptUI);
@@ -29,13 +42,13 @@ public class ScriptUILabel extends UIElement {
 
     @Override
     public void render(MixinTextRenderer fontRenderer, MixinTextureManager renderEngine, float partialTickTime) {
-        int color = Math.max(Math.min((int) (this.alpha * 255.0f), 255), 0);
+        int color = Math.max((int) Math.min((int) ((int) (this.alpha * 255.0f)), (int) 255), (int) 0);
         if (color == 0) {
             return;
         }
-        color = (color << 8) + Math.max(Math.min((int) (this.red * 255.0f), 255), 0);
-        color = (color << 8) + Math.max(Math.min((int) (this.green * 255.0f), 255), 0);
-        color = (color << 8) + Math.max(Math.min((int) (this.blue * 255.0f), 255), 0);
+        color = (color << 8) + Math.max((int) Math.min((int) ((int) (this.red * 255.0f)), (int) 255), (int) 0);
+        color = (color << 8) + Math.max((int) Math.min((int) ((int) (this.green * 255.0f)), (int) 255), (int) 0);
+        color = (color << 8) + Math.max((int) Math.min((int) ((int) (this.blue * 255.0f)), (int) 255), (int) 0);
         float xPos = this.getXAtTime(partialTickTime);
         float yPos = this.getYAtTime(partialTickTime);
         for (String line : this.textLines) {

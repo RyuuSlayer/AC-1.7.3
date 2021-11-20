@@ -1,10 +1,18 @@
 package io.github.ryuu.adventurecraft.entities;
 
-import net.minecraft.tile.Tile;
-import net.minecraft.util.maths.MathsHelper;
-
 import java.util.ArrayList;
 import java.util.List;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.level.Level;
+import net.minecraft.tile.Tile;
+import net.minecraft.util.io.CompoundTag;
+import net.minecraft.util.maths.MathsHelper;
 
 public class EntityBoomerang extends MixinEntity {
 
@@ -100,7 +108,7 @@ public class EntityBoomerang extends MixinEntity {
             double deltaX = this.returnsTo.x - this.x;
             double deltaY = this.returnsTo.y - this.y;
             double deltaZ = this.returnsTo.z - this.z;
-            double length = Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
+            double length = Math.sqrt((double) (deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ));
             if (length < 1.5) {
                 this.remove();
             }
@@ -121,10 +129,11 @@ public class EntityBoomerang extends MixinEntity {
         for (int i = 0; i < entitiesWithin.size(); ++i) {
             MixinEntity e = (MixinEntity) entitiesWithin.get(i);
             if (e instanceof MixinItemEntity) {
-                this.itemsPickedUp.add(e);
+                this.itemsPickedUp.add((Object) e);
                 continue;
             }
-            if (!(e instanceof MixinLivingEntity) || e == this.returnsTo) continue;
+            if (!(e instanceof MixinLivingEntity) || e == this.returnsTo)
+                continue;
             e.stunned = 20;
             e.prevX = e.x;
             e.prevY = e.y;
@@ -133,7 +142,8 @@ public class EntityBoomerang extends MixinEntity {
             e.prevPitch = e.pitch;
         }
         for (MixinEntity e : this.itemsPickedUp) {
-            if (e.removed) continue;
+            if (e.removed)
+                continue;
             e.setPosition(this.x, this.y, this.z);
         }
         int curChunkX = (int) Math.floor((double) this.x);
@@ -161,7 +171,7 @@ public class EntityBoomerang extends MixinEntity {
     public void determineRotation() {
         this.yaw = -57.29578f * (float) Math.atan2((double) this.velocityX, (double) this.velocityZ);
         double xzLength = Math.sqrt((double) (this.velocityZ * this.velocityZ + this.velocityX * this.velocityX));
-        this.pitch = -57.29578f * (float) Math.atan2((double) this.velocityY, xzLength);
+        this.pitch = -57.29578f * (float) Math.atan2((double) this.velocityY, (double) xzLength);
     }
 
     @Override

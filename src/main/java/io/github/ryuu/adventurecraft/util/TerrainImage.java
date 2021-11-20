@@ -1,20 +1,30 @@
 package io.github.ryuu.adventurecraft.util;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import javax.imageio.ImageIO;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class TerrainImage {
 
-    public static boolean isLoaded;
-    public static boolean isWaterLoaded;
     private static int[] biomeInfo;
+
     private static int[] terrainInfo;
+
     private static int[] waterInfo;
+
     private static int imageHeight;
+
     private static int imageWidth;
+
     private static int halfHeight;
+
     private static int halfWidth;
+
+    public static boolean isLoaded;
+
+    public static boolean isWaterLoaded;
 
     private static int getOffset(int x, int z) {
         z += halfHeight;
@@ -86,7 +96,7 @@ public class TerrainImage {
 
     public static boolean loadBiomeMap(File biomeFile) {
         try {
-            BufferedImage bufferedimage = ImageIO.read(biomeFile);
+            BufferedImage bufferedimage = ImageIO.read((File) biomeFile);
             assert (imageWidth == bufferedimage.getWidth()) : "biomeMap.png width doesn't match the width of terrainMap.png";
             assert (imageHeight == bufferedimage.getHeight()) : "biomeMap.png height doesn't match the height of terrainMap.png";
             bufferedimage.getRGB(0, 0, imageWidth, imageHeight, biomeInfo, 0, imageWidth);
@@ -98,7 +108,7 @@ public class TerrainImage {
 
     public static boolean loadWaterMap(File waterFile) {
         try {
-            BufferedImage bufferedimage = ImageIO.read(waterFile);
+            BufferedImage bufferedimage = ImageIO.read((File) waterFile);
             assert (imageWidth == bufferedimage.getWidth()) : "waterMap.png width doesn't match the width of terrainMap.png";
             assert (imageHeight == bufferedimage.getHeight()) : "waterMap.png height doesn't match the height of terrainMap.png";
             waterInfo = new int[imageWidth * imageHeight];
@@ -122,8 +132,8 @@ public class TerrainImage {
         isWaterLoaded = false;
         try {
             File terrainFile = new File(f, "terrainMap.png");
-            System.out.printf("Exists: %b Path: %s\n", terrainFile.exists(), terrainFile.getCanonicalPath());
-            BufferedImage bufferedimage = ImageIO.read(terrainFile);
+            System.out.printf("Exists: %b Path: %s\n", new Object[] { terrainFile.exists(), terrainFile.getCanonicalPath() });
+            BufferedImage bufferedimage = ImageIO.read((File) terrainFile);
             imageWidth = bufferedimage.getWidth();
             imageHeight = bufferedimage.getHeight();
             halfWidth = imageWidth / 2;

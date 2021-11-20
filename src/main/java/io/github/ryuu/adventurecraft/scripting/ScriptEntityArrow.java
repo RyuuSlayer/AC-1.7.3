@@ -1,5 +1,11 @@
 package io.github.ryuu.adventurecraft.scripting;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.entity.projectile.Arrow;
+import net.minecraft.script.ScriptEntity;
+import net.minecraft.script.ScriptVec3;
+
 public class ScriptEntityArrow extends ScriptEntity {
 
     MixinArrow entityArrow;

@@ -1,31 +1,39 @@
 package io.github.ryuu.adventurecraft.mixin.tile.entity;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.packet.AbstractPacket;
 import net.minecraft.packet.play.UpdateSignPacket;
-import net.minecraft.tile.entity.Sign;
+import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.util.io.CompoundTag;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(Sign.class)
-public class MixinSign extends MixinTileEntity {
+public class MixinSign extends TileEntity {
 
     @Shadow()
-    public String[] lines = new String[]{"", "", "", ""};
+    public String[] lines = new String[] { "", "", "", "" };
 
     public int field_2270 = -1;
-    public boolean playSong;
-    public String instrument;
-    public int onNote;
-    public int tickSinceStart;
+
     private boolean field_2271 = true;
+
+    public boolean playSong;
+
+    public String instrument;
+
+    public int onNote;
+
+    public int tickSinceStart;
 
     /**
      * @author Ryuu, TechPizza, Phil
      */
     @Override
     @Overwrite()
-    public void writeIdentifyingData(MixinCompoundTag tag) {
+    public void writeIdentifyingData(CompoundTag tag) {
         super.writeIdentifyingData(tag);
         tag.put("Text1", this.lines[0]);
         tag.put("Text2", this.lines[1]);
@@ -38,12 +46,13 @@ public class MixinSign extends MixinTileEntity {
      */
     @Override
     @Overwrite()
-    public void readIdentifyingData(MixinCompoundTag tag) {
+    public void readIdentifyingData(CompoundTag tag) {
         this.field_2271 = false;
         super.readIdentifyingData(tag);
         for (int i = 0; i < 4; ++i) {
             this.lines[i] = tag.getString("Text" + (i + 1));
-            if (this.lines[i].length() <= 15) continue;
+            if (this.lines[i].length() <= 15)
+                continue;
             this.lines[i] = this.lines[i].substring(0, 15);
         }
     }
@@ -77,34 +86,5 @@ public class MixinSign extends MixinTileEntity {
         this.instrument = useInstrument;
         this.tickSinceStart = 0;
         this.onNote = 0;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public AbstractPacket createInitialChunkDataPacket() {
-        String[] stringArray = new String[4];
-        for (int i = 0; i < 4; ++i) {
-            stringArray[i] = this.lines[i];
-        }
-        return new UpdateSignPacket(this.x, this.y, this.z, stringArray);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean method_1810() {
-        return this.field_2271;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_1811(boolean bl) {
-        this.field_2271 = bl;
     }
 }

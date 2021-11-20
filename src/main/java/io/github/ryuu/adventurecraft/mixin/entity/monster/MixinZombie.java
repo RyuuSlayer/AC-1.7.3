@@ -1,15 +1,17 @@
 package io.github.ryuu.adventurecraft.mixin.entity.monster;
 
-import net.minecraft.entity.monster.Zombie;
+import net.minecraft.entity.monster.Monster;
 import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
 import net.minecraft.util.maths.MathsHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(Zombie.class)
-public class MixinZombie extends MixinMonster {
+public class MixinZombie extends Monster {
 
-    public MixinZombie(MixinLevel world) {
+    public MixinZombie(Level world) {
         super(world);
         this.texture = "/mob/zombie.png";
         this.movementSpeed = 0.5f;
@@ -27,41 +29,5 @@ public class MixinZombie extends MixinMonster {
             this.fire = 300;
         }
         super.updateDespawnCounter();
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    protected String getAmbientSound() {
-        return "mob.zombie";
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    protected String getHurtSound() {
-        return "mob.zombiehurt";
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    protected String getDeathSound() {
-        return "mob.zombiedeath";
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    protected int getMobDrops() {
-        return ItemType.feather.id;
     }
 }

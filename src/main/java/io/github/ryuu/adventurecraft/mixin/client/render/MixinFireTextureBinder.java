@@ -1,62 +1,35 @@
 package io.github.ryuu.adventurecraft.mixin.client.render;
 
+import java.awt.image.BufferedImage;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.render.FireTextureBinder;
+import net.minecraft.client.render.TextureBinder;
 import net.minecraft.tile.Tile;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
-import java.awt.image.BufferedImage;
-
 @Mixin(FireTextureBinder.class)
-public class MixinFireTextureBinder extends MixinTextureBinder {
-
-    static boolean hasImages;
-    static int numFrames;
-    static int curFrame;
-    private static int[] frameImages;
-    private static int width;
-
-    static {
-        curFrame = 0;
-    }
+public class MixinFireTextureBinder extends TextureBinder {
 
     @Shadow()
     protected float[] field_2459 = new float[320];
+
     protected float[] field_2460 = new float[320];
+
+    static boolean hasImages;
+
+    static int numFrames;
+
+    private static int[] frameImages;
+
+    private static int width;
+
+    static int curFrame;
 
     public MixinFireTextureBinder(int i) {
         super(Tile.FIRE.tex + i * 16);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public static void loadImage() {
-        FireTextureBinder.loadImage("/custom_fire.png");
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public static void loadImage(String texName) {
-        BufferedImage bufferedimage = null;
-        if (Minecraft.minecraftInstance.level != null) {
-            bufferedimage = Minecraft.minecraftInstance.level.loadMapTexture(texName);
-        }
-        curFrame = 0;
-        if (bufferedimage == null) {
-            hasImages = false;
-            return;
-        }
-        width = bufferedimage.getWidth();
-        numFrames = bufferedimage.getHeight() / bufferedimage.getWidth();
-        frameImages = new int[bufferedimage.getWidth() * bufferedimage.getHeight()];
-        bufferedimage.getRGB(0, 0, bufferedimage.getWidth(), bufferedimage.getHeight(), frameImages, 0, bufferedimage.getWidth());
-        hasImages = true;
     }
 
     /**
@@ -146,7 +119,8 @@ public class MixinFireTextureBinder extends MixinTextureBinder {
                         }
                     }
                     this.field_2460[i + j * w] = f1 / ((float) l * reduceAmount);
-                    if (j < h - 1) continue;
+                    if (j < h - 1)
+                        continue;
                     this.field_2460[i + j * w] = (float) (Math.random() * Math.random() * Math.random() * 4.0 + Math.random() * (double) 0.1f + (double) 0.2f);
                 }
             }
@@ -186,5 +160,38 @@ public class MixinFireTextureBinder extends MixinTextureBinder {
             this.grid[k * 4 + 2] = (byte) j2;
             this.grid[k * 4 + 3] = (byte) c;
         }
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static void loadImage() {
+        FireTextureBinder.loadImage("/custom_fire.png");
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static void loadImage(String texName) {
+        BufferedImage bufferedimage = null;
+        if (Minecraft.minecraftInstance.level != null) {
+            bufferedimage = Minecraft.minecraftInstance.level.loadMapTexture(texName);
+        }
+        curFrame = 0;
+        if (bufferedimage == null) {
+            hasImages = false;
+            return;
+        }
+        width = bufferedimage.getWidth();
+        numFrames = bufferedimage.getHeight() / bufferedimage.getWidth();
+        frameImages = new int[bufferedimage.getWidth() * bufferedimage.getHeight()];
+        bufferedimage.getRGB(0, 0, bufferedimage.getWidth(), bufferedimage.getHeight(), frameImages, 0, bufferedimage.getWidth());
+        hasImages = true;
+    }
+
+    static {
+        curFrame = 0;
     }
 }

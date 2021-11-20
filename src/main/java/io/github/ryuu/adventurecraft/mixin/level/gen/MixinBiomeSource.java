@@ -1,32 +1,40 @@
 package io.github.ryuu.adventurecraft.mixin.level.gen;
 
+import java.util.Random;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.level.Level;
 import net.minecraft.level.biome.Biome;
-import net.minecraft.level.gen.BiomeSource;
 import net.minecraft.util.maths.Vec2i;
 import net.minecraft.util.noise.SimplexOctaveNoise;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
-import java.util.Random;
-
 @Mixin(BiomeSource.class)
 public class MixinBiomeSource {
 
-    public double[] temperatureNoises;
-    public double[] rainfallNoises;
-    public double[] detailNoises;
-    public MixinBiome[] biomes;
     @Shadow()
     private SimplexOctaveNoise temperatureNoise;
+
     private SimplexOctaveNoise rainfallNoise;
+
     private SimplexOctaveNoise detailNoise;
-    private MixinLevel worldObj;
+
+    public double[] temperatureNoises;
+
+    public double[] rainfallNoises;
+
+    public double[] detailNoises;
+
+    public Biome[] biomes;
+
+    private Level worldObj;
 
     protected MixinBiomeSource() {
     }
 
-    public MixinBiomeSource(MixinLevel level) {
+    public MixinBiomeSource(Level level) {
         this.temperatureNoise = new SimplexOctaveNoise(new Random(level.getSeed() * 9871L), 4);
         this.rainfallNoise = new SimplexOctaveNoise(new Random(level.getSeed() * 39811L), 4);
         this.detailNoise = new SimplexOctaveNoise(new Random(level.getSeed() * 543321L), 2);
@@ -37,7 +45,7 @@ public class MixinBiomeSource {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite()
-    public MixinBiome getBiomeInChunk(Vec2i pos) {
+    public Biome getBiomeInChunk(Vec2i pos) {
         return this.getBiome(pos.x << 4, pos.z << 4);
     }
 
@@ -45,7 +53,7 @@ public class MixinBiomeSource {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite()
-    public MixinBiome getBiome(int x, int z) {
+    public Biome getBiome(int x, int z) {
         return this.getBiomes(x, z, 1, 1)[0];
     }
 
@@ -62,7 +70,7 @@ public class MixinBiomeSource {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite()
-    public MixinBiome[] getBiomes(int x, int z, int xSize, int zSize) {
+    public Biome[] getBiomes(int x, int z, int xSize, int zSize) {
         this.biomes = this.getBiomes(this.biomes, x, z, xSize, zSize);
         return this.biomes;
     }
@@ -109,9 +117,9 @@ public class MixinBiomeSource {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite()
-    public MixinBiome[] getBiomes(MixinBiome[] biomes, int x, int z, int xSize, int zSize) {
+    public Biome[] getBiomes(Biome[] biomes, int x, int z, int xSize, int zSize) {
         if (biomes == null || biomes.length < xSize * zSize) {
-            biomes = new MixinBiome[xSize * zSize];
+            biomes = new Biome[xSize * zSize];
         }
         this.temperatureNoises = this.temperatureNoise.sample(this.temperatureNoises, x, z, xSize, xSize, 0.025f, 0.025f, 0.25);
         this.rainfallNoises = this.rainfallNoise.sample(this.rainfallNoises, x, z, xSize, xSize, 0.05f, 0.05f, 0.3333333333333333);

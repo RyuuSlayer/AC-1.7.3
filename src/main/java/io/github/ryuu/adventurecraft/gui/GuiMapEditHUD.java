@@ -1,14 +1,20 @@
 package io.github.ryuu.adventurecraft.gui;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
+import net.minecraft.level.Level;
 import org.lwjgl.input.Keyboard;
 
 public class GuiMapEditHUD extends MixinScreen {
 
-    private final MixinLevel world;
-    private final GuiEditPalette palette;
+    private MixinLevel world;
+
     private long clickedTime;
+
+    private GuiEditPalette palette;
 
     public GuiMapEditHUD(MixinLevel w) {
         this.world = w;

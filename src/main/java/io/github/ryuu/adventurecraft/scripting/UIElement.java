@@ -1,6 +1,11 @@
 package io.github.ryuu.adventurecraft.scripting;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.TextRenderer;
+import net.minecraft.client.texture.TextureManager;
+import net.minecraft.script.ScriptUIContainer;
 
 public class UIElement {
 

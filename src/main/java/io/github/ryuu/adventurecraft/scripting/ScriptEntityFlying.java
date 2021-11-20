@@ -1,5 +1,10 @@
 package io.github.ryuu.adventurecraft.scripting;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.entity.FlyingEntity;
+import net.minecraft.script.ScriptEntityLiving;
+
 public class ScriptEntityFlying extends ScriptEntityLiving {
 
     MixinFlyingEntity entityFlying;
@@ -9,11 +14,11 @@ public class ScriptEntityFlying extends ScriptEntityLiving {
         this.entityFlying = e;
     }
 
-    public int getAttackStrength() {
-        return this.entityFlying.attackStrength;
-    }
-
     public void setAttackStrength(int i) {
         this.entityFlying.attackStrength = i;
+    }
+
+    public int getAttackStrength() {
+        return this.entityFlying.attackStrength;
     }
 }

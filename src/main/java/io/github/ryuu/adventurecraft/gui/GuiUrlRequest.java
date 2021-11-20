@@ -1,19 +1,21 @@
 package io.github.ryuu.adventurecraft.gui;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widgets.Button;
-import net.minecraft.client.gui.widgets.OptionButton;
-
-import java.awt.*;
+import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
+import net.minecraft.client.gui.widgets.Button;
+import net.minecraft.client.gui.widgets.OptionButton;
 
 public class GuiUrlRequest extends MixinScreen {
 
-    private final String url;
+    private String url;
 
-    private final String msg;
+    private String msg;
 
     public GuiUrlRequest(String u) {
         this(u, "The map wants you to goto");
@@ -22,14 +24,6 @@ public class GuiUrlRequest extends MixinScreen {
     public GuiUrlRequest(String u, String m) {
         this.url = u;
         this.msg = m;
-    }
-
-    public static void showUI(String url) {
-        Minecraft.minecraftInstance.openScreen(new GuiUrlRequest(url));
-    }
-
-    public static void showUI(String url, String msg) {
-        Minecraft.minecraftInstance.openScreen(new GuiUrlRequest(url, msg));
     }
 
     @Override
@@ -63,6 +57,14 @@ public class GuiUrlRequest extends MixinScreen {
         this.drawTextWithShadow(this.textManager, this.msg, this.width / 2 - this.textManager.getTextWidth(this.msg) / 2, this.height / 2 - 15, 0xE0E0E0);
         this.drawTextWithShadow(this.textManager, this.url, this.width / 2 - this.textManager.getTextWidth(this.url) / 2, this.height / 2, 0xE0E0E0);
         super.render(mouseX, mouseY, delta);
+    }
+
+    public static void showUI(String url) {
+        Minecraft.minecraftInstance.openScreen(new GuiUrlRequest(url));
+    }
+
+    public static void showUI(String url, String msg) {
+        Minecraft.minecraftInstance.openScreen(new GuiUrlRequest(url, msg));
     }
 
     @Override

@@ -1,10 +1,17 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.io.CompoundTag;
+
 public class TileEntityNpcPath extends TileEntityMinMax {
 
-    public static EntityNPC lastEntity = null;
     private int entityID;
+
     private EntityNPC npc = null;
+
+    public static EntityNPC lastEntity = null;
 
     @Override
     public void readIdentifyingData(MixinCompoundTag tag) {

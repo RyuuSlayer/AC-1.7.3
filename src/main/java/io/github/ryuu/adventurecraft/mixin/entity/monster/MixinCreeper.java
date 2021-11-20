@@ -1,21 +1,27 @@
 package io.github.ryuu.adventurecraft.mixin.entity.monster;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.Lightning;
-import net.minecraft.entity.monster.Creeper;
+import net.minecraft.entity.monster.Monster;
+import net.minecraft.entity.monster.Skeleton;
 import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
+import net.minecraft.util.io.CompoundTag;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(Creeper.class)
-public class MixinCreeper extends MixinMonster {
+public class MixinCreeper extends Monster {
 
     @Shadow()
     int currentFuseTime;
 
     int lastFuseTime;
 
-    public MixinCreeper(MixinLevel world) {
+    public MixinCreeper(Level world) {
         super(world);
         this.texture = "/mob/creeper.png";
         this.attackDamage = 3;
@@ -37,7 +43,7 @@ public class MixinCreeper extends MixinMonster {
      */
     @Override
     @Overwrite()
-    public void writeCustomDataToTag(MixinCompoundTag tag) {
+    public void writeCustomDataToTag(CompoundTag tag) {
         super.writeCustomDataToTag(tag);
         if (this.dataTracker.getByte(17) == 1) {
             tag.put("powered", true);
@@ -49,27 +55,9 @@ public class MixinCreeper extends MixinMonster {
      */
     @Override
     @Overwrite()
-    public void readCustomDataFromTag(MixinCompoundTag tag) {
+    public void readCustomDataFromTag(CompoundTag tag) {
         super.readCustomDataFromTag(tag);
         this.dataTracker.setData(17, (byte) (tag.getBoolean("powered") ? 1 : 0));
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    protected void method_639(MixinEntity entity, float f) {
-        if (this.level.isClient) {
-            return;
-        }
-        if (this.currentFuseTime > 0) {
-            this.setFuseSpeed(-1);
-            --this.currentFuseTime;
-            if (this.currentFuseTime < 0) {
-                this.currentFuseTime = 0;
-            }
-        }
     }
 
     /**
@@ -107,37 +95,7 @@ public class MixinCreeper extends MixinMonster {
      */
     @Override
     @Overwrite()
-    protected String getHurtSound() {
-        return "mob.creeper";
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    protected String getDeathSound() {
-        return "mob.creeperdeath";
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public void onKilledBy(MixinEntity entity) {
-        super.onKilledBy(entity);
-        if (entity instanceof MixinSkeleton) {
-            this.dropItem(ItemType.record_13.id + this.rand.nextInt(2), 1);
-        }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    protected void method_637(MixinEntity entity, float f) {
+    protected void method_637(Entity entity, float f) {
         if (this.level.isClient) {
             return;
         }
@@ -164,39 +122,6 @@ public class MixinCreeper extends MixinMonster {
                 this.currentFuseTime = 0;
             }
         }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean isCharged() {
-        return this.dataTracker.getByte(17) == 1;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public float method_410(float f) {
-        return ((float) this.lastFuseTime + (float) (this.currentFuseTime - this.lastFuseTime) * f) / 28.0f;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    protected int getMobDrops() {
-        return ItemType.sulphur.id;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    private int getFuseSpeed() {
-        return this.dataTracker.getByte(16);
     }
 
     /**

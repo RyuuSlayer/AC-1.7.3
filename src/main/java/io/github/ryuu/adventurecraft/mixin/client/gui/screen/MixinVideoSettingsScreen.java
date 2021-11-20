@@ -1,9 +1,12 @@
 package io.github.ryuu.adventurecraft.mixin.client.gui.screen;
 
-import net.minecraft.client.gui.screen.VideoSettingsScreen;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.OptionButton;
 import net.minecraft.client.gui.widgets.Slider;
+import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.options.Option;
 import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.client.util.ScreenScaler;
@@ -12,15 +15,18 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(VideoSettingsScreen.class)
-public class MixinVideoSettingsScreen extends MixinScreen {
+public class MixinVideoSettingsScreen extends Screen {
 
-    private static final Option[] OPTIONS = new Option[]{Option.GRAPHICS, Option.RENDER_DISTANCE, Option.AMBIENT_OCCLUSION, Option.FRAMERATE_LIMIT, Option.ANAGLYPH, Option.VIEW_BOBBING, Option.GUI_SCALE, Option.ADVANCED_OPENGL, Option.AUTO_FAR_CLIP, Option.GRASS_3D};
-    private final MixinGameOptions options;
-    protected String title = "Video Settings";
     @Shadow()
-    private MixinScreen parent;
+    private Screen parent;
 
-    public MixinVideoSettingsScreen(MixinScreen parent, MixinGameOptions gamesettings) {
+    protected String title = "Video Settings";
+
+    private GameOptions options;
+
+    private static Option[] OPTIONS = new Option[] { Option.GRAPHICS, Option.RENDER_DISTANCE, Option.AMBIENT_OCCLUSION, Option.FRAMERATE_LIMIT, Option.ANAGLYPH, Option.VIEW_BOBBING, Option.GUI_SCALE, Option.ADVANCED_OPENGL, Option.AUTO_FAR_CLIP, Option.GRASS_3D };
+
+    public MixinVideoSettingsScreen(Screen parent, GameOptions gamesettings) {
         this.parent = parent;
         this.options = gamesettings;
     }
@@ -31,7 +37,7 @@ public class MixinVideoSettingsScreen extends MixinScreen {
     @Override
     @Overwrite()
     public void init() {
-        MixinTranslationStorage stringtranslate = TranslationStorage.getInstance();
+        TranslationStorage stringtranslate = TranslationStorage.getInstance();
         this.title = stringtranslate.translate("options.videoTitle");
         int i = 0;
         for (Option enumoptions : OPTIONS) {

@@ -1,14 +1,37 @@
 package io.github.ryuu.adventurecraft.scripting;
 
+import java.util.ArrayList;
+import java.util.List;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityRegistry;
+import net.minecraft.entity.FlyingEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.WalkingEntity;
+import net.minecraft.entity.animal.Wolf;
+import net.minecraft.entity.monster.Monster;
+import net.minecraft.entity.monster.Slime;
+import net.minecraft.entity.player.Player;
+import net.minecraft.entity.projectile.Arrow;
+import net.minecraft.script.ScriptEntityArrow;
+import net.minecraft.script.ScriptEntityCreature;
+import net.minecraft.script.ScriptEntityFlying;
+import net.minecraft.script.ScriptEntityLiving;
+import net.minecraft.script.ScriptEntityLivingScript;
+import net.minecraft.script.ScriptEntityMob;
+import net.minecraft.script.ScriptEntityNPC;
+import net.minecraft.script.ScriptEntityPlayer;
+import net.minecraft.script.ScriptEntitySlime;
+import net.minecraft.script.ScriptEntityWolf;
+import net.minecraft.script.ScriptItem;
+import net.minecraft.script.ScriptVec3;
+import net.minecraft.script.ScriptVecRot;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.hit.HitType;
 import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.Vec3f;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ScriptEntity {
 
@@ -63,13 +86,13 @@ public class ScriptEntity {
         return new ScriptVec3(this.entity.x, this.entity.y, this.entity.z);
     }
 
-    public void setPosition(ScriptVec3 p) {
-        this.setPosition(p.x, p.y, p.z);
-    }
-
     ScriptVec3 getPosition(float f) {
         float iF = 1.0f - f;
         return new ScriptVec3((double) iF * this.entity.prevX + (double) f * this.entity.x, (double) iF * this.entity.prevY + (double) f * this.entity.y, (double) iF * this.entity.prevZ + (double) f * this.entity.z);
+    }
+
+    public void setPosition(ScriptVec3 p) {
+        this.setPosition(p.x, p.y, p.z);
     }
 
     public void setPosition(double x, double y, double z) {
@@ -148,8 +171,9 @@ public class ScriptEntity {
         double sqDist = dist * dist;
         for (Object ent : entities) {
             MixinEntity e = (MixinEntity) ent;
-            if (!(e.method_1352(this.entity) < sqDist)) continue;
-            scriptEntities.add(ScriptEntity.getEntityClass(e));
+            if (!(e.method_1352(this.entity) < sqDist))
+                continue;
+            scriptEntities.add((Object) ScriptEntity.getEntityClass(e));
         }
         int i = 0;
         ScriptEntity[] returnList = new ScriptEntity[scriptEntities.size()];
@@ -256,12 +280,12 @@ public class ScriptEntity {
         this.entity.setPosition(this.entity.x, this.entity.y, this.entity.z);
     }
 
-    public boolean getIsFlying() {
-        return this.entity.isFlying;
-    }
-
     public void setIsFlying(boolean b) {
         this.entity.isFlying = b;
+    }
+
+    public boolean getIsFlying() {
+        return this.entity.isFlying;
     }
 
     public boolean getOnGround() {

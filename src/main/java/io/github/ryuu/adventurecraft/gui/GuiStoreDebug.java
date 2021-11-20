@@ -1,12 +1,16 @@
 package io.github.ryuu.adventurecraft.gui;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.OptionButton;
+import net.minecraft.item.ItemInstance;
 
 public class GuiStoreDebug extends MixinScreen {
 
-    private final TileEntityStore store;
+    private TileEntityStore store;
 
     private GuiSlider2 supply;
 
@@ -14,15 +18,11 @@ public class GuiStoreDebug extends MixinScreen {
         this.store = s;
     }
 
-    public static void showUI(TileEntityStore s) {
-        Minecraft.minecraftInstance.openScreen(new GuiStoreDebug(s));
-    }
-
     @Override
     public void init() {
         OptionButton b = new OptionButton(0, 4, 0, "Set Items");
         this.buttons.add((Object) b);
-        this.supply = new GuiSlider2(6, 4, 26, 10, String.format("Supply: %d", new Object[]{this.store.buySupply}), (float) this.store.buySupply / 9.0f);
+        this.supply = new GuiSlider2(6, 4, 26, 10, String.format((String) "Supply: %d", (Object[]) new Object[] { this.store.buySupply }), (float) this.store.buySupply / 9.0f);
         if (this.store.buySupply == -1) {
             this.supply.text = "Supply: Infinite";
             this.supply.sliderValue = 0.0f;
@@ -70,7 +70,7 @@ public class GuiStoreDebug extends MixinScreen {
         this.fill(0, 0, this.width, this.height, Integer.MIN_VALUE);
         this.store.buySupply = (int) (this.supply.sliderValue * 9.0f);
         if (this.store.buySupply != 0) {
-            this.supply.text = String.format("Supply: %d", new Object[]{this.store.buySupply});
+            this.supply.text = String.format((String) "Supply: %d", (Object[]) new Object[] { this.store.buySupply });
         } else {
             this.supply.text = "Supply: Infinite";
             this.store.buySupply = -1;
@@ -83,6 +83,10 @@ public class GuiStoreDebug extends MixinScreen {
         this.minecraft.updateStoreGUI();
         this.minecraft.storeGUI.render(mouseX, mouseY, delta);
         this.store.level.getChunk(this.store.x, this.store.z).method_885();
+    }
+
+    public static void showUI(TileEntityStore s) {
+        Minecraft.minecraftInstance.openScreen(new GuiStoreDebug(s));
     }
 
     @Override

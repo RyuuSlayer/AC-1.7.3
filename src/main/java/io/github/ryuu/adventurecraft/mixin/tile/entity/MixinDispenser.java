@@ -1,36 +1,30 @@
 package io.github.ryuu.adventurecraft.mixin.tile.entity;
 
+import java.util.Random;
+import net.minecraft.entity.player.Player;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.tile.entity.Dispenser;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.io.ListTag;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
-import java.util.Random;
-
 @Mixin(Dispenser.class)
-public class MixinDispenser extends MixinTileEntity implements Inventory {
+public class MixinDispenser extends TileEntity implements Inventory {
 
-    private final Random rand = new Random();
     @Shadow()
-    private MixinItemInstance[] contents = new MixinItemInstance[9];
+    private ItemInstance[] contents = new ItemInstance[9];
+
+    private Random rand = new Random();
 
     /**
      * @author Ryuu, TechPizza, Phil
      */
     @Override
     @Overwrite()
-    public int getInvSize() {
-        return 9;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public MixinItemInstance getInvItem(int i) {
+    public ItemInstance getInvItem(int i) {
         return this.contents[i];
     }
 
@@ -39,20 +33,20 @@ public class MixinDispenser extends MixinTileEntity implements Inventory {
      */
     @Override
     @Overwrite()
-    public MixinItemInstance takeInvItem(int index, int j) {
+    public ItemInstance takeInvItem(int index, int j) {
         if (this.contents[index] != null) {
             if (this.contents[index].count <= j && this.contents[index].count >= 0) {
-                MixinItemInstance itemstack = this.contents[index];
+                ItemInstance itemstack = this.contents[index];
                 this.contents[index] = null;
                 this.markDirty();
                 return itemstack;
             }
             if (this.contents[index].count < 0) {
-                MixinItemInstance item = this.contents[index].copy();
+                ItemInstance item = this.contents[index].copy();
                 item.count = 1;
                 return item;
             }
-            MixinItemInstance itemstack1 = this.contents[index].split(j);
+            ItemInstance itemstack1 = this.contents[index].split(j);
             if (this.contents[index].count == 0) {
                 this.contents[index] = null;
             }
@@ -66,11 +60,12 @@ public class MixinDispenser extends MixinTileEntity implements Inventory {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite()
-    public MixinItemInstance getItemToDispense() {
+    public ItemInstance getItemToDispense() {
         int i = -1;
         int j = 1;
         for (int k = 0; k < this.contents.length; ++k) {
-            if (this.contents[k] == null || this.rand.nextInt(j++) != 0) continue;
+            if (this.contents[k] == null || this.rand.nextInt(j++) != 0)
+                continue;
             i = k;
         }
         if (i >= 0) {
@@ -84,7 +79,7 @@ public class MixinDispenser extends MixinTileEntity implements Inventory {
      */
     @Override
     @Overwrite()
-    public void setInvItem(int i, MixinItemInstance itemstack) {
+    public void setInvItem(int i, ItemInstance itemstack) {
         this.contents[i] = itemstack;
         if (itemstack != null && itemstack.count > this.getMaxItemCount()) {
             itemstack.count = this.getMaxItemCount();
@@ -97,24 +92,16 @@ public class MixinDispenser extends MixinTileEntity implements Inventory {
      */
     @Override
     @Overwrite()
-    public String getContainerName() {
-        return "Trap";
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public void readIdentifyingData(MixinCompoundTag tag) {
+    public void readIdentifyingData(CompoundTag tag) {
         super.readIdentifyingData(tag);
         ListTag nbttaglist = tag.getListTag("Items");
-        this.contents = new MixinItemInstance[this.getInvSize()];
+        this.contents = new ItemInstance[this.getInvSize()];
         for (int i = 0; i < nbttaglist.size(); ++i) {
-            MixinCompoundTag nbttagcompound1 = (MixinCompoundTag) nbttaglist.get(i);
+            CompoundTag nbttagcompound1 = (CompoundTag) nbttaglist.get(i);
             int j = nbttagcompound1.getByte("Slot") & 0xFF;
-            if (j < 0 || j >= this.contents.length) continue;
-            this.contents[j] = new MixinItemInstance(nbttagcompound1);
+            if (j < 0 || j >= this.contents.length)
+                continue;
+            this.contents[j] = new ItemInstance(nbttagcompound1);
         }
     }
 
@@ -123,12 +110,13 @@ public class MixinDispenser extends MixinTileEntity implements Inventory {
      */
     @Override
     @Overwrite()
-    public void writeIdentifyingData(MixinCompoundTag tag) {
+    public void writeIdentifyingData(CompoundTag tag) {
         super.writeIdentifyingData(tag);
         ListTag nbttaglist = new ListTag();
         for (int i = 0; i < this.contents.length; ++i) {
-            if (this.contents[i] == null) continue;
-            MixinCompoundTag nbttagcompound1 = new MixinCompoundTag();
+            if (this.contents[i] == null)
+                continue;
+            CompoundTag nbttagcompound1 = new CompoundTag();
             nbttagcompound1.put("Slot", (byte) i);
             this.contents[i].toTag(nbttagcompound1);
             nbttaglist.add(nbttagcompound1);
@@ -141,16 +129,7 @@ public class MixinDispenser extends MixinTileEntity implements Inventory {
      */
     @Override
     @Overwrite()
-    public int getMaxItemCount() {
-        return 64;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public boolean canPlayerUse(MixinPlayer entityplayer) {
+    public boolean canPlayerUse(Player entityplayer) {
         if (this.level.getTileEntity(this.x, this.y, this.z) != this) {
             return false;
         }

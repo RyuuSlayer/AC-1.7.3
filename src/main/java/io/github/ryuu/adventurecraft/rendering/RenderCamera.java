@@ -1,7 +1,11 @@
 package io.github.ryuu.adventurecraft.rendering;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.model.EntityModel;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 
 public class RenderCamera extends LivingEntityRenderer {
 
@@ -12,7 +16,7 @@ public class RenderCamera extends LivingEntityRenderer {
     @Override
     protected void method_821(MixinLivingEntity entityliving, double d, double d1, double d2) {
         EntityCamera e = (EntityCamera) entityliving;
-        this.method_818(entityliving, String.format("%.2f", new Object[]{Float.valueOf((float) e.time)}), d, d1 - 1.5, d2, 64);
+        this.method_818(entityliving, String.format((String) "%.2f", (Object[]) new Object[] { Float.valueOf((float) e.time) }), d, d1 - 1.5, d2, 64);
     }
 
     @Override

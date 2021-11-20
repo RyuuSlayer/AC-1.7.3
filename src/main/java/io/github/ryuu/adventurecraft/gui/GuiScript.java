@@ -1,9 +1,11 @@
 package io.github.ryuu.adventurecraft.gui;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widgets.Button;
-
 import java.io.File;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
+import net.minecraft.client.gui.widgets.Button;
 
 public class GuiScript extends MixinScreen {
 
@@ -19,10 +21,6 @@ public class GuiScript extends MixinScreen {
 
     public GuiScript(TileEntityScript s) {
         this.script = s;
-    }
-
-    public static void showUI(TileEntityScript s) {
-        Minecraft.minecraftInstance.openScreen(new GuiScript(s));
     }
 
     @Override
@@ -104,6 +102,10 @@ public class GuiScript extends MixinScreen {
     public void render(int mouseX, int mouseY, float delta) {
         this.fill(0, 0, this.width, this.height, Integer.MIN_VALUE);
         super.render(mouseX, mouseY, delta);
+    }
+
+    public static void showUI(TileEntityScript s) {
+        Minecraft.minecraftInstance.openScreen(new GuiScript(s));
     }
 
     @Override

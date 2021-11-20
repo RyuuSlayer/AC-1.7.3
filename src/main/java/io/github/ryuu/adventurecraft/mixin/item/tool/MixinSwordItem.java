@@ -1,6 +1,11 @@
 package io.github.ryuu.adventurecraft.mixin.item.tool;
 
-import net.minecraft.item.tool.SwordItem;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
 import net.minecraft.item.tool.ToolMaterial;
 import net.minecraft.tile.Tile;
 import org.spongepowered.asm.mixin.Mixin;
@@ -8,7 +13,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(SwordItem.class)
-public class MixinSwordItem extends MixinItemType {
+public class MixinSwordItem extends ItemType {
 
     @Shadow()
     private int field_1314;
@@ -25,7 +30,7 @@ public class MixinSwordItem extends MixinItemType {
      */
     @Override
     @Overwrite()
-    public float method_438(MixinItemInstance item, MixinTile tile) {
+    public float method_438(ItemInstance item, Tile tile) {
         return tile.id != Tile.WEB.id ? 1.5f : 15.0f;
     }
 
@@ -34,7 +39,7 @@ public class MixinSwordItem extends MixinItemType {
      */
     @Override
     @Overwrite()
-    public boolean postHit(MixinItemInstance itemstack, MixinLivingEntity entityliving, MixinLivingEntity entityliving1) {
+    public boolean postHit(ItemInstance itemstack, LivingEntity entityliving, LivingEntity entityliving1) {
         return true;
     }
 
@@ -43,43 +48,7 @@ public class MixinSwordItem extends MixinItemType {
      */
     @Override
     @Overwrite()
-    public boolean postMine(MixinItemInstance itemstack, int i, int j, int k, int l, MixinLivingEntity entityliving) {
-        return true;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public int method_447(MixinEntity entity) {
-        return this.field_1314;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public boolean shouldRenderLikeStick() {
-        return true;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public boolean isEffectiveOn(MixinTile tile) {
-        return tile.id == Tile.WEB.id;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public boolean mainActionLeftClick() {
+    public boolean postMine(ItemInstance itemstack, int i, int j, int k, int l, LivingEntity entityliving) {
         return true;
     }
 }

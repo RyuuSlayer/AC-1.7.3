@@ -1,6 +1,9 @@
 package io.github.ryuu.adventurecraft.entities;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.level.Level;
 
 public class EntityAirFX extends Particle {
 

@@ -1,8 +1,12 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.script.ScopeTag;
+import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.io.AbstractTag;
+import net.minecraft.util.io.CompoundTag;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
@@ -20,8 +24,10 @@ public class TileEntityScript extends MixinTileEntity {
     public String onDetriggerScriptFile = "";
 
     public String onUpdateScriptFile = "";
-    public Scriptable scope;
+
     boolean loaded = false;
+
+    public Scriptable scope;
 
     public TileEntityScript() {
         this.scope = Minecraft.minecraftInstance.level.script.getNewScope();
@@ -31,18 +37,18 @@ public class TileEntityScript extends MixinTileEntity {
     public void tick() {
         if (!this.inited) {
             this.inited = true;
-            Object wrappedOut = Context.javaToJS(new Integer(this.x), this.scope);
-            ScriptableObject.putProperty(this.scope, "xCoord", wrappedOut);
-            wrappedOut = Context.javaToJS(new Integer(this.y), this.scope);
-            ScriptableObject.putProperty(this.scope, "yCoord", wrappedOut);
-            wrappedOut = Context.javaToJS(new Integer(this.z), this.scope);
-            ScriptableObject.putProperty(this.scope, "zCoord", wrappedOut);
+            Object wrappedOut = Context.javaToJS((Object) new Integer(this.x), (Scriptable) this.scope);
+            ScriptableObject.putProperty((Scriptable) this.scope, (String) "xCoord", (Object) wrappedOut);
+            wrappedOut = Context.javaToJS((Object) new Integer(this.y), (Scriptable) this.scope);
+            ScriptableObject.putProperty((Scriptable) this.scope, (String) "yCoord", (Object) wrappedOut);
+            wrappedOut = Context.javaToJS((Object) new Integer(this.z), (Scriptable) this.scope);
+            ScriptableObject.putProperty((Scriptable) this.scope, (String) "zCoord", (Object) wrappedOut);
         }
         if (this.checkTrigger) {
             this.isActivated = this.level.triggerManager.isActivated(this.x, this.y, this.z);
             this.checkTrigger = false;
         }
-        if (this.isActivated && !this.onUpdateScriptFile.equals("")) {
+        if (this.isActivated && !this.onUpdateScriptFile.equals((Object) "")) {
             this.level.scriptHandler.runScript(this.onUpdateScriptFile, this.scope);
         }
     }

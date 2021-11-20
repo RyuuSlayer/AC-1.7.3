@@ -1,65 +1,41 @@
 package io.github.ryuu.adventurecraft.mixin.client.render;
 
+import java.awt.image.BufferedImage;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.render.FlowingWaterTextureBinder2;
+import net.minecraft.client.render.TextureBinder;
 import net.minecraft.tile.Tile;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
-import java.awt.image.BufferedImage;
-
 @Mixin(FlowingWaterTextureBinder2.class)
-public class MixinFlowingWaterTextureBinder2 extends MixinTextureBinder {
-
-    static boolean hasImages;
-    static int numFrames;
-    static int curFrame;
-    private static int[] frameImages;
-    private static int width;
-
-    static {
-        curFrame = 0;
-    }
+public class MixinFlowingWaterTextureBinder2 extends TextureBinder {
 
     @Shadow()
     protected float[] field_2566 = new float[256];
+
     protected float[] field_2567 = new float[256];
+
     protected float[] field_2568 = new float[256];
+
     protected float[] field_2569 = new float[256];
+
     private int field_2570 = 0;
+
+    static boolean hasImages;
+
+    static int numFrames;
+
+    private static int[] frameImages;
+
+    private static int width;
+
+    static int curFrame;
 
     public MixinFlowingWaterTextureBinder2() {
         super(Tile.FLOWING_WATER.tex);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public static void loadImage() {
-        FlowingWaterTextureBinder2.loadImage("/custom_water_still.png");
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public static void loadImage(String texName) {
-        BufferedImage bufferedimage = null;
-        if (Minecraft.minecraftInstance.level != null) {
-            bufferedimage = Minecraft.minecraftInstance.level.loadMapTexture(texName);
-        }
-        curFrame = 0;
-        if (bufferedimage == null) {
-            hasImages = false;
-            return;
-        }
-        width = bufferedimage.getWidth();
-        numFrames = bufferedimage.getHeight() / bufferedimage.getWidth();
-        frameImages = new int[bufferedimage.getWidth() * bufferedimage.getHeight()];
-        bufferedimage.getRGB(0, 0, bufferedimage.getWidth(), bufferedimage.getHeight(), frameImages, 0, bufferedimage.getWidth());
-        hasImages = true;
     }
 
     /**
@@ -128,7 +104,7 @@ public class MixinFlowingWaterTextureBinder2 extends MixinTextureBinder {
             this.field_2568 = new float[s];
             this.field_2569 = new float[s];
         }
-        int vw = (int) Math.sqrt(w / 16);
+        int vw = (int) Math.sqrt((double) (w / 16));
         float weight = (float) (vw * 2 + 1) * 1.1f;
         ++this.field_2570;
         for (int i = 0; i < w; ++i) {
@@ -151,7 +127,8 @@ public class MixinFlowingWaterTextureBinder2 extends MixinTextureBinder {
                 }
                 int n2 = j + l * w;
                 this.field_2569[n2] = this.field_2569[n2] - 0.1f;
-                if (!(Math.random() < 0.05)) continue;
+                if (!(Math.random() < 0.05))
+                    continue;
                 this.field_2569[j + l * w] = 0.5f;
             }
         }
@@ -193,5 +170,38 @@ public class MixinFlowingWaterTextureBinder2 extends MixinTextureBinder {
             this.grid[i1 * 4 + 2] = (byte) k2;
             this.grid[i1 * 4 + 3] = (byte) l2;
         }
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static void loadImage() {
+        FlowingWaterTextureBinder2.loadImage("/custom_water_still.png");
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static void loadImage(String texName) {
+        BufferedImage bufferedimage = null;
+        if (Minecraft.minecraftInstance.level != null) {
+            bufferedimage = Minecraft.minecraftInstance.level.loadMapTexture(texName);
+        }
+        curFrame = 0;
+        if (bufferedimage == null) {
+            hasImages = false;
+            return;
+        }
+        width = bufferedimage.getWidth();
+        numFrames = bufferedimage.getHeight() / bufferedimage.getWidth();
+        frameImages = new int[bufferedimage.getWidth() * bufferedimage.getHeight()];
+        bufferedimage.getRGB(0, 0, bufferedimage.getWidth(), bufferedimage.getHeight(), frameImages, 0, bufferedimage.getWidth());
+        hasImages = true;
+    }
+
+    static {
+        curFrame = 0;
     }
 }

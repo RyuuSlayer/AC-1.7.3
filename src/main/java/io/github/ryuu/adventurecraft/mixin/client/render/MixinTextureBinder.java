@@ -1,6 +1,8 @@
 package io.github.ryuu.adventurecraft.mixin.client.render;
 
-import net.minecraft.client.render.TextureBinder;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.texture.TextureManager;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -37,8 +39,8 @@ public class MixinTextureBinder {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite()
-    public void bindTexture(MixinTextureManager manager) {
-        GL11.glBindTexture(3553, (int) manager.getTextureId(this.getTexture()));
+    public void bindTexture(TextureManager manager) {
+        GL11.glBindTexture((int) 3553, (int) manager.getTextureId(this.getTexture()));
     }
 
     /**

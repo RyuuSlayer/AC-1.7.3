@@ -1,15 +1,29 @@
 package io.github.ryuu.adventurecraft.blocks;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.colour.FoliageColour;
 import net.minecraft.client.colour.GrassColour;
-import net.minecraft.client.render.*;
+import net.minecraft.client.render.FireTextureBinder;
+import net.minecraft.client.render.FlowingLavaTextureBinder;
+import net.minecraft.client.render.FlowingLavaTextureBinder2;
+import net.minecraft.client.render.FlowingWaterTextureBinder;
+import net.minecraft.client.render.FlowingWaterTextureBinder2;
+import net.minecraft.client.render.PortalTextureBinder;
+import net.minecraft.entity.player.Player;
+import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
 import net.minecraft.tile.TileWithEntity;
+import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
-
-import java.io.*;
 
 public class BlockEffect extends TileWithEntity {
 
@@ -17,72 +31,6 @@ public class BlockEffect extends TileWithEntity {
 
     protected BlockEffect(int i, int j) {
         super(i, j, Material.AIR);
-    }
-
-    public static void revertTextures(MixinLevel world) {
-        Minecraft.minecraftInstance.textureManager.revertTextures();
-        if (needsReloadForRevert) {
-            GrassColour.loadGrass("/misc/grasscolor.png");
-            FoliageColour.loadFoliage("/misc/foliagecolor.png");
-            TerrainImage.loadWaterMap(new File(world.levelDir, "watermap.png"));
-            TerrainImage.loadBiomeMap(new File(world.levelDir, "biomemap.png"));
-            Minecraft.minecraftInstance.worldRenderer.method_1148();
-            needsReloadForRevert = false;
-        }
-        world.properties.revertTextures();
-    }
-
-    public static boolean replaceTexture(MixinLevel world, String textureToReplace, String replacementTexture) {
-        String lTextureToReplace = textureToReplace.toLowerCase();
-        if (!world.properties.addReplacementTexture(textureToReplace, replacementTexture)) {
-            return false;
-        }
-        if (lTextureToReplace.equals("/watermap.png")) {
-            TerrainImage.loadWaterMap(new File(world.levelDir, replacementTexture));
-            needsReloadForRevert = true;
-            return true;
-        }
-        if (lTextureToReplace.equals("/biomemap.png")) {
-            TerrainImage.loadBiomeMap(new File(world.levelDir, replacementTexture));
-            needsReloadForRevert = true;
-            return true;
-        }
-        if (lTextureToReplace.equals("/misc/grasscolor.png")) {
-            GrassColour.loadGrass(replacementTexture);
-            needsReloadForRevert = true;
-            return true;
-        }
-        if (lTextureToReplace.equals("/misc/foliagecolor.png")) {
-            FoliageColour.loadFoliage(replacementTexture);
-            needsReloadForRevert = true;
-            return true;
-        }
-        if (lTextureToReplace.equals("/custom_fire.png")) {
-            FireTextureBinder.loadImage(replacementTexture);
-            return true;
-        }
-        if (lTextureToReplace.equals("/custom_lava_flowing.png")) {
-            FlowingLavaTextureBinder2.loadImage(replacementTexture);
-            return true;
-        }
-        if (lTextureToReplace.equals("/custom_lava_still.png")) {
-            FlowingLavaTextureBinder.loadImage(replacementTexture);
-            return true;
-        }
-        if (lTextureToReplace.equals("/custom_portal.png")) {
-            PortalTextureBinder.loadImage(replacementTexture);
-            return true;
-        }
-        if (lTextureToReplace.equals("/custom_water_flowing.png")) {
-            FlowingWaterTextureBinder.loadImage(replacementTexture);
-            return true;
-        }
-        if (lTextureToReplace.equals("/custom_water_still.png")) {
-            FlowingWaterTextureBinder2.loadImage(replacementTexture);
-            return true;
-        }
-        Minecraft.minecraftInstance.textureManager.replaceTexture(textureToReplace, replacementTexture);
-        return false;
     }
 
     @Override
@@ -145,17 +93,31 @@ public class BlockEffect extends TileWithEntity {
         }
     }
 
+    public static void revertTextures(MixinLevel world) {
+        Minecraft.minecraftInstance.textureManager.revertTextures();
+        if (needsReloadForRevert) {
+            GrassColour.loadGrass("/misc/grasscolor.png");
+            FoliageColour.loadFoliage("/misc/foliagecolor.png");
+            TerrainImage.loadWaterMap(new File(world.levelDir, "watermap.png"));
+            TerrainImage.loadBiomeMap(new File(world.levelDir, "biomemap.png"));
+            Minecraft.minecraftInstance.worldRenderer.method_1148();
+            needsReloadForRevert = false;
+        }
+        world.properties.revertTextures();
+    }
+
     public void replaceTextures(MixinLevel world, String replacement) {
         boolean needsReload = false;
         File replacementFile = new File(world.levelDir, "textureReplacement/" + replacement);
         if (replacementFile.exists()) {
             try {
-                BufferedReader reader = new BufferedReader(new FileReader(replacementFile));
+                BufferedReader reader = new BufferedReader((Reader) new FileReader(replacementFile));
                 try {
                     while (reader.ready()) {
                         String line = reader.readLine();
                         String[] parts = line.split(",", 2);
-                        if (parts.length != 2) continue;
+                        if (parts.length != 2)
+                            continue;
                         needsReload |= BlockEffect.replaceTexture(world, parts[0], parts[1]);
                     }
                 } catch (IOException e) {
@@ -168,6 +130,59 @@ public class BlockEffect extends TileWithEntity {
         if (needsReload) {
             Minecraft.minecraftInstance.worldRenderer.method_1148();
         }
+    }
+
+    public static boolean replaceTexture(MixinLevel world, String textureToReplace, String replacementTexture) {
+        String lTextureToReplace = textureToReplace.toLowerCase();
+        if (!world.properties.addReplacementTexture(textureToReplace, replacementTexture)) {
+            return false;
+        }
+        if (lTextureToReplace.equals((Object) "/watermap.png")) {
+            TerrainImage.loadWaterMap(new File(world.levelDir, replacementTexture));
+            needsReloadForRevert = true;
+            return true;
+        }
+        if (lTextureToReplace.equals((Object) "/biomemap.png")) {
+            TerrainImage.loadBiomeMap(new File(world.levelDir, replacementTexture));
+            needsReloadForRevert = true;
+            return true;
+        }
+        if (lTextureToReplace.equals((Object) "/misc/grasscolor.png")) {
+            GrassColour.loadGrass(replacementTexture);
+            needsReloadForRevert = true;
+            return true;
+        }
+        if (lTextureToReplace.equals((Object) "/misc/foliagecolor.png")) {
+            FoliageColour.loadFoliage(replacementTexture);
+            needsReloadForRevert = true;
+            return true;
+        }
+        if (lTextureToReplace.equals((Object) "/custom_fire.png")) {
+            FireTextureBinder.loadImage(replacementTexture);
+            return true;
+        }
+        if (lTextureToReplace.equals((Object) "/custom_lava_flowing.png")) {
+            FlowingLavaTextureBinder2.loadImage(replacementTexture);
+            return true;
+        }
+        if (lTextureToReplace.equals((Object) "/custom_lava_still.png")) {
+            FlowingLavaTextureBinder.loadImage(replacementTexture);
+            return true;
+        }
+        if (lTextureToReplace.equals((Object) "/custom_portal.png")) {
+            PortalTextureBinder.loadImage(replacementTexture);
+            return true;
+        }
+        if (lTextureToReplace.equals((Object) "/custom_water_flowing.png")) {
+            FlowingWaterTextureBinder.loadImage(replacementTexture);
+            return true;
+        }
+        if (lTextureToReplace.equals((Object) "/custom_water_still.png")) {
+            FlowingWaterTextureBinder2.loadImage(replacementTexture);
+            return true;
+        }
+        Minecraft.minecraftInstance.textureManager.replaceTexture(textureToReplace, replacementTexture);
+        return false;
     }
 
     @Override

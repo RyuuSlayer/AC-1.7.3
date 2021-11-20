@@ -1,6 +1,11 @@
 package io.github.ryuu.adventurecraft.scripting;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.WorldRenderer;
+import net.minecraft.level.Level;
+import net.minecraft.script.ScriptEntity;
 
 public class ScriptEffect {
 

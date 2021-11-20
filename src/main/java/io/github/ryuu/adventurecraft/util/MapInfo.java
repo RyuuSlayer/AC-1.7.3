@@ -1,16 +1,21 @@
 package io.github.ryuu.adventurecraft.util;
 
+import java.awt.image.BufferedImage;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.image.BufferedImage;
-
 public class MapInfo {
 
-    private final BufferedImage mapThumbnail;
     public String name;
+
     public String description1;
+
     public String description2;
+
+    private BufferedImage mapThumbnail;
+
     private int textureID = -1;
 
     MapInfo(String mapName, String mapDescription1, String mapDescription2, BufferedImage thumbnail) {
@@ -33,7 +38,7 @@ public class MapInfo {
         if (this.mapThumbnail != null) {
             minecraft.textureManager.bindTexture(this.textureID);
         } else {
-            GL11.glBindTexture(3553, minecraft.textureManager.getTextureId("/gui/unknown_pack.png"));
+            GL11.glBindTexture((int) 3553, (int) minecraft.textureManager.getTextureId("/gui/unknown_pack.png"));
         }
     }
 }

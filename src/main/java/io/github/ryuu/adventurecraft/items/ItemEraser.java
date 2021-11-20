@@ -1,6 +1,12 @@
 package io.github.ryuu.adventurecraft.items;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
 
 public class ItemEraser extends MixinItemType {
 
@@ -12,12 +18,12 @@ public class ItemEraser extends MixinItemType {
     public boolean useOnTile(MixinItemInstance item, MixinPlayer player, MixinLevel level, int x, int y, int z, int facing) {
         if (ItemCursor.bothSet) {
             Minecraft.minecraftInstance.overlay.addChatMessage("Erasing Area");
-            int minX = Math.min(ItemCursor.oneX, ItemCursor.twoX);
-            int maxX = Math.max(ItemCursor.oneX, ItemCursor.twoX);
-            int minY = Math.min(ItemCursor.oneY, ItemCursor.twoY);
-            int maxY = Math.max(ItemCursor.oneY, ItemCursor.twoY);
-            int minZ = Math.min(ItemCursor.oneZ, ItemCursor.twoZ);
-            int maxZ = Math.max(ItemCursor.oneZ, ItemCursor.twoZ);
+            int minX = Math.min((int) ItemCursor.oneX, (int) ItemCursor.twoX);
+            int maxX = Math.max((int) ItemCursor.oneX, (int) ItemCursor.twoX);
+            int minY = Math.min((int) ItemCursor.oneY, (int) ItemCursor.twoY);
+            int maxY = Math.max((int) ItemCursor.oneY, (int) ItemCursor.twoY);
+            int minZ = Math.min((int) ItemCursor.oneZ, (int) ItemCursor.twoZ);
+            int maxZ = Math.max((int) ItemCursor.oneZ, (int) ItemCursor.twoZ);
             for (int x2 = minX; x2 <= maxX; ++x2) {
                 for (int y2 = minY; y2 <= maxY; ++y2) {
                     for (int z2 = minZ; z2 <= maxZ; ++z2) {

@@ -1,6 +1,11 @@
 package io.github.ryuu.adventurecraft.util;
 
+import java.util.Random;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.level.Level;
 import net.minecraft.level.biome.Biome;
+import net.minecraft.level.chunk.Chunk;
 import net.minecraft.level.source.LevelSource;
 import net.minecraft.level.structure.CactusPatch;
 import net.minecraft.level.structure.Feature;
@@ -11,27 +16,42 @@ import net.minecraft.tile.material.Material;
 import net.minecraft.util.ProgressListener;
 import net.minecraft.util.noise.PerlinOctaveNoise;
 
-import java.util.Random;
-
 public class ChunkProviderHeightMapGenerate implements LevelSource {
 
-    private final Random rand;
-    private final PerlinOctaveNoise field_912_k;
-    private final PerlinOctaveNoise field_911_l;
-    private final PerlinOctaveNoise field_910_m;
-    private final PerlinOctaveNoise field_908_o;
-    private final MixinLevel worldObj;
+    private Random rand;
+
+    private PerlinOctaveNoise field_912_k;
+
+    private PerlinOctaveNoise field_911_l;
+
+    private PerlinOctaveNoise field_910_m;
+
+    private PerlinOctaveNoise field_908_o;
+
     public PerlinOctaveNoise field_922_a;
+
     public PerlinOctaveNoise field_921_b;
+
     public PerlinOctaveNoise mobSpawnerNoise;
-    double[] field_4185_d;
-    double[] field_4184_e;
-    double[] field_4183_f;
-    double[] field_4182_g;
-    double[] field_4181_h;
-    int[][] unusedIntArray32x32 = new int[32][32];
+
+    private MixinLevel worldObj;
+
     private double[] stoneNoise = new double[256];
+
     private MixinBiome[] biomesForGeneration;
+
+    double[] field_4185_d;
+
+    double[] field_4184_e;
+
+    double[] field_4183_f;
+
+    double[] field_4182_g;
+
+    double[] field_4181_h;
+
+    int[][] unusedIntArray32x32 = new int[32][32];
+
     private double[] generatedTemperatures;
 
     public ChunkProviderHeightMapGenerate(MixinLevel world, long l) {
@@ -98,7 +118,8 @@ public class ChunkProviderHeightMapGenerate implements LevelSource {
                         j1 = -1;
                         continue;
                     }
-                    if (byte3 != Tile.STONE.id) continue;
+                    if (byte3 != Tile.STONE.id)
+                        continue;
                     if (j1 == -1) {
                         if (k1 >= waterHeight - 4 && k1 <= waterHeight + 1) {
                             byte1 = mobspawnerbase.topTileId;
@@ -119,7 +140,8 @@ public class ChunkProviderHeightMapGenerate implements LevelSource {
                         abyte0[l1] = byte2;
                         continue;
                     }
-                    if (j1 <= 0) continue;
+                    if (j1 <= 0)
+                        continue;
                     --j1;
                     abyte0[l1] = byte2;
                 }

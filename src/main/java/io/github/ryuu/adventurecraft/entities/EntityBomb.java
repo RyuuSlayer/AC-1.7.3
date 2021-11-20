@@ -1,10 +1,17 @@
 package io.github.ryuu.adventurecraft.entities;
 
-import net.minecraft.tile.Tile;
-import net.minecraft.util.maths.Box;
-
 import java.util.List;
 import java.util.Random;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.level.Level;
+import net.minecraft.tile.Tile;
+import net.minecraft.util.io.CompoundTag;
+import net.minecraft.util.maths.Box;
 
 public class EntityBomb extends MixinItemEntity {
 
@@ -40,20 +47,39 @@ public class EntityBomb extends MixinItemEntity {
         this.prevZ = this.z;
     }
 
+    @Override
+    public void tick() {
+        super.tick();
+        if (this.fuse == 45) {
+            this.level.playSound(this, "random.fuse", 1.0f, 1.0f);
+        }
+        --this.fuse;
+        double fuseDuration = (double) this.fuse / 45.0;
+        double fuseOffset = 0.2 * fuseDuration;
+        if (this.fuse == 0) {
+            EntityBomb.explode(this, this.parentEntity, this.level, this.x, this.y, this.z);
+        } else if (this.fuse % 2 == 0) {
+            this.level.addParticle("smoke", this.x, this.y + 0.675 + fuseOffset, this.z, 0.0, 0.0, 0.0);
+        } else {
+            this.level.addParticle("flame", this.x, this.y + 0.675 + fuseOffset, this.z, 0.0, 0.0, 0.0);
+        }
+    }
+
     public static void explode(MixinEntity exploding, MixinEntity parentEntity, MixinLevel worldObj, double posX, double posY, double posZ) {
         exploding.remove();
         worldObj.playSound(posX, posY, posZ, "random.explode", 4.0f, 1.0f);
-        List list = worldObj.getEntities(exploding, Box.getOrCreate(Math.floor(posX - 5.0), Math.floor(posY - 5.0), Math.floor(posZ - 5.0), Math.ceil(posX + 5.0), Math.ceil(posY + 5.0), Math.ceil(posZ + 5.0)));
+        List list = worldObj.getEntities(exploding, Box.getOrCreate(Math.floor((double) (posX - 5.0)), Math.floor((double) (posY - 5.0)), Math.floor((double) (posZ - 5.0)), Math.ceil((double) (posX + 5.0)), Math.ceil((double) (posY + 5.0)), Math.ceil((double) (posZ + 5.0))));
         for (int i = 0; i < list.size(); ++i) {
             MixinEntity entity = (MixinEntity) list.get(i);
             double dist = entity.method_1350(posX, posY, posZ);
-            if (!(dist < 5.0)) continue;
+            if (!(dist < 5.0))
+                continue;
             dist = (5.0 - dist) / 5.0;
             double dX = entity.x - posX;
             double dY = entity.y - posY;
             double dZ = entity.z - posZ;
             entity.method_1322(dist * dX, dist * dY, dist * dZ);
-            entity.damage(parentEntity, (int) Math.ceil(dist * 20.0));
+            entity.damage(parentEntity, (int) Math.ceil((double) (dist * 20.0)));
         }
         int coordX = (int) posX;
         int coordY = (int) posY;
@@ -75,11 +101,12 @@ public class EntityBomb extends MixinItemEntity {
             for (int y = -3; y <= 3; ++y) {
                 for (int z = -3; z <= 3; ++z) {
                     Double distSq = (double) x * (double) x + (double) (y * y) + (double) (z * z);
-                    if (rand.nextInt(3) != 0 || !(distSq <= 9.0)) continue;
+                    if (rand.nextInt(3) != 0 || !(distSq <= 9.0))
+                        continue;
                     Double velX = x;
                     Double velY = y;
                     Double velZ = z;
-                    Double dist = Math.sqrt(distSq) * (0.75 + 0.5 * rand.nextDouble()) * 1.5 / 3.0;
+                    Double dist = Math.sqrt((double) distSq) * (0.75 + 0.5 * rand.nextDouble()) * 1.5 / 3.0;
                     velX = velX / dist;
                     velY = velY / dist;
                     velZ = velZ / dist;
@@ -87,24 +114,6 @@ public class EntityBomb extends MixinItemEntity {
                     worldObj.addParticle("smoke", posX, posY, posZ, velX, velY, velZ);
                 }
             }
-        }
-    }
-
-    @Override
-    public void tick() {
-        super.tick();
-        if (this.fuse == 45) {
-            this.level.playSound(this, "random.fuse", 1.0f, 1.0f);
-        }
-        --this.fuse;
-        double fuseDuration = (double) this.fuse / 45.0;
-        double fuseOffset = 0.2 * fuseDuration;
-        if (this.fuse == 0) {
-            EntityBomb.explode(this, this.parentEntity, this.level, this.x, this.y, this.z);
-        } else if (this.fuse % 2 == 0) {
-            this.level.addParticle("smoke", this.x, this.y + 0.675 + fuseOffset, this.z, 0.0, 0.0, 0.0);
-        } else {
-            this.level.addParticle("flame", this.x, this.y + 0.675 + fuseOffset, this.z, 0.0, 0.0, 0.0);
         }
     }
 

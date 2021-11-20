@@ -1,5 +1,10 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.util.io.CompoundTag;
+
 public class TileEntityMusic extends MixinTileEntity {
 
     public String musicName = "";
@@ -19,7 +24,7 @@ public class TileEntityMusic extends MixinTileEntity {
     @Override
     public void writeIdentifyingData(MixinCompoundTag tag) {
         super.writeIdentifyingData(tag);
-        if (this.musicName != null && !this.musicName.equals("")) {
+        if (this.musicName != null && !this.musicName.equals((Object) "")) {
             tag.put("musicName", this.musicName);
         }
         tag.put("fadeOut", this.fadeOut);

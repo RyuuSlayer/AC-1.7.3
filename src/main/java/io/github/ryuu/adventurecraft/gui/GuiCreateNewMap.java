@@ -1,40 +1,68 @@
 package io.github.ryuu.adventurecraft.gui;
 
+import java.util.Random;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.class_520;
+import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.Textbox;
 import net.minecraft.client.resource.language.TranslationStorage;
+import net.minecraft.level.Level;
 import net.minecraft.util.maths.MathsHelper;
 import org.lwjgl.input.Keyboard;
 
-import java.util.Random;
-
 public class GuiCreateNewMap extends MixinScreen {
 
-    private final MixinScreen parent;
-    public double mapSize = 250.0;
-    public int waterLevel = 64;
-    public double fractureHorizontal = 1.0;
-    public double fractureVertical = 1.0;
-    public double maxAvgDepth = 0.0;
-    public double maxAvgHeight = 0.0;
-    public double volatility1 = 1.0;
-    public double volatility2 = 1.0;
-    public double volatilityWeight1 = 0.0;
-    public double volatilityWeight2 = 1.0;
-    GuiSlider2 sliderMapSize;
-    GuiSlider2 sliderWaterLevel;
-    GuiSlider2 sliderFracHorizontal;
-    GuiSlider2 sliderFracVertical;
-    GuiSlider2 sliderMaxAvgDepth;
-    GuiSlider2 sliderMaxAvgHeight;
-    GuiSlider2 sliderVolatility1;
-    GuiSlider2 sliderVolatility2;
-    GuiSlider2 sliderVolatilityWeight1;
-    GuiSlider2 sliderVolatilityWeight2;
+    private MixinScreen parent;
+
     private Textbox textboxMapName;
+
     private Textbox textboxSeed;
+
     private String folderName;
+
     private boolean createClicked;
+
+    public double mapSize = 250.0;
+
+    public int waterLevel = 64;
+
+    public double fractureHorizontal = 1.0;
+
+    public double fractureVertical = 1.0;
+
+    public double maxAvgDepth = 0.0;
+
+    public double maxAvgHeight = 0.0;
+
+    public double volatility1 = 1.0;
+
+    public double volatility2 = 1.0;
+
+    public double volatilityWeight1 = 0.0;
+
+    public double volatilityWeight2 = 1.0;
+
+    GuiSlider2 sliderMapSize;
+
+    GuiSlider2 sliderWaterLevel;
+
+    GuiSlider2 sliderFracHorizontal;
+
+    GuiSlider2 sliderFracVertical;
+
+    GuiSlider2 sliderMaxAvgDepth;
+
+    GuiSlider2 sliderMaxAvgHeight;
+
+    GuiSlider2 sliderVolatility1;
+
+    GuiSlider2 sliderVolatility2;
+
+    GuiSlider2 sliderVolatilityWeight1;
+
+    GuiSlider2 sliderVolatilityWeight2;
 
     public GuiCreateNewMap(MixinScreen guiscreen) {
         this.parent = guiscreen;
@@ -49,7 +77,7 @@ public class GuiCreateNewMap extends MixinScreen {
     @Override
     public void init() {
         MixinTranslationStorage stringtranslate = TranslationStorage.getInstance();
-        Keyboard.enableRepeatEvents(true);
+        Keyboard.enableRepeatEvents((boolean) true);
         this.buttons.clear();
         this.buttons.add((Object) new Button(0, this.width / 2 - 205, 200, "Create Map"));
         this.buttons.add((Object) new Button(1, this.width / 2 + 5, 200, stringtranslate.translate("gui.cancel")));
@@ -93,21 +121,21 @@ public class GuiCreateNewMap extends MixinScreen {
         this.volatility2 = (double) this.sliderVolatility2.sliderValue * 5.0;
         this.volatilityWeight1 = (double) this.sliderVolatilityWeight1.sliderValue - 0.5;
         this.volatilityWeight2 = (double) this.sliderVolatilityWeight2.sliderValue + 0.5;
-        this.sliderMapSize.text = String.format("Map Size: %.1f", new Object[]{this.mapSize});
-        this.sliderWaterLevel.text = String.format("Water Level: %d", new Object[]{this.waterLevel});
-        this.sliderFracHorizontal.text = String.format("Fracture Horizontal: %.2f", new Object[]{this.fractureHorizontal});
-        this.sliderFracVertical.text = String.format("Fracture Vertical: %.2f", new Object[]{this.fractureVertical});
-        this.sliderMaxAvgDepth.text = String.format("Max Avg Depth: %.2f", new Object[]{this.maxAvgDepth});
-        this.sliderMaxAvgHeight.text = String.format("Max Avg Height: %.2f", new Object[]{this.maxAvgHeight});
-        this.sliderVolatility1.text = String.format("Volatility 1: %.2f", new Object[]{this.volatility1});
-        this.sliderVolatility2.text = String.format("Volatility 2: %.2f", new Object[]{this.volatility2});
-        this.sliderVolatilityWeight1.text = String.format("Volatility Weight 1: %.2f", new Object[]{this.volatilityWeight1});
-        this.sliderVolatilityWeight2.text = String.format("Volatility Weight 2: %.2f", new Object[]{this.volatilityWeight2});
+        this.sliderMapSize.text = String.format((String) "Map Size: %.1f", (Object[]) new Object[] { this.mapSize });
+        this.sliderWaterLevel.text = String.format((String) "Water Level: %d", (Object[]) new Object[] { this.waterLevel });
+        this.sliderFracHorizontal.text = String.format((String) "Fracture Horizontal: %.2f", (Object[]) new Object[] { this.fractureHorizontal });
+        this.sliderFracVertical.text = String.format((String) "Fracture Vertical: %.2f", (Object[]) new Object[] { this.fractureVertical });
+        this.sliderMaxAvgDepth.text = String.format((String) "Max Avg Depth: %.2f", (Object[]) new Object[] { this.maxAvgDepth });
+        this.sliderMaxAvgHeight.text = String.format((String) "Max Avg Height: %.2f", (Object[]) new Object[] { this.maxAvgHeight });
+        this.sliderVolatility1.text = String.format((String) "Volatility 1: %.2f", (Object[]) new Object[] { this.volatility1 });
+        this.sliderVolatility2.text = String.format((String) "Volatility 2: %.2f", (Object[]) new Object[] { this.volatility2 });
+        this.sliderVolatilityWeight1.text = String.format((String) "Volatility Weight 1: %.2f", (Object[]) new Object[] { this.volatilityWeight1 });
+        this.sliderVolatilityWeight2.text = String.format((String) "Volatility Weight 2: %.2f", (Object[]) new Object[] { this.volatilityWeight2 });
     }
 
     @Override
     public void onClose() {
-        Keyboard.enableRepeatEvents(false);
+        Keyboard.enableRepeatEvents((boolean) false);
     }
 
     @Override
@@ -127,7 +155,7 @@ public class GuiCreateNewMap extends MixinScreen {
             String s = this.textboxSeed.method_1876();
             if (!MathsHelper.isStringEmpty(s)) {
                 try {
-                    long l1 = Long.parseLong(s);
+                    long l1 = Long.parseLong((String) s);
                     if (l1 != 0L) {
                         l = l1;
                     }

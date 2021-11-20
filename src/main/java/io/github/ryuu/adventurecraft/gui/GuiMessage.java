@@ -1,23 +1,26 @@
 package io.github.ryuu.adventurecraft.gui;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
+import net.minecraft.level.Level;
 import net.minecraft.util.CharacterUtils;
 
 public class GuiMessage extends MixinScreen {
 
-    private final TileEntityMessage msg;
-    private final MixinLevel world;
+    private TileEntityMessage msg;
+
     private TileEntityMessage soundFile;
+
+    private MixinLevel world;
+
     private int page;
 
     public GuiMessage(MixinLevel w, TileEntityMessage tileEntityMsg) {
         this.world = w;
         this.msg = tileEntityMsg;
-    }
-
-    public static void showUI(MixinLevel w, TileEntityMessage tileEntityMsg) {
-        Minecraft.minecraftInstance.openScreen(new GuiMessage(w, tileEntityMsg));
     }
 
     @Override
@@ -34,7 +37,7 @@ public class GuiMessage extends MixinScreen {
         }
         int numPages = this.world.soundList.length / maxEntries + 1;
         for (int i = 0; i < numPages; ++i) {
-            b = new Button(100 + i, 4 + i * 50, 40, 46, 18, String.format("Page %d", new Object[]{i + 1}));
+            b = new Button(100 + i, 4 + i * 50, 40, 46, 18, String.format((String) "Page %d", (Object[]) new Object[] { i + 1 }));
             this.buttons.add((Object) b);
         }
     }
@@ -60,7 +63,7 @@ public class GuiMessage extends MixinScreen {
         if (key == 14 && this.msg.message.length() > 0) {
             this.msg.message = this.msg.message.substring(0, this.msg.message.length() - 1);
         }
-        if (CharacterUtils.SUPPORTED_CHARS.indexOf(character) >= 0 && this.msg.message.length() < 30) {
+        if (CharacterUtils.SUPPORTED_CHARS.indexOf((int) character) >= 0 && this.msg.message.length() < 30) {
             this.msg.message = this.msg.message + character;
         }
     }
@@ -68,12 +71,16 @@ public class GuiMessage extends MixinScreen {
     @Override
     public void render(int mouseX, int mouseY, float delta) {
         this.renderBackground();
-        this.drawTextWithShadow(this.textManager, String.format("Message: '%s'", new Object[]{this.msg.message}), 4, 4, 0xE0E0E0);
+        this.drawTextWithShadow(this.textManager, String.format((String) "Message: '%s'", (Object[]) new Object[] { this.msg.message }), 4, 4, 0xE0E0E0);
         if (this.msg.sound != "") {
-            this.drawTextWithShadow(this.textManager, String.format("Sound: %s", new Object[]{this.msg.sound}), 4, 24, 0xE0E0E0);
+            this.drawTextWithShadow(this.textManager, String.format((String) "Sound: %s", (Object[]) new Object[] { this.msg.sound }), 4, 24, 0xE0E0E0);
         } else {
-            this.drawTextWithShadow(this.textManager, String.format("Sound: None", new Object[0]), 4, 24, 0xE0E0E0);
+            this.drawTextWithShadow(this.textManager, String.format((String) "Sound: None", (Object[]) new Object[0]), 4, 24, 0xE0E0E0);
         }
         super.render(mouseX, mouseY, delta);
+    }
+
+    public static void showUI(MixinLevel w, TileEntityMessage tileEntityMsg) {
+        Minecraft.minecraftInstance.openScreen(new GuiMessage(w, tileEntityMsg));
     }
 }

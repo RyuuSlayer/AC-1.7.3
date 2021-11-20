@@ -4,10 +4,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.container.Container;
 import net.minecraft.container.slot.CraftingResultSlot;
 import net.minecraft.container.slot.Slot;
-import net.minecraft.entity.player.PlayerContainer;
+import net.minecraft.entity.player.Player;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.CraftingResultInventory;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.armour.ArmourItem;
 import net.minecraft.recipe.RecipeRegistry;
 import net.minecraft.tile.Tile;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,11 +27,11 @@ public class MixinPlayerContainer extends Container {
 
     public boolean local = false;
 
-    public MixinPlayerContainer(MixinPlayerInventory inventoryplayer) {
+    public MixinPlayerContainer(PlayerInventory inventoryplayer) {
         this(inventoryplayer, true);
     }
 
-    public MixinPlayerContainer(MixinPlayerInventory inventoryplayer, boolean local) {
+    public MixinPlayerContainer(PlayerInventory inventoryplayer, boolean local) {
         this.local = local;
         if (Minecraft.minecraftInstance.level.properties.allowsInventoryCrafting) {
             this.addSlot(new CraftingResultSlot(inventoryplayer.player, this.craftingInv, this.resultInv, 0, 144, 52));
@@ -46,17 +49,9 @@ public class MixinPlayerContainer extends Container {
                  * @author Ryuu, TechPizza, Phil
                  */
                 @Overwrite()
-                public int getMaxStackCount() {
-                    return 1;
-                }
-
-                /**
-                 * @author Ryuu, TechPizza, Phil
-                 */
-                @Overwrite()
-                public boolean canInsert(MixinItemInstance itemInstance) {
-                    if (itemInstance.getType() instanceof MixinArmourItem) {
-                        return ((MixinArmourItem) itemInstance.getType()).armourSlot == j1;
+                public boolean canInsert(ItemInstance itemInstance) {
+                    if (itemInstance.getType() instanceof ArmourItem) {
+                        return ((ArmourItem) itemInstance.getType()).armourSlot == j1;
                     }
                     if (itemInstance.getType().id == Tile.PUMPKIN.id) {
                         return j1 == 0;
@@ -81,20 +76,12 @@ public class MixinPlayerContainer extends Container {
      */
     @Override
     @Overwrite()
-    public void onContentsChanged(Inventory iinventory) {
-        this.resultInv.setInvItem(0, RecipeRegistry.getInstance().getCraftingOutput(this.craftingInv));
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public void onClosed(MixinPlayer entityplayer) {
+    public void onClosed(Player entityplayer) {
         super.onClosed(entityplayer);
         for (int i = 0; i < 4; ++i) {
-            MixinItemInstance itemstack = this.craftingInv.getInvItem(i);
-            if (itemstack == null) continue;
+            ItemInstance itemstack = this.craftingInv.getInvItem(i);
+            if (itemstack == null)
+                continue;
             entityplayer.dropItem(itemstack);
             this.craftingInv.setInvItem(i, null);
         }
@@ -105,20 +92,11 @@ public class MixinPlayerContainer extends Container {
      */
     @Override
     @Overwrite()
-    public boolean canUse(MixinPlayer entityplayer) {
-        return true;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public MixinItemInstance transferSlot(int index) {
-        MixinItemInstance itemstack = null;
+    public ItemInstance transferSlot(int index) {
+        ItemInstance itemstack = null;
         Slot slot = (Slot) this.slots.get(index);
         if (slot != null && slot.hasItem()) {
-            MixinItemInstance itemstack1 = slot.getItem();
+            ItemInstance itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             if (index == 0) {
                 this.insertItem(itemstack1, 9, 45, true);

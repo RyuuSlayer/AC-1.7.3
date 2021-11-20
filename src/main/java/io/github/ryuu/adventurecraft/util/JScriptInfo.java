@@ -1,5 +1,7 @@
 package io.github.ryuu.adventurecraft.util;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import org.mozilla.javascript.Script;
 
 public class JScriptInfo implements Comparable<net.minecraft.src.JScriptInfo> {
@@ -15,7 +17,7 @@ public class JScriptInfo implements Comparable<net.minecraft.src.JScriptInfo> {
     public int count;
 
     JScriptInfo(String n, Script s) {
-        this.name = n.replace(".js", "");
+        this.name = n.replace((CharSequence) ".js", (CharSequence) "");
         this.compiledScript = s;
     }
 

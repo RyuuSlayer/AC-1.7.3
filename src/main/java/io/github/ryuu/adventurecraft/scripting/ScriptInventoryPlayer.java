@@ -1,5 +1,12 @@
 package io.github.ryuu.adventurecraft.scripting;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.script.ScriptInventory;
+import net.minecraft.script.ScriptItem;
+
 public class ScriptInventoryPlayer extends ScriptInventory {
 
     MixinPlayerInventory invPlayer;
@@ -14,7 +21,8 @@ public class ScriptInventoryPlayer extends ScriptInventory {
         if (i == -1) {
             for (int j = 36; j < 40; ++j) {
                 MixinItemInstance k = this.invPlayer.getInvItem(j);
-                if (k == null || k.itemId != itemID) continue;
+                if (k == null || k.itemId != itemID)
+                    continue;
                 return j;
             }
         }
@@ -24,10 +32,15 @@ public class ScriptInventoryPlayer extends ScriptInventory {
     public int getSlotContainingItemDamage(int itemID, int damage) {
         for (int i = 0; i < this.invPlayer.getInvSize(); ++i) {
             MixinItemInstance j = this.invPlayer.getInvItem(i);
-            if (j == null || j.itemId != itemID || j.getDamage() != damage) continue;
+            if (j == null || j.itemId != itemID || j.getDamage() != damage)
+                continue;
             return i;
         }
         return -1;
+    }
+
+    public void setCurrentItem(int i) {
+        this.invPlayer.method_691(i, false);
     }
 
     public void changeCurrentItem(int i) {
@@ -56,10 +69,6 @@ public class ScriptInventoryPlayer extends ScriptInventory {
             return null;
         }
         return new ScriptItem(i);
-    }
-
-    public void setCurrentItem(int i) {
-        this.invPlayer.method_691(i, false);
     }
 
     public ScriptItem getOffhandItem() {

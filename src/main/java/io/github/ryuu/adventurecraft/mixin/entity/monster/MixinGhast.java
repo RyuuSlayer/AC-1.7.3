@@ -1,8 +1,11 @@
 package io.github.ryuu.adventurecraft.mixin.entity.monster;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.FlyingEntity;
 import net.minecraft.entity.MonsterEntityType;
-import net.minecraft.entity.monster.Ghast;
+import net.minecraft.entity.projectile.Snowball;
 import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
 import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.MathsHelper;
 import net.minecraft.util.maths.Vec3f;
@@ -11,7 +14,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(Ghast.class)
-public class MixinGhast extends MixinFlyingEntity implements MonsterEntityType {
+public class MixinGhast extends FlyingEntity implements MonsterEntityType {
 
     @Shadow()
     public int field_1376 = 0;
@@ -21,12 +24,16 @@ public class MixinGhast extends MixinFlyingEntity implements MonsterEntityType {
     public double field_1378;
 
     public double field_1379;
-    public int field_1380 = 0;
-    public int field_1381 = 0;
-    private MixinEntity field_1382 = null;
+
+    private Entity field_1382 = null;
+
     private int field_1383 = 0;
 
-    public MixinGhast(MixinLevel world) {
+    public int field_1380 = 0;
+
+    public int field_1381 = 0;
+
+    public MixinGhast(Level world) {
         super(world);
         this.texture = "/mob/ghast.png";
         this.setSize(4.0f, 4.0f);
@@ -102,7 +109,7 @@ public class MixinGhast extends MixinFlyingEntity implements MonsterEntityType {
             double d5 = this.field_1382.x - this.x;
             double d6 = this.field_1382.boundingBox.minY + (double) (this.field_1382.height / 2.0f) - (this.y + (double) (this.height / 2.0f));
             double d7 = this.field_1382.z - this.z;
-            this.field_1012 = this.yaw = -((float) Math.atan2(d5, d7)) * 180.0f / 3.141593f;
+            this.field_1012 = this.yaw = -((float) Math.atan2((double) d5, (double) d7)) * 180.0f / 3.141593f;
             if (this.method_928(this.field_1382)) {
                 if (this.field_1381 == 10) {
                     this.level.playSound(this, "mob.ghast.charge", this.getSoundVolume(), (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2f + 1.0f);
@@ -110,7 +117,7 @@ public class MixinGhast extends MixinFlyingEntity implements MonsterEntityType {
                 ++this.field_1381;
                 if (this.field_1381 == 20) {
                     this.level.playSound(this, "mob.ghast.fireball", this.getSoundVolume(), (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2f + 1.0f);
-                    MixinSnowball entityfireball = new MixinSnowball(this.level, this, d5, d6, d7, this.attackStrength);
+                    Snowball entityfireball = new Snowball(this.level, this, d5, d6, d7, this.attackStrength);
                     double d8 = 4.0;
                     Vec3f vec3d = this.method_926(1.0f);
                     entityfireball.x = this.x + vec3d.x * d8;
@@ -151,68 +158,5 @@ public class MixinGhast extends MixinFlyingEntity implements MonsterEntityType {
             ++i;
         }
         return true;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    protected String getAmbientSound() {
-        return "mob.ghast.moan";
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    protected String getHurtSound() {
-        return "mob.ghast.scream";
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    protected String getDeathSound() {
-        return "mob.ghast.death";
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    protected int getMobDrops() {
-        return ItemType.sulphur.id;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    protected float getSoundVolume() {
-        return 10.0f;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public boolean canSpawn() {
-        return this.rand.nextInt(20) == 0 && super.canSpawn() && this.level.difficulty > 0;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public int getLimitPerChunk() {
-        return 1;
     }
 }

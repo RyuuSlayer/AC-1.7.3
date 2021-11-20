@@ -1,15 +1,24 @@
 package io.github.ryuu.adventurecraft.util;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
+import javax.imageio.ImageIO;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.src.MapInfo;
 
 public class MapList {
 
-    private final File mapDir;
     private List<MapInfo> availableMaps = new ArrayList();
+
+    private File mapDir;
 
     public MapList(File file) {
         this.mapDir = new File(file, "../maps");
@@ -24,13 +33,14 @@ public class MapList {
         if (this.mapDir.exists() && this.mapDir.isDirectory()) {
             File[] afile;
             for (File file : afile = this.mapDir.listFiles()) {
-                if (!file.isDirectory()) continue;
+                if (!file.isDirectory())
+                    continue;
                 String mapName = file.getName();
                 String description1 = "";
                 String description2 = "";
                 File infoFile = new File(file, "description.txt");
                 try {
-                    BufferedReader input = new BufferedReader(new FileReader(infoFile));
+                    BufferedReader input = new BufferedReader((Reader) new FileReader(infoFile));
                     description1 = input.readLine();
                     description2 = input.readLine();
                 } catch (FileNotFoundException e) {
@@ -39,11 +49,11 @@ public class MapList {
                 File thumbnailFile = new File(file, "thumbnail.png");
                 BufferedImage thumbnail = null;
                 try {
-                    thumbnail = ImageIO.read(thumbnailFile);
+                    thumbnail = ImageIO.read((File) thumbnailFile);
                 } catch (FileNotFoundException e) {
                 } catch (IOException e) {
                 }
-                arraylist.add(new MapInfo(mapName, description1, description2, thumbnail));
+                arraylist.add((Object) new MapInfo(mapName, description1, description2, thumbnail));
             }
         }
         this.availableMaps = arraylist;

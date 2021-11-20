@@ -1,19 +1,29 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityRegistry;
+import net.minecraft.entity.FallingTile;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Minecart;
+import net.minecraft.entity.animal.Wolf;
+import net.minecraft.entity.monster.Skeleton;
+import net.minecraft.entity.monster.Slime;
+import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.script.ScopeTag;
 import net.minecraft.script.ScriptEntity;
 import net.minecraft.tile.Tile;
 import net.minecraft.util.io.AbstractTag;
+import net.minecraft.util.io.CompoundTag;
 import org.mozilla.javascript.Scriptable;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
 
 public class TileEntityMobSpawner extends TileEntityScript {
 
@@ -40,15 +50,24 @@ public class TileEntityMobSpawner extends TileEntityScript {
     public int spawnID;
 
     public int spawnMeta;
-    public Coord[] minVec = new Coord[8];
-    public Coord[] maxVec = new Coord[8];
-    public Coord minSpawnVec;
-    public Coord maxSpawnVec;
-    public int ticksBeforeLoad = 20;
-    public MixinCompoundTag delayLoadData;
+
     Random rand = new Random();
-    Scriptable scope;
+
+    public Coord[] minVec = new Coord[8];
+
+    public Coord[] maxVec = new Coord[8];
+
+    public Coord minSpawnVec;
+
+    public Coord maxSpawnVec;
+
+    public int ticksBeforeLoad = 20;
+
+    public MixinCompoundTag delayLoadData;
+
     private boolean spawnStill = false;
+
+    Scriptable scope;
 
     public TileEntityMobSpawner() {
         for (int i = 0; i < 8; ++i) {
@@ -68,7 +87,8 @@ public class TileEntityMobSpawner extends TileEntityScript {
                 ++numAlive;
                 continue;
             }
-            if (!this.entitiesLeft.contains((Object) ent)) continue;
+            if (!this.entitiesLeft.contains((Object) ent))
+                continue;
             this.entitiesLeft.remove((Object) ent);
         }
         return numAlive;
@@ -76,7 +96,8 @@ public class TileEntityMobSpawner extends TileEntityScript {
 
     public void resetMobs() {
         for (MixinEntity ent : this.spawnedEntities) {
-            if (ent.removed) continue;
+            if (ent.removed)
+                continue;
             ent.remove();
         }
         this.spawnedEntities.clear();
@@ -95,7 +116,7 @@ public class TileEntityMobSpawner extends TileEntityScript {
         for (int i = 0; i < this.spawnNumber * 6; ++i) {
             MixinWolf w;
             MixinSkeleton rider;
-            String spawnEntityID = this.entityID.replace(" ", "");
+            String spawnEntityID = this.entityID.replace((CharSequence) " ", (CharSequence) "");
             if (spawnEntityID.equalsIgnoreCase("FallingBlock")) {
                 spawnEntityID = "FallingSand";
             } else if (spawnEntityID.startsWith("Slime")) {
@@ -114,14 +135,16 @@ public class TileEntityMobSpawner extends TileEntityScript {
                 return;
             }
             if (spawnEntityID.equalsIgnoreCase("FallingSand")) {
-                if (this.spawnID >= 256 || Tile.BY_ID[this.spawnID] == null) return;
+                if (this.spawnID >= 256 || Tile.BY_ID[this.spawnID] == null)
+                    return;
                 ((MixinFallingTile) entity).tile = this.spawnID;
                 ((MixinFallingTile) entity).metadata = this.spawnMeta;
             } else if (spawnEntityID.equalsIgnoreCase("Item")) {
-                if (ItemType.byId[this.spawnID] == null) return;
+                if (ItemType.byId[this.spawnID] == null)
+                    return;
                 ((MixinItemEntity) entity).item = new MixinItemInstance(this.spawnID, 1, this.spawnMeta);
             } else if (this.entityID.startsWith("Slime") && this.entityID.length() > 6) {
-                int size = Integer.parseInt(this.entityID.split(":")[1].trim());
+                int size = Integer.parseInt((String) this.entityID.split(":")[1].trim());
                 ((MixinSlime) entity).setSize(size);
             } else if (this.entityID.equalsIgnoreCase("Minecart Chest")) {
                 ((Minecart) entity).type = 1;
@@ -133,7 +156,8 @@ public class TileEntityMobSpawner extends TileEntityScript {
             double posZ = (double) (this.z + this.minSpawnVec.z) + this.level.rand.nextDouble() * (double) (this.maxSpawnVec.z - this.minSpawnVec.z) + 0.5;
             float rot = !spawnEntityID.equalsIgnoreCase("FallingSand") ? this.level.rand.nextFloat() * 360.0f : 0.0f;
             entity.setPositionAndAngles(posX, posY, posZ, rot, 0.0f);
-            if (!this.canSpawn(entity)) continue;
+            if (!this.canSpawn(entity))
+                continue;
             this.level.spawnEntity(entity);
             if (this.entityID.equalsIgnoreCase("Spider Skeleton")) {
                 rider = new MixinSkeleton(this.level);
@@ -163,14 +187,15 @@ public class TileEntityMobSpawner extends TileEntityScript {
             }
             if (this.entityID.endsWith("(Scripted)")) {
                 EntityLivingScript els = (EntityLivingScript) entity;
-                els.setEntityDescription(this.entityID.replace(" (Scripted)", ""));
+                els.setEntityDescription(this.entityID.replace((CharSequence) " (Scripted)", (CharSequence) ""));
             }
             if (entity instanceof MixinLivingEntity) {
                 ((MixinLivingEntity) entity).onSpawnedFromSpawner();
             }
-            this.spawnedEntities.add(entity);
-            this.entitiesLeft.add(entity);
-            if (this.spawnedEntities.size() >= this.spawnNumber) break;
+            this.spawnedEntities.add((Object) entity);
+            this.entitiesLeft.add((Object) entity);
+            if (this.spawnedEntities.size() >= this.spawnNumber)
+                break;
         }
         if (this.spawnNumber > 0 && this.spawnedEntities.size() == 0) {
             this.delay = 20;
@@ -188,17 +213,18 @@ public class TileEntityMobSpawner extends TileEntityScript {
         if (this.delayLoadData != null) {
             if (this.ticksBeforeLoad == 0) {
                 int num = this.delayLoadData.getShort("numEntities");
-                block0:
-                for (int i = 0; i < num; ++i) {
-                    int entID = this.delayLoadData.getInt(String.format("entID_%d", new Object[]{i}));
+                block0: for (int i = 0; i < num; ++i) {
+                    int entID = this.delayLoadData.getInt(String.format((String) "entID_%d", (Object[]) new Object[] { i }));
                     Iterator i$ = this.level.entities.iterator();
                     while (i$.hasNext()) {
                         MixinEntity obj;
                         MixinEntity e = obj = (MixinEntity) i$.next();
-                        if (e.id != entID) continue;
-                        this.spawnedEntities.add(e);
-                        if (!e.isAlive()) continue block0;
-                        this.entitiesLeft.add(e);
+                        if (e.id != entID)
+                            continue;
+                        this.spawnedEntities.add((Object) e);
+                        if (!e.isAlive())
+                            continue block0;
+                        this.entitiesLeft.add((Object) e);
                         continue block0;
                     }
                 }
@@ -234,7 +260,8 @@ public class TileEntityMobSpawner extends TileEntityScript {
                 }
                 this.executeScript(this.onDetriggerScriptFile);
                 for (int i = 4; i < 8; ++i) {
-                    if (!this.isTriggerSet(i)) continue;
+                    if (!this.isTriggerSet(i))
+                        continue;
                     this.activateTrigger(i, this.minVec[i], this.maxVec[i]);
                 }
                 this.deactivateTriggers();
@@ -289,7 +316,8 @@ public class TileEntityMobSpawner extends TileEntityScript {
 
     private void activateTriggers() {
         for (int i = 0; i < 4; ++i) {
-            if (!this.isTriggerSet(i)) continue;
+            if (!this.isTriggerSet(i))
+                continue;
             this.activateTrigger(i, this.minVec[i], this.maxVec[i]);
         }
     }
@@ -318,12 +346,12 @@ public class TileEntityMobSpawner extends TileEntityScript {
         this.hasDroppedItem = tag.getBoolean("HasDroppedItem");
         this.spawnID = tag.getInt("SpawnID");
         for (int i = 0; i < 8; ++i) {
-            this.minVec[i].x = tag.getInt("minX".concat(Integer.toString(i)));
-            this.minVec[i].y = tag.getInt("minY".concat(Integer.toString(i)));
-            this.minVec[i].z = tag.getInt("minZ".concat(Integer.toString(i)));
-            this.maxVec[i].x = tag.getInt("maxX".concat(Integer.toString(i)));
-            this.maxVec[i].y = tag.getInt("maxY".concat(Integer.toString(i)));
-            this.maxVec[i].z = tag.getInt("maxZ".concat(Integer.toString(i)));
+            this.minVec[i].x = tag.getInt("minX".concat(Integer.toString((int) i)));
+            this.minVec[i].y = tag.getInt("minY".concat(Integer.toString((int) i)));
+            this.minVec[i].z = tag.getInt("minZ".concat(Integer.toString((int) i)));
+            this.maxVec[i].x = tag.getInt("maxX".concat(Integer.toString((int) i)));
+            this.maxVec[i].y = tag.getInt("maxY".concat(Integer.toString((int) i)));
+            this.maxVec[i].z = tag.getInt("maxZ".concat(Integer.toString((int) i)));
         }
         this.minSpawnVec.x = tag.getInt("minSpawnX");
         this.minSpawnVec.y = tag.getInt("minSpawnY");
@@ -354,12 +382,12 @@ public class TileEntityMobSpawner extends TileEntityScript {
         tag.put("DropItem", this.dropItem);
         tag.put("HasDroppedItem", this.hasDroppedItem);
         for (i = 0; i < 8; ++i) {
-            tag.put("minX".concat(Integer.toString(i)), this.minVec[i].x);
-            tag.put("minY".concat(Integer.toString(i)), this.minVec[i].y);
-            tag.put("minZ".concat(Integer.toString(i)), this.minVec[i].z);
-            tag.put("maxX".concat(Integer.toString(i)), this.maxVec[i].x);
-            tag.put("maxY".concat(Integer.toString(i)), this.maxVec[i].y);
-            tag.put("maxZ".concat(Integer.toString(i)), this.maxVec[i].z);
+            tag.put("minX".concat(Integer.toString((int) i)), this.minVec[i].x);
+            tag.put("minY".concat(Integer.toString((int) i)), this.minVec[i].y);
+            tag.put("minZ".concat(Integer.toString((int) i)), this.minVec[i].z);
+            tag.put("maxX".concat(Integer.toString((int) i)), this.maxVec[i].x);
+            tag.put("maxY".concat(Integer.toString((int) i)), this.maxVec[i].y);
+            tag.put("maxZ".concat(Integer.toString((int) i)), this.maxVec[i].z);
         }
         tag.put("minSpawnX", this.minSpawnVec.x);
         tag.put("minSpawnY", this.minSpawnVec.y);
@@ -370,14 +398,14 @@ public class TileEntityMobSpawner extends TileEntityScript {
         tag.put("numEntities", (short) this.spawnedEntities.size());
         i = 0;
         for (MixinEntity e : this.spawnedEntities) {
-            tag.put(String.format("entID_%d", new Object[]{i}), e.id);
+            tag.put(String.format((String) "entID_%d", (Object[]) new Object[] { i }), e.id);
             ++i;
         }
         tag.put("scope", (AbstractTag) ScopeTag.getTagFromScope(this.scope));
     }
 
     private void executeScript(String scriptName) {
-        if (!scriptName.equals("")) {
+        if (!scriptName.equals((Object) "")) {
             int i = 0;
             ScriptEntity[] scriptSpawnedEntities = new ScriptEntity[this.entitiesLeft.size()];
             for (MixinEntity e : this.entitiesLeft) {

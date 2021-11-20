@@ -1,13 +1,19 @@
 package io.github.ryuu.adventurecraft.mixin;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.ClientInteractionManager;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
-@Mixin(class_520.class)
-public class MixinClass_520 extends MixinClientInteractionManager {
+@Mixin(Class_520.class)
+public class MixinClass_520 extends ClientInteractionManager {
 
     @Shadow()
     private int field_2181 = -1;
@@ -33,7 +39,7 @@ public class MixinClass_520 extends MixinClientInteractionManager {
      */
     @Override
     @Overwrite()
-    public void method_1711(MixinPlayer entityplayer) {
+    public void method_1711(Player entityplayer) {
         entityplayer.yaw = -180.0f;
     }
 
@@ -68,7 +74,8 @@ public class MixinClass_520 extends MixinClientInteractionManager {
                         flag |= this._sendBlockRemoved(i + z, j + y, k + x, side);
                         continue;
                     }
-                    if (side != 5) continue;
+                    if (side != 5)
+                        continue;
                     flag |= this._sendBlockRemoved(i - z, j + y, k + x, side);
                 }
             }
@@ -88,7 +95,7 @@ public class MixinClass_520 extends MixinClientInteractionManager {
         }
         int j1 = this.minecraft.level.getTileMeta(i, j, k);
         boolean flag = super.method_1716(i, j, k, l);
-        MixinItemInstance itemstack = this.minecraft.player.getHeldItem();
+        ItemInstance itemstack = this.minecraft.player.getHeldItem();
         boolean flag1 = this.minecraft.player.method_514(Tile.BY_ID[i1]);
         if (itemstack != null) {
             itemstack.postMine(i1, i, j, k, this.minecraft.player);
@@ -124,16 +131,6 @@ public class MixinClass_520 extends MixinClientInteractionManager {
      */
     @Override
     @Overwrite()
-    public void method_1705() {
-        this.field_2184 = 0.0f;
-        this.field_2187 = 0;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
     public void method_1721(int i, int j, int k, int l) {
         if (!DebugMode.active) {
             return;
@@ -147,7 +144,7 @@ public class MixinClass_520 extends MixinClientInteractionManager {
             if (i1 == 0) {
                 return;
             }
-            MixinTile block = Tile.BY_ID[i1];
+            Tile block = Tile.BY_ID[i1];
             this.field_2184 += block.method_1582(this.minecraft.player);
             if (this.field_2186 % 4.0f == 0.0f && block != null) {
                 this.minecraft.soundHelper.playSound(block.sounds.getWalkSound(), (float) i + 0.5f, (float) j + 0.5f, (float) k + 0.5f, (block.sounds.getVolume() + 1.0f) / 8.0f, block.sounds.getPitch() * 0.5f);
@@ -206,17 +203,7 @@ public class MixinClass_520 extends MixinClientInteractionManager {
      */
     @Override
     @Overwrite()
-    public void method_1710(MixinLevel world) {
+    public void method_1710(Level world) {
         super.method_1710(world);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public void tick() {
-        this.field_2185 = this.field_2184;
-        this.minecraft.soundHelper.playBackgroundMusic();
     }
 }

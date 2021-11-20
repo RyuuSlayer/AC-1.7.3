@@ -1,5 +1,8 @@
 package io.github.ryuu.adventurecraft.util;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
 class Coord {
 
     public int x;
@@ -31,14 +34,14 @@ class Coord {
     }
 
     public void min(int i, int j, int k) {
-        this.x = Math.min(this.x, i);
-        this.y = Math.min(this.y, j);
-        this.z = Math.min(this.z, k);
+        this.x = Math.min((int) this.x, (int) i);
+        this.y = Math.min((int) this.y, (int) j);
+        this.z = Math.min((int) this.z, (int) k);
     }
 
     public void max(int i, int j, int k) {
-        this.x = Math.max(this.x, i);
-        this.y = Math.max(this.y, j);
-        this.z = Math.max(this.z, k);
+        this.x = Math.max((int) this.x, (int) i);
+        this.y = Math.max((int) this.y, (int) j);
+        this.z = Math.max((int) this.z, (int) k);
     }
 }

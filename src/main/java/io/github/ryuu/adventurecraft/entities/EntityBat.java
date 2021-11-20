@@ -1,10 +1,14 @@
 package io.github.ryuu.adventurecraft.entities;
 
+import java.util.Random;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.FlyingEntity;
 import net.minecraft.entity.MonsterEntityType;
+import net.minecraft.level.Level;
 import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.MathsHelper;
-
-import java.util.Random;
 
 public class EntityBat extends MixinFlyingEntity implements MonsterEntityType {
 
@@ -15,11 +19,16 @@ public class EntityBat extends MixinFlyingEntity implements MonsterEntityType {
     public double waypointY;
 
     public double waypointZ;
-    boolean movingToTarget;
-    int attackCooldown;
-    Random bs;
+
     private MixinEntity targetedEntity = null;
+
     private int aggroCooldown = 0;
+
+    boolean movingToTarget;
+
+    int attackCooldown;
+
+    Random bs;
 
     public EntityBat(MixinLevel world) {
         super(world);
@@ -51,7 +60,7 @@ public class EntityBat extends MixinFlyingEntity implements MonsterEntityType {
                 this.aggroCooldown = 20;
             }
         }
-        if ((d3 = MathsHelper.sqrt((d = this.waypointX - this.x) * d + (d1 = this.waypointY - this.y) * d1 + (d2 = this.waypointZ - this.z) * d2)) < 1.0 || d3 > 60.0 || this.bs.nextInt(20) == 0) {
+        if ((d3 = (double) MathsHelper.sqrt((d = this.waypointX - this.x) * d + (d1 = this.waypointY - this.y) * d1 + (d2 = this.waypointZ - this.z) * d2)) < 1.0 || d3 > 60.0 || this.bs.nextInt(20) == 0) {
             if (this.targetedEntity == null || this.bs.nextInt(3) == 0) {
                 this.movingToTarget = false;
                 this.waypointX = this.x + (double) ((this.bs.nextFloat() * 2.0f - 1.0f) * 4.0f);
@@ -80,7 +89,7 @@ public class EntityBat extends MixinFlyingEntity implements MonsterEntityType {
         if (this.targetedEntity != null) {
             double d5 = this.targetedEntity.x - this.x;
             double d7 = this.targetedEntity.z - this.z;
-            this.field_1012 = -((float) Math.atan2(d5, d7)) * 180.0f / 3.141593f;
+            this.field_1012 = -((float) Math.atan2((double) d5, (double) d7)) * 180.0f / 3.141593f;
             if (this.movingToTarget && this.targetedEntity.method_1352(this) < 2.25) {
                 this.velocityX = 0.0;
                 this.velocityY = 0.0;
