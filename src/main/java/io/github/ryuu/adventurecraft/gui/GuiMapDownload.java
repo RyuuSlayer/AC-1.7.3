@@ -29,13 +29,13 @@ import net.minecraft.client.render.Tessellator;
 import net.minecraft.script.ScriptUIContainer;
 import org.lwjgl.opengl.GL11;
 
-class GuiMapDownload extends MixinScreen {
+class GuiMapDownload extends Screen {
 
     static final String url = "http://www.adventurecraft.org/";
 
     public ScriptUIContainer ui = new ScriptUIContainer(0.0f, 26.0f, null);
 
-    protected MixinScreen parentScreen;
+    protected Screen parentScreen;
 
     private File mapDownloadFolder;
 
@@ -75,7 +75,7 @@ class GuiMapDownload extends MixinScreen {
 
     private Random rand;
 
-    GuiMapDownload(MixinScreen guiscreen) {
+    GuiMapDownload(Screen guiscreen) {
         this.mapDownloadFolder = new File("./mapDownloads/");
         if (!this.mapDownloadFolder.exists()) {
             this.mapDownloadFolder.mkdirs();
@@ -404,7 +404,7 @@ class GuiMapDownload extends MixinScreen {
             ++i;
         } while (worldDir.exists());
         this.minecraft.saveMapUsed(saveName, this.mapName);
-        this.minecraft.interactionManager = new MixinClass_520(this.minecraft);
+        this.minecraft.interactionManager = new class_520(this.minecraft);
         this.minecraft.startWorld(saveName, saveName, 0L, this.mapName);
     }
 

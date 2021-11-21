@@ -9,14 +9,14 @@ import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 
-public class ItemHammer extends MixinItemType {
+public class ItemHammer extends ItemType {
 
     protected ItemHammer(int id) {
         super(id);
     }
 
     @Override
-    public boolean useOnTile(MixinItemInstance item, MixinPlayer player, MixinLevel level, int x, int y, int z, int facing) {
+    public boolean useOnTile(ItemInstance item, Player player, Level level, int x, int y, int z, int facing) {
         if (ItemCursor.bothSet) {
             int blockToSwapTo = level.getTileId(x, y, z);
             int metadata = level.getTileMeta(x, y, z);
@@ -39,12 +39,12 @@ public class ItemHammer extends MixinItemType {
     }
 
     @Override
-    public float method_438(MixinItemInstance item, MixinTile tile) {
+    public float method_438(ItemInstance item, Tile tile) {
         return 32.0f;
     }
 
     @Override
-    public boolean isEffectiveOn(MixinTile tile) {
+    public boolean isEffectiveOn(Tile tile) {
         return true;
     }
 

@@ -16,12 +16,12 @@ public class BlockRedstoneTrigger extends TileWithEntity {
     }
 
     @Override
-    protected MixinTileEntity createTileEntity() {
+    protected TileEntity createTileEntity() {
         return new TileEntityRedstoneTrigger();
     }
 
     @Override
-    public void method_1609(MixinLevel level, int x, int y, int z, int id) {
+    public void method_1609(Level level, int x, int y, int z, int id) {
         this.updateBlock(level, x, y, z, id);
     }
 
@@ -34,7 +34,7 @@ public class BlockRedstoneTrigger extends TileWithEntity {
         return this.tex + 1;
     }
 
-    private void updateBlock(MixinLevel world, int i, int j, int k, int l) {
+    private void updateBlock(Level world, int i, int j, int k, int l) {
         boolean flag = world.hasRedstonePower(i, j, k);
         TileEntityRedstoneTrigger obj = (TileEntityRedstoneTrigger) world.getTileEntity(i, j, k);
         if (obj != null && obj.isActivated != flag) {
@@ -53,7 +53,7 @@ public class BlockRedstoneTrigger extends TileWithEntity {
     }
 
     @Override
-    public boolean activate(MixinLevel level, int x, int y, int z, MixinPlayer player) {
+    public boolean activate(Level level, int x, int y, int z, Player player) {
         if (DebugMode.active && player.getHeldItem() != null && player.getHeldItem().itemId == Items.cursor.id) {
             TileEntityRedstoneTrigger obj = (TileEntityRedstoneTrigger) level.getTileEntity(x, y, z);
             GuiRedstoneTrigger.showUI(level, x, y, z, obj);
@@ -61,7 +61,7 @@ public class BlockRedstoneTrigger extends TileWithEntity {
         return true;
     }
 
-    public void setTriggerToSelection(MixinLevel world, int i, int j, int k) {
+    public void setTriggerToSelection(Level world, int i, int j, int k) {
         TileEntityRedstoneTrigger obj = (TileEntityRedstoneTrigger) world.getTileEntity(i, j, k);
         if (obj.minX == ItemCursor.minX && obj.minY == ItemCursor.minY && obj.minZ == ItemCursor.minZ && obj.maxX == ItemCursor.maxX && obj.maxY == ItemCursor.maxY && obj.maxZ == ItemCursor.maxZ) {
             return;

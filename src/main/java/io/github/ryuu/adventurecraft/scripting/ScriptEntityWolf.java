@@ -8,9 +8,9 @@ import net.minecraft.script.ScriptEntityPlayer;
 
 public class ScriptEntityWolf extends ScriptEntityCreature {
 
-    MixinWolf entityWolf;
+    Wolf entityWolf;
 
-    ScriptEntityWolf(MixinWolf e) {
+    ScriptEntityWolf(Wolf e) {
         super(e);
         this.entityWolf = e;
     }

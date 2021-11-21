@@ -27,7 +27,7 @@ public class ScriptInventory {
     }
 
     public ScriptItem getItemInSlot(int i) {
-        MixinItemInstance item = this.inv.getInvItem(i);
+        ItemInstance item = this.inv.getInvItem(i);
         if (item == null || item.itemId == 0) {
             return null;
         }
@@ -35,7 +35,7 @@ public class ScriptInventory {
     }
 
     public ScriptItem decrementItem(int slot, int amount) {
-        MixinItemInstance item = this.inv.takeInvItem(slot, amount);
+        ItemInstance item = this.inv.takeInvItem(slot, amount);
         if (item == null || item.itemId == 0) {
             return null;
         }

@@ -17,7 +17,7 @@ public class BlockTimer extends TileWithEntity {
     }
 
     @Override
-    protected MixinTileEntity createTileEntity() {
+    protected TileEntity createTileEntity() {
         return new TileEntityTimer();
     }
 
@@ -27,7 +27,7 @@ public class BlockTimer extends TileWithEntity {
     }
 
     @Override
-    public Box getCollisionShape(MixinLevel level, int x, int y, int z) {
+    public Box getCollisionShape(Level level, int x, int y, int z) {
         return null;
     }
 
@@ -41,7 +41,7 @@ public class BlockTimer extends TileWithEntity {
         return true;
     }
 
-    public void setTriggerToSelection(MixinLevel world, int i, int j, int k) {
+    public void setTriggerToSelection(Level world, int i, int j, int k) {
         TileEntityMinMax obj = (TileEntityMinMax) world.getTileEntity(i, j, k);
         if (obj.minX == ItemCursor.minX && obj.minY == ItemCursor.minY && obj.minZ == ItemCursor.minZ && obj.maxX == ItemCursor.maxX && obj.maxY == ItemCursor.maxY && obj.maxZ == ItemCursor.maxZ) {
             return;
@@ -55,7 +55,7 @@ public class BlockTimer extends TileWithEntity {
     }
 
     @Override
-    public void onTriggerActivated(MixinLevel world, int i, int j, int k) {
+    public void onTriggerActivated(Level world, int i, int j, int k) {
         TileEntityTimer obj = (TileEntityTimer) world.getTileEntity(i, j, k);
         if (obj.canActivate && !obj.active) {
             obj.startActive();
@@ -63,7 +63,7 @@ public class BlockTimer extends TileWithEntity {
     }
 
     @Override
-    public boolean activate(MixinLevel level, int x, int y, int z, MixinPlayer player) {
+    public boolean activate(Level level, int x, int y, int z, Player player) {
         if (DebugMode.active) {
             TileEntityTimer obj = (TileEntityTimer) level.getTileEntity(x, y, z);
             GuiTimer.showUI(level, x, y, z, obj);
@@ -77,7 +77,7 @@ public class BlockTimer extends TileWithEntity {
     }
 
     @Override
-    public void reset(MixinLevel world, int i, int j, int k, boolean death) {
+    public void reset(Level world, int i, int j, int k, boolean death) {
         TileEntityTimer obj = (TileEntityTimer) world.getTileEntity(i, j, k);
         obj.active = false;
         obj.canActivate = true;

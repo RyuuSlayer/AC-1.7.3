@@ -8,9 +8,9 @@ import net.minecraft.entity.projectile.Arrow;
 import net.minecraft.level.Level;
 import net.minecraft.util.maths.MathsHelper;
 
-public class EntitySkeletonBoss extends MixinSkeleton {
+public class EntitySkeletonBoss extends Skeleton {
 
-    public EntitySkeletonBoss(MixinLevel world) {
+    public EntitySkeletonBoss(Level world) {
         super(world);
         this.setSize(this.width * 2.5f, this.height * 2.5f);
         this.movementSpeed = 0.25f;
@@ -26,13 +26,13 @@ public class EntitySkeletonBoss extends MixinSkeleton {
     }
 
     @Override
-    protected void method_637(MixinEntity entity, float f) {
+    protected void method_637(Entity entity, float f) {
         if (f < 20.0f) {
             double d = entity.x - this.x;
             double d1 = entity.z - this.z;
             if (this.attackTime == 0) {
                 for (int i = 0; i < 5; ++i) {
-                    MixinArrow entityarrow = new MixinArrow(this.level, this, this.attackDamage);
+                    Arrow entityarrow = new Arrow(this.level, this, this.attackDamage);
                     entityarrow.y += (double) 1.4f;
                     double d2 = entity.y - (double) 0.2f - entityarrow.y;
                     float f1 = MathsHelper.sqrt(d * d + d1 * d1) * 0.2f;
@@ -55,7 +55,7 @@ public class EntitySkeletonBoss extends MixinSkeleton {
     }
 
     @Override
-    public boolean damage(MixinEntity target, int amount) {
+    public boolean damage(Entity target, int amount) {
         if (target != null) {
             return false;
         }

@@ -104,7 +104,7 @@ public class RenderHookshot extends EntityRenderer {
     }
 
     @Override
-    public void render(MixinEntity entity, double x, double y, double z, float f, float f1) {
+    public void render(Entity entity, double x, double y, double z, float f, float f1) {
         this.doRenderFish((EntityHookshot) entity, x, y, z, f, f1);
     }
 }

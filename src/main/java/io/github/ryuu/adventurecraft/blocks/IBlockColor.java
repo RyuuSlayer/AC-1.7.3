@@ -6,5 +6,5 @@ import net.minecraft.level.Level;
 
 public interface IBlockColor {
 
-    public void incrementColor(MixinLevel var1, int var2, int var3, int var4);
+    public void incrementColor(Level var1, int var2, int var3, int var4);
 }

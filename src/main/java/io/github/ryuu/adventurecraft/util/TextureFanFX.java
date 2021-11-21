@@ -7,7 +7,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.TextureBinder;
 
-public class TextureFanFX extends MixinTextureBinder {
+public class TextureFanFX extends TextureBinder {
 
     static int numFrames;
 

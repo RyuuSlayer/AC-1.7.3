@@ -5,7 +5,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.io.CompoundTag;
 
-public class TileEntityUrl extends MixinTileEntity {
+public class TileEntityUrl extends TileEntity {
 
     public String url = "";
 
@@ -13,13 +13,13 @@ public class TileEntityUrl extends MixinTileEntity {
     }
 
     @Override
-    public void readIdentifyingData(MixinCompoundTag tag) {
+    public void readIdentifyingData(CompoundTag tag) {
         super.readIdentifyingData(tag);
         this.url = tag.getString("url");
     }
 
     @Override
-    public void writeIdentifyingData(MixinCompoundTag tag) {
+    public void writeIdentifyingData(CompoundTag tag) {
         super.writeIdentifyingData(tag);
         if (this.url != null && !this.url.equals((Object) "")) {
             tag.put("url", this.url);

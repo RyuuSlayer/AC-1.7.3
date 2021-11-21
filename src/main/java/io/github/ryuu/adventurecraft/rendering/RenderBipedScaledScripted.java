@@ -14,7 +14,7 @@ public class RenderBipedScaledScripted extends BipedEntityRenderer {
     }
 
     @Override
-    protected void method_823(MixinLivingEntity entityliving, float f) {
+    protected void method_823(LivingEntity entityliving, float f) {
         EntityLivingScript e = (EntityLivingScript) entityliving;
         float width = (1.0f - f) * e.prevWidth + f * e.width;
         float height = (1.0f - f) * e.prevHeight + f * e.height;

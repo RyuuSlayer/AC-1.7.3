@@ -55,7 +55,7 @@ public class TileEntityEffectRenderer extends TileEntityRenderer {
     }
 
     @Override
-    public void render(MixinTileEntity entity, double x, double y, double z, float f) {
+    public void render(TileEntity entity, double x, double y, double z, float f) {
         this.render((TileEntityEffect) entity, x, y, z, f);
     }
 }

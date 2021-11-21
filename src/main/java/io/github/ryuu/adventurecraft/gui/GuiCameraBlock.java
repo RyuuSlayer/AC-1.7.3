@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 
-public class GuiCameraBlock extends MixinScreen {
+public class GuiCameraBlock extends Screen {
 
     private TileEntityCamera cam;
 

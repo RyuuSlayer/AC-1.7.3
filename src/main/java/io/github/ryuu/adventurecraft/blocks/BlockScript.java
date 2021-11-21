@@ -17,7 +17,7 @@ public class BlockScript extends TileWithEntity {
     }
 
     @Override
-    protected MixinTileEntity createTileEntity() {
+    protected TileEntity createTileEntity() {
         return new TileEntityScript();
     }
 
@@ -27,7 +27,7 @@ public class BlockScript extends TileWithEntity {
     }
 
     @Override
-    public Box getCollisionShape(MixinLevel level, int x, int y, int z) {
+    public Box getCollisionShape(Level level, int x, int y, int z) {
         return null;
     }
 
@@ -52,7 +52,7 @@ public class BlockScript extends TileWithEntity {
     }
 
     @Override
-    public void onTriggerActivated(MixinLevel world, int i, int j, int k) {
+    public void onTriggerActivated(Level world, int i, int j, int k) {
         TileEntityScript obj = (TileEntityScript) world.getTileEntity(i, j, k);
         if (!obj.onTriggerScriptFile.equals((Object) "")) {
             world.scriptHandler.runScript(obj.onTriggerScriptFile, obj.scope);
@@ -61,7 +61,7 @@ public class BlockScript extends TileWithEntity {
     }
 
     @Override
-    public void onTriggerDeactivated(MixinLevel world, int i, int j, int k) {
+    public void onTriggerDeactivated(Level world, int i, int j, int k) {
         TileEntityScript obj = (TileEntityScript) world.getTileEntity(i, j, k);
         if (!obj.onDetriggerScriptFile.equals((Object) "")) {
             world.scriptHandler.runScript(obj.onDetriggerScriptFile, obj.scope);
@@ -70,7 +70,7 @@ public class BlockScript extends TileWithEntity {
     }
 
     @Override
-    public boolean activate(MixinLevel level, int x, int y, int z, MixinPlayer player) {
+    public boolean activate(Level level, int x, int y, int z, Player player) {
         if (DebugMode.active) {
             TileEntityScript obj = (TileEntityScript) level.getTileEntity(x, y, z);
             GuiScript.showUI(obj);

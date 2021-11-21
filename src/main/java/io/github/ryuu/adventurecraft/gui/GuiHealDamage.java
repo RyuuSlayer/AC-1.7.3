@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.level.Level;
 
-public class GuiHealDamage extends MixinScreen {
+public class GuiHealDamage extends Screen {
 
     private TileEntityHealDamage tileEnt;
 
@@ -38,7 +38,7 @@ public class GuiHealDamage extends MixinScreen {
         this.tileEnt.level.getChunk(this.tileEnt.x, this.tileEnt.z).method_885();
     }
 
-    public static void showUI(MixinLevel worldArg, TileEntityHealDamage w) {
+    public static void showUI(Level worldArg, TileEntityHealDamage w) {
         Minecraft.minecraftInstance.openScreen(new GuiHealDamage(w));
     }
 

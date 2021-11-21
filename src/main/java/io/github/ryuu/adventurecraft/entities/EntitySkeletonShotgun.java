@@ -8,18 +8,18 @@ import net.minecraft.entity.monster.Skeleton;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
 
-public class EntitySkeletonShotgun extends MixinSkeleton {
+public class EntitySkeletonShotgun extends Skeleton {
 
     private static final Random bs = new Random();
 
-    public EntitySkeletonShotgun(MixinLevel world) {
+    public EntitySkeletonShotgun(Level world) {
         super(world);
         this.attackDamage = 2;
-        this.heldItem = new MixinItemInstance(Items.shotgun, 1);
+        this.heldItem = new ItemInstance(Items.shotgun, 1);
     }
 
     @Override
-    protected void method_637(MixinEntity entity, float f) {
+    protected void method_637(Entity entity, float f) {
         if ((double) f < 10.0 && bs.nextBoolean()) {
             this.method_924(entity, 30.0f, 30.0f);
             if (this.attackTime == 0) {

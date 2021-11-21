@@ -10,21 +10,21 @@ import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 import net.minecraft.util.maths.Vec3f;
 
-public class ItemNudge extends MixinItemType {
+public class ItemNudge extends ItemType {
 
     public ItemNudge(int id) {
         super(id);
     }
 
     @Override
-    public MixinItemInstance use(MixinItemInstance item, MixinLevel level, MixinPlayer player) {
+    public ItemInstance use(ItemInstance item, Level level, Player player) {
         if (ItemCursor.bothSet) {
             int metadata;
             int blockID;
             int k;
             int j;
             int i;
-            MixinLivingEntity camera = Minecraft.minecraftInstance.field_2807;
+            LivingEntity camera = Minecraft.minecraftInstance.field_2807;
             Vec3f lookDir = camera.method_1320();
             int width = ItemCursor.maxX - ItemCursor.minX + 1;
             int height = ItemCursor.maxY - ItemCursor.minY + 1;
@@ -120,13 +120,13 @@ public class ItemNudge extends MixinItemType {
     }
 
     @Override
-    public void onItemLeftClick(MixinItemInstance itemstack, MixinLevel world, MixinPlayer entityplayer) {
+    public void onItemLeftClick(ItemInstance itemstack, Level world, Player entityplayer) {
         if (ItemCursor.bothSet) {
             int blockID;
             int k;
             int j;
             int i;
-            MixinLivingEntity camera = Minecraft.minecraftInstance.field_2807;
+            LivingEntity camera = Minecraft.minecraftInstance.field_2807;
             Vec3f lookDir = camera.method_1320();
             int width = ItemCursor.maxX - ItemCursor.minX + 1;
             int height = ItemCursor.maxY - ItemCursor.minY + 1;

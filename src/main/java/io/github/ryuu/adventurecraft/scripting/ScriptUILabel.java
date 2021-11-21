@@ -41,7 +41,7 @@ public class ScriptUILabel extends UIElement {
     }
 
     @Override
-    public void render(MixinTextRenderer fontRenderer, MixinTextureManager renderEngine, float partialTickTime) {
+    public void render(TextRenderer fontRenderer, TextureManager renderEngine, float partialTickTime) {
         int color = Math.max((int) Math.min((int) ((int) (this.alpha * 255.0f)), (int) 255), (int) 0);
         if (color == 0) {
             return;

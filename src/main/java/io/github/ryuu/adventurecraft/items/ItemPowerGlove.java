@@ -10,14 +10,14 @@ import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 import org.lwjgl.input.Keyboard;
 
-public class ItemPowerGlove extends MixinItemType {
+public class ItemPowerGlove extends ItemType {
 
     protected ItemPowerGlove(int id) {
         super(id);
     }
 
     @Override
-    public boolean useOnTile(MixinItemInstance item, MixinPlayer player, MixinLevel level, int x, int y, int z, int facing) {
+    public boolean useOnTile(ItemInstance item, Player player, Level level, int x, int y, int z, int facing) {
         int nextBlockID;
         int xOffset = 0;
         int zOffset = 0;
@@ -43,7 +43,7 @@ public class ItemPowerGlove extends MixinItemType {
             int blockID = level.getTileId(x, y, z);
             int metadata = level.getTileMeta(x, y, z);
             level.method_201(x, y, z, 0, 0);
-            MixinFallingTile e = new MixinFallingTile(level, (double) x + 0.5, (double) y + 0.5, (double) z + 0.5, blockID);
+            FallingTile e = new FallingTile(level, (double) x + 0.5, (double) y + 0.5, (double) z + 0.5, blockID);
             e.velocityX = 0.3 * (double) xOffset;
             e.velocityZ = 0.3 * (double) zOffset;
             e.metadata = metadata;

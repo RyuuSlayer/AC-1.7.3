@@ -52,7 +52,7 @@ public class ScriptUISprite extends UIElement {
     }
 
     @Override
-    public void render(MixinTextRenderer fontRenderer, MixinTextureManager renderEngine, float partialTickTime) {
+    public void render(TextRenderer fontRenderer, TextureManager renderEngine, float partialTickTime) {
         if (this.texture.startsWith("http")) {
             renderEngine.bindTexture(renderEngine.getTextureId(this.texture, "./pack.png"));
         } else {

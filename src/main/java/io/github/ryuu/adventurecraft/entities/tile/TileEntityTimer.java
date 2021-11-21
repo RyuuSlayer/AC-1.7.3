@@ -60,7 +60,7 @@ public class TileEntityTimer extends TileEntityMinMax {
     }
 
     @Override
-    public void readIdentifyingData(MixinCompoundTag tag) {
+    public void readIdentifyingData(CompoundTag tag) {
         super.readIdentifyingData(tag);
         this.resetOnTrigger = tag.getBoolean("resetOnTrigger");
         this.timeActive = tag.getInt("timeActive");
@@ -73,7 +73,7 @@ public class TileEntityTimer extends TileEntityMinMax {
     }
 
     @Override
-    public void writeIdentifyingData(MixinCompoundTag tag) {
+    public void writeIdentifyingData(CompoundTag tag) {
         super.writeIdentifyingData(tag);
         tag.put("resetOnTrigger", this.resetOnTrigger);
         tag.put("timeActive", this.timeActive);

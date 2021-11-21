@@ -61,7 +61,7 @@ public class UndoStack {
         return this.isRecording;
     }
 
-    void recordChange(int x, int y, int z, int prevBlockID, int prevMeta, MixinCompoundTag prevTag, int nextBlockID, int nextMeta, MixinCompoundTag nextTag) {
+    void recordChange(int x, int y, int z, int prevBlockID, int prevMeta, CompoundTag prevTag, int nextBlockID, int nextMeta, CompoundTag nextTag) {
         EditAction newAction = new EditAction(x, y, z, prevBlockID, prevMeta, prevTag, nextBlockID, nextMeta, nextTag);
         if (this.firstAction == null) {
             this.firstAction = newAction;
@@ -81,7 +81,7 @@ public class UndoStack {
         this.lastAction = newAction;
     }
 
-    public void undo(MixinLevel w) {
+    public void undo(Level w) {
         if (!this.undoStack.isEmpty()) {
             EditAction action = (EditAction) this.undoStack.removeLast();
             action.undo(w);
@@ -99,7 +99,7 @@ public class UndoStack {
         }
     }
 
-    public void redo(MixinLevel w) {
+    public void redo(Level w) {
         if (!this.redoStack.isEmpty()) {
             EditAction action = (EditAction) this.redoStack.removeLast();
             action.redo(w);

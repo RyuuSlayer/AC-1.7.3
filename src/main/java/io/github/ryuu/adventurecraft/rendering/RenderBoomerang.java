@@ -105,7 +105,7 @@ public class RenderBoomerang extends EntityRenderer {
     }
 
     @Override
-    public void render(MixinEntity entity, double x, double y, double z, float f, float f1) {
+    public void render(Entity entity, double x, double y, double z, float f, float f1) {
         this.doRenderItem((EntityBoomerang) entity, x, y, z, f, f1);
     }
 }

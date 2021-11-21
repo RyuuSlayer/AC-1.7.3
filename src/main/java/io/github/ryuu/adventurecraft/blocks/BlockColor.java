@@ -7,7 +7,7 @@ import net.minecraft.level.TileView;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 
-class BlockColor extends MixinTile implements IBlockColor {
+class BlockColor extends Tile implements IBlockColor {
 
     static final int numColors = 7;
 
@@ -28,12 +28,12 @@ class BlockColor extends MixinTile implements IBlockColor {
         return iblockaccess.getTileMeta(i, j, k);
     }
 
-    protected void setColorMetaData(MixinLevel world, int i, int j, int k, int color) {
+    protected void setColorMetaData(Level world, int i, int j, int k, int color) {
         world.setTileMeta(i, j, k, color);
     }
 
     @Override
-    public void incrementColor(MixinLevel world, int i, int j, int k) {
+    public void incrementColor(Level world, int i, int j, int k) {
         int color = (this.getColorMetaData(world, i, j, k) + 1) % numColors;
         this.setColorMetaData(world, i, j, k, color);
     }

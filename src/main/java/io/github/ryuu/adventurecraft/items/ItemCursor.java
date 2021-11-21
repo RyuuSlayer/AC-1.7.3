@@ -8,7 +8,7 @@ import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 
-public class ItemCursor extends MixinItemType {
+public class ItemCursor extends ItemType {
 
     static boolean bothSet;
 
@@ -43,12 +43,12 @@ public class ItemCursor extends MixinItemType {
     }
 
     @Override
-    public boolean onItemUseLeftClick(MixinItemInstance itemstack, MixinPlayer entityplayer, MixinLevel world, int i, int j, int k, int l) {
+    public boolean onItemUseLeftClick(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
         return this.useOnTile(itemstack, entityplayer, world, i, j, k, l);
     }
 
     @Override
-    public boolean useOnTile(MixinItemInstance item, MixinPlayer player, MixinLevel level, int x, int y, int z, int facing) {
+    public boolean useOnTile(ItemInstance item, Player player, Level level, int x, int y, int z, int facing) {
         if (firstPosition) {
             Minecraft.minecraftInstance.overlay.addChatMessage(String.format((String) "Setting Cursor Position 1 (%d, %d, %d)", (Object[]) new Object[] { x, y, z }));
             oneX = x;

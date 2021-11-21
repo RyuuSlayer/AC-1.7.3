@@ -9,7 +9,7 @@ import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
-public class BlockTriggeredDoor extends MixinTile {
+public class BlockTriggeredDoor extends Tile {
 
     protected BlockTriggeredDoor(int i) {
         super(i, Material.WOOD);
@@ -32,7 +32,7 @@ public class BlockTriggeredDoor extends MixinTile {
     }
 
     @Override
-    public Box getCollisionShape(MixinLevel level, int x, int y, int z) {
+    public Box getCollisionShape(Level level, int x, int y, int z) {
         if (!level.triggerManager.isActivated(x, y, z) || DebugMode.active) {
             return null;
         }
@@ -45,13 +45,13 @@ public class BlockTriggeredDoor extends MixinTile {
     }
 
     @Override
-    public void onTriggerActivated(MixinLevel world, int i, int j, int k) {
+    public void onTriggerActivated(Level world, int i, int j, int k) {
         world.playSound((double) i + 0.5, (double) j + 0.5, (double) k + 0.5, "random.door_open", 1.0f, world.rand.nextFloat() * 0.1f + 0.9f);
         world.method_243(i, j, k);
     }
 
     @Override
-    public void onTriggerDeactivated(MixinLevel world, int i, int j, int k) {
+    public void onTriggerDeactivated(Level world, int i, int j, int k) {
         world.playSound((double) i + 0.5, (double) j + 0.5, (double) k + 0.5, "random.door_close", 1.0f, world.rand.nextFloat() * 0.1f + 0.9f);
         world.method_243(i, j, k);
     }

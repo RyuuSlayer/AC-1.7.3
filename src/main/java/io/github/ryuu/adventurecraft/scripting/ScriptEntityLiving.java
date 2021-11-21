@@ -11,9 +11,9 @@ import net.minecraft.util.maths.Vec3f;
 
 public class ScriptEntityLiving extends ScriptEntity {
 
-    MixinLivingEntity entityLiving;
+    LivingEntity entityLiving;
 
-    ScriptEntityLiving(MixinLivingEntity e) {
+    ScriptEntityLiving(LivingEntity e) {
         super(e);
         this.entityLiving = e;
     }
@@ -35,7 +35,7 @@ public class ScriptEntityLiving extends ScriptEntity {
     }
 
     public ScriptEntity getLookTarget() {
-        MixinEntity e = this.entityLiving.method_922();
+        Entity e = this.entityLiving.method_922();
         return ScriptEntity.getEntityClass(e);
     }
 

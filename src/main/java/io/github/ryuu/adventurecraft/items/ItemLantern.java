@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 
-class ItemLantern extends MixinItemType {
+class ItemLantern extends ItemType {
 
     public ItemLantern(int id) {
         super(id);
@@ -14,7 +14,7 @@ class ItemLantern extends MixinItemType {
     }
 
     @Override
-    public boolean isLighting(MixinItemInstance itemstack) {
+    public boolean isLighting(ItemInstance itemstack) {
         if (itemstack.getDamage() < itemstack.method_723()) {
             itemstack.setDamage(itemstack.getDamage() + 1);
             return true;

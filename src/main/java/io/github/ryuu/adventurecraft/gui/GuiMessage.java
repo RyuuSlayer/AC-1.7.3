@@ -8,17 +8,17 @@ import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.level.Level;
 import net.minecraft.util.CharacterUtils;
 
-public class GuiMessage extends MixinScreen {
+public class GuiMessage extends Screen {
 
     private TileEntityMessage msg;
 
     private TileEntityMessage soundFile;
 
-    private MixinLevel world;
+    private Level world;
 
     private int page;
 
-    public GuiMessage(MixinLevel w, TileEntityMessage tileEntityMsg) {
+    public GuiMessage(Level w, TileEntityMessage tileEntityMsg) {
         this.world = w;
         this.msg = tileEntityMsg;
     }
@@ -80,7 +80,7 @@ public class GuiMessage extends MixinScreen {
         super.render(mouseX, mouseY, delta);
     }
 
-    public static void showUI(MixinLevel w, TileEntityMessage tileEntityMsg) {
+    public static void showUI(Level w, TileEntityMessage tileEntityMsg) {
         Minecraft.minecraftInstance.openScreen(new GuiMessage(w, tileEntityMsg));
     }
 }

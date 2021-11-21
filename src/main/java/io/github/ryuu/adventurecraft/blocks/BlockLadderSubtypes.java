@@ -5,7 +5,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.level.Level;
 import net.minecraft.tile.LadderTile;
 
-public class BlockLadderSubtypes extends MixinLadderTile implements IBlockColor {
+public class BlockLadderSubtypes extends LadderTile implements IBlockColor {
 
     protected BlockLadderSubtypes(int id, int texUVStart) {
         super(id, texUVStart);
@@ -17,7 +17,7 @@ public class BlockLadderSubtypes extends MixinLadderTile implements IBlockColor 
     }
 
     @Override
-    public void onPlaced(MixinLevel level, int x, int y, int z, int facing) {
+    public void onPlaced(Level level, int x, int y, int z, int facing) {
         int meta = level.getTileMeta(x, y, z);
         int side = 0;
         if (side == 0 && BlockLadderSubtypes.isLadderID(level.getTileId(x, y - 1, z))) {
@@ -42,11 +42,11 @@ public class BlockLadderSubtypes extends MixinLadderTile implements IBlockColor 
     }
 
     @Override
-    public void method_1609(MixinLevel level, int x, int y, int z, int id) {
+    public void method_1609(Level level, int x, int y, int z, int id) {
     }
 
     @Override
-    public void incrementColor(MixinLevel world, int i, int j, int k) {
+    public void incrementColor(Level world, int i, int j, int k) {
         int metadata = world.getTileMeta(i, j, k);
         world.setTileMeta(i, j, k, (metadata + 4) % 16);
     }

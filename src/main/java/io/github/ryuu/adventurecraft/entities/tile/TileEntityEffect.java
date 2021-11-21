@@ -6,7 +6,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.io.CompoundTag;
 
-public class TileEntityEffect extends MixinTileEntity {
+public class TileEntityEffect extends TileEntity {
 
     public boolean checkTrigger = true;
 
@@ -71,7 +71,7 @@ public class TileEntityEffect extends MixinTileEntity {
     private static Random rand = new Random();
 
     @Override
-    public void readIdentifyingData(MixinCompoundTag tag) {
+    public void readIdentifyingData(CompoundTag tag) {
         super.readIdentifyingData(tag);
         this.particleType = tag.getString("particleType");
         this.particlesPerSpawn = tag.getInt("particlesPerSpawn");
@@ -104,7 +104,7 @@ public class TileEntityEffect extends MixinTileEntity {
     }
 
     @Override
-    public void writeIdentifyingData(MixinCompoundTag tag) {
+    public void writeIdentifyingData(CompoundTag tag) {
         super.writeIdentifyingData(tag);
         if (!this.particleType.equals((Object) "")) {
             tag.put("particleType", this.particleType);

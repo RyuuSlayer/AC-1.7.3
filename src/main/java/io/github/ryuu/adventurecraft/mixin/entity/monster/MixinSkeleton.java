@@ -5,6 +5,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.monster.Monster;
+import net.minecraft.entity.monster.Skeleton;
 import net.minecraft.entity.projectile.Arrow;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
@@ -16,7 +17,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(Skeleton.class)
-public class MixinSkeleton extends Monster {
+public class MixinSkeleton extends MixinMonster {
 
     @Shadow()
     private static final ItemInstance field_302 = new ItemInstance(ItemType.bow, 1);

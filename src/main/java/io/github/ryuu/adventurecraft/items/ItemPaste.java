@@ -10,21 +10,21 @@ import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 import net.minecraft.util.maths.Vec3f;
 
-public class ItemPaste extends MixinItemType {
+public class ItemPaste extends ItemType {
 
     public ItemPaste(int id) {
         super(id);
     }
 
     @Override
-    public MixinItemInstance use(MixinItemInstance item, MixinLevel level, MixinPlayer player) {
+    public ItemInstance use(ItemInstance item, Level level, Player player) {
         if (ItemCursor.bothSet) {
             int metadata;
             int blockID;
             int k;
             int j;
             int i;
-            MixinLivingEntity camera = Minecraft.minecraftInstance.field_2807;
+            LivingEntity camera = Minecraft.minecraftInstance.field_2807;
             Vec3f lookDir = camera.method_1320();
             int width = ItemCursor.maxX - ItemCursor.minX + 1;
             int height = ItemCursor.maxY - ItemCursor.minY + 1;

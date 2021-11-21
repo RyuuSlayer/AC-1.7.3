@@ -8,7 +8,7 @@ import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.OptionButton;
 import net.minecraft.item.ItemInstance;
 
-public class GuiStoreDebug extends MixinScreen {
+public class GuiStoreDebug extends Screen {
 
     private TileEntityStore store;
 
@@ -38,7 +38,7 @@ public class GuiStoreDebug extends MixinScreen {
     @Override
     protected void buttonClicked(Button button) {
         if (button.id == 0) {
-            MixinItemInstance item = this.minecraft.player.getHeldItem();
+            ItemInstance item = this.minecraft.player.getHeldItem();
             if (item != null) {
                 this.store.buyItemID = item.itemId;
                 this.store.buyItemDamage = item.getDamage();

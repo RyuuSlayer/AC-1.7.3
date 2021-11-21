@@ -6,9 +6,9 @@ import net.minecraft.level.Level;
 
 public class ScriptScript {
 
-    MixinLevel world;
+    Level world;
 
-    ScriptScript(MixinLevel w) {
+    ScriptScript(Level w) {
         this.world = w;
     }
 

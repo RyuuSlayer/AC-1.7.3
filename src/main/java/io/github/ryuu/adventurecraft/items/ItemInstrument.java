@@ -9,7 +9,7 @@ import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.entity.Sign;
 
-public class ItemInstrument extends MixinItemType {
+public class ItemInstrument extends ItemType {
 
     String instrument;
 
@@ -19,16 +19,16 @@ public class ItemInstrument extends MixinItemType {
     }
 
     @Override
-    public boolean useOnTile(MixinItemInstance item, MixinPlayer player, MixinLevel level, int x, int y, int z, int facing) {
+    public boolean useOnTile(ItemInstance item, Player player, Level level, int x, int y, int z, int facing) {
         if (level.getTileId(x, y, z) == Tile.STANDING_SIGN.id) {
-            MixinSign sign = (MixinSign) level.getTileEntity(x, y, z);
+            Sign sign = (Sign) level.getTileEntity(x, y, z);
             sign.playSong(this.instrument);
         }
         return false;
     }
 
     @Override
-    public MixinItemInstance use(MixinItemInstance item, MixinLevel level, MixinPlayer player) {
+    public ItemInstance use(ItemInstance item, Level level, Player player) {
         GuiMusicSheet.showUI(this.instrument);
         return item;
     }

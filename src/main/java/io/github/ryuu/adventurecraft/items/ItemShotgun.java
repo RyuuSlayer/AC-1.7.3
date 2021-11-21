@@ -7,7 +7,7 @@ import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 
-class ItemShotgun extends MixinItemType implements IItemReload {
+class ItemShotgun extends ItemType implements IItemReload {
 
     public ItemShotgun(int id) {
         super(id);
@@ -16,7 +16,7 @@ class ItemShotgun extends MixinItemType implements IItemReload {
     }
 
     @Override
-    public MixinItemInstance use(MixinItemInstance item, MixinLevel level, MixinPlayer player) {
+    public ItemInstance use(ItemInstance item, Level level, Player player) {
         if (item.timeLeft > 0) {
             if (item.isReloading && item.getDamage() > 0) {
                 item.isReloading = false;
@@ -42,17 +42,17 @@ class ItemShotgun extends MixinItemType implements IItemReload {
     }
 
     @Override
-    public boolean isLighting(MixinItemInstance itemstack) {
+    public boolean isLighting(ItemInstance itemstack) {
         return itemstack.timeLeft > 42;
     }
 
     @Override
-    public boolean isMuzzleFlash(MixinItemInstance itemstack) {
+    public boolean isMuzzleFlash(ItemInstance itemstack) {
         return itemstack.timeLeft > 35;
     }
 
     @Override
-    public void reload(MixinItemInstance itemstack, MixinLevel world, MixinPlayer entityplayer) {
+    public void reload(ItemInstance itemstack, Level world, Player entityplayer) {
         if (itemstack.getDamage() > 0 && entityplayer.inventory.decreaseAmountOfItem(Items.shotgunAmmo.id)) {
             itemstack.setDamage(itemstack.getDamage() - 1);
             itemstack.timeLeft = 20;

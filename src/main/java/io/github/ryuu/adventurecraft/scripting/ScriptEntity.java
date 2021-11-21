@@ -35,30 +35,30 @@ import net.minecraft.util.maths.Vec3f;
 
 public class ScriptEntity {
 
-    MixinEntity entity;
+    Entity entity;
 
-    ScriptEntity(MixinEntity e) {
+    ScriptEntity(Entity e) {
         this.entity = e;
     }
 
-    public static ScriptEntity getEntityClass(MixinEntity e) {
+    public static ScriptEntity getEntityClass(Entity e) {
         if (e == null) {
             return null;
         }
-        if (e instanceof MixinPlayer) {
-            return new ScriptEntityPlayer((MixinPlayer) e);
+        if (e instanceof Player) {
+            return new ScriptEntityPlayer((Player) e);
         }
-        if (e instanceof MixinMonster) {
-            return new ScriptEntityMob((MixinMonster) e);
+        if (e instanceof Monster) {
+            return new ScriptEntityMob((Monster) e);
         }
-        if (e instanceof MixinWolf) {
-            return new ScriptEntityWolf((MixinWolf) e);
+        if (e instanceof Wolf) {
+            return new ScriptEntityWolf((Wolf) e);
         }
-        if (e instanceof MixinWalkingEntity) {
-            return new ScriptEntityCreature((MixinWalkingEntity) e);
+        if (e instanceof WalkingEntity) {
+            return new ScriptEntityCreature((WalkingEntity) e);
         }
-        if (e instanceof MixinFlyingEntity) {
-            return new ScriptEntityFlying((MixinFlyingEntity) e);
+        if (e instanceof FlyingEntity) {
+            return new ScriptEntityFlying((FlyingEntity) e);
         }
         if (e instanceof EntityNPC) {
             return new ScriptEntityNPC((EntityNPC) e);
@@ -66,14 +66,14 @@ public class ScriptEntity {
         if (e instanceof EntityLivingScript) {
             return new ScriptEntityLivingScript((EntityLivingScript) e);
         }
-        if (e instanceof MixinSlime) {
-            return new ScriptEntitySlime((MixinSlime) e);
+        if (e instanceof Slime) {
+            return new ScriptEntitySlime((Slime) e);
         }
-        if (e instanceof MixinLivingEntity) {
-            return new ScriptEntityLiving((MixinLivingEntity) e);
+        if (e instanceof LivingEntity) {
+            return new ScriptEntityLiving((LivingEntity) e);
         }
-        if (e instanceof MixinArrow) {
-            return new ScriptEntityArrow((MixinArrow) e);
+        if (e instanceof Arrow) {
+            return new ScriptEntityArrow((Arrow) e);
         }
         return new ScriptEntity(e);
     }
@@ -170,7 +170,7 @@ public class ScriptEntity {
         ArrayList scriptEntities = new ArrayList();
         double sqDist = dist * dist;
         for (Object ent : entities) {
-            MixinEntity e = (MixinEntity) ent;
+            Entity e = (Entity) ent;
             if (!(e.method_1352(this.entity) < sqDist))
                 continue;
             scriptEntities.add((Object) ScriptEntity.getEntityClass(e));
@@ -248,7 +248,7 @@ public class ScriptEntity {
     }
 
     public String getClassType() {
-        if (this.entity instanceof MixinPlayer) {
+        if (this.entity instanceof Player) {
             return "Player";
         }
         return EntityRegistry.getEntityStringClimbing(this.entity);

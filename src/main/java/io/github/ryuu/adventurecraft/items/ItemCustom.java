@@ -19,7 +19,7 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
-public class ItemCustom extends MixinItemType {
+public class ItemCustom extends ItemType {
 
     String fileName;
 
@@ -91,7 +91,7 @@ public class ItemCustom extends MixinItemType {
     }
 
     @Override
-    public MixinItemInstance use(MixinItemInstance item, MixinLevel level, MixinPlayer player) {
+    public ItemInstance use(ItemInstance item, Level level, Player player) {
         if (!this.onItemUsedScript.equals((Object) "")) {
             ScriptItem item2 = new ScriptItem(item);
             Object wrappedOut = Context.javaToJS((Object) item2, (Scriptable) level.scope);

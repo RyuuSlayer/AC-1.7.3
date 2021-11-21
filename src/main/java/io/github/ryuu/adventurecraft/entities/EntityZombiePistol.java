@@ -8,18 +8,18 @@ import net.minecraft.entity.monster.Zombie;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
 
-public class EntityZombiePistol extends MixinZombie {
+public class EntityZombiePistol extends Zombie {
 
     int ammo = 15;
 
-    public EntityZombiePistol(MixinLevel world) {
+    public EntityZombiePistol(Level world) {
         super(world);
-        this.heldItem = new MixinItemInstance(Items.pistol, 1);
+        this.heldItem = new ItemInstance(Items.pistol, 1);
         this.attackDamage = 6;
     }
 
     @Override
-    protected void method_637(MixinEntity entity, float f) {
+    protected void method_637(Entity entity, float f) {
         if (this.attackTime == 0 && this.rand.nextBoolean() && this.rand.nextBoolean()) {
             this.method_924(entity, 45.0f, 90.0f);
             --this.ammo;
@@ -52,7 +52,7 @@ public class EntityZombiePistol extends MixinZombie {
     protected void dropLoot() {
         int i = this.rand.nextInt(3) + 1;
         for (int j = 0; j < i; ++j) {
-            MixinItemEntity item = this.dropItem(this.getMobDrops(), 1);
+            ItemEntity item = this.dropItem(this.getMobDrops(), 1);
             item.item.count = 5;
         }
     }

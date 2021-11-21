@@ -24,28 +24,28 @@ class MapEditing {
 
     Minecraft mc;
 
-    MixinLevel world;
+    Level world;
 
     HitResult cursor;
 
-    private MixinTileRenderer renderBlocks;
+    private TileRenderer renderBlocks;
 
     int selectedBlockID;
 
     int selectedMetadata;
 
-    MapEditing(Minecraft mcInstance, MixinLevel w) {
+    MapEditing(Minecraft mcInstance, Level w) {
         this.mc = mcInstance;
         this.world = w;
-        this.renderBlocks = new MixinTileRenderer(w);
+        this.renderBlocks = new TileRenderer(w);
     }
 
-    public void updateWorld(MixinLevel w) {
+    public void updateWorld(Level w) {
         this.world = w;
         this.renderBlocks.field_82 = w;
     }
 
-    public void updateCursor(MixinLivingEntity camera, float fov, float time) {
+    public void updateCursor(LivingEntity camera, float fov, float time) {
         if (this.mc.field_2778) {
             this.cursor = null;
             return;
@@ -113,7 +113,7 @@ class MapEditing {
     }
 
     public void render(float time) {
-        MixinLivingEntity camera = Minecraft.minecraftInstance.field_2807;
+        LivingEntity camera = Minecraft.minecraftInstance.field_2807;
         if (!this.mc.field_2778) {
             this.drawCursor(camera, time);
             if (this.cursor != null) {
@@ -137,7 +137,7 @@ class MapEditing {
 
     public void renderSelection(float time) {
         if (ItemCursor.bothSet) {
-            MixinLivingEntity camera = Minecraft.minecraftInstance.field_2807;
+            LivingEntity camera = Minecraft.minecraftInstance.field_2807;
             float x = (float) (camera.prevRenderX + (camera.x - camera.prevRenderX) * (double) time);
             float y = (float) (camera.prevRenderY + (camera.y - camera.prevRenderY) * (double) time);
             float z = (float) (camera.prevRenderZ + (camera.z - camera.prevRenderZ) * (double) time);
@@ -176,7 +176,7 @@ class MapEditing {
     }
 
     private void drawBlock(int x, int y, int z, int blockID, int metadata) {
-        MixinTile block = Tile.BY_ID[blockID];
+        Tile block = Tile.BY_ID[blockID];
         if (block != null) {
             int prevBlockID = this.world.getTileId(x, y, z);
             int prevMetadata = this.world.getTileMeta(x, y, z);
@@ -214,7 +214,7 @@ class MapEditing {
         tessellator.draw();
     }
 
-    private void drawCursor(MixinLivingEntity camera, float time) {
+    private void drawCursor(LivingEntity camera, float time) {
         if (this.cursor != null && this.cursor.type == HitType.TILE) {
             GL11.glEnable((int) 3042);
             GL11.glBlendFunc((int) 770, (int) 771);

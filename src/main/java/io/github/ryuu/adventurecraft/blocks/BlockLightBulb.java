@@ -10,7 +10,7 @@ import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
-public class BlockLightBulb extends MixinTile {
+public class BlockLightBulb extends Tile {
 
     protected BlockLightBulb(int i, int j) {
         super(i, j, Material.AIR);
@@ -22,7 +22,7 @@ public class BlockLightBulb extends MixinTile {
     }
 
     @Override
-    public Box getCollisionShape(MixinLevel level, int x, int y, int z) {
+    public Box getCollisionShape(Level level, int x, int y, int z) {
         return null;
     }
 
@@ -37,14 +37,14 @@ public class BlockLightBulb extends MixinTile {
     }
 
     @Override
-    public void onTriggerActivated(MixinLevel world, int i, int j, int k) {
+    public void onTriggerActivated(Level world, int i, int j, int k) {
         int m = world.getTileMeta(i, j, k);
         world.method_201(i, j, k, 0, 0);
         world.method_201(i, j, k, this.id, m);
     }
 
     @Override
-    public void onTriggerDeactivated(MixinLevel world, int i, int j, int k) {
+    public void onTriggerDeactivated(Level world, int i, int j, int k) {
         int m = world.getTileMeta(i, j, k);
         world.method_201(i, j, k, 0, 0);
         world.method_201(i, j, k, this.id, m);
@@ -59,7 +59,7 @@ public class BlockLightBulb extends MixinTile {
     }
 
     @Override
-    public void onPlaced(MixinLevel level, int x, int y, int z, int facing) {
+    public void onPlaced(Level level, int x, int y, int z, int facing) {
         level.setTileMeta(x, y, z, 15);
     }
 
@@ -79,7 +79,7 @@ public class BlockLightBulb extends MixinTile {
     }
 
     @Override
-    public boolean activate(MixinLevel level, int x, int y, int z, MixinPlayer player) {
+    public boolean activate(Level level, int x, int y, int z, Player player) {
         if (DebugMode.active) {
             GuiLightBulb.showUI(level, x, y, z);
         }

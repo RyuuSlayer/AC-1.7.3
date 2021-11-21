@@ -9,7 +9,7 @@ import net.minecraft.client.gui.widgets.OptionButton;
 import net.minecraft.client.gui.widgets.Textbox;
 import net.minecraft.level.Level;
 
-public class GuiTimer extends MixinScreen {
+public class GuiTimer extends Screen {
 
     boolean ignoreNext = false;
 
@@ -21,7 +21,7 @@ public class GuiTimer extends MixinScreen {
 
     private int blockZ;
 
-    private MixinLevel world;
+    private Level world;
 
     boolean useTextFields;
 
@@ -37,7 +37,7 @@ public class GuiTimer extends MixinScreen {
 
     private Textbox delayTimeText;
 
-    public GuiTimer(MixinLevel w, int x, int y, int z, TileEntityTimer timerClicked) {
+    public GuiTimer(Level w, int x, int y, int z, TileEntityTimer timerClicked) {
         this.world = w;
         this.blockX = x;
         this.blockY = y;
@@ -182,7 +182,7 @@ public class GuiTimer extends MixinScreen {
         super.mouseClicked(mouseX, mouseY, button);
     }
 
-    public static void showUI(MixinLevel w, int x, int y, int z, TileEntityTimer timerClicked) {
+    public static void showUI(Level w, int x, int y, int z, TileEntityTimer timerClicked) {
         Minecraft.minecraftInstance.openScreen(new GuiTimer(w, x, y, z, timerClicked));
     }
 

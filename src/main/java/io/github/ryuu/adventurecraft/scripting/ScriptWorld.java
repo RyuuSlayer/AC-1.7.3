@@ -13,9 +13,9 @@ import net.minecraft.util.maths.Vec3f;
 
 public class ScriptWorld {
 
-    MixinLevel worldObj;
+    Level worldObj;
 
-    ScriptWorld(MixinLevel w) {
+    ScriptWorld(Level w) {
         this.worldObj = w;
     }
 
@@ -69,7 +69,7 @@ public class ScriptWorld {
     }
 
     public ScriptEntity spawnEntity(String entityType, double x, double y, double z) {
-        MixinEntity e = EntityRegistry.create(entityType, this.worldObj);
+        Entity e = EntityRegistry.create(entityType, this.worldObj);
         if (e != null) {
             e.setPosition(x, y, z);
             this.worldObj.method_287(e);

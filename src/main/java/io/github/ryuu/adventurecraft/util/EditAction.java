@@ -20,15 +20,15 @@ class EditAction {
 
     int prevMetadata;
 
-    MixinCompoundTag prevNBT;
+    CompoundTag prevNBT;
 
     int newBlockID;
 
     int newMetadata;
 
-    MixinCompoundTag newNBT;
+    CompoundTag newNBT;
 
-    EditAction(int i, int j, int k, int pID, int pMeta, MixinCompoundTag pNBT, int nID, int nMeta, MixinCompoundTag nNBT) {
+    EditAction(int i, int j, int k, int pID, int pMeta, CompoundTag pNBT, int nID, int nMeta, CompoundTag nNBT) {
         this.x = i;
         this.y = j;
         this.z = k;
@@ -41,10 +41,10 @@ class EditAction {
         this.nextAction = null;
     }
 
-    void undo(MixinLevel world) {
+    void undo(Level world) {
         world.method_201(this.x, this.y, this.z, this.prevBlockID, this.prevMetadata);
         if (this.prevNBT != null) {
-            MixinTileEntity te = TileEntity.method_1068(this.prevNBT);
+            TileEntity te = TileEntity.method_1068(this.prevNBT);
             world.setTileEntity(te.x, te.y, te.z, te);
         }
         if (this.nextAction != null) {
@@ -52,10 +52,10 @@ class EditAction {
         }
     }
 
-    void redo(MixinLevel world) {
+    void redo(Level world) {
         world.method_201(this.x, this.y, this.z, this.newBlockID, this.newMetadata);
         if (this.newNBT != null) {
-            MixinTileEntity te = TileEntity.method_1068(this.newNBT);
+            TileEntity te = TileEntity.method_1068(this.newNBT);
             world.setTileEntity(te.x, te.y, te.z, te);
         }
         if (this.nextAction != null) {

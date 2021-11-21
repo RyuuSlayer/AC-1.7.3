@@ -33,7 +33,7 @@ public class BlockChair extends BlockSolid {
     }
 
     @Override
-    public void afterPlaced(MixinLevel world, int i, int j, int k, MixinLivingEntity entityliving) {
+    public void afterPlaced(Level world, int i, int j, int k, LivingEntity entityliving) {
         int meta = world.getTileMeta(i, j, k);
         int l = MathsHelper.floor((double) (entityliving.yaw * 4.0f / 360.0f) + 0.5) & 3;
         world.setTileMeta(i, j, k, meta + (l + 1) % 4);

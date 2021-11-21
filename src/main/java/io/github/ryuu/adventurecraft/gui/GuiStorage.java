@@ -7,7 +7,7 @@ import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.OptionButton;
 
-public class GuiStorage extends MixinScreen {
+public class GuiStorage extends Screen {
 
     private TileEntityStorage storage;
 

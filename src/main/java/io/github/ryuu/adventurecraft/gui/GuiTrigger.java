@@ -8,7 +8,7 @@ import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.OptionButton;
 import net.minecraft.level.Level;
 
-public class GuiTrigger extends MixinScreen {
+public class GuiTrigger extends Screen {
 
     private TileEntityTrigger trigger;
 
@@ -18,9 +18,9 @@ public class GuiTrigger extends MixinScreen {
 
     private int blockZ;
 
-    private MixinLevel world;
+    private Level world;
 
-    public GuiTrigger(MixinLevel w, int x, int y, int z, TileEntityTrigger triggerClicked) {
+    public GuiTrigger(Level w, int x, int y, int z, TileEntityTrigger triggerClicked) {
         this.world = w;
         this.blockX = x;
         this.blockY = y;
@@ -67,7 +67,7 @@ public class GuiTrigger extends MixinScreen {
         super.render(mouseX, mouseY, delta);
     }
 
-    public static void showUI(MixinLevel w, int x, int y, int z, TileEntityTrigger triggerClicked) {
+    public static void showUI(Level w, int x, int y, int z, TileEntityTrigger triggerClicked) {
         Minecraft.minecraftInstance.openScreen(new GuiTrigger(w, x, y, z, triggerClicked));
     }
 

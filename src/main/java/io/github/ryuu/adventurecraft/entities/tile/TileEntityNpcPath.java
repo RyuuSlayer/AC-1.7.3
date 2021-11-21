@@ -14,20 +14,20 @@ public class TileEntityNpcPath extends TileEntityMinMax {
     public static EntityNPC lastEntity = null;
 
     @Override
-    public void readIdentifyingData(MixinCompoundTag tag) {
+    public void readIdentifyingData(CompoundTag tag) {
         super.readIdentifyingData(tag);
         this.entityID = tag.getInt("entityID");
     }
 
     @Override
-    public void writeIdentifyingData(MixinCompoundTag tag) {
+    public void writeIdentifyingData(CompoundTag tag) {
         super.writeIdentifyingData(tag);
         tag.put("entityID", this.entityID);
     }
 
     public EntityNPC getNPC() {
         if (this.npc == null || this.npc.id != this.entityID) {
-            MixinEntity e;
+            Entity e;
             if (this.level != null && (e = this.level.getEntityByID(this.entityID)) instanceof EntityNPC) {
                 this.npc = (EntityNPC) e;
                 return this.npc;

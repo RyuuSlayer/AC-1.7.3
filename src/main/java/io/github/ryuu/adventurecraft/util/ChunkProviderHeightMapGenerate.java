@@ -34,11 +34,11 @@ public class ChunkProviderHeightMapGenerate implements LevelSource {
 
     public PerlinOctaveNoise mobSpawnerNoise;
 
-    private MixinLevel worldObj;
+    private Level worldObj;
 
     private double[] stoneNoise = new double[256];
 
-    private MixinBiome[] biomesForGeneration;
+    private Biome[] biomesForGeneration;
 
     double[] field_4185_d;
 
@@ -54,7 +54,7 @@ public class ChunkProviderHeightMapGenerate implements LevelSource {
 
     private double[] generatedTemperatures;
 
-    public ChunkProviderHeightMapGenerate(MixinLevel world, long l) {
+    public ChunkProviderHeightMapGenerate(Level world, long l) {
         this.worldObj = world;
         this.rand = new Random(l);
         this.field_912_k = new PerlinOctaveNoise(this.rand, 16);
@@ -66,7 +66,7 @@ public class ChunkProviderHeightMapGenerate implements LevelSource {
         this.mobSpawnerNoise = new PerlinOctaveNoise(this.rand, 8);
     }
 
-    public void generateTerrain(int i, int j, byte[] abyte0, MixinBiome[] amobspawnerbase, double[] ad) {
+    public void generateTerrain(int i, int j, byte[] abyte0, Biome[] amobspawnerbase, double[] ad) {
         int byte0 = 4;
         for (int i1 = 0; i1 < byte0; ++i1) {
             for (int j1 = 0; j1 < byte0; ++j1) {
@@ -98,12 +98,12 @@ public class ChunkProviderHeightMapGenerate implements LevelSource {
         }
     }
 
-    public void replaceBlocksForBiome(int i, int j, byte[] abyte0, MixinBiome[] amobspawnerbase) {
+    public void replaceBlocksForBiome(int i, int j, byte[] abyte0, Biome[] amobspawnerbase) {
         double d = 0.03125;
         this.stoneNoise = this.field_908_o.sample(this.stoneNoise, i * 16, j * 16, 0.0, 16, 16, 1, d * 2.0, d * 2.0, d * 2.0);
         for (int k = 0; k < 16; ++k) {
             for (int l = 0; l < 16; ++l) {
-                MixinBiome mobspawnerbase = amobspawnerbase[k + l * 16];
+                Biome mobspawnerbase = amobspawnerbase[k + l * 16];
                 int i1 = (int) (this.stoneNoise[k + l * 16] / 3.0 + 3.0 + this.rand.nextDouble() * 0.25);
                 int j1 = -1;
                 byte byte1 = mobspawnerbase.topTileId;
@@ -150,15 +150,15 @@ public class ChunkProviderHeightMapGenerate implements LevelSource {
     }
 
     @Override
-    public MixinChunk loadChunk(int x, int z) {
+    public Chunk loadChunk(int x, int z) {
         return this.getChunk(x, z);
     }
 
     @Override
-    public MixinChunk getChunk(int x, int z) {
+    public Chunk getChunk(int x, int z) {
         this.rand.setSeed((long) x * 341873128712L + (long) z * 132897987541L);
         byte[] abyte0 = new byte[32768];
-        MixinChunk chunk = new MixinChunk(this.worldObj, abyte0, x, z);
+        Chunk chunk = new Chunk(this.worldObj, abyte0, x, z);
         this.biomesForGeneration = this.worldObj.getBiomeSource().getBiomes(this.biomesForGeneration, x * 16, z * 16, 16, 16);
         double[] ad = this.worldObj.getBiomeSource().temperatureNoises;
         this.generateTerrain(x, z, abyte0, this.biomesForGeneration, ad);
@@ -255,7 +255,7 @@ public class ChunkProviderHeightMapGenerate implements LevelSource {
         SandTile.fallInstantly = true;
         int k = chunkX * 16;
         int l = chunkZ * 16;
-        MixinBiome mobspawnerbase = this.worldObj.getBiomeSource().getBiome(k + 16, l + 16);
+        Biome mobspawnerbase = this.worldObj.getBiomeSource().getBiome(k + 16, l + 16);
         this.rand.setSeed(this.worldObj.getSeed());
         long l1 = this.rand.nextLong() / 2L * 2L + 1L;
         long l2 = this.rand.nextLong() / 2L * 2L + 1L;

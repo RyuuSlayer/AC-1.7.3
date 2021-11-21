@@ -81,7 +81,7 @@ public class ScriptModel {
     }
 
     public void addBoxExpanded(String boxName, float offsetX, float offsetY, float offsetZ, int width, int height, int depth, int u, int v, float expand) {
-        MixinModelPart r = new MixinModelPart(u, v, this.textureWidth, this.textureHeight);
+        ModelPart r = new ModelPart(u, v, this.textureWidth, this.textureHeight);
         r.addBoxInverted(offsetX, offsetY, offsetZ, width, height, depth, expand);
         this.boxes.put((Object) boxName, (Object) r);
     }
@@ -164,8 +164,8 @@ public class ScriptModel {
     }
 
     private void render(float f) {
-        MixinLevel w = Minecraft.minecraftInstance.level;
-        MixinTextureManager renderEngine = Minecraft.minecraftInstance.textureManager;
+        Level w = Minecraft.minecraftInstance.level;
+        TextureManager renderEngine = Minecraft.minecraftInstance.textureManager;
         if (this.texture != null && !this.texture.equals((Object) "")) {
             renderEngine.bindTexture(renderEngine.getTextureId(this.texture));
         }
@@ -182,7 +182,7 @@ public class ScriptModel {
         GL11.glColor3f((float) b, (float) b, (float) b);
         GL11.glPushMatrix();
         this.transform(f);
-        for (MixinModelPart r : this.boxes.values()) {
+        for (ModelPart r : this.boxes.values()) {
             r.render(0.0625f);
         }
         GL11.glPopMatrix();

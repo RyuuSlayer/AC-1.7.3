@@ -11,14 +11,14 @@ public class TileEntityTriggerPushable extends TileEntityMinMax {
     public boolean resetOnTrigger;
 
     @Override
-    public void readIdentifyingData(MixinCompoundTag tag) {
+    public void readIdentifyingData(CompoundTag tag) {
         super.readIdentifyingData(tag);
         this.resetOnTrigger = tag.getBoolean("ResetOnTrigger");
         this.activated = tag.getBoolean("activated");
     }
 
     @Override
-    public void writeIdentifyingData(MixinCompoundTag tag) {
+    public void writeIdentifyingData(CompoundTag tag) {
         super.writeIdentifyingData(tag);
         tag.put("ResetOnTrigger", this.resetOnTrigger);
         tag.put("activated", this.activated);

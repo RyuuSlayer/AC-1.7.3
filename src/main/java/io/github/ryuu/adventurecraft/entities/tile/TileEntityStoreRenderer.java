@@ -13,11 +13,11 @@ import org.lwjgl.opengl.GL11;
 
 public class TileEntityStoreRenderer extends TileEntityRenderer {
 
-    static MixinItemInstance item = new MixinItemInstance(0, 0, 0);
+    static ItemInstance item = new ItemInstance(0, 0, 0);
 
-    static MixinItemEntity eItem = new MixinItemEntity(null, 0.0, 0.0, 0.0, item);
+    static ItemEntity eItem = new ItemEntity(null, 0.0, 0.0, 0.0, item);
 
-    static MixinItemRenderer renderItem = new MixinItemRenderer();
+    static ItemRenderer renderItem = new ItemRenderer();
 
     public TileEntityStoreRenderer() {
         renderItem.setDispatcher(EntityRenderDispatcher.INSTANCE);
@@ -45,7 +45,7 @@ public class TileEntityStoreRenderer extends TileEntityRenderer {
             for (int i = store.tradeTrigger.minX; i <= store.tradeTrigger.maxX; ++i) {
                 for (int j = store.tradeTrigger.minY; j <= store.tradeTrigger.maxY; ++j) {
                     for (int k = store.tradeTrigger.minZ; k <= store.tradeTrigger.maxZ; ++k) {
-                        MixinTile block = Tile.BY_ID[store.level.getTileId(i, j, k)];
+                        Tile block = Tile.BY_ID[store.level.getTileId(i, j, k)];
                         if (block == null || !block.canBeTriggered())
                             continue;
                         GL11.glColor3f((float) 0.0f, (float) 0.0f, (float) 0.0f);
@@ -65,7 +65,7 @@ public class TileEntityStoreRenderer extends TileEntityRenderer {
     }
 
     @Override
-    public void render(MixinTileEntity entity, double x, double y, double z, float f) {
+    public void render(TileEntity entity, double x, double y, double z, float f) {
         this.renderTileEntityStore((TileEntityStore) entity, x, y, z, f);
     }
 

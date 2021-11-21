@@ -16,13 +16,13 @@ import org.mozilla.javascript.Scriptable;
 
 public class JScriptHandler {
 
-    MixinLevel world;
+    Level world;
 
     File scriptDir;
 
     public HashMap<String, JScriptInfo> scripts;
 
-    JScriptHandler(MixinLevel w, File mapDir) {
+    JScriptHandler(Level w, File mapDir) {
         this.world = w;
         this.scriptDir = new File(mapDir, "scripts");
         this.scripts = new HashMap();

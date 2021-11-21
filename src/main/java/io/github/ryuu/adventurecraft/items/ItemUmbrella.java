@@ -13,7 +13,7 @@ import net.minecraft.level.Level;
 import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.Vec3f;
 
-class ItemUmbrella extends MixinItemType {
+class ItemUmbrella extends ItemType {
 
     public ItemUmbrella(int id) {
         super(id);
@@ -30,13 +30,13 @@ class ItemUmbrella extends MixinItemType {
     }
 
     @Override
-    public MixinItemInstance use(MixinItemInstance item, MixinLevel level, MixinPlayer player) {
+    public ItemInstance use(ItemInstance item, Level level, Player player) {
         double dotProduct;
         double dZ;
         double dY;
         double dX;
         double dist;
-        MixinEntity e;
+        Entity e;
         if (!player.onGround || item.getDamage() > 0) {
             return item;
         }
@@ -45,9 +45,9 @@ class ItemUmbrella extends MixinItemType {
         Box aabb = Box.getOrCreate(player.x, player.y, player.z, player.x, player.y, player.z).expand(6.0, 6.0, 6.0);
         List entities = level.getEntities(player, aabb);
         for (Object obj : entities) {
-            e = (MixinEntity) obj;
+            e = (Entity) obj;
             dist = e.method_1352(player);
-            if (!(dist < 36.0) || e instanceof MixinFallingTile)
+            if (!(dist < 36.0) || e instanceof FallingTile)
                 continue;
             dX = e.x - player.x;
             dY = e.y - player.y;
@@ -60,7 +60,7 @@ class ItemUmbrella extends MixinItemType {
         }
         entities = Minecraft.minecraftInstance.particleManager.getEffectsWithinAABB(aabb);
         for (Object obj : entities) {
-            e = (MixinEntity) obj;
+            e = (Entity) obj;
             dist = e.method_1352(player);
             if (!(dist < 36.0))
                 continue;

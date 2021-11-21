@@ -11,7 +11,7 @@ import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
-public class BlockSpawn extends MixinTile {
+public class BlockSpawn extends Tile {
 
     protected BlockSpawn(int i, int j) {
         super(i, j, Material.AIR);
@@ -33,7 +33,7 @@ public class BlockSpawn extends MixinTile {
     }
 
     @Override
-    public Box getCollisionShape(MixinLevel level, int x, int y, int z) {
+    public Box getCollisionShape(Level level, int x, int y, int z) {
         return null;
     }
 
@@ -48,8 +48,8 @@ public class BlockSpawn extends MixinTile {
     }
 
     @Override
-    public void onEntityCollision(MixinLevel world, int i, int j, int k, MixinEntity entity) {
-        if (entity instanceof MixinPlayer) {
+    public void onEntityCollision(Level world, int i, int j, int k, Entity entity) {
+        if (entity instanceof Player) {
             world.properties.setSpawnPosition(i, j, k);
             world.setSpawnYaw(entity.yaw);
         }
@@ -61,7 +61,7 @@ public class BlockSpawn extends MixinTile {
     }
 
     @Override
-    public void onTriggerActivated(MixinLevel world, int i, int j, int k) {
+    public void onTriggerActivated(Level world, int i, int j, int k) {
         world.properties.setSpawnPosition(i, j, k);
     }
 }

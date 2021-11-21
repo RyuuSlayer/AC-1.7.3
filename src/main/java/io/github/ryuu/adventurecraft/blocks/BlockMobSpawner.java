@@ -19,7 +19,7 @@ public class BlockMobSpawner extends TileWithEntity {
     }
 
     @Override
-    protected MixinTileEntity createTileEntity() {
+    protected TileEntity createTileEntity() {
         return new TileEntityMobSpawner();
     }
 
@@ -39,12 +39,12 @@ public class BlockMobSpawner extends TileWithEntity {
     }
 
     @Override
-    public Box getCollisionShape(MixinLevel level, int x, int y, int z) {
+    public Box getCollisionShape(Level level, int x, int y, int z) {
         return null;
     }
 
     @Override
-    public boolean activate(MixinLevel level, int x, int y, int z, MixinPlayer player) {
+    public boolean activate(Level level, int x, int y, int z, Player player) {
         if (DebugMode.active) {
             TileEntityMobSpawner obj = (TileEntityMobSpawner) level.getTileEntity(x, y, z);
             GuiMobSpawner.showUI(obj);
@@ -64,7 +64,7 @@ public class BlockMobSpawner extends TileWithEntity {
     }
 
     @Override
-    public void onTriggerActivated(MixinLevel world, int i, int j, int k) {
+    public void onTriggerActivated(Level world, int i, int j, int k) {
         TileEntityMobSpawner obj = (TileEntityMobSpawner) world.getTileEntity(i, j, k);
         if (obj.spawnOnTrigger && !Tile.resetActive) {
             obj.spawnMobs();
@@ -72,7 +72,7 @@ public class BlockMobSpawner extends TileWithEntity {
     }
 
     @Override
-    public void onTriggerDeactivated(MixinLevel world, int i, int j, int k) {
+    public void onTriggerDeactivated(Level world, int i, int j, int k) {
         TileEntityMobSpawner obj = (TileEntityMobSpawner) world.getTileEntity(i, j, k);
         if (obj.spawnOnDetrigger && !Tile.resetActive) {
             obj.spawnMobs();
@@ -85,7 +85,7 @@ public class BlockMobSpawner extends TileWithEntity {
     }
 
     @Override
-    public void reset(MixinLevel world, int i, int j, int k, boolean death) {
+    public void reset(Level world, int i, int j, int k, boolean death) {
         TileEntityMobSpawner obj = (TileEntityMobSpawner) world.getTileEntity(i, j, k);
         if (!death) {
             obj.hasDroppedItem = false;

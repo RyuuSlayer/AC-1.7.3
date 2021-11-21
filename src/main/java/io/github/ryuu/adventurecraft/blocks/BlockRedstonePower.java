@@ -9,7 +9,7 @@ import net.minecraft.level.TileView;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 
-public class BlockRedstonePower extends MixinTile {
+public class BlockRedstonePower extends Tile {
 
     protected BlockRedstonePower(int i, int j) {
         super(i, j, Material.STONE);
@@ -49,7 +49,7 @@ public class BlockRedstonePower extends MixinTile {
     }
 
     @Override
-    public void onTriggerActivated(MixinLevel world, int i, int j, int k) {
+    public void onTriggerActivated(Level world, int i, int j, int k) {
         world.method_201(i, j, k, 0, 0);
         world.method_201(i, j, k, this.id, 0);
         world.method_243(i, j, k);
@@ -63,7 +63,7 @@ public class BlockRedstonePower extends MixinTile {
     }
 
     @Override
-    public void onTriggerDeactivated(MixinLevel world, int i, int j, int k) {
+    public void onTriggerDeactivated(Level world, int i, int j, int k) {
         world.method_201(i, j, k, 0, 0);
         world.method_201(i, j, k, this.id, 0);
         world.method_243(i, j, k);
@@ -87,12 +87,12 @@ public class BlockRedstonePower extends MixinTile {
     }
 
     @Override
-    public boolean method_1570(MixinLevel world, int i, int j, int k, int l) {
+    public boolean method_1570(Level world, int i, int j, int k, int l) {
         return world.triggerManager.isActivated(i, j, k);
     }
 
     @Override
-    public void randomDisplayTick(MixinLevel level, int x, int y, int z, Random rand) {
+    public void randomDisplayTick(Level level, int x, int y, int z, Random rand) {
         boolean activated = level.triggerManager.isActivated(x, y, z);
         if (activated) {
             double d = (double) ((float) x + 0.5f) + (double) (rand.nextFloat() - 0.5f) * 0.2;

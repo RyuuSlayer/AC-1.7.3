@@ -37,8 +37,8 @@ public class TriggerArea {
         return this.minZ <= z && z <= this.maxZ;
     }
 
-    MixinCompoundTag getTagCompound() {
-        MixinCompoundTag t = new MixinCompoundTag();
+    CompoundTag getTagCompound() {
+        CompoundTag t = new CompoundTag();
         t.put("minX", this.minX);
         t.put("minY", this.minY);
         t.put("minZ", this.minZ);
@@ -48,7 +48,7 @@ public class TriggerArea {
         return t;
     }
 
-    static TriggerArea getFromTagCompound(MixinCompoundTag tag) {
+    static TriggerArea getFromTagCompound(CompoundTag tag) {
         int minX = tag.getInt("minX");
         int minY = tag.getInt("minY");
         int minZ = tag.getInt("minZ");

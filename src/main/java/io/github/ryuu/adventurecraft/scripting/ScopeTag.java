@@ -7,8 +7,8 @@ import org.mozilla.javascript.Scriptable;
 
 public class ScopeTag {
 
-    public static MixinCompoundTag getTagFromScope(Scriptable scope) {
-        MixinCompoundTag tag = new MixinCompoundTag();
+    public static CompoundTag getTagFromScope(Scriptable scope) {
+        CompoundTag tag = new CompoundTag();
         for (Object id : scope.getIds()) {
             if (!(id instanceof String))
                 continue;
@@ -19,7 +19,7 @@ public class ScopeTag {
         return tag;
     }
 
-    private static void saveProperty(MixinCompoundTag tag, String key, Object value) {
+    private static void saveProperty(CompoundTag tag, String key, Object value) {
         if (value instanceof String) {
             String strValue = (String) value;
             tag.put("String_" + key, strValue);
@@ -47,7 +47,7 @@ public class ScopeTag {
         }
     }
 
-    public static void loadScopeFromTag(Scriptable scope, MixinCompoundTag tag) {
+    public static void loadScopeFromTag(Scriptable scope, CompoundTag tag) {
         for (String varKey : tag.getKeys()) {
             String[] parts = varKey.split("_", 2);
             if (parts.length != 2) {

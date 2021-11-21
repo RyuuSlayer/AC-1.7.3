@@ -8,5 +8,5 @@ import net.minecraft.level.Level;
 
 public interface IItemReload {
 
-    public void reload(MixinItemInstance var1, MixinLevel var2, MixinPlayer var3);
+    public void reload(ItemInstance var1, Level var2, Player var3);
 }

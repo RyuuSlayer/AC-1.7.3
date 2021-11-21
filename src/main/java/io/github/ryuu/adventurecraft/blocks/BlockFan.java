@@ -13,7 +13,7 @@ import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
-public class BlockFan extends MixinTile {
+public class BlockFan extends Tile {
 
     private boolean fanOn;
 
@@ -36,7 +36,7 @@ public class BlockFan extends MixinTile {
     }
 
     @Override
-    public void onPlaced(MixinLevel level, int x, int y, int z, int facing) {
+    public void onPlaced(Level level, int x, int y, int z, int facing) {
         level.setTileMeta(x, y, z, facing);
         if (this.fanOn) {
             level.method_216(x, y, z, this.id, this.getTickrate());
@@ -48,14 +48,14 @@ public class BlockFan extends MixinTile {
     }
 
     @Override
-    public void onScheduledTick(MixinLevel level, int x, int y, int z, Random rand) {
+    public void onScheduledTick(Level level, int x, int y, int z, Random rand) {
         if (!this.fanOn) {
             return;
         }
         level.method_216(x, y, z, this.id, this.getTickrate());
         if (!DebugMode.active) {
             double dist;
-            MixinEntity e;
+            Entity e;
             int blockID;
             int direction = level.getTileMeta(x, y, z);
             int xOffset = 0;
@@ -111,21 +111,21 @@ public class BlockFan extends MixinTile {
                 }
             }
             Box aabb = this.getCollisionShape(level, x, y, z).add(xOffset, yOffset, zOffset);
-            List entities = level.getEntities(MixinEntity.class, aabb);
+            List entities = level.getEntities(Entity.class, aabb);
             for (Object obj : entities) {
-                e = (MixinEntity) obj;
-                if (e instanceof MixinFallingTile)
+                e = (Entity) obj;
+                if (e instanceof FallingTile)
                     continue;
                 dist = e.method_1350((double) x + 0.5, (double) y + 0.5, (double) z + 0.5) * (double) Math.abs((int) (xOffset + yOffset + zOffset)) / 4.0;
                 e.method_1322(0.07 * (double) xOffset / dist, 0.07 * (double) yOffset / dist, 0.07 * (double) zOffset / dist);
-                if (!(e instanceof MixinPlayer) || !((MixinPlayer) e).usingUmbrella())
+                if (!(e instanceof Player) || !((Player) e).usingUmbrella())
                     continue;
                 e.method_1322(0.07 * (double) xOffset / dist, 0.07 * (double) yOffset / dist, 0.07 * (double) zOffset / dist);
             }
             entities = Minecraft.minecraftInstance.particleManager.getEffectsWithinAABB(aabb);
             for (Object obj : entities) {
-                e = (MixinEntity) obj;
-                if (e instanceof MixinFallingTile)
+                e = (Entity) obj;
+                if (e instanceof FallingTile)
                     continue;
                 dist = e.method_1350((double) x + 0.5, (double) y + 0.5, (double) z + 0.5) * (double) Math.abs((int) (xOffset + yOffset + zOffset)) / 4.0;
                 e.method_1322(0.03 * (double) xOffset / dist, 0.03 * (double) yOffset / dist, 0.03 * (double) zOffset / dist);
@@ -135,14 +135,14 @@ public class BlockFan extends MixinTile {
     }
 
     @Override
-    public void randomDisplayTick(MixinLevel level, int x, int y, int z, Random rand) {
+    public void randomDisplayTick(Level level, int x, int y, int z, Random rand) {
         if (this.fanOn) {
             level.method_216(x, y, z, this.id, this.getTickrate());
         }
     }
 
     @Override
-    public boolean activate(MixinLevel level, int x, int y, int z, MixinPlayer player) {
+    public boolean activate(Level level, int x, int y, int z, Player player) {
         if (DebugMode.active) {
             level.setTileMeta(x, y, z, (level.getTileMeta(x, y, z) + 1) % 6);
             level.method_246(x, y, z);
@@ -152,7 +152,7 @@ public class BlockFan extends MixinTile {
     }
 
     @Override
-    public void method_1609(MixinLevel level, int x, int y, int z, int id) {
+    public void method_1609(Level level, int x, int y, int z, int id) {
         if (level.isClient) {
             return;
         }

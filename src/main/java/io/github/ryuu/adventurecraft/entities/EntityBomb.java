@@ -13,7 +13,7 @@ import net.minecraft.tile.Tile;
 import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.Box;
 
-public class EntityBomb extends MixinItemEntity {
+public class EntityBomb extends ItemEntity {
 
     private static final double BOMB_DAMAGE = 20.0;
 
@@ -25,16 +25,16 @@ public class EntityBomb extends MixinItemEntity {
 
     private int fuse;
 
-    private MixinEntity parentEntity;
+    private Entity parentEntity;
 
-    public EntityBomb(MixinLevel world) {
+    public EntityBomb(Level world) {
         super(world);
         this.setSize(0.5f, 0.5f);
-        this.item = new MixinItemInstance(Items.bomb);
+        this.item = new ItemInstance(Items.bomb);
         this.fuse = 45;
     }
 
-    public EntityBomb(MixinLevel world, MixinEntity entity) {
+    public EntityBomb(Level world, Entity entity) {
         this(world);
         this.parentEntity = entity;
         this.setRotation(entity.yaw, entity.pitch);
@@ -65,12 +65,12 @@ public class EntityBomb extends MixinItemEntity {
         }
     }
 
-    public static void explode(MixinEntity exploding, MixinEntity parentEntity, MixinLevel worldObj, double posX, double posY, double posZ) {
+    public static void explode(Entity exploding, Entity parentEntity, Level worldObj, double posX, double posY, double posZ) {
         exploding.remove();
         worldObj.playSound(posX, posY, posZ, "random.explode", 4.0f, 1.0f);
         List list = worldObj.getEntities(exploding, Box.getOrCreate(Math.floor((double) (posX - 5.0)), Math.floor((double) (posY - 5.0)), Math.floor((double) (posZ - 5.0)), Math.ceil((double) (posX + 5.0)), Math.ceil((double) (posY + 5.0)), Math.ceil((double) (posZ + 5.0))));
         for (int i = 0; i < list.size(); ++i) {
-            MixinEntity entity = (MixinEntity) list.get(i);
+            Entity entity = (Entity) list.get(i);
             double dist = entity.method_1350(posX, posY, posZ);
             if (!(dist < 5.0))
                 continue;
@@ -118,7 +118,7 @@ public class EntityBomb extends MixinItemEntity {
     }
 
     @Override
-    public boolean damage(MixinEntity target, int amount) {
+    public boolean damage(Entity target, int amount) {
         if (!this.removed) {
             this.method_1336();
             EntityBomb.explode(this, this.parentEntity, this.level, this.x, this.y, this.z);
@@ -127,18 +127,18 @@ public class EntityBomb extends MixinItemEntity {
     }
 
     @Override
-    public void writeCustomDataToTag(MixinCompoundTag tag) {
+    public void writeCustomDataToTag(CompoundTag tag) {
         super.writeCustomDataToTag(tag);
         tag.put("Fuse", (byte) this.fuse);
     }
 
     @Override
-    public void readCustomDataFromTag(MixinCompoundTag tag) {
+    public void readCustomDataFromTag(CompoundTag tag) {
         super.readCustomDataFromTag(tag);
         this.fuse = tag.getByte("Fuse");
     }
 
     @Override
-    public void onPlayerCollision(MixinPlayer entityplayer) {
+    public void onPlayerCollision(Player entityplayer) {
     }
 }

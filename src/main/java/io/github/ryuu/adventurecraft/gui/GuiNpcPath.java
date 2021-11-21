@@ -7,7 +7,7 @@ import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.OptionButton;
 
-public class GuiNpcPath extends MixinScreen {
+public class GuiNpcPath extends Screen {
 
     private TileEntityNpcPath path;
 

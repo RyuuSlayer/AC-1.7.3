@@ -5,6 +5,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
@@ -22,10 +23,11 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(LivingEntity.class)
-public abstract class MixinLivingEntity extends Entity {
+public abstract class MixinLivingEntity extends MixinEntity {
 
     @Shadow()
     public int field_1009 = 20;
+
 
     public float field_1010;
 

@@ -5,7 +5,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.io.CompoundTag;
 
-public class TileEntityStore extends MixinTileEntity {
+public class TileEntityStore extends TileEntity {
 
     public int buyItemID;
 
@@ -35,7 +35,7 @@ public class TileEntityStore extends MixinTileEntity {
     }
 
     @Override
-    public void readIdentifyingData(MixinCompoundTag tag) {
+    public void readIdentifyingData(CompoundTag tag) {
         super.readIdentifyingData(tag);
         this.buyItemID = tag.getInt("buyItemID");
         this.buyItemAmount = tag.getInt("buyItemAmount");
@@ -49,7 +49,7 @@ public class TileEntityStore extends MixinTileEntity {
     }
 
     @Override
-    public void writeIdentifyingData(MixinCompoundTag tag) {
+    public void writeIdentifyingData(CompoundTag tag) {
         super.writeIdentifyingData(tag);
         tag.put("buyItemID", this.buyItemID);
         tag.put("buyItemAmount", this.buyItemAmount);

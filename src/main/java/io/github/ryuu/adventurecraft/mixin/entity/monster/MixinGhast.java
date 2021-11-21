@@ -1,8 +1,10 @@
 package io.github.ryuu.adventurecraft.mixin.entity.monster;
 
+import io.github.ryuu.adventurecraft.mixin.entity.MixinFlyingEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.FlyingEntity;
 import net.minecraft.entity.MonsterEntityType;
+import net.minecraft.entity.monster.Ghast;
 import net.minecraft.entity.projectile.Snowball;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
@@ -14,7 +16,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(Ghast.class)
-public class MixinGhast extends FlyingEntity implements MonsterEntityType {
+public class MixinGhast extends MixinFlyingEntity implements MonsterEntityType {
 
     @Shadow()
     public int field_1376 = 0;
@@ -33,7 +35,8 @@ public class MixinGhast extends FlyingEntity implements MonsterEntityType {
 
     public int field_1381 = 0;
 
-    public MixinGhast(Level world) {
+    public
+MixinGhast(Level world) {
         super(world);
         this.texture = "/mob/ghast.png";
         this.setSize(4.0f, 4.0f);

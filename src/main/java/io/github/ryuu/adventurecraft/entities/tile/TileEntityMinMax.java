@@ -5,7 +5,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.io.CompoundTag;
 
-public class TileEntityMinMax extends MixinTileEntity {
+public class TileEntityMinMax extends TileEntity {
 
     public int minX;
 
@@ -20,7 +20,7 @@ public class TileEntityMinMax extends MixinTileEntity {
     public int maxZ;
 
     @Override
-    public void readIdentifyingData(MixinCompoundTag tag) {
+    public void readIdentifyingData(CompoundTag tag) {
         super.readIdentifyingData(tag);
         this.minX = tag.getInt("minX");
         this.minY = tag.getInt("minY");
@@ -31,7 +31,7 @@ public class TileEntityMinMax extends MixinTileEntity {
     }
 
     @Override
-    public void writeIdentifyingData(MixinCompoundTag tag) {
+    public void writeIdentifyingData(CompoundTag tag) {
         super.writeIdentifyingData(tag);
         tag.put("minX", this.minX);
         tag.put("minY", this.minY);

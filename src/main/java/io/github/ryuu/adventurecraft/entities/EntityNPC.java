@@ -31,13 +31,13 @@ public class EntityNPC extends EntityLivingScript {
 
     int ticksTillNewPath = 0;
 
-    MixinClass_61 pathToPoint = null;
+    class_61 pathToPoint = null;
 
-    MixinEntity entityToTrack;
+    Entity entityToTrack;
 
     private boolean ranOnCreate = false;
 
-    public EntityNPC(MixinLevel world) {
+    public EntityNPC(Level world) {
         super(world);
         this.texture = "/mob/char.png";
         this.npcName = "New NPC";
@@ -93,8 +93,8 @@ public class EntityNPC extends EntityLivingScript {
         }
     }
 
-    protected MixinEntity findPlayerToTrack() {
-        MixinPlayer entityplayer = this.level.getClosestPlayerTo(this, 16.0);
+    protected Entity findPlayerToTrack() {
+        Player entityplayer = this.level.getClosestPlayerTo(this, 16.0);
         if (entityplayer != null && this.method_928(entityplayer)) {
             return entityplayer;
         }
@@ -107,7 +107,7 @@ public class EntityNPC extends EntityLivingScript {
     }
 
     @Override
-    public void method_1353(MixinEntity entity) {
+    public void method_1353(Entity entity) {
         System.out.println("collision");
     }
 
@@ -116,7 +116,7 @@ public class EntityNPC extends EntityLivingScript {
     }
 
     @Override
-    public void writeCustomDataToTag(MixinCompoundTag tag) {
+    public void writeCustomDataToTag(CompoundTag tag) {
         super.writeCustomDataToTag(tag);
         tag.put("npcName", this.npcName);
         tag.put("chatMsg", this.chatMsg);
@@ -130,7 +130,7 @@ public class EntityNPC extends EntityLivingScript {
     }
 
     @Override
-    public void readCustomDataFromTag(MixinCompoundTag tag) {
+    public void readCustomDataFromTag(CompoundTag tag) {
         super.readCustomDataFromTag(tag);
         this.npcName = tag.getString("npcName");
         this.chatMsg = tag.getString("chatMsg");
@@ -152,7 +152,7 @@ public class EntityNPC extends EntityLivingScript {
     }
 
     @Override
-    public boolean interact(MixinPlayer entityplayer) {
+    public boolean interact(Player entityplayer) {
         if (super.interact(entityplayer)) {
             if (this.chatMsg != null && !this.chatMsg.equals((Object) "")) {
                 Minecraft.minecraftInstance.overlay.addChatMessage(String.format((String) "<%s> %s", (Object[]) new Object[] { this.npcName, this.chatMsg }));
@@ -163,7 +163,7 @@ public class EntityNPC extends EntityLivingScript {
     }
 
     @Override
-    public boolean damage(MixinEntity target, int amount) {
+    public boolean damage(Entity target, int amount) {
         if (this.isAttackable) {
             return super.damage(target, amount);
         }
@@ -171,7 +171,7 @@ public class EntityNPC extends EntityLivingScript {
     }
 
     @Override
-    public boolean attackEntityFromMulti(MixinEntity entity, int i) {
+    public boolean attackEntityFromMulti(Entity entity, int i) {
         if (this.isAttackable) {
             return super.attackEntityFromMulti(entity, i);
         }

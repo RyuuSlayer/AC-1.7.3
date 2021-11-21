@@ -11,7 +11,7 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
-public class TileEntityScript extends MixinTileEntity {
+public class TileEntityScript extends TileEntity {
 
     public boolean inited = false;
 
@@ -54,7 +54,7 @@ public class TileEntityScript extends MixinTileEntity {
     }
 
     @Override
-    public void readIdentifyingData(MixinCompoundTag tag) {
+    public void readIdentifyingData(CompoundTag tag) {
         super.readIdentifyingData(tag);
         this.onTriggerScriptFile = tag.getString("onTriggerScriptFile");
         this.onDetriggerScriptFile = tag.getString("onDetriggerScriptFile");
@@ -66,7 +66,7 @@ public class TileEntityScript extends MixinTileEntity {
     }
 
     @Override
-    public void writeIdentifyingData(MixinCompoundTag tag) {
+    public void writeIdentifyingData(CompoundTag tag) {
         super.writeIdentifyingData(tag);
         if (!this.onTriggerScriptFile.isEmpty()) {
             tag.put("onTriggerScriptFile", this.onTriggerScriptFile);

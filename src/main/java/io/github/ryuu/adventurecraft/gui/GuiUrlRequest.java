@@ -11,7 +11,7 @@ import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.OptionButton;
 
-public class GuiUrlRequest extends MixinScreen {
+public class GuiUrlRequest extends Screen {
 
     private String url;
 

@@ -5,7 +5,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.armour.ArmourItem;
 
-class ItemPegasusBoots extends MixinArmourItem {
+class ItemPegasusBoots extends ArmourItem {
 
     public ItemPegasusBoots(int id) {
         super(id, 0, 0, 3);
@@ -13,7 +13,7 @@ class ItemPegasusBoots extends MixinArmourItem {
     }
 
     @Override
-    public void onAddToSlot(MixinPlayer entityPlayer, int slot, int damage) {
+    public void onAddToSlot(Player entityPlayer, int slot, int damage) {
         super.onAddToSlot(entityPlayer, slot, damage);
         if (slot == 36) {
             entityPlayer.canWallJump = true;
@@ -22,7 +22,7 @@ class ItemPegasusBoots extends MixinArmourItem {
     }
 
     @Override
-    public void onRemovedFromSlot(MixinPlayer entityPlayer, int slot, int damage) {
+    public void onRemovedFromSlot(Player entityPlayer, int slot, int damage) {
         super.onRemovedFromSlot(entityPlayer, slot, damage);
         if (slot == 36) {
             entityPlayer.canWallJump = false;

@@ -17,23 +17,23 @@ public class UtilBullet {
 
     static Random rand = new Random();
 
-    public static void fireBullet(MixinLevel worldObj, MixinLivingEntity e, float spread, int damage) {
+    public static void fireBullet(Level worldObj, LivingEntity e, float spread, int damage) {
         HitResult hit = UtilBullet.findHit(worldObj, e, spread);
         if (hit != null) {
             Vec3f hitLoc = hit.field_1988;
             Minecraft.minecraftInstance.worldRenderer.addParticle("smoke", hitLoc.x, hitLoc.y, hitLoc.z, 0.0, 0.0, 0.0);
             if (hit.type == HitType.ENTITY) {
-                MixinEntity attacking = hit.field_1989;
+                Entity attacking = hit.field_1989;
                 attacking.attackEntityFromMulti(e, damage);
             }
         }
     }
 
-    public static HitResult rayTraceBlocks(MixinLevel worldObj, Vec3f start, Vec3f end) {
+    public static HitResult rayTraceBlocks(Level worldObj, Vec3f start, Vec3f end) {
         return worldObj.rayTraceBlocks2(start, end, false, false, false);
     }
 
-    static HitResult findHit(MixinLevel worldObj, MixinLivingEntity e, float spread) {
+    static HitResult findHit(Level worldObj, LivingEntity e, float spread) {
         double d = 256.0;
         Vec3f pos = e.method_931(1.0f);
         Vec3f lookDir = e.method_926(1.0f);
@@ -47,7 +47,7 @@ public class UtilBullet {
         return UtilBullet.rayTrace(worldObj, e, pos, hitLoc);
     }
 
-    public static HitResult rayTrace(MixinLevel worldObj, MixinEntity ignore, Vec3f startVec, Vec3f endVec) {
+    public static HitResult rayTrace(Level worldObj, Entity ignore, Vec3f startVec, Vec3f endVec) {
         Vec3f hitLoc = endVec;
         Vec3f temp = Vec3f.from(startVec.x, startVec.y, startVec.z);
         HitResult hit = UtilBullet.rayTraceBlocks(worldObj, temp, endVec);
@@ -55,14 +55,14 @@ public class UtilBullet {
             hitLoc = hit.field_1988;
         }
         double d = hitLoc.method_1294(startVec);
-        MixinEntity hitEntity = null;
+        Entity hitEntity = null;
         float f1 = 1.0f;
         Box aabb = Box.getOrCreate(Math.min((double) startVec.x, (double) hitLoc.x), Math.min((double) startVec.y, (double) hitLoc.y), Math.min((double) startVec.z, (double) hitLoc.z), Math.max((double) startVec.x, (double) hitLoc.x), Math.max((double) startVec.y, (double) hitLoc.y), Math.max((double) startVec.z, (double) hitLoc.z)).expand(f1, f1, f1);
         List list = worldObj.getEntities(ignore, aabb);
         double d2 = d;
         for (int i = 0; i < list.size(); ++i) {
             double d3;
-            MixinEntity entity = (MixinEntity) list.get(i);
+            Entity entity = (Entity) list.get(i);
             if (!entity.method_1356())
                 continue;
             float f2 = entity.method_1369();

@@ -5,7 +5,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.io.CompoundTag;
 
-public class TileEntityMessage extends MixinTileEntity {
+public class TileEntityMessage extends TileEntity {
 
     public String message = "";
 
@@ -15,14 +15,14 @@ public class TileEntityMessage extends MixinTileEntity {
     }
 
     @Override
-    public void readIdentifyingData(MixinCompoundTag tag) {
+    public void readIdentifyingData(CompoundTag tag) {
         super.readIdentifyingData(tag);
         this.message = tag.getString("message");
         this.sound = tag.getString("sound");
     }
 
     @Override
-    public void writeIdentifyingData(MixinCompoundTag tag) {
+    public void writeIdentifyingData(CompoundTag tag) {
         super.writeIdentifyingData(tag);
         if (this.message != null && !this.message.equals((Object) "")) {
             tag.put("message", this.message);

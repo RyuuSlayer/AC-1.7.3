@@ -10,19 +10,19 @@ import net.minecraft.tile.material.Material;
 
 public class Blocks {
 
-    public static final MixinTile lockedDoor = new BlockLockedDoor(150, 208, Items.doorKey.id).hardness(5.0f).sounds(Tile.WOOD_SOUNDS).name("lockedDoor").setTextureNum(3);
+    public static final Tile lockedDoor = new BlockLockedDoor(150, 208, Items.doorKey.id).hardness(5.0f).sounds(Tile.WOOD_SOUNDS).name("lockedDoor").setTextureNum(3);
 
-    public static final MixinTile lockedBossDoor;
+    public static final Tile lockedBossDoor;
 
-    public static final MixinTile newMobSpawner;
+    public static final Tile newMobSpawner;
 
-    public static final MixinTile spawnBlock;
+    public static final Tile spawnBlock;
 
     public static final BlockTrigger triggerBlock;
 
-    public static final MixinTile triggerDoor;
+    public static final Tile triggerDoor;
 
-    public static final MixinTile spikeBlock;
+    public static final Tile spikeBlock;
 
     public static final BlockTriggerInverter triggerInverter;
 
@@ -42,113 +42,113 @@ public class Blocks {
 
     public static final BlockMusic musicTriggered;
 
-    public static final MixinTile pushableBlock;
+    public static final Tile pushableBlock;
 
     public static final BlockTimer timer;
 
     public static final BlockMessage message;
 
-    public static final MixinTile fan;
+    public static final Tile fan;
 
-    public static final MixinTile camera;
+    public static final Tile camera;
 
-    public static final MixinTile lightBulb;
+    public static final Tile lightBulb;
 
-    public static final MixinTile fanOff;
+    public static final Tile fanOff;
 
-    public static final MixinTile script;
+    public static final Tile script;
 
-    public static final MixinTile store;
+    public static final Tile store;
 
-    public static final MixinTile effect;
+    public static final Tile effect;
 
-    public static final MixinTile darkness;
+    public static final Tile darkness;
 
-    public static final MixinTile triggerPushable;
+    public static final Tile triggerPushable;
 
-    public static final MixinTile storage;
+    public static final Tile storage;
 
-    public static final MixinTile healDamage;
+    public static final Tile healDamage;
 
-    public static final MixinTile teleport;
+    public static final Tile teleport;
 
-    public static final MixinTile url;
+    public static final Tile url;
 
-    public static final MixinTile npcPath;
+    public static final Tile npcPath;
 
-    public static final MixinTile pillarStone;
+    public static final Tile pillarStone;
 
-    public static final MixinTile pillarMetal;
+    public static final Tile pillarMetal;
 
-    public static final MixinTile plant1;
+    public static final Tile plant1;
 
-    public static final MixinTile trees;
+    public static final Tile trees;
 
-    public static final MixinTile glassBlocks;
+    public static final Tile glassBlocks;
 
-    public static final MixinTile cageBlocks;
+    public static final Tile cageBlocks;
 
-    public static final MixinTile stoneBlocks1;
+    public static final Tile stoneBlocks1;
 
-    public static final MixinTile stoneBlocks2;
+    public static final Tile stoneBlocks2;
 
-    public static final MixinTile stoneBlocks3;
+    public static final Tile stoneBlocks3;
 
-    public static final MixinTile woodBlocks;
+    public static final Tile woodBlocks;
 
-    public static final MixinTile halfSteps1;
+    public static final Tile halfSteps1;
 
-    public static final MixinTile halfSteps2;
+    public static final Tile halfSteps2;
 
-    public static final MixinTile halfSteps3;
+    public static final Tile halfSteps3;
 
-    public static final MixinTile tableBlocks;
+    public static final Tile tableBlocks;
 
-    public static final MixinTile chairBlocks1;
+    public static final Tile chairBlocks1;
 
-    public static final MixinTile chairBlocks2;
+    public static final Tile chairBlocks2;
 
-    public static final MixinTile chairBlocks3;
+    public static final Tile chairBlocks3;
 
-    public static final MixinTile chairBlocks4;
+    public static final Tile chairBlocks4;
 
-    public static final MixinTile ropes1;
+    public static final Tile ropes1;
 
-    public static final MixinTile ropes2;
+    public static final Tile ropes2;
 
-    public static final MixinTile chains;
+    public static final Tile chains;
 
-    public static final MixinTile ladders1;
+    public static final Tile ladders1;
 
-    public static final MixinTile ladders2;
+    public static final Tile ladders2;
 
-    public static final MixinTile ladders3;
+    public static final Tile ladders3;
 
-    public static final MixinTile ladders4;
+    public static final Tile ladders4;
 
-    public static final MixinTile lights1;
+    public static final Tile lights1;
 
-    public static final MixinTile plant2;
+    public static final Tile plant2;
 
-    public static final MixinTile plant3;
+    public static final Tile plant3;
 
-    public static final MixinTile overlay1;
+    public static final Tile overlay1;
 
-    public static final MixinTile stairs1;
+    public static final Tile stairs1;
 
-    public static final MixinTile stairs2;
+    public static final Tile stairs2;
 
-    public static final MixinTile stairs3;
+    public static final Tile stairs3;
 
-    public static final MixinTile stairs4;
+    public static final Tile stairs4;
 
-    public static final MixinTile slopes1;
+    public static final Tile slopes1;
 
-    public static final MixinTile slopes2;
+    public static final Tile slopes2;
 
-    public static final MixinTile slopes3;
+    public static final Tile slopes3;
 
-    public static final MixinTile slopes4;
+    public static final Tile slopes4;
 
     private Blocks() {
     }
@@ -276,7 +276,7 @@ public class Blocks {
         for (int i = 0; i < 256; ++i) {
             if (Tile.BY_ID[i] == null || ItemType.byId[i] != null)
                 continue;
-            ItemType.byId[i] = new MixinPlaceableTileItem(i - 256);
+            ItemType.byId[i] = new PlaceableTileItem(i - 256);
             Tile.BY_ID[i].afterTileItemCreated();
         }
     }

@@ -8,7 +8,7 @@ import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.OptionButton;
 import net.minecraft.level.Level;
 
-public class GuiRedstoneTrigger extends MixinScreen {
+public class GuiRedstoneTrigger extends Screen {
 
     private TileEntityRedstoneTrigger trigger;
 
@@ -18,9 +18,9 @@ public class GuiRedstoneTrigger extends MixinScreen {
 
     private int blockZ;
 
-    private MixinLevel world;
+    private Level world;
 
-    public GuiRedstoneTrigger(MixinLevel w, int x, int y, int z, TileEntityRedstoneTrigger triggerClicked) {
+    public GuiRedstoneTrigger(Level w, int x, int y, int z, TileEntityRedstoneTrigger triggerClicked) {
         this.world = w;
         this.blockX = x;
         this.blockY = y;
@@ -64,7 +64,7 @@ public class GuiRedstoneTrigger extends MixinScreen {
         super.render(mouseX, mouseY, delta);
     }
 
-    public static void showUI(MixinLevel w, int x, int y, int z, TileEntityRedstoneTrigger triggerClicked) {
+    public static void showUI(Level w, int x, int y, int z, TileEntityRedstoneTrigger triggerClicked) {
         Minecraft.minecraftInstance.openScreen(new GuiRedstoneTrigger(w, x, y, z, triggerClicked));
     }
 

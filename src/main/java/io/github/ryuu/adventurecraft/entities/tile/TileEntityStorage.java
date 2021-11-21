@@ -47,9 +47,9 @@ public class TileEntityStorage extends TileEntityMinMax {
                     int metadata = this.level.getTileMeta(x, y, z);
                     this.blockIDs[offset] = (byte) Chunk.translate128(blockID);
                     this.metadatas[offset] = (byte) metadata;
-                    MixinTileEntity te = this.level.getTileEntity(x, y, z);
+                    TileEntity te = this.level.getTileEntity(x, y, z);
                     if (te != null) {
-                        MixinCompoundTag tag = new MixinCompoundTag();
+                        CompoundTag tag = new CompoundTag();
                         te.writeIdentifyingData(tag);
                         this.tileEntities.add((Object) tag);
                     }
@@ -78,14 +78,14 @@ public class TileEntityStorage extends TileEntityMinMax {
                 }
             }
         }
-        for (MixinCompoundTag tag : this.tileEntities) {
-            MixinTileEntity te = TileEntity.method_1068(tag);
+        for (CompoundTag tag : this.tileEntities) {
+            TileEntity te = TileEntity.method_1068(tag);
             this.level.setTileEntity(te.x, te.y, te.z, te);
         }
     }
 
     @Override
-    public void readIdentifyingData(MixinCompoundTag tag) {
+    public void readIdentifyingData(CompoundTag tag) {
         super.readIdentifyingData(tag);
         if (tag.containsKey("blockIDs")) {
             this.blockIDs = tag.getByteArray("blockIDs");
@@ -106,7 +106,7 @@ public class TileEntityStorage extends TileEntityMinMax {
     }
 
     @Override
-    public void writeIdentifyingData(MixinCompoundTag tag) {
+    public void writeIdentifyingData(CompoundTag tag) {
         super.writeIdentifyingData(tag);
         if (this.blockIDs != null) {
             tag.put("blockIDs", this.blockIDs);
@@ -116,7 +116,7 @@ public class TileEntityStorage extends TileEntityMinMax {
         }
         if (!this.tileEntities.isEmpty()) {
             int i = 0;
-            for (MixinCompoundTag tag2 : this.tileEntities) {
+            for (CompoundTag tag2 : this.tileEntities) {
                 tag.put(String.format((String) "tile%d", (Object[]) new Object[] { i }), (AbstractTag) tag2);
                 ++i;
             }

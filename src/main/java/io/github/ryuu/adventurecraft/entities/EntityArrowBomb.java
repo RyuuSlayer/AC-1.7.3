@@ -10,19 +10,19 @@ import net.minecraft.level.Level;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.io.CompoundTag;
 
-public class EntityArrowBomb extends MixinArrow {
+public class EntityArrowBomb extends Arrow {
 
     private int fuse = 45;
 
-    public EntityArrowBomb(MixinLevel world) {
+    public EntityArrowBomb(Level world) {
         super(world);
     }
 
-    public EntityArrowBomb(MixinLevel world, double d, double d1, double d2) {
+    public EntityArrowBomb(Level world, double d, double d1, double d2) {
         super(world, d, d1, d2);
     }
 
-    public EntityArrowBomb(MixinLevel world, MixinLivingEntity entityliving) {
+    public EntityArrowBomb(Level world, LivingEntity entityliving) {
         super(world, entityliving);
     }
 
@@ -49,23 +49,23 @@ public class EntityArrowBomb extends MixinArrow {
     }
 
     @Override
-    public void writeCustomDataToTag(MixinCompoundTag tag) {
+    public void writeCustomDataToTag(CompoundTag tag) {
         super.writeCustomDataToTag(tag);
         tag.put("fuse", (byte) this.fuse);
     }
 
     @Override
-    public void readCustomDataFromTag(MixinCompoundTag tag) {
+    public void readCustomDataFromTag(CompoundTag tag) {
         super.readCustomDataFromTag(tag);
         this.fuse = tag.getByte("fuse") & 0xFF;
     }
 
     @Override
-    public void onPlayerCollision(MixinPlayer entityplayer) {
+    public void onPlayerCollision(Player entityplayer) {
     }
 
     @Override
-    public boolean damage(MixinEntity target, int amount) {
+    public boolean damage(Entity target, int amount) {
         if (!this.removed) {
             this.method_1336();
             EntityBomb.explode(this, this.field_1576, this.level, this.x, this.y, this.z);
