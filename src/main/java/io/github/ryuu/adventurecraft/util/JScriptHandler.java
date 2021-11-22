@@ -9,9 +9,6 @@ import java.io.Reader;
 import java.util.HashMap;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.level.Level;
-import net.minecraft.src.JScriptInfo;
 import org.mozilla.javascript.Scriptable;
 
 public class JScriptHandler {

@@ -1,12 +1,8 @@
 package io.github.ryuu.adventurecraft.items;
 
-import io.github.ryuu.adventurecraft.mixin.item.MixinItemInstance;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.entity.player.Player;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.item.ItemType;
-import net.minecraft.level.Level;
+import io.github.ryuu.adventurecraft.util.UtilBullet;
 
 class ItemPistol extends ItemType implements IItemReload {
 
@@ -17,7 +13,7 @@ class ItemPistol extends ItemType implements IItemReload {
     }
 
     @Override
-    public ItemInstance use(MixinItemInstance item, Level level, Player player) {
+    public ItemInstance use(ItemInstance item, Level level, Player player) {
         if (item.timeLeft > 0 || item.isReloading) {
             return item;
         }

@@ -1,18 +1,12 @@
 package io.github.ryuu.adventurecraft.mixin.tile;
 
 import java.util.Random;
-
-import io.github.ryuu.adventurecraft.blocks.Blocks;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.level.Level;
-import net.minecraft.tile.LadderTile;
-import net.minecraft.tile.Tile;
-import net.minecraft.tile.material.Material;
-import net.minecraft.util.maths.Box;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import io.github.ryuu.adventurecraft.blocks.Blocks;
 
 @Mixin(LadderTile.class)
 public class MixinLadderTile extends Tile {

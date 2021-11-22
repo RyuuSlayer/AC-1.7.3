@@ -2,13 +2,6 @@ package io.github.ryuu.adventurecraft.entities;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.Player;
-import net.minecraft.entity.projectile.Arrow;
-import net.minecraft.level.Level;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.io.CompoundTag;
 
 public class EntityArrowBomb extends Arrow {
 

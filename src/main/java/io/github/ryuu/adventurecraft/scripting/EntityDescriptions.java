@@ -10,7 +10,6 @@ import java.util.Properties;
 import java.util.Set;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.script.ScriptEntityDescription;
 
 public class EntityDescriptions {
 

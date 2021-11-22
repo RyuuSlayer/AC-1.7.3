@@ -2,7 +2,6 @@ package io.github.ryuu.adventurecraft.mixin.util.maths;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.util.maths.MathsHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;

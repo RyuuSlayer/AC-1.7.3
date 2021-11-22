@@ -3,10 +3,8 @@ package io.github.ryuu.adventurecraft.entities;
 import java.util.Random;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.monster.Skeleton;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.level.Level;
+import io.github.ryuu.adventurecraft.items.Items;
+import io.github.ryuu.adventurecraft.util.UtilBullet;
 
 public class EntitySkeletonShotgun extends Skeleton {
 

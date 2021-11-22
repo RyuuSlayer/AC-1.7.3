@@ -4,14 +4,6 @@ import java.util.List;
 import java.util.Random;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.level.Level;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.hit.HitType;
-import net.minecraft.util.maths.Box;
-import net.minecraft.util.maths.Vec3f;
 
 public class UtilBullet {
 

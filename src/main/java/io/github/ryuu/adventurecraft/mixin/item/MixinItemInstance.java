@@ -2,18 +2,10 @@ package io.github.ryuu.adventurecraft.mixin.item;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.Player;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.item.ItemType;
-import net.minecraft.level.Level;
-import net.minecraft.stat.Stats;
-import net.minecraft.tile.Tile;
-import net.minecraft.util.io.CompoundTag;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import io.github.ryuu.adventurecraft.items.Items;
 
 @Mixin(ItemInstance.class)
 public final class MixinItemInstance {

@@ -17,19 +17,12 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.GLAllocator;
-import net.minecraft.client.ImageDownloader;
-import net.minecraft.client.ImageProcessor;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.TexturePackManager;
-import net.minecraft.client.options.GameOptions;
-import net.minecraft.client.render.TextureBinder;
-import net.minecraft.client.resource.TexturePack;
-import net.minecraft.client.texture.TextureManager;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import io.github.ryuu.adventurecraft.util.Vec2;
+import io.github.ryuu.adventurecraft.util.TextureAnimated;
 
 @Mixin(TextureManager.class)
 public class MixinTextureManager {

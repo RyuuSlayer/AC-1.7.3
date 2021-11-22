@@ -3,31 +3,17 @@ package io.github.ryuu.adventurecraft.mixin.entity;
 import java.util.List;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.Player;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.level.Level;
-import net.minecraft.tile.LadderTile;
-import net.minecraft.tile.Tile;
-import net.minecraft.tile.TileSounds;
-import net.minecraft.tile.material.Material;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.io.CompoundTag;
-import net.minecraft.util.maths.Box;
-import net.minecraft.util.maths.MathsHelper;
-import net.minecraft.util.maths.Vec3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import io.github.ryuu.adventurecraft.items.Items;
+import io.github.ryuu.adventurecraft.blocks.Blocks;
 
 @Mixin(LivingEntity.class)
-public abstract class MixinLivingEntity extends MixinEntity {
+public abstract class MixinLivingEntity extends Entity {
 
     @Shadow()
     public int field_1009 = 20;
-
 
     public float field_1010;
 

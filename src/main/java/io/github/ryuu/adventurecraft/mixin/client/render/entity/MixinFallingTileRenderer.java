@@ -2,13 +2,6 @@ package io.github.ryuu.adventurecraft.mixin.client.render.entity;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.render.TileRenderer;
-import net.minecraft.client.render.entity.EntityRenderer;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.FallingTile;
-import net.minecraft.level.Level;
-import net.minecraft.tile.Tile;
-import net.minecraft.util.maths.MathsHelper;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;

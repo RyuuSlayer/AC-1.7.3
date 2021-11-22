@@ -3,10 +3,6 @@ package io.github.ryuu.adventurecraft.util;
 import java.util.LinkedList;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.level.Level;
-import net.minecraft.src.EditAction;
-import net.minecraft.util.io.CompoundTag;
 
 public class UndoStack {
 

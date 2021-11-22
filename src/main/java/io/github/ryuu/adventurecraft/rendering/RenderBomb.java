@@ -2,10 +2,6 @@ package io.github.ryuu.adventurecraft.rendering;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.entity.ItemRenderer;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.item.ItemInstance;
 import org.lwjgl.opengl.GL11;
 
 public class RenderBomb extends ItemRenderer {

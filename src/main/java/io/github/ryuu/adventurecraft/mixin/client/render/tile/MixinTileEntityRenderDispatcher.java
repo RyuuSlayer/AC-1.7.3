@@ -2,27 +2,24 @@ package io.github.ryuu.adventurecraft.mixin.client.render.tile;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import io.github.ryuu.adventurecraft.entities.tile.*;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.render.TextRenderer;
-import net.minecraft.client.render.entity.tile.MobSpawnerRenderer;
-import net.minecraft.client.render.entity.tile.PistonRenderer;
-import net.minecraft.client.render.entity.tile.SignRenderer;
-import net.minecraft.client.render.entity.tile.TileEntityRenderer;
-import net.minecraft.client.render.tile.TileEntityRenderDispatcher;
-import net.minecraft.client.texture.TextureManager;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.level.Level;
-import net.minecraft.tile.entity.MobSpawner;
-import net.minecraft.tile.entity.Piston;
-import net.minecraft.tile.entity.Sign;
-import net.minecraft.tile.entity.TileEntity;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityTrigger;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityMinMaxRenderer;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityTriggerInverter;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityTriggerMemory;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityTimer;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityRedstoneTrigger;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityMobSpawner;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityMobSpawnerRenderer;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityStore;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityStoreRenderer;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityEffect;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityEffectRenderer;
 
 @Mixin(TileEntityRenderDispatcher.class)
 public class MixinTileEntityRenderDispatcher {

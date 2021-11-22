@@ -2,7 +2,7 @@ package io.github.ryuu.adventurecraft.entities.tile;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.util.io.CompoundTag;
+import io.github.ryuu.adventurecraft.blocks.Blocks;
 
 public class TileEntityTriggerMemory extends TileEntityMinMax {
 

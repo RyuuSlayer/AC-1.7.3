@@ -2,11 +2,8 @@ package io.github.ryuu.adventurecraft.entities;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.monster.Zombie;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.level.Level;
+import io.github.ryuu.adventurecraft.items.Items;
+import io.github.ryuu.adventurecraft.util.UtilBullet;
 
 public class EntityZombiePistol extends Zombie {
 

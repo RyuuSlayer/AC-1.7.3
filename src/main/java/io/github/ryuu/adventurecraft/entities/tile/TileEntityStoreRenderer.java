@@ -2,14 +2,8 @@ package io.github.ryuu.adventurecraft.entities.tile;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
-import net.minecraft.client.render.entity.ItemRenderer;
-import net.minecraft.client.render.entity.tile.TileEntityRenderer;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.tile.Tile;
-import net.minecraft.tile.entity.TileEntity;
 import org.lwjgl.opengl.GL11;
+import io.github.ryuu.adventurecraft.util.DebugMode;
 
 public class TileEntityStoreRenderer extends TileEntityRenderer {
 

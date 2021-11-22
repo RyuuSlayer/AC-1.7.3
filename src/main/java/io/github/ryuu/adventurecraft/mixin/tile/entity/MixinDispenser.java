@@ -1,13 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.tile.entity;
 
 import java.util.Random;
-import net.minecraft.entity.player.Player;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.tile.entity.Dispenser;
-import net.minecraft.tile.entity.TileEntity;
-import net.minecraft.util.io.CompoundTag;
-import net.minecraft.util.io.ListTag;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;

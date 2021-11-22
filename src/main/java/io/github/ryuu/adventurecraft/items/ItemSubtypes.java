@@ -2,8 +2,6 @@ package io.github.ryuu.adventurecraft.items;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.item.PlaceableTileItem;
-import net.minecraft.tile.Tile;
 
 public class ItemSubtypes extends PlaceableTileItem {
 

@@ -2,7 +2,7 @@ package io.github.ryuu.adventurecraft.scripting;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.level.Level;
+import io.github.ryuu.adventurecraft.gui.GuiUrlRequest;
 
 public class ScriptScript {
 

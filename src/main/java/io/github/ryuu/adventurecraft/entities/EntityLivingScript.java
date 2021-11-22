@@ -2,22 +2,16 @@ package io.github.ryuu.adventurecraft.entities;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.class_61;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.Player;
-import net.minecraft.level.Level;
-import net.minecraft.script.EntityDescriptions;
-import net.minecraft.script.ScopeTag;
-import net.minecraft.script.ScriptEntity;
-import net.minecraft.script.ScriptEntityDescription;
-import net.minecraft.util.io.AbstractTag;
-import net.minecraft.util.io.CompoundTag;
-import net.minecraft.util.maths.MathsHelper;
-import net.minecraft.util.maths.Vec3f;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
+import io.github.ryuu.adventurecraft.scripting.ScriptEntity;
+import io.github.ryuu.adventurecraft.scripting.EntityDescriptions;
+import io.github.ryuu.adventurecraft.scripting.ScopeTag;
+import io.github.ryuu.adventurecraft.util.CoordBlock;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityNpcPath;
+import io.github.ryuu.adventurecraft.scripting.ScriptEntityDescription;
+import io.github.ryuu.adventurecraft.util.IEntityPather;
 
 public class EntityLivingScript extends LivingEntity implements IEntityPather {
 

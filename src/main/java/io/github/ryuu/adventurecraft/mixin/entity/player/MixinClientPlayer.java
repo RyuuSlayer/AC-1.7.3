@@ -1,40 +1,17 @@
 package io.github.ryuu.adventurecraft.mixin.entity.player;
 
-import io.github.ryuu.adventurecraft.gui.GuiPalette;
-import io.github.ryuu.adventurecraft.gui.GuiScriptStats;
-import io.github.ryuu.adventurecraft.util.DebugMode;
-import io.github.ryuu.adventurecraft.util.InventoryDebug;
-import io.github.ryuu.adventurecraft.util.JScriptInfo;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.achievement.Achievement;
-import net.minecraft.achievement.Achievements;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.PlayerKeypressManager;
-import net.minecraft.client.gui.screen.EditSignScreen;
-import net.minecraft.client.gui.screen.container.CraftingScreen;
-import net.minecraft.client.gui.screen.container.DispenserScreen;
-import net.minecraft.client.gui.screen.container.DoubleChestScreen;
-import net.minecraft.client.gui.screen.container.FurnaceScreen;
-import net.minecraft.client.particle.EntityCollisionParticle;
-import net.minecraft.client.util.Session;
-import net.minecraft.client.util.Smoother;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.FurnaceEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.ClientPlayer;
-import net.minecraft.entity.player.Player;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.level.Level;
-import net.minecraft.stat.Stat;
-import net.minecraft.tile.FluidTile;
-import net.minecraft.tile.entity.Dispenser;
-import net.minecraft.tile.entity.Sign;
-import net.minecraft.util.io.CompoundTag;
-import net.minecraft.util.maths.MathsHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import io.github.ryuu.adventurecraft.util.DebugMode;
+import io.github.ryuu.adventurecraft.gui.GuiScriptStats;
+import io.github.ryuu.adventurecraft.util.InventoryDebug;
+import io.github.ryuu.adventurecraft.gui.GuiPalette;
+import io.github.ryuu.adventurecraft.gui.GuiWorldConfig;
+import io.github.ryuu.adventurecraft.gui.GuiMapEditHUD;
+import io.github.ryuu.adventurecraft.util.JScriptInfo;
 
 @Mixin(ClientPlayer.class)
 public class MixinClientPlayer extends Player {

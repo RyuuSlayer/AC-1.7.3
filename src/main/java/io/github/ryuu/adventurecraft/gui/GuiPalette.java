@@ -2,10 +2,8 @@ package io.github.ryuu.adventurecraft.gui;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gui.screen.container.DoubleChestScreen;
-import net.minecraft.client.gui.widgets.Button;
-import net.minecraft.inventory.Inventory;
 import org.lwjgl.opengl.GL11;
+import io.github.ryuu.adventurecraft.util.InventoryDebug;
 
 public class GuiPalette extends DoubleChestScreen {
 

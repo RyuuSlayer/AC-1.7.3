@@ -2,12 +2,9 @@ package io.github.ryuu.adventurecraft.blocks;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.entity.player.Player;
-import net.minecraft.level.Level;
-import net.minecraft.tile.TileWithEntity;
-import net.minecraft.tile.entity.TileEntity;
-import net.minecraft.tile.material.Material;
-import net.minecraft.util.maths.Box;
+import io.github.ryuu.adventurecraft.util.DebugMode;
+import io.github.ryuu.adventurecraft.gui.GuiTree;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityTree;
 
 public class BlockTree extends TileWithEntity implements IBlockColor {
 

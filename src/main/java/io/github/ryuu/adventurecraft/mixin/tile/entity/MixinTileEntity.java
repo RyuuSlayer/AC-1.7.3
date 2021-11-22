@@ -2,19 +2,31 @@ package io.github.ryuu.adventurecraft.mixin.tile.entity;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import io.github.ryuu.adventurecraft.entities.tile.*;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.entity.FurnaceEntity;
-import net.minecraft.level.Level;
-import net.minecraft.packet.AbstractPacket;
-import net.minecraft.tile.Tile;
-import net.minecraft.tile.entity.*;
-import net.minecraft.util.io.CompoundTag;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityMobSpawner;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityTrigger;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityTriggerInverter;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityTriggerMemory;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityRedstoneTrigger;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityWeather;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityMusic;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityTimer;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityMessage;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityCamera;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityTriggerPushable;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityStorage;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityHealDamage;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityTeleport;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityTree;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityScript;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityStore;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityEffect;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityUrl;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityNpcPath;
 
 @Mixin(TileEntity.class)
 public class MixinTileEntity {

@@ -9,8 +9,6 @@ import java.util.Map;
 import java.util.Set;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.src.NBTBase;
-import net.minecraft.util.io.*;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;

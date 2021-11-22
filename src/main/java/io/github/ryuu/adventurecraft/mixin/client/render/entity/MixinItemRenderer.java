@@ -3,22 +3,11 @@ package io.github.ryuu.adventurecraft.mixin.client.render.entity;
 import java.util.Random;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.TextRenderer;
-import net.minecraft.client.render.TileRenderer;
-import net.minecraft.client.render.entity.EntityRenderer;
-import net.minecraft.client.render.entity.ItemRenderer;
-import net.minecraft.client.texture.TextureManager;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.item.ItemType;
-import net.minecraft.tile.Tile;
-import net.minecraft.util.maths.MathsHelper;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import io.github.ryuu.adventurecraft.items.IItemReload;
 
 @Mixin(ItemRenderer.class)
 public class MixinItemRenderer extends EntityRenderer {

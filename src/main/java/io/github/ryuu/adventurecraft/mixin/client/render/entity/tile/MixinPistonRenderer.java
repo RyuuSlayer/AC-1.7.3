@@ -2,17 +2,6 @@ package io.github.ryuu.adventurecraft.mixin.client.render.entity.tile;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.render.RenderHelper;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.TileRenderer;
-import net.minecraft.client.render.entity.tile.PistonRenderer;
-import net.minecraft.client.render.entity.tile.TileEntityRenderer;
-import net.minecraft.level.Level;
-import net.minecraft.tile.PistonTile;
-import net.minecraft.tile.Tile;
-import net.minecraft.tile.entity.Piston;
-import net.minecraft.tile.entity.TileEntity;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;

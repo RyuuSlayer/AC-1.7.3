@@ -2,14 +2,6 @@ package io.github.ryuu.adventurecraft.mixin.entity.monster;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.Lightning;
-import net.minecraft.entity.monster.Creeper;
-import net.minecraft.entity.monster.Monster;
-import net.minecraft.entity.monster.Skeleton;
-import net.minecraft.item.ItemType;
-import net.minecraft.level.Level;
-import net.minecraft.util.io.CompoundTag;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;

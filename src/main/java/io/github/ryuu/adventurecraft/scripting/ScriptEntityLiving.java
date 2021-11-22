@@ -2,12 +2,7 @@ package io.github.ryuu.adventurecraft.scripting;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.script.ScriptEntity;
-import net.minecraft.script.ScriptItem;
-import net.minecraft.script.ScriptVec3;
-import net.minecraft.util.maths.Vec3f;
+import io.github.ryuu.adventurecraft.util.UtilBullet;
 
 public class ScriptEntityLiving extends ScriptEntity {
 

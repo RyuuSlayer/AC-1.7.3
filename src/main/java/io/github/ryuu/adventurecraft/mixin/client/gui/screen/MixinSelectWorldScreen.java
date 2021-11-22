@@ -7,21 +7,10 @@ import java.util.Date;
 import java.util.List;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.class_520;
-import net.minecraft.class_97;
-import net.minecraft.client.gui.Screen;
-import net.minecraft.client.gui.screen.DeleteConfirmationScreen;
-import net.minecraft.client.gui.screen.EditLevelScreen;
-import net.minecraft.client.gui.screen.SelectWorldScreen;
-import net.minecraft.client.gui.widgets.Button;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.resource.language.TranslationStorage;
-import net.minecraft.level.storage.LevelMetadata;
-import net.minecraft.level.storage.LevelStorage;
-import net.minecraft.util.maths.MathsHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import io.github.ryuu.adventurecraft.gui.GuiMapSelect;
 
 @Mixin(SelectWorldScreen.class)
 public class MixinSelectWorldScreen extends Screen {

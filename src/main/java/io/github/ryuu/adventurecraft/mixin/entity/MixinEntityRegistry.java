@@ -2,35 +2,24 @@ package io.github.ryuu.adventurecraft.mixin.entity;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import io.github.ryuu.adventurecraft.entities.*;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.entity.*;
-import net.minecraft.entity.animal.Chicken;
-import net.minecraft.entity.animal.Cow;
-import net.minecraft.entity.animal.Pig;
-import net.minecraft.entity.animal.Sheep;
-import net.minecraft.entity.animal.Squid;
-import net.minecraft.entity.animal.Wolf;
-import net.minecraft.entity.monster.Creeper;
-import net.minecraft.entity.monster.Ghast;
-import net.minecraft.entity.monster.Giant;
-import net.minecraft.entity.monster.Monster;
-import net.minecraft.entity.monster.Skeleton;
-import net.minecraft.entity.monster.Slime;
-import net.minecraft.entity.monster.Spider;
-import net.minecraft.entity.monster.Zombie;
-import net.minecraft.entity.monster.ZombiePigman;
-import net.minecraft.entity.projectile.Arrow;
-import net.minecraft.entity.projectile.Snowball;
-import net.minecraft.entity.projectile.ThrownEgg;
-import net.minecraft.entity.projectile.ThrownSnowball;
-import net.minecraft.level.Level;
-import net.minecraft.util.io.CompoundTag;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import io.github.ryuu.adventurecraft.entities.EntitySkeletonSword;
+import io.github.ryuu.adventurecraft.entities.EntitySkeletonBoss;
+import io.github.ryuu.adventurecraft.entities.EntityBat;
+import io.github.ryuu.adventurecraft.entities.EntityRat;
+import io.github.ryuu.adventurecraft.entities.EntityNPC;
+import io.github.ryuu.adventurecraft.entities.EntitySkeletonRifle;
+import io.github.ryuu.adventurecraft.entities.EntitySkeletonShotgun;
+import io.github.ryuu.adventurecraft.entities.EntityZombiePistol;
+import io.github.ryuu.adventurecraft.entities.EntityBomb;
+import io.github.ryuu.adventurecraft.entities.EntityBoomerang;
+import io.github.ryuu.adventurecraft.entities.EntityArrowBomb;
+import io.github.ryuu.adventurecraft.entities.EntityHookshot;
+import io.github.ryuu.adventurecraft.entities.EntityLivingScript;
 
 @Mixin(EntityRegistry.class)
 public class MixinEntityRegistry {

@@ -2,25 +2,19 @@ package io.github.ryuu.adventurecraft.mixin.entity;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.entity.FlyingEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.level.Level;
-import net.minecraft.tile.Tile;
-import net.minecraft.util.maths.MathsHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(FlyingEntity.class)
-public class MixinFlyingEntity extends MixinLivingEntity {
+public class MixinFlyingEntity extends LivingEntity {
 
+    @Shadow()
     public int attackStrength = 1;
 
     public MixinFlyingEntity(Level world) {
         super(world);
     }
-
-
 
     /**
      * @author Ryuu, TechPizza, Phil

@@ -2,12 +2,6 @@ package io.github.ryuu.adventurecraft.mixin.client.gui.screen;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gui.Screen;
-import net.minecraft.client.gui.screen.*;
-import net.minecraft.client.gui.widgets.Button;
-import net.minecraft.client.resource.language.I18n;
-import net.minecraft.stat.Stats;
-import net.minecraft.util.maths.MathsHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;

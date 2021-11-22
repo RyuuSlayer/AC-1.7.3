@@ -2,10 +2,6 @@ package io.github.ryuu.adventurecraft.scripting;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.script.ScriptInventory;
-import net.minecraft.script.ScriptItem;
 
 public class ScriptInventoryPlayer extends ScriptInventory {
 

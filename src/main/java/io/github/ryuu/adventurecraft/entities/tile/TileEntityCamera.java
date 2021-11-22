@@ -2,9 +2,8 @@ package io.github.ryuu.adventurecraft.entities.tile;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.tile.entity.TileEntity;
-import net.minecraft.util.io.CompoundTag;
+import io.github.ryuu.adventurecraft.util.CutsceneCamera;
+import io.github.ryuu.adventurecraft.util.CutsceneCameraPoint;
 
 public class TileEntityCamera extends TileEntity {
 

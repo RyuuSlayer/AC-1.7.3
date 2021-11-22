@@ -3,10 +3,6 @@ package io.github.ryuu.adventurecraft.gui;
 import java.io.File;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gui.Screen;
-import net.minecraft.client.gui.widgets.Button;
-import net.minecraft.client.gui.widgets.Textbox;
-import net.minecraft.level.Level;
 
 public class GuiWorldConfig extends Screen {
 

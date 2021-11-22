@@ -2,8 +2,6 @@ package io.github.ryuu.adventurecraft.scripting;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.entity.monster.Slime;
-import net.minecraft.script.ScriptEntityLiving;
 
 public class ScriptEntitySlime extends ScriptEntityLiving {
 

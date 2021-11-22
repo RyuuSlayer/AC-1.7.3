@@ -3,23 +3,10 @@ package io.github.ryuu.adventurecraft.mixin.entity.projectile;
 import java.util.List;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.Player;
-import net.minecraft.entity.projectile.Arrow;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.item.ItemType;
-import net.minecraft.level.Level;
-import net.minecraft.tile.LadderTile;
-import net.minecraft.tile.Tile;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.io.CompoundTag;
-import net.minecraft.util.maths.Box;
-import net.minecraft.util.maths.MathsHelper;
-import net.minecraft.util.maths.Vec3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import io.github.ryuu.adventurecraft.blocks.Blocks;
 
 @Mixin(Arrow.class)
 public class MixinArrow extends Entity {

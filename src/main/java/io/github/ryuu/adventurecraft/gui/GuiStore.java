@@ -2,12 +2,6 @@ package io.github.ryuu.adventurecraft.gui;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gui.Screen;
-import net.minecraft.client.render.RenderHelper;
-import net.minecraft.client.render.entity.ItemRenderer;
-import net.minecraft.client.resource.language.TranslationStorage;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.item.ItemType;
 import org.lwjgl.opengl.GL11;
 
 public class GuiStore extends Screen {

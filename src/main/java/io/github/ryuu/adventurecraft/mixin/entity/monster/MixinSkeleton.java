@@ -2,22 +2,12 @@ package io.github.ryuu.adventurecraft.mixin.entity.monster;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.monster.Monster;
-import net.minecraft.entity.monster.Skeleton;
-import net.minecraft.entity.projectile.Arrow;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.item.ItemType;
-import net.minecraft.level.Level;
-import net.minecraft.util.io.CompoundTag;
-import net.minecraft.util.maths.MathsHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(Skeleton.class)
-public class MixinSkeleton extends MixinMonster {
+public class MixinSkeleton extends Monster {
 
     @Shadow()
     private static final ItemInstance field_302 = new ItemInstance(ItemType.bow, 1);

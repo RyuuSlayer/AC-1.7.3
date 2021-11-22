@@ -4,21 +4,12 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.TileRenderer;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.level.Level;
-import net.minecraft.tile.Tile;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.hit.HitType;
-import net.minecraft.util.maths.Box;
-import net.minecraft.util.maths.Vec3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 import org.lwjgl.util.glu.GLU;
+import io.github.ryuu.adventurecraft.items.ItemCursor;
 
 class MapEditing {
 

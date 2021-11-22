@@ -3,7 +3,6 @@ package io.github.ryuu.adventurecraft.util;
 import java.awt.image.BufferedImage;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
 import org.lwjgl.opengl.GL11;
 
 public class MapInfo {

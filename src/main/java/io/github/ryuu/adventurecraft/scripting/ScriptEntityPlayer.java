@@ -2,9 +2,6 @@ package io.github.ryuu.adventurecraft.scripting;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.entity.player.Player;
-import net.minecraft.script.ScriptEntityLiving;
-import net.minecraft.script.ScriptInventoryPlayer;
 
 public class ScriptEntityPlayer extends ScriptEntityLiving {
 

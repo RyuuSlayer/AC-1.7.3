@@ -3,10 +3,9 @@ package io.github.ryuu.adventurecraft.gui;
 import java.util.ArrayList;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Screen;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
+import io.github.ryuu.adventurecraft.util.MusicPlayer;
 
 public class GuiMusicSheet extends Screen {
 

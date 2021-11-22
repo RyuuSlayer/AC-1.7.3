@@ -2,8 +2,8 @@ package io.github.ryuu.adventurecraft.entities.tile;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.tile.entity.TileEntity;
-import net.minecraft.util.io.CompoundTag;
+import io.github.ryuu.adventurecraft.items.Items;
+import io.github.ryuu.adventurecraft.util.TriggerArea;
 
 public class TileEntityStore extends TileEntity {
 

@@ -1,50 +1,15 @@
 package io.github.ryuu.adventurecraft.mixin.entity.player;
 
 import java.util.List;
-
-import io.github.ryuu.adventurecraft.items.Items;
-import io.github.ryuu.adventurecraft.util.PlayerTorch;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.achievement.Achievements;
-import net.minecraft.container.Container;
-import net.minecraft.entity.Boat;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.FishHook;
-import net.minecraft.entity.FurnaceEntity;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Minecart;
-import net.minecraft.entity.animal.Pig;
-import net.minecraft.entity.animal.Wolf;
-import net.minecraft.entity.monster.Creeper;
-import net.minecraft.entity.monster.Ghast;
-import net.minecraft.entity.monster.Monster;
-import net.minecraft.entity.player.Player;
-import net.minecraft.entity.player.PlayerContainer;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.projectile.Arrow;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.item.ItemType;
-import net.minecraft.level.Level;
-import net.minecraft.level.source.LevelSource;
-import net.minecraft.stat.Stat;
-import net.minecraft.stat.Stats;
-import net.minecraft.tile.BedTile;
-import net.minecraft.tile.Tile;
-import net.minecraft.tile.entity.Dispenser;
-import net.minecraft.tile.entity.Sign;
-import net.minecraft.tile.material.Material;
-import net.minecraft.util.SleepStatus;
-import net.minecraft.util.Vec3i;
-import net.minecraft.util.io.CompoundTag;
-import net.minecraft.util.io.ListTag;
-import net.minecraft.util.maths.Box;
-import net.minecraft.util.maths.MathsHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import io.github.ryuu.adventurecraft.blocks.Blocks;
+import io.github.ryuu.adventurecraft.util.PlayerTorch;
+import io.github.ryuu.adventurecraft.items.Items;
+import io.github.ryuu.adventurecraft.util.DebugMode;
 
 @Mixin(Player.class)
 public abstract class MixinPlayer extends LivingEntity {

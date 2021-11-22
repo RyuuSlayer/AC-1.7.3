@@ -2,10 +2,9 @@ package io.github.ryuu.adventurecraft.entities.tile;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.render.entity.tile.TileEntityRenderer;
-import net.minecraft.tile.Tile;
-import net.minecraft.tile.entity.TileEntity;
 import org.lwjgl.opengl.GL11;
+import io.github.ryuu.adventurecraft.util.DebugMode;
+import io.github.ryuu.adventurecraft.util.Coord;
 
 public class TileEntityMobSpawnerRenderer extends TileEntityRenderer {
 

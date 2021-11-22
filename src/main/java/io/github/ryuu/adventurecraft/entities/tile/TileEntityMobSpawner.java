@@ -6,24 +6,14 @@ import java.util.List;
 import java.util.Random;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityRegistry;
-import net.minecraft.entity.FallingTile;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Minecart;
-import net.minecraft.entity.animal.Wolf;
-import net.minecraft.entity.monster.Skeleton;
-import net.minecraft.entity.monster.Slime;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.item.ItemType;
-import net.minecraft.script.ScopeTag;
-import net.minecraft.script.ScriptEntity;
-import net.minecraft.tile.Tile;
-import net.minecraft.util.io.AbstractTag;
-import net.minecraft.util.io.CompoundTag;
 import org.mozilla.javascript.Scriptable;
+import io.github.ryuu.adventurecraft.items.ItemCursor;
+import io.github.ryuu.adventurecraft.scripting.ScopeTag;
+import io.github.ryuu.adventurecraft.scripting.ScriptEntity;
+import io.github.ryuu.adventurecraft.util.Coord;
+import io.github.ryuu.adventurecraft.entities.EntitySkeletonSword;
+import io.github.ryuu.adventurecraft.entities.EntityLivingScript;
+import io.github.ryuu.adventurecraft.util.TriggerArea;
 
 public class TileEntityMobSpawner extends TileEntityScript {
 

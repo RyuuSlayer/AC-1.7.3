@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
 
 public class AdventureCraft {
 

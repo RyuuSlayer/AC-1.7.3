@@ -4,11 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Screen;
-import net.minecraft.client.gui.widgets.Button;
-import net.minecraft.item.ItemType;
-import net.minecraft.script.EntityDescriptions;
+import io.github.ryuu.adventurecraft.scripting.EntityDescriptions;
+import io.github.ryuu.adventurecraft.items.Items;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityMobSpawner;
 
 public class GuiMobSpawner extends Screen {
 

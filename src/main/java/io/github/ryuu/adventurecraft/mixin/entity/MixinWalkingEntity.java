@@ -1,24 +1,16 @@
 package io.github.ryuu.adventurecraft.mixin.entity;
 
-import io.github.ryuu.adventurecraft.util.IEntityPather;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.api.EnvironmentInterface;
 import net.fabricmc.api.EnvironmentInterfaces;
-import net.minecraft.class_61;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.WalkingEntity;
-import net.minecraft.level.Level;
-import net.minecraft.util.io.CompoundTag;
-import net.minecraft.util.maths.MathsHelper;
-import net.minecraft.util.maths.Vec3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import io.github.ryuu.adventurecraft.util.IEntityPather;
 
 @Mixin(WalkingEntity.class)
-public class MixinWalkingEntity extends MixinLivingEntity implements IEntityPather {
+public class MixinWalkingEntity extends LivingEntity implements IEntityPather {
 
     @Shadow()
     private class_61 field_661;
@@ -35,11 +27,6 @@ public class MixinWalkingEntity extends MixinLivingEntity implements IEntityPath
 
     public MixinWalkingEntity(Level world) {
         super(world);
-    }
-
-    @Override
-    protected void initDataTracker() {
-
     }
 
     /**

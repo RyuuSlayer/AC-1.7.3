@@ -2,11 +2,6 @@ package io.github.ryuu.adventurecraft.mixin.client.particle;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.TileParticle;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.level.Level;
-import net.minecraft.tile.Tile;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;

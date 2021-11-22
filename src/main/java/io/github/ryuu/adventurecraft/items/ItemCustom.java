@@ -9,15 +9,10 @@ import java.util.ArrayList;
 import java.util.Properties;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.Player;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.item.ItemType;
-import net.minecraft.level.Level;
-import net.minecraft.script.ScriptItem;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
+import io.github.ryuu.adventurecraft.scripting.ScriptItem;
 
 public class ItemCustom extends ItemType {
 

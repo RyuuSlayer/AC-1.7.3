@@ -4,17 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.gui.widgets.Button;
-import net.minecraft.client.render.RenderHelper;
-import net.minecraft.client.render.TextRenderer;
-import net.minecraft.client.render.entity.ItemRenderer;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.src.Block;
-import net.minecraft.src.GuiButton;
-import net.minecraft.tile.Tile;
 import org.lwjgl.opengl.GL11;
+import io.github.ryuu.adventurecraft.util.DebugMode;
 
 class GuiEditPalette extends DrawableHelper {
 

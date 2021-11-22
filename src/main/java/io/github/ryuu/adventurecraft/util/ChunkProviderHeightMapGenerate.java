@@ -3,18 +3,6 @@ package io.github.ryuu.adventurecraft.util;
 import java.util.Random;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.level.Level;
-import net.minecraft.level.biome.Biome;
-import net.minecraft.level.chunk.Chunk;
-import net.minecraft.level.source.LevelSource;
-import net.minecraft.level.structure.CactusPatch;
-import net.minecraft.level.structure.Feature;
-import net.minecraft.level.structure.MushroomPatch;
-import net.minecraft.tile.SandTile;
-import net.minecraft.tile.Tile;
-import net.minecraft.tile.material.Material;
-import net.minecraft.util.ProgressListener;
-import net.minecraft.util.noise.PerlinOctaveNoise;
 
 public class ChunkProviderHeightMapGenerate implements LevelSource {
 

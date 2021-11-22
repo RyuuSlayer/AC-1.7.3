@@ -2,11 +2,8 @@ package io.github.ryuu.adventurecraft.blocks;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.item.ItemType;
-import net.minecraft.item.PlaceableTileItem;
-import net.minecraft.level.chunk.Chunk;
-import net.minecraft.tile.Tile;
-import net.minecraft.tile.material.Material;
+import io.github.ryuu.adventurecraft.items.Items;
+import io.github.ryuu.adventurecraft.items.ItemSubtypes;
 
 public class Blocks {
 

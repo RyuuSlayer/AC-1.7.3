@@ -2,19 +2,11 @@ package io.github.ryuu.adventurecraft.mixin.entity.player;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.Player;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.item.ItemType;
-import net.minecraft.item.armour.ArmourItem;
-import net.minecraft.tile.Tile;
-import net.minecraft.util.io.CompoundTag;
-import net.minecraft.util.io.ListTag;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import io.github.ryuu.adventurecraft.items.Items;
+import io.github.ryuu.adventurecraft.items.IItemReload;
 
 @Mixin(PlayerInventory.class)
 public class MixinPlayerInventory implements Inventory {

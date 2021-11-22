@@ -2,9 +2,6 @@ package io.github.ryuu.adventurecraft.util;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.level.Level;
-import net.minecraft.tile.Tile;
 
 public class PlayerTorch {
 

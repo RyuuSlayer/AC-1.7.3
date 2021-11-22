@@ -2,10 +2,8 @@ package io.github.ryuu.adventurecraft.gui;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Screen;
-import net.minecraft.client.gui.widgets.Button;
-import net.minecraft.client.gui.widgets.OptionButton;
+import io.github.ryuu.adventurecraft.items.ItemCursor;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityTriggerPushable;
 
 public class GuiTriggerPushable extends Screen {
 

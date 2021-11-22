@@ -2,11 +2,9 @@ package io.github.ryuu.adventurecraft.gui;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Screen;
-import net.minecraft.client.gui.widgets.Button;
-import net.minecraft.level.Level;
 import org.lwjgl.input.Keyboard;
+import io.github.ryuu.adventurecraft.util.DebugMode;
+import io.github.ryuu.adventurecraft.util.MapEditing;
 
 public class GuiMapEditHUD extends Screen {
 

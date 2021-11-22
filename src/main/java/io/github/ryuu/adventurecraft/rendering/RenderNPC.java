@@ -2,9 +2,7 @@ package io.github.ryuu.adventurecraft.rendering;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.render.entity.model.BipedModel;
-import net.minecraft.entity.LivingEntity;
+import io.github.ryuu.adventurecraft.entities.EntityNPC;
 
 public class RenderNPC extends RenderBipedScaledScripted {
 

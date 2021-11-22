@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.util;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import io.github.ryuu.adventurecraft.items.ItemCursor;
 
 class Selection {
 

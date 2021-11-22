@@ -2,11 +2,7 @@ package io.github.ryuu.adventurecraft.entities;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.Player;
-import net.minecraft.level.Level;
-import net.minecraft.util.io.CompoundTag;
+import io.github.ryuu.adventurecraft.gui.GuiCamera;
 
 public class EntityCamera extends LivingEntity {
 

@@ -3,24 +3,11 @@ package io.github.ryuu.adventurecraft.mixin;
 import java.util.LinkedList;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.class_108;
-import net.minecraft.class_109;
-import net.minecraft.class_61;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.level.TileView;
-import net.minecraft.tile.DoorTile;
-import net.minecraft.tile.Tile;
-import net.minecraft.tile.material.Material;
-import net.minecraft.util.Int2ObjectLinkedHashMap;
-import net.minecraft.util.maths.Box;
-import net.minecraft.util.maths.MathsHelper;
-import net.minecraft.util.maths.Vec3i;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
-@Mixin(class_108.class)
+@Mixin(Class_108.class)
 public class MixinClass_108 {
 
     @Shadow()

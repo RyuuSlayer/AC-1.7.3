@@ -3,8 +3,6 @@ package io.github.ryuu.adventurecraft.scripting;
 import java.util.HashMap;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.options.GameOptions;
-import net.minecraft.level.Level;
 import org.lwjgl.input.Keyboard;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;

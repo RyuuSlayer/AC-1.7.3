@@ -3,13 +3,11 @@ package io.github.ryuu.adventurecraft.mixin.client.render;
 import java.awt.image.BufferedImage;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.render.FlowingWaterTextureBinder2;
-import net.minecraft.client.render.TextureBinder;
-import net.minecraft.tile.Tile;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import io.github.ryuu.adventurecraft.util.TerrainImage;
+import io.github.ryuu.adventurecraft.util.Vec2;
 
 @Mixin(FlowingWaterTextureBinder2.class)
 public class MixinFlowingWaterTextureBinder2 extends TextureBinder {

@@ -1,20 +1,13 @@
 package io.github.ryuu.adventurecraft.mixin.level;
 
-import io.github.ryuu.adventurecraft.util.LightCache;
-import io.github.ryuu.adventurecraft.util.PlayerTorch;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.level.Level;
-import net.minecraft.level.TileView;
-import net.minecraft.level.WorldPopulationRegion;
-import net.minecraft.level.chunk.Chunk;
-import net.minecraft.level.gen.BiomeSource;
-import net.minecraft.tile.Tile;
-import net.minecraft.tile.entity.TileEntity;
-import net.minecraft.tile.material.Material;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import io.github.ryuu.adventurecraft.util.LightCache;
+import io.github.ryuu.adventurecraft.util.PlayerTorch;
+import io.github.ryuu.adventurecraft.blocks.BlockStairMulti;
 
 @Mixin(WorldPopulationRegion.class)
 public class MixinWorldPopulationRegion implements TileView {

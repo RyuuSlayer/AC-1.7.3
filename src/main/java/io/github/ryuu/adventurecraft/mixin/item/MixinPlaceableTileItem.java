@@ -2,15 +2,10 @@ package io.github.ryuu.adventurecraft.mixin.item;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.entity.player.Player;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.item.ItemType;
-import net.minecraft.item.PlaceableTileItem;
-import net.minecraft.level.Level;
-import net.minecraft.tile.Tile;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import io.github.ryuu.adventurecraft.util.DebugMode;
 
 @Mixin(PlaceableTileItem.class)
 public class MixinPlaceableTileItem extends ItemType {

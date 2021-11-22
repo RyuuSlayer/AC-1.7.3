@@ -12,19 +12,14 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import io.github.ryuu.adventurecraft.util.Version;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.applet.GameStartupErrorPanel;
-import net.minecraft.applet.LogoCanvas;
-import net.minecraft.applet.SquareCanvas;
-import net.minecraft.client.GameStartupError;
 import org.lwjgl.Sys;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import io.github.ryuu.adventurecraft.util.Version;
 
 @Mixin(GameStartupErrorPanel.class)
 public class MixinGameStartupErrorPanel extends Panel {

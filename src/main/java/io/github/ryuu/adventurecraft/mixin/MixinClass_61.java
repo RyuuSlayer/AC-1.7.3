@@ -2,16 +2,11 @@ package io.github.ryuu.adventurecraft.mixin;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.class_108;
-import net.minecraft.class_61;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.maths.Vec3f;
-import net.minecraft.util.maths.Vec3i;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
-@Mixin(class_61.class)
+@Mixin(Class_61.class)
 public class MixinClass_61 {
 
     @Shadow()

@@ -2,15 +2,6 @@ package io.github.ryuu.adventurecraft.mixin.client.gui.screen.container;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.achievement.Achievements;
-import net.minecraft.client.gui.screen.AchievementsScreen;
-import net.minecraft.client.gui.screen.StatsScreen;
-import net.minecraft.client.gui.screen.container.ContainerScreen;
-import net.minecraft.client.gui.screen.container.PlayerInventoryScreen;
-import net.minecraft.client.gui.widgets.Button;
-import net.minecraft.client.render.RenderHelper;
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
-import net.minecraft.entity.player.Player;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;

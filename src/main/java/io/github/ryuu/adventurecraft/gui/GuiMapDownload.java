@@ -21,13 +21,8 @@ import java.util.zip.ZipInputStream;
 import javax.swing.SwingUtilities;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.class_520;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Screen;
-import net.minecraft.client.gui.widgets.Button;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.script.ScriptUIContainer;
 import org.lwjgl.opengl.GL11;
+import io.github.ryuu.adventurecraft.scripting.ScriptUIContainer;
 
 class GuiMapDownload extends Screen {
 

@@ -2,12 +2,6 @@ package io.github.ryuu.adventurecraft.entities;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.class_61;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.Player;
-import net.minecraft.level.Level;
-import net.minecraft.util.io.CompoundTag;
 
 public class EntityNPC extends EntityLivingScript {
 

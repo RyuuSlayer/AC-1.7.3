@@ -2,10 +2,6 @@ package io.github.ryuu.adventurecraft.rendering;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.entity.ArrowRenderer;
-import net.minecraft.entity.projectile.Arrow;
-import net.minecraft.util.maths.MathsHelper;
 import org.lwjgl.opengl.GL11;
 
 public class RenderArrowBomb extends ArrowRenderer {

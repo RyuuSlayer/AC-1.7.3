@@ -4,34 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityRegistry;
-import net.minecraft.entity.FlyingEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.WalkingEntity;
-import net.minecraft.entity.animal.Wolf;
-import net.minecraft.entity.monster.Monster;
-import net.minecraft.entity.monster.Slime;
-import net.minecraft.entity.player.Player;
-import net.minecraft.entity.projectile.Arrow;
-import net.minecraft.script.ScriptEntityArrow;
-import net.minecraft.script.ScriptEntityCreature;
-import net.minecraft.script.ScriptEntityFlying;
-import net.minecraft.script.ScriptEntityLiving;
-import net.minecraft.script.ScriptEntityLivingScript;
-import net.minecraft.script.ScriptEntityMob;
-import net.minecraft.script.ScriptEntityNPC;
-import net.minecraft.script.ScriptEntityPlayer;
-import net.minecraft.script.ScriptEntitySlime;
-import net.minecraft.script.ScriptEntityWolf;
-import net.minecraft.script.ScriptItem;
-import net.minecraft.script.ScriptVec3;
-import net.minecraft.script.ScriptVecRot;
-import net.minecraft.tile.material.Material;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.hit.HitType;
-import net.minecraft.util.maths.Box;
-import net.minecraft.util.maths.Vec3f;
+import io.github.ryuu.adventurecraft.util.UtilBullet;
+import io.github.ryuu.adventurecraft.entities.EntityNPC;
+import io.github.ryuu.adventurecraft.entities.EntityLivingScript;
 
 public class ScriptEntity {
 

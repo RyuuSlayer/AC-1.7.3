@@ -3,12 +3,8 @@ package io.github.ryuu.adventurecraft.entities.tile;
 import java.util.ArrayList;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.level.chunk.Chunk;
-import net.minecraft.src.NBTTagCompound;
-import net.minecraft.tile.entity.TileEntity;
-import net.minecraft.util.io.AbstractTag;
-import net.minecraft.util.io.CompoundTag;
+import io.github.ryuu.adventurecraft.items.ItemCursor;
+import io.github.ryuu.adventurecraft.blocks.Blocks;
 
 public class TileEntityStorage extends TileEntityMinMax {
 

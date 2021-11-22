@@ -1,78 +1,126 @@
 package io.github.ryuu.adventurecraft.mixin.level;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.Player;
-import net.minecraft.level.Level;
-import net.minecraft.level.LevelProperties;
-import net.minecraft.util.io.AbstractTag;
-import net.minecraft.util.io.CompoundTag;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
+import io.github.ryuu.adventurecraft.blocks.BlockEffect;
 
 @Mixin(LevelProperties.class)
 public class MixinLevelProperties {
 
-    public double tempOffset;
-    public boolean useImages = true;
-    public double mapSize = 250.0;
-    public int waterLevel = 64;
-    public double fractureHorizontal = 1.0;
-    public double fractureVertical = 1.0;
-    public double maxAvgDepth = 0.0;
-    public double maxAvgHeight = 0.0;
-    public double volatility1 = 1.0;
-    public double volatility2 = 1.0;
-    public double volatilityWeight1 = 0.0;
-    public double volatilityWeight2 = 1.0;
-    public boolean iceMelts = true;
-    public CompoundTag triggerData = null;
-    public String playingMusic = "";
-    public boolean mobsBurn = true;
-    public boolean overrideFogColor = false;
-    public float fogR;
-    public float fogG;
-    public float fogB;
-    public boolean overrideFogDensity = false;
-    public float fogStart;
-    public float fogEnd;
-    public String overlay = "";
-    public HashMap<String, String> replacementTextures;
-    public String onNewSaveScript = "";
-    public String onLoadScript = "";
-    public String onUpdateScript = "";
-    public String playerName = "ACPlayer";
-    public float[] brightness;
-    public float spawnYaw;
-    public CompoundTag globalScope = null;
-    public CompoundTag worldScope = null;
-    public CompoundTag musicScope = null;
-    public boolean originallyFromAC = false;
-    public boolean allowsInventoryCrafting = false;
-    float timeOfDay;
-    float timeRate;
-    CompoundTag replacementTag = null;
     @Shadow()
     private long randomSeed;
+
     private int spawnX;
+
     private int spawnY;
+
     private int spawnZ;
+
     private long time;
+
     private long lastPlayed;
+
     private long sizeOnDisk;
+
     private CompoundTag playerData;
+
     private int dimensionId;
+
     private String levelName;
+
     private int version;
+
     private boolean raining;
+
     private int rainTime;
+
     private boolean thundering;
+
     private int thunderTime;
+
+    public double tempOffset;
+
+    public boolean useImages = true;
+
+    public double mapSize = 250.0;
+
+    public int waterLevel = 64;
+
+    public double fractureHorizontal = 1.0;
+
+    public double fractureVertical = 1.0;
+
+    public double maxAvgDepth = 0.0;
+
+    public double maxAvgHeight = 0.0;
+
+    public double volatility1 = 1.0;
+
+    public double volatility2 = 1.0;
+
+    public double volatilityWeight1 = 0.0;
+
+    public double volatilityWeight2 = 1.0;
+
+    public boolean iceMelts = true;
+
+    public CompoundTag triggerData = null;
+
+    float timeOfDay;
+
+    float timeRate;
+
+    public String playingMusic = "";
+
+    public boolean mobsBurn = true;
+
+    public boolean overrideFogColor = false;
+
+    public float fogR;
+
+    public float fogG;
+
+    public float fogB;
+
+    public boolean overrideFogDensity = false;
+
+    public float fogStart;
+
+    public float fogEnd;
+
+    public String overlay = "";
+
+    CompoundTag replacementTag = null;
+
+    public HashMap<String, String> replacementTextures;
+
+    public String onNewSaveScript = "";
+
+    public String onLoadScript = "";
+
+    public String onUpdateScript = "";
+
+    public String playerName = "ACPlayer";
+
+    public float[] brightness;
+
+    public float spawnYaw;
+
+    public CompoundTag globalScope = null;
+
+    public CompoundTag worldScope = null;
+
+    public CompoundTag musicScope = null;
+
+    public boolean originallyFromAC = false;
+
+    public boolean allowsInventoryCrafting = false;
 
     public MixinLevelProperties(CompoundTag tag) {
         this.brightness = new float[16];
@@ -136,7 +184,7 @@ public class MixinLevelProperties {
         }
         float f = 0.05f;
         for (int i = 0; i < 16; ++i) {
-            String key = String.format("brightness%d", new Object[]{i});
+            String key = String.format((String) "brightness%d", (Object[]) new Object[] { i });
             if (tag.containsKey(key)) {
                 this.brightness[i] = tag.getFloat(key);
                 continue;
@@ -154,7 +202,7 @@ public class MixinLevelProperties {
             this.musicScope = tag.getCompoundTag("musicScope");
         }
         this.originallyFromAC = tag.containsKey("originallyFromAC") ? tag.getBoolean("originallyFromAC") : tag.containsKey("TemperatureOffset");
-        this.allowsInventoryCrafting = !tag.containsKey("allowsInventoryCrafting") || tag.getBoolean("allowsInventoryCrafting");
+        this.allowsInventoryCrafting = tag.containsKey("allowsInventoryCrafting") ? tag.getBoolean("allowsInventoryCrafting") : true;
     }
 
     public MixinLevelProperties(long seed, String levelName) {
@@ -262,28 +310,28 @@ public class MixinLevelProperties {
         }
         tag.put("timeOfDay", this.timeOfDay);
         tag.put("timeRate", this.timeRate);
-        if (!this.playingMusic.equals("")) {
+        if (!this.playingMusic.equals((Object) "")) {
             tag.put("playingMusic", this.playingMusic);
         }
         tag.put("mobsBurn", this.mobsBurn);
-        if (!this.overlay.equals("")) {
+        if (!this.overlay.equals((Object) "")) {
             tag.put("overlay", this.overlay);
         }
         tag.put("textureReplacements", this.getTextureReplacementTags());
-        if (!this.onNewSaveScript.equals("")) {
+        if (!this.onNewSaveScript.equals((Object) "")) {
             tag.put("onNewSaveScript", this.onNewSaveScript);
         }
-        if (!this.onLoadScript.equals("")) {
+        if (!this.onLoadScript.equals((Object) "")) {
             tag.put("onLoadScript", this.onLoadScript);
         }
-        if (!this.onUpdateScript.equals("")) {
+        if (!this.onUpdateScript.equals((Object) "")) {
             tag.put("onUpdateScript", this.onUpdateScript);
         }
-        if (!this.playerName.equals("")) {
+        if (!this.playerName.equals((Object) "")) {
             tag.put("playerName", this.playerName);
         }
         for (int i = 0; i < 16; ++i) {
-            String key = String.format("brightness%d", new Object[]{i});
+            String key = String.format((String) "brightness%d", (Object[]) new Object[] { i });
             tag.put(key, this.brightness[i]);
         }
         if (this.globalScope != null) {
@@ -311,8 +359,8 @@ public class MixinLevelProperties {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite()
-    public void setTimeOfDay(float l) {
-        this.timeOfDay = l;
+    public void addToTimeOfDay(float t) {
+        this.timeOfDay += t;
         while (this.timeOfDay < 0.0f) {
             this.timeOfDay += 24000.0f;
         }
@@ -325,8 +373,8 @@ public class MixinLevelProperties {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite()
-    public void addToTimeOfDay(float t) {
-        this.timeOfDay += t;
+    public void setTimeOfDay(float l) {
+        this.timeOfDay = l;
         while (this.timeOfDay < 0.0f) {
             this.timeOfDay += 24000.0f;
         }
@@ -462,8 +510,8 @@ public class MixinLevelProperties {
      */
     @Overwrite()
     boolean addReplacementTexture(String replace, String newTexture) {
-        String prevReplacement = this.replacementTextures.get(replace);
-        if (prevReplacement != null && prevReplacement.equals(newTexture)) {
+        String prevReplacement = (String) this.replacementTextures.get((Object) replace);
+        if (prevReplacement != null && prevReplacement.equals((Object) newTexture)) {
             return false;
         }
         this.replacementTextures.put((Object) replace, (Object) newTexture);

@@ -2,12 +2,8 @@ package io.github.ryuu.adventurecraft.rendering;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.entity.EntityRenderer;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.maths.MathsHelper;
 import org.lwjgl.opengl.GL11;
+import io.github.ryuu.adventurecraft.entities.EntityHookshot;
 
 public class RenderHookshot extends EntityRenderer {
 

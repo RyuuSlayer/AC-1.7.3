@@ -2,12 +2,6 @@ package io.github.ryuu.adventurecraft.mixin.client.particle;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.particle.FootstepParticle;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.texture.TextureManager;
-import net.minecraft.level.Level;
-import net.minecraft.util.maths.MathsHelper;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;

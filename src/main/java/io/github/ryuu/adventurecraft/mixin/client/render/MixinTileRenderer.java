@@ -3,30 +3,13 @@ package io.github.ryuu.adventurecraft.mixin.client.render;
 import java.util.Random;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.TileRenderer;
-import net.minecraft.level.Level;
-import net.minecraft.level.TileView;
-import net.minecraft.sortme.MagicBedNumbers;
-import net.minecraft.tile.BedTile;
-import net.minecraft.tile.DoorTile;
-import net.minecraft.tile.FluidTile;
-import net.minecraft.tile.PistonHead;
-import net.minecraft.tile.PistonTile;
-import net.minecraft.tile.RailTile;
-import net.minecraft.tile.RedstoneDustTile;
-import net.minecraft.tile.RedstoneRepeaterTile;
-import net.minecraft.tile.Tile;
-import net.minecraft.tile.entity.TileEntity;
-import net.minecraft.tile.material.Material;
-import net.minecraft.util.maths.MathsHelper;
-import net.minecraft.util.maths.Vec3f;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import io.github.ryuu.adventurecraft.blocks.Blocks;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityTree;
+import io.github.ryuu.adventurecraft.blocks.BlockOverlay;
 
 @Mixin(TileRenderer.class)
 public class MixinTileRenderer {

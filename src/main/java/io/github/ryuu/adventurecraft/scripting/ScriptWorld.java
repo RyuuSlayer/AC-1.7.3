@@ -2,14 +2,8 @@ package io.github.ryuu.adventurecraft.scripting;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityRegistry;
-import net.minecraft.level.Level;
-import net.minecraft.script.ScriptEntity;
-import net.minecraft.script.ScriptVec3;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.hit.HitType;
-import net.minecraft.util.maths.Vec3f;
+import io.github.ryuu.adventurecraft.util.UtilBullet;
+import io.github.ryuu.adventurecraft.util.TriggerArea;
 
 public class ScriptWorld {
 

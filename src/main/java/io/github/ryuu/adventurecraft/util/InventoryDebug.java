@@ -2,11 +2,7 @@ package io.github.ryuu.adventurecraft.util;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.entity.player.Player;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.item.ItemType;
-import net.minecraft.tile.Tile;
+import io.github.ryuu.adventurecraft.blocks.Blocks;
 
 public class InventoryDebug implements Inventory {
 

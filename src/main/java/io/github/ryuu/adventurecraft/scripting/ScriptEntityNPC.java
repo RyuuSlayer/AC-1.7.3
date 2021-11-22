@@ -2,7 +2,7 @@ package io.github.ryuu.adventurecraft.scripting;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.script.ScriptEntityLivingScript;
+import io.github.ryuu.adventurecraft.entities.EntityNPC;
 
 public class ScriptEntityNPC extends ScriptEntityLivingScript {
 

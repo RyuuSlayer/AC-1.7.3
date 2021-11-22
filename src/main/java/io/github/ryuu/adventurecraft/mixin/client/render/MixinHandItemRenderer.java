@@ -1,28 +1,13 @@
 package io.github.ryuu.adventurecraft.mixin.client.render;
 
-import io.github.ryuu.adventurecraft.items.Items;
-import io.github.ryuu.adventurecraft.util.Vec2;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelPart;
-import net.minecraft.client.render.*;
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
-import net.minecraft.client.render.entity.EntityRenderer;
-import net.minecraft.client.render.entity.PlayerRenderer;
-import net.minecraft.client.render.entity.model.BipedModel;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.ClientPlayer;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.item.ItemType;
-import net.minecraft.level.storage.MapStorage;
-import net.minecraft.tile.Tile;
-import net.minecraft.tile.material.Material;
-import net.minecraft.util.maths.MathsHelper;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import io.github.ryuu.adventurecraft.items.Items;
+import io.github.ryuu.adventurecraft.util.Vec2;
 
 @Mixin(HandItemRenderer.class)
 public class MixinHandItemRenderer {

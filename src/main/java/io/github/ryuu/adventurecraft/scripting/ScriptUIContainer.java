@@ -4,10 +4,6 @@ import java.util.LinkedList;
 import java.util.List;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.render.TextRenderer;
-import net.minecraft.client.texture.TextureManager;
-import net.minecraft.script.UIElement;
 import org.lwjgl.opengl.GL11;
 
 public class ScriptUIContainer extends UIElement {

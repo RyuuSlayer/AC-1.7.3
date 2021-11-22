@@ -4,33 +4,16 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import io.github.ryuu.adventurecraft.util.DebugMode;
-import io.github.ryuu.adventurecraft.util.TerrainImage;
-import io.github.ryuu.adventurecraft.util.Version;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ChatMessage;
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.gui.Overlay;
-import net.minecraft.client.gui.screen.ChatScreen;
-import net.minecraft.client.render.RenderHelper;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.TextRenderer;
-import net.minecraft.client.render.entity.ItemRenderer;
-import net.minecraft.client.resource.language.TranslationStorage;
-import net.minecraft.client.util.ScreenScaler;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.script.ScriptUIContainer;
-import net.minecraft.tile.Tile;
-import net.minecraft.tile.material.Material;
-import net.minecraft.util.maths.MathsHelper;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import io.github.ryuu.adventurecraft.util.TerrainImage;
+import io.github.ryuu.adventurecraft.util.Version;
+import io.github.ryuu.adventurecraft.util.DebugMode;
+import io.github.ryuu.adventurecraft.scripting.ScriptUIContainer;
 
 @Mixin(Overlay.class)
 public class MixinOverlay extends DrawableHelper {

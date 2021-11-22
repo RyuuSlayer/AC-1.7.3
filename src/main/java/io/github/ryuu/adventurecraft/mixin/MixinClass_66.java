@@ -6,27 +6,14 @@ import java.util.HashSet;
 import java.util.List;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.class_66;
-import net.minecraft.class_68;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.TileRenderer;
-import net.minecraft.client.render.entity.ItemRenderer;
-import net.minecraft.client.render.tile.TileEntityRenderDispatcher;
-import net.minecraft.entity.Entity;
-import net.minecraft.level.Level;
-import net.minecraft.level.WorldPopulationRegion;
-import net.minecraft.level.chunk.Chunk;
-import net.minecraft.tile.Tile;
-import net.minecraft.tile.entity.TileEntity;
-import net.minecraft.util.maths.Box;
-import net.minecraft.util.maths.MathsHelper;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import io.github.ryuu.adventurecraft.util.LightCache;
+import io.github.ryuu.adventurecraft.util.CoordBlock;
 
-@Mixin(class_66.class)
+@Mixin(Class_66.class)
 public class MixinClass_66 {
 
     @Shadow()

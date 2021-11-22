@@ -3,10 +3,8 @@ package io.github.ryuu.adventurecraft.gui;
 import java.io.File;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Screen;
-import net.minecraft.client.gui.widgets.Button;
-import net.minecraft.client.gui.widgets.Textbox;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityNpcPath;
+import io.github.ryuu.adventurecraft.entities.EntityNPC;
 
 public class GuiNPC extends Screen {
 

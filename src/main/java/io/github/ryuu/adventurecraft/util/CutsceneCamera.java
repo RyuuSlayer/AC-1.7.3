@@ -4,15 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.ClientPlayer;
-import net.minecraft.src.CutsceneCameraPoint;
-import net.minecraft.src.Vec3D;
-import net.minecraft.util.maths.Vec3f;
 import org.lwjgl.opengl.GL11;
+import io.github.ryuu.adventurecraft.entities.EntityCamera;
 
 public class CutsceneCamera {
 

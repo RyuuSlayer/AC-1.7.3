@@ -2,36 +2,13 @@ package io.github.ryuu.adventurecraft.mixin.tile;
 
 import java.util.ArrayList;
 import java.util.Random;
-
-import io.github.ryuu.adventurecraft.blocks.BlockColor;
-import io.github.ryuu.adventurecraft.items.ItemSubtypes;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.resource.language.I18n;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.Player;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.item.ItemType;
-import net.minecraft.item.LeavesItem;
-import net.minecraft.item.LogItem;
-import net.minecraft.item.PistonItem;
-import net.minecraft.item.PlaceableTileItem;
-import net.minecraft.item.SaplingItem;
-import net.minecraft.item.StoneSlabItem;
-import net.minecraft.item.WoolItem;
-import net.minecraft.level.Level;
-import net.minecraft.level.TileView;
-import net.minecraft.stat.Stats;
-import net.minecraft.tile.*;
-import net.minecraft.tile.entity.Sign;
-import net.minecraft.tile.material.Material;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.maths.Box;
-import net.minecraft.util.maths.Vec3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import io.github.ryuu.adventurecraft.blocks.BlockColor;
+import io.github.ryuu.adventurecraft.items.ItemSubtypes;
 
 @Mixin(Tile.class)
 public class MixinTile {

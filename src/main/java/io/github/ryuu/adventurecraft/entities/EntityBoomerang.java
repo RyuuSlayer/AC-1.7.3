@@ -4,15 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.Player;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.level.Level;
-import net.minecraft.tile.Tile;
-import net.minecraft.util.io.CompoundTag;
-import net.minecraft.util.maths.MathsHelper;
 
 public class EntityBoomerang extends Entity {
 

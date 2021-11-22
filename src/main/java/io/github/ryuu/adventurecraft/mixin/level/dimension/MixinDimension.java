@@ -1,24 +1,11 @@
 package io.github.ryuu.adventurecraft.mixin.level.dimension;
 
-import io.github.ryuu.adventurecraft.util.ChunkProviderHeightMapGenerate;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.level.Level;
-import net.minecraft.level.LevelProperties;
-import net.minecraft.level.dimension.Dimension;
-import net.minecraft.level.dimension.Nether;
-import net.minecraft.level.dimension.Overworld;
-import net.minecraft.level.dimension.Skylands;
-import net.minecraft.level.gen.BiomeSource;
-import net.minecraft.level.source.LevelSource;
-import net.minecraft.level.source.OverworldLevelSource;
-import net.minecraft.tile.FluidTile;
-import net.minecraft.tile.Tile;
-import net.minecraft.util.maths.MathsHelper;
-import net.minecraft.util.maths.Vec3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import io.github.ryuu.adventurecraft.util.ChunkProviderHeightMapGenerate;
 
 @Mixin(Dimension.class)
 public abstract class MixinDimension {

@@ -2,8 +2,6 @@ package io.github.ryuu.adventurecraft.util;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.entity.Entity;
-import net.minecraft.level.Level;
 
 class MusicPlayer {
 

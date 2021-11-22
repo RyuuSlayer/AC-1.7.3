@@ -7,13 +7,10 @@ import java.util.List;
 import javax.swing.SwingUtilities;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.render.TextRenderer;
-import net.minecraft.client.texture.TextureManager;
-import net.minecraft.script.ScriptUIContainer;
-import net.minecraft.script.ScriptUILabel;
-import net.minecraft.script.ScriptUIRect;
-import net.minecraft.script.ScriptUISprite;
+import io.github.ryuu.adventurecraft.scripting.ScriptUIRect;
+import io.github.ryuu.adventurecraft.scripting.ScriptUISprite;
+import io.github.ryuu.adventurecraft.scripting.ScriptUILabel;
+import io.github.ryuu.adventurecraft.scripting.ScriptUIContainer;
 
 public class GuiMapElement extends ScriptUIContainer {
 

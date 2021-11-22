@@ -3,12 +3,6 @@ package io.github.ryuu.adventurecraft.entities;
 import java.util.Random;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.FlyingEntity;
-import net.minecraft.entity.MonsterEntityType;
-import net.minecraft.level.Level;
-import net.minecraft.util.maths.Box;
-import net.minecraft.util.maths.MathsHelper;
 
 public class EntityBat extends FlyingEntity implements MonsterEntityType {
 

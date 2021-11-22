@@ -2,10 +2,8 @@ package io.github.ryuu.adventurecraft.rendering;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.render.entity.LivingEntityRenderer;
-import net.minecraft.client.render.entity.model.EntityModel;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
+import io.github.ryuu.adventurecraft.util.DebugMode;
+import io.github.ryuu.adventurecraft.entities.EntityCamera;
 
 public class RenderCamera extends LivingEntityRenderer {
 

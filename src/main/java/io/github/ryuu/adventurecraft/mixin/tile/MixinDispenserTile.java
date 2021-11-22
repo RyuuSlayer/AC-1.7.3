@@ -3,26 +3,12 @@ package io.github.ryuu.adventurecraft.mixin.tile;
 import java.util.Random;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.Player;
-import net.minecraft.entity.projectile.Arrow;
-import net.minecraft.entity.projectile.ThrownEgg;
-import net.minecraft.entity.projectile.ThrownSnowball;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.item.ItemType;
-import net.minecraft.level.Level;
-import net.minecraft.level.TileView;
-import net.minecraft.tile.DispenserTile;
-import net.minecraft.tile.Tile;
-import net.minecraft.tile.TileWithEntity;
-import net.minecraft.tile.entity.Dispenser;
-import net.minecraft.tile.entity.TileEntity;
-import net.minecraft.tile.material.Material;
-import net.minecraft.util.maths.MathsHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import io.github.ryuu.adventurecraft.util.DebugMode;
+import io.github.ryuu.adventurecraft.items.Items;
+import io.github.ryuu.adventurecraft.entities.EntityArrowBomb;
 
 @Mixin(DispenserTile.class)
 public class MixinDispenserTile extends TileWithEntity {

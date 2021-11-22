@@ -8,22 +8,11 @@ import java.io.IOException;
 import java.io.Reader;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.colour.FoliageColour;
-import net.minecraft.client.colour.GrassColour;
-import net.minecraft.client.render.FireTextureBinder;
-import net.minecraft.client.render.FlowingLavaTextureBinder;
-import net.minecraft.client.render.FlowingLavaTextureBinder2;
-import net.minecraft.client.render.FlowingWaterTextureBinder;
-import net.minecraft.client.render.FlowingWaterTextureBinder2;
-import net.minecraft.client.render.PortalTextureBinder;
-import net.minecraft.entity.player.Player;
-import net.minecraft.level.Level;
-import net.minecraft.level.TileView;
-import net.minecraft.tile.TileWithEntity;
-import net.minecraft.tile.entity.TileEntity;
-import net.minecraft.tile.material.Material;
-import net.minecraft.util.maths.Box;
+import io.github.ryuu.adventurecraft.util.DebugMode;
+import io.github.ryuu.adventurecraft.util.TerrainImage;
+import io.github.ryuu.adventurecraft.items.Items;
+import io.github.ryuu.adventurecraft.gui.GuiEffect;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityEffect;
 
 public class BlockEffect extends TileWithEntity {
 

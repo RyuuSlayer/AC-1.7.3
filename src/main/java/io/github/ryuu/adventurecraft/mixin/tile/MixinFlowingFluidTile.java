@@ -1,14 +1,10 @@
 package io.github.ryuu.adventurecraft.mixin.tile;
 
 import java.util.Random;
-import net.minecraft.level.Level;
-import net.minecraft.tile.FlowingFluidTile;
-import net.minecraft.tile.FluidTile;
-import net.minecraft.tile.Tile;
-import net.minecraft.tile.material.Material;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import io.github.ryuu.adventurecraft.util.DebugMode;
 
 @Mixin(FlowingFluidTile.class)
 public class MixinFlowingFluidTile extends FluidTile {

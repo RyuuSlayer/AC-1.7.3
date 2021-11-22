@@ -4,8 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.render.TextureBinder;
+import io.github.ryuu.adventurecraft.blocks.Blocks;
 
 public class TextureFanFX extends TextureBinder {
 

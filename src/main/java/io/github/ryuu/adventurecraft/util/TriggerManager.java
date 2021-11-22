@@ -5,12 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.level.Level;
-import net.minecraft.src.TriggerArea;
-import net.minecraft.tile.Tile;
-import net.minecraft.util.io.AbstractTag;
-import net.minecraft.util.io.CompoundTag;
 
 public class TriggerManager {
 

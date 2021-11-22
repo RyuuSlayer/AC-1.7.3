@@ -2,7 +2,6 @@ package io.github.ryuu.adventurecraft.util;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.util.io.CompoundTag;
 
 public class TriggerArea {
 

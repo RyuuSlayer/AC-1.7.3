@@ -2,14 +2,10 @@ package io.github.ryuu.adventurecraft.entities.tile;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.script.ScopeTag;
-import net.minecraft.tile.entity.TileEntity;
-import net.minecraft.util.io.AbstractTag;
-import net.minecraft.util.io.CompoundTag;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
+import io.github.ryuu.adventurecraft.scripting.ScopeTag;
 
 public class TileEntityScript extends TileEntity {
 

@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Stack;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.src.ProfileContext;
 
 public class Profiler {
 

@@ -2,9 +2,6 @@ package io.github.ryuu.adventurecraft.scripting;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.entity.animal.Wolf;
-import net.minecraft.script.ScriptEntityCreature;
-import net.minecraft.script.ScriptEntityPlayer;
 
 public class ScriptEntityWolf extends ScriptEntityCreature {
 

@@ -2,9 +2,7 @@ package io.github.ryuu.adventurecraft.blocks;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.level.TileView;
-import net.minecraft.tile.Tile;
-import net.minecraft.tile.material.Material;
+import io.github.ryuu.adventurecraft.util.DebugMode;
 
 public class BlockClip extends Tile {
 

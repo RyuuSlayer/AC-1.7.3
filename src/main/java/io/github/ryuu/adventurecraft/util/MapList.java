@@ -12,7 +12,6 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.src.MapInfo;
 
 public class MapList {
 

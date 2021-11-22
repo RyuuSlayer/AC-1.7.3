@@ -2,8 +2,6 @@ package io.github.ryuu.adventurecraft.gui;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widgets.Button;
 import org.lwjgl.opengl.GL11;
 
 public class GuiSlider2 extends Button {

@@ -1,18 +1,12 @@
 package io.github.ryuu.adventurecraft.mixin.client.render;
 
 import java.awt.image.BufferedImage;
-
-import io.github.ryuu.adventurecraft.util.Vec2;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.render.FlowingLavaTextureBinder2;
-import net.minecraft.client.render.TextureBinder;
-import net.minecraft.tile.Tile;
-import net.minecraft.util.maths.MathsHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import io.github.ryuu.adventurecraft.util.Vec2;
 
 @Mixin(FlowingLavaTextureBinder2.class)
 public class MixinFlowingLavaTextureBinder2 extends TextureBinder {

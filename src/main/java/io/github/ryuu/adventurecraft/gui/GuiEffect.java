@@ -4,9 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Screen;
-import net.minecraft.client.gui.widgets.Button;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityEffect;
 
 public class GuiEffect extends Screen {
 

@@ -3,14 +3,8 @@ package io.github.ryuu.adventurecraft.gui;
 import java.util.Random;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.class_520;
-import net.minecraft.client.gui.Screen;
-import net.minecraft.client.gui.widgets.Button;
-import net.minecraft.client.gui.widgets.Textbox;
-import net.minecraft.client.resource.language.TranslationStorage;
-import net.minecraft.level.Level;
-import net.minecraft.util.maths.MathsHelper;
 import org.lwjgl.input.Keyboard;
+import io.github.ryuu.adventurecraft.util.DebugMode;
 
 public class GuiCreateNewMap extends Screen {
 

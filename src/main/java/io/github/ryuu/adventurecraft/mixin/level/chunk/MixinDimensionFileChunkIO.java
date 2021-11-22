@@ -8,22 +8,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityRegistry;
-import net.minecraft.level.Level;
-import net.minecraft.level.LevelProperties;
-import net.minecraft.level.chunk.Chunk;
-import net.minecraft.level.chunk.ChunkIO;
-import net.minecraft.level.chunk.ChunkSubData;
-import net.minecraft.level.chunk.DimensionFileChunkIO;
-import net.minecraft.tile.entity.TileEntity;
-import net.minecraft.util.io.AbstractTag;
-import net.minecraft.util.io.CompoundTag;
-import net.minecraft.util.io.ListTag;
-import net.minecraft.util.io.NBTIO;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import io.github.ryuu.adventurecraft.blocks.Blocks;
 
 @Mixin(DimensionFileChunkIO.class)
 public class MixinDimensionFileChunkIO implements ChunkIO {

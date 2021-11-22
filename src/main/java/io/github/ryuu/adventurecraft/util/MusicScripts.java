@@ -9,9 +9,8 @@ import java.io.Reader;
 import java.util.ArrayList;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.script.Script;
-import net.minecraft.src.MusicScriptEntry;
 import org.mozilla.javascript.Scriptable;
+import io.github.ryuu.adventurecraft.scripting.Script;
 
 public class MusicScripts {
 

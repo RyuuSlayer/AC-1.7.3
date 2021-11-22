@@ -4,14 +4,8 @@ import java.util.List;
 import java.util.Random;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.player.Player;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.level.Level;
-import net.minecraft.tile.Tile;
-import net.minecraft.util.io.CompoundTag;
-import net.minecraft.util.maths.Box;
+import io.github.ryuu.adventurecraft.items.Items;
+import io.github.ryuu.adventurecraft.blocks.BlockBombable;
 
 public class EntityBomb extends ItemEntity {
 

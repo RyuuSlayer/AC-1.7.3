@@ -4,16 +4,9 @@ import java.io.File;
 import java.util.List;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.class_520;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Screen;
-import net.minecraft.client.gui.widgets.Button;
-import net.minecraft.client.gui.widgets.OptionButton;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.resource.language.TranslationStorage;
-import net.minecraft.src.MapInfo;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
+import io.github.ryuu.adventurecraft.util.MapInfo;
 
 public class GuiMapSelect extends Screen {
 
