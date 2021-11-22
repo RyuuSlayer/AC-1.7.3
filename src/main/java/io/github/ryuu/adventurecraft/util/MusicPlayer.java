@@ -10,11 +10,11 @@ class MusicPlayer {
     MusicPlayer() {
     }
 
-    static void playNoteFromEntity(MixinLevel world, MixinEntity ent, String instrument, char note, boolean sharp, float octave, float volume) {
+    static void playNoteFromEntity(Level world, Entity ent, String instrument, char note, boolean sharp, float octave, float volume) {
         MusicPlayer.playNote(world, ent.x, ent.y, ent.z, instrument, note, sharp, octave, volume);
     }
 
-    static void playNote(MixinLevel world, double x, double y, double z, String instrument, char note, boolean sharp, float octave, float volume) {
+    static void playNote(Level world, double x, double y, double z, String instrument, char note, boolean sharp, float octave, float volume) {
         float pitch = 1.189207f;
         switch(note) {
             case 'A':
@@ -62,7 +62,7 @@ class MusicPlayer {
         world.playSound(x, y, z, instrument, volume, pitch * octave);
     }
 
-    static void playNoteFromSong(MixinLevel world, double x, double y, double z, String instrument, String song, int noteNum, float volume) {
+    static void playNoteFromSong(Level world, double x, double y, double z, String instrument, String song, int noteNum, float volume) {
         int stringIndex;
         int onNote = 0;
         boolean flat = false;

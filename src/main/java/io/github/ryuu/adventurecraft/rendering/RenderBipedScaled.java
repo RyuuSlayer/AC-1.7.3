@@ -17,7 +17,7 @@ public class RenderBipedScaled extends BipedEntityRenderer {
     }
 
     @Override
-    protected void method_823(MixinLivingEntity entityliving, float f) {
+    protected void method_823(LivingEntity entityliving, float f) {
         GL11.glScalef((float) this.scaling, (float) this.scaling, (float) this.scaling);
     }
 }

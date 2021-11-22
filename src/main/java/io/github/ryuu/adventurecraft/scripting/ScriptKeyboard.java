@@ -12,7 +12,7 @@ import org.mozilla.javascript.ScriptableObject;
 
 public class ScriptKeyboard {
 
-    private MixinGameOptions gameSettings;
+    private GameOptions gameSettings;
 
     public String keyForwardScript = "";
 
@@ -30,11 +30,11 @@ public class ScriptKeyboard {
 
     HashMap<Integer, String> keyBinds;
 
-    MixinLevel world;
+    Level world;
 
     Scriptable scope;
 
-    ScriptKeyboard(MixinLevel w, MixinGameOptions g, Scriptable s) {
+    ScriptKeyboard(Level w, GameOptions g, Scriptable s) {
         this.world = w;
         this.keyBinds = new HashMap();
         this.allKeys = null;

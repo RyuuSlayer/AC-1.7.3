@@ -8,7 +8,7 @@ import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
-public class BlockDarkness extends MixinTile {
+public class BlockDarkness extends Tile {
 
     protected BlockDarkness(int i, int j) {
         super(i, j, Material.AIR);
@@ -21,7 +21,7 @@ public class BlockDarkness extends MixinTile {
     }
 
     @Override
-    public Box getCollisionShape(MixinLevel level, int x, int y, int z) {
+    public Box getCollisionShape(Level level, int x, int y, int z) {
         return null;
     }
 

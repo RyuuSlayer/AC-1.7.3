@@ -9,13 +9,13 @@ import net.minecraft.level.Level;
 import net.minecraft.util.CharacterUtils;
 import org.lwjgl.input.Keyboard;
 
-public class GuiUrl extends MixinScreen {
+public class GuiUrl extends Screen {
 
     private TileEntityUrl msg;
 
-    private MixinLevel world;
+    private Level world;
 
-    public GuiUrl(MixinLevel w, TileEntityUrl u) {
+    public GuiUrl(Level w, TileEntityUrl u) {
         this.world = w;
         this.msg = u;
     }
@@ -52,7 +52,7 @@ public class GuiUrl extends MixinScreen {
         super.render(mouseX, mouseY, delta);
     }
 
-    public static void showUI(MixinLevel w, TileEntityUrl tileEntityMsg) {
+    public static void showUI(Level w, TileEntityUrl tileEntityMsg) {
         Minecraft.minecraftInstance.openScreen(new GuiUrl(w, tileEntityMsg));
     }
 }

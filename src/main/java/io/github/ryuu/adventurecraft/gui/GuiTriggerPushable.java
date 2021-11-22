@@ -7,7 +7,7 @@ import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.OptionButton;
 
-public class GuiTriggerPushable extends MixinScreen {
+public class GuiTriggerPushable extends Screen {
 
     private TileEntityTriggerPushable trigger;
 

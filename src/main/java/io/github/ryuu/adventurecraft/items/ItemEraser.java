@@ -8,14 +8,14 @@ import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 
-public class ItemEraser extends MixinItemType {
+public class ItemEraser extends ItemType {
 
     protected ItemEraser(int id) {
         super(id);
     }
 
     @Override
-    public boolean useOnTile(MixinItemInstance item, MixinPlayer player, MixinLevel level, int x, int y, int z, int facing) {
+    public boolean useOnTile(ItemInstance item, Player player, Level level, int x, int y, int z, int facing) {
         if (ItemCursor.bothSet) {
             Minecraft.minecraftInstance.overlay.addChatMessage("Erasing Area");
             int minX = Math.min((int) ItemCursor.oneX, (int) ItemCursor.twoX);

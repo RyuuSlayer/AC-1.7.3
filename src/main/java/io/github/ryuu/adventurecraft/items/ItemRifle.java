@@ -7,7 +7,7 @@ import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 
-class ItemRifle extends MixinItemType implements IItemReload {
+class ItemRifle extends ItemType implements IItemReload {
 
     public ItemRifle(int id) {
         super(id);
@@ -16,7 +16,7 @@ class ItemRifle extends MixinItemType implements IItemReload {
     }
 
     @Override
-    public MixinItemInstance use(MixinItemInstance item, MixinLevel level, MixinPlayer player) {
+    public ItemInstance use(ItemInstance item, Level level, Player player) {
         if (item.timeLeft > 3 || item.isReloading) {
             return item;
         }
@@ -39,17 +39,17 @@ class ItemRifle extends MixinItemType implements IItemReload {
     }
 
     @Override
-    public boolean isLighting(MixinItemInstance itemstack) {
+    public boolean isLighting(ItemInstance itemstack) {
         return !itemstack.justReloaded && itemstack.timeLeft > 3;
     }
 
     @Override
-    public boolean isMuzzleFlash(MixinItemInstance itemstack) {
+    public boolean isMuzzleFlash(ItemInstance itemstack) {
         return !itemstack.justReloaded && itemstack.timeLeft > 3;
     }
 
     @Override
-    public void reload(MixinItemInstance itemstack, MixinLevel world, MixinPlayer entityplayer) {
+    public void reload(ItemInstance itemstack, Level world, Player entityplayer) {
         if (itemstack.getDamage() > 0 && entityplayer.inventory.decreaseAmountOfItem(Items.rifleAmmo.id)) {
             itemstack.setDamage(itemstack.getDamage() - 1);
             while (itemstack.getDamage() > 0 && entityplayer.inventory.decreaseAmountOfItem(Items.rifleAmmo.id)) {

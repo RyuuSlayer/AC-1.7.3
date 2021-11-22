@@ -18,7 +18,7 @@ public class BlockTeleport extends TileWithEntity {
     }
 
     @Override
-    protected MixinTileEntity createTileEntity() {
+    protected TileEntity createTileEntity() {
         return new TileEntityTeleport();
     }
 
@@ -28,7 +28,7 @@ public class BlockTeleport extends TileWithEntity {
     }
 
     @Override
-    public Box getCollisionShape(MixinLevel level, int x, int y, int z) {
+    public Box getCollisionShape(Level level, int x, int y, int z) {
         return null;
     }
 
@@ -43,19 +43,19 @@ public class BlockTeleport extends TileWithEntity {
     }
 
     @Override
-    public void onTriggerActivated(MixinLevel world, int i, int j, int k) {
+    public void onTriggerActivated(Level world, int i, int j, int k) {
         int y;
         TileEntityTeleport tileEnt = (TileEntityTeleport) world.getTileEntity(i, j, k);
         for (y = tileEnt.y; y < 128 && world.getMaterial(tileEnt.x, y, tileEnt.z) != Material.AIR; ++y) {
         }
         for (Object obj : world.players) {
-            MixinPlayer p = (MixinPlayer) obj;
+            Player p = (Player) obj;
             p.setPosition((double) tileEnt.x + 0.5, y, (double) tileEnt.z + 0.5);
         }
     }
 
     @Override
-    public void onTriggerDeactivated(MixinLevel world, int i, int j, int k) {
+    public void onTriggerDeactivated(Level world, int i, int j, int k) {
     }
 
     @Override
@@ -64,7 +64,7 @@ public class BlockTeleport extends TileWithEntity {
     }
 
     @Override
-    public boolean activate(MixinLevel level, int x, int y, int z, MixinPlayer player) {
+    public boolean activate(Level level, int x, int y, int z, Player player) {
         if (DebugMode.active && player.getHeldItem() != null && player.getHeldItem().itemId == Items.cursor.id) {
             TileEntityTeleport obj = (TileEntityTeleport) level.getTileEntity(x, y, z);
             obj.x = ItemCursor.minX;

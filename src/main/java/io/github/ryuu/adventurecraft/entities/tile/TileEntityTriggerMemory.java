@@ -28,7 +28,7 @@ public class TileEntityTriggerMemory extends TileEntityMinMax {
     }
 
     @Override
-    public void readIdentifyingData(MixinCompoundTag tag) {
+    public void readIdentifyingData(CompoundTag tag) {
         super.readIdentifyingData(tag);
         this.isActivated = tag.getBoolean("IsActivated");
         this.activateOnDetrigger = tag.getBoolean("ActivateOnDetrigger");
@@ -36,7 +36,7 @@ public class TileEntityTriggerMemory extends TileEntityMinMax {
     }
 
     @Override
-    public void writeIdentifyingData(MixinCompoundTag tag) {
+    public void writeIdentifyingData(CompoundTag tag) {
         super.writeIdentifyingData(tag);
         tag.put("IsActivated", this.isActivated);
         tag.put("ActivateOnDetrigger", this.activateOnDetrigger);

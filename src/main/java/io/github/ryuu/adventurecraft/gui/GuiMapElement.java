@@ -187,7 +187,7 @@ public class GuiMapElement extends ScriptUIContainer {
     }
 
     @Override
-    public void render(MixinTextRenderer fontRenderer, MixinTextureManager renderEngine, float partialTickTime) {
+    public void render(TextRenderer fontRenderer, TextureManager renderEngine, float partialTickTime) {
         long fadeCurTime;
         long fadeDiff;
         float fadeChange;

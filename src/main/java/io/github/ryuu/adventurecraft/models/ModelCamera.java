@@ -7,7 +7,7 @@ import net.minecraft.client.render.entity.model.EntityModel;
 
 public class ModelCamera extends EntityModel {
 
-    public MixinModelPart head = new MixinModelPart(0, 0);
+    public ModelPart head = new ModelPart(0, 0);
 
     public ModelCamera() {
         this.head.addCuboid(-4.0f, -4.0f, -4.0f, 8, 8, 8, 0.0f);

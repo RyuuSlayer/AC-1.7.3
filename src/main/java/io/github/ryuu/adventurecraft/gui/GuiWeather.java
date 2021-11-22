@@ -8,7 +8,7 @@ import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.OptionButton;
 import net.minecraft.level.Level;
 
-public class GuiWeather extends MixinScreen {
+public class GuiWeather extends Screen {
 
     private TileEntityWeather weather;
 
@@ -18,7 +18,7 @@ public class GuiWeather extends MixinScreen {
 
     private GuiSlider2 timeRate;
 
-    public GuiWeather(MixinLevel worldArg, TileEntityWeather w) {
+    public GuiWeather(Level worldArg, TileEntityWeather w) {
         this.weather = w;
     }
 
@@ -108,7 +108,7 @@ public class GuiWeather extends MixinScreen {
         super.render(mouseX, mouseY, delta);
     }
 
-    public static void showUI(MixinLevel worldArg, TileEntityWeather w) {
+    public static void showUI(Level worldArg, TileEntityWeather w) {
         Minecraft.minecraftInstance.openScreen(new GuiWeather(worldArg, w));
     }
 

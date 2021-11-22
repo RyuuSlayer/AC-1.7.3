@@ -42,7 +42,7 @@ public class CutsceneCamera {
     }
 
     public void loadCameraEntities() {
-        for (MixinEntity obj : Minecraft.minecraftInstance.level.entities) {
+        for (Entity obj : Minecraft.minecraftInstance.level.entities) {
             if (!(obj instanceof EntityCamera))
                 continue;
             obj.remove();
@@ -74,7 +74,7 @@ public class CutsceneCamera {
         }
     }
 
-    public void drawLines(MixinLivingEntity entityplayer, float f) {
+    public void drawLines(LivingEntity entityplayer, float f) {
         double offX = entityplayer.prevRenderX + (entityplayer.x - entityplayer.prevRenderX) * (double) f;
         double offY = entityplayer.prevRenderY + (entityplayer.y - entityplayer.prevRenderY) * (double) f;
         double offZ = entityplayer.prevRenderZ + (entityplayer.z - entityplayer.prevRenderZ) * (double) f;
@@ -181,7 +181,7 @@ public class CutsceneCamera {
                 return this.curPoint;
             }
             if (this.startType != 0) {
-                MixinClientPlayer player = Minecraft.minecraftInstance.player;
+                ClientPlayer player = Minecraft.minecraftInstance.player;
                 this.prevPoint = new CutsceneCameraPoint(0.0f, (float) player.x, (float) player.y, (float) player.z, player.yaw, player.pitch, this.startType);
                 this.fixYawPitch(player.yaw, player.pitch);
             } else {

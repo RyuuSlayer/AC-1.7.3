@@ -7,9 +7,9 @@ import net.minecraft.level.Level;
 
 public class ScriptTime {
 
-    MixinLevel worldObj;
+    Level worldObj;
 
-    ScriptTime(MixinLevel w) {
+    ScriptTime(Level w) {
         this.worldObj = w;
     }
 

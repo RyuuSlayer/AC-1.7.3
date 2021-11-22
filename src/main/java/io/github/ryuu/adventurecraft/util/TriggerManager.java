@@ -14,11 +14,11 @@ import net.minecraft.util.io.CompoundTag;
 
 public class TriggerManager {
 
-    MixinLevel world;
+    Level world;
 
     HashMap<net.minecraft.src.CoordBlock, HashMap<Integer, TriggerArea>> triggerAreas;
 
-    TriggerManager(MixinLevel w) {
+    TriggerManager(Level w) {
         this.world = w;
         this.triggerAreas = new HashMap();
     }
@@ -144,18 +144,18 @@ public class TriggerManager {
         }
     }
 
-    MixinCompoundTag getTagCompound() {
-        MixinCompoundTag tag = new MixinCompoundTag();
+    CompoundTag getTagCompound() {
+        CompoundTag tag = new CompoundTag();
         int numCoords = 0;
         for (Map.Entry e : this.triggerAreas.entrySet()) {
-            MixinCompoundTag coordTag = new MixinCompoundTag();
+            CompoundTag coordTag = new CompoundTag();
             CoordBlock c = (CoordBlock) e.getKey();
             coordTag.put("x", c.x);
             coordTag.put("y", c.y);
             coordTag.put("z", c.z);
             int numAreas = 0;
             for (Map.Entry te : ((HashMap) e.getValue()).entrySet()) {
-                MixinCompoundTag areaTag = ((TriggerArea) te.getValue()).getTagCompound();
+                CompoundTag areaTag = ((TriggerArea) te.getValue()).getTagCompound();
                 areaTag.put("areaID", (Integer) te.getKey());
                 coordTag.put(String.format((String) "area%d", (Object[]) new Object[] { numAreas++ }), (AbstractTag) areaTag);
             }
@@ -166,17 +166,17 @@ public class TriggerManager {
         return tag;
     }
 
-    void loadFromTagCompound(MixinCompoundTag tag) {
+    void loadFromTagCompound(CompoundTag tag) {
         this.triggerAreas.clear();
         int numCoords = tag.getInt("numCoords");
         for (int i = 0; i < numCoords; ++i) {
-            MixinCompoundTag coordTag = tag.getCompoundTag(String.format((String) "coord%d", (Object[]) new Object[] { i }));
+            CompoundTag coordTag = tag.getCompoundTag(String.format((String) "coord%d", (Object[]) new Object[] { i }));
             CoordBlock coord = new CoordBlock(coordTag.getInt("x"), coordTag.getInt("y"), coordTag.getInt("z"));
             HashMap areas = new HashMap();
             this.triggerAreas.put((Object) coord, (Object) areas);
             int numAreas = coordTag.getInt("numAreas");
             for (int j = 0; j < numAreas; ++j) {
-                MixinCompoundTag areaTag = coordTag.getCompoundTag(String.format((String) "area%d", (Object[]) new Object[] { j }));
+                CompoundTag areaTag = coordTag.getCompoundTag(String.format((String) "area%d", (Object[]) new Object[] { j }));
                 TriggerArea area = TriggerArea.getFromTagCompound(areaTag);
                 areas.put((Object) coordTag.getInt("areaID"), (Object) area);
             }

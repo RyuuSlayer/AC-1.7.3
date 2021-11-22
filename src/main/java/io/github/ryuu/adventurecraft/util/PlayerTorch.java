@@ -32,14 +32,14 @@ public class PlayerTorch {
         return torchActive;
     }
 
-    public static void setTorchState(MixinLevel world, boolean active) {
+    public static void setTorchState(Level world, boolean active) {
         if (torchActive != active) {
             torchActive = active;
             PlayerTorch.markBlocksDirty(world);
         }
     }
 
-    public static void setTorchPos(MixinLevel world, float x, float y, float z) {
+    public static void setTorchPos(Level world, float x, float y, float z) {
         long avgTime = Minecraft.minecraftInstance.getAvgFrameTime();
         int updateRate = 1;
         if (avgTime > 33333333L) {
@@ -58,7 +58,7 @@ public class PlayerTorch {
         }
     }
 
-    public static float getTorchLight(MixinLevel world, int x, int y, int z) {
+    public static float getTorchLight(Level world, int x, int y, int z) {
         if (torchActive) {
             int diffX = x - iX + torchBrightness;
             int diffY = y - iY + torchBrightness;
@@ -70,7 +70,7 @@ public class PlayerTorch {
         return 0.0f;
     }
 
-    private static void markBlocksDirty(MixinLevel world) {
+    private static void markBlocksDirty(Level world) {
         float xDiff = posX - (float) iX;
         float yDiff = posY - (float) iY;
         float zDiff = posZ - (float) iZ;

@@ -18,7 +18,7 @@ public class BlockMessage extends TileWithEntity {
     }
 
     @Override
-    protected MixinTileEntity createTileEntity() {
+    protected TileEntity createTileEntity() {
         return new TileEntityMessage();
     }
 
@@ -28,7 +28,7 @@ public class BlockMessage extends TileWithEntity {
     }
 
     @Override
-    public Box getCollisionShape(MixinLevel level, int x, int y, int z) {
+    public Box getCollisionShape(Level level, int x, int y, int z) {
         return null;
     }
 
@@ -43,7 +43,7 @@ public class BlockMessage extends TileWithEntity {
     }
 
     @Override
-    public void onTriggerActivated(MixinLevel world, int i, int j, int k) {
+    public void onTriggerActivated(Level world, int i, int j, int k) {
         TileEntityMessage obj = (TileEntityMessage) world.getTileEntity(i, j, k);
         if (!obj.message.equals((Object) "")) {
             Minecraft.minecraftInstance.overlay.addChatMessage(obj.message);
@@ -54,7 +54,7 @@ public class BlockMessage extends TileWithEntity {
     }
 
     @Override
-    public boolean activate(MixinLevel level, int x, int y, int z, MixinPlayer player) {
+    public boolean activate(Level level, int x, int y, int z, Player player) {
         if (DebugMode.active) {
             TileEntityMessage obj = (TileEntityMessage) level.getTileEntity(x, y, z);
             GuiMessage.showUI(level, obj);

@@ -5,7 +5,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.io.CompoundTag;
 
-public class TileEntityWeather extends MixinTileEntity {
+public class TileEntityWeather extends TileEntity {
 
     public boolean changePrecipitate;
 
@@ -28,7 +28,7 @@ public class TileEntityWeather extends MixinTileEntity {
     public boolean changeThundering;
 
     @Override
-    public void readIdentifyingData(MixinCompoundTag tag) {
+    public void readIdentifyingData(CompoundTag tag) {
         super.readIdentifyingData(tag);
         this.changePrecipitate = tag.getBoolean("changePrecipitate");
         this.precipitate = tag.getBoolean("precipitate");
@@ -43,7 +43,7 @@ public class TileEntityWeather extends MixinTileEntity {
     }
 
     @Override
-    public void writeIdentifyingData(MixinCompoundTag tag) {
+    public void writeIdentifyingData(CompoundTag tag) {
         super.writeIdentifyingData(tag);
         tag.put("changePrecipitate", this.changePrecipitate);
         tag.put("precipitate", this.precipitate);

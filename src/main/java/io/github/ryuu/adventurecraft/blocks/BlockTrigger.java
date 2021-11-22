@@ -20,7 +20,7 @@ public class BlockTrigger extends TileWithEntity {
     }
 
     @Override
-    protected MixinTileEntity createTileEntity() {
+    protected TileEntity createTileEntity() {
         return new TileEntityTrigger();
     }
 
@@ -40,7 +40,7 @@ public class BlockTrigger extends TileWithEntity {
     }
 
     @Override
-    public Box getCollisionShape(MixinLevel level, int x, int y, int z) {
+    public Box getCollisionShape(Level level, int x, int y, int z) {
         return null;
     }
 
@@ -59,7 +59,7 @@ public class BlockTrigger extends TileWithEntity {
         return DebugMode.active;
     }
 
-    private void setNotVisited(MixinLevel world, int i, int j, int k) {
+    private void setNotVisited(Level world, int i, int j, int k) {
         TileEntityTrigger obj = (TileEntityTrigger) world.getTileEntity(i, j, k);
         if (obj != null && obj.visited) {
             obj.visited = false;
@@ -75,13 +75,13 @@ public class BlockTrigger extends TileWithEntity {
         }
     }
 
-    public boolean isAlreadyActivated(MixinLevel world, int i, int j, int k) {
+    public boolean isAlreadyActivated(Level world, int i, int j, int k) {
         boolean isActivated = this._isAlreadyActivated(world, i, j, k);
         this.setNotVisited(world, i, j, k);
         return isActivated;
     }
 
-    private boolean _isAlreadyActivated(MixinLevel world, int i, int j, int k) {
+    private boolean _isAlreadyActivated(Level world, int i, int j, int k) {
         boolean isActivated = false;
         TileEntityTrigger obj = (TileEntityTrigger) world.getTileEntity(i, j, k);
         if (obj != null && !obj.visited) {
@@ -107,12 +107,12 @@ public class BlockTrigger extends TileWithEntity {
         return isActivated;
     }
 
-    public void removeArea(MixinLevel world, int i, int j, int k) {
+    public void removeArea(Level world, int i, int j, int k) {
         this._removeArea(world, i, j, k);
         this.setNotVisited(world, i, j, k);
     }
 
-    private void _removeArea(MixinLevel world, int i, int j, int k) {
+    private void _removeArea(Level world, int i, int j, int k) {
         TileEntityTrigger obj = (TileEntityTrigger) world.getTileEntity(i, j, k);
         if (!obj.visited) {
             obj.visited = true;
@@ -130,12 +130,12 @@ public class BlockTrigger extends TileWithEntity {
     }
 
     @Override
-    public void onEntityCollision(MixinLevel world, int i, int j, int k, MixinEntity entity) {
+    public void onEntityCollision(Level world, int i, int j, int k, Entity entity) {
         if (DebugMode.active) {
             return;
         }
         TileEntityTrigger obj = (TileEntityTrigger) world.getTileEntity(i, j, k);
-        if (entity instanceof MixinPlayer) {
+        if (entity instanceof Player) {
             if (!this.isAlreadyActivated(world, i, j, k)) {
                 if (!obj.resetOnTrigger) {
                     world.triggerManager.addArea(i, j, k, new TriggerArea(obj.minX, obj.minY, obj.minZ, obj.maxX, obj.maxY, obj.maxZ));
@@ -147,14 +147,14 @@ public class BlockTrigger extends TileWithEntity {
         }
     }
 
-    public void deactivateTrigger(MixinLevel world, int i, int j, int k) {
+    public void deactivateTrigger(Level world, int i, int j, int k) {
         TileEntityTrigger obj = (TileEntityTrigger) world.getTileEntity(i, j, k);
         if (!this.isAlreadyActivated(world, i, j, k) && !obj.resetOnTrigger) {
             this.removeArea(world, i, j, k);
         }
     }
 
-    public void setTriggerToSelection(MixinLevel world, int i, int j, int k) {
+    public void setTriggerToSelection(Level world, int i, int j, int k) {
         TileEntityMinMax obj = (TileEntityMinMax) world.getTileEntity(i, j, k);
         if (obj.minX == ItemCursor.minX && obj.minY == ItemCursor.minY && obj.minZ == ItemCursor.minZ && obj.maxX == ItemCursor.maxX && obj.maxY == ItemCursor.maxY && obj.maxZ == ItemCursor.maxZ) {
             return;
@@ -176,7 +176,7 @@ public class BlockTrigger extends TileWithEntity {
         }
     }
 
-    public void setTriggerReset(MixinLevel world, int i, int j, int k, boolean resetOnTrigger) {
+    public void setTriggerReset(Level world, int i, int j, int k, boolean resetOnTrigger) {
         TileEntityTrigger obj = (TileEntityTrigger) world.getTileEntity(i, j, k);
         if (obj.resetOnTrigger == resetOnTrigger) {
             return;
@@ -194,7 +194,7 @@ public class BlockTrigger extends TileWithEntity {
     }
 
     @Override
-    public boolean activate(MixinLevel level, int x, int y, int z, MixinPlayer player) {
+    public boolean activate(Level level, int x, int y, int z, Player player) {
         if (DebugMode.active && player.getHeldItem() != null && player.getHeldItem().itemId == Items.cursor.id) {
             TileEntityTrigger obj = (TileEntityTrigger) level.getTileEntity(x, y, z);
             GuiTrigger.showUI(level, x, y, z, obj);
@@ -203,7 +203,7 @@ public class BlockTrigger extends TileWithEntity {
     }
 
     @Override
-    public void reset(MixinLevel world, int i, int j, int k, boolean death) {
+    public void reset(Level world, int i, int j, int k, boolean death) {
         TileEntityTrigger obj = (TileEntityTrigger) world.getTileEntity(i, j, k);
         obj.activated = 0;
     }

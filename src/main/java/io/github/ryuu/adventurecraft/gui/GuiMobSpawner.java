@@ -10,7 +10,7 @@ import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.item.ItemType;
 import net.minecraft.script.EntityDescriptions;
 
-public class GuiMobSpawner extends MixinScreen {
+public class GuiMobSpawner extends Screen {
 
     private TileEntityMobSpawner mobSpawner;
 

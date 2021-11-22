@@ -16,7 +16,7 @@ import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.MathsHelper;
 import net.minecraft.util.maths.Vec3f;
 
-public class EntityHookshot extends MixinEntity {
+public class EntityHookshot extends Entity {
 
     int timeBeforeTurnAround;
 
@@ -26,13 +26,13 @@ public class EntityHookshot extends MixinEntity {
 
     public boolean mainHand;
 
-    MixinLivingEntity returnsTo;
+    LivingEntity returnsTo;
 
-    MixinEntity entityGrabbed;
+    Entity entityGrabbed;
 
-    MixinItemInstance item;
+    ItemInstance item;
 
-    public EntityHookshot(MixinLevel world) {
+    public EntityHookshot(Level world) {
         super(world);
         this.setSize(0.5f, 0.5f);
         this.turningAround = true;
@@ -40,7 +40,7 @@ public class EntityHookshot extends MixinEntity {
         this.collidesWithClipBlocks = false;
     }
 
-    public EntityHookshot(MixinLevel world, MixinLivingEntity entity, boolean main, MixinItemInstance i) {
+    public EntityHookshot(Level world, LivingEntity entity, boolean main, ItemInstance i) {
         this(world);
         this.mainHand = main;
         this.setRotation(entity.yaw, entity.pitch);
@@ -75,8 +75,8 @@ public class EntityHookshot extends MixinEntity {
 
     @Override
     public void tick() {
-        if (this.item != null && this.returnsTo instanceof MixinPlayer) {
-            MixinPlayer player = (MixinPlayer) this.returnsTo;
+        if (this.item != null && this.returnsTo instanceof Player) {
+            Player player = (Player) this.returnsTo;
             if (this.mainHand && this.item != player.inventory.getHeldItem()) {
                 Items.hookshot.releaseHookshot(this);
             }
@@ -144,9 +144,9 @@ public class EntityHookshot extends MixinEntity {
         if (!this.turningAround) {
             List entitiesWithin = this.level.getEntities(this, this.boundingBox.expand(0.5, 0.5, 0.5));
             for (int i = 0; i < entitiesWithin.size(); ++i) {
-                MixinEntity e = (MixinEntity) entitiesWithin.get(i);
-                boolean isItem = e instanceof MixinItemEntity;
-                if (!isItem && (!(e instanceof MixinLivingEntity) || e == this.returnsTo))
+                Entity e = (Entity) entitiesWithin.get(i);
+                boolean isItem = e instanceof ItemEntity;
+                if (!isItem && (!(e instanceof LivingEntity) || e == this.returnsTo))
                     continue;
                 if (isItem) {
                     this.level.playSound(this, "damage.fallsmall", 1.0f, 1.2f / (this.rand.nextFloat() * 0.2f + 0.9f));
@@ -165,20 +165,20 @@ public class EntityHookshot extends MixinEntity {
     }
 
     @Override
-    protected void writeCustomDataToTag(MixinCompoundTag tag) {
+    protected void writeCustomDataToTag(CompoundTag tag) {
     }
 
     @Override
-    public void readCustomDataFromTag(MixinCompoundTag tag) {
+    public void readCustomDataFromTag(CompoundTag tag) {
         this.remove();
     }
 
     @Override
-    public void onPlayerCollision(MixinPlayer entityplayer) {
+    public void onPlayerCollision(Player entityplayer) {
     }
 
     @Override
-    public boolean damage(MixinEntity target, int amount) {
+    public boolean damage(Entity target, int amount) {
         return false;
     }
 

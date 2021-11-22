@@ -7,7 +7,7 @@ import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
-public class BlockPlant extends MixinTile implements IBlockColor {
+public class BlockPlant extends Tile implements IBlockColor {
 
     protected BlockPlant(int i, int j) {
         super(i, j, Material.PLANT);
@@ -21,7 +21,7 @@ public class BlockPlant extends MixinTile implements IBlockColor {
     }
 
     @Override
-    public Box getCollisionShape(MixinLevel level, int x, int y, int z) {
+    public Box getCollisionShape(Level level, int x, int y, int z) {
         return null;
     }
 
@@ -41,7 +41,7 @@ public class BlockPlant extends MixinTile implements IBlockColor {
     }
 
     @Override
-    public void incrementColor(MixinLevel world, int i, int j, int k) {
+    public void incrementColor(Level world, int i, int j, int k) {
         int metadata = world.getTileMeta(i, j, k);
         world.setTileMeta(i, j, k, (metadata + 1) % subTypes[this.id]);
     }

@@ -5,7 +5,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.io.CompoundTag;
 
-public class TileEntityMusic extends MixinTileEntity {
+public class TileEntityMusic extends TileEntity {
 
     public String musicName = "";
 
@@ -14,7 +14,7 @@ public class TileEntityMusic extends MixinTileEntity {
     public int fadeIn = 500;
 
     @Override
-    public void readIdentifyingData(MixinCompoundTag tag) {
+    public void readIdentifyingData(CompoundTag tag) {
         super.readIdentifyingData(tag);
         this.musicName = tag.getString("musicName");
         this.fadeOut = tag.getInt("fadeOut");
@@ -22,7 +22,7 @@ public class TileEntityMusic extends MixinTileEntity {
     }
 
     @Override
-    public void writeIdentifyingData(MixinCompoundTag tag) {
+    public void writeIdentifyingData(CompoundTag tag) {
         super.writeIdentifyingData(tag);
         if (this.musicName != null && !this.musicName.equals((Object) "")) {
             tag.put("musicName", this.musicName);

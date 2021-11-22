@@ -35,7 +35,7 @@ public class TileEntityMinMaxRenderer extends TileEntityRenderer {
             for (int i = minMax.minX; i <= minMax.maxX; ++i) {
                 for (int j = minMax.minY; j <= minMax.maxY; ++j) {
                     for (int k = minMax.minZ; k <= minMax.maxZ; ++k) {
-                        MixinTile block = Tile.BY_ID[minMax.level.getTileId(i, j, k)];
+                        Tile block = Tile.BY_ID[minMax.level.getTileId(i, j, k)];
                         if (block == null || !block.canBeTriggered())
                             continue;
                         GL11.glColor3f((float) 0.0f, (float) 0.0f, (float) 0.0f);
@@ -55,7 +55,7 @@ public class TileEntityMinMaxRenderer extends TileEntityRenderer {
     }
 
     @Override
-    public void render(MixinTileEntity entity, double x, double y, double z, float f) {
+    public void render(TileEntity entity, double x, double y, double z, float f) {
         this.render((TileEntityMinMax) entity, x, y, z, f);
     }
 }

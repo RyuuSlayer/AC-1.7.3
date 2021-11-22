@@ -26,9 +26,9 @@ class GuiEditPalette extends DrawableHelper {
 
     Button selectedButton;
 
-    MixinItemInstance item = new MixinItemInstance(0, 0, 0);
+    ItemInstance item = new ItemInstance(0, 0, 0);
 
-    private static MixinItemRenderer itemRenderer = new MixinItemRenderer();
+    private static ItemRenderer itemRenderer = new ItemRenderer();
 
     static int rows = 8;
 
@@ -64,7 +64,7 @@ class GuiEditPalette extends DrawableHelper {
                     mc.soundHelper.playSound("random.click", 1.0f, 1.0f);
                     int i = columnClicked + rowClicked * columns;
                     if (i + this.getOffset() < this.blocks.size()) {
-                        DebugMode.mapEditing.setBlock(((MixinTile) this.blocks.get((int) (i + this.getOffset()))).id, 0);
+                        DebugMode.mapEditing.setBlock(((Tile) this.blocks.get((int) (i + this.getOffset()))).id, 0);
                         return true;
                     }
                 } else if (columnClicked == columns && x % 16 < 4 && this.needScrollbar()) {
@@ -77,7 +77,7 @@ class GuiEditPalette extends DrawableHelper {
         return false;
     }
 
-    void drawPalette(Minecraft mc, MixinTextRenderer fontRenderer, int width, int height) {
+    void drawPalette(Minecraft mc, TextRenderer fontRenderer, int width, int height) {
         int pLeft = 0;
         int pWidth = 16 * columns;
         int pTop = height / 2 - rows * 8;
@@ -98,7 +98,7 @@ class GuiEditPalette extends DrawableHelper {
         GL11.glEnable((int) 32826);
         int offset = this.getOffset();
         for (int i = 0; i < rows * columns && i + offset < this.blocks.size(); ++i) {
-            this.item.itemId = ((MixinTile) this.blocks.get((int) (i + offset))).id;
+            this.item.itemId = ((Tile) this.blocks.get((int) (i + offset))).id;
             itemRenderer.renderItemInstance(fontRenderer, mc.textureManager, this.item, i % columns * 16, height / 2 - rows * 8 + 16 * (i / columns));
         }
         GL11.glDisable((int) 32826);

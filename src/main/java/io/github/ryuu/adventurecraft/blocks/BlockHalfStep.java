@@ -33,7 +33,7 @@ public class BlockHalfStep extends BlockSolid {
     }
 
     @Override
-    public Box getCollisionShape(MixinLevel level, int x, int y, int z) {
+    public Box getCollisionShape(Level level, int x, int y, int z) {
         this.updateBlockBounds(level, x, y, z);
         return super.getCollisionShape(level, x, y, z);
     }

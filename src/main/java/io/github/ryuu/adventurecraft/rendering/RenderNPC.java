@@ -13,7 +13,7 @@ public class RenderNPC extends RenderBipedScaledScripted {
     }
 
     @Override
-    protected void method_821(MixinLivingEntity entityliving, double d, double d1, double d2) {
+    protected void method_821(LivingEntity entityliving, double d, double d1, double d2) {
         EntityNPC npc = (EntityNPC) entityliving;
         if (Minecraft.isDebugHudEnabled()) {
             this.method_818(entityliving, String.format((String) "%s - %d", (Object[]) new Object[] { npc.npcName, npc.id }), d, d1, d2, 64);

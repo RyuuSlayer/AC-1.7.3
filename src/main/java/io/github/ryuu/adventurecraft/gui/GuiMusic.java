@@ -7,9 +7,9 @@ import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.level.Level;
 
-public class GuiMusic extends MixinScreen {
+public class GuiMusic extends Screen {
 
-    private MixinLevel world;
+    private Level world;
 
     private TileEntityMusic music;
 
@@ -19,7 +19,7 @@ public class GuiMusic extends MixinScreen {
 
     private int page;
 
-    public GuiMusic(MixinLevel w, TileEntityMusic m) {
+    public GuiMusic(Level w, TileEntityMusic m) {
         this.world = w;
         this.music = m;
     }
@@ -81,7 +81,7 @@ public class GuiMusic extends MixinScreen {
         this.world.getChunk(this.music.x, this.music.z).method_885();
     }
 
-    public static void showUI(MixinLevel w, TileEntityMusic m) {
+    public static void showUI(Level w, TileEntityMusic m) {
         Minecraft.minecraftInstance.openScreen(new GuiMusic(w, m));
     }
 

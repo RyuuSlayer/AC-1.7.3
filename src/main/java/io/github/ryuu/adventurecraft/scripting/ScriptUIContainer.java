@@ -30,7 +30,7 @@ public class ScriptUIContainer extends UIElement {
     }
 
     @Override
-    public void render(MixinTextRenderer fontRenderer, MixinTextureManager renderEngine, float partialTickTime) {
+    public void render(TextRenderer fontRenderer, TextureManager renderEngine, float partialTickTime) {
         float x = this.getXAtTime(partialTickTime);
         float y = this.getYAtTime(partialTickTime);
         if (x != 0.0f || y != 0.0f) {

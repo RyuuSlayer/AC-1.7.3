@@ -7,7 +7,7 @@ import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.level.Level;
 
-public class GuiLightBulb extends MixinScreen {
+public class GuiLightBulb extends Screen {
 
     private int blockX;
 
@@ -15,13 +15,13 @@ public class GuiLightBulb extends MixinScreen {
 
     private int blockZ;
 
-    private MixinLevel world;
+    private Level world;
 
     GuiSlider2 lightSlider;
 
     int lightValue;
 
-    public GuiLightBulb(MixinLevel w, int x, int y, int z) {
+    public GuiLightBulb(Level w, int x, int y, int z) {
         this.world = w;
         this.blockX = x;
         this.blockY = y;
@@ -56,7 +56,7 @@ public class GuiLightBulb extends MixinScreen {
         this.world.getChunk(this.blockX, this.blockZ).method_885();
     }
 
-    public static void showUI(MixinLevel w, int x, int y, int z) {
+    public static void showUI(Level w, int x, int y, int z) {
         Minecraft.minecraftInstance.openScreen(new GuiLightBulb(w, x, y, z));
     }
 

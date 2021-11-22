@@ -8,9 +8,9 @@ import net.minecraft.script.ScriptEntityLiving;
 
 public class ScriptEntityCreature extends ScriptEntityLiving {
 
-    MixinWalkingEntity entityCreature;
+    WalkingEntity entityCreature;
 
-    ScriptEntityCreature(MixinWalkingEntity e) {
+    ScriptEntityCreature(WalkingEntity e) {
         super(e);
         this.entityCreature = e;
     }

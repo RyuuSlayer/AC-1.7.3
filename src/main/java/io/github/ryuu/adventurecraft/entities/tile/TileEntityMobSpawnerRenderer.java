@@ -26,7 +26,7 @@ public class TileEntityMobSpawnerRenderer extends TileEntityRenderer {
                 for (int i = min.x; i <= max.x; ++i) {
                     for (int j = min.y; j <= max.y; ++j) {
                         for (int k = min.z; k <= max.z; ++k) {
-                            MixinTile b = Tile.BY_ID[mobSpawner.level.getTileId(i, j, k)];
+                            Tile b = Tile.BY_ID[mobSpawner.level.getTileId(i, j, k)];
                             if (b == null || !b.canBeTriggered())
                                 continue;
                             GL11.glColor3f((float) 0.0f, (float) 0.0f, (float) 0.0f);
@@ -47,7 +47,7 @@ public class TileEntityMobSpawnerRenderer extends TileEntityRenderer {
     }
 
     @Override
-    public void render(MixinTileEntity entity, double x, double y, double z, float f) {
+    public void render(TileEntity entity, double x, double y, double z, float f) {
         this.render((TileEntityMobSpawner) entity, x, y, z, f);
     }
 }

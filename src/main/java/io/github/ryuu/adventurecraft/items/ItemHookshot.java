@@ -7,17 +7,17 @@ import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 
-class ItemHookshot extends MixinItemType {
+class ItemHookshot extends ItemType {
 
     public EntityHookshot mainHookshot = null;
 
     public EntityHookshot offHookshot = null;
 
-    MixinItemInstance mainActiveHookshot = null;
+    ItemInstance mainActiveHookshot = null;
 
-    MixinItemInstance offActiveHookshot = null;
+    ItemInstance offActiveHookshot = null;
 
-    MixinPlayer player = null;
+    Player player = null;
 
     public ItemHookshot(int id) {
         super(id);
@@ -39,7 +39,7 @@ class ItemHookshot extends MixinItemType {
     }
 
     @Override
-    public MixinItemInstance use(MixinItemInstance item, MixinLevel level, MixinPlayer player) {
+    public ItemInstance use(ItemInstance item, Level level, Player player) {
         EntityHookshot other;
         EntityHookshot hookshot;
         boolean main = true;

@@ -7,9 +7,9 @@ import net.minecraft.script.ScriptEntityLiving;
 
 public class ScriptEntityFlying extends ScriptEntityLiving {
 
-    MixinFlyingEntity entityFlying;
+    FlyingEntity entityFlying;
 
-    ScriptEntityFlying(MixinFlyingEntity e) {
+    ScriptEntityFlying(FlyingEntity e) {
         super(e);
         this.entityFlying = e;
     }

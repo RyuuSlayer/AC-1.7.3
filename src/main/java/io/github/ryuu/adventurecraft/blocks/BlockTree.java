@@ -17,7 +17,7 @@ public class BlockTree extends TileWithEntity implements IBlockColor {
     }
 
     @Override
-    protected MixinTileEntity createTileEntity() {
+    protected TileEntity createTileEntity() {
         return new TileEntityTree();
     }
 
@@ -27,7 +27,7 @@ public class BlockTree extends TileWithEntity implements IBlockColor {
     }
 
     @Override
-    public Box getCollisionShape(MixinLevel level, int x, int y, int z) {
+    public Box getCollisionShape(Level level, int x, int y, int z) {
         return null;
     }
 
@@ -52,7 +52,7 @@ public class BlockTree extends TileWithEntity implements IBlockColor {
     }
 
     @Override
-    public boolean activate(MixinLevel level, int x, int y, int z, MixinPlayer player) {
+    public boolean activate(Level level, int x, int y, int z, Player player) {
         if (DebugMode.active) {
             TileEntityTree obj = (TileEntityTree) level.getTileEntity(x, y, z);
             GuiTree.showUI(level, x, y, z, obj);
@@ -61,7 +61,7 @@ public class BlockTree extends TileWithEntity implements IBlockColor {
     }
 
     @Override
-    public void incrementColor(MixinLevel world, int i, int j, int k) {
+    public void incrementColor(Level world, int i, int j, int k) {
         int metadata = world.getTileMeta(i, j, k);
         world.setTileMeta(i, j, k, (metadata + 1) % subTypes[this.id]);
     }

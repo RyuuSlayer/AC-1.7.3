@@ -7,7 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 
-public class GuiScriptStats extends MixinScreen {
+public class GuiScriptStats extends Screen {
 
     int maxSize = 90;
 

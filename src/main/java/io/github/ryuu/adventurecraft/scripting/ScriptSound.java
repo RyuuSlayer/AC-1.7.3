@@ -6,9 +6,9 @@ import net.minecraft.client.sound.SoundHelper;
 
 public class ScriptSound {
 
-    MixinSoundHelper soundMgr;
+    SoundHelper soundMgr;
 
-    ScriptSound(MixinSoundHelper s) {
+    ScriptSound(SoundHelper s) {
         this.soundMgr = s;
     }
 

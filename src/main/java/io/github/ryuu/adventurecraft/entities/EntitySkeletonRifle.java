@@ -1,5 +1,8 @@
 package io.github.ryuu.adventurecraft.entities;
 
+import io.github.ryuu.adventurecraft.items.Items;
+import io.github.ryuu.adventurecraft.mixin.entity.monster.MixinSkeleton;
+import io.github.ryuu.adventurecraft.util.UtilBullet;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.Entity;
@@ -11,15 +14,15 @@ public class EntitySkeletonRifle extends MixinSkeleton {
 
     int ammo;
 
-    public EntitySkeletonRifle(MixinLevel world) {
+    public EntitySkeletonRifle(Level world) {
         super(world);
         this.attackDamage = 6;
         this.ammo = 30;
-        this.heldItem = new MixinItemInstance(Items.rifle, 1);
+        this.heldItem = new ItemInstance(Items.rifle, 1);
     }
 
     @Override
-    protected void method_637(MixinEntity entity, float f) {
+    protected void method_637(Entity entity, float f) {
         if ((double) f < 15.0 && this.rand.nextBoolean()) {
             this.method_924(entity, 30.0f, 30.0f);
             if (this.attackTime == 0) {

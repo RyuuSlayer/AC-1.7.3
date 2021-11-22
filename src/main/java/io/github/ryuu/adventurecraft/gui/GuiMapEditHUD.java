@@ -8,15 +8,15 @@ import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.level.Level;
 import org.lwjgl.input.Keyboard;
 
-public class GuiMapEditHUD extends MixinScreen {
+public class GuiMapEditHUD extends Screen {
 
-    private MixinLevel world;
+    private Level world;
 
     private long clickedTime;
 
     private GuiEditPalette palette;
 
-    public GuiMapEditHUD(MixinLevel w) {
+    public GuiMapEditHUD(Level w) {
         this.world = w;
         DebugMode.editMode = true;
         if (DebugMode.mapEditing == null) {

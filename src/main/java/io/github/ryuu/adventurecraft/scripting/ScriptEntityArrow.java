@@ -8,9 +8,9 @@ import net.minecraft.script.ScriptVec3;
 
 public class ScriptEntityArrow extends ScriptEntity {
 
-    MixinArrow entityArrow;
+    Arrow entityArrow;
 
-    ScriptEntityArrow(MixinArrow e) {
+    ScriptEntityArrow(Arrow e) {
         super(e);
         this.entityArrow = e;
     }

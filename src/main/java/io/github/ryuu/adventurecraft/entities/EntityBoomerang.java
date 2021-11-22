@@ -14,7 +14,7 @@ import net.minecraft.tile.Tile;
 import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.MathsHelper;
 
-public class EntityBoomerang extends MixinEntity {
+public class EntityBoomerang extends Entity {
 
     double bounceFactor;
 
@@ -26,11 +26,11 @@ public class EntityBoomerang extends MixinEntity {
 
     boolean turningAround;
 
-    MixinEntity returnsTo;
+    Entity returnsTo;
 
-    List<net.minecraft.src.MixinEntity> itemsPickedUp;
+    List<net.minecraft.src.Entity> itemsPickedUp;
 
-    MixinItemInstance item;
+    ItemInstance item;
 
     int chunkX;
 
@@ -38,7 +38,7 @@ public class EntityBoomerang extends MixinEntity {
 
     int chunkZ;
 
-    public EntityBoomerang(MixinLevel world) {
+    public EntityBoomerang(Level world) {
         super(world);
         this.setSize(0.5f, 0.0625f);
         this.standingEyeHeight = 0.03125f;
@@ -50,7 +50,7 @@ public class EntityBoomerang extends MixinEntity {
         this.collidesWithClipBlocks = false;
     }
 
-    public EntityBoomerang(MixinLevel world, MixinEntity entity, MixinItemInstance b) {
+    public EntityBoomerang(Level world, Entity entity, ItemInstance b) {
         this(world);
         this.item = b;
         this.setRotation(entity.yaw, entity.pitch);
@@ -127,12 +127,12 @@ public class EntityBoomerang extends MixinEntity {
         }
         List entitiesWithin = this.level.getEntities(this, this.boundingBox.expand(0.5, 0.5, 0.5));
         for (int i = 0; i < entitiesWithin.size(); ++i) {
-            MixinEntity e = (MixinEntity) entitiesWithin.get(i);
-            if (e instanceof MixinItemEntity) {
+            Entity e = (Entity) entitiesWithin.get(i);
+            if (e instanceof ItemEntity) {
                 this.itemsPickedUp.add((Object) e);
                 continue;
             }
-            if (!(e instanceof MixinLivingEntity) || e == this.returnsTo)
+            if (!(e instanceof LivingEntity) || e == this.returnsTo)
                 continue;
             e.stunned = 20;
             e.prevX = e.x;
@@ -141,7 +141,7 @@ public class EntityBoomerang extends MixinEntity {
             e.prevYaw = e.yaw;
             e.prevPitch = e.pitch;
         }
-        for (MixinEntity e : this.itemsPickedUp) {
+        for (Entity e : this.itemsPickedUp) {
             if (e.removed)
                 continue;
             e.setPosition(this.x, this.y, this.z);
@@ -154,8 +154,8 @@ public class EntityBoomerang extends MixinEntity {
             this.chunkY = curChunkY;
             this.chunkZ = curChunkZ;
             int blockID = this.level.getTileId(this.chunkX, this.chunkY, this.chunkZ);
-            if (blockID == Tile.LEVER.id && this.returnsTo instanceof MixinPlayer) {
-                Tile.LEVER.activate(this.level, this.chunkX, this.chunkY, this.chunkZ, (MixinPlayer) this.returnsTo);
+            if (blockID == Tile.LEVER.id && this.returnsTo instanceof Player) {
+                Tile.LEVER.activate(this.level, this.chunkX, this.chunkY, this.chunkZ, (Player) this.returnsTo);
             }
         }
     }
@@ -175,20 +175,20 @@ public class EntityBoomerang extends MixinEntity {
     }
 
     @Override
-    protected void writeCustomDataToTag(MixinCompoundTag tag) {
+    protected void writeCustomDataToTag(CompoundTag tag) {
     }
 
     @Override
-    public void readCustomDataFromTag(MixinCompoundTag tag) {
+    public void readCustomDataFromTag(CompoundTag tag) {
         this.remove();
     }
 
     @Override
-    public void onPlayerCollision(MixinPlayer entityplayer) {
+    public void onPlayerCollision(Player entityplayer) {
     }
 
     @Override
-    public boolean damage(MixinEntity target, int amount) {
+    public boolean damage(Entity target, int amount) {
         return false;
     }
 

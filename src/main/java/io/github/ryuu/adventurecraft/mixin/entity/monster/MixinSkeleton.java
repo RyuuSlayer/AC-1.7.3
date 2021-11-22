@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(Skeleton.class)
-public class MixinSkeleton extends Monster {
+public class MixinSkeleton extends MixinMonster {
 
     @Shadow()
     private static final ItemInstance field_302 = new ItemInstance(ItemType.bow, 1);

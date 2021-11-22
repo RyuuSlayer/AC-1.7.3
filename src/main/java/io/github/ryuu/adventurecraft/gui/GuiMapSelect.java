@@ -15,9 +15,9 @@ import net.minecraft.src.MapInfo;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
-public class GuiMapSelect extends MixinScreen {
+public class GuiMapSelect extends Screen {
 
-    protected MixinScreen parent;
+    protected Screen parent;
 
     private int field_6460_h = 0;
 
@@ -39,7 +39,7 @@ public class GuiMapSelect extends MixinScreen {
 
     private MapInfo selectedMap;
 
-    public GuiMapSelect(MixinScreen guiscreen, String save) {
+    public GuiMapSelect(Screen guiscreen, String save) {
         this.parent = guiscreen;
         this.saveName = save;
     }
@@ -47,7 +47,7 @@ public class GuiMapSelect extends MixinScreen {
     @Override
     public void init() {
         this.minecraft.mapList.findMaps();
-        MixinTranslationStorage stringtranslate = TranslationStorage.getInstance();
+        TranslationStorage stringtranslate = TranslationStorage.getInstance();
         if (this.saveName == null) {
             this.buttons.add((Object) new OptionButton(6, this.width / 2 + 5, this.height - 48, stringtranslate.translate("gui.done")));
             this.buttons.add((Object) new Button(7, this.width / 2 - 155, this.height - 48, 150, 20, "New Map"));
@@ -86,7 +86,7 @@ public class GuiMapSelect extends MixinScreen {
                     }
                     this.minecraft.saveMapUsed(this.saveName, this.selectedMap.name);
                 }
-                this.minecraft.interactionManager = new MixinClass_520(this.minecraft);
+                this.minecraft.interactionManager = new class_520(this.minecraft);
                 this.minecraft.startWorld(this.saveName, this.saveName, 0L, this.selectedMap.name);
             }
         } else if (button.id == 7) {
@@ -223,7 +223,7 @@ public class GuiMapSelect extends MixinScreen {
         GL11.glShadeModel((int) 7424);
         GL11.glEnable((int) 3008);
         GL11.glDisable((int) 3042);
-        MixinTranslationStorage stringtranslate = TranslationStorage.getInstance();
+        TranslationStorage stringtranslate = TranslationStorage.getInstance();
         this.drawTextWithShadowCentred(this.textManager, stringtranslate.translate("mapList.title"), this.width / 2, 16, 0xFFFFFF);
         super.render(mouseX, mouseY, delta);
     }

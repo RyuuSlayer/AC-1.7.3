@@ -8,7 +8,7 @@ import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.Textbox;
 
-public class GuiNPC extends MixinScreen {
+public class GuiNPC extends Screen {
 
     private EntityNPC npc;
 

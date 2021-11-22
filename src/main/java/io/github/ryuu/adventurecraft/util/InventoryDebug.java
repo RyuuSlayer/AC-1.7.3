@@ -14,7 +14,7 @@ public class InventoryDebug implements Inventory {
 
     private int size;
 
-    private MixinItemInstance[] inventoryContents;
+    private ItemInstance[] inventoryContents;
 
     public int firstItem;
 
@@ -25,7 +25,7 @@ public class InventoryDebug implements Inventory {
     public InventoryDebug(String s, int i) {
         this.inventoryTitle = s;
         this.size = i;
-        this.inventoryContents = new MixinItemInstance[i];
+        this.inventoryContents = new ItemInstance[i];
     }
 
     private int getID(int i) {
@@ -636,7 +636,7 @@ public class InventoryDebug implements Inventory {
         for (int i = 0; i < this.size; ++i) {
             int id = this.getID(i + offset);
             if (ItemType.byId[id] != null) {
-                this.inventoryContents[i] = new MixinItemInstance(ItemType.byId[id], -64);
+                this.inventoryContents[i] = new ItemInstance(ItemType.byId[id], -64);
                 this.inventoryContents[i].setDamage(this.getSubtype(i + offset));
                 this.lastItem = i + offset;
                 if (filledFirst)
@@ -665,7 +665,7 @@ public class InventoryDebug implements Inventory {
         for (int i = 0; i < this.size; ++i) {
             int id = this.getID(offset - i);
             if (id > 0 && ItemType.byId[id] != null) {
-                this.inventoryContents[this.size - i - 1] = new MixinItemInstance(ItemType.byId[id], -64);
+                this.inventoryContents[this.size - i - 1] = new ItemInstance(ItemType.byId[id], -64);
                 this.inventoryContents[this.size - i - 1].setDamage(this.getSubtype(offset - i));
                 this.firstItem = offset - i;
                 if (filledFirst)
@@ -688,12 +688,12 @@ public class InventoryDebug implements Inventory {
     }
 
     @Override
-    public MixinItemInstance getInvItem(int i) {
+    public ItemInstance getInvItem(int i) {
         return this.inventoryContents[i];
     }
 
     @Override
-    public MixinItemInstance takeInvItem(int index, int j) {
+    public ItemInstance takeInvItem(int index, int j) {
         if (this.inventoryContents[index] != null) {
             return this.inventoryContents[index].copy();
         }
@@ -701,7 +701,7 @@ public class InventoryDebug implements Inventory {
     }
 
     @Override
-    public void setInvItem(int i, MixinItemInstance itemstack) {
+    public void setInvItem(int i, ItemInstance itemstack) {
         if (this.inventoryContents[i] != null) {
             this.inventoryContents[i] = this.inventoryContents[i].copy();
         }
@@ -727,7 +727,7 @@ public class InventoryDebug implements Inventory {
     }
 
     @Override
-    public boolean canPlayerUse(MixinPlayer entityplayer) {
+    public boolean canPlayerUse(Player entityplayer) {
         return true;
     }
 }

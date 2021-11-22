@@ -18,7 +18,7 @@ public class BlockMusic extends TileWithEntity {
     }
 
     @Override
-    protected MixinTileEntity createTileEntity() {
+    protected TileEntity createTileEntity() {
         return new TileEntityMusic();
     }
 
@@ -28,7 +28,7 @@ public class BlockMusic extends TileWithEntity {
     }
 
     @Override
-    public Box getCollisionShape(MixinLevel level, int x, int y, int z) {
+    public Box getCollisionShape(Level level, int x, int y, int z) {
         return null;
     }
 
@@ -43,7 +43,7 @@ public class BlockMusic extends TileWithEntity {
     }
 
     @Override
-    public void onTriggerActivated(MixinLevel world, int i, int j, int k) {
+    public void onTriggerActivated(Level world, int i, int j, int k) {
         TileEntityMusic obj = (TileEntityMusic) world.getTileEntity(i, j, k);
         if (!obj.musicName.equals((Object) "")) {
             Minecraft.minecraftInstance.soundHelper.playMusicFromStreaming(obj.musicName, obj.fadeOut, obj.fadeIn);
@@ -53,11 +53,11 @@ public class BlockMusic extends TileWithEntity {
     }
 
     @Override
-    public void onTriggerDeactivated(MixinLevel world, int i, int j, int k) {
+    public void onTriggerDeactivated(Level world, int i, int j, int k) {
     }
 
     @Override
-    public boolean activate(MixinLevel level, int x, int y, int z, MixinPlayer player) {
+    public boolean activate(Level level, int x, int y, int z, Player player) {
         if (DebugMode.active && player.getHeldItem() != null && player.getHeldItem().itemId == Items.cursor.id) {
             TileEntityMusic obj = (TileEntityMusic) level.getTileEntity(x, y, z);
             GuiMusic.showUI(level, obj);

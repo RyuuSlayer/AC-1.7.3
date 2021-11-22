@@ -10,7 +10,7 @@ import net.minecraft.level.Level;
 import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.MathsHelper;
 
-public class EntityBat extends MixinFlyingEntity implements MonsterEntityType {
+public class EntityBat extends FlyingEntity implements MonsterEntityType {
 
     public int courseChangeCooldown = 0;
 
@@ -20,7 +20,7 @@ public class EntityBat extends MixinFlyingEntity implements MonsterEntityType {
 
     public double waypointZ;
 
-    private MixinEntity targetedEntity = null;
+    private Entity targetedEntity = null;
 
     private int aggroCooldown = 0;
 
@@ -30,7 +30,7 @@ public class EntityBat extends MixinFlyingEntity implements MonsterEntityType {
 
     Random bs;
 
-    public EntityBat(MixinLevel world) {
+    public EntityBat(Level world) {
         super(world);
         this.texture = "/mob/bat.png";
         this.bs = new Random();

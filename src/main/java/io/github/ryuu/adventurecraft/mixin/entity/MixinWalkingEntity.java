@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(WalkingEntity.class)
-public class MixinWalkingEntity extends LivingEntity implements IEntityPather {
+public class MixinWalkingEntity extends MixinLivingEntity implements IEntityPather {
 
     @Shadow()
     private class_61 field_661;
@@ -35,6 +35,11 @@ public class MixinWalkingEntity extends LivingEntity implements IEntityPather {
 
     public MixinWalkingEntity(Level world) {
         super(world);
+    }
+
+    @Override
+    protected void initDataTracker() {
+
     }
 
     /**

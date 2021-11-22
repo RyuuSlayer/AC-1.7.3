@@ -8,7 +8,7 @@ import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 
-class ItemNPCStick extends MixinItemType {
+class ItemNPCStick extends ItemType {
 
     public ItemNPCStick(int id) {
         super(id);
@@ -17,7 +17,7 @@ class ItemNPCStick extends MixinItemType {
     }
 
     @Override
-    public boolean useOnTile(MixinItemInstance item, MixinPlayer player, MixinLevel level, int x, int y, int z, int facing) {
+    public boolean useOnTile(ItemInstance item, Player player, Level level, int x, int y, int z, int facing) {
         EntityNPC npc = new EntityNPC(level);
         npc.method_1338((double) x + 0.5, y + 1, (double) z + 0.5, player.yaw + 180.0f, 0.0f);
         npc.field_1012 = npc.yaw;
@@ -26,7 +26,7 @@ class ItemNPCStick extends MixinItemType {
     }
 
     @Override
-    public boolean postHit(MixinItemInstance itemstack, MixinLivingEntity entityliving, MixinLivingEntity entityliving1) {
+    public boolean postHit(ItemInstance itemstack, LivingEntity entityliving, LivingEntity entityliving1) {
         if (entityliving instanceof EntityNPC) {
             GuiNPC.showUI((EntityNPC) entityliving);
             return true;

@@ -8,7 +8,7 @@ import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.Textbox;
 import net.minecraft.entity.Entity;
 
-public class GuiCamera extends MixinScreen {
+public class GuiCamera extends Screen {
 
     private EntityCamera cam;
 
@@ -59,7 +59,7 @@ public class GuiCamera extends MixinScreen {
         } else if (button.id == 1) {
             this.cam.type = (this.cam.type + 1) % 3;
             this.minecraft.activeCutsceneCamera.setPointType(this.cam.cameraID, this.cam.type);
-            for (MixinEntity obj : this.minecraft.level.entities) {
+            for (Entity obj : this.minecraft.level.entities) {
                 EntityCamera c;
                 if (!(obj instanceof EntityCamera) || !(c = (EntityCamera) obj).isAlive() || c.cameraID != this.cam.cameraID)
                     continue;

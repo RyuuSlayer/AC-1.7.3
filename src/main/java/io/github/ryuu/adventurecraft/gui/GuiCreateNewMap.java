@@ -12,9 +12,9 @@ import net.minecraft.level.Level;
 import net.minecraft.util.maths.MathsHelper;
 import org.lwjgl.input.Keyboard;
 
-public class GuiCreateNewMap extends MixinScreen {
+public class GuiCreateNewMap extends Screen {
 
-    private MixinScreen parent;
+    private Screen parent;
 
     private Textbox textboxMapName;
 
@@ -64,7 +64,7 @@ public class GuiCreateNewMap extends MixinScreen {
 
     GuiSlider2 sliderVolatilityWeight2;
 
-    public GuiCreateNewMap(MixinScreen guiscreen) {
+    public GuiCreateNewMap(Screen guiscreen) {
         this.parent = guiscreen;
     }
 
@@ -76,7 +76,7 @@ public class GuiCreateNewMap extends MixinScreen {
 
     @Override
     public void init() {
-        MixinTranslationStorage stringtranslate = TranslationStorage.getInstance();
+        TranslationStorage stringtranslate = TranslationStorage.getInstance();
         Keyboard.enableRepeatEvents((boolean) true);
         this.buttons.clear();
         this.buttons.add((Object) new Button(0, this.width / 2 - 205, 200, "Create Map"));
@@ -163,11 +163,11 @@ public class GuiCreateNewMap extends MixinScreen {
                     l = s.hashCode();
                 }
             }
-            this.minecraft.interactionManager = new MixinClass_520(this.minecraft);
+            this.minecraft.interactionManager = new class_520(this.minecraft);
             DebugMode.levelEditing = true;
             String mapName = this.textboxMapName.method_1876().trim();
             this.minecraft.saveMapUsed(mapName, mapName);
-            MixinLevel w = this.minecraft.getWorld(mapName, l, mapName);
+            Level w = this.minecraft.getWorld(mapName, l, mapName);
             w.properties.useImages = false;
             w.properties.mapSize = this.mapSize;
             w.properties.waterLevel = this.waterLevel;
@@ -204,7 +204,7 @@ public class GuiCreateNewMap extends MixinScreen {
 
     @Override
     public void render(int mouseX, int mouseY, float delta) {
-        MixinTranslationStorage stringtranslate = TranslationStorage.getInstance();
+        TranslationStorage stringtranslate = TranslationStorage.getInstance();
         this.renderBackground();
         this.drawTextWithShadowCentred(this.textManager, "Create Random Map", this.width / 2, 20, 0xFFFFFF);
         String enterName = "Map Name:";

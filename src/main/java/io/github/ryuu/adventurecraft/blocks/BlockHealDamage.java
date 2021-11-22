@@ -17,7 +17,7 @@ public class BlockHealDamage extends TileWithEntity {
     }
 
     @Override
-    protected MixinTileEntity createTileEntity() {
+    protected TileEntity createTileEntity() {
         return new TileEntityHealDamage();
     }
 
@@ -27,7 +27,7 @@ public class BlockHealDamage extends TileWithEntity {
     }
 
     @Override
-    public Box getCollisionShape(MixinLevel level, int x, int y, int z) {
+    public Box getCollisionShape(Level level, int x, int y, int z) {
         return null;
     }
 
@@ -42,10 +42,10 @@ public class BlockHealDamage extends TileWithEntity {
     }
 
     @Override
-    public void onTriggerActivated(MixinLevel world, int i, int j, int k) {
+    public void onTriggerActivated(Level world, int i, int j, int k) {
         TileEntityHealDamage tileEnt = (TileEntityHealDamage) world.getTileEntity(i, j, k);
         for (Object obj : world.players) {
-            MixinPlayer p = (MixinPlayer) obj;
+            Player p = (Player) obj;
             if (tileEnt.healDamage > 0) {
                 p.addHealth(tileEnt.healDamage);
                 continue;
@@ -55,7 +55,7 @@ public class BlockHealDamage extends TileWithEntity {
     }
 
     @Override
-    public void onTriggerDeactivated(MixinLevel world, int i, int j, int k) {
+    public void onTriggerDeactivated(Level world, int i, int j, int k) {
     }
 
     @Override
@@ -64,7 +64,7 @@ public class BlockHealDamage extends TileWithEntity {
     }
 
     @Override
-    public boolean activate(MixinLevel level, int x, int y, int z, MixinPlayer player) {
+    public boolean activate(Level level, int x, int y, int z, Player player) {
         if (DebugMode.active && player.getHeldItem() != null && player.getHeldItem().itemId == Items.cursor.id) {
             TileEntityHealDamage obj = (TileEntityHealDamage) level.getTileEntity(x, y, z);
             GuiHealDamage.showUI(level, obj);

@@ -6,9 +6,9 @@ import net.minecraft.level.Level;
 
 public class ScriptWeather {
 
-    MixinLevel world;
+    Level world;
 
-    ScriptWeather(MixinLevel w) {
+    ScriptWeather(Level w) {
         this.world = w;
     }
 

@@ -18,7 +18,7 @@ public class BlockTriggerInverter extends TileWithEntity {
     }
 
     @Override
-    protected MixinTileEntity createTileEntity() {
+    protected TileEntity createTileEntity() {
         return new TileEntityTriggerInverter();
     }
 
@@ -38,7 +38,7 @@ public class BlockTriggerInverter extends TileWithEntity {
     }
 
     @Override
-    public Box getCollisionShape(MixinLevel level, int x, int y, int z) {
+    public Box getCollisionShape(Level level, int x, int y, int z) {
         return null;
     }
 
@@ -63,17 +63,17 @@ public class BlockTriggerInverter extends TileWithEntity {
     }
 
     @Override
-    public void onTriggerActivated(MixinLevel world, int i, int j, int k) {
+    public void onTriggerActivated(Level world, int i, int j, int k) {
         world.triggerManager.removeArea(i, j, k);
     }
 
     @Override
-    public void onTriggerDeactivated(MixinLevel world, int i, int j, int k) {
+    public void onTriggerDeactivated(Level world, int i, int j, int k) {
         TileEntityTriggerInverter obj = (TileEntityTriggerInverter) world.getTileEntity(i, j, k);
         world.triggerManager.addArea(i, j, k, new TriggerArea(obj.minX, obj.minY, obj.minZ, obj.maxX, obj.maxY, obj.maxZ));
     }
 
-    public void setTriggerToSelection(MixinLevel world, int i, int j, int k) {
+    public void setTriggerToSelection(Level world, int i, int j, int k) {
         TileEntityTriggerInverter obj = (TileEntityTriggerInverter) world.getTileEntity(i, j, k);
         if (obj.minX == ItemCursor.minX && obj.minY == ItemCursor.minY && obj.minZ == ItemCursor.minZ && obj.maxX == ItemCursor.maxX && obj.maxY == ItemCursor.maxY && obj.maxZ == ItemCursor.maxZ) {
             return;
@@ -82,7 +82,7 @@ public class BlockTriggerInverter extends TileWithEntity {
     }
 
     @Override
-    public boolean activate(MixinLevel level, int x, int y, int z, MixinPlayer player) {
+    public boolean activate(Level level, int x, int y, int z, Player player) {
         if (DebugMode.active && player.getHeldItem() != null && player.getHeldItem().itemId == Items.cursor.id) {
             TileEntityTriggerInverter obj = (TileEntityTriggerInverter) level.getTileEntity(x, y, z);
             GuiTriggerInverter.showUI(level, x, y, z, obj);
@@ -92,7 +92,7 @@ public class BlockTriggerInverter extends TileWithEntity {
     }
 
     @Override
-    public void reset(MixinLevel world, int i, int j, int k, boolean death) {
+    public void reset(Level world, int i, int j, int k, boolean death) {
         if (!world.triggerManager.isActivated(i, j, k)) {
             this.onTriggerDeactivated(world, i, j, k);
         }

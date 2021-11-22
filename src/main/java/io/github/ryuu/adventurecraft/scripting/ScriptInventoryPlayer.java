@@ -9,9 +9,9 @@ import net.minecraft.script.ScriptItem;
 
 public class ScriptInventoryPlayer extends ScriptInventory {
 
-    MixinPlayerInventory invPlayer;
+    PlayerInventory invPlayer;
 
-    ScriptInventoryPlayer(MixinPlayerInventory i) {
+    ScriptInventoryPlayer(PlayerInventory i) {
         super(i);
         this.invPlayer = i;
     }
@@ -20,7 +20,7 @@ public class ScriptInventoryPlayer extends ScriptInventory {
         int i = this.invPlayer.getSlotWithItem(itemID);
         if (i == -1) {
             for (int j = 36; j < 40; ++j) {
-                MixinItemInstance k = this.invPlayer.getInvItem(j);
+                ItemInstance k = this.invPlayer.getInvItem(j);
                 if (k == null || k.itemId != itemID)
                     continue;
                 return j;
@@ -31,7 +31,7 @@ public class ScriptInventoryPlayer extends ScriptInventory {
 
     public int getSlotContainingItemDamage(int itemID, int damage) {
         for (int i = 0; i < this.invPlayer.getInvSize(); ++i) {
-            MixinItemInstance j = this.invPlayer.getInvItem(i);
+            ItemInstance j = this.invPlayer.getInvItem(i);
             if (j == null || j.itemId != itemID || j.getDamage() != damage)
                 continue;
             return i;
@@ -64,7 +64,7 @@ public class ScriptInventoryPlayer extends ScriptInventory {
     }
 
     public ScriptItem getCurrentItem() {
-        MixinItemInstance i = this.invPlayer.getHeldItem();
+        ItemInstance i = this.invPlayer.getHeldItem();
         if (i == null || i.itemId == 0) {
             return null;
         }
@@ -72,7 +72,7 @@ public class ScriptInventoryPlayer extends ScriptInventory {
     }
 
     public ScriptItem getOffhandItem() {
-        MixinItemInstance i = this.invPlayer.getOffhandItem();
+        ItemInstance i = this.invPlayer.getOffhandItem();
         if (i == null || i.itemId == 0) {
             return null;
         }
@@ -88,7 +88,7 @@ public class ScriptInventoryPlayer extends ScriptInventory {
     }
 
     public ScriptItem getCursorItem() {
-        MixinItemInstance i = this.invPlayer.getCursorItem();
+        ItemInstance i = this.invPlayer.getCursorItem();
         if (i == null || i.itemId == 0) {
             return null;
         }

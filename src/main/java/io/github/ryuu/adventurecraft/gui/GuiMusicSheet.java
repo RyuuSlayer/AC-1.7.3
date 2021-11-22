@@ -8,7 +8,7 @@ import net.minecraft.client.gui.Screen;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-public class GuiMusicSheet extends MixinScreen {
+public class GuiMusicSheet extends Screen {
 
     private String instrument;
 

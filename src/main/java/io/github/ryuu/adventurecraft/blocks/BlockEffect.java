@@ -34,7 +34,7 @@ public class BlockEffect extends TileWithEntity {
     }
 
     @Override
-    protected MixinTileEntity createTileEntity() {
+    protected TileEntity createTileEntity() {
         return new TileEntityEffect();
     }
 
@@ -44,7 +44,7 @@ public class BlockEffect extends TileWithEntity {
     }
 
     @Override
-    public Box getCollisionShape(MixinLevel level, int x, int y, int z) {
+    public Box getCollisionShape(Level level, int x, int y, int z) {
         return null;
     }
 
@@ -64,7 +64,7 @@ public class BlockEffect extends TileWithEntity {
     }
 
     @Override
-    public void onTriggerActivated(MixinLevel world, int i, int j, int k) {
+    public void onTriggerActivated(Level world, int i, int j, int k) {
         TileEntityEffect obj = (TileEntityEffect) world.getTileEntity(i, j, k);
         obj.isActivated = true;
         obj.ticksBeforeParticle = 0;
@@ -93,7 +93,7 @@ public class BlockEffect extends TileWithEntity {
         }
     }
 
-    public static void revertTextures(MixinLevel world) {
+    public static void revertTextures(Level world) {
         Minecraft.minecraftInstance.textureManager.revertTextures();
         if (needsReloadForRevert) {
             GrassColour.loadGrass("/misc/grasscolor.png");
@@ -106,7 +106,7 @@ public class BlockEffect extends TileWithEntity {
         world.properties.revertTextures();
     }
 
-    public void replaceTextures(MixinLevel world, String replacement) {
+    public void replaceTextures(Level world, String replacement) {
         boolean needsReload = false;
         File replacementFile = new File(world.levelDir, "textureReplacement/" + replacement);
         if (replacementFile.exists()) {
@@ -132,7 +132,7 @@ public class BlockEffect extends TileWithEntity {
         }
     }
 
-    public static boolean replaceTexture(MixinLevel world, String textureToReplace, String replacementTexture) {
+    public static boolean replaceTexture(Level world, String textureToReplace, String replacementTexture) {
         String lTextureToReplace = textureToReplace.toLowerCase();
         if (!world.properties.addReplacementTexture(textureToReplace, replacementTexture)) {
             return false;
@@ -186,13 +186,13 @@ public class BlockEffect extends TileWithEntity {
     }
 
     @Override
-    public void onTriggerDeactivated(MixinLevel world, int i, int j, int k) {
+    public void onTriggerDeactivated(Level world, int i, int j, int k) {
         TileEntityEffect obj = (TileEntityEffect) world.getTileEntity(i, j, k);
         obj.isActivated = false;
     }
 
     @Override
-    public boolean activate(MixinLevel level, int x, int y, int z, MixinPlayer player) {
+    public boolean activate(Level level, int x, int y, int z, Player player) {
         if (DebugMode.active && player.getHeldItem() != null && player.getHeldItem().itemId == Items.cursor.id) {
             TileEntityEffect obj = (TileEntityEffect) level.getTileEntity(x, y, z);
             GuiEffect.showUI(obj);

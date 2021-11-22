@@ -10,19 +10,19 @@ import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import org.lwjgl.opengl.GL11;
 
-public class GuiStore extends MixinScreen {
+public class GuiStore extends Screen {
 
-    MixinItemInstance buyItem = new MixinItemInstance(0, 0, 0);
+    ItemInstance buyItem = new ItemInstance(0, 0, 0);
 
-    MixinItemInstance sellItem = new MixinItemInstance(0, 0, 0);
+    ItemInstance sellItem = new ItemInstance(0, 0, 0);
 
     int supplyLeft;
 
-    private static MixinItemRenderer itemRenderer = new MixinItemRenderer();
+    private static ItemRenderer itemRenderer = new ItemRenderer();
 
     @Override
     public void render(int mouseX, int mouseY, float delta) {
-        MixinTranslationStorage t = TranslationStorage.getInstance();
+        TranslationStorage t = TranslationStorage.getInstance();
         int yOffset = 64;
         if (this.supplyLeft < 0) {
             this.fill(this.width / 2 - 38, this.height / 2 - 10 - 12 - yOffset, this.width / 2 + 38, this.height / 2 + 10 - yOffset, Integer.MIN_VALUE);

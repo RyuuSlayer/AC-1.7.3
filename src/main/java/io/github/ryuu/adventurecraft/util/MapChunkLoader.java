@@ -19,8 +19,8 @@ public class MapChunkLoader implements ChunkIO {
     }
 
     @Override
-    public MixinChunk getChunk(MixinLevel level, int xPos, int zPos) throws IOException {
-        MixinChunk returnChunk = this.saveRegion.getChunk(level, xPos, zPos);
+    public Chunk getChunk(Level level, int xPos, int zPos) throws IOException {
+        Chunk returnChunk = this.saveRegion.getChunk(level, xPos, zPos);
         if (returnChunk == null) {
             returnChunk = this.mapRegion.getChunk(level, xPos, zPos);
         }
@@ -28,7 +28,7 @@ public class MapChunkLoader implements ChunkIO {
     }
 
     @Override
-    public void saveChunk(MixinLevel level, MixinChunk chunk) {
+    public void saveChunk(Level level, Chunk chunk) {
         try {
             this.saveRegion.saveChunk(level, chunk);
             if (DebugMode.levelEditing) {
@@ -40,7 +40,7 @@ public class MapChunkLoader implements ChunkIO {
     }
 
     @Override
-    public void prepareChunk(MixinLevel level, MixinChunk chunk) {
+    public void prepareChunk(Level level, Chunk chunk) {
     }
 
     @Override

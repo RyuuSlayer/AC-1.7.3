@@ -7,7 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 
-public class GuiScript extends MixinScreen {
+public class GuiScript extends Screen {
 
     TileEntityScript script;
 

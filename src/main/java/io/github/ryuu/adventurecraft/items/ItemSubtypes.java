@@ -5,7 +5,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.item.PlaceableTileItem;
 import net.minecraft.tile.Tile;
 
-public class ItemSubtypes extends MixinPlaceableTileItem {
+public class ItemSubtypes extends PlaceableTileItem {
 
     public ItemSubtypes(int id) {
         super(id);

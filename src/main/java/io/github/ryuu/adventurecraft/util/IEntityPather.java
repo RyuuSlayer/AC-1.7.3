@@ -6,5 +6,5 @@ import net.minecraft.class_61;
 
 public interface IEntityPather {
 
-    public MixinClass_61 getCurrentPath();
+    public class_61 getCurrentPath();
 }

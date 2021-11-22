@@ -7,9 +7,9 @@ import net.minecraft.entity.monster.Monster;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 
-public class EntityRat extends MixinMonster {
+public class EntityRat extends Monster {
 
-    public EntityRat(MixinLevel world) {
+    public EntityRat(Level world) {
         super(world);
         this.texture = "/mob/rat.png";
         this.movementSpeed = 0.5f;
@@ -20,8 +20,8 @@ public class EntityRat extends MixinMonster {
     }
 
     @Override
-    protected MixinEntity method_638() {
-        MixinPlayer entityplayer = this.level.getClosestPlayerTo(this, 5.0);
+    protected Entity method_638() {
+        Player entityplayer = this.level.getClosestPlayerTo(this, 5.0);
         if (entityplayer != null && this.method_928(entityplayer)) {
             return entityplayer;
         }

@@ -14,13 +14,13 @@ public class BlockRope extends BlockPlant {
     }
 
     @Override
-    public Box getOutlineShape(MixinLevel level, int x, int y, int z) {
+    public Box getOutlineShape(Level level, int x, int y, int z) {
         this.updateBounds(level, x, y, z);
         return super.getOutlineShape(level, x, y, z);
     }
 
     @Override
-    public Box getCollisionShape(MixinLevel level, int x, int y, int z) {
+    public Box getCollisionShape(Level level, int x, int y, int z) {
         int m = level.getTileMeta(x, y, z) % 3;
         if (m == 0) {
             return null;
@@ -29,7 +29,7 @@ public class BlockRope extends BlockPlant {
         return Box.getOrCreate((double) x + this.minX, (double) y + this.minY, (double) z + this.minZ, (double) x + this.maxX, (double) y + this.maxY, (double) z + this.maxZ);
     }
 
-    private void updateBounds(MixinLevel world, int i, int j, int k) {
+    private void updateBounds(Level world, int i, int j, int k) {
         int m = world.getTileMeta(i, j, k) % 3;
         float f = 0.2f;
         if (m == 0) {

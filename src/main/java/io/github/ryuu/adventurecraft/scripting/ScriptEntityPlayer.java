@@ -8,9 +8,9 @@ import net.minecraft.script.ScriptInventoryPlayer;
 
 public class ScriptEntityPlayer extends ScriptEntityLiving {
 
-    MixinPlayer entityPlayer;
+    Player entityPlayer;
 
-    ScriptEntityPlayer(MixinPlayer e) {
+    ScriptEntityPlayer(Player e) {
         super(e);
         this.entityPlayer = e;
     }

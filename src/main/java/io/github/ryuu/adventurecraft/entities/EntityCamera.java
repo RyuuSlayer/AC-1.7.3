@@ -8,7 +8,7 @@ import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.util.io.CompoundTag;
 
-public class EntityCamera extends MixinLivingEntity {
+public class EntityCamera extends LivingEntity {
 
     float time;
 
@@ -16,7 +16,7 @@ public class EntityCamera extends MixinLivingEntity {
 
     int cameraID;
 
-    EntityCamera(MixinLevel world, float t, int ty, int id) {
+    EntityCamera(Level world, float t, int ty, int id) {
         super(world);
         this.time = t;
         this.cameraID = id;
@@ -33,11 +33,11 @@ public class EntityCamera extends MixinLivingEntity {
     }
 
     @Override
-    public void readCustomDataFromTag(MixinCompoundTag tag) {
+    public void readCustomDataFromTag(CompoundTag tag) {
     }
 
     @Override
-    public void writeCustomDataToTag(MixinCompoundTag tag) {
+    public void writeCustomDataToTag(CompoundTag tag) {
     }
 
     @Override
@@ -63,7 +63,7 @@ public class EntityCamera extends MixinLivingEntity {
     }
 
     @Override
-    public boolean interact(MixinPlayer entityplayer) {
+    public boolean interact(Player entityplayer) {
         GuiCamera.showUI(this);
         return true;
     }

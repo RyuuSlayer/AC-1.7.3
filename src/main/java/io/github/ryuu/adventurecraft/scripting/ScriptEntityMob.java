@@ -7,9 +7,9 @@ import net.minecraft.script.ScriptEntityCreature;
 
 public class ScriptEntityMob extends ScriptEntityCreature {
 
-    MixinMonster entityMob;
+    Monster entityMob;
 
-    ScriptEntityMob(MixinMonster e) {
+    ScriptEntityMob(Monster e) {
         super(e);
         this.entityMob = e;
     }

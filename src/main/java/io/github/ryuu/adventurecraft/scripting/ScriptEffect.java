@@ -9,11 +9,11 @@ import net.minecraft.script.ScriptEntity;
 
 public class ScriptEffect {
 
-    MixinLevel worldObj;
+    Level worldObj;
 
-    MixinWorldRenderer renderGlobal;
+    WorldRenderer renderGlobal;
 
-    ScriptEffect(MixinLevel w, MixinWorldRenderer rg) {
+    ScriptEffect(Level w, WorldRenderer rg) {
         this.worldObj = w;
         this.renderGlobal = rg;
     }

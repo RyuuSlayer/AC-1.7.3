@@ -8,15 +8,15 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemInstance;
 import org.lwjgl.opengl.GL11;
 
-public class RenderBomb extends MixinItemRenderer {
+public class RenderBomb extends ItemRenderer {
 
     public RenderBomb() {
         this.field_2678 = 0.35f;
     }
 
     @Override
-    public void method_1484(MixinItemEntity entityitem, double d, double d1, double d2, float f, float f1) {
-        MixinItemInstance itemstack = entityitem.item;
+    public void method_1484(ItemEntity entityitem, double d, double d1, double d2, float f, float f1) {
+        ItemInstance itemstack = entityitem.item;
         GL11.glPushMatrix();
         GL11.glTranslatef((float) ((float) d), (float) ((float) d1 + 0.1f), (float) ((float) d2));
         GL11.glEnable((int) 32826);

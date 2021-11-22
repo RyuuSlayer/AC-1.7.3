@@ -8,7 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 
-public class GuiEffect extends MixinScreen {
+public class GuiEffect extends Screen {
 
     private TileEntityEffect effect;
 

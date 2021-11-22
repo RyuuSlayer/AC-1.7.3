@@ -7,9 +7,9 @@ import net.minecraft.script.ScriptEntityLiving;
 
 public class ScriptEntitySlime extends ScriptEntityLiving {
 
-    MixinSlime entitySlime;
+    Slime entitySlime;
 
-    ScriptEntitySlime(MixinSlime e) {
+    ScriptEntitySlime(Slime e) {
         super(e);
         this.entitySlime = e;
     }

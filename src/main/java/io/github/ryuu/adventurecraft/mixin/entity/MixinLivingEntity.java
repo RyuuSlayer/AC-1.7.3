@@ -23,10 +23,11 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(LivingEntity.class)
-public abstract class MixinLivingEntity extends Entity {
+public abstract class MixinLivingEntity extends MixinEntity {
 
     @Shadow()
     public int field_1009 = 20;
+
 
     public float field_1010;
 

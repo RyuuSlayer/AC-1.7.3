@@ -13,14 +13,14 @@ public class TileEntityRedstoneTrigger extends TileEntityMinMax {
     public boolean resetOnTrigger;
 
     @Override
-    public void readIdentifyingData(MixinCompoundTag tag) {
+    public void readIdentifyingData(CompoundTag tag) {
         super.readIdentifyingData(tag);
         this.resetOnTrigger = tag.getBoolean("ResetOnTrigger");
         this.isActivated = tag.getBoolean("IsActivated");
     }
 
     @Override
-    public void writeIdentifyingData(MixinCompoundTag tag) {
+    public void writeIdentifyingData(CompoundTag tag) {
         super.writeIdentifyingData(tag);
         tag.put("ResetOnTrigger", this.resetOnTrigger);
         tag.put("IsActivated", this.isActivated);

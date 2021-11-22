@@ -7,7 +7,7 @@ import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 
-class ItemBomb extends MixinItemType {
+class ItemBomb extends ItemType {
 
     public ItemBomb(int id) {
         super(id);
@@ -15,7 +15,7 @@ class ItemBomb extends MixinItemType {
     }
 
     @Override
-    public MixinItemInstance use(MixinItemInstance item, MixinLevel level, MixinPlayer player) {
+    public ItemInstance use(ItemInstance item, Level level, Player player) {
         --item.count;
         level.spawnEntity(new EntityBomb(level, player));
         return item;

@@ -7,7 +7,7 @@ import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.level.Level;
 
-public class GuiTree extends MixinScreen {
+public class GuiTree extends Screen {
 
     private int blockX;
 
@@ -15,7 +15,7 @@ public class GuiTree extends MixinScreen {
 
     private int blockZ;
 
-    private MixinLevel world;
+    private Level world;
 
     TileEntityTree tree;
 
@@ -23,7 +23,7 @@ public class GuiTree extends MixinScreen {
 
     float prevValue;
 
-    public GuiTree(MixinLevel w, int x, int y, int z, TileEntityTree t) {
+    public GuiTree(Level w, int x, int y, int z, TileEntityTree t) {
         this.world = w;
         this.blockX = x;
         this.blockY = y;
@@ -58,7 +58,7 @@ public class GuiTree extends MixinScreen {
         super.render(mouseX, mouseY, delta);
     }
 
-    public static void showUI(MixinLevel w, int x, int y, int z, TileEntityTree t) {
+    public static void showUI(Level w, int x, int y, int z, TileEntityTree t) {
         Minecraft.minecraftInstance.openScreen(new GuiTree(w, x, y, z, t));
     }
 

@@ -11,7 +11,7 @@ import org.lwjgl.opengl.GL11;
 public class RenderArrowBomb extends ArrowRenderer {
 
     @Override
-    public void render(MixinArrow entity, double x, double y, double z, float f, float f1) {
+    public void render(Arrow entity, double x, double y, double z, float f, float f1) {
         this.bindTexture("/item/arrows.png");
         GL11.glPushMatrix();
         GL11.glTranslatef((float) ((float) x), (float) ((float) y), (float) ((float) z));

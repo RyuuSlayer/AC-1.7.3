@@ -8,36 +8,36 @@ import org.lwjgl.opengl.GL11;
 
 public class ModelRat extends EntityModel {
 
-    public MixinModelPart snout;
+    public ModelPart snout;
 
-    public MixinModelPart theHead;
+    public ModelPart theHead;
 
-    public MixinModelPart leftEar;
+    public ModelPart leftEar;
 
-    public MixinModelPart rightEar;
+    public ModelPart rightEar;
 
-    public MixinModelPart theBody;
+    public ModelPart theBody;
 
-    public MixinModelPart tail;
+    public ModelPart tail;
 
     public ModelRat() {
         float offset = 20.0f;
-        this.theHead = new MixinModelPart(0, 0);
+        this.theHead = new ModelPart(0, 0);
         this.theHead.addCuboid(-1.5f, 0.0f, -3.0f, 3, 3, 3, 0.0f);
         this.theHead.setPivot(0.0f, offset, -4.0f);
-        this.snout = new MixinModelPart(0, 6);
+        this.snout = new ModelPart(0, 6);
         this.snout.addCuboid(-1.5f, 1.0f, -5.0f, 3, 2, 2, 0.0f);
         this.snout.setPivot(0.0f, offset, -4.0f);
-        this.leftEar = new MixinModelPart(10, 6);
+        this.leftEar = new ModelPart(10, 6);
         this.leftEar.addCuboid(-1.5f, -1.0f, -2.0f, 0, 1, 1, 0.0f);
         this.leftEar.setPivot(0.0f, offset, -4.0f);
-        this.rightEar = new MixinModelPart(12, 6);
+        this.rightEar = new ModelPart(12, 6);
         this.rightEar.addCuboid(1.5f, -1.0f, -2.0f, 0, 1, 1, 0.0f);
         this.rightEar.setPivot(0.0f, offset, -4.0f);
-        this.theBody = new MixinModelPart(0, 10);
+        this.theBody = new ModelPart(0, 10);
         this.theBody.addCuboid(-2.0f, -0.5f, -4.0f, 4, 4, 8, 0.0f);
         this.theBody.setPivot(0.0f, 0.0f + offset, 0.0f);
-        this.tail = new MixinModelPart(16, 0);
+        this.tail = new ModelPart(16, 0);
         this.tail.addCuboid(-0.5f, 0.0f, 0.0f, 1, 1, 7, 0.0f);
         this.tail.setPivot(0.0f, 2.0f + offset, 3.5f);
     }

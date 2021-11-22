@@ -11,7 +11,7 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.Vec3f;
 
-public class BlockLockedDoor extends MixinTile {
+public class BlockLockedDoor extends Tile {
 
     int doorKeyToUse;
 
@@ -27,7 +27,7 @@ public class BlockLockedDoor extends MixinTile {
     }
 
     @Override
-    public HitResult raycast(MixinLevel world, int x, int y, int z, Vec3f vec3d, Vec3f vec3d1) {
+    public HitResult raycast(Level world, int x, int y, int z, Vec3f vec3d, Vec3f vec3d1) {
         int metadata = world.getTileMeta(x, y, z);
         if (!DebugMode.active && metadata == 1) {
             return null;
@@ -36,7 +36,7 @@ public class BlockLockedDoor extends MixinTile {
     }
 
     @Override
-    public Box getCollisionShape(MixinLevel level, int x, int y, int z) {
+    public Box getCollisionShape(Level level, int x, int y, int z) {
         int metadata = level.getTileMeta(x, y, z);
         if (DebugMode.active || metadata == 1) {
             return null;
@@ -114,7 +114,7 @@ public class BlockLockedDoor extends MixinTile {
     }
 
     @Override
-    public void onPunched(MixinLevel level, int x, int y, int z, MixinPlayer player) {
+    public void onPunched(Level level, int x, int y, int z, Player player) {
         if (player.inventory.decreaseAmountOfItem(this.doorKeyToUse)) {
             int offsetX;
             level.playSound((double) x + 0.5, (double) y + 0.5, (double) z + 0.5, "random.door_open", 1.0f, level.rand.nextFloat() * 0.1f + 0.9f);
@@ -178,14 +178,14 @@ public class BlockLockedDoor extends MixinTile {
     }
 
     @Override
-    public void reset(MixinLevel world, int i, int j, int k, boolean death) {
+    public void reset(Level world, int i, int j, int k, boolean death) {
         if (!death) {
             world.setTileMeta(i, j, k, 0);
         }
     }
 
     @Override
-    public int alwaysUseClick(MixinLevel world, int i, int j, int k) {
+    public int alwaysUseClick(Level world, int i, int j, int k) {
         return 0;
     }
 }

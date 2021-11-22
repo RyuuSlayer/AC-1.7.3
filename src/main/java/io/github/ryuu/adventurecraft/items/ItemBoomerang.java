@@ -7,7 +7,7 @@ import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 
-class ItemBoomerang extends MixinItemType {
+class ItemBoomerang extends ItemType {
 
     public ItemBoomerang(int id) {
         super(id);
@@ -26,7 +26,7 @@ class ItemBoomerang extends MixinItemType {
     }
 
     @Override
-    public MixinItemInstance use(MixinItemInstance item, MixinLevel level, MixinPlayer player) {
+    public ItemInstance use(ItemInstance item, Level level, Player player) {
         if (item.getDamage() == 0) {
             level.spawnEntity(new EntityBoomerang(level, player, item));
             item.setDamage(1);

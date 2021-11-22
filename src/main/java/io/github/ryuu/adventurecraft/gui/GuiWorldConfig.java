@@ -8,11 +8,11 @@ import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.Textbox;
 import net.minecraft.level.Level;
 
-public class GuiWorldConfig extends MixinScreen {
+public class GuiWorldConfig extends Screen {
 
     private int page = 0;
 
-    private MixinLevel world;
+    private Level world;
 
     private Textbox playerName;
 
@@ -28,7 +28,7 @@ public class GuiWorldConfig extends MixinScreen {
 
     private boolean lightChanged = false;
 
-    public GuiWorldConfig(MixinLevel w) {
+    public GuiWorldConfig(Level w) {
         this.world = w;
         this.lightLevels = new Textbox[16];
     }

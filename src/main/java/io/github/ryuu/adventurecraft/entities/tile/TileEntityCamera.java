@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.io.CompoundTag;
 
-public class TileEntityCamera extends MixinTileEntity {
+public class TileEntityCamera extends TileEntity {
 
     public String message;
 
@@ -38,7 +38,7 @@ public class TileEntityCamera extends MixinTileEntity {
     }
 
     @Override
-    public void readIdentifyingData(MixinCompoundTag tag) {
+    public void readIdentifyingData(CompoundTag tag) {
         super.readIdentifyingData(tag);
         int numPoints = tag.getInt("numPoints");
         for (int i = 0; i < numPoints; ++i) {
@@ -53,7 +53,7 @@ public class TileEntityCamera extends MixinTileEntity {
     }
 
     @Override
-    public void writeIdentifyingData(MixinCompoundTag tag) {
+    public void writeIdentifyingData(CompoundTag tag) {
         super.writeIdentifyingData(tag);
         int numPoints = 0;
         for (CutsceneCameraPoint p : this.camera.cameraPoints) {
@@ -65,8 +65,8 @@ public class TileEntityCamera extends MixinTileEntity {
         tag.put("pauseGame", this.pauseGame);
     }
 
-    private MixinCompoundTag getPointTag(CutsceneCameraPoint point) {
-        MixinCompoundTag nbttagcompound = new MixinCompoundTag();
+    private CompoundTag getPointTag(CutsceneCameraPoint point) {
+        CompoundTag nbttagcompound = new CompoundTag();
         nbttagcompound.put("time", point.time);
         nbttagcompound.put("posX", point.posX);
         nbttagcompound.put("posY", point.posY);
@@ -77,7 +77,7 @@ public class TileEntityCamera extends MixinTileEntity {
         return nbttagcompound;
     }
 
-    private void readPointTag(MixinCompoundTag nbttagcompound) {
+    private void readPointTag(CompoundTag nbttagcompound) {
         float time = nbttagcompound.getFloat("time");
         float posX = nbttagcompound.getFloat("posX");
         float posY = nbttagcompound.getFloat("posY");

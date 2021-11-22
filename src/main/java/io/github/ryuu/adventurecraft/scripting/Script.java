@@ -60,7 +60,7 @@ public class Script {
 
     static boolean shutterSet = false;
 
-    public Script(MixinLevel w) {
+    public Script(Level w) {
         this.cx = ContextFactory.getGlobal().enterContext();
         this.cx.setOptimizationLevel(-1);
         if (!shutterSet) {
