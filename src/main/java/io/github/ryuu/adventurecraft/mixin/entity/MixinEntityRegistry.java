@@ -3,7 +3,7 @@ package io.github.ryuu.adventurecraft.mixin.entity;
 import java.util.HashMap;
 import java.util.Map;
 
-import io.github.ryuu.adventurecraft.entities.EntitySkeletonRifle;
+import io.github.ryuu.adventurecraft.entities.*;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.*;

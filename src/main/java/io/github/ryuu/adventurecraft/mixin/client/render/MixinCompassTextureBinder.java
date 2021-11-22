@@ -4,9 +4,12 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 import javax.imageio.ImageIO;
+
+import io.github.ryuu.adventurecraft.util.Vec2;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.CompassTextureBinder;
 import net.minecraft.client.render.TextureBinder;
 import net.minecraft.item.ItemType;
 import net.minecraft.util.Vec3i;

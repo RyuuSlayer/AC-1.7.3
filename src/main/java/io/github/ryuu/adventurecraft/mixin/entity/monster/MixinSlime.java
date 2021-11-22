@@ -4,6 +4,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MonsterEntityType;
+import net.minecraft.entity.monster.Slime;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;

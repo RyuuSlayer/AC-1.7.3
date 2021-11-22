@@ -1,6 +1,9 @@
 package io.github.ryuu.adventurecraft.mixin.tile;
 
 import java.util.Random;
+
+import io.github.ryuu.adventurecraft.blocks.BlockColor;
+import net.minecraft.tile.StoneTile;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 import org.spongepowered.asm.mixin.Mixin;

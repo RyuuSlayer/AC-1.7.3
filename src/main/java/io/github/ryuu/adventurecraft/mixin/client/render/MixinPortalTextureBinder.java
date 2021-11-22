@@ -5,6 +5,7 @@ import java.util.Random;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.PortalTextureBinder;
 import net.minecraft.client.render.TextureBinder;
 import net.minecraft.tile.Tile;
 import net.minecraft.util.maths.MathsHelper;

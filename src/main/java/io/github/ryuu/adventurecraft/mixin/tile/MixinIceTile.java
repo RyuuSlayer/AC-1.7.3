@@ -7,6 +7,7 @@ import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.level.LightType;
 import net.minecraft.level.TileView;
+import net.minecraft.tile.IceTile;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.TranslucentTile;
 import net.minecraft.tile.material.Material;

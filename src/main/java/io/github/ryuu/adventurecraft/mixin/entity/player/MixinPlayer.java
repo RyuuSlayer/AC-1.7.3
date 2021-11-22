@@ -1,6 +1,9 @@
 package io.github.ryuu.adventurecraft.mixin.entity.player;
 
 import java.util.List;
+
+import io.github.ryuu.adventurecraft.items.Items;
+import io.github.ryuu.adventurecraft.util.PlayerTorch;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.achievement.Achievements;
@@ -17,6 +20,7 @@ import net.minecraft.entity.animal.Wolf;
 import net.minecraft.entity.monster.Creeper;
 import net.minecraft.entity.monster.Ghast;
 import net.minecraft.entity.monster.Monster;
+import net.minecraft.entity.player.Player;
 import net.minecraft.entity.player.PlayerContainer;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.projectile.Arrow;

@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.mixin.level.biome;
 
 import java.util.Random;
 import net.minecraft.level.biome.Biome;
+import net.minecraft.level.biome.Forest;
 import net.minecraft.level.structure.BirchTree;
 import net.minecraft.level.structure.Feature;
 import net.minecraft.level.structure.LargeOak;

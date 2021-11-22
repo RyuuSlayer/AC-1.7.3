@@ -1,5 +1,10 @@
 package io.github.ryuu.adventurecraft.mixin.entity.player;
 
+import io.github.ryuu.adventurecraft.gui.GuiPalette;
+import io.github.ryuu.adventurecraft.gui.GuiScriptStats;
+import io.github.ryuu.adventurecraft.util.DebugMode;
+import io.github.ryuu.adventurecraft.util.InventoryDebug;
+import io.github.ryuu.adventurecraft.util.JScriptInfo;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.achievement.Achievement;
@@ -17,6 +22,7 @@ import net.minecraft.client.util.Smoother;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.FurnaceEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.ClientPlayer;
 import net.minecraft.entity.player.Player;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.level.Level;

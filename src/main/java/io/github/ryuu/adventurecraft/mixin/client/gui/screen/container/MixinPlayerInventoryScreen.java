@@ -6,6 +6,7 @@ import net.minecraft.achievement.Achievements;
 import net.minecraft.client.gui.screen.AchievementsScreen;
 import net.minecraft.client.gui.screen.StatsScreen;
 import net.minecraft.client.gui.screen.container.ContainerScreen;
+import net.minecraft.client.gui.screen.container.PlayerInventoryScreen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.render.RenderHelper;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;

@@ -6,6 +6,7 @@ import java.util.Random;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.particle.TileParticle;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.texture.TextureManager;

@@ -10,6 +10,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.GLAllocator;
 import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.TextRenderer;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.util.CharacterUtils;
 import org.lwjgl.opengl.GL11;

@@ -9,6 +9,7 @@ import net.minecraft.level.chunk.Chunk;
 import net.minecraft.level.gen.Cave;
 import net.minecraft.level.gen.OverworldCave;
 import net.minecraft.level.source.LevelSource;
+import net.minecraft.level.source.OverworldLevelSource;
 import net.minecraft.level.structure.CactusPatch;
 import net.minecraft.level.structure.ClayDisk;
 import net.minecraft.level.structure.DeadbushPatch;

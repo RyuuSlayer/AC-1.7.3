@@ -9,6 +9,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.SmokeRenderer;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.render.Tessellator;

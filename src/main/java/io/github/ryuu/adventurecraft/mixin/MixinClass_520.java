@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.mixin;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.class_520;
 import net.minecraft.client.ClientInteractionManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.Player;
@@ -12,7 +13,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
-@Mixin(Class_520.class)
+@Mixin(class_520.class)
 public class MixinClass_520 extends ClientInteractionManager {
 
     @Shadow()

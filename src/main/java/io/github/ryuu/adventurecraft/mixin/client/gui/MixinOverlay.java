@@ -4,11 +4,16 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import io.github.ryuu.adventurecraft.util.DebugMode;
+import io.github.ryuu.adventurecraft.util.TerrainImage;
+import io.github.ryuu.adventurecraft.util.Version;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ChatMessage;
 import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.Overlay;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.render.RenderHelper;
 import net.minecraft.client.render.Tessellator;

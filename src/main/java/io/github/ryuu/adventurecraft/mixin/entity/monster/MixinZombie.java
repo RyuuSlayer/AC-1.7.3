@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.mixin.entity.monster;
 
 import net.minecraft.entity.monster.Monster;
+import net.minecraft.entity.monster.Zombie;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 import net.minecraft.util.maths.MathsHelper;

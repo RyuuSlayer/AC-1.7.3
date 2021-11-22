@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.mixin.tile;
 import java.util.Random;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.tile.GlassTile;
 import net.minecraft.tile.TranslucentTile;
 import net.minecraft.tile.material.Material;
 import org.spongepowered.asm.mixin.Mixin;

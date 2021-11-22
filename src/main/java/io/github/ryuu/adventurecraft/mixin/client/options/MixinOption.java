@@ -2,11 +2,12 @@ package io.github.ryuu.adventurecraft.mixin.client.options;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.options.Option;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
-public enum Option {
+public enum MixinOption {
 
     MUSIC("MUSIC", 0, "options.music", true, false),
     SOUND("SOUND", 1, "options.sound", true, false),

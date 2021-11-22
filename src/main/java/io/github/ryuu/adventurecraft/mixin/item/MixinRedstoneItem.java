@@ -1,8 +1,10 @@
 package io.github.ryuu.adventurecraft.mixin.item;
 
+import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
+import net.minecraft.item.RedstoneItem;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 import org.spongepowered.asm.mixin.Mixin;

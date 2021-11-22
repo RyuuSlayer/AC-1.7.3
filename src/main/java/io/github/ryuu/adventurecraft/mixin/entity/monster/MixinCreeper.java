@@ -4,6 +4,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.Lightning;
+import net.minecraft.entity.monster.Creeper;
 import net.minecraft.entity.monster.Monster;
 import net.minecraft.entity.monster.Skeleton;
 import net.minecraft.item.ItemType;

@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.FlowingWaterTextureBinder;
 import net.minecraft.client.render.TextureBinder;
 import net.minecraft.tile.Tile;
 import org.spongepowered.asm.mixin.Mixin;

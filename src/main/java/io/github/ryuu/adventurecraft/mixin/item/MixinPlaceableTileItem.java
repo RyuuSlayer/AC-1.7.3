@@ -5,6 +5,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
+import net.minecraft.item.PlaceableTileItem;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 import org.spongepowered.asm.mixin.Mixin;
