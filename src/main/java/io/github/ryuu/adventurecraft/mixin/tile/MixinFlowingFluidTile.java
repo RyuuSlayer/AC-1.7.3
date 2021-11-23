@@ -2,21 +2,34 @@ package io.github.ryuu.adventurecraft.mixin.tile;
 
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.level.Level;
+import net.minecraft.tile.FlowingFluidTile;
 import net.minecraft.tile.FluidTile;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.Random;
 
+@Mixin(FlowingFluidTile.class)
 public class MixinFlowingFluidTile extends FluidTile {
+
+    @Shadow()
     int field_1232 = 0;
+
     boolean[] field_1233 = new boolean[4];
+
     int[] field_1234 = new int[4];
 
-    protected FlowingFluidTile(int id, Material material) {
+    protected MixinFlowingFluidTile(int id, Material material) {
         super(id, material);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void method_1055(Level world, int i, int j, int k) {
         int l = world.getTileMeta(i, j, k);
         world.setTileWithMetadata(i, j, k, this.id + 1, l);
@@ -24,6 +37,11 @@ public class MixinFlowingFluidTile extends FluidTile {
         world.method_243(i, j, k);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void onScheduledTick(Level level, int x, int y, int z, Random rand) {
         if (DebugMode.active) {
             return;
@@ -104,6 +122,10 @@ public class MixinFlowingFluidTile extends FluidTile {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void method_1054(Level world, int i, int j, int k, int l) {
         if (this.method_1058(world, i, j, k)) {
             int i1 = world.getTileId(i, j, k);
@@ -118,6 +140,10 @@ public class MixinFlowingFluidTile extends FluidTile {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private int method_1052(Level world, int i, int j, int k, int l, int i1) {
         int j1 = 1000;
         for (int k1 = 0; k1 < 4; ++k1) {
@@ -138,7 +164,8 @@ public class MixinFlowingFluidTile extends FluidTile {
             if (k1 == 3) {
                 ++j2;
             }
-            if (this.method_1057(world, l1, i2, j2) || world.getMaterial(l1, i2, j2) == this.material && world.getTileMeta(l1, i2, j2) == 0) continue;
+            if (this.method_1057(world, l1, i2, j2) || world.getMaterial(l1, i2, j2) == this.material && world.getTileMeta(l1, i2, j2) == 0)
+                continue;
             if (!this.method_1057(world, l1, i2 - 1, j2)) {
                 return l;
             }
@@ -148,6 +175,10 @@ public class MixinFlowingFluidTile extends FluidTile {
         return j1;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private boolean[] method_1056(Level world, int i, int j, int k) {
         for (int l = 0; l < 4; ++l) {
             this.field_1234[l] = 1000;
@@ -166,7 +197,8 @@ public class MixinFlowingFluidTile extends FluidTile {
             if (l == 3) {
                 ++j2;
             }
-            if (this.method_1057(world, j1, i2, j2) || world.getMaterial(j1, i2, j2) == this.material && world.getTileMeta(j1, i2, j2) == 0) continue;
+            if (this.method_1057(world, j1, i2, j2) || world.getMaterial(j1, i2, j2) == this.material && world.getTileMeta(j1, i2, j2) == 0)
+                continue;
             this.field_1234[l] = !this.method_1057(world, j1, i2 - 1, j2) ? 0 : this.method_1052(world, j1, i2, j2, 1, l);
         }
         int i1 = this.field_1234[0];
@@ -180,6 +212,10 @@ public class MixinFlowingFluidTile extends FluidTile {
         return this.field_1233;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private boolean method_1057(Level world, int i, int j, int k) {
         int l = world.getTileId(i, j, k);
         if (l == Tile.DOOR_WOOD.id || l == Tile.DOOR_IRON.id || l == Tile.STANDING_SIGN.id || l == Tile.LADDER.id || l == Tile.REEDS.id) {
@@ -192,6 +228,10 @@ public class MixinFlowingFluidTile extends FluidTile {
         return material.blocksMovement();
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     protected int method_1053(Level world, int i, int j, int k, int l) {
         int i1 = this.method_1220(world, i, j, k);
         if (i1 < 0) {
@@ -206,6 +246,10 @@ public class MixinFlowingFluidTile extends FluidTile {
         return l >= 0 && i1 >= l ? l : i1;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private boolean method_1058(Level world, int i, int j, int k) {
         Material material = world.getMaterial(i, j, k);
         if (material == this.material) {
@@ -217,6 +261,11 @@ public class MixinFlowingFluidTile extends FluidTile {
         return !this.method_1057(world, i, j, k);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void method_1611(Level level, int x, int y, int z) {
         super.method_1611(level, x, y, z);
         if (level.getTileId(x, y, z) == this.id) {

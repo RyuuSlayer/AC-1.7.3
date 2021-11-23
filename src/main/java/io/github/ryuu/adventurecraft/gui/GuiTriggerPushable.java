@@ -8,6 +8,7 @@ import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.OptionButton;
 
 public class GuiTriggerPushable extends Screen {
+
     private final TileEntityTriggerPushable trigger;
 
     public GuiTriggerPushable(TileEntityTriggerPushable triggerClicked) {
@@ -15,7 +16,7 @@ public class GuiTriggerPushable extends Screen {
     }
 
     public static void showUI(TileEntityTriggerPushable triggerClicked) {
-        Minecraft.minecraftInstance.a(new GuiTriggerPushable(triggerClicked));
+        Minecraft.minecraftInstance.openScreen(new GuiTriggerPushable(triggerClicked));
     }
 
     @Override
@@ -26,37 +27,34 @@ public class GuiTriggerPushable extends Screen {
     public void init() {
         this.buttons.add(new OptionButton(0, 4, 40, "Use Current Selection"));
         OptionButton b = new OptionButton(1, 4, 60, "Trigger Target");
-        if (this.trigger.resetOnTrigger)
+        if (this.trigger.resetOnTrigger) {
             b.text = "Reset Target";
+        }
         this.buttons.add(b);
     }
 
     @Override
-    protected void buttonClicked(Button guibutton) {
-        if (guibutton.id == 0) {
+    protected void buttonClicked(Button button) {
+        if (button.id == 0) {
             this.trigger.minX = ItemCursor.minX;
             this.trigger.minY = ItemCursor.minY;
             this.trigger.minZ = ItemCursor.minZ;
             this.trigger.maxX = ItemCursor.maxX;
             this.trigger.maxY = ItemCursor.maxY;
             this.trigger.maxZ = ItemCursor.maxZ;
-        } else if (guibutton.id == 1) {
+        } else if (button.id == 1) {
             this.trigger.resetOnTrigger = !this.trigger.resetOnTrigger;
-            if (this.trigger.resetOnTrigger) {
-                guibutton.text = "Reset Target";
-            } else {
-                guibutton.text = "Trigger Target";
-            }
+            button.text = this.trigger.resetOnTrigger ? "Reset Target" : "Trigger Target";
         }
         this.trigger.level.getChunk(this.trigger.x, this.trigger.z).method_885();
     }
 
     @Override
-    public void render(int i, int j, float f) {
-        fill(0, 0, this.width, this.height, -2147483648);
-        drawTextWithShadow(this.textManager, String.format("Min: (%d, %d, %d)", this.trigger.minX, this.trigger.minY, this.trigger.minZ), 4, 4, 14737632);
-        drawTextWithShadow(this.textManager, String.format("Max: (%d, %d, %d)", this.trigger.maxX, this.trigger.maxY, this.trigger.maxZ), 4, 24, 14737632);
-        super.render(i, j, f);
+    public void render(int mouseX, int mouseY, float delta) {
+        this.fill(0, 0, this.width, this.height, Integer.MIN_VALUE);
+        this.drawTextWithShadow(this.textManager, String.format("Min: (%d, %d, %d)", this.trigger.minX, this.trigger.minY, this.trigger.minZ), 4, 4, 0xE0E0E0);
+        this.drawTextWithShadow(this.textManager, String.format("Max: (%d, %d, %d)", this.trigger.maxX, this.trigger.maxY, this.trigger.maxZ), 4, 24, 0xE0E0E0);
+        super.render(mouseX, mouseY, delta);
     }
 
     @Override

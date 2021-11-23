@@ -4,36 +4,38 @@ import net.minecraft.level.Level;
 import net.minecraft.util.maths.Box;
 
 public class BlockRope extends BlockPlant {
+
     protected BlockRope(int i, int j) {
         super(i, j);
-        float f = 0.2F;
-        setBoundingBox(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 1.0F, 0.5F + f);
+        float f = 0.2f;
+        this.setBoundingBox(0.5f - f, 0.0f, 0.5f - f, 0.5f + f, 1.0f, 0.5f + f);
     }
 
     @Override
-    public Box getOutlineShape(Level world, int i, int j, int k) {
-        updateBounds(world, i, j, k);
-        return super.getOutlineShape(world, i, j, k);
+    public Box getOutlineShape(Level level, int x, int y, int z) {
+        this.updateBounds(level, x, y, z);
+        return super.getOutlineShape(level, x, y, z);
     }
 
     @Override
-    public Box getCollisionShape(Level world, int i, int j, int k) {
-        int m = world.getTileMeta(i, j, k) % 3;
-        if (m == 0)
+    public Box getCollisionShape(Level level, int x, int y, int z) {
+        int m = level.getTileMeta(x, y, z) % 3;
+        if (m == 0) {
             return null;
-        updateBounds(world, i, j, k);
-        return Box.getOrCreate(i + this.minX, j + this.minY, k + this.minZ, i + this.maxX, j + this.maxY, k + this.maxZ);
+        }
+        this.updateBounds(level, x, y, z);
+        return Box.getOrCreate((double) x + this.minX, (double) y + this.minY, (double) z + this.minZ, (double) x + this.maxX, (double) y + this.maxY, (double) z + this.maxZ);
     }
 
     private void updateBounds(Level world, int i, int j, int k) {
         int m = world.getTileMeta(i, j, k) % 3;
-        float f = 0.2F;
+        float f = 0.2f;
         if (m == 0) {
-            setBoundingBox(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 1.0F, 0.5F + f);
+            this.setBoundingBox(0.5f - f, 0.0f, 0.5f - f, 0.5f + f, 1.0f, 0.5f + f);
         } else if (m == 1) {
-            setBoundingBox(0.0F, 0.5F - f, 0.5F - f, 1.0F, 0.5F + f, 0.5F + f);
+            this.setBoundingBox(0.0f, 0.5f - f, 0.5f - f, 1.0f, 0.5f + f, 0.5f + f);
         } else {
-            setBoundingBox(0.5F - f, 0.5F - f, 0.0F, 0.5F + f, 0.5F + f, 1.0F);
+            this.setBoundingBox(0.5f - f, 0.5f - f, 0.0f, 0.5f + f, 0.5f + f, 1.0f);
         }
     }
 
@@ -43,7 +45,7 @@ public class BlockRope extends BlockPlant {
     }
 
     @Override
-    public int getTextureForSide(int i, int j) {
-        return this.tex + j / 3;
+    public int getTextureForSide(int side, int meta) {
+        return this.tex + meta / 3;
     }
 }

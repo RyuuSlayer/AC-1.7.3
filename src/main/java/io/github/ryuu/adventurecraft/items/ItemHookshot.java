@@ -7,43 +7,42 @@ import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 
 class ItemHookshot extends ItemType {
-    public EntityHookshot mainHookshot;
 
-    public EntityHookshot offHookshot;
+    public EntityHookshot mainHookshot = null;
 
-    ItemInstance mainActiveHookshot;
+    public EntityHookshot offHookshot = null;
 
-    ItemInstance offActiveHookshot;
+    ItemInstance mainActiveHookshot = null;
 
-    Player player;
+    ItemInstance offActiveHookshot = null;
 
-    public ItemHookshot(int itemIndex) {
-        super(itemIndex);
-        this.mainHookshot = null;
-        this.offHookshot = null;
-        this.mainActiveHookshot = null;
-        this.offActiveHookshot = null;
-        this.player = null;
-        setTexturePosition(3, 10);
+    Player player = null;
+
+    public ItemHookshot(int id) {
+        super(id);
+        this.setTexturePosition(3, 10);
         this.maxStackSize = 1;
     }
 
-    public boolean c() {
+    @Override
+    public boolean shouldRotate180() {
         return true;
     }
 
     @Override
-    public int getTexturePosition(int i) {
-        if (i == 1)
+    public int getTexturePosition(int damage) {
+        if (damage == 1) {
             return this.texturePosition + 1;
+        }
         return this.texturePosition;
     }
 
     @Override
-    public ItemInstance use(ItemInstance itemstack, Level world, Player entityplayer) {
-        EntityHookshot hookshot, other;
+    public ItemInstance use(ItemInstance item, Level level, Player player) {
+        EntityHookshot other;
+        EntityHookshot hookshot;
         boolean main = true;
-        if (!entityplayer.swappedItems) {
+        if (!player.swappedItems) {
             hookshot = this.mainHookshot;
             other = this.offHookshot;
         } else {
@@ -51,32 +50,33 @@ class ItemHookshot extends ItemType {
             other = this.mainHookshot;
             main = false;
         }
-        if ((hookshot == null || hookshot.removed) && ((other != null && other.attachedToSurface) || entityplayer.onGround || entityplayer.method_1335() || entityplayer.method_1393())) {
-            hookshot = new EntityHookshot(world, entityplayer, main, itemstack);
-            world.spawnEntity(hookshot);
-            entityplayer.swingHand();
+        if ((hookshot == null || hookshot.removed) && (other != null && other.attachedToSurface || player.onGround || player.method_1335() || player.method_1393())) {
+            hookshot = new EntityHookshot(level, player, main, item);
+            level.spawnEntity(hookshot);
+            player.swingHand();
             if (main) {
-                this.mainActiveHookshot = itemstack;
+                this.mainActiveHookshot = item;
                 this.mainActiveHookshot.setDamage(1);
             } else {
-                this.offActiveHookshot = itemstack;
+                this.offActiveHookshot = item;
                 this.offActiveHookshot.setDamage(1);
             }
-            this.player = entityplayer;
+            this.player = player;
         } else {
-            releaseHookshot(hookshot);
+            this.releaseHookshot(hookshot);
         }
         if (main) {
             this.mainHookshot = hookshot;
         } else {
             this.offHookshot = hookshot;
         }
-        return itemstack;
+        return item;
     }
 
     public void releaseHookshot(EntityHookshot hookshot) {
-        if (hookshot == null)
+        if (hookshot == null) {
             return;
+        }
         hookshot.turningAround = true;
         hookshot.attachedToSurface = false;
         hookshot.entityGrabbed = null;

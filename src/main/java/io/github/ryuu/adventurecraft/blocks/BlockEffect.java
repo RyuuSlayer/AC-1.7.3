@@ -1,11 +1,5 @@
 package io.github.ryuu.adventurecraft.blocks;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityEffect;
 import io.github.ryuu.adventurecraft.gui.GuiEffect;
 import io.github.ryuu.adventurecraft.items.Items;
@@ -23,7 +17,10 @@ import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
+import java.io.*;
+
 public class BlockEffect extends TileWithEntity {
+
     static boolean needsReloadForRevert = true;
 
     protected BlockEffect(int i, int j) {
@@ -31,13 +28,13 @@ public class BlockEffect extends TileWithEntity {
     }
 
     public static void revertTextures(Level world) {
-        Minecraft.minecraftInstance.p.revertTextures();
+        Minecraft.minecraftInstance.textureManager.revertTextures();
         if (needsReloadForRevert) {
             GrassColour.loadGrass("/misc/grasscolor.png");
             FoliageColour.loadFoliage("/misc/foliagecolor.png");
             TerrainImage.loadWaterMap(new File(world.levelDir, "watermap.png"));
             TerrainImage.loadBiomeMap(new File(world.levelDir, "biomemap.png"));
-            Minecraft.minecraftInstance.g.e();
+            Minecraft.minecraftInstance.worldRenderer.method_1148();
             needsReloadForRevert = false;
         }
         world.properties.revertTextures();
@@ -45,8 +42,9 @@ public class BlockEffect extends TileWithEntity {
 
     public static boolean replaceTexture(Level world, String textureToReplace, String replacementTexture) {
         String lTextureToReplace = textureToReplace.toLowerCase();
-        if (!world.properties.addReplacementTexture(textureToReplace, replacementTexture))
+        if (!world.properties.addReplacementTexture(textureToReplace, replacementTexture)) {
             return false;
+        }
         if (lTextureToReplace.equals("/watermap.png")) {
             TerrainImage.loadWaterMap(new File(world.levelDir, replacementTexture));
             needsReloadForRevert = true;
@@ -91,7 +89,7 @@ public class BlockEffect extends TileWithEntity {
             FlowingWaterTextureBinder2.loadImage(replacementTexture);
             return true;
         }
-        Minecraft.minecraftInstance.p.replaceTexture(textureToReplace, replacementTexture);
+        Minecraft.minecraftInstance.textureManager.replaceTexture(textureToReplace, replacementTexture);
         return false;
     }
 
@@ -106,10 +104,11 @@ public class BlockEffect extends TileWithEntity {
     }
 
     @Override
-    public Box getCollisionShape(Level world, int i, int j, int k) {
+    public Box getCollisionShape(Level level, int x, int y, int z) {
         return null;
     }
 
+    @Override
     public boolean shouldRender(TileView blockAccess, int i, int j, int k) {
         return DebugMode.active;
     }
@@ -119,10 +118,12 @@ public class BlockEffect extends TileWithEntity {
         return DebugMode.active;
     }
 
+    @Override
     public boolean canBeTriggered() {
         return true;
     }
 
+    @Override
     public void onTriggerActivated(Level world, int i, int j, int k) {
         TileEntityEffect obj = (TileEntityEffect) world.getTileEntity(i, j, k);
         obj.isActivated = true;
@@ -142,27 +143,28 @@ public class BlockEffect extends TileWithEntity {
         } else if (obj.changeFogDensity == 2) {
             world.properties.overrideFogDensity = false;
         }
-        if (obj.setOverlay)
+        if (obj.setOverlay) {
             world.properties.overlay = obj.overlay;
+        }
         if (obj.replaceTextures) {
-            replaceTextures(world, obj.textureReplacement);
+            this.replaceTextures(world, obj.textureReplacement);
         } else if (obj.revertTextures) {
-            revertTextures(world);
+            BlockEffect.revertTextures(world);
         }
     }
 
     public void replaceTextures(Level world, String replacement) {
         boolean needsReload = false;
         File replacementFile = new File(world.levelDir, "textureReplacement/" + replacement);
-        if (replacementFile.exists())
+        if (replacementFile.exists()) {
             try {
                 BufferedReader reader = new BufferedReader(new FileReader(replacementFile));
                 try {
                     while (reader.ready()) {
                         String line = reader.readLine();
                         String[] parts = line.split(",", 2);
-                        if (parts.length == 2)
-                            needsReload |= replaceTexture(world, parts[0], parts[1]);
+                        if (parts.length != 2) continue;
+                        needsReload |= BlockEffect.replaceTexture(world, parts[0], parts[1]);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -170,19 +172,22 @@ public class BlockEffect extends TileWithEntity {
             } catch (FileNotFoundException e1) {
                 e1.printStackTrace();
             }
-        if (needsReload)
-            Minecraft.minecraftInstance.g.e();
+        }
+        if (needsReload) {
+            Minecraft.minecraftInstance.worldRenderer.method_1148();
+        }
     }
 
+    @Override
     public void onTriggerDeactivated(Level world, int i, int j, int k) {
         TileEntityEffect obj = (TileEntityEffect) world.getTileEntity(i, j, k);
         obj.isActivated = false;
     }
 
     @Override
-    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
-        if (DebugMode.active && entityplayer.getHeldItem() != null && (entityplayer.getHeldItem()).itemId == Items.cursor.id) {
-            TileEntityEffect obj = (TileEntityEffect) world.getTileEntity(i, j, k);
+    public boolean activate(Level level, int x, int y, int z, Player player) {
+        if (DebugMode.active && player.getHeldItem() != null && player.getHeldItem().itemId == Items.cursor.id) {
+            TileEntityEffect obj = (TileEntityEffect) level.getTileEntity(x, y, z);
             GuiEffect.showUI(obj);
             return true;
         }

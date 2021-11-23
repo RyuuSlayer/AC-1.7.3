@@ -5,5 +5,6 @@ import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
 
 public interface IItemReload {
-    void reload(ItemInstance paramiz, Level paramfd, Player paramgs);
+
+    void reload(ItemInstance var1, Level var2, Player var3);
 }

@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.scripting;
 import net.minecraft.item.ItemInstance;
 
 public class ScriptItem {
+
     public ItemInstance item;
 
     public ScriptItem(ItemInstance i) {

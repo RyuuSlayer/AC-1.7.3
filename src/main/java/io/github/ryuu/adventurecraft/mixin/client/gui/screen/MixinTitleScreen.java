@@ -1,16 +1,7 @@
 package io.github.ryuu.adventurecraft.mixin.client.gui.screen;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Random;
-
 import io.github.ryuu.adventurecraft.gui.GuiMapDownload;
 import io.github.ryuu.adventurecraft.gui.GuiMapSelect;
-import io.github.ryuu.adventurecraft.scripting.ScriptModel;
 import io.github.ryuu.adventurecraft.util.Version;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Screen;
@@ -18,13 +9,31 @@ import net.minecraft.client.gui.screen.*;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.resource.language.TranslationStorage;
+import net.minecraft.script.ScriptModel;
 import net.minecraft.util.maths.MathsHelper;
 import org.lwjgl.opengl.GL11;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Random;
+
+@Mixin(TitleScreen.class)
 public class MixinTitleScreen extends Screen {
+
+    @Shadow()
     private static final Random RANDOM = new Random();
-    private float ticksOpened;
+
+    private final float ticksOpened;
+
     private String splashMessage;
+
     private Button multiplayerButton;
 
     public MixinTitleScreen() {
@@ -35,26 +44,22 @@ public class MixinTitleScreen extends Screen {
         try {
             String s1;
             ArrayList arraylist = new ArrayList();
-            BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(TitleScreen.class.getResourceAsStream("/title/splashes.txt"), Charset.forName((String)"UTF-8")));
+            BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(TitleScreen.class.getResourceAsStream("/title/splashes.txt"), StandardCharsets.UTF_8));
             String s = "";
             while ((s1 = bufferedreader.readLine()) != null) {
                 if ((s1 = s1.trim()).length() <= 0) continue;
                 arraylist.add(s1);
             }
-            this.splashMessage = (String)arraylist.get(RANDOM.nextInt(arraylist.size()));
-        }
-        catch (Exception exception) {
-            // empty catch block
+            this.splashMessage = (String) arraylist.get(RANDOM.nextInt(arraylist.size()));
+        } catch (Exception exception) {
         }
     }
 
-    public void tick() {
-        this.ticksOpened += 1.0f;
-    }
-
-    protected void keyPressed(char character, int key) {
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void init() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
@@ -85,6 +90,11 @@ public class MixinTitleScreen extends Screen {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     protected void buttonClicked(Button button) {
         if (button.id == 0) {
             this.minecraft.openScreen(new OptionsScreen(this, this.minecraft.options));
@@ -105,6 +115,11 @@ public class MixinTitleScreen extends Screen {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void render(int mouseX, int mouseY, float delta) {
         this.renderBackground();
         Tessellator tessellator = Tessellator.INSTANCE;
@@ -117,10 +132,10 @@ public class MixinTitleScreen extends Screen {
         this.blit(k + 256, byte0 + 0, 0, 128, 64, 31);
         tessellator.colour(0xFFFFFF);
         GL11.glPushMatrix();
-        GL11.glTranslatef((float)(this.width / 2 + 90), 70.0f, 0.0f);
+        GL11.glTranslatef((float) (this.width / 2 + 90), 70.0f, 0.0f);
         GL11.glRotatef(-20.0f, 0.0f, 0.0f, 1.0f);
-        float f1 = 1.8f - MathsHelper.abs(MathsHelper.sin((float)(System.currentTimeMillis() % 1000L) / 1000.0f * 3.141593f * 2.0f) * 0.1f);
-        f1 = f1 * 100.0f / (float)(this.textManager.getTextWidth(this.splashMessage) + 32);
+        float f1 = 1.8f - MathsHelper.abs(MathsHelper.sin((float) (System.currentTimeMillis() % 1000L) / 1000.0f * 3.141593f * 2.0f) * 0.1f);
+        f1 = f1 * 100.0f / (float) (this.textManager.getTextWidth(this.splashMessage) + 32);
         GL11.glScalef(f1, f1, f1);
         this.drawTextWithShadowCentred(this.textManager, this.splashMessage, 0, -8, 0xFFFF00);
         GL11.glPopMatrix();

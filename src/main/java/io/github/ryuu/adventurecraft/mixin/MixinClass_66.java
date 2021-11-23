@@ -1,11 +1,8 @@
 package io.github.ryuu.adventurecraft.mixin;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-
 import io.github.ryuu.adventurecraft.util.CoordBlock;
 import io.github.ryuu.adventurecraft.util.LightCache;
+import net.minecraft.class_66;
 import net.minecraft.class_68;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.Tessellator;
@@ -21,12 +18,28 @@ import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.MathsHelper;
 import org.lwjgl.opengl.GL11;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
+@Mixin(class_66.class)
 public class MixinClass_66 {
-    public Level level;
-    private int field_225 = -1;
-    private static Tessellator tesselator;
+
+    private static final Tessellator tesselator;
     public static int field_230;
+
+    static {
+        field_230 = 0;
+        tesselator = Tessellator.INSTANCE;
+    }
+
+    private final List field_228;
+    @Shadow()
+    public Level level;
     public int field_231;
     public int field_232;
     public int field_233;
@@ -52,9 +65,9 @@ public class MixinClass_66 {
     public boolean field_253;
     public int field_254;
     public boolean field_223;
-    private boolean field_227 = false;
     public List field_224 = new ArrayList();
-    private List field_228;
+    private int field_225 = -1;
+    private boolean field_227 = false;
 
     public MixinClass_66(Level world, List list, int i, int j, int k, int l, int i1) {
         this.level = world;
@@ -68,6 +81,10 @@ public class MixinClass_66 {
         this.field_249 = false;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_298(int i, int j, int k) {
         if (i == this.field_231 && j == this.field_232 && k == this.field_233) {
             return;
@@ -86,17 +103,17 @@ public class MixinClass_66 {
         this.field_238 = j - this.field_241;
         this.field_239 = k - this.field_242;
         float f = 6.0f;
-        this.field_250 = Box.create((float)i - f, (float)j - f, (float)k - f, (float)(i + this.field_234) + f, (float)(j + this.field_235) + f, (float)(k + this.field_236) + f);
-        GL11.glNewList((int)(this.field_225 + 2), (int)4864);
-        ItemRenderer.method_2024(Box.getOrCreate((float)this.field_240 - f, (float)this.field_241 - f, (float)this.field_242 - f, (float)(this.field_240 + this.field_234) + f, (float)(this.field_241 + this.field_235) + f, (float)(this.field_242 + this.field_236) + f));
+        this.field_250 = Box.create((float) i - f, (float) j - f, (float) k - f, (float) (i + this.field_234) + f, (float) (j + this.field_235) + f, (float) (k + this.field_236) + f);
+        GL11.glNewList(this.field_225 + 2, 4864);
+        ItemRenderer.method_2024(Box.getOrCreate((float) this.field_240 - f, (float) this.field_241 - f, (float) this.field_242 - f, (float) (this.field_240 + this.field_234) + f, (float) (this.field_241 + this.field_235) + f, (float) (this.field_242 + this.field_236) + f));
         GL11.glEndList();
         this.method_305();
     }
 
-    private void method_306() {
-        GL11.glTranslatef((float)this.field_240, (float)this.field_241, (float)this.field_242);
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_296() {
         if (!this.field_249) {
             return;
@@ -135,20 +152,20 @@ public class MixinClass_66 {
                             if (i3 <= 0 || texNum != Tile.BY_ID[i3].getTextureNum()) continue;
                             if (!flag2) {
                                 flag2 = true;
-                                GL11.glNewList((int)(this.field_225 + i2), (int)4864);
+                                GL11.glNewList(this.field_225 + i2, 4864);
                                 GL11.glPushMatrix();
                                 this.method_306();
                                 float f = 1.000001f;
-                                GL11.glTranslatef((float)(-this.field_236) / 2.0f, (float)(-this.field_235) / 2.0f, (float)(-this.field_236) / 2.0f);
+                                GL11.glTranslatef((float) (-this.field_236) / 2.0f, (float) (-this.field_235) / 2.0f, (float) (-this.field_236) / 2.0f);
                                 GL11.glScalef(f, f, f);
-                                GL11.glTranslatef((float)this.field_236 / 2.0f, (float)this.field_235 / 2.0f, (float)this.field_236 / 2.0f);
+                                GL11.glTranslatef((float) this.field_236 / 2.0f, (float) this.field_235 / 2.0f, (float) this.field_236 / 2.0f);
                             }
                             if (!startedDrawing) {
                                 startedDrawing = true;
                                 if (texNum == 0) {
-                                    GL11.glBindTexture(3553, (int)Minecraft.minecraftInstance.textureManager.getTextureId("/terrain.png"));
+                                    GL11.glBindTexture(3553, (int) Minecraft.minecraftInstance.textureManager.getTextureId("/terrain.png"));
                                 } else {
-                                    GL11.glBindTexture(3553, (int)Minecraft.minecraftInstance.textureManager.getTextureId(String.format("/terrain%d.png", (Object[])new Object[]{texNum})));
+                                    GL11.glBindTexture(3553, (int) Minecraft.minecraftInstance.textureManager.getTextureId(String.format("/terrain%d.png", new Object[]{texNum})));
                                 }
                                 tesselator.start();
                                 tesselator.prevPos(-this.field_231, -this.field_232, -this.field_233);
@@ -193,26 +210,21 @@ public class MixinClass_66 {
         CoordBlock.resetPool();
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public float method_299(Entity entity) {
-        float f = (float)(entity.x - (double)this.field_245);
-        float f1 = (float)(entity.y - (double)this.field_246);
-        float f2 = (float)(entity.z - (double)this.field_247);
+        float f = (float) (entity.x - (double) this.field_245);
+        float f1 = (float) (entity.y - (double) this.field_246);
+        float f2 = (float) (entity.z - (double) this.field_247);
         return f * f + f1 * f1 + f2 * f2;
     }
 
-    public void method_301() {
-        for (int i = 0; i < 2; ++i) {
-            this.field_244[i] = true;
-        }
-        this.field_243 = false;
-        this.field_227 = false;
-    }
-
-    public void method_302() {
-        this.method_301();
-        this.level = null;
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public int method_297(int i) {
         if (!this.field_243) {
             return -1;
@@ -223,27 +235,11 @@ public class MixinClass_66 {
         return -1;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_300(class_68 icamera) {
         this.field_243 = icamera.method_2007(this.field_250);
-    }
-
-    public void method_303() {
-        GL11.glCallList((int)(this.field_225 + 2));
-    }
-
-    public boolean method_304() {
-        if (!this.field_227) {
-            return false;
-        }
-        return this.field_244[0] && this.field_244[1];
-    }
-
-    public void method_305() {
-        this.field_249 = true;
-    }
-
-    static {
-        field_230 = 0;
-        tesselator = Tessellator.INSTANCE;
     }
 }

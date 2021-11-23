@@ -7,6 +7,7 @@ import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.level.Level;
 
 public class GuiMusic extends Screen {
+
     private final Level world;
 
     private final TileEntityMusic music;
@@ -23,7 +24,7 @@ public class GuiMusic extends Screen {
     }
 
     public static void showUI(Level w, TileEntityMusic m) {
-        Minecraft.minecraftInstance.a(new GuiMusic(w, m));
+        Minecraft.minecraftInstance.openScreen(new GuiMusic(w, m));
     }
 
     @Override
@@ -32,52 +33,54 @@ public class GuiMusic extends Screen {
 
     @Override
     public void init() {
-        int maxEntries = 3 * (this.height - 60) / 20;
-        for (int i = 0; i + maxEntries * this.page <= this.world.musicList.length && i < maxEntries; i++) {
+        Button b;
+        int maxEntries = 3 * ((this.height - 60) / 20);
+        for (int i = 0; i + maxEntries * this.page <= this.world.musicList.length && i < maxEntries; ++i) {
             String musicName = "Stop Music";
-            if (i != 0 || this.page != 0)
+            if (i != 0 || this.page != 0) {
                 musicName = this.world.musicList[i - 1 + maxEntries * this.page];
-            Button b = new Button(i, 4 + i % 3 * this.width / 3, 60 + i / 3 * 20, (this.width - 16) / 3, 18, musicName);
+            }
+            b = new Button(i, 4 + i % 3 * this.width / 3, 60 + i / 3 * 20, (this.width - 16) / 3, 18, musicName);
             this.buttons.add(b);
         }
-        this.fadeOut = new GuiSlider2(200, 4, 16, 10, String.format("Fade Out: %d", this.music.fadeOut), this.music.fadeOut / 5000.0F);
-        this.fadeIn = new GuiSlider2(201, this.width / 2, 16, 10, String.format("Fade In: %d", this.music.fadeIn), this.music.fadeIn / 5000.0F);
+        this.fadeOut = new GuiSlider2(200, 4, 16, 10, String.format("Fade Out: %d", this.music.fadeOut), (float) this.music.fadeOut / 5000.0f);
+        this.fadeIn = new GuiSlider2(201, this.width / 2, 16, 10, String.format("Fade In: %d", this.music.fadeIn), (float) this.music.fadeIn / 5000.0f);
         this.buttons.add(this.fadeOut);
         this.buttons.add(this.fadeIn);
         int numPages = (this.world.musicList.length - 1) / maxEntries + 1;
-        for (int j = 0; j < numPages; j++) {
-            Button b = new Button(100 + j, 4 + j * 50, 40, 46, 18, String.format("Page %d", j + 1));
+        for (int i = 0; i < numPages; ++i) {
+            b = new Button(100 + i, 4 + i * 50, 40, 46, 18, String.format("Page %d", i + 1));
             this.buttons.add(b);
         }
     }
 
     @Override
-    protected void buttonClicked(Button guibutton) {
-        if (guibutton.id == 0 && this.page == 0) {
+    protected void buttonClicked(Button button) {
+        if (button.id == 0 && this.page == 0) {
             this.music.musicName = "";
-        } else if (guibutton.id < 100) {
-            int maxEntries = 3 * (this.height - 60) / 20;
-            this.music.musicName = this.world.musicList[guibutton.id + maxEntries * this.page - 1];
-        } else if (guibutton.id < 200) {
-            this.page = guibutton.id - 100;
+        } else if (button.id < 100) {
+            int maxEntries = 3 * ((this.height - 60) / 20);
+            this.music.musicName = this.world.musicList[button.id + maxEntries * this.page - 1];
+        } else if (button.id < 200) {
+            this.page = button.id - 100;
             this.buttons.clear();
-            init();
+            this.init();
         }
     }
 
     @Override
-    public void render(int i, int j, float f) {
-        fill(0, 0, this.width, this.height, -2147483648);
+    public void render(int mouseX, int mouseY, float delta) {
+        this.fill(0, 0, this.width, this.height, Integer.MIN_VALUE);
         if (this.music.musicName.equals("")) {
-            drawTextWithShadow(this.textManager, "Music: Stop Music", 4, 4, 14737632);
+            this.drawTextWithShadow(this.textManager, "Music: Stop Music", 4, 4, 0xE0E0E0);
         } else {
-            drawTextWithShadow(this.textManager, String.format("Music: %s", this.music.musicName), 4, 4, 14737632);
+            this.drawTextWithShadow(this.textManager, String.format("Music: %s", this.music.musicName), 4, 4, 0xE0E0E0);
         }
-        this.music.fadeOut = (int) (this.fadeOut.sliderValue * 5000.0F + 0.5F);
+        this.music.fadeOut = (int) (this.fadeOut.sliderValue * 5000.0f + 0.5f);
         this.fadeOut.text = String.format("Fade Out: %d", this.music.fadeOut);
-        this.music.fadeIn = (int) (this.fadeIn.sliderValue * 5000.0F + 0.5F);
+        this.music.fadeIn = (int) (this.fadeIn.sliderValue * 5000.0f + 0.5f);
         this.fadeIn.text = String.format("Fade In: %d", this.music.fadeIn);
-        super.render(i, j, f);
+        super.render(mouseX, mouseY, delta);
         this.world.getChunk(this.music.x, this.music.z).method_885();
     }
 

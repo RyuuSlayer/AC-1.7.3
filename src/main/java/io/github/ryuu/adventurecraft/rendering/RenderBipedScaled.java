@@ -6,6 +6,7 @@ import net.minecraft.entity.LivingEntity;
 import org.lwjgl.opengl.GL11;
 
 public class RenderBipedScaled extends BipedEntityRenderer {
+
     private final float scaling;
 
     public RenderBipedScaled(BipedModel modelbase, float f, float f1) {
@@ -13,7 +14,8 @@ public class RenderBipedScaled extends BipedEntityRenderer {
         this.scaling = f1;
     }
 
-    protected void a(LivingEntity entityliving, float f) {
+    @Override
+    protected void method_823(LivingEntity entityliving, float f) {
         GL11.glScalef(this.scaling, this.scaling, this.scaling);
     }
 }

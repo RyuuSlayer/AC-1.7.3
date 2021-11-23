@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.scripting;
 import net.minecraft.entity.projectile.Arrow;
 
 public class ScriptEntityArrow extends ScriptEntity {
+
     Arrow entityArrow;
 
     ScriptEntityArrow(Arrow e) {
@@ -15,8 +16,9 @@ public class ScriptEntityArrow extends ScriptEntity {
     }
 
     public ScriptVec3 getInBlockCoords() {
-        if (this.entityArrow.inTile == 0)
+        if (this.entityArrow.inTile == 0) {
             return null;
+        }
         return new ScriptVec3(this.entityArrow.xTile, this.entityArrow.yTile, this.entityArrow.zTile);
     }
 

@@ -15,10 +15,17 @@ import net.minecraft.level.Level;
 import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.MathsHelper;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.List;
 
+@Mixin(Wolf.class)
 public class MixinWolf extends Animal {
+
+    public int attackStrength;
+    @Shadow()
     private boolean begging = false;
     private float begAnimationProgress;
     private float lastBegAnimationProgress;
@@ -26,7 +33,6 @@ public class MixinWolf extends Animal {
     private boolean canShakeWaterOff;
     private float shakeProgress;
     private float lastShakeProgress;
-    public int attackStrength;
 
     public MixinWolf(Level world) {
         super(world);
@@ -37,27 +43,23 @@ public class MixinWolf extends Animal {
         this.attackStrength = -1;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     protected void initDataTracker() {
         super.initDataTracker();
-        this.dataTracker.startTracking(16, (byte)0);
+        this.dataTracker.startTracking(16, (byte) 0);
         this.dataTracker.startTracking(17, "");
         this.dataTracker.startTracking(18, new Integer(this.health));
     }
 
-    protected boolean canClimb() {
-        return false;
-    }
-
-    public String method_1314() {
-        if (this.isTamed()) {
-            return "/mob/wolf_tame.png";
-        }
-        if (this.isAngry()) {
-            return "/mob/wolf_angry.png";
-        }
-        return super.method_1314();
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void writeCustomDataToTag(CompoundTag tag) {
         super.writeCustomDataToTag(tag);
         tag.put("Angry", this.isAngry());
@@ -69,6 +71,11 @@ public class MixinWolf extends Animal {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void readCustomDataFromTag(CompoundTag tag) {
         super.readCustomDataFromTag(tag);
         this.setAngry(tag.getBoolean("Angry"));
@@ -80,39 +87,11 @@ public class MixinWolf extends Animal {
         }
     }
 
-    protected boolean method_940() {
-        return !this.isTamed();
-    }
-
-    protected String getAmbientSound() {
-        if (this.isAngry()) {
-            return "mob.wolf.growl";
-        }
-        if (this.rand.nextInt(3) == 0) {
-            if (this.isTamed() && this.dataTracker.getInt(18) < 10) {
-                return "mob.wolf.whine";
-            }
-            return "mob.wolf.panting";
-        }
-        return "mob.wolf.bark";
-    }
-
-    protected String getHurtSound() {
-        return "mob.wolf.hurt";
-    }
-
-    protected String getDeathSound() {
-        return "mob.wolf.death";
-    }
-
-    protected float getSoundVolume() {
-        return 0.4f;
-    }
-
-    protected int getMobDrops() {
-        return -1;
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     protected void tickHandSwing() {
         List list;
         super.tickHandSwing();
@@ -127,7 +106,7 @@ public class MixinWolf extends Animal {
                 this.setSitting(true);
             }
         } else if (!(this.entity != null || this.method_633() || this.isTamed() || this.level.rand.nextInt(100) != 0 || (list = this.level.getEntities(Sheep.class, Box.getOrCreate(this.x, this.y, this.z, this.x + 1.0, this.y + 1.0, this.z + 1.0).expand(16.0, 4.0, 16.0))).isEmpty())) {
-            this.method_636((Entity)list.get(this.level.rand.nextInt(list.size())));
+            this.method_636((Entity) list.get(this.level.rand.nextInt(list.size())));
         }
         if (this.method_1334()) {
             this.setSitting(false);
@@ -137,18 +116,23 @@ public class MixinWolf extends Animal {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void updateDespawnCounter() {
         Entity entity;
         super.updateDespawnCounter();
         this.begging = false;
         if (this.method_921() && !this.method_633() && !this.isAngry() && (entity = this.method_922()) instanceof Player) {
-            Player entityplayer = (Player)entity;
+            Player entityplayer = (Player) entity;
             ItemInstance itemstack = entityplayer.inventory.getHeldItem();
             if (itemstack != null) {
                 if (!this.isTamed() && itemstack.itemId == ItemType.bone.id) {
                     this.begging = true;
                 } else if (this.isTamed() && ItemType.byId[itemstack.itemId] instanceof FoodItem) {
-                    this.begging = ((FoodItem)ItemType.byId[itemstack.itemId]).canWolvesEat();
+                    this.begging = ((FoodItem) ItemType.byId[itemstack.itemId]).canWolvesEat();
                 }
             }
         }
@@ -156,10 +140,15 @@ public class MixinWolf extends Animal {
             this.canShakeWaterOff = true;
             this.shakeProgress = 0.0f;
             this.lastShakeProgress = 0.0f;
-            this.level.method_185(this, (byte)8);
+            this.level.method_185(this, (byte) 8);
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void tick() {
         super.tick();
         this.lastBegAnimationProgress = this.begAnimationProgress;
@@ -185,25 +174,21 @@ public class MixinWolf extends Animal {
                 this.shakeProgress = 0.0f;
             }
             if (this.shakeProgress > 0.4f) {
-                float f = (float)this.boundingBox.minY;
-                int i = (int)(MathsHelper.sin((this.shakeProgress - 0.4f) * 3.141593f) * 7.0f);
+                float f = (float) this.boundingBox.minY;
+                int i = (int) (MathsHelper.sin((this.shakeProgress - 0.4f) * 3.141593f) * 7.0f);
                 for (int j = 0; j < i; ++j) {
                     float f1 = (this.rand.nextFloat() * 2.0f - 1.0f) * this.width * 0.5f;
                     float f2 = (this.rand.nextFloat() * 2.0f - 1.0f) * this.width * 0.5f;
-                    this.level.addParticle("splash", this.x + (double)f1, f + 0.8f, this.z + (double)f2, this.velocityX, this.velocityY, this.velocityZ);
+                    this.level.addParticle("splash", this.x + (double) f1, f + 0.8f, this.z + (double) f2, this.velocityX, this.velocityY, this.velocityZ);
                 }
             }
         }
     }
 
-    public boolean isWet() {
-        return this.wet;
-    }
-
-    public float getWetBrightnessMultiplier(float f) {
-        return 0.75f + (this.lastShakeProgress + (this.shakeProgress - this.lastShakeProgress) * f) / 2.0f * 0.25f;
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public float getShakeAnimationProgress(float f, float f1) {
         float f2 = (this.lastShakeProgress + (this.shakeProgress - this.lastShakeProgress) * f + f1) / 1.8f;
         if (f2 < 0.0f) {
@@ -214,21 +199,18 @@ public class MixinWolf extends Animal {
         return MathsHelper.sin(f2 * 3.141593f) * MathsHelper.sin(f2 * 3.141593f * 11.0f) * 0.15f * 3.141593f;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public float getBegAnimationProgress(float f) {
         return (this.lastBegAnimationProgress + (this.begAnimationProgress - this.lastBegAnimationProgress) * f) * 0.15f * 3.141593f;
     }
 
-    public float getStandingEyeHeight() {
-        return this.height * 0.8f;
-    }
-
-    protected int getLookPitchSpeed() {
-        if (this.isSitting()) {
-            return 20;
-        }
-        return super.getLookPitchSpeed();
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void method_429(Entity entity, float f) {
         class_61 pathentity = this.level.method_192(this, entity, 16.0f);
         if (pathentity == null && f > 12.0f) {
@@ -237,8 +219,9 @@ public class MixinWolf extends Animal {
             int k = MathsHelper.floor(entity.boundingBox.minY);
             for (int l = 0; l <= 4; ++l) {
                 for (int i1 = 0; i1 <= 4; ++i1) {
-                    if (l >= 1 && i1 >= 1 && l <= 3 && i1 <= 3 || !this.level.canSuffocate(i + l, k - 1, j + i1) || this.level.canSuffocate(i + l, k, j + i1) || this.level.canSuffocate(i + l, k + 1, j + i1)) continue;
-                    this.setPositionAndAngles((float)(i + l) + 0.5f, k, (float)(j + i1) + 0.5f, this.yaw, this.pitch);
+                    if (l >= 1 && i1 >= 1 && l <= 3 && i1 <= 3 || !this.level.canSuffocate(i + l, k - 1, j + i1) || this.level.canSuffocate(i + l, k, j + i1) || this.level.canSuffocate(i + l, k + 1, j + i1))
+                        continue;
+                    this.setPositionAndAngles((float) (i + l) + 0.5f, k, (float) (j + i1) + 0.5f, this.yaw, this.pitch);
                     return;
                 }
             }
@@ -247,10 +230,11 @@ public class MixinWolf extends Animal {
         }
     }
 
-    protected boolean method_640() {
-        return this.isSitting() || this.canShakeWaterOff;
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public boolean damage(Entity target, int amount) {
         this.setSitting(false);
         if (target != null && !(target instanceof Player) && !(target instanceof Arrow)) {
@@ -262,13 +246,13 @@ public class MixinWolf extends Animal {
                     this.setAngry(true);
                     this.entity = target;
                 }
-                if (target instanceof Arrow && ((Arrow)target).field_1576 != null) {
-                    target = ((Arrow)target).field_1576;
+                if (target instanceof Arrow && ((Arrow) target).field_1576 != null) {
+                    target = ((Arrow) target).field_1576;
                 }
                 if (target instanceof LivingEntity) {
                     List list = this.level.getEntities(Wolf.class, Box.getOrCreate(this.x, this.y, this.z, this.x + 1.0, this.y + 1.0, this.z + 1.0).expand(16.0, 4.0, 16.0));
                     for (Entity entity1 : list) {
-                        Wolf entitywolf = (Wolf)entity1;
+                        Wolf entitywolf = (Wolf) entity1;
                         if (entitywolf.isTamed() || entitywolf.entity != null) continue;
                         entitywolf.entity = target;
                         if (!(target instanceof Player)) continue;
@@ -276,7 +260,7 @@ public class MixinWolf extends Animal {
                     }
                 }
             } else if (target != this && target != null) {
-                if (this.isTamed() && target instanceof Player && ((Player)target).name.equalsIgnoreCase(this.getOwner())) {
+                if (this.isTamed() && target instanceof Player && ((Player) target).name.equalsIgnoreCase(this.getOwner())) {
                     return true;
                 }
                 this.entity = target;
@@ -286,24 +270,22 @@ public class MixinWolf extends Animal {
         return false;
     }
 
-    protected Entity method_638() {
-        if (this.isAngry()) {
-            return this.level.getClosestPlayerTo(this, 16.0);
-        }
-        return null;
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     protected void method_637(Entity entity, float f) {
         if (f > 2.0f && f < 6.0f && this.rand.nextInt(10) == 0) {
             if (this.onGround) {
                 double d = entity.x - this.x;
                 double d1 = entity.z - this.z;
                 float f1 = MathsHelper.sqrt(d * d + d1 * d1);
-                this.velocityX = d / (double)f1 * 0.5 * (double)0.8f + this.velocityX * (double)0.2f;
-                this.velocityZ = d1 / (double)f1 * 0.5 * (double)0.8f + this.velocityZ * (double)0.2f;
+                this.velocityX = d / (double) f1 * 0.5 * (double) 0.8f + this.velocityX * (double) 0.2f;
+                this.velocityZ = d1 / (double) f1 * 0.5 * (double) 0.8f + this.velocityZ * (double) 0.2f;
                 this.velocityY = 0.4f;
             }
-        } else if ((double)f < 1.5 && entity.boundingBox.maxY > this.boundingBox.minY && entity.boundingBox.minY < this.boundingBox.maxY) {
+        } else if ((double) f < 1.5 && entity.boundingBox.maxY > this.boundingBox.minY && entity.boundingBox.minY < this.boundingBox.maxY) {
             this.attackTime = 20;
             int byte0 = 2;
             if (this.isTamed()) {
@@ -316,6 +298,11 @@ public class MixinWolf extends Animal {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public boolean interact(Player entityplayer) {
         ItemInstance itemstack = entityplayer.inventory.getHeldItem();
         if (!this.isTamed()) {
@@ -332,22 +319,22 @@ public class MixinWolf extends Animal {
                         this.health = 20;
                         this.setOwner(entityplayer.name);
                         this.spawnBoneParticles(true);
-                        this.level.method_185(this, (byte)7);
+                        this.level.method_185(this, (byte) 7);
                     } else {
                         this.spawnBoneParticles(false);
-                        this.level.method_185(this, (byte)6);
+                        this.level.method_185(this, (byte) 6);
                     }
                 }
                 return true;
             }
         } else {
             FoodItem itemfood;
-            if (itemstack != null && ItemType.byId[itemstack.itemId] instanceof FoodItem && (itemfood = (FoodItem)ItemType.byId[itemstack.itemId]).canWolvesEat() && this.dataTracker.getInt(18) < 20) {
+            if (itemstack != null && ItemType.byId[itemstack.itemId] instanceof FoodItem && (itemfood = (FoodItem) ItemType.byId[itemstack.itemId]).canWolvesEat() && this.dataTracker.getInt(18) < 20) {
                 --itemstack.count;
                 if (itemstack.count <= 0) {
                     entityplayer.inventory.setInvItem(entityplayer.inventory.selectedHotbarSlot, null);
                 }
-                this.addHealth(((FoodItem)ItemType.porkchopRaw).getHealAmount());
+                this.addHealth(((FoodItem) ItemType.porkchopRaw).getHealAmount());
                 return true;
             }
             if (entityplayer.name.equalsIgnoreCase(this.getOwner())) {
@@ -362,6 +349,10 @@ public class MixinWolf extends Animal {
         return false;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     void spawnBoneParticles(boolean tamed) {
         String s = "heart";
         if (!tamed) {
@@ -371,10 +362,15 @@ public class MixinWolf extends Animal {
             double d = this.rand.nextGaussian() * 0.02;
             double d1 = this.rand.nextGaussian() * 0.02;
             double d2 = this.rand.nextGaussian() * 0.02;
-            this.level.addParticle(s, this.x + (double)(this.rand.nextFloat() * this.width * 2.0f) - (double)this.width, this.y + 0.5 + (double)(this.rand.nextFloat() * this.height), this.z + (double)(this.rand.nextFloat() * this.width * 2.0f) - (double)this.width, d, d1, d2);
+            this.level.addParticle(s, this.x + (double) (this.rand.nextFloat() * this.width * 2.0f) - (double) this.width, this.y + 0.5 + (double) (this.rand.nextFloat() * this.height), this.z + (double) (this.rand.nextFloat() * this.width * 2.0f) - (double) this.width, d, d1, d2);
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void handleStatus(byte byte0) {
         if (byte0 == 7) {
             this.spawnBoneParticles(true);
@@ -389,64 +385,64 @@ public class MixinWolf extends Animal {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public float method_424() {
         if (this.isAngry()) {
             return 1.53938f;
         }
         if (this.isTamed()) {
-            return (0.55f - (float)(20 - this.dataTracker.getInt(18)) * 0.02f) * 3.141593f;
+            return (0.55f - (float) (20 - this.dataTracker.getInt(18)) * 0.02f) * 3.141593f;
         }
         return 0.6283185f;
     }
 
-    public int getLimitPerChunk() {
-        return 8;
-    }
-
-    public String getOwner() {
-        return this.dataTracker.getString(17);
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void setOwner(String s) {
         this.dataTracker.setData(17, s);
     }
 
-    public boolean isSitting() {
-        return (this.dataTracker.getByte(16) & 1) != 0;
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void setSitting(boolean flag) {
         byte byte0 = this.dataTracker.getByte(16);
         if (flag) {
-            this.dataTracker.setData(16, (byte)(byte0 | 1));
+            this.dataTracker.setData(16, (byte) (byte0 | 1));
         } else {
-            this.dataTracker.setData(16, (byte)(byte0 & 0xFFFFFFFE));
+            this.dataTracker.setData(16, (byte) (byte0 & 0xFFFFFFFE));
         }
     }
 
-    public boolean isAngry() {
-        return (this.dataTracker.getByte(16) & 2) != 0;
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void setAngry(boolean flag) {
         byte byte0 = this.dataTracker.getByte(16);
         if (flag) {
-            this.dataTracker.setData(16, (byte)(byte0 | 2));
+            this.dataTracker.setData(16, (byte) (byte0 | 2));
         } else {
-            this.dataTracker.setData(16, (byte)(byte0 & 0xFFFFFFFD));
+            this.dataTracker.setData(16, (byte) (byte0 & 0xFFFFFFFD));
         }
     }
 
-    public boolean isTamed() {
-        return (this.dataTracker.getByte(16) & 4) != 0;
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void setHasOwner(boolean flag) {
         byte byte0 = this.dataTracker.getByte(16);
         if (flag) {
-            this.dataTracker.setData(16, (byte)(byte0 | 4));
+            this.dataTracker.setData(16, (byte) (byte0 | 4));
         } else {
-            this.dataTracker.setData(16, (byte)(byte0 & 0xFFFFFFFB));
+            this.dataTracker.setData(16, (byte) (byte0 & 0xFFFFFFFB));
         }
     }
 }

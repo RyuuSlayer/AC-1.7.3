@@ -1,9 +1,9 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.Slime;
 
 public class ScriptEntitySlime extends ScriptEntityLiving {
+
     Slime entitySlime;
 
     ScriptEntitySlime(Slime e) {
@@ -20,10 +20,10 @@ public class ScriptEntitySlime extends ScriptEntityLiving {
     }
 
     public int getSlimeSize() {
-        return this.entitySlime.setSize();
+        return this.entitySlime.getSize();
     }
 
     public void setSlimeSize(int i) {
-        this.entitySlime.getSize(i);
+        this.entitySlime.setSize(i);
     }
 }

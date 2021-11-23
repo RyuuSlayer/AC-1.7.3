@@ -11,6 +11,7 @@ import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.Vec3f;
 
 public class BlockLockedDoor extends Tile {
+
     int doorKeyToUse;
 
     protected BlockLockedDoor(int i, int j, int keyToUse) {
@@ -25,149 +26,164 @@ public class BlockLockedDoor extends Tile {
     }
 
     @Override
-    public HitResult raycast(Level world, int i, int j, int k, Vec3f vec3d, Vec3f vec3d1) {
-        int metadata = world.getTileMeta(i, j, k);
-        if (!DebugMode.active && metadata == 1)
+    public HitResult raycast(Level world, int x, int y, int z, Vec3f vec3d, Vec3f vec3d1) {
+        int metadata = world.getTileMeta(x, y, z);
+        if (!DebugMode.active && metadata == 1) {
             return null;
-        return super.raycast(world, i, j, k, vec3d, vec3d1);
+        }
+        return super.raycast(world, x, y, z, vec3d, vec3d1);
     }
 
     @Override
-    public Box getCollisionShape(Level world, int i, int j, int k) {
-        int metadata = world.getTileMeta(i, j, k);
-        if (DebugMode.active || metadata == 1)
+    public Box getCollisionShape(Level level, int x, int y, int z) {
+        int metadata = level.getTileMeta(x, y, z);
+        if (DebugMode.active || metadata == 1) {
             return null;
-        return super.getCollisionShape(world, i, j, k);
+        }
+        return super.getCollisionShape(level, x, y, z);
     }
 
+    @Override
     public boolean shouldRender(TileView blockAccess, int i, int j, int k) {
         int metadata = blockAccess.getTileMeta(i, j, k);
-        return (DebugMode.active || metadata == 0);
+        return DebugMode.active || metadata == 0;
     }
 
     @Override
     public int method_1626(TileView world, int i, int j, int k, int side) {
-        if (side == 0 || side == 1)
+        if (side == 0 || side == 1) {
             return this.tex;
+        }
         int height = 1;
-        while (world.getTileId(i, j + height, k) == this.id)
-            height++;
+        while (world.getTileId(i, j + height, k) == this.id) {
+            ++height;
+        }
         int offset = 1;
         while (world.getTileId(i, j - offset, k) == this.id) {
-            height++;
-            offset++;
+            ++height;
+            ++offset;
         }
         int textureToReturn = this.tex;
         if (height > 2) {
             if (height / 2 == offset - 1) {
                 int width = 1;
                 offset = 1;
-                while (world.getTileId(i + width, j, k) == this.id)
-                    width++;
+                while (world.getTileId(i + width, j, k) == this.id) {
+                    ++width;
+                }
                 while (world.getTileId(i - offset, j, k) == this.id) {
-                    width++;
-                    offset++;
+                    ++width;
+                    ++offset;
                 }
                 if (width == 1) {
-                    while (world.getTileId(i, j, k + width) == this.id)
-                        width++;
+                    while (world.getTileId(i, j, k + width) == this.id) {
+                        ++width;
+                    }
                     while (world.getTileId(i, j, k - offset) == this.id) {
-                        width++;
-                        offset++;
+                        ++width;
+                        ++offset;
                     }
                 }
-                if (width / 2 == offset - 1)
-                    textureToReturn++;
+                if (width / 2 == offset - 1) {
+                    ++textureToReturn;
+                }
             }
         } else {
             textureToReturn += 16;
-            if (world.getTileId(i, j - 1, k) != this.id)
+            if (world.getTileId(i, j - 1, k) != this.id) {
                 textureToReturn += 16;
+            }
             if (side == 2) {
-                if (world.getTileId(i + 1, j, k) == this.id)
-                    textureToReturn++;
+                if (world.getTileId(i + 1, j, k) == this.id) {
+                    ++textureToReturn;
+                }
             } else if (side == 3) {
-                if (world.getTileId(i - 1, j, k) == this.id)
-                    textureToReturn++;
+                if (world.getTileId(i - 1, j, k) == this.id) {
+                    ++textureToReturn;
+                }
             } else if (side == 4) {
-                if (world.getTileId(i, j, k - 1) == this.id)
-                    textureToReturn++;
-            } else if (side == 5) {
-                if (world.getTileId(i, j, k + 1) == this.id)
-                    textureToReturn++;
+                if (world.getTileId(i, j, k - 1) == this.id) {
+                    ++textureToReturn;
+                }
+            } else if (side == 5 && world.getTileId(i, j, k + 1) == this.id) {
+                ++textureToReturn;
             }
         }
         return textureToReturn;
     }
 
     @Override
-    public void onPunched(Level world, int i, int j, int k, Player entityplayer) {
-        if (entityplayer.inventory.decreaseAmountOfItem(this.doorKeyToUse)) {
-            world.playSound(i + 0.5D, j + 0.5D, k + 0.5D, "random.door_open", 1.0F, world.rand.nextFloat() * 0.1F + 0.9F);
+    public void onPunched(Level level, int x, int y, int z, Player player) {
+        if (player.inventory.decreaseAmountOfItem(this.doorKeyToUse)) {
+            int offsetX;
+            level.playSound((double) x + 0.5, (double) y + 0.5, (double) z + 0.5, "random.door_open", 1.0f, level.rand.nextFloat() * 0.1f + 0.9f);
             int offsetY = 0;
-            while (world.getTileId(i, j + offsetY, k) == this.id) {
-                int offsetX = 0;
-                while (world.getTileId(i + offsetX, j + offsetY, k) == this.id) {
-                    world.setTileMeta(i + offsetX, j + offsetY, k, 1);
-                    world.method_243(i + offsetX, j + offsetY, k);
-                    offsetX++;
+            while (level.getTileId(x, y + offsetY, z) == this.id) {
+                offsetX = 0;
+                while (level.getTileId(x + offsetX, y + offsetY, z) == this.id) {
+                    level.setTileMeta(x + offsetX, y + offsetY, z, 1);
+                    level.method_243(x + offsetX, y + offsetY, z);
+                    ++offsetX;
                 }
                 offsetX = 1;
-                while (world.getTileId(i - offsetX, j + offsetY, k) == this.id) {
-                    world.setTileMeta(i - offsetX, j + offsetY, k, 1);
-                    world.method_243(i - offsetX, j + offsetY, k);
-                    offsetX++;
+                while (level.getTileId(x - offsetX, y + offsetY, z) == this.id) {
+                    level.setTileMeta(x - offsetX, y + offsetY, z, 1);
+                    level.method_243(x - offsetX, y + offsetY, z);
+                    ++offsetX;
                 }
                 offsetX = 1;
-                while (world.getTileId(i, j + offsetY, k + offsetX) == this.id) {
-                    world.setTileMeta(i, j + offsetY, k + offsetX, 1);
-                    world.method_243(i, j + offsetY, k + offsetX);
-                    offsetX++;
+                while (level.getTileId(x, y + offsetY, z + offsetX) == this.id) {
+                    level.setTileMeta(x, y + offsetY, z + offsetX, 1);
+                    level.method_243(x, y + offsetY, z + offsetX);
+                    ++offsetX;
                 }
                 offsetX = 1;
-                while (world.getTileId(i, j + offsetY, k - offsetX) == this.id) {
-                    world.setTileMeta(i, j + offsetY, k - offsetX, 1);
-                    world.method_243(i, j + offsetY, k - offsetX);
-                    offsetX++;
+                while (level.getTileId(x, y + offsetY, z - offsetX) == this.id) {
+                    level.setTileMeta(x, y + offsetY, z - offsetX, 1);
+                    level.method_243(x, y + offsetY, z - offsetX);
+                    ++offsetX;
                 }
-                offsetY++;
+                ++offsetY;
             }
             offsetY = -1;
-            while (world.getTileId(i, j + offsetY, k) == this.id) {
-                int offsetX = 0;
-                while (world.getTileId(i + offsetX, j + offsetY, k) == this.id) {
-                    world.setTileMeta(i + offsetX, j + offsetY, k, 1);
-                    world.method_243(i + offsetX, j + offsetY, k);
-                    offsetX++;
+            while (level.getTileId(x, y + offsetY, z) == this.id) {
+                offsetX = 0;
+                while (level.getTileId(x + offsetX, y + offsetY, z) == this.id) {
+                    level.setTileMeta(x + offsetX, y + offsetY, z, 1);
+                    level.method_243(x + offsetX, y + offsetY, z);
+                    ++offsetX;
                 }
                 offsetX = 1;
-                while (world.getTileId(i - offsetX, j + offsetY, k) == this.id) {
-                    world.setTileMeta(i - offsetX, j + offsetY, k, 1);
-                    world.method_243(i - offsetX, j + offsetY, k);
-                    offsetX++;
+                while (level.getTileId(x - offsetX, y + offsetY, z) == this.id) {
+                    level.setTileMeta(x - offsetX, y + offsetY, z, 1);
+                    level.method_243(x - offsetX, y + offsetY, z);
+                    ++offsetX;
                 }
                 offsetX = 1;
-                while (world.getTileId(i, j + offsetY, k + offsetX) == this.id) {
-                    world.setTileMeta(i, j + offsetY, k + offsetX, 1);
-                    world.method_243(i, j + offsetY, k + offsetX);
-                    offsetX++;
+                while (level.getTileId(x, y + offsetY, z + offsetX) == this.id) {
+                    level.setTileMeta(x, y + offsetY, z + offsetX, 1);
+                    level.method_243(x, y + offsetY, z + offsetX);
+                    ++offsetX;
                 }
                 offsetX = 1;
-                while (world.getTileId(i, j + offsetY, k - offsetX) == this.id) {
-                    world.setTileMeta(i, j + offsetY, k - offsetX, 1);
-                    world.method_243(i, j + offsetY, k - offsetX);
-                    offsetX++;
+                while (level.getTileId(x, y + offsetY, z - offsetX) == this.id) {
+                    level.setTileMeta(x, y + offsetY, z - offsetX, 1);
+                    level.method_243(x, y + offsetY, z - offsetX);
+                    ++offsetX;
                 }
-                offsetY--;
+                --offsetY;
             }
         }
     }
 
+    @Override
     public void reset(Level world, int i, int j, int k, boolean death) {
-        if (!death)
+        if (!death) {
             world.setTileMeta(i, j, k, 0);
+        }
     }
 
+    @Override
     public int alwaysUseClick(Level world, int i, int j, int k) {
         return 0;
     }

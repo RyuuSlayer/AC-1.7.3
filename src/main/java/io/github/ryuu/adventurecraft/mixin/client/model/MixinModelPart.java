@@ -2,28 +2,33 @@ package io.github.ryuu.adventurecraft.mixin.client.model;
 
 import net.minecraft.class_290;
 import net.minecraft.class_552;
-import net.minecraft.client.GLAllocator;
-import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.model.ModelPart;
 import org.lwjgl.opengl.GL11;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
+@Mixin(ModelPart.class)
 public class MixinModelPart {
-    private class_290[] vertices;
-    private class_552[] field_2302;
-    private int xTexOffset;
-    private int yTexOffset;
+
+    private final int xTexOffset;
+    private final int yTexOffset;
+    private final boolean compiled = false;
+    private final int list = 0;
+    private final int tWidth;
+    private final int tHeight;
     public float pivotX;
     public float pivotY;
     public float pivotZ;
     public float pitch;
     public float yaw;
     public float roll;
-    private boolean compiled = false;
-    private int list = 0;
     public boolean mirror = false;
     public boolean visible = true;
     public boolean hidden = false;
-    private int tWidth;
-    private int tHeight;
+    @Shadow()
+    private class_290[] vertices;
+    private class_552[] field_2302;
 
     public MixinModelPart(int xTexOffset, int yTexOffset) {
         this(xTexOffset, yTexOffset, 64, 32);
@@ -36,16 +41,24 @@ public class MixinModelPart {
         this.tHeight = h;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void addCuboid(float f, float f1, float f2, int i, int j, int k) {
         this.addCuboid(f, f1, f2, i, j, k, 0.0f);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void addCuboid(float f, float f1, float f2, int i, int j, int k, float f3) {
         this.vertices = new class_290[8];
         this.field_2302 = new class_552[6];
-        float f4 = f + (float)i;
-        float f5 = f1 + (float)j;
-        float f6 = f2 + (float)k;
+        float f4 = f + (float) i;
+        float f5 = f1 + (float) j;
+        float f6 = f2 + (float) k;
         f -= f3;
         f1 -= f3;
         f2 -= f3;
@@ -86,12 +99,16 @@ public class MixinModelPart {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void addBoxInverted(float f, float f1, float f2, int i, int j, int k, float f3) {
         this.vertices = new class_290[8];
         this.field_2302 = new class_552[6];
-        float f4 = f + (float)i;
-        float f5 = f1 + (float)j;
-        float f6 = f2 + (float)k;
+        float f4 = f + (float) i;
+        float f5 = f1 + (float) j;
+        float f6 = f2 + (float) k;
         f -= f3;
         f1 -= f3;
         f2 -= f3;
@@ -132,12 +149,20 @@ public class MixinModelPart {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void setPivot(float f, float f1, float f2) {
         this.pivotX = f;
         this.pivotY = f1;
         this.pivotZ = f2;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void render(float f) {
         if (this.hidden) {
             return;
@@ -171,6 +196,10 @@ public class MixinModelPart {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_1819(float f) {
         if (this.hidden) {
             return;
@@ -196,6 +225,10 @@ public class MixinModelPart {
         GL11.glPopMatrix();
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_1820(float f) {
         if (this.hidden) {
             return;
@@ -220,16 +253,5 @@ public class MixinModelPart {
         } else if (this.pivotX != 0.0f || this.pivotY != 0.0f || this.pivotZ != 0.0f) {
             GL11.glTranslatef(this.pivotX * f, this.pivotY * f, this.pivotZ * f);
         }
-    }
-
-    private void compile(float f) {
-        this.list = GLAllocator.add(1);
-        GL11.glNewList(this.list, 4864);
-        Tessellator tessellator = Tessellator.INSTANCE;
-        for (int i = 0; i < this.field_2302.length; ++i) {
-            this.field_2302[i].method_1926(tessellator, f);
-        }
-        GL11.glEndList();
-        this.compiled = true;
     }
 }

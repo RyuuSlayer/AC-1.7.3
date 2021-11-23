@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.util;
 import io.github.ryuu.adventurecraft.items.ItemCursor;
 
 class Selection {
+
     int oneX;
 
     int oneY;
@@ -14,6 +15,9 @@ class Selection {
     int twoY;
 
     int twoZ;
+
+    Selection() {
+    }
 
     void record() {
         this.oneX = ItemCursor.oneX;

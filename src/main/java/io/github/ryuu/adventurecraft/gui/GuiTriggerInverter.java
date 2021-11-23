@@ -9,6 +9,7 @@ import net.minecraft.client.gui.widgets.OptionButton;
 import net.minecraft.level.Level;
 
 public class GuiTriggerInverter extends Screen {
+
     private final TileEntityTriggerInverter trigger;
 
     private final int blockX;
@@ -28,7 +29,7 @@ public class GuiTriggerInverter extends Screen {
     }
 
     public static void showUI(Level w, int x, int y, int z, TileEntityTriggerInverter triggerClicked) {
-        Minecraft.minecraftInstance.a(new GuiTriggerInverter(w, x, y, z, triggerClicked));
+        Minecraft.minecraftInstance.openScreen(new GuiTriggerInverter(w, x, y, z, triggerClicked));
     }
 
     @Override
@@ -41,19 +42,20 @@ public class GuiTriggerInverter extends Screen {
     }
 
     @Override
-    protected void buttonClicked(Button guibutton) {
+    protected void buttonClicked(Button button) {
         int blockID = this.world.getTileId(this.blockX, this.blockY, this.blockZ);
-        if (blockID == Blocks.triggerInverter.id)
+        if (blockID == Blocks.triggerInverter.id) {
             Blocks.triggerInverter.setTriggerToSelection(this.world, this.blockX, this.blockY, this.blockZ);
+        }
         this.world.getChunk(this.blockX, this.blockZ).method_885();
     }
 
     @Override
-    public void render(int i, int j, float f) {
-        fill(0, 0, this.width, this.height, -2147483648);
-        drawTextWithShadow(this.textManager, String.format("Min: (%d, %d, %d)", this.trigger.minX, this.trigger.minY, this.trigger.minZ), 4, 4, 14737632);
-        drawTextWithShadow(this.textManager, String.format("Max: (%d, %d, %d)", this.trigger.maxX, this.trigger.maxY, this.trigger.maxZ), 4, 24, 14737632);
-        super.render(i, j, f);
+    public void render(int mouseX, int mouseY, float delta) {
+        this.fill(0, 0, this.width, this.height, Integer.MIN_VALUE);
+        this.drawTextWithShadow(this.textManager, String.format("Min: (%d, %d, %d)", this.trigger.minX, this.trigger.minY, this.trigger.minZ), 4, 4, 0xE0E0E0);
+        this.drawTextWithShadow(this.textManager, String.format("Max: (%d, %d, %d)", this.trigger.maxX, this.trigger.maxY, this.trigger.maxZ), 4, 24, 0xE0E0E0);
+        super.render(mouseX, mouseY, delta);
     }
 
     @Override
@@ -61,4 +63,3 @@ public class GuiTriggerInverter extends Screen {
         return false;
     }
 }
-

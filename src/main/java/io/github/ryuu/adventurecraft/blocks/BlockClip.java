@@ -6,8 +6,9 @@ import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 
 public class BlockClip extends Tile {
-    protected BlockClip(int i, int j, Material material) {
-        super(i, j, material);
+
+    protected BlockClip(int id, int tex, Material material) {
+        super(id, tex, material);
     }
 
     @Override
@@ -15,6 +16,7 @@ public class BlockClip extends Tile {
         return false;
     }
 
+    @Override
     public boolean shouldRender(TileView blockAccess, int i, int j, int k) {
         return DebugMode.active;
     }

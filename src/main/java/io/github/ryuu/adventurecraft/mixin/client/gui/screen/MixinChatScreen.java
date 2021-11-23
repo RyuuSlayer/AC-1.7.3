@@ -5,24 +5,23 @@ import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.util.CharacterUtils;
 import org.lwjgl.input.Keyboard;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
+@Mixin(ChatScreen.class)
 public class MixinChatScreen extends Screen {
-    protected String field_786 = "";
-    private int field_787 = 0;
+
     private static final String field_788 = CharacterUtils.SUPPORTED_CHARS;
+    private final int field_787 = 0;
+    @Shadow()
+    protected String field_786 = "";
 
-    public void init() {
-        Keyboard.enableRepeatEvents(true);
-    }
-
-    public void onClose() {
-        Keyboard.enableRepeatEvents(false);
-    }
-
-    public void tick() {
-        ++this.field_787;
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     protected void keyPressed(char character, int key) {
         if (Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157) || Keyboard.isKeyDown(219) || Keyboard.isKeyDown(220)) {
             if (key == 47) {
@@ -52,17 +51,27 @@ public class MixinChatScreen extends Screen {
         if (key == 14 && this.field_786.length() > 0) {
             this.field_786 = this.field_786.substring(0, this.field_786.length() - 1);
         }
-        if (field_788.indexOf((int)character) >= 0 && this.field_786.length() < 100) {
+        if (field_788.indexOf(character) >= 0 && this.field_786.length() < 100) {
             this.field_786 = this.field_786 + character;
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void render(int mouseX, int mouseY, float delta) {
         this.fill(2, this.height - 14, this.width - 2, this.height - 2, Integer.MIN_VALUE);
         this.drawTextWithShadow(this.textManager, "> " + this.field_786 + (this.field_787 / 6 % 2 != 0 ? "" : "_"), 4, this.height - 12, 0xE0E0E0);
         super.render(mouseX, mouseY, delta);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     protected void mouseClicked(int mouseX, int mouseY, int button) {
         if (button != 0) {
             return;

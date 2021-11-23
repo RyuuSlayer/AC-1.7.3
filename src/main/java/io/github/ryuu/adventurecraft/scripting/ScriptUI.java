@@ -4,15 +4,19 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ScreenScaler;
 
 public class ScriptUI {
+
     Minecraft mc = Minecraft.minecraftInstance;
 
+    ScriptUI() {
+    }
+
     public int getWidth() {
-        ScreenScaler scaledresolution = new ScreenScaler(this.mc.z, this.mc.d, this.mc.e);
+        ScreenScaler scaledresolution = new ScreenScaler(this.mc.options, this.mc.actualWidth, this.mc.actualHeight);
         return scaledresolution.getScaledWidth();
     }
 
     public int getHeight() {
-        ScreenScaler scaledresolution = new ScreenScaler(this.mc.z, this.mc.d, this.mc.e);
+        ScreenScaler scaledresolution = new ScreenScaler(this.mc.options, this.mc.actualWidth, this.mc.actualHeight);
         return scaledresolution.getScaledHeight();
     }
 

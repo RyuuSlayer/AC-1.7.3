@@ -3,8 +3,9 @@ package io.github.ryuu.adventurecraft.util;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class CoordBlock {
-    private static final List<CoordBlock> blockCoords = new ArrayList<>();
+final class CoordBlock {
+
+    private static final List<net.minecraft.src.CoordBlock> blockCoords = new ArrayList();
     public static int numBlockCoordsInUse = 0;
     public int x;
     public int y;
@@ -17,9 +18,10 @@ public final class CoordBlock {
     }
 
     public static CoordBlock getFromPool(int i, int j, int k) {
-        if (numBlockCoordsInUse >= blockCoords.size())
-            blockCoords.add(new CoordBlock(i, j, k));
-        return blockCoords.get(numBlockCoordsInUse++).set(i, j, k);
+        if (numBlockCoordsInUse >= blockCoords.size()) {
+            blockCoords.add((Object) new CoordBlock(i, j, k));
+        }
+        return ((CoordBlock) blockCoords.get(numBlockCoordsInUse++)).set(i, j, k);
     }
 
     public static void resetPool() {
@@ -27,7 +29,7 @@ public final class CoordBlock {
     }
 
     public static void releaseLastOne() {
-        numBlockCoordsInUse--;
+        --numBlockCoordsInUse;
     }
 
     public CoordBlock set(int i, int j, int k) {
@@ -38,13 +40,13 @@ public final class CoordBlock {
     }
 
     public boolean isEqual(int i, int j, int k) {
-        return (this.x == i && this.y == j && this.z == k);
+        return this.x == i && this.y == j && this.z == k;
     }
 
     public boolean equals(Object obj) {
         if (obj instanceof CoordBlock) {
             CoordBlock otherCoord = (CoordBlock) obj;
-            return (this.x == otherCoord.x && this.y == otherCoord.y && this.z == otherCoord.z);
+            return this.x == otherCoord.x && this.y == otherCoord.y && this.z == otherCoord.z;
         }
         return false;
     }

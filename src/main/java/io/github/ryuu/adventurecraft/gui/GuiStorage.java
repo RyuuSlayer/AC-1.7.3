@@ -7,6 +7,7 @@ import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.OptionButton;
 
 public class GuiStorage extends Screen {
+
     private final TileEntityStorage storage;
 
     public GuiStorage(TileEntityStorage storageClicked) {
@@ -14,7 +15,7 @@ public class GuiStorage extends Screen {
     }
 
     public static void showUI(TileEntityStorage storageClicked) {
-        Minecraft.minecraftInstance.a(new GuiStorage(storageClicked));
+        Minecraft.minecraftInstance.openScreen(new GuiStorage(storageClicked));
     }
 
     @Override
@@ -29,22 +30,22 @@ public class GuiStorage extends Screen {
     }
 
     @Override
-    protected void buttonClicked(Button guibutton) {
-        if (guibutton.id == 0) {
+    protected void buttonClicked(Button button) {
+        if (button.id == 0) {
             this.storage.setArea();
-        } else if (guibutton.id == 1) {
+        } else if (button.id == 1) {
             this.storage.saveCurrentArea();
-        } else if (guibutton.id == 2) {
+        } else if (button.id == 2) {
             this.storage.loadCurrentArea();
         }
     }
 
     @Override
-    public void render(int i, int j, float f) {
-        fill(0, 0, this.width, this.height, -2147483648);
-        drawTextWithShadow(this.textManager, String.format("Min: (%d, %d, %d)", this.storage.minX, this.storage.minY, this.storage.minZ), 4, 4, 14737632);
-        drawTextWithShadow(this.textManager, String.format("Max: (%d, %d, %d)", this.storage.maxX, this.storage.maxY, this.storage.maxZ), 4, 24, 14737632);
-        super.render(i, j, f);
+    public void render(int mouseX, int mouseY, float delta) {
+        this.fill(0, 0, this.width, this.height, Integer.MIN_VALUE);
+        this.drawTextWithShadow(this.textManager, String.format("Min: (%d, %d, %d)", this.storage.minX, this.storage.minY, this.storage.minZ), 4, 4, 0xE0E0E0);
+        this.drawTextWithShadow(this.textManager, String.format("Max: (%d, %d, %d)", this.storage.maxX, this.storage.maxY, this.storage.maxZ), 4, 24, 0xE0E0E0);
+        super.render(mouseX, mouseY, delta);
     }
 
     @Override

@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.scripting;
 import net.minecraft.entity.WalkingEntity;
 
 public class ScriptEntityCreature extends ScriptEntityLiving {
+
     WalkingEntity entityCreature;
 
     ScriptEntityCreature(WalkingEntity e) {
@@ -23,11 +24,11 @@ public class ScriptEntityCreature extends ScriptEntityLiving {
     }
 
     public void pathToEntity(ScriptEntity e) {
-        this.entityCreature.a(this.entityCreature.level.method_192(this.entityCreature, e.entity, 1.0F));
+        this.entityCreature.setTarget(this.entityCreature.level.method_192(this.entityCreature, e.entity, 1.0f));
     }
 
     public void pathToBlock(int x, int y, int z) {
-        this.entityCreature.a(this.entityCreature.level.method_189(this.entityCreature, x, y, z, 1.0F));
+        this.entityCreature.setTarget(this.entityCreature.level.method_189(this.entityCreature, x, y, z, 1.0f));
     }
 
     public boolean getCanForgetTargetRandomly() {

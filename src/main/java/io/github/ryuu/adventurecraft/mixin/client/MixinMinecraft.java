@@ -3,52 +3,52 @@ package io.github.ryuu.adventurecraft.mixin.client;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.gui.GuiMapSelect;
 import io.github.ryuu.adventurecraft.gui.GuiStore;
-import io.github.ryuu.adventurecraft.scripting.ScriptEntity;
 import io.github.ryuu.adventurecraft.scripting.ScriptItem;
 import io.github.ryuu.adventurecraft.scripting.ScriptVec3;
-import net.minecraft.*;
+import io.github.ryuu.adventurecraft.util.*;
 import net.minecraft.achievement.Achievements;
+import net.minecraft.*;
+import net.minecraft.client.*;
 import net.minecraft.client.colour.FoliageColour;
 import net.minecraft.client.colour.GrassColour;
-import net.minecraft.client.gui.Overlay;
-import net.minecraft.client.options.Option;
-import net.minecraft.client.util.*;
-
-import java.awt.*;
-import java.awt.event.WindowListener;
-import java.io.*;
-
-import io.github.ryuu.adventurecraft.util.*;
-import net.minecraft.client.options.GameOptions;
-import net.minecraft.client.MovementManager;
-import net.minecraft.client.*;
 import net.minecraft.client.colour.WaterColour;
+import net.minecraft.client.gui.Overlay;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.screen.*;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.client.gui.screen.container.PlayerInventoryScreen;
+import net.minecraft.client.options.GameOptions;
+import net.minecraft.client.options.Option;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.render.entity.model.BipedModel;
 import net.minecraft.client.sound.SoundHelper;
 import net.minecraft.client.texture.TextureManager;
+import net.minecraft.client.util.OcclusionQueryTester;
+import net.minecraft.client.util.ResourceDownloadThread;
+import net.minecraft.client.util.ScreenScaler;
+import net.minecraft.client.util.Session;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ClientPlayer;
-import net.minecraft.entity.player.MultiplayerClientPlayer;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 import net.minecraft.level.chunk.ClientChunkCache;
+import net.minecraft.level.dimension.Dimension;
 import net.minecraft.level.dimension.DimensionData;
 import net.minecraft.level.source.LevelSource;
 import net.minecraft.level.storage.LevelStorage;
 import net.minecraft.level.storage.McRegionLevelStorage;
 import net.minecraft.level.storage.SessionLockException;
+import net.minecraft.script.ScriptEntity;
+import net.minecraft.script.ScriptItem;
+import net.minecraft.script.ScriptVec3;
 import net.minecraft.stat.StatManager;
 import net.minecraft.stat.Stats;
 import net.minecraft.tile.Tile;
+import net.minecraft.util.FormattedString;
 import net.minecraft.util.ProgressListenerError;
 import net.minecraft.util.ProgressListenerImpl;
 import net.minecraft.util.Vec3i;
@@ -69,18 +69,45 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
-import net.minecraft.client.gui.screen.container.PlayerInventoryScreen;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
+import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.io.*;
+
+@Mixin(Minecraft.class)
 public abstract class MixinMinecraft implements Runnable {
+
+    private static final File gameDirectory;
+    @Shadow()
     public static byte[] field_2800 = new byte[0xA00000];
+    public static long[] field_2769;
+    public static long[] field_2770;
+    public static int field_2771;
+    public static long field_2772;
+    public static Minecraft minecraftInstance;
+    public static long[] updateTimes;
+    public static long updateRendererTime;
     private static Minecraft instance;
+
+    static {
+        field_2769 = new long[512];
+        field_2770 = new long[512];
+        field_2771 = 0;
+        field_2772 = 0L;
+        gameDirectory = null;
+        updateTimes = new long[512];
+    }
+
+    private final Timer tickTimer = new Timer(20.0f);
+    private final int height;
+    private final FlowingWaterTextureBinder2 waterTextureBinder = new FlowingWaterTextureBinder2();
+    private final FlowingLavaTextureBinder lavaTextureBinder = new FlowingLavaTextureBinder();
     public ClientInteractionManager interactionManager;
-    private boolean isFullscreen = false;
-    private boolean field_2782 = false;
     public int actualWidth;
     public int actualHeight;
-    private OcclusionQueryTester occlusionQueryTester;
-    private Timer tickTimer = new Timer(20.0f);
     public Level level;
     public WorldRenderer worldRenderer;
     public ClientPlayer player;
@@ -97,45 +124,20 @@ public abstract class MixinMinecraft implements Runnable {
     public ProgressListenerImpl progressListener = new ProgressListenerImpl(this);
     public GameRenderer gameRenderer;
     public ResourceDownloadThread resourceDownloadThread;
-    private int field_2786 = 0;
-    private int attackCooldown = 0;
-    private int width;
-    private int height;
     public ToastManager toastManager = new ToastManager(this);
     public Overlay overlay;
     public boolean skipGameRender = false;
     public BipedModel field_2822 = new BipedModel(0.0f);
     public HitResult hitResult = null;
     public GameOptions options;
-    protected MinecraftApplet minecraftApplet;
     public SoundHelper soundHelper = new SoundHelper();
     public class_596 field_2767;
     public TexturePackManager texturePackManager;
-    private File gameDir;
-    private LevelStorage levelStorage;
-    public static long[] field_2769;
-    public static long[] field_2770;
-    public static int field_2771;
-    public static long field_2772;
     public StatManager statManager;
-    private String serverIp;
-    private int serverPort;
-    private FlowingWaterTextureBinder2 waterTextureBinder = new FlowingWaterTextureBinder2();
-    private FlowingLavaTextureBinder lavaTextureBinder = new FlowingLavaTextureBinder();
-    private static File gameDirectory;
     public volatile boolean running = true;
     public String fpsDebugString = "";
-    boolean field_2776 = false;
-    long field_2777 = -1L;
     public boolean field_2778 = false;
-    private int field_2798 = 0;
-    private int rightMouseTicksRan;
     public boolean field_2779 = false;
-    long lastTickTime = System.currentTimeMillis();
-    private int field_2799 = 0;
-    public static Minecraft minecraftInstance;
-    public static long[] updateTimes;
-    public static long updateRendererTime;
     public MapList mapList;
     public int nextFrameTime;
     public long prevFrameTimeForAvg;
@@ -146,17 +148,34 @@ public abstract class MixinMinecraft implements Runnable {
     public boolean cameraPause = true;
     public LivingEntity cutsceneCameraEntity;
     public GuiStore storeGUI;
+    protected MinecraftApplet minecraftApplet;
+    boolean field_2776 = false;
+    long field_2777 = -1L;
+    long lastTickTime = System.currentTimeMillis();
     ItemInstance lastItemUsed;
     Entity lastEntityHit;
     ScriptVec3 lastBlockHit;
     int gcTime = 0;
+    private boolean isFullscreen = false;
+    private boolean field_2782 = false;
+    private OcclusionQueryTester occlusionQueryTester;
+    private int field_2786 = 0;
+    private int attackCooldown = 0;
+    private int width;
+    private File gameDir;
+    private LevelStorage levelStorage;
+    private String serverIp;
+    private int serverPort;
+    private int field_2798 = 0;
+    private int rightMouseTicksRan;
+    private int field_2799 = 0;
 
     public MixinMinecraft(Component component, Canvas canvas, MinecraftApplet applet, int actualWidth, int actualHeight, boolean isFullscreen) {
         Stats.method_748();
         this.height = actualHeight;
         this.isFullscreen = isFullscreen;
         this.minecraftApplet = applet;
-        new Minecraft$TimerHackThread(this, "Timer hack thread");
+        new TimerHackThread("Timer hack thread");
         this.canvas = canvas;
         this.actualWidth = actualWidth;
         this.actualHeight = actualHeight;
@@ -171,18 +190,143 @@ public abstract class MixinMinecraft implements Runnable {
         this.storeGUI = new GuiStore();
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static File getWorkingDirectory(String s) {
+        File file;
+        String s1 = System.getProperty("user.home", ".");
+        switch (Minecraft.getOperatingSystem()) {
+            case linux:
+            case solaris: {
+                file = new File(s1, '.' + s + '/');
+                break;
+            }
+            case windows: {
+                String s2 = System.getenv("APPDATA");
+                if (s2 != null) {
+                    file = new File(s2, "." + s + '/');
+                    break;
+                }
+                file = new File(s1, '.' + s + '/');
+                break;
+            }
+            case macos: {
+                file = new File(s1, "Library/Application Support/" + s);
+                break;
+            }
+            default: {
+                file = new File(s1, s + '/');
+            }
+        }
+        if (!file.exists() && !file.mkdirs()) {
+            throw new RuntimeException("The working directory could not be created: " + file);
+        }
+        return file;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    private static OperatingSystem getOperatingSystem() {
+        String s = System.getProperty("os.name").toLowerCase();
+        if (s.contains("win")) {
+            return OperatingSystem.windows;
+        }
+        if (s.contains("mac")) {
+            return OperatingSystem.macos;
+        }
+        if (s.contains("solaris")) {
+            return OperatingSystem.solaris;
+        }
+        if (s.contains("sunos")) {
+            return OperatingSystem.solaris;
+        }
+        if (s.contains("linux")) {
+            return OperatingSystem.linux;
+        }
+        if (s.contains("unix")) {
+            return OperatingSystem.linux;
+        }
+        return OperatingSystem.unknown;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static void start(String playerName, String s1) {
+        Minecraft.start(playerName, s1, null);
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static void start(String playerName, String s1, String s2) {
+        boolean flag = false;
+        String s3 = playerName;
+        Frame frame = new Frame("Minecraft");
+        Canvas canvas = new Canvas();
+        frame.setLayout(new BorderLayout());
+        frame.add(canvas, "Center");
+        canvas.setPreferredSize(new java.awt.Dimension(854, 480));
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        class_640 minecraftimpl = new class_640((Component) frame, canvas, null, 854, 480, flag, frame);
+        Thread thread = new Thread(minecraftimpl, "Minecraft main thread");
+        thread.setPriority(10);
+        minecraftimpl.field_2810 = "www.minecraft.net";
+        minecraftimpl.session = s3 != null && s1 != null ? new Session(s3, s1) : new Session("ACPlayer", "");
+        if (s2 != null) {
+            String[] as = s2.split(":");
+            minecraftimpl.setConnectionInfo(as[0], Integer.parseInt(as[1]));
+        }
+        frame.setVisible(true);
+        frame.addWindowListener(minecraftimpl.new MinecraftWindowAdapter(thread));
+        thread.start();
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static void main(String[] args) {
+        String s = "ACPlayer";
+        if (args.length > 0) {
+            s = args[0];
+        }
+        String s1 = "-";
+        if (args.length > 1) {
+            s1 = args[1];
+        }
+        Minecraft.start(s, s1);
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void onGameStartupFailure(GameStartupError unexpectedthrowable) {
         this.field_2782 = true;
         this.showGameStartupError(unexpectedthrowable);
     }
 
-    public abstract void showGameStartupError(GameStartupError var1);
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void setConnectionInfo(String serverIp, int serverPort) {
         this.serverIp = serverIp;
         this.serverPort = serverPort;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void init() throws LWJGLException {
         if (this.canvas != null) {
             Graphics g = this.canvas.getGraphics();
@@ -208,14 +352,11 @@ public abstract class MixinMinecraft implements Runnable {
         Display.setTitle(Version.version);
         try {
             Display.create();
-        }
-        catch (LWJGLException lwjglexception) {
+        } catch (LWJGLException lwjglexception) {
             lwjglexception.printStackTrace();
             try {
                 Thread.sleep(1000L);
-            }
-            catch (InterruptedException interruptedException) {
-                // empty catch block
+            } catch (InterruptedException interruptedException) {
             }
             Display.create();
         }
@@ -232,15 +373,14 @@ public abstract class MixinMinecraft implements Runnable {
         this.gameRenderer = new GameRenderer(this);
         EntityRenderDispatcher.INSTANCE.field_2494 = new HandItemRenderer(this);
         this.statManager = new StatManager(this.session, this.gameDir);
-        Achievements.OPEN_INVENTORY.formatter(new Minecraft$class_637(this));
+        Achievements.OPEN_INVENTORY.formatter(new class_637());
         this.method_2150();
         Keyboard.create();
         Mouse.create();
         this.field_2767 = new class_596(this.canvas);
         try {
             Controllers.create();
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             exception.printStackTrace();
         }
         this.printOpenGLError("Pre startup");
@@ -275,9 +415,7 @@ public abstract class MixinMinecraft implements Runnable {
             this.resourceDownloadThread = new ResourceDownloadThread(this.gameDir, this);
             this.resourceDownloadThread.start();
             this.resourceDownloadThread.method_107();
-        }
-        catch (Exception exception) {
-            // empty catch block
+        } catch (Exception exception) {
         }
         this.printOpenGLError("Post startup");
         this.overlay = new Overlay(this);
@@ -288,6 +426,10 @@ public abstract class MixinMinecraft implements Runnable {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void method_2150() throws LWJGLException {
         ScreenScaler scaledresolution = new ScreenScaler(this.options, this.actualWidth, this.actualHeight);
         GL11.glClear(16640);
@@ -323,84 +465,26 @@ public abstract class MixinMinecraft implements Runnable {
         Display.swapBuffers();
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_2109(int i, int j, int k, int l, int i1, int j1) {
         float f = 0.00390625f;
         float f1 = 0.00390625f;
         Tessellator tessellator = Tessellator.INSTANCE;
         tessellator.start();
-        tessellator.vertex(i + 0, j + j1, 0.0, (float)(k + 0) * f, (float)(l + j1) * f1);
-        tessellator.vertex(i + i1, j + j1, 0.0, (float)(k + i1) * f, (float)(l + j1) * f1);
-        tessellator.vertex(i + i1, j + 0, 0.0, (float)(k + i1) * f, (float)(l + 0) * f1);
-        tessellator.vertex(i + 0, j + 0, 0.0, (float)(k + 0) * f, (float)(l + 0) * f1);
+        tessellator.vertex(i + 0, j + j1, 0.0, (float) (k + 0) * f, (float) (l + j1) * f1);
+        tessellator.vertex(i + i1, j + j1, 0.0, (float) (k + i1) * f, (float) (l + j1) * f1);
+        tessellator.vertex(i + i1, j + 0, 0.0, (float) (k + i1) * f, (float) (l + 0) * f1);
+        tessellator.vertex(i + 0, j + 0, 0.0, (float) (k + 0) * f, (float) (l + 0) * f1);
         tessellator.draw();
     }
 
-    public static File getGameDirectory() {
-        if (gameDirectory == null) {
-            gameDirectory = Minecraft.getWorkingDirectory("minecraft");
-        }
-        return gameDirectory;
-    }
-
-    public static File getWorkingDirectory(String s) {
-        File file;
-        String s1 = System.getProperty("user.home", ".");
-        switch (Minecraft.getOperatingSystem()) {
-            case linux:
-            case solaris: {
-                file = new File(s1, '.' + s + '/');
-                break;
-            }
-            case windows: {
-                String s2 = System.getenv("APPDATA");
-                if (s2 != null) {
-                    file = new File(s2, "." + s + '/');
-                    break;
-                }
-                file = new File(s1, '.' + s + '/');
-                break;
-            }
-            case macos: {
-                file = new File(s1, "Library/Application Support/" + s);
-                break;
-            }
-            default: {
-                file = new File(s1, s + '/');
-            }
-        }
-        if (!file.exists() && !file.mkdirs()) {
-            throw new RuntimeException("The working directory could not be created: " + file);
-        }
-        return file;
-    }
-
-    private static OperatingSystem getOperatingSystem() {
-        String s = System.getProperty("os.name").toLowerCase();
-        if (s.contains("win")) {
-            return OperatingSystem.windows;
-        }
-        if (s.contains("mac")) {
-            return OperatingSystem.macos;
-        }
-        if (s.contains("solaris")) {
-            return OperatingSystem.solaris;
-        }
-        if (s.contains("sunos")) {
-            return OperatingSystem.solaris;
-        }
-        if (s.contains("linux")) {
-            return OperatingSystem.linux;
-        }
-        if (s.contains("unix")) {
-            return OperatingSystem.linux;
-        }
-        return OperatingSystem.unknown;
-    }
-
-    public LevelStorage method_2127() {
-        return this.levelStorage;
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void openScreen(Screen screen) {
         if (this.currentScreen instanceof class_625) {
             return;
@@ -433,6 +517,10 @@ public abstract class MixinMinecraft implements Runnable {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void printOpenGLError(String s) {
         int i = GL11.glGetError();
         if (i != 0) {
@@ -443,9 +531,10 @@ public abstract class MixinMinecraft implements Runnable {
         }
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
+    /**
+     * @author Ryuu, TechPizza, Phil
      */
+    @Overwrite()
     public void stop() {
         try {
             this.statManager.method_1991();
@@ -457,28 +546,21 @@ public abstract class MixinMinecraft implements Runnable {
                 if (this.resourceDownloadThread != null) {
                     this.resourceDownloadThread.method_111();
                 }
-            }
-            catch (Exception exception) {
-                // empty catch block
+            } catch (Exception exception) {
             }
             System.out.println("Stopping!");
             try {
                 this.setLevel(null);
-            }
-            catch (Throwable throwable) {
-                // empty catch block
+            } catch (Throwable throwable) {
             }
             try {
                 GLAllocator.clear();
-            }
-            catch (Throwable throwable) {
-                // empty catch block
+            } catch (Throwable throwable) {
             }
             this.soundHelper.method_2014();
             Mouse.destroy();
             Keyboard.destroy();
-        }
-        finally {
+        } finally {
             Display.destroy();
             if (!this.field_2782) {
                 System.exit(0);
@@ -487,6 +569,10 @@ public abstract class MixinMinecraft implements Runnable {
         System.gc();
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public long getAvgFrameTime() {
         if (this.tFrameTimes[this.nextFrameTime] != 0L) {
             return (this.prevFrameTimeForAvg - this.tFrameTimes[this.nextFrameTime]) / 60L;
@@ -494,15 +580,15 @@ public abstract class MixinMinecraft implements Runnable {
         return 23333333L;
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
+    /**
+     * @author Ryuu, TechPizza, Phil
      */
+    @Overwrite()
     public void run() {
         this.running = true;
         try {
             this.init();
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             exception.printStackTrace();
             this.onGameStartupFailure(new GameStartupError("Failed to start game", exception));
             return;
@@ -537,8 +623,7 @@ public abstract class MixinMinecraft implements Runnable {
                         try {
                             this.tick();
                             continue;
-                        }
-                        catch (SessionLockException minecraftexception1) {
+                        } catch (SessionLockException minecraftexception1) {
                             this.level = null;
                             this.setLevel(null);
                             this.openScreen(new LevelSaveConflictScreen());
@@ -606,71 +691,57 @@ public abstract class MixinMinecraft implements Runnable {
                     }
                     this.tFrameTimes[this.nextFrameTime] = this.prevFrameTimeForAvg = System.nanoTime();
                     this.nextFrameTime = (this.nextFrameTime + 1) % 60;
-                }
-                catch (SessionLockException minecraftexception) {
+                } catch (SessionLockException minecraftexception) {
                     this.level = null;
                     this.setLevel(null);
                     this.openScreen(new LevelSaveConflictScreen());
-                }
-                catch (OutOfMemoryError outofmemoryerror) {
+                } catch (OutOfMemoryError outofmemoryerror) {
                     outofmemoryerror.printStackTrace();
                     this.method_2131();
                     this.openScreen(new OutOfMemoryScreen());
                     System.gc();
                 }
             }
-        }
-        catch (ProgressListenerError minecrafterror) {
-        }
-        catch (Throwable throwable) {
+        } catch (ProgressListenerError minecrafterror) {
+        } catch (Throwable throwable) {
             this.method_2131();
             throwable.printStackTrace();
             this.onGameStartupFailure(new GameStartupError("Unexpected error", throwable));
-        }
-        finally {
+        } finally {
             ContextFactory.getGlobal().enterContext();
             Context.exit();
             this.stop();
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_2131() {
         try {
             field_2800 = new byte[0];
             this.worldRenderer.method_1558();
-        }
-        catch (Throwable throwable) {
-            // empty catch block
+        } catch (Throwable throwable) {
         }
         try {
             System.gc();
             Box.method_105();
             Vec3f.method_1305();
-        }
-        catch (Throwable throwable1) {
-            // empty catch block
+        } catch (Throwable throwable1) {
         }
         try {
             System.gc();
             this.setLevel(null);
-        }
-        catch (Throwable throwable) {
-            // empty catch block
+        } catch (Throwable throwable) {
         }
         System.gc();
     }
 
-    private void method_2152() {
-        if (Keyboard.isKeyDown(60)) {
-            if (!this.field_2776) {
-                this.field_2776 = true;
-                this.overlay.addChatMessage(ScreenshotManager.takeScreenshot(gameDirectory, this.actualWidth, this.actualHeight));
-            }
-        } else {
-            this.field_2776 = false;
-        }
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void method_2111(long l) {
         long l1 = 16666666L;
         if (this.field_2777 == -1L) {
@@ -692,7 +763,7 @@ public abstract class MixinMinecraft implements Runnable {
         GL11.glDisable(3553);
         Tessellator tessellator = Tessellator.INSTANCE;
         tessellator.start(7);
-        int i = (int)(l1 / 200000L);
+        int i = (int) (l1 / 200000L);
         tessellator.colour(0x20000000);
         tessellator.pos(0.0, this.actualHeight - i, 0.0);
         tessellator.pos(0.0, this.actualHeight, 0.0);
@@ -708,7 +779,7 @@ public abstract class MixinMinecraft implements Runnable {
         for (int j = 0; j < field_2769.length; ++j) {
             l3 += field_2769[j];
         }
-        int k = (int)(l3 / 200000L / (long)field_2769.length);
+        int k = (int) (l3 / 200000L / (long) field_2769.length);
         tessellator.start(7);
         tessellator.colour(0x20400000);
         tessellator.pos(0.0, this.actualHeight - k, 0.0);
@@ -731,23 +802,23 @@ public abstract class MixinMinecraft implements Runnable {
             long uTime = updateTimes[i1] / 200000L;
             long l4 = field_2769[i1] / 200000L;
             long l5 = field_2770[i1] / 200000L;
-            tessellator.pos((float)i1 + 0.5f, (float)((long)this.actualHeight - l4) + 0.5f, 0.0);
-            tessellator.pos((float)i1 + 0.5f, (float)this.actualHeight + 0.5f, 0.0);
+            tessellator.pos((float) i1 + 0.5f, (float) ((long) this.actualHeight - l4) + 0.5f, 0.0);
+            tessellator.pos((float) i1 + 0.5f, (float) this.actualHeight + 0.5f, 0.0);
             tessellator.colour(k1 * 1);
-            tessellator.pos((float)i1 + 0.5f, (float)((long)this.actualHeight - (l4 - l5)) + 0.5f, 0.0);
-            tessellator.pos((float)i1 + 0.5f, (float)((long)this.actualHeight - (l4 - l5 - uTime)) + 0.5f, 0.0);
+            tessellator.pos((float) i1 + 0.5f, (float) ((long) this.actualHeight - (l4 - l5)) + 0.5f, 0.0);
+            tessellator.pos((float) i1 + 0.5f, (float) ((long) this.actualHeight - (l4 - l5 - uTime)) + 0.5f, 0.0);
             tessellator.colour(-16777216 + k1 * 65536 + k1 * 256 + k1 * 1);
-            tessellator.pos((float)i1 + 0.5f, (float)((long)this.actualHeight - l4) + 0.5f, 0.0);
-            tessellator.pos((float)i1 + 0.5f, (float)((long)this.actualHeight - (l4 - l5)) + 0.5f, 0.0);
+            tessellator.pos((float) i1 + 0.5f, (float) ((long) this.actualHeight - l4) + 0.5f, 0.0);
+            tessellator.pos((float) i1 + 0.5f, (float) ((long) this.actualHeight - (l4 - l5)) + 0.5f, 0.0);
         }
         tessellator.draw();
         GL11.glEnable(3553);
     }
 
-    public void scheduleStop() {
-        this.running = false;
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void lockCursor() {
         if (!Display.isActive()) {
             return;
@@ -761,24 +832,10 @@ public abstract class MixinMinecraft implements Runnable {
         this.field_2798 = this.field_2786 + 10000;
     }
 
-    public void method_2134() {
-        if (!this.field_2778) {
-            return;
-        }
-        if (this.player != null) {
-            this.player.method_140();
-        }
-        this.field_2778 = false;
-        this.field_2767.method_1971();
-    }
-
-    public void method_2135() {
-        if (this.currentScreen != null) {
-            return;
-        }
-        this.openScreen(new PauseScreen());
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void method_2110(int i, boolean flag) {
         if (this.interactionManager.field_2105) {
             return;
@@ -797,6 +854,10 @@ public abstract class MixinMinecraft implements Runnable {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void method_2107(int i) {
         if (i == 0 && this.attackCooldown > 0) {
             return;
@@ -896,53 +957,53 @@ public abstract class MixinMinecraft implements Runnable {
         }
         if (itemUsing != null) {
             if (this.lastItemUsed != itemUsing) {
-                Object wrappedOut = Context.javaToJS(new ScriptItem(itemUsing), (Scriptable)this.level.script.globalScope);
-                ScriptableObject.putProperty((Scriptable)this.level.script.globalScope, "lastItemUsed", wrappedOut);
+                Object wrappedOut = Context.javaToJS((Object) new ScriptItem(itemUsing), (Scriptable) this.level.script.globalScope);
+                ScriptableObject.putProperty((Scriptable) this.level.script.globalScope, "lastItemUsed", wrappedOut);
                 this.lastItemUsed = itemUsing;
             }
             if (this.hitResult == null) {
                 if (this.lastEntityHit != null) {
                     this.lastEntityHit = null;
-                    Object wrappedOut = Context.javaToJS(null, (Scriptable)this.level.script.globalScope);
-                    ScriptableObject.putProperty((Scriptable)this.level.script.globalScope, "hitEntity", wrappedOut);
+                    Object wrappedOut = Context.javaToJS(null, (Scriptable) this.level.script.globalScope);
+                    ScriptableObject.putProperty((Scriptable) this.level.script.globalScope, "hitEntity", wrappedOut);
                 }
                 if (this.lastBlockHit != null) {
                     this.lastBlockHit = null;
-                    Object wrappedOut = Context.javaToJS(null, (Scriptable)this.level.script.globalScope);
-                    ScriptableObject.putProperty((Scriptable)this.level.script.globalScope, "hitBlock", wrappedOut);
+                    Object wrappedOut = Context.javaToJS(null, (Scriptable) this.level.script.globalScope);
+                    ScriptableObject.putProperty((Scriptable) this.level.script.globalScope, "hitBlock", wrappedOut);
                 }
             } else if (this.hitResult.type == HitType.ENTITY) {
                 if (this.lastEntityHit != this.hitResult.field_1989) {
                     this.lastEntityHit = this.hitResult.field_1989;
-                    Object wrappedOut = Context.javaToJS(ScriptEntity.getEntityClass(this.hitResult.field_1989), (Scriptable)this.level.script.globalScope);
-                    ScriptableObject.putProperty((Scriptable)this.level.script.globalScope, "hitEntity", wrappedOut);
+                    Object wrappedOut = Context.javaToJS((Object) ScriptEntity.getEntityClass(this.hitResult.field_1989), (Scriptable) this.level.script.globalScope);
+                    ScriptableObject.putProperty((Scriptable) this.level.script.globalScope, "hitEntity", wrappedOut);
                 }
                 if (this.lastBlockHit != null) {
                     this.lastBlockHit = null;
-                    Object wrappedOut = Context.javaToJS(null, (Scriptable)this.level.script.globalScope);
-                    ScriptableObject.putProperty((Scriptable)this.level.script.globalScope, "hitBlock", wrappedOut);
+                    Object wrappedOut = Context.javaToJS(null, (Scriptable) this.level.script.globalScope);
+                    ScriptableObject.putProperty((Scriptable) this.level.script.globalScope, "hitBlock", wrappedOut);
                 }
             } else if (this.hitResult.type == HitType.TILE) {
-                if (this.lastBlockHit == null || this.lastBlockHit.x != (double)this.hitResult.x || this.lastBlockHit.y != (double)this.hitResult.y || this.lastBlockHit.z != (double)this.hitResult.z) {
+                if (this.lastBlockHit == null || this.lastBlockHit.x != (double) this.hitResult.x || this.lastBlockHit.y != (double) this.hitResult.y || this.lastBlockHit.z != (double) this.hitResult.z) {
                     this.lastBlockHit = new ScriptVec3(this.hitResult.x, this.hitResult.y, this.hitResult.z);
-                    Object wrappedOut = Context.javaToJS(this.lastBlockHit, (Scriptable)this.level.script.globalScope);
-                    ScriptableObject.putProperty((Scriptable)this.level.script.globalScope, "hitBlock", wrappedOut);
+                    Object wrappedOut = Context.javaToJS((Object) this.lastBlockHit, (Scriptable) this.level.script.globalScope);
+                    ScriptableObject.putProperty((Scriptable) this.level.script.globalScope, "hitBlock", wrappedOut);
                 }
                 if (this.lastEntityHit != null) {
                     this.lastEntityHit = null;
-                    Object wrappedOut = Context.javaToJS(null, (Scriptable)this.level.script.globalScope);
-                    ScriptableObject.putProperty((Scriptable)this.level.script.globalScope, "hitEntity", wrappedOut);
+                    Object wrappedOut = Context.javaToJS(null, (Scriptable) this.level.script.globalScope);
+                    ScriptableObject.putProperty((Scriptable) this.level.script.globalScope, "hitEntity", wrappedOut);
                 }
             } else {
                 if (this.lastEntityHit != null) {
                     this.lastEntityHit = null;
-                    Object wrappedOut = Context.javaToJS(null, (Scriptable)this.level.script.globalScope);
-                    ScriptableObject.putProperty((Scriptable)this.level.script.globalScope, "hitEntity", wrappedOut);
+                    Object wrappedOut = Context.javaToJS(null, (Scriptable) this.level.script.globalScope);
+                    ScriptableObject.putProperty((Scriptable) this.level.script.globalScope, "hitEntity", wrappedOut);
                 }
                 if (this.lastBlockHit != null) {
                     this.lastBlockHit = null;
-                    Object wrappedOut = Context.javaToJS(null, (Scriptable)this.level.script.globalScope);
-                    ScriptableObject.putProperty((Scriptable)this.level.script.globalScope, "hitBlock", wrappedOut);
+                    Object wrappedOut = Context.javaToJS(null, (Scriptable) this.level.script.globalScope);
+                    ScriptableObject.putProperty((Scriptable) this.level.script.globalScope, "hitBlock", wrappedOut);
                 }
             }
             if (itemUsing.method_719()) {
@@ -960,45 +1021,10 @@ public abstract class MixinMinecraft implements Runnable {
         }
     }
 
-    public void toggleFullscreen() {
-        try {
-            boolean bl = this.isFullscreen = !this.isFullscreen;
-            if (this.isFullscreen) {
-                Display.setDisplayMode(Display.getDesktopDisplayMode());
-                this.actualWidth = Display.getDisplayMode().getWidth();
-                this.actualHeight = Display.getDisplayMode().getHeight();
-                if (this.actualWidth <= 0) {
-                    this.actualWidth = 1;
-                }
-                if (this.actualHeight <= 0) {
-                    this.actualHeight = 1;
-                }
-            } else {
-                if (this.canvas != null) {
-                    this.actualWidth = this.canvas.getWidth();
-                    this.actualHeight = this.canvas.getHeight();
-                } else {
-                    this.actualWidth = this.width;
-                    this.actualHeight = this.height;
-                }
-                if (this.actualWidth <= 0) {
-                    this.actualWidth = 1;
-                }
-                if (this.actualHeight <= 0) {
-                    this.actualHeight = 1;
-                }
-            }
-            if (this.currentScreen != null) {
-                this.updateScreenResolution(this.actualWidth, this.actualHeight);
-            }
-            Display.setFullscreen(this.isFullscreen);
-            Display.update();
-        }
-        catch (Exception exception) {
-            exception.printStackTrace();
-        }
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void updateScreenResolution(int actualWidth, int actualHeight) {
         if (actualWidth <= 0) {
             actualWidth = 1;
@@ -1017,6 +1043,10 @@ public abstract class MixinMinecraft implements Runnable {
         this.storeGUI.init(this, k, l);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void method_2103() {
         if (this.hitResult != null) {
             int i = this.level.getTileId(this.hitResult.x, this.hitResult.y, this.hitResult.z);
@@ -1033,10 +1063,10 @@ public abstract class MixinMinecraft implements Runnable {
         }
     }
 
-    private void startLoginThread() {
-        new Minecraft$LoginThread(this).start();
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void tick() {
         LevelSource ichunkprovider;
         if (this.field_2786 == 6000) {
@@ -1045,9 +1075,9 @@ public abstract class MixinMinecraft implements Runnable {
         this.overlay.method_1944();
         this.gameRenderer.method_1838(1.0f);
         if (this.player != null && (ichunkprovider = this.level.getLevelSource()) instanceof ClientChunkCache) {
-            ClientChunkCache chunkproviderloadorgenerate = (ClientChunkCache)ichunkprovider;
-            int j = MathsHelper.floor((int)this.player.x) >> 4;
-            int i1 = MathsHelper.floor((int)this.player.z) >> 4;
+            ClientChunkCache chunkproviderloadorgenerate = (ClientChunkCache) ichunkprovider;
+            int j = MathsHelper.floor((int) this.player.x) >> 4;
+            int i1 = MathsHelper.floor((int) this.player.z) >> 4;
             chunkproviderloadorgenerate.setSpawnChunk(j, i1);
         }
         if (!this.paused && this.level != null) {
@@ -1094,7 +1124,7 @@ public abstract class MixinMinecraft implements Runnable {
                     if (DebugMode.active && altDown) {
                         DebugMode.reachDistance += k;
                         DebugMode.reachDistance = Math.min(Math.max(DebugMode.reachDistance, 2), 100);
-                        this.overlay.addChatMessage(String.format("Reach Changed to %d", new Object[]{DebugMode.reachDistance}));
+                        this.overlay.addChatMessage(String.format("Reach Changed to %d", DebugMode.reachDistance));
                     } else {
                         int t;
                         if (ctrlDown) {
@@ -1109,7 +1139,7 @@ public abstract class MixinMinecraft implements Runnable {
                             this.player.inventory.offhandItem = t;
                         }
                         if (this.options.field_1445) {
-                            this.options.field_1448 += (float)k * 0.25f;
+                            this.options.field_1448 += (float) k * 0.25f;
                         }
                     }
                 }
@@ -1214,10 +1244,10 @@ public abstract class MixinMinecraft implements Runnable {
                 this.level.script.keyboard.processKeyPress(Keyboard.getEventKey());
             }
             if (this.currentScreen == null || this.currentScreen.disableInputGrabbing) {
-                if (Mouse.isButtonDown(0) && (float)(this.field_2786 - this.field_2798) >= 0.0f && this.field_2778) {
+                if (Mouse.isButtonDown(0) && (float) (this.field_2786 - this.field_2798) >= 0.0f && this.field_2778) {
                     this.method_2107(0);
                 }
-                if (Mouse.isButtonDown(1) && (float)(this.field_2786 - this.rightMouseTicksRan) >= 0.0f && this.field_2778) {
+                if (Mouse.isButtonDown(1) && (float) (this.field_2786 - this.rightMouseTicksRan) >= 0.0f && this.field_2778) {
                     this.method_2107(1);
                 }
             }
@@ -1265,17 +1295,10 @@ public abstract class MixinMinecraft implements Runnable {
         }
     }
 
-    private void method_2105() {
-        System.out.println("FORCING RELOAD!");
-        this.soundHelper = new SoundHelper();
-        this.soundHelper.acceptOptions(this.options);
-        this.resourceDownloadThread.method_107();
-    }
-
-    public boolean isConnectedToServer() {
-        return this.level != null && this.level.isClient;
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public String getMapUsed(String s) {
         File mcDir = Minecraft.getGameDirectory();
         File saveDir = new File(mcDir, "saves");
@@ -1283,20 +1306,21 @@ public abstract class MixinMinecraft implements Runnable {
         File mapTxt = new File(worldDir, "map.txt");
         if (mapTxt.exists()) {
             try {
-                BufferedReader input = new BufferedReader((Reader)new FileReader(mapTxt));
+                BufferedReader input = new BufferedReader(new FileReader(mapTxt));
                 String result = input.readLine();
                 input.close();
                 return result;
-            }
-            catch (FileNotFoundException e) {
-            }
-            catch (IOException e) {
-                // empty catch block
+            } catch (FileNotFoundException e) {
+            } catch (IOException e) {
             }
         }
         return null;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void saveMapUsed(String s, String mapName) {
         File mcDir = Minecraft.getGameDirectory();
         File saveDir = new File(mcDir, "saves");
@@ -1311,14 +1335,15 @@ public abstract class MixinMinecraft implements Runnable {
             BufferedWriter output = new BufferedWriter(new FileWriter(mapTxt));
             output.write(mapName);
             output.close();
-        }
-        catch (FileNotFoundException e) {
-        }
-        catch (IOException e) {
-            // empty catch block
+        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void createOrLoadWorld(String s, String s1, long l) {
         String mapName = this.getMapUsed(s);
         if (MathsHelper.isStringEmpty(mapName)) {
@@ -1328,6 +1353,10 @@ public abstract class MixinMinecraft implements Runnable {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void startWorld(String s, String s1, long l, String mapName) {
         this.setLevel(null);
         System.gc();
@@ -1357,6 +1386,10 @@ public abstract class MixinMinecraft implements Runnable {
         this.openScreen(null);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public Level getWorld(String saveName, long l, String mapName) {
         this.setLevel(null);
         System.gc();
@@ -1365,6 +1398,10 @@ public abstract class MixinMinecraft implements Runnable {
         return world;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void switchDimension() {
         System.out.println("Toggling dimension!!");
         this.player.dimensionId = this.player.dimensionId == -1 ? 0 : -1;
@@ -1398,14 +1435,26 @@ public abstract class MixinMinecraft implements Runnable {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void setLevel(Level world) {
         this.notifyStatus(world, "");
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void notifyStatus(Level world, String s) {
         this.method_2115(world, s, null);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_2115(Level world, String s, Player entityplayer) {
         this.statManager.method_1991();
         this.statManager.sync();
@@ -1423,7 +1472,7 @@ public abstract class MixinMinecraft implements Runnable {
             this.interactionManager.method_1710(world);
             if (!this.isConnectedToServer()) {
                 if (entityplayer == null) {
-                    this.player = (ClientPlayer)world.method_278(ClientPlayer.class);
+                    this.player = (ClientPlayer) world.method_278(ClientPlayer.class);
                 }
             } else if (this.player != null) {
                 this.player.afterSpawn();
@@ -1435,7 +1484,7 @@ public abstract class MixinMinecraft implements Runnable {
                 this.method_2130(s);
             }
             if (this.player == null) {
-                this.player = (ClientPlayer)this.interactionManager.createPlayer(world);
+                this.player = (ClientPlayer) this.interactionManager.createPlayer(world);
                 this.player.afterSpawn();
                 this.interactionManager.method_1711(this.player);
                 this.cutsceneCameraEntity = this.interactionManager.createPlayer(world);
@@ -1453,9 +1502,9 @@ public abstract class MixinMinecraft implements Runnable {
                 world.method_285();
             }
             if ((ichunkprovider = world.getLevelSource()) instanceof ClientChunkCache) {
-                ClientChunkCache chunkproviderloadorgenerate = (ClientChunkCache)ichunkprovider;
-                int i = MathsHelper.floor((int)this.player.x) >> 4;
-                int j = MathsHelper.floor((int)this.player.z) >> 4;
+                ClientChunkCache chunkproviderloadorgenerate = (ClientChunkCache) ichunkprovider;
+                int i = MathsHelper.floor((int) this.player.x) >> 4;
+                int j = MathsHelper.floor((int) this.player.z) >> 4;
                 chunkproviderloadorgenerate.setSpawnChunk(i, j);
             }
             world.addPlayer(this.player);
@@ -1470,6 +1519,10 @@ public abstract class MixinMinecraft implements Runnable {
         this.lastTickTime = 0L;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void convertWorldFormat(String s, String s1) {
         this.progressListener.notifyWithGameRunning("Converting World to " + this.levelStorage.getLevelFormat());
         this.progressListener.notifySubMessage("This may take a while :)");
@@ -1477,6 +1530,10 @@ public abstract class MixinMinecraft implements Runnable {
         this.createOrLoadWorld(s, s1, 0L);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void method_2130(String s) {
         this.progressListener.notifyWithGameRunning(s);
         this.progressListener.notifySubMessage("Building terrain");
@@ -1487,11 +1544,11 @@ public abstract class MixinMinecraft implements Runnable {
         LevelSource ichunkprovider = this.level.getLevelSource();
         Vec3i chunkcoordinates = this.level.getSpawnPosition();
         if (this.player != null) {
-            chunkcoordinates.x = (int)this.player.x;
-            chunkcoordinates.z = (int)this.player.z;
+            chunkcoordinates.x = (int) this.player.x;
+            chunkcoordinates.z = (int) this.player.z;
         }
         if (ichunkprovider instanceof ClientChunkCache) {
-            ClientChunkCache chunkproviderloadorgenerate = (ClientChunkCache)ichunkprovider;
+            ClientChunkCache chunkproviderloadorgenerate = (ClientChunkCache) ichunkprovider;
             chunkproviderloadorgenerate.setSpawnChunk(chunkcoordinates.x >> 4, chunkcoordinates.z >> 4);
         }
         for (int k = -c; k <= c; k += 16) {
@@ -1507,6 +1564,10 @@ public abstract class MixinMinecraft implements Runnable {
         this.level.method_292();
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void loadSoundFromDir(String s, File file) {
         int i = s.indexOf("/");
         String s1 = s.substring(0, i);
@@ -1524,26 +1585,10 @@ public abstract class MixinMinecraft implements Runnable {
         }
     }
 
-    public OcclusionQueryTester getOcclusionQueryTester() {
-        return this.occlusionQueryTester;
-    }
-
-    public String getDebugFirstLine() {
-        return this.worldRenderer.getDebugFirstLine();
-    }
-
-    public String getDebugSecondLine() {
-        return this.worldRenderer.getDebugSecondLine();
-    }
-
-    public String getDebugFourthLine() {
-        return this.level.method_290();
-    }
-
-    public String getDebugThirdLine() {
-        return "P: " + this.particleManager.getDebugString() + ". T: " + this.level.method_288();
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void respawn(boolean flag, int i) {
         if (!this.level.isClient && !this.level.dimension.canPlayerSleep()) {
             this.switchDimension();
@@ -1551,7 +1596,7 @@ public abstract class MixinMinecraft implements Runnable {
         Vec3i chunkcoordinates = this.level.getSpawnPosition();
         LevelSource ichunkprovider = this.level.getLevelSource();
         if (ichunkprovider instanceof ClientChunkCache) {
-            ClientChunkCache chunkproviderloadorgenerate = (ClientChunkCache)ichunkprovider;
+            ClientChunkCache chunkproviderloadorgenerate = (ClientChunkCache) ichunkprovider;
             chunkproviderloadorgenerate.setSpawnChunk(chunkcoordinates.x >> 4, chunkcoordinates.z >> 4);
         }
         this.level.method_295();
@@ -1560,13 +1605,13 @@ public abstract class MixinMinecraft implements Runnable {
             entID = this.player.id;
             this.level.removeEntity(this.player);
         } else {
-            this.player = (ClientPlayer)this.interactionManager.createPlayer(this.level);
+            this.player = (ClientPlayer) this.interactionManager.createPlayer(this.level);
             this.level.script.initPlayer();
         }
         this.worldRenderer.resetForDeath();
         Vec3i spawnCoords = this.level.getSpawnPosition();
         this.player.afterSpawn();
-        this.player.setPositionAndAngles((double)spawnCoords.x + 0.5, spawnCoords.y, (double)spawnCoords.z + 0.5, 0.0f, 0.0f);
+        this.player.setPositionAndAngles((double) spawnCoords.x + 0.5, spawnCoords.y, (double) spawnCoords.z + 0.5, 0.0f, 0.0f);
         this.field_2807 = this.player;
         this.player.afterSpawn();
         this.interactionManager.method_1711(this.player);
@@ -1582,76 +1627,20 @@ public abstract class MixinMinecraft implements Runnable {
         }
     }
 
-    public static void start(String playerName, String s1) {
-        Minecraft.start(playerName, s1, null);
-    }
-
-    public static void start(String playerName, String s1, String s2) {
-        boolean flag = false;
-        String s3 = playerName;
-        Frame frame = new Frame("Minecraft");
-        Canvas canvas = new Canvas();
-        frame.setLayout(new BorderLayout());
-        frame.add(canvas, "Center");
-        canvas.setPreferredSize(new java.awt.Dimension(854, 480));
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        Minecraft$class_640 minecraftimpl = new Minecraft$class_640((Component)frame, canvas, null, 854, 480, flag, frame);
-        Thread thread = new Thread((Runnable)minecraftimpl, "Minecraft main thread");
-        thread.setPriority(10);
-        minecraftimpl.field_2810 = "www.minecraft.net";
-        minecraftimpl.session = s3 != null && s1 != null ? new Session(s3, s1) : new Session("ACPlayer", "");
-        if (s2 != null) {
-            String[] as = s2.split(":");
-            minecraftimpl.setConnectionInfo(as[0], Integer.parseInt(as[1]));
-        }
-        frame.setVisible(true);
-        frame.addWindowListener((WindowListener)new Minecraft$MinecraftWindowAdapter(minecraftimpl, thread));
-        thread.start();
-    }
-
-    public ClientPlayNetworkHandler method_2145() {
-        if (this.player instanceof MultiplayerClientPlayer) {
-            return ((MultiplayerClientPlayer)this.player).networkHandler;
-        }
-        return null;
-    }
-
-    public static void main(String[] args) {
-        String s = "ACPlayer";
-        if (args.length > 0) {
-            s = args[0];
-        }
-        String s1 = "-";
-        if (args.length > 1) {
-            s1 = args[1];
-        }
-        Minecraft.start(s, s1);
-    }
-
-    public static boolean isHudHidden() {
-        return instance == null || !Minecraft.instance.options.hideHud;
-    }
-
-    public static boolean isFancyGraphicsEnabled() {
-        return instance != null && Minecraft.instance.options.fancyGraphics;
-    }
-
-    public static boolean isSmoothLightingEnabled() {
-        return instance != null && Minecraft.instance.options.ao;
-    }
-
-    public static boolean isDebugHudEnabled() {
-        return instance != null && Minecraft.instance.options.debugHud;
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean handleClientCommand(String chatMessage) {
         if (!chatMessage.startsWith("/")) {
-            // empty if block
         }
         return false;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void updateStoreGUI() {
         ScreenScaler scaledresolution = new ScreenScaler(this.options, this.actualWidth, this.actualHeight);
         int i = scaledresolution.getScaledWidth();
@@ -1659,12 +1648,37 @@ public abstract class MixinMinecraft implements Runnable {
         this.storeGUI.init(this, i, j);
     }
 
-    static {
-        field_2769 = new long[512];
-        field_2770 = new long[512];
-        field_2771 = 0;
-        field_2772 = 0L;
-        gameDirectory = null;
-        updateTimes = new long[512];
+    public class TimerHackThread extends Thread {
+
+        public MixinMinecraft(String string) {
+            super(string);
+            this.setDaemon(true);
+            this.start();
+        }
+    }
+
+    public class class_637 implements FormattedString {
+    }
+
+    public final class MinecraftWindowAdapter extends WindowAdapter {
+
+        final Thread field_2828;
+
+        public MixinMinecraft(Thread thread) {
+            this.field_2828 = thread;
+        }
+    }
+
+    public class LoginThread extends Thread {
+    }
+
+    public final class class_640 extends Minecraft {
+
+        final Frame field_2830;
+
+        public MixinMinecraft(Component component, Canvas canvas, MinecraftApplet minecraftApplet, int n, int n2, boolean bl, Frame frame) {
+            super(component, canvas, minecraftApplet, n, n2, bl);
+            this.field_2830 = frame;
+        }
     }
 }

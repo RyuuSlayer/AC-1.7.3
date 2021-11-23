@@ -9,6 +9,7 @@ import net.minecraft.tile.Tile;
 import net.minecraft.tile.entity.Sign;
 
 public class ItemInstrument extends ItemType {
+
     String instrument;
 
     protected ItemInstrument(int i, String instrumentToUse) {
@@ -16,16 +17,18 @@ public class ItemInstrument extends ItemType {
         this.instrument = instrumentToUse;
     }
 
-    public boolean useOnTile(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
-        if (world.getTileId(i, j, k) == Tile.STANDING_SIGN.id) {
-            Sign sign = (Sign) world.getTileEntity(i, j, k);
+    @Override
+    public boolean useOnTile(ItemInstance item, Player player, Level level, int x, int y, int z, int facing) {
+        if (level.getTileId(x, y, z) == Tile.STANDING_SIGN.id) {
+            Sign sign = (Sign) level.getTileEntity(x, y, z);
             sign.playSong(this.instrument);
         }
         return false;
     }
 
-    public ItemInstance use(ItemInstance itemstack, Level world, Player entityplayer) {
+    @Override
+    public ItemInstance use(ItemInstance item, Level level, Player player) {
         GuiMusicSheet.showUI(this.instrument);
-        return itemstack;
+        return item;
     }
 }

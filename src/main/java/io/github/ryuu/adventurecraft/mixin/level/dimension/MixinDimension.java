@@ -14,8 +14,15 @@ import net.minecraft.tile.FluidTile;
 import net.minecraft.tile.Tile;
 import net.minecraft.util.maths.MathsHelper;
 import net.minecraft.util.maths.Vec3f;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
+@Mixin(Dimension.class)
 public abstract class MixinDimension {
+
+    private final float[] field_2180 = new float[4];
+    @Shadow()
     public Level level;
     public BiomeSource biomeSource;
     public boolean hasFog = false;
@@ -23,26 +30,40 @@ public abstract class MixinDimension {
     public boolean fixedSpawnPos = false;
     public float[] field_2178 = new float[16];
     public int id = 0;
-    private float[] field_2180 = new float[4];
 
-    public final void setLevel(Level level) {
-        this.level = level;
-        this.createBiomeSource();
-        this.method_1765();
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static Dimension getByID(int id) {
+        if (id == -1) {
+            return new Nether();
+        }
+        if (id == 0) {
+            return new Overworld();
+        }
+        if (id == 1) {
+            return new Skylands();
+        }
+        return null;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     protected void method_1765() {
         float f = 0.05f;
         for (int i = 0; i <= 15; ++i) {
-            float f1 = 1.0f - (float)i / 15.0f;
+            float f1 = 1.0f - (float) i / 15.0f;
             this.field_2178[i] = (1.0f - f1) / (f1 * 3.0f + 1.0f) * (1.0f - f) + f;
         }
     }
 
-    protected void createBiomeSource() {
-        this.biomeSource = new BiomeSource(this.level);
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public LevelSource createLevelSource() {
         if (this.level.properties.useImages) {
             return new ChunkProviderHeightMapGenerate(this.level, this.level.getSeed());
@@ -62,14 +83,22 @@ public abstract class MixinDimension {
         return c;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean isValidSpawnPos(int x, int z) {
         int k = this.level.getTileAtSurface(x, z);
         return k != 0 && Tile.BY_ID[k] != null && !(Tile.BY_ID[k] instanceof FluidTile);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public float method_1771(long l, float f) {
-        int i = (int)(l % 24000L);
-        float f1 = ((float)i + f) / 24000.0f - 0.25f;
+        int i = (int) (l % 24000L);
+        float f1 = ((float) i + f) / 24000.0f - 0.25f;
         if (f1 < 0.0f) {
             f1 += 1.0f;
         }
@@ -77,11 +106,15 @@ public abstract class MixinDimension {
             f1 -= 1.0f;
         }
         float f2 = f1;
-        f1 = 1.0f - (float)((Math.cos((double)f1 * Math.PI) + 1.0) / 2.0);
+        f1 = 1.0f - (float) ((Math.cos((double) f1 * Math.PI) + 1.0) / 2.0);
         f1 = f2 + (f1 - f2) / 3.0f;
         return f1;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public float[] method_1761(float f, float f1) {
         float f4;
         float f2 = 0.4f;
@@ -99,6 +132,10 @@ public abstract class MixinDimension {
         return null;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public Vec3f getSkyColour(float temperature, float humidity) {
         float f2 = MathsHelper.cos(temperature * 3.141593f * 2.0f) * 2.0f + 0.5f;
         if (f2 < 0.0f) {
@@ -111,30 +148,5 @@ public abstract class MixinDimension {
         float f4 = 0.8470588f;
         float f5 = 1.0f;
         return Vec3f.from(f3 *= f2 * 0.94f + 0.06f, f4 *= f2 * 0.94f + 0.06f, f5 *= f2 * 0.91f + 0.09f);
-    }
-
-    public boolean canPlayerSleep() {
-        return true;
-    }
-
-    public static Dimension getByID(int id) {
-        if (id == -1) {
-            return new Nether();
-        }
-        if (id == 0) {
-            return new Overworld();
-        }
-        if (id == 1) {
-            return new Skylands();
-        }
-        return null;
-    }
-
-    public float getCloudHeight() {
-        return 108.0f;
-    }
-
-    public boolean renderAsSkylands() {
-        return true;
     }
 }

@@ -5,17 +5,20 @@ import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 
 public class BlockPillar extends Tile implements IBlockColor {
+
     public BlockPillar(int i, int j) {
         super(i, j, Material.STONE);
     }
 
     @Override
-    public int getTextureForSide(int i, int j) {
-        if (i == 1)
-            return this.tex - 16 + j;
-        if (i == 0)
-            return this.tex + 16 + j;
-        return this.tex + j;
+    public int getTextureForSide(int side, int meta) {
+        if (side == 1) {
+            return this.tex - 16 + meta;
+        }
+        if (side == 0) {
+            return this.tex + 16 + meta;
+        }
+        return this.tex + meta;
     }
 
     @Override

@@ -14,13 +14,24 @@ import net.minecraft.util.io.AbstractTag;
 import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.io.ListTag;
 import net.minecraft.util.io.NBTIO;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
+@Mixin(DimensionFileChunkIO.class)
 public class MixinDimensionFileChunkIO implements ChunkIO {
-    private File field_1701;
-    private File levelDir;
-    private boolean field_1702;
+
+    @Shadow()
+    private final File field_1701;
+
+    private final File levelDir;
+
+    private final boolean field_1702;
 
     public MixinDimensionFileChunkIO(File file, boolean flag) {
         this.field_1701 = file;
@@ -34,90 +45,10 @@ public class MixinDimensionFileChunkIO implements ChunkIO {
         this.field_1702 = flag;
     }
 
-    private File method_1478(int i, int j) {
-        String s = "c." + Integer.toString(i, 36) + "." + Integer.toString(j, 36) + ".dat";
-        String s1 = Integer.toString(i & 0x3F, 36);
-        String s2 = Integer.toString(j & 0x3F, 36);
-        File file = new File(this.field_1701, s1);
-        if (!file.exists()) {
-            if (this.field_1702) {
-                file.mkdir();
-            } else {
-                return null;
-            }
-        }
-        if (!(file = new File(file, s2)).exists()) {
-            if (this.field_1702) {
-                file.mkdir();
-            } else {
-                return null;
-            }
-        }
-        if (!(file = new File(file, s)).exists() && !this.field_1702) {
-            return null;
-        }
-        return file;
-    }
-
-    public Chunk getChunk(Level level, int xPos, int zPos) throws IOException {
-        File file = this.method_1478(xPos, zPos);
-        if (file != null && file.exists()) {
-            try {
-                FileInputStream fileinputstream = new FileInputStream(file);
-                CompoundTag nbttagcompound = NBTIO.readGzipped(fileinputstream);
-                if (!nbttagcompound.containsKey("Level")) {
-                    System.out.println("Chunk file at " + xPos + "," + zPos + " is missing level data, skipping");
-                    return null;
-                }
-                if (!nbttagcompound.getCompoundTag("Level").containsKey("Blocks")) {
-                    System.out.println("Chunk file at " + xPos + "," + zPos + " is missing block data, skipping");
-                    return null;
-                }
-                Chunk chunk = DimensionFileChunkIO.loadChunk(level, nbttagcompound.getCompoundTag("Level"));
-                if (!chunk.equals(xPos, zPos)) {
-                    System.out.println("Chunk file at " + xPos + "," + zPos + " is in the wrong location; relocating. (Expected " + xPos + ", " + zPos + ", got " + chunk.x + ", " + chunk.z + ")");
-                    nbttagcompound.put("xPos", xPos);
-                    nbttagcompound.put("zPos", zPos);
-                    chunk = DimensionFileChunkIO.loadChunk(level, nbttagcompound.getCompoundTag("Level"));
-                }
-                chunk.method_890();
-                return chunk;
-            }
-            catch (Exception exception) {
-                exception.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-    public void saveChunk(Level level, Chunk chunk) throws IOException {
-        level.checkSessionLock();
-        File file = this.method_1478(chunk.x, chunk.z);
-        if (file.exists()) {
-            LevelProperties worldinfo = level.getProperties();
-            worldinfo.setSizeOnDisk(worldinfo.getSizeOnDisk() - file.length());
-        }
-        try {
-            File file1 = new File(this.field_1701, "tmp_chunk.dat");
-            FileOutputStream fileoutputstream = new FileOutputStream(file1);
-            CompoundTag nbttagcompound = new CompoundTag();
-            CompoundTag nbttagcompound1 = new CompoundTag();
-            nbttagcompound.put("Level", (AbstractTag)nbttagcompound1);
-            DimensionFileChunkIO.method_1480(chunk, level, nbttagcompound1);
-            NBTIO.writeGzipped(nbttagcompound, fileoutputstream);
-            fileoutputstream.close();
-            if (file.exists()) {
-                file.delete();
-            }
-            file1.renameTo(file);
-            LevelProperties worldinfo1 = level.getProperties();
-            worldinfo1.setSizeOnDisk(worldinfo1.getSizeOnDisk() + file.length());
-        }
-        catch (Exception exception) {
-            exception.printStackTrace();
-        }
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public static void method_1480(Chunk chunk, Level level, CompoundTag tag) {
         level.checkSessionLock();
         tag.put("xPos", chunk.x);
@@ -150,6 +81,10 @@ public class MixinDimensionFileChunkIO implements ChunkIO {
         tag.put("TileEntities", nbttaglist1);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public static Chunk loadChunk(Level level, CompoundTag tag) {
         ListTag nbttaglist1;
         ListTag nbttaglist;
@@ -179,7 +114,7 @@ public class MixinDimensionFileChunkIO implements ChunkIO {
         }
         if ((nbttaglist = tag.getListTag("Entities")) != null) {
             for (int k = 0; k < nbttaglist.size(); ++k) {
-                CompoundTag nbttagcompound1 = (CompoundTag)nbttaglist.get(k);
+                CompoundTag nbttagcompound1 = (CompoundTag) nbttaglist.get(k);
                 Entity entity = EntityRegistry.create(nbttagcompound1, level);
                 chunk.field_969 = true;
                 if (entity == null) continue;
@@ -188,7 +123,7 @@ public class MixinDimensionFileChunkIO implements ChunkIO {
         }
         if ((nbttaglist1 = tag.getListTag("TileEntities")) != null) {
             for (int l = 0; l < nbttaglist1.size(); ++l) {
-                CompoundTag nbttagcompound2 = (CompoundTag)nbttaglist1.get(l);
+                CompoundTag nbttagcompound2 = (CompoundTag) nbttaglist1.get(l);
                 TileEntity tileentity = TileEntity.method_1068(nbttagcompound2);
                 if (tileentity == null) continue;
                 chunk.addTileEntity(tileentity);
@@ -197,12 +132,99 @@ public class MixinDimensionFileChunkIO implements ChunkIO {
         return chunk;
     }
 
-    public void method_810() {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    private File method_1478(int i, int j) {
+        String s = "c." + Integer.toString(i, 36) + "." + Integer.toString(j, 36) + ".dat";
+        String s1 = Integer.toString(i & 0x3F, 36);
+        String s2 = Integer.toString(j & 0x3F, 36);
+        File file = new File(this.field_1701, s1);
+        if (!file.exists()) {
+            if (this.field_1702) {
+                file.mkdir();
+            } else {
+                return null;
+            }
+        }
+        if (!(file = new File(file, s2)).exists()) {
+            if (this.field_1702) {
+                file.mkdir();
+            } else {
+                return null;
+            }
+        }
+        if (!(file = new File(file, s)).exists() && !this.field_1702) {
+            return null;
+        }
+        return file;
     }
 
-    public void method_813() {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public Chunk getChunk(Level level, int xPos, int zPos) throws IOException {
+        File file = this.method_1478(xPos, zPos);
+        if (file != null && file.exists()) {
+            try {
+                FileInputStream fileinputstream = new FileInputStream(file);
+                CompoundTag nbttagcompound = NBTIO.readGzipped(fileinputstream);
+                if (!nbttagcompound.containsKey("Level")) {
+                    System.out.println("Chunk file at " + xPos + "," + zPos + " is missing level data, skipping");
+                    return null;
+                }
+                if (!nbttagcompound.getCompoundTag("Level").containsKey("Blocks")) {
+                    System.out.println("Chunk file at " + xPos + "," + zPos + " is missing block data, skipping");
+                    return null;
+                }
+                Chunk chunk = DimensionFileChunkIO.loadChunk(level, nbttagcompound.getCompoundTag("Level"));
+                if (!chunk.equals(xPos, zPos)) {
+                    System.out.println("Chunk file at " + xPos + "," + zPos + " is in the wrong location; relocating. (Expected " + xPos + ", " + zPos + ", got " + chunk.x + ", " + chunk.z + ")");
+                    nbttagcompound.put("xPos", xPos);
+                    nbttagcompound.put("zPos", zPos);
+                    chunk = DimensionFileChunkIO.loadChunk(level, nbttagcompound.getCompoundTag("Level"));
+                }
+                chunk.method_890();
+                return chunk;
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        }
+        return null;
     }
 
-    public void prepareChunk(Level level, Chunk chunk) throws IOException {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    public void saveChunk(Level level, Chunk chunk) throws IOException {
+        level.checkSessionLock();
+        File file = this.method_1478(chunk.x, chunk.z);
+        if (file.exists()) {
+            LevelProperties worldinfo = level.getProperties();
+            worldinfo.setSizeOnDisk(worldinfo.getSizeOnDisk() - file.length());
+        }
+        try {
+            File file1 = new File(this.field_1701, "tmp_chunk.dat");
+            FileOutputStream fileoutputstream = new FileOutputStream(file1);
+            CompoundTag nbttagcompound = new CompoundTag();
+            CompoundTag nbttagcompound1 = new CompoundTag();
+            nbttagcompound.put("Level", (AbstractTag) nbttagcompound1);
+            DimensionFileChunkIO.method_1480(chunk, level, nbttagcompound1);
+            NBTIO.writeGzipped(nbttagcompound, fileoutputstream);
+            fileoutputstream.close();
+            if (file.exists()) {
+                file.delete();
+            }
+            file1.renameTo(file);
+            LevelProperties worldinfo1 = level.getProperties();
+            worldinfo1.setSizeOnDisk(worldinfo1.getSizeOnDisk() + file.length());
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
     }
 }

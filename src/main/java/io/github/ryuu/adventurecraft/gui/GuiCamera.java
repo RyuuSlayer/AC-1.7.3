@@ -8,6 +8,7 @@ import net.minecraft.client.gui.widgets.Textbox;
 import net.minecraft.entity.Entity;
 
 public class GuiCamera extends Screen {
+
     private EntityCamera cam;
 
     private Textbox timerText;
@@ -17,7 +18,7 @@ public class GuiCamera extends Screen {
     }
 
     public static void showUI(EntityCamera c) {
-        Minecraft.minecraftInstance.a(new GuiCamera(c));
+        Minecraft.minecraftInstance.openScreen(new GuiCamera(c));
     }
 
     @Override
@@ -31,7 +32,7 @@ public class GuiCamera extends Screen {
             b.text = "Quadratic Interpolation";
         }
         this.buttons.add(b);
-        this.timerText = new Textbox(this, this.textManager, 80, 46, 70, 16, String.format("%.2f", this.cam.time));
+        this.timerText = new Textbox(this, this.textManager, 80, 46, 70, 16, String.format("%.2f", Float.valueOf(this.cam.time)));
     }
 
     @Override
@@ -40,56 +41,49 @@ public class GuiCamera extends Screen {
     }
 
     @Override
-    protected void keyPressed(char c, int i) {
-        if (this.timerText.field_2420 && (i == 14 || (c >= '0' && c <= '9') || c == '.' || c == '\t'))
-            this.timerText.method_1877(c, i);
-        super.keyPressed(c, i);
+    protected void keyPressed(char character, int key) {
+        if (this.timerText.field_2420 && (key == 14 || character >= '0' && character <= '9' || character == '.' || character == '\t')) {
+            this.timerText.method_1877(character, key);
+        }
+        super.keyPressed(character, key);
     }
 
     @Override
-    protected void mouseClicked(int i, int j, int k) {
-        this.timerText.method_1879(i, j, k);
-        super.mouseClicked(i, j, k);
+    protected void mouseClicked(int mouseX, int mouseY, int button) {
+        this.timerText.method_1879(mouseX, mouseY, button);
+        super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
-    protected void buttonClicked(Button guibutton) {
-        if (guibutton.id == 0) {
+    protected void buttonClicked(Button button) {
+        if (button.id == 0) {
             this.cam.deleteCameraPoint();
-            Minecraft.minecraftInstance.a(null);
-        } else if (guibutton.id == 1) {
+            Minecraft.minecraftInstance.openScreen(null);
+        } else if (button.id == 1) {
             this.cam.type = (this.cam.type + 1) % 3;
             this.minecraft.activeCutsceneCamera.setPointType(this.cam.cameraID, this.cam.type);
             for (Entity obj : this.minecraft.level.entities) {
-                if (obj instanceof EntityCamera) {
-                    EntityCamera c = (EntityCamera) obj;
-                    if (c.isAlive() && c.cameraID == this.cam.cameraID) {
-                        this.cam = c;
-                        break;
-                    }
-                }
+                EntityCamera c;
+                if (!(obj instanceof EntityCamera) || !(c = (EntityCamera) obj).isAlive() || c.cameraID != this.cam.cameraID)
+                    continue;
+                this.cam = c;
+                break;
             }
-            if (this.cam.type == 1) {
-                guibutton.text = "Linear Interpolation";
-            } else if (this.cam.type == 2) {
-                guibutton.text = "Quadratic Interpolation";
-            } else {
-                guibutton.text = "No Interpolation";
-            }
+            button.text = this.cam.type == 1 ? "Linear Interpolation" : (this.cam.type == 2 ? "Quadratic Interpolation" : "No Interpolation");
         }
     }
 
     @Override
-    public void render(int i, int j, float f) {
-        renderBackground();
+    public void render(int mouseX, int mouseY, float delta) {
+        this.renderBackground();
         try {
             Float value = Float.valueOf(this.timerText.method_1876());
             this.cam.time = value.floatValue();
             this.minecraft.activeCutsceneCamera.setTime(this.cam.cameraID, value.floatValue());
         } catch (NumberFormatException e) {
         }
-        drawTextWithShadow(this.textManager, "Active At:", 4, 49, 14737632);
+        this.drawTextWithShadow(this.textManager, "Active At:", 4, 49, 0xE0E0E0);
         this.timerText.method_1883();
-        super.render(i, j, f);
+        super.render(mouseX, mouseY, delta);
     }
 }

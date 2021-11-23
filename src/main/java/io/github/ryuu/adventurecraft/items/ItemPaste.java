@@ -10,61 +10,66 @@ import net.minecraft.level.Level;
 import net.minecraft.util.maths.Vec3f;
 
 public class ItemPaste extends ItemType {
-    public ItemPaste(int i) {
-        super(i);
+
+    public ItemPaste(int id) {
+        super(id);
     }
 
     @Override
-    public ItemInstance use(ItemInstance itemstack, Level world, Player entityplayer) {
+    public ItemInstance use(ItemInstance item, Level level, Player player) {
         if (ItemCursor.bothSet) {
-            LivingEntity camera = Minecraft.minecraftInstance.i;
+            int metadata;
+            int blockID;
+            int k;
+            int j;
+            int i;
+            LivingEntity camera = Minecraft.minecraftInstance.field_2807;
             Vec3f lookDir = camera.method_1320();
             int width = ItemCursor.maxX - ItemCursor.minX + 1;
             int height = ItemCursor.maxY - ItemCursor.minY + 1;
             int depth = ItemCursor.maxZ - ItemCursor.minZ + 1;
             int[] blocks = new int[width * height * depth];
             int[] meta = new int[width * height * depth];
-            for (int i = 0; i < width; i++) {
-                for (int k = 0; k < height; k++) {
-                    for (int m = 0; m < depth; m++) {
-                        int blockID = world.getTileId(i + ItemCursor.minX, k + ItemCursor.minY, m + ItemCursor.minZ);
-                        int metadata = world.getTileMeta(i + ItemCursor.minX, k + ItemCursor.minY, m + ItemCursor.minZ);
-                        blocks[depth * (height * i + k) + m] = blockID;
-                        meta[depth * (height * i + k) + m] = metadata;
+            for (int i2 = 0; i2 < width; ++i2) {
+                for (int j2 = 0; j2 < height; ++j2) {
+                    for (int k2 = 0; k2 < depth; ++k2) {
+                        int blockID2 = level.getTileId(i2 + ItemCursor.minX, j2 + ItemCursor.minY, k2 + ItemCursor.minZ);
+                        int metadata2 = level.getTileMeta(i2 + ItemCursor.minX, j2 + ItemCursor.minY, k2 + ItemCursor.minZ);
+                        blocks[depth * (height * i2 + j2) + k2] = blockID2;
+                        meta[depth * (height * i2 + j2) + k2] = metadata2;
                     }
                 }
             }
-            int xOffset = (int) (camera.x + DebugMode.reachDistance * lookDir.x);
-            int yOffset = (int) (camera.y + DebugMode.reachDistance * lookDir.y);
-            int zOffset = (int) (camera.z + DebugMode.reachDistance * lookDir.z);
-            int j;
-            for (j = 0; j < width; j++) {
-                for (int k = 0; k < height; k++) {
-                    for (int m = 0; m < depth; m++) {
-                        int blockID = blocks[depth * (height * j + k) + m];
-                        int metadata = meta[depth * (height * j + k) + m];
-                        world.setTileWithMetadata(xOffset + j, yOffset + k, zOffset + m, blockID, metadata);
+            int xOffset = (int) (camera.x + (double) DebugMode.reachDistance * lookDir.x);
+            int yOffset = (int) (camera.y + (double) DebugMode.reachDistance * lookDir.y);
+            int zOffset = (int) (camera.z + (double) DebugMode.reachDistance * lookDir.z);
+            for (i = 0; i < width; ++i) {
+                for (j = 0; j < height; ++j) {
+                    for (k = 0; k < depth; ++k) {
+                        blockID = blocks[depth * (height * i + j) + k];
+                        metadata = meta[depth * (height * i + j) + k];
+                        level.setTileWithMetadata(xOffset + i, yOffset + j, zOffset + k, blockID, metadata);
                     }
                 }
             }
-            for (j = 0; j < width; j++) {
-                for (int k = 0; k < height; k++) {
-                    for (int m = 0; m < depth; m++) {
-                        int blockID = blocks[depth * (height * j + k) + m];
-                        int metadata = meta[depth * (height * j + k) + m];
-                        world.setTileWithMetadata(xOffset + j, yOffset + k, zOffset + m, blockID, metadata);
+            for (i = 0; i < width; ++i) {
+                for (j = 0; j < height; ++j) {
+                    for (k = 0; k < depth; ++k) {
+                        blockID = blocks[depth * (height * i + j) + k];
+                        metadata = meta[depth * (height * i + j) + k];
+                        level.setTileWithMetadata(xOffset + i, yOffset + j, zOffset + k, blockID, metadata);
                     }
                 }
             }
-            for (j = 0; j < width; j++) {
-                for (int k = 0; k < height; k++) {
-                    for (int m = 0; m < depth; m++) {
-                        int blockID = blocks[depth * (height * j + k) + m];
-                        world.g(xOffset + j, yOffset + k, zOffset + m, blockID);
+            for (i = 0; i < width; ++i) {
+                for (j = 0; j < height; ++j) {
+                    for (k = 0; k < depth; ++k) {
+                        blockID = blocks[depth * (height * i + j) + k];
+                        level.method_235(xOffset + i, yOffset + j, zOffset + k, blockID);
                     }
                 }
             }
         }
-        return itemstack;
+        return item;
     }
 }

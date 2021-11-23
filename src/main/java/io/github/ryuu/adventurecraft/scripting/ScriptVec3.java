@@ -1,7 +1,7 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-
 public class ScriptVec3 {
+
     public double x;
 
     public double y;

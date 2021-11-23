@@ -3,19 +3,26 @@ package io.github.ryuu.adventurecraft.mixin.level.gen;
 import io.github.ryuu.adventurecraft.util.TerrainImage;
 import net.minecraft.level.Level;
 import net.minecraft.level.biome.Biome;
+import net.minecraft.level.gen.BiomeSource;
 import net.minecraft.util.maths.Vec2i;
 import net.minecraft.util.noise.SimplexOctaveNoise;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.Random;
 
+@Mixin(BiomeSource.class)
 public class MixinBiomeSource {
-    private SimplexOctaveNoise temperatureNoise;
-    private SimplexOctaveNoise rainfallNoise;
-    private SimplexOctaveNoise detailNoise;
+
     public double[] temperatureNoises;
     public double[] rainfallNoises;
     public double[] detailNoises;
     public Biome[] biomes;
+    @Shadow()
+    private SimplexOctaveNoise temperatureNoise;
+    private SimplexOctaveNoise rainfallNoise;
+    private SimplexOctaveNoise detailNoise;
     private Level worldObj;
 
     protected MixinBiomeSource() {
@@ -28,24 +35,44 @@ public class MixinBiomeSource {
         this.worldObj = level;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public Biome getBiomeInChunk(Vec2i pos) {
         return this.getBiome(pos.x << 4, pos.z << 4);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public Biome getBiome(int x, int z) {
         return this.getBiomes(x, z, 1, 1)[0];
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public double getTemperature(int x, int z) {
         this.temperatureNoises = this.temperatureNoise.sample(this.temperatureNoises, x, z, 1, 1, 0.025f, 0.025f, 0.5);
         return this.temperatureNoises[0];
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public Biome[] getBiomes(int x, int z, int xSize, int zSize) {
         this.biomes = this.getBiomes(this.biomes, x, z, xSize, zSize);
         return this.biomes;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public double[] getTemperatures(double[] temperatures, int x, int z, int xSize, int zSize) {
         if (temperatures == null || temperatures.length < xSize * zSize) {
             temperatures = new double[xSize * zSize];
@@ -80,6 +107,10 @@ public class MixinBiomeSource {
         return temperatures;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public Biome[] getBiomes(Biome[] biomes, int x, int z, int xSize, int zSize) {
         if (biomes == null || biomes.length < xSize * zSize) {
             biomes = new Biome[xSize * zSize];

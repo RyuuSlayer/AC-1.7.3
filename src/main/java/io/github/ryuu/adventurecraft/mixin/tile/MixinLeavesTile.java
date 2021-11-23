@@ -9,14 +9,20 @@ import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
 import net.minecraft.stat.Stats;
 import net.minecraft.tile.FancyTile;
+import net.minecraft.tile.LeavesTile;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.Random;
 
-public class MixinLeavesTile
-        extends FancyTile {
-    private int field_1172;
+@Mixin(LeavesTile.class)
+public class MixinLeavesTile extends FancyTile {
+
+    @Shadow()
+    private final int field_1172;
     int[] field_1171;
 
     protected MixinLeavesTile(int id, int meta) {
@@ -25,6 +31,11 @@ public class MixinLeavesTile
         this.setTicksRandomly(true);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public int method_1589(int i) {
         if ((i & 1) == 1) {
             return FoliageColour.method_1079();
@@ -35,6 +46,11 @@ public class MixinLeavesTile
         return FoliageColour.method_1083();
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public int getTint(TileView iblockaccess, int i, int j, int k) {
         int l = iblockaccess.getTileMeta(i, j, k);
         if ((l & 1) == 1) {
@@ -49,6 +65,11 @@ public class MixinLeavesTile
         return FoliageColour.getColour(d, d1);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void onTileRemoved(Level level, int x, int y, int z) {
         int l = 1;
         int i1 = l + 1;
@@ -66,22 +87,37 @@ public class MixinLeavesTile
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void onScheduledTick(Level level, int x, int y, int z, Random rand) {
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void method_990(Level world, int i, int j, int k) {
         this.drop(world, i, j, k, world.getTileMeta(i, j, k));
         world.setTile(i, j, k, 0);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public int getDropCount(Random rand) {
         return rand.nextInt(20) != 0 ? 0 : 1;
     }
 
-    public int getDropId(int meta, Random rand) {
-        return Tile.SAPLING.id;
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void afterBreak(Level world, Player entityplayer, int i, int j, int k, int l) {
         if (!world.isClient && entityplayer.getHeldItem() != null && entityplayer.getHeldItem().itemId == ItemType.shears.id) {
             entityplayer.increaseStat(Stats.mineBlock[this.id], 1);
@@ -91,14 +127,20 @@ public class MixinLeavesTile
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     protected int getDropMeta(int i) {
         return i & 3;
     }
 
-    public boolean isFullOpaque() {
-        return !this.fastGraphics;
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public int getTextureForSide(int side, int meta) {
         if ((meta & 3) == 1) {
             return this.tex + 80;
@@ -106,11 +148,20 @@ public class MixinLeavesTile
         return this.tex;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void setFastGraphics(boolean fast) {
         this.fastGraphics = fast;
         this.tex = this.field_1172 + (fast ? 0 : 1);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void method_1560(Level world, int i, int j, int k, Entity entity) {
         super.method_1560(world, i, j, k, entity);
     }

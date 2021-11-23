@@ -10,15 +10,23 @@ import net.minecraft.level.Level;
 import net.minecraft.stat.Stats;
 import net.minecraft.tile.Tile;
 import net.minecraft.util.io.CompoundTag;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
+@Mixin(ItemInstance.class)
 public final class MixinItemInstance {
+
+    @Shadow()
     public int count = 0;
+
     public int cooldown;
+
     public int itemId;
-    private int damage;
     public int timeLeft;
     public boolean isReloading = false;
     public boolean justReloaded = false;
+    private int damage;
 
     public MixinItemInstance(Tile tile) {
         this(tile, 1);
@@ -54,141 +62,10 @@ public final class MixinItemInstance {
         this.fromTag(tag);
     }
 
-    public ItemInstance split(int countToTake) {
-        this.count -= countToTake;
-        return new ItemInstance(this.itemId, countToTake, this.damage);
-    }
-
-    public ItemType getType() {
-        return ItemType.byId[this.itemId];
-    }
-
-    public int getTexturePosition() {
-        return this.getType().getTexturePosition(this);
-    }
-
-    public boolean useOnTile(Player entityplayer, Level world, int x, int y, int z, int l) {
-        boolean flag = this.getType().useOnTile(this, entityplayer, world, x, y, z, l);
-        if (flag) {
-            entityplayer.increaseStat(Stats.useItem[this.itemId], 1);
-        }
-        return flag;
-    }
-
-    public boolean useItemLeftClick(Player entityplayer, Level world, int i, int j, int k, int l) {
-        return this.getType().onItemUseLeftClick(this, entityplayer, world, i, j, k, l);
-    }
-
-    public float method_708(Tile block) {
-        return this.getType().method_438(this, block);
-    }
-
-    public ItemInstance use(Level world, Player entityplayer) {
-        return this.getType().use(this, world, entityplayer);
-    }
-
-    public CompoundTag toTag(CompoundTag tag) {
-        tag.put("id", (short)this.itemId);
-        tag.put("Count", this.count);
-        tag.put("Damage", (short)this.damage);
-        return tag;
-    }
-
-    public void fromTag(CompoundTag tag) {
-        this.itemId = tag.getShort("id");
-        this.count = tag.getInt("Count");
-        this.damage = tag.getShort("Damage");
-        if (this.itemId == Items.boomerang.id) {
-            this.damage = 0;
-        }
-    }
-
-    public int method_709() {
-        return this.getType().method_459();
-    }
-
-    public boolean method_715() {
-        return this.method_709() > 1 && (!this.method_717() || !this.method_720());
-    }
-
-    public boolean method_717() {
-        return ItemType.byId[this.itemId].method_464() > 0;
-    }
-
-    public boolean method_719() {
-        return ItemType.byId[this.itemId].method_462();
-    }
-
-    public boolean method_720() {
-        return this.method_717() && this.damage > 0;
-    }
-
-    public int method_721() {
-        return this.damage;
-    }
-
-    public int getDamage() {
-        return this.damage;
-    }
-
-    public void setDamage(int i) {
-        this.damage = i;
-    }
-
-    public int method_723() {
-        return ItemType.byId[this.itemId].method_464();
-    }
-
-    public void applyDamage(int i, Entity entity) {
-        if (!this.method_717()) {
-            return;
-        }
-        this.damage += i;
-        if (this.damage > this.method_723()) {
-            if (entity instanceof Player) {
-                ((Player)entity).increaseStat(Stats.breakItem[this.itemId], 1);
-            }
-            --this.count;
-            if (this.count < 0) {
-                this.count = 0;
-            }
-            this.damage = 0;
-        }
-    }
-
-    public void postHit(LivingEntity entityliving, Player entityplayer) {
-        boolean flag = ItemType.byId[this.itemId].postHit(this, entityliving, entityplayer);
-        if (flag) {
-            entityplayer.increaseStat(Stats.useItem[this.itemId], 1);
-        }
-    }
-
-    public void postMine(int i, int j, int k, int l, Player entityplayer) {
-        boolean flag = ItemType.byId[this.itemId].postMine(this, i, j, k, l, entityplayer);
-        if (flag) {
-            entityplayer.increaseStat(Stats.useItem[this.itemId], 1);
-        }
-    }
-
-    public int method_707(Entity entity) {
-        return ItemType.byId[this.itemId].method_447(entity);
-    }
-
-    public boolean isEffectiveOn(Tile block) {
-        return ItemType.byId[this.itemId].isEffectiveOn(block);
-    }
-
-    public void method_700(Player entityplayer) {
-    }
-
-    public void interactWithEntity(LivingEntity entityliving) {
-        ItemType.byId[this.itemId].interactWithEntity(this, entityliving);
-    }
-
-    public ItemInstance copy() {
-        return new ItemInstance(this.itemId, this.count, this.damage);
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public static boolean method_703(ItemInstance itemstack, ItemInstance itemstack1) {
         if (itemstack == null && itemstack1 == null) {
             return true;
@@ -199,6 +76,154 @@ public final class MixinItemInstance {
         return itemstack.method_718(itemstack1);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static ItemInstance copy(ItemInstance itemstack) {
+        return itemstack != null ? itemstack.copy() : null;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public ItemInstance split(int countToTake) {
+        this.count -= countToTake;
+        return new ItemInstance(this.itemId, countToTake, this.damage);
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public boolean useOnTile(Player entityplayer, Level world, int x, int y, int z, int l) {
+        boolean flag = this.getType().useOnTile(this, entityplayer, world, x, y, z, l);
+        if (flag) {
+            entityplayer.increaseStat(Stats.useItem[this.itemId], 1);
+        }
+        return flag;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public boolean useItemLeftClick(Player entityplayer, Level world, int i, int j, int k, int l) {
+        return this.getType().onItemUseLeftClick(this, entityplayer, world, i, j, k, l);
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public float method_708(Tile block) {
+        return this.getType().method_438(this, block);
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public ItemInstance use(Level world, Player entityplayer) {
+        return this.getType().use(this, world, entityplayer);
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public CompoundTag toTag(CompoundTag tag) {
+        tag.put("id", (short) this.itemId);
+        tag.put("Count", this.count);
+        tag.put("Damage", (short) this.damage);
+        return tag;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public void fromTag(CompoundTag tag) {
+        this.itemId = tag.getShort("id");
+        this.count = tag.getInt("Count");
+        this.damage = tag.getShort("Damage");
+        if (this.itemId == Items.boomerang.id) {
+            this.damage = 0;
+        }
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public void setDamage(int i) {
+        this.damage = i;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public void applyDamage(int i, Entity entity) {
+        if (!this.method_717()) {
+            return;
+        }
+        this.damage += i;
+        if (this.damage > this.method_723()) {
+            if (entity instanceof Player) {
+                ((Player) entity).increaseStat(Stats.breakItem[this.itemId], 1);
+            }
+            --this.count;
+            if (this.count < 0) {
+                this.count = 0;
+            }
+            this.damage = 0;
+        }
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public void postHit(LivingEntity entityliving, Player entityplayer) {
+        boolean flag = ItemType.byId[this.itemId].postHit(this, entityliving, entityplayer);
+        if (flag) {
+            entityplayer.increaseStat(Stats.useItem[this.itemId], 1);
+        }
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public void postMine(int i, int j, int k, int l, Player entityplayer) {
+        boolean flag = ItemType.byId[this.itemId].postMine(this, i, j, k, l, entityplayer);
+        if (flag) {
+            entityplayer.increaseStat(Stats.useItem[this.itemId], 1);
+        }
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public boolean isEffectiveOn(Tile block) {
+        return ItemType.byId[this.itemId].isEffectiveOn(block);
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public void interactWithEntity(LivingEntity entityliving) {
+        ItemType.byId[this.itemId].interactWithEntity(this, entityliving);
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private boolean method_718(ItemInstance itemstack) {
         if (this.count != itemstack.count) {
             return false;
@@ -209,22 +234,18 @@ public final class MixinItemInstance {
         return this.damage == itemstack.damage;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean isEqualIgnoreFlags(ItemInstance itemstack) {
         return this.itemId == itemstack.itemId && this.damage == itemstack.damage;
     }
 
-    public String getTranslationKey() {
-        return ItemType.byId[this.itemId].getTranslationKey(this);
-    }
-
-    public static ItemInstance copy(ItemInstance itemstack) {
-        return itemstack != null ? itemstack.copy() : null;
-    }
-
-    public String toString() {
-        return this.count + "x" + ItemType.byId[this.itemId].getTranslationKey() + "@" + this.damage;
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void inventoryTick(Level world, Entity entity, int i, boolean flag) {
         if (this.cooldown > 0) {
             --this.cooldown;
@@ -232,11 +253,19 @@ public final class MixinItemInstance {
         ItemType.byId[this.itemId].inventoryTick(this, world, entity, i, flag);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void onCrafted(Level world, Player entityplayer) {
         entityplayer.increaseStat(Stats.field_809[this.itemId], this.count);
         ItemType.byId[this.itemId].method_461(this, world, entityplayer);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean isItemEqualIgnoreDamage(ItemInstance itemstack) {
         return this.itemId == itemstack.itemId && this.count == itemstack.count && this.damage == itemstack.damage;
     }

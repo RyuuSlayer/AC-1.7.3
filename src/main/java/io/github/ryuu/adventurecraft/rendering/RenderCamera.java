@@ -8,17 +8,21 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 
 public class RenderCamera extends LivingEntityRenderer {
+
     public RenderCamera(EntityModel modelbase, float f) {
         super(modelbase, f);
     }
 
-    protected void a(LivingEntity entityliving, double d, double d1, double d2) {
+    @Override
+    protected void method_821(LivingEntity entityliving, double d, double d1, double d2) {
         EntityCamera e = (EntityCamera) entityliving;
-        this.method_818(entityliving, String.format("%.2f", new Object[]{Float.valueOf(e.time)}), d, d1 - 1.5D, d2, 64);
+        this.method_818(entityliving, String.format("%.2f", Float.valueOf(e.time)), d, d1 - 1.5, d2, 64);
     }
 
-    public void a(Entity entity, double d, double d1, double d2, float f, float f1) {
-        if (DebugMode.active)
-            super.render(entity, d, d1, d2, f, f1);
+    @Override
+    public void render(Entity entity, double x, double y, double z, float f, float f1) {
+        if (DebugMode.active) {
+            super.render(entity, x, y, z, f, f1);
+        }
     }
 }

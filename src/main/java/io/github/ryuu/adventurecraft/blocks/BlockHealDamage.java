@@ -13,6 +13,7 @@ import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 public class BlockHealDamage extends TileWithEntity {
+
     protected BlockHealDamage(int i, int j) {
         super(i, j, Material.AIR);
     }
@@ -28,18 +29,21 @@ public class BlockHealDamage extends TileWithEntity {
     }
 
     @Override
-    public Box getCollisionShape(Level world, int i, int j, int k) {
+    public Box getCollisionShape(Level level, int x, int y, int z) {
         return null;
     }
 
+    @Override
     public boolean shouldRender(TileView blockAccess, int i, int j, int k) {
         return DebugMode.active;
     }
 
+    @Override
     public boolean canBeTriggered() {
         return true;
     }
 
+    @Override
     public void onTriggerActivated(Level world, int i, int j, int k) {
         TileEntityHealDamage tileEnt = (TileEntityHealDamage) world.getTileEntity(i, j, k);
         for (Object obj : world.players) {
@@ -48,10 +52,11 @@ public class BlockHealDamage extends TileWithEntity {
                 p.addHealth(tileEnt.healDamage);
                 continue;
             }
-            p.addHealth(-tileEnt.healDamage);
+            p.applyDamage(-tileEnt.healDamage);
         }
     }
 
+    @Override
     public void onTriggerDeactivated(Level world, int i, int j, int k) {
     }
 
@@ -61,10 +66,10 @@ public class BlockHealDamage extends TileWithEntity {
     }
 
     @Override
-    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
-        if (DebugMode.active && entityplayer.getHeldItem() != null && (entityplayer.getHeldItem()).itemId == Items.cursor.id) {
-            TileEntityHealDamage obj = (TileEntityHealDamage) world.getTileEntity(i, j, k);
-            GuiHealDamage.showUI(world, obj);
+    public boolean activate(Level level, int x, int y, int z, Player player) {
+        if (DebugMode.active && player.getHeldItem() != null && player.getHeldItem().itemId == Items.cursor.id) {
+            TileEntityHealDamage obj = (TileEntityHealDamage) level.getTileEntity(x, y, z);
+            GuiHealDamage.showUI(level, obj);
             return true;
         }
         return false;

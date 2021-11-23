@@ -2,32 +2,53 @@ package io.github.ryuu.adventurecraft.mixin;
 
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.DebugMode;
+import net.minecraft.class_520;
 import net.minecraft.client.ClientInteractionManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
-import net.minecraft.level.chunk.ChunkSubData;
 import net.minecraft.tile.Tile;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
-public class MixinClass_520
-        extends ClientInteractionManager {
+@Mixin(class_520.class)
+public class MixinClass_520 extends ClientInteractionManager {
+
+    @Shadow()
     private int field_2181 = -1;
+
     private int field_2182 = -1;
+
     private int field_2183 = -1;
+
     private float field_2184 = 0.0f;
+
     private float field_2185 = 0.0f;
+
     private float field_2186 = 0.0f;
+
     private int field_2187 = 0;
 
     public MixinClass_520(Minecraft minecraft) {
         super(minecraft);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void method_1711(Player entityplayer) {
         entityplayer.yaw = -180.0f;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public boolean method_1716(int i, int j, int k, int side) {
         this.minecraft.level.undoStack.startRecording();
         boolean flag = false;
@@ -63,6 +84,10 @@ public class MixinClass_520
         return flag;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private boolean _sendBlockRemoved(int i, int j, int k, int l) {
         int i1 = this.minecraft.level.getTileId(i, j, k);
         if (i1 == 0) {
@@ -85,6 +110,11 @@ public class MixinClass_520
         return flag;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void method_1707(int i, int j, int k, int l) {
         this.minecraft.level.method_172(this.minecraft.player, i, j, k, l);
         int i1 = this.minecraft.level.getTileId(i, j, k);
@@ -96,11 +126,11 @@ public class MixinClass_520
         }
     }
 
-    public void method_1705() {
-        this.field_2184 = 0.0f;
-        this.field_2187 = 0;
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void method_1721(int i, int j, int k, int l) {
         if (!DebugMode.active) {
             return;
@@ -117,7 +147,7 @@ public class MixinClass_520
             Tile block = Tile.BY_ID[i1];
             this.field_2184 += block.method_1582(this.minecraft.player);
             if (this.field_2186 % 4.0f == 0.0f && block != null) {
-                this.minecraft.soundHelper.playSound(block.sounds.getWalkSound(), (float)i + 0.5f, (float)j + 0.5f, (float)k + 0.5f, (block.sounds.getVolume() + 1.0f) / 8.0f, block.sounds.getPitch() * 0.5f);
+                this.minecraft.soundHelper.playSound(block.sounds.getWalkSound(), (float) i + 0.5f, (float) j + 0.5f, (float) k + 0.5f, (block.sounds.getVolume() + 1.0f) / 8.0f, block.sounds.getPitch() * 0.5f);
             }
             this.field_2186 += 1.0f;
             if (this.field_2184 >= 1.0f) {
@@ -137,6 +167,11 @@ public class MixinClass_520
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void method_1706(float f) {
         if (this.field_2184 <= 0.0f) {
             this.minecraft.overlay.field_2542 = 0.0f;
@@ -148,6 +183,11 @@ public class MixinClass_520
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public float method_1715() {
         if (this.minecraft.player.getHeldItem() != null && this.minecraft.player.getHeldItem().itemId == Items.quill.id) {
             return 500.0f;
@@ -158,12 +198,12 @@ public class MixinClass_520
         return 4.0f;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void method_1710(Level world) {
         super.method_1710(world);
-    }
-
-    public void tick() {
-        this.field_2185 = this.field_2184;
-        this.minecraft.soundHelper.playBackgroundMusic();
     }
 }

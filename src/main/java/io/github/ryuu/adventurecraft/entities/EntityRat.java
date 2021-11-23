@@ -6,20 +6,23 @@ import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 
 public class EntityRat extends Monster {
+
     public EntityRat(Level world) {
         super(world);
         this.texture = "/mob/rat.png";
-        this.movementSpeed = 0.5F;
+        this.movementSpeed = 0.5f;
         this.attackDamage = 1;
-        setSize(0.6F, 0.6F);
+        this.setSize(0.6f, 0.6f);
         this.health = 6;
         this.maxHealth = 6;
     }
 
-    protected Entity findPlayerToTrack() {
-        Player entityplayer = this.level.getClosestPlayerTo(this, 5.0D);
-        if (entityplayer != null && method_928(entityplayer))
+    @Override
+    protected Entity method_638() {
+        Player entityplayer = this.level.getClosestPlayerTo(this, 5.0);
+        if (entityplayer != null && this.method_928(entityplayer)) {
             return entityplayer;
+        }
         return null;
     }
 

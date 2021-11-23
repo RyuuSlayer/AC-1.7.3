@@ -6,14 +6,29 @@ import net.minecraft.tile.LadderTile;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 
-import java.util.Random;
-
+@Mixin(LadderTile.class)
 public class MixinLadderTile extends Tile {
-    protected LadderTile(int id, int texUVStart) {
+
+    protected MixinLadderTile(int id, int texUVStart) {
         super(id, texUVStart, Material.DOODADS);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static boolean isLadderID(int bID) {
+        return bID == Tile.LADDER.id || bID == Blocks.ladders1.id || bID == Blocks.ladders2.id || bID == Blocks.ladders3.id || bID == Blocks.ladders4.id;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public Box getCollisionShape(Level level, int x, int y, int z) {
         int l = level.getTileMeta(x, y, z) % 4 + 2;
         float f = 0.125f;
@@ -32,6 +47,11 @@ public class MixinLadderTile extends Tile {
         return super.getCollisionShape(level, x, y, z);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public Box getOutlineShape(Level level, int x, int y, int z) {
         int l = level.getTileMeta(x, y, z) % 4 + 2;
         float f = 0.125f;
@@ -50,18 +70,11 @@ public class MixinLadderTile extends Tile {
         return super.getOutlineShape(level, x, y, z);
     }
 
-    public boolean isFullOpaque() {
-        return false;
-    }
-
-    public boolean isFullCube() {
-        return false;
-    }
-
-    public int method_1621() {
-        return 8;
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public boolean canPlaceAt(Level level, int x, int y, int z) {
         if (level.canSuffocate(x - 1, y, z)) {
             return true;
@@ -79,10 +92,11 @@ public class MixinLadderTile extends Tile {
         return level.canSuffocate(x, y, z + 1);
     }
 
-    public static boolean isLadderID(int bID) {
-        return bID == Tile.LADDER.id || bID == Blocks.ladders1.id || bID == Blocks.ladders2.id || bID == Blocks.ladders3.id || bID == Blocks.ladders4.id;
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void onPlaced(Level level, int x, int y, int z, int facing) {
         int i1 = level.getTileMeta(x, y, z);
         if (i1 == 0 && LadderTile.isLadderID(level.getTileId(x, y - 1, z))) {
@@ -104,9 +118,5 @@ public class MixinLadderTile extends Tile {
             i1 = 5;
         }
         level.setTileMeta(x, y, z, i1 - 2);
-    }
-
-    public int getDropCount(Random rand) {
-        return 1;
     }
 }

@@ -5,17 +5,19 @@ import net.minecraft.level.Level;
 import net.minecraft.util.maths.MathsHelper;
 
 public class BlockChair extends BlockSolid {
+
     protected BlockChair(int i, int j) {
         super(i, j);
-        setBoundingBox(0.125F, 0.5F, 0.125F, 0.875F, 0.625F, 0.875F);
+        this.setBoundingBox(0.125f, 0.5f, 0.125f, 0.875f, 0.625f, 0.875f);
     }
 
     @Override
-    public int getTextureForSide(int i, int j) {
-        j /= 4;
-        if (i <= 1)
-            return this.tex + j;
-        return this.tex + 16 + j;
+    public int getTextureForSide(int side, int meta) {
+        meta /= 4;
+        if (side <= 1) {
+            return this.tex + meta;
+        }
+        return this.tex + 16 + meta;
     }
 
     @Override
@@ -31,7 +33,7 @@ public class BlockChair extends BlockSolid {
     @Override
     public void afterPlaced(Level world, int i, int j, int k, LivingEntity entityliving) {
         int meta = world.getTileMeta(i, j, k);
-        int l = MathsHelper.floor((entityliving.yaw * 4.0F / 360.0F) + 0.5D) & 0x3;
+        int l = MathsHelper.floor((double) (entityliving.yaw * 4.0f / 360.0f) + 0.5) & 3;
         world.setTileMeta(i, j, k, meta + (l + 1) % 4);
     }
 }

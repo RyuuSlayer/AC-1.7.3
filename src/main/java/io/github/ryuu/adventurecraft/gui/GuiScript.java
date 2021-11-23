@@ -1,13 +1,14 @@
 package io.github.ryuu.adventurecraft.gui;
 
-import java.io.File;
-
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityScript;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 
+import java.io.File;
+
 public class GuiScript extends Screen {
+
     TileEntityScript script;
 
     Button setOnTrigger;
@@ -23,7 +24,7 @@ public class GuiScript extends Screen {
     }
 
     public static void showUI(TileEntityScript s) {
-        Minecraft.minecraftInstance.a(new GuiScript(s));
+        Minecraft.minecraftInstance.openScreen(new GuiScript(s));
     }
 
     @Override
@@ -39,13 +40,13 @@ public class GuiScript extends Screen {
         this.buttons.add(b);
         b = new Button(4, 4, 92, 160, 18, "None");
         this.buttons.add(b);
-        String[] scripts = getScriptFiles();
+        String[] scripts = this.getScriptFiles();
         if (scripts != null) {
             int i = 1;
             for (String scriptFile : scripts) {
                 b = new Button(4 + i, 4 + i % 3 * this.width / 3, 92 + i / 3 * 20, 160, 18, scriptFile);
                 this.buttons.add(b);
-                i++;
+                ++i;
             }
         }
     }
@@ -56,8 +57,9 @@ public class GuiScript extends Screen {
             File[] scriptFiles = scriptDir.listFiles();
             String[] fileNames = new String[scriptFiles.length];
             int i = 0;
-            for (File scriptFile : scriptFiles)
+            for (File scriptFile : scriptFiles) {
                 fileNames[i++] = scriptFile.getName();
+            }
             return fileNames;
         }
         return null;
@@ -77,17 +79,17 @@ public class GuiScript extends Screen {
     }
 
     @Override
-    protected void buttonClicked(Button guibutton) {
-        if (guibutton.id < 3) {
-            this.selectedID = guibutton.id;
-        } else if (guibutton.id == 3) {
+    protected void buttonClicked(Button button) {
+        if (button.id < 3) {
+            this.selectedID = button.id;
+        } else if (button.id == 3) {
             this.script.level.scriptHandler.loadScripts();
-        } else if (guibutton.id == 4) {
-            updateScriptFile("");
+        } else if (button.id == 4) {
+            this.updateScriptFile("");
         } else {
-            updateScriptFile(guibutton.text);
+            this.updateScriptFile(button.text);
         }
-        resetNames();
+        this.resetNames();
     }
 
     private void updateScriptFile(String file) {
@@ -101,9 +103,9 @@ public class GuiScript extends Screen {
     }
 
     @Override
-    public void render(int i, int j, float f) {
-        fill(0, 0, this.width, this.height, -2147483648);
-        super.render(i, j, f);
+    public void render(int mouseX, int mouseY, float delta) {
+        this.fill(0, 0, this.width, this.height, Integer.MIN_VALUE);
+        super.render(mouseX, mouseY, delta);
     }
 
     @Override

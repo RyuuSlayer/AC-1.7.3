@@ -16,7 +16,6 @@ import net.minecraft.entity.player.Player;
 import net.minecraft.entity.player.PlayerContainer;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.projectile.Arrow;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
@@ -25,8 +24,6 @@ import net.minecraft.stat.Stat;
 import net.minecraft.stat.Stats;
 import net.minecraft.tile.BedTile;
 import net.minecraft.tile.Tile;
-import net.minecraft.tile.entity.Dispenser;
-import net.minecraft.tile.entity.Sign;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.SleepStatus;
 import net.minecraft.util.Vec3i;
@@ -34,41 +31,59 @@ import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.io.ListTag;
 import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.MathsHelper;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.List;
 
+@Mixin(Player.class)
 public abstract class MixinPlayer extends LivingEntity {
+
+    @Shadow()
     public PlayerInventory inventory = new PlayerInventory(this);
+
     public Container playerContainer;
+
     public Container container;
+
     public byte field_522 = 0;
+
     public int score = 0;
+
     public float field_524;
+
     public float field_525;
+
     public boolean handSwinging = false;
+
     public int handSwingTicks = 0;
+
     public String name;
+
     public int dimensionId;
+
     public String playerCloakUrl;
+
     public double field_530;
+
     public double field_531;
+
     public double field_532;
+
     public double field_533;
+
     public double field_534;
+
     public double field_535;
-    protected boolean sleeping;
     public Vec3i bedPosition;
-    private int sleepTimer;
     public float field_509;
     public float field_507;
     public float field_510;
-    private Vec3i spawnPos;
-    private Vec3i field_517;
     public int field_511 = 20;
-    protected boolean field_512 = false;
     public float field_504;
     public float field_505;
-    private int field_518 = 0;
+    public float field_513;
     public FishHook fishHook = null;
     public boolean isSwingingOffhand;
     public int swingProgressIntOffhand;
@@ -77,13 +92,19 @@ public abstract class MixinPlayer extends LivingEntity {
     public boolean swappedItems;
     public int numHeartPieces;
     public String cloakTexture;
+    protected boolean sleeping;
+    protected boolean field_512 = false;
+    private int sleepTimer;
+    private Vec3i spawnPos;
+    private Vec3i field_517;
+    private int field_518 = 0;
 
     public MixinPlayer(Level world) {
         super(world);
         this.container = this.playerContainer = new PlayerContainer(this.inventory, !world.isClient);
         this.standingEyeHeight = 1.62f;
         Vec3i chunkcoordinates = world.getSpawnPosition();
-        this.setPositionAndAngles((double)chunkcoordinates.x + 0.5, chunkcoordinates.y + 1, (double)chunkcoordinates.z + 0.5, 0.0f, 0.0f);
+        this.setPositionAndAngles((double) chunkcoordinates.x + 0.5, chunkcoordinates.y + 1, (double) chunkcoordinates.z + 0.5, 0.0f, 0.0f);
         this.health = 12;
         this.maxHealth = 12;
         this.field_1022 = "humanoid";
@@ -96,11 +117,38 @@ public abstract class MixinPlayer extends LivingEntity {
         this.numHeartPieces = 0;
     }
 
-    protected void initDataTracker() {
-        super.initDataTracker();
-        this.dataTracker.startTracking(16, (byte)0);
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static Vec3i getRespawnPos(Level level, Vec3i respawnPos) {
+        LevelSource ichunkprovider = level.getLevelSource();
+        ichunkprovider.loadChunk(respawnPos.x - 3 >> 4, respawnPos.z - 3 >> 4);
+        ichunkprovider.loadChunk(respawnPos.x + 3 >> 4, respawnPos.z - 3 >> 4);
+        ichunkprovider.loadChunk(respawnPos.x - 3 >> 4, respawnPos.z + 3 >> 4);
+        ichunkprovider.loadChunk(respawnPos.x + 3 >> 4, respawnPos.z + 3 >> 4);
+        if (level.getTileId(respawnPos.x, respawnPos.y, respawnPos.z) != Tile.BED.id) {
+            return null;
+        }
+        Vec3i chunkcoordinates1 = BedTile.findWakeUpPosition(level, respawnPos.x, respawnPos.y, respawnPos.z, 0);
+        return chunkcoordinates1;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
+    protected void initDataTracker() {
+        super.initDataTracker();
+        this.dataTracker.startTracking(16, (byte) 0);
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void tick() {
         if (this.isSleeping()) {
             ++this.sleepTimer;
@@ -159,18 +207,11 @@ public abstract class MixinPlayer extends LivingEntity {
         }
     }
 
-    protected boolean cannotMove() {
-        return this.health <= 0 || this.isSleeping();
-    }
-
-    protected void closeContainer() {
-        this.container = this.playerContainer;
-    }
-
-    public void initCloak() {
-        this.cloakUrl = this.playerCloakUrl = "http://s3.amazonaws.com/MinecraftCloaks/" + this.name + ".png";
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void tickRiding() {
         double d = this.x;
         double d1 = this.y;
@@ -181,6 +222,11 @@ public abstract class MixinPlayer extends LivingEntity {
         this.method_519(this.x - d, this.y - d1, this.z - d2);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void afterSpawn() {
         this.standingEyeHeight = 1.62f;
         this.setSize(0.6f, 1.8f);
@@ -191,6 +237,11 @@ public abstract class MixinPlayer extends LivingEntity {
         this.fire = -this.field_1646;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     protected void tickHandSwing() {
         if (this.handSwinging) {
             ++this.handSwingTicks;
@@ -201,7 +252,7 @@ public abstract class MixinPlayer extends LivingEntity {
         } else {
             this.handSwingTicks = 0;
         }
-        this.handSwingProgress = (float)this.handSwingTicks / 8.0f;
+        this.handSwingProgress = (float) this.handSwingTicks / 8.0f;
         if (this.isSwingingOffhand) {
             ++this.swingProgressIntOffhand;
             if (this.swingProgressIntOffhand == 8) {
@@ -211,14 +262,24 @@ public abstract class MixinPlayer extends LivingEntity {
         } else {
             this.swingProgressIntOffhand = 0;
         }
-        this.swingProgressOffhand = (float)this.swingProgressIntOffhand / 8.0f;
+        this.swingProgressOffhand = (float) this.swingProgressIntOffhand / 8.0f;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void baseTick() {
         this.prevSwingProgressOffhand = this.swingProgressOffhand;
         super.baseTick();
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void updateDespawnCounter() {
         List list;
         if (this.level.difficulty == 0 && this.health < this.maxHealth && this.field_1645 % 20 * 12 == 0) {
@@ -228,7 +289,7 @@ public abstract class MixinPlayer extends LivingEntity {
         this.field_524 = this.field_525;
         super.updateDespawnCounter();
         float f = MathsHelper.sqrt(this.velocityX * this.velocityX + this.velocityZ * this.velocityZ);
-        float f1 = (float)Math.atan((double)(-this.velocityY * (double)0.2f)) * 15.0f;
+        float f1 = (float) Math.atan(-this.velocityY * (double) 0.2f) * 15.0f;
         if (f > 0.1f) {
             f = 0.1f;
         }
@@ -242,7 +303,7 @@ public abstract class MixinPlayer extends LivingEntity {
         this.field_1044 += (f1 - this.field_1044) * 0.8f;
         if (this.health > 0 && (list = this.level.getEntities(this, this.boundingBox.expand(1.0, 0.0, 1.0))) != null) {
             for (int i = 0; i < list.size(); ++i) {
-                Entity entity = (Entity)list.get(i);
+                Entity entity = (Entity) list.get(i);
                 if (entity.removed) continue;
                 this.method_520(entity);
             }
@@ -252,7 +313,7 @@ public abstract class MixinPlayer extends LivingEntity {
         boolean litFromItem = mainItem != null && ItemType.byId[mainItem.itemId].isLighting(mainItem);
         if ((litFromItem |= offItem != null && ItemType.byId[offItem.itemId].isLighting(offItem)) || mainItem != null && (mainItem.itemId == Tile.TORCH.id || mainItem.itemId == Blocks.lights1.id) || offItem != null && (offItem.itemId == Tile.TORCH.id || offItem.itemId == Blocks.lights1.id)) {
             PlayerTorch.setTorchState(this.level, true);
-            PlayerTorch.setTorchPos(this.level, (float)this.x, (float)this.y, (float)this.z);
+            PlayerTorch.setTorchPos(this.level, (float) this.x, (float) this.y, (float) this.z);
         } else {
             PlayerTorch.setTorchState(this.level, false);
         }
@@ -269,6 +330,10 @@ public abstract class MixinPlayer extends LivingEntity {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private boolean handleLantern(ItemInstance i) {
         if (i == null) {
             return false;
@@ -279,7 +344,7 @@ public abstract class MixinPlayer extends LivingEntity {
         if (i.getDamage() < i.method_723()) {
             i.setDamage(i.getDamage() + 1);
             PlayerTorch.setTorchState(this.level, true);
-            PlayerTorch.setTorchPos(this.level, (float)this.x, (float)this.y, (float)this.z);
+            PlayerTorch.setTorchPos(this.level, (float) this.x, (float) this.y, (float) this.z);
         }
         if (i.getDamage() == i.method_723()) {
             if (this.inventory.decreaseAmountOfItem(Items.oil.id)) {
@@ -291,20 +356,17 @@ public abstract class MixinPlayer extends LivingEntity {
         return true;
     }
 
-    private void method_520(Entity entity) {
-        entity.onPlayerCollision(this);
-    }
-
-    public int method_481() {
-        return this.score;
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void onKilledBy(Entity entity) {
         super.onKilledBy(entity);
         this.setSize(0.2f, 0.2f);
         this.setPosition(this.x, this.y, this.z);
         this.velocityY = 0.1f;
-        if (this.name.equals((Object)"Notch")) {
+        if (this.name.equals("Notch")) {
             this.dropItem(new ItemInstance(ItemType.apple, 1), true);
         }
         if (entity != null) {
@@ -318,6 +380,11 @@ public abstract class MixinPlayer extends LivingEntity {
         this.increaseStat(Stats.deaths, 1);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void onKilledOther(Entity entity, int i) {
         this.score += i;
         if (entity instanceof Player) {
@@ -327,19 +394,23 @@ public abstract class MixinPlayer extends LivingEntity {
         }
     }
 
-    public void dropSelectedItem() {
-        this.dropItem(this.inventory.takeInvItem(this.inventory.selectedHotbarSlot, 1), false);
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void dropItem(ItemInstance itemstack) {
         this.dropItem(itemstack, false);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void dropItem(ItemInstance itemstack, boolean flag) {
         if (itemstack == null) {
             return;
         }
-        ItemEntity entityitem = new ItemEntity(this.level, this.x, this.y - (double)0.3f + (double)this.getStandingEyeHeight(), this.z, itemstack);
+        ItemEntity entityitem = new ItemEntity(this.level, this.x, this.y - (double) 0.3f + (double) this.getStandingEyeHeight(), this.z, itemstack);
         entityitem.pickupDelay = 40;
         float f = 0.1f;
         if (flag) {
@@ -355,18 +426,26 @@ public abstract class MixinPlayer extends LivingEntity {
             entityitem.velocityY = -MathsHelper.sin(this.pitch / 180.0f * 3.141593f) * f1 + 0.1f;
             f1 = 0.02f;
             float f3 = this.rand.nextFloat() * 3.141593f * 2.0f;
-            entityitem.velocityX += Math.cos(f3) * (double)(f1 *= this.rand.nextFloat());
+            entityitem.velocityX += Math.cos(f3) * (double) (f1 *= this.rand.nextFloat());
             entityitem.velocityY += (this.rand.nextFloat() - this.rand.nextFloat()) * 0.1f;
-            entityitem.velocityZ += Math.sin(f3) * (double)f1;
+            entityitem.velocityZ += Math.sin(f3) * (double) f1;
         }
         this.spawnItem(entityitem);
         this.increaseStat(Stats.drop, 1);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     protected void spawnItem(ItemEntity entityitem) {
         this.level.spawnEntity(entityitem);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public float method_511(Tile block) {
         float f = this.inventory.method_674(block);
         if (this.isInFluid(Material.WATER)) {
@@ -378,10 +457,19 @@ public abstract class MixinPlayer extends LivingEntity {
         return f;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean method_514(Tile block) {
         return this.inventory.isUsingEffectiveTool(block);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void readCustomDataFromTag(CompoundTag tag) {
         super.readCustomDataFromTag(tag);
         ListTag nbttaglist = tag.getListTag("Inventory");
@@ -403,12 +491,17 @@ public abstract class MixinPlayer extends LivingEntity {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void writeCustomDataToTag(CompoundTag tag) {
         super.writeCustomDataToTag(tag);
         tag.put("Inventory", this.inventory.toTag(new ListTag()));
         tag.put("Dimension", this.dimensionId);
         tag.put("Sleeping", this.sleeping);
-        tag.put("SleepTimer", (short)this.sleepTimer);
+        tag.put("SleepTimer", (short) this.sleepTimer);
         if (this.spawnPos != null) {
             tag.put("SpawnX", this.spawnPos.x);
             tag.put("SpawnY", this.spawnPos.y);
@@ -417,26 +510,11 @@ public abstract class MixinPlayer extends LivingEntity {
         tag.put("NumHeartPieces", this.numHeartPieces);
     }
 
-    public void openChestScreen(Inventory iinventory) {
-    }
-
-    public void displayGUIPalette() {
-    }
-
-    public void openCraftingScreen(int i, int j, int k) {
-    }
-
-    public void onEntityCollision(Entity entity, int i) {
-    }
-
-    public float getStandingEyeHeight() {
-        return 0.12f;
-    }
-
-    protected void updateEyeHeight() {
-        this.standingEyeHeight = 1.62f;
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public boolean damage(Entity target, int amount) {
         this.despawnCounter = 0;
         if (this.health <= 0) {
@@ -460,16 +538,21 @@ public abstract class MixinPlayer extends LivingEntity {
             return false;
         }
         Entity obj = target;
-        if (obj instanceof Arrow && ((Arrow)obj).field_1576 != null) {
-            obj = ((Arrow)obj).field_1576;
+        if (obj instanceof Arrow && ((Arrow) obj).field_1576 != null) {
+            obj = ((Arrow) obj).field_1576;
         }
         if (obj instanceof LivingEntity) {
-            this.method_510((LivingEntity)obj, false);
+            this.method_510((LivingEntity) obj, false);
         }
         this.increaseStat(Stats.damageTaken, amount);
         return super.damage(target, amount);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public boolean attackEntityFromMulti(Entity entity, int i) {
         this.despawnCounter = 0;
         if (this.health <= 0) {
@@ -493,26 +576,26 @@ public abstract class MixinPlayer extends LivingEntity {
             return false;
         }
         Entity obj = entity;
-        if (obj instanceof Arrow && ((Arrow)obj).field_1576 != null) {
-            obj = ((Arrow)obj).field_1576;
+        if (obj instanceof Arrow && ((Arrow) obj).field_1576 != null) {
+            obj = ((Arrow) obj).field_1576;
         }
         if (obj instanceof LivingEntity) {
-            this.method_510((LivingEntity)obj, false);
+            this.method_510((LivingEntity) obj, false);
         }
         this.increaseStat(Stats.damageTaken, i);
         return super.attackEntityFromMulti(entity, i);
     }
 
-    protected boolean method_498() {
-        return false;
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     protected void method_510(LivingEntity entityliving, boolean flag) {
         Wolf entitywolf;
         if (entityliving instanceof Creeper || entityliving instanceof Ghast) {
             return;
         }
-        if (entityliving instanceof Wolf && (entitywolf = (Wolf)entityliving).isTamed() && this.name.equals((Object)entitywolf.getOwner())) {
+        if (entityliving instanceof Wolf && (entitywolf = (Wolf) entityliving).isTamed() && this.name.equals(entitywolf.getOwner())) {
             return;
         }
         if (entityliving instanceof Player && !this.method_498()) {
@@ -520,13 +603,19 @@ public abstract class MixinPlayer extends LivingEntity {
         }
         List list = this.level.getEntities(Wolf.class, Box.getOrCreate(this.x, this.y, this.z, this.x + 1.0, this.y + 1.0, this.z + 1.0).expand(16.0, 4.0, 16.0));
         for (Entity entity : list) {
-            Wolf entitywolf1 = (Wolf)entity;
-            if (!entitywolf1.isTamed() || entitywolf1.method_634() != null || !this.name.equals(entitywolf1.getOwner()) || flag && entitywolf1.isSitting()) continue;
+            Wolf entitywolf1 = (Wolf) entity;
+            if (!entitywolf1.isTamed() || entitywolf1.method_634() != null || !this.name.equals(entitywolf1.getOwner()) || flag && entitywolf1.isSitting())
+                continue;
             entitywolf1.setSitting(false);
             entitywolf1.method_636(entityliving);
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     protected void applyDamage(int i) {
         if (DebugMode.active) {
             return;
@@ -538,22 +627,17 @@ public abstract class MixinPlayer extends LivingEntity {
         super.applyDamage(i);
     }
 
-    public void openFurnaceScreen(FurnaceEntity tileentityfurnace) {
-    }
-
-    public void openDispenserScreen(Dispenser tileentitydispenser) {
-    }
-
-    public void openSignScreen(Sign tileentitysign) {
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void interactWith(Entity entity) {
         if (entity.interact(this)) {
             return;
         }
         ItemInstance itemstack = this.getHeldItem();
         if (itemstack != null && entity instanceof LivingEntity) {
-            itemstack.interactWithEntity((LivingEntity)entity);
+            itemstack.interactWithEntity((LivingEntity) entity);
             if (itemstack.count == 0) {
                 itemstack.method_700(this);
                 this.method_503();
@@ -561,18 +645,10 @@ public abstract class MixinPlayer extends LivingEntity {
         }
     }
 
-    public ItemInstance getHeldItem() {
-        return this.inventory.getHeldItem();
-    }
-
-    public void method_503() {
-        this.inventory.setInvItem(this.inventory.selectedHotbarSlot, null);
-    }
-
-    public double getHeightOffset() {
-        return this.standingEyeHeight - 0.5f;
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void swingHand() {
         if (this.swappedItems) {
             this.swingOffhandItem();
@@ -582,11 +658,19 @@ public abstract class MixinPlayer extends LivingEntity {
         this.handSwinging = true;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void swingOffhandItem() {
         this.swingProgressIntOffhand = -1;
         this.isSwingingOffhand = true;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public float getSwingOffhandProgress(float f) {
         float f1 = this.swingProgressOffhand - this.prevSwingProgressOffhand;
         if (f1 < 0.0f) {
@@ -595,6 +679,10 @@ public abstract class MixinPlayer extends LivingEntity {
         return this.prevSwingProgressOffhand + f1 * f;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void attack(Entity entity) {
         int i = this.inventory.method_672(entity);
         if (i > 0) {
@@ -604,7 +692,7 @@ public abstract class MixinPlayer extends LivingEntity {
             entity.damage(this, i);
             ItemInstance itemstack = this.getHeldItem();
             if (itemstack != null && entity instanceof LivingEntity) {
-                itemstack.postHit((LivingEntity)entity, this);
+                itemstack.postHit((LivingEntity) entity, this);
                 if (itemstack.count == 0) {
                     itemstack.method_700(this);
                     this.method_503();
@@ -612,29 +700,18 @@ public abstract class MixinPlayer extends LivingEntity {
             }
             if (entity instanceof LivingEntity) {
                 if (entity.isAlive()) {
-                    this.method_510((LivingEntity)entity, true);
+                    this.method_510((LivingEntity) entity, true);
                 }
                 this.increaseStat(Stats.damageDealt, i);
             }
         }
     }
 
-    public void respawn() {
-    }
-
-    public abstract void method_494();
-
-    public void updateCursorItem(ItemInstance itemstack) {
-    }
-
-    public void remove() {
-        super.remove();
-        this.playerContainer.onClosed(this);
-        if (this.container != null) {
-            this.container.onClosed(this);
-        }
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public boolean protectedByShield() {
         ItemInstance curItem = this.inventory.getHeldItem();
         ItemInstance offItem = this.inventory.getOffhandItem();
@@ -644,10 +721,10 @@ public abstract class MixinPlayer extends LivingEntity {
         return false;
     }
 
-    public boolean isInsideWall() {
-        return !this.sleeping && super.isInsideWall();
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public SleepStatus trySleep(int x, int y, int z) {
         if (!this.level.isClient) {
             if (this.isSleeping() || !this.isAlive()) {
@@ -659,7 +736,7 @@ public abstract class MixinPlayer extends LivingEntity {
             if (this.level.isDaylight()) {
                 return SleepStatus.NOT_POSSIBLE_NOW;
             }
-            if (Math.abs(this.x - (double)x) > 3.0 || Math.abs(this.y - (double)y) > 2.0 || Math.abs(this.z - (double)z) > 3.0) {
+            if (Math.abs(this.x - (double) x) > 3.0 || Math.abs(this.y - (double) y) > 2.0 || Math.abs(this.z - (double) z) > 3.0) {
                 return SleepStatus.TOO_FAR_AWAY;
             }
         }
@@ -688,9 +765,9 @@ public abstract class MixinPlayer extends LivingEntity {
                 }
             }
             this.method_517(i1);
-            this.setPosition((float)x + f, (float)y + 0.9375f, (float)z + f1);
+            this.setPosition((float) x + f, (float) y + 0.9375f, (float) z + f1);
         } else {
-            this.setPosition((float)x + 0.5f, (float)y + 0.9375f, (float)z + 0.5f);
+            this.setPosition((float) x + 0.5f, (float) y + 0.9375f, (float) z + 0.5f);
         }
         this.sleeping = true;
         this.sleepTimer = 0;
@@ -704,6 +781,10 @@ public abstract class MixinPlayer extends LivingEntity {
         return SleepStatus.OK;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void method_517(int i) {
         this.field_509 = 0.0f;
         this.field_510 = 0.0f;
@@ -726,6 +807,10 @@ public abstract class MixinPlayer extends LivingEntity {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void wakeUp(boolean flag, boolean flag1, boolean flag2) {
         this.setSize(0.6f, 1.8f);
         this.updateEyeHeight();
@@ -737,7 +822,7 @@ public abstract class MixinPlayer extends LivingEntity {
             if (chunkcoordinates2 == null) {
                 chunkcoordinates2 = new Vec3i(chunkcoordinates.x, chunkcoordinates.y + 1, chunkcoordinates.z);
             }
-            this.setPosition((float)chunkcoordinates2.x + 0.5f, (float)chunkcoordinates2.y + this.standingEyeHeight + 0.1f, (float)chunkcoordinates2.z + 0.5f);
+            this.setPosition((float) chunkcoordinates2.x + 0.5f, (float) chunkcoordinates2.y + this.standingEyeHeight + 0.1f, (float) chunkcoordinates2.z + 0.5f);
         }
         this.sleeping = false;
         if (!this.level.isClient && flag1) {
@@ -749,23 +834,10 @@ public abstract class MixinPlayer extends LivingEntity {
         }
     }
 
-    private boolean isBedPosValid() {
-        return this.level.getTileId(this.bedPosition.x, this.bedPosition.y, this.bedPosition.z) == Tile.BED.id;
-    }
-
-    public static Vec3i getRespawnPos(Level level, Vec3i respawnPos) {
-        LevelSource ichunkprovider = level.getLevelSource();
-        ichunkprovider.loadChunk(respawnPos.x - 3 >> 4, respawnPos.z - 3 >> 4);
-        ichunkprovider.loadChunk(respawnPos.x + 3 >> 4, respawnPos.z - 3 >> 4);
-        ichunkprovider.loadChunk(respawnPos.x - 3 >> 4, respawnPos.z + 3 >> 4);
-        ichunkprovider.loadChunk(respawnPos.x + 3 >> 4, respawnPos.z + 3 >> 4);
-        if (level.getTileId(respawnPos.x, respawnPos.y, respawnPos.z) != Tile.BED.id) {
-            return null;
-        }
-        Vec3i chunkcoordinates1 = BedTile.findWakeUpPosition(level, respawnPos.x, respawnPos.y, respawnPos.z, 0);
-        return chunkcoordinates1;
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public float method_482() {
         if (this.bedPosition != null) {
             int i = this.level.getTileMeta(this.bedPosition.x, this.bedPosition.y, this.bedPosition.z);
@@ -788,41 +860,27 @@ public abstract class MixinPlayer extends LivingEntity {
         return 0.0f;
     }
 
-    public boolean isSleeping() {
-        return this.sleeping;
-    }
-
-    public boolean hasSleptEnough() {
-        return this.sleeping && this.sleepTimer >= 100;
-    }
-
-    public int getSleepTimer() {
-        return this.sleepTimer;
-    }
-
-    public void sendTranslatedMessage(String key) {
-    }
-
-    public Vec3i getSpawnPosition() {
-        return this.spawnPos;
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void setPlayerSpawn(Vec3i chunkcoordinates) {
         this.spawnPos = chunkcoordinates != null ? new Vec3i(chunkcoordinates) : null;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void incrementStat(Stat statbase) {
         this.increaseStat(statbase, 1);
     }
 
-    public void increaseStat(Stat state, int amount) {
-    }
-
-    protected void jump() {
-        super.jump();
-        this.increaseStat(Stats.jump, 1);
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void travel(float f, float f1) {
         double d = this.x;
         double d1 = this.y;
@@ -831,6 +889,10 @@ public abstract class MixinPlayer extends LivingEntity {
         this.method_518(this.x - d, this.y - d1, this.z - d2);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void method_518(double d, double d1, double d2) {
         if (this.vehicle != null) {
             return;
@@ -847,7 +909,7 @@ public abstract class MixinPlayer extends LivingEntity {
             }
         } else if (this.isOnLadder()) {
             if (d1 > 0.0) {
-                this.increaseStat(Stats.climbOneCm, (int)Math.round(d1 * 100.0));
+                this.increaseStat(Stats.climbOneCm, (int) Math.round(d1 * 100.0));
             }
         } else if (this.onGround) {
             int k = Math.round(MathsHelper.sqrt(d * d + d2 * d2) * 100.0f);
@@ -862,6 +924,10 @@ public abstract class MixinPlayer extends LivingEntity {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void method_519(double d, double d1, double d2) {
         int i;
         if (this.vehicle != null && (i = Math.round(MathsHelper.sqrt(d * d + d1 * d1 + d2 * d2) * 100.0f)) > 0) {
@@ -880,20 +946,22 @@ public abstract class MixinPlayer extends LivingEntity {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
     @Override
-    protected void handleFallDamage(float f) {
-        if (f >= 2.0f) {
-            this.increaseStat(Stats.fallOneCm, (int)Math.round((double)f * 100.0));
-        }
-        super.handleFallDamage(f);
-    }
-
+    @Overwrite()
     public void handleKilledEntity(LivingEntity entityliving) {
         if (entityliving instanceof Monster) {
             this.incrementStat(Achievements.KILL_ENEMY);
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public int getItemTexturePosition(ItemInstance itemstack) {
         int i = super.getItemTexturePosition(itemstack);
         if (itemstack.itemId == ItemType.fishingRod.id && this.fishHook != null) {
@@ -902,14 +970,11 @@ public abstract class MixinPlayer extends LivingEntity {
         return i;
     }
 
-    public void method_1388() {
-        if (this.field_511 > 0) {
-            this.field_511 = 10;
-            return;
-        }
-        this.field_512 = true;
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public double getGravity() {
         if (Items.hookshot.mainHookshot != null && Items.hookshot.mainHookshot.attachedToSurface || Items.hookshot.offHookshot != null && Items.hookshot.offHookshot.attachedToSurface) {
             return 0.0;
@@ -917,6 +982,10 @@ public abstract class MixinPlayer extends LivingEntity {
         return super.getGravity();
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean usingUmbrella() {
         return this.inventory.getHeldItem() != null && this.inventory.getHeldItem().itemId == Items.umbrella.id || this.inventory.getOffhandItem() != null && this.inventory.getOffhandItem().itemId == Items.umbrella.id;
     }

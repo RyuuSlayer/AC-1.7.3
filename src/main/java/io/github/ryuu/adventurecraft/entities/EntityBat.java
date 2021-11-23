@@ -1,6 +1,5 @@
 package io.github.ryuu.adventurecraft.entities;
 
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.FlyingEntity;
 import net.minecraft.entity.MonsterEntityType;
@@ -11,7 +10,8 @@ import net.minecraft.util.maths.MathsHelper;
 import java.util.Random;
 
 public class EntityBat extends FlyingEntity implements MonsterEntityType {
-    public int courseChangeCooldown;
+
+    public int courseChangeCooldown = 0;
 
     public double waypointX;
 
@@ -21,59 +21,59 @@ public class EntityBat extends FlyingEntity implements MonsterEntityType {
     boolean movingToTarget;
     int attackCooldown;
     Random bs;
-    private Entity targetedEntity;
-    private int aggroCooldown;
+    private Entity targetedEntity = null;
+    private int aggroCooldown = 0;
 
     public EntityBat(Level world) {
         super(world);
-        this.courseChangeCooldown = 0;
-        this.targetedEntity = null;
-        this.aggroCooldown = 0;
         this.texture = "/mob/bat.png";
         this.bs = new Random();
-        this.bs.setSeed(System.currentTimeMillis() * 10L + this.id);
+        this.bs.setSeed(System.currentTimeMillis() * 10L + (long) this.id);
         this.movingToTarget = false;
-        setSize(0.5F, 0.5F);
+        this.setSize(0.5f, 0.5f);
         this.health = 5;
         this.maxHealth = 5;
     }
 
     @Override
     protected void tickHandSwing() {
-        if (this.level.difficulty == 0) // maybe difficulty
-            remove(); // maybe remove
+        double d2;
+        double d1;
+        double d;
+        double d3;
+        if (this.level.difficulty == 0) {
+            this.remove();
+        }
         if (this.targetedEntity != null && this.targetedEntity.removed) {
             this.targetedEntity = null;
             this.movingToTarget = false;
         }
         if (this.targetedEntity == null || this.aggroCooldown-- <= 0) {
-            this.targetedEntity = this.level.getClosestPlayerTo(this, 100.0D);
-            if (this.targetedEntity != null)
+            this.targetedEntity = this.level.getClosestPlayerTo(this, 100.0);
+            if (this.targetedEntity != null) {
                 this.aggroCooldown = 20;
+            }
         }
-        double d = this.waypointX - this.x;
-        double d1 = this.waypointY - this.y;
-        double d2 = this.waypointZ - this.z;
-        double d3 = MathsHelper.sqrt(d * d + d1 * d1 + d2 * d2);
-        if (d3 < 1.0D || d3 > 60.0D || this.bs.nextInt(20) == 0)
+        if ((d3 = MathsHelper.sqrt((d = this.waypointX - this.x) * d + (d1 = this.waypointY - this.y) * d1 + (d2 = this.waypointZ - this.z) * d2)) < 1.0 || d3 > 60.0 || this.bs.nextInt(20) == 0) {
             if (this.targetedEntity == null || this.bs.nextInt(3) == 0) {
                 this.movingToTarget = false;
-                this.waypointX = this.x + ((this.bs.nextFloat() * 2.0F - 1.0F) * 4.0F);
-                this.waypointY = this.y + ((this.bs.nextFloat() * 2.0F - 1.0F) * 1.0F);
-                this.waypointZ = this.z + ((this.bs.nextFloat() * 2.0F - 1.0F) * 4.0F);
+                this.waypointX = this.x + (double) ((this.bs.nextFloat() * 2.0f - 1.0f) * 4.0f);
+                this.waypointY = this.y + (double) ((this.bs.nextFloat() * 2.0f - 1.0f) * 1.0f);
+                this.waypointZ = this.z + (double) ((this.bs.nextFloat() * 2.0f - 1.0f) * 4.0f);
             } else {
                 this.movingToTarget = true;
                 this.waypointX = this.targetedEntity.x;
                 this.waypointY = this.targetedEntity.y;
                 this.waypointZ = this.targetedEntity.z;
             }
+        }
         if (this.courseChangeCooldown-- <= 0) {
             this.courseChangeCooldown += this.bs.nextInt(5) + 2;
-            if (isCourseTraversable(this.waypointX, this.waypointY, this.waypointZ, d3)) {
-                this.velocityX += d / d3 * 0.08D;
-                this.velocityY += d1 / d3 * 0.08D;
-                this.velocityZ += d2 / d3 * 0.08D;
-                this.yaw = -((float) Math.atan2(this.velocityX, this.velocityZ)) * 180.0F / 3.141593F;
+            if (this.isCourseTraversable(this.waypointX, this.waypointY, this.waypointZ, d3)) {
+                this.velocityX += d / d3 * 0.08;
+                this.velocityY += d1 / d3 * 0.08;
+                this.velocityZ += d2 / d3 * 0.08;
+                this.yaw = -((float) Math.atan2(this.velocityX, this.velocityZ)) * 180.0f / 3.141593f;
             } else {
                 this.waypointX = this.x;
                 this.waypointY = this.y;
@@ -83,11 +83,11 @@ public class EntityBat extends FlyingEntity implements MonsterEntityType {
         if (this.targetedEntity != null) {
             double d5 = this.targetedEntity.x - this.x;
             double d7 = this.targetedEntity.z - this.z;
-            this.field_1012 = -((float) Math.atan2(d5, d7)) * 180.0F / 3.141593F;
-            if (this.movingToTarget && this.targetedEntity.method_1352(this) < 2.25D) {
-                this.velocityX = 0.0D;
-                this.velocityY = 0.0D;
-                this.velocityZ = 0.0D;
+            this.field_1012 = -((float) Math.atan2(d5, d7)) * 180.0f / 3.141593f;
+            if (this.movingToTarget && this.targetedEntity.method_1352(this) < 2.25) {
+                this.velocityX = 0.0;
+                this.velocityY = 0.0;
+                this.velocityZ = 0.0;
                 this.yaw = this.field_1012;
                 if (this.attackCooldown <= 0) {
                     this.targetedEntity.damage(this, this.attackStrength);
@@ -96,8 +96,9 @@ public class EntityBat extends FlyingEntity implements MonsterEntityType {
                 }
             }
         }
-        if (this.attackCooldown > 0)
-            this.attackCooldown--;
+        if (this.attackCooldown > 0) {
+            --this.attackCooldown;
+        }
     }
 
     private boolean isCourseTraversable(double d, double d1, double d2, double d3) {
@@ -105,17 +106,20 @@ public class EntityBat extends FlyingEntity implements MonsterEntityType {
         double d5 = (this.waypointY - this.y) / d3;
         double d6 = (this.waypointZ - this.z) / d3;
         Box axisalignedbb = this.boundingBox.method_92();
-        for (int i = 1; i < d3; i++) {
+        int i = 1;
+        while ((double) i < d3) {
             axisalignedbb.method_102(d4, d5, d6);
-            if (this.level.getEntities(this, axisalignedbb).size() > 0)
+            if (this.level.method_190(this, axisalignedbb).size() > 0) {
                 return false;
+            }
+            ++i;
         }
         return true;
     }
 
     @Override
     protected float getSoundVolume() {
-        return 0.6F;
+        return 0.6f;
     }
 
     @Override

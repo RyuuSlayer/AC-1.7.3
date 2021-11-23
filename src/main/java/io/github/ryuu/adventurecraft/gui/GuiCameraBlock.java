@@ -6,6 +6,7 @@ import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 
 public class GuiCameraBlock extends Screen {
+
     private final TileEntityCamera cam;
 
     public GuiCameraBlock(TileEntityCamera c) {
@@ -13,7 +14,7 @@ public class GuiCameraBlock extends Screen {
     }
 
     public static void showUI(TileEntityCamera c) {
-        Minecraft.minecraftInstance.a(new GuiCameraBlock(c));
+        Minecraft.minecraftInstance.openScreen(new GuiCameraBlock(c));
     }
 
     @Override
@@ -26,34 +27,30 @@ public class GuiCameraBlock extends Screen {
         }
         this.buttons.add(b);
         b = new Button(1, 4, 24, 160, 18, "Pause Game");
-        if (!this.cam.pauseGame)
+        if (!this.cam.pauseGame) {
             b.text = "Game Runs";
+        }
         this.buttons.add(b);
     }
 
     @Override
-    protected void buttonClicked(Button guibutton) {
-        if (guibutton.id == 0) {
+    protected void buttonClicked(Button button) {
+        if (button.id == 0) {
             this.cam.type = (this.cam.type + 1) % 3;
-            if (this.cam.type == 1) {
-                guibutton.text = "Linear Interpolation";
-            } else if (this.cam.type == 2) {
-                guibutton.text = "Quadratic Interpolation";
-            } else {
-                guibutton.text = "Skip to first point";
-            }
-        } else if (guibutton.id == 1) {
+            button.text = this.cam.type == 1 ? "Linear Interpolation" : (this.cam.type == 2 ? "Quadratic Interpolation" : "Skip to first point");
+        } else if (button.id == 1) {
             this.cam.pauseGame = !this.cam.pauseGame;
-            guibutton.text = "Pause Game";
-            if (!this.cam.pauseGame)
-                guibutton.text = "Game Runs";
+            button.text = "Pause Game";
+            if (!this.cam.pauseGame) {
+                button.text = "Game Runs";
+            }
         }
         this.cam.level.getChunk(this.cam.x, this.cam.z).method_885();
     }
 
     @Override
-    public void render(int i, int j, float f) {
-        renderBackground();
-        super.render(i, j, f);
+    public void render(int mouseX, int mouseY, float delta) {
+        this.renderBackground();
+        super.render(mouseX, mouseY, delta);
     }
 }

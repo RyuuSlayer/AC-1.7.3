@@ -6,19 +6,20 @@ import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 public class BlockPlant extends Tile implements IBlockColor {
+
     protected BlockPlant(int i, int j) {
         super(i, j, Material.PLANT);
-        float f = 0.2F;
-        setBoundingBox(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, f * 3.0F, 0.5F + f);
+        float f = 0.2f;
+        this.setBoundingBox(0.5f - f, 0.0f, 0.5f - f, 0.5f + f, f * 3.0f, 0.5f + f);
     }
 
     @Override
-    public int getTextureForSide(int i, int j) {
-        return this.tex + j;
+    public int getTextureForSide(int side, int meta) {
+        return this.tex + meta;
     }
 
     @Override
-    public Box getCollisionShape(Level world, int i, int j, int k) {
+    public Box getCollisionShape(Level level, int x, int y, int z) {
         return null;
     }
 

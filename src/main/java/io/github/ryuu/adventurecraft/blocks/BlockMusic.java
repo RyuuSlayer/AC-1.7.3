@@ -14,6 +14,7 @@ import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 public class BlockMusic extends TileWithEntity {
+
     protected BlockMusic(int i, int j) {
         super(i, j, Material.AIR);
     }
@@ -29,18 +30,21 @@ public class BlockMusic extends TileWithEntity {
     }
 
     @Override
-    public Box getCollisionShape(Level world, int i, int j, int k) {
+    public Box getCollisionShape(Level level, int x, int y, int z) {
         return null;
     }
 
+    @Override
     public boolean shouldRender(TileView blockAccess, int i, int j, int k) {
         return DebugMode.active;
     }
 
+    @Override
     public boolean canBeTriggered() {
         return true;
     }
 
+    @Override
     public void onTriggerActivated(Level world, int i, int j, int k) {
         TileEntityMusic obj = (TileEntityMusic) world.getTileEntity(i, j, k);
         if (!obj.musicName.equals("")) {
@@ -50,14 +54,15 @@ public class BlockMusic extends TileWithEntity {
         }
     }
 
+    @Override
     public void onTriggerDeactivated(Level world, int i, int j, int k) {
     }
 
     @Override
-    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
-        if (DebugMode.active && entityplayer.getHeldItem() != null && (entityplayer.getHeldItem()).itemId == Items.cursor.id) {
-            TileEntityMusic obj = (TileEntityMusic) world.getTileEntity(i, j, k);
-            GuiMusic.showUI(world, obj);
+    public boolean activate(Level level, int x, int y, int z, Player player) {
+        if (DebugMode.active && player.getHeldItem() != null && player.getHeldItem().itemId == Items.cursor.id) {
+            TileEntityMusic obj = (TileEntityMusic) level.getTileEntity(x, y, z);
+            GuiMusic.showUI(level, obj);
             return true;
         }
         return false;

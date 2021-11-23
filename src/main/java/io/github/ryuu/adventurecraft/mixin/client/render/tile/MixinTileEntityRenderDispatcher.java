@@ -1,8 +1,5 @@
 package io.github.ryuu.adventurecraft.mixin.client.render.tile;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import io.github.ryuu.adventurecraft.entities.tile.*;
 import net.minecraft.client.render.TextRenderer;
 import net.minecraft.client.render.entity.tile.MobSpawnerRenderer;
@@ -18,14 +15,22 @@ import net.minecraft.tile.entity.Piston;
 import net.minecraft.tile.entity.Sign;
 import net.minecraft.tile.entity.TileEntity;
 import org.lwjgl.opengl.GL11;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Mixin(TileEntityRenderDispatcher.class)
 public class MixinTileEntityRenderDispatcher {
-    private Map renderers = new HashMap();
+
     public static TileEntityRenderDispatcher INSTANCE = new TileEntityRenderDispatcher();
-    private TextRenderer textRenderer;
     public static double renderOffsetX;
     public static double renderOffsetY;
     public static double renderOffsetZ;
+    @Shadow()
+    private final Map renderers = new HashMap();
     public TextureManager textureManager;
     public Level level;
     public LivingEntity cameraEntity;
@@ -34,6 +39,7 @@ public class MixinTileEntityRenderDispatcher {
     public double x;
     public double y;
     public double z;
+    private TextRenderer textRenderer;
 
     private MixinTileEntityRenderDispatcher() {
         this.renderers.put(Sign.class, new SignRenderer());
@@ -52,8 +58,12 @@ public class MixinTileEntityRenderDispatcher {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public TileEntityRenderer getRenderer(Class clazz) {
-        TileEntityRenderer tileentityspecialrenderer = (TileEntityRenderer)this.renderers.get(clazz);
+        TileEntityRenderer tileentityspecialrenderer = (TileEntityRenderer) this.renderers.get(clazz);
         if (tileentityspecialrenderer == null && clazz != TileEntity.class) {
             tileentityspecialrenderer = this.getRenderer(clazz.getSuperclass());
             this.renderers.put(clazz, tileentityspecialrenderer);
@@ -61,17 +71,10 @@ public class MixinTileEntityRenderDispatcher {
         return tileentityspecialrenderer;
     }
 
-    public boolean hasRenderer(TileEntity tileEntity) {
-        return this.getRenderer(tileEntity) != null;
-    }
-
-    public TileEntityRenderer getRenderer(TileEntity tileEntity) {
-        if (tileEntity == null) {
-            return null;
-        }
-        return this.getRenderer(tileEntity.getClass());
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void refresh(Level level, TextureManager textureManager, TextRenderer textRenderer, LivingEntity cameraEntity, float tickDelta) {
         if (this.level != level) {
             this.refreshLevel(level);
@@ -81,19 +84,27 @@ public class MixinTileEntityRenderDispatcher {
         this.textRenderer = textRenderer;
         this.yaw = cameraEntity.prevYaw + (cameraEntity.yaw - cameraEntity.prevYaw) * tickDelta;
         this.pitch = cameraEntity.prevPitch + (cameraEntity.pitch - cameraEntity.prevPitch) * tickDelta;
-        this.x = cameraEntity.prevRenderX + (cameraEntity.x - cameraEntity.prevRenderX) * (double)tickDelta;
-        this.y = cameraEntity.prevRenderY + (cameraEntity.y - cameraEntity.prevRenderY) * (double)tickDelta;
-        this.z = cameraEntity.prevRenderZ + (cameraEntity.z - cameraEntity.prevRenderZ) * (double)tickDelta;
+        this.x = cameraEntity.prevRenderX + (cameraEntity.x - cameraEntity.prevRenderX) * (double) tickDelta;
+        this.y = cameraEntity.prevRenderY + (cameraEntity.y - cameraEntity.prevRenderY) * (double) tickDelta;
+        this.z = cameraEntity.prevRenderZ + (cameraEntity.z - cameraEntity.prevRenderZ) * (double) tickDelta;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void renderTileEntity(TileEntity tileEntity, float tickDelta) {
         if (tileEntity.squaredDistanceTo(this.x, this.y, this.z) < 4096.0) {
             float f1 = this.level.getBrightness(tileEntity.x, tileEntity.y, tileEntity.z);
             GL11.glColor3f(f1, f1, f1);
-            this.renderTileEntity(tileEntity, (double)tileEntity.x - renderOffsetX, (double)tileEntity.y - renderOffsetY, (double)tileEntity.z - renderOffsetZ, tickDelta);
+            this.renderTileEntity(tileEntity, (double) tileEntity.x - renderOffsetX, (double) tileEntity.y - renderOffsetY, (double) tileEntity.z - renderOffsetZ, tickDelta);
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void renderTileEntity(TileEntity tileEntity, double x, double y, double z, float tickDelta) {
         TileEntityRenderer tileentityspecialrenderer = this.getRenderer(tileEntity);
         if (tileentityspecialrenderer != null) {
@@ -101,15 +112,15 @@ public class MixinTileEntityRenderDispatcher {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void refreshLevel(Level level) {
         this.level = level;
         for (TileEntityRenderer tileentityspecialrenderer : this.renderers.values()) {
             if (tileentityspecialrenderer == null) continue;
             tileentityspecialrenderer.refreshLevel(level);
         }
-    }
-
-    public TextRenderer getTextRenderer() {
-        return this.textRenderer;
     }
 }

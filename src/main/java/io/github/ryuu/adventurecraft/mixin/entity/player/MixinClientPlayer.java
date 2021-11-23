@@ -16,12 +16,12 @@ import net.minecraft.client.gui.screen.container.CraftingScreen;
 import net.minecraft.client.gui.screen.container.DispenserScreen;
 import net.minecraft.client.gui.screen.container.DoubleChestScreen;
 import net.minecraft.client.gui.screen.container.FurnaceScreen;
-import net.minecraft.client.particle.EntityCollisionParticle;
 import net.minecraft.client.util.Session;
 import net.minecraft.client.util.Smoother;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.FurnaceEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.ClientPlayer;
 import net.minecraft.entity.player.Player;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.level.Level;
@@ -31,13 +31,19 @@ import net.minecraft.tile.entity.Dispenser;
 import net.minecraft.tile.entity.Sign;
 import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.MathsHelper;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
+@Mixin(ClientPlayer.class)
 public class MixinClientPlayer extends Player {
+
+    private final Smoother field_163 = new Smoother();
+    private final Smoother field_164 = new Smoother();
+    private final Smoother field_165 = new Smoother();
+    @Shadow()
     public PlayerKeypressManager keypressManager;
     protected Minecraft minecraft;
-    private Smoother field_163 = new Smoother();
-    private Smoother field_164 = new Smoother();
-    private Smoother field_165 = new Smoother();
 
     public MixinClientPlayer(Minecraft minecraft, Level level, Session session, int dimensionId) {
         super(level);
@@ -47,10 +53,20 @@ public class MixinClientPlayer extends Player {
         this.movementSpeed = 1.0f;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void move(double d, double d1, double d2) {
         super.move(d, d1, d2);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void tickHandSwing() {
         super.tickHandSwing();
         this.perpendicularMovement = this.movementSpeed * this.keypressManager.perpendicularMovement;
@@ -58,6 +74,11 @@ public class MixinClientPlayer extends Player {
         this.jumping = this.keypressManager.jump;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void updateDespawnCounter() {
         if (!this.minecraft.statManager.hasAchievement(Achievements.OPEN_INVENTORY)) {
             this.minecraft.toastManager.set(Achievements.OPEN_INVENTORY);
@@ -77,7 +98,6 @@ public class MixinClientPlayer extends Player {
             if (this.field_504 >= 1.0f) {
                 this.field_504 = 1.0f;
                 if (!this.level.isClient) {
-                    // empty if block
                 }
             }
             this.field_512 = false;
@@ -99,65 +119,96 @@ public class MixinClientPlayer extends Player {
         super.updateDespawnCounter();
     }
 
-    public void method_140() {
-        this.keypressManager.resetKeys();
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_136(int i, boolean flag) {
         if (this.level.script.keyboard.processPlayerKeyPress(i, flag)) {
             this.keypressManager.onKeyPressed(i, flag);
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void writeCustomDataToTag(CompoundTag tag) {
         super.writeCustomDataToTag(tag);
         tag.put("Score", this.score);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void readCustomDataFromTag(CompoundTag tag) {
         super.readCustomDataFromTag(tag);
         this.score = tag.getInt("Score");
     }
 
-    public void closeContainer() {
-        super.closeContainer();
-        this.minecraft.openScreen(null);
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void openSignScreen(Sign tileentitysign) {
         this.minecraft.openScreen(new EditSignScreen(tileentitysign));
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void openChestScreen(Inventory iinventory) {
         this.minecraft.openScreen(new DoubleChestScreen(this.inventory, iinventory));
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void displayGUIPalette() {
         InventoryDebug palette = new InventoryDebug("Palette", 54);
         palette.fillInventory(1);
         this.minecraft.openScreen(new GuiPalette(this.inventory, palette));
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void openCraftingScreen(int i, int j, int k) {
         this.minecraft.openScreen(new CraftingScreen(this.inventory, this.level, i, j, k));
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void openFurnaceScreen(FurnaceEntity tileentityfurnace) {
         this.minecraft.openScreen(new FurnaceScreen(this.inventory, tileentityfurnace));
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void openDispenserScreen(Dispenser tileentitydispenser) {
         this.minecraft.openScreen(new DispenserScreen(this.inventory, tileentitydispenser));
     }
 
-    public void onEntityCollision(Entity entity, int i) {
-        this.minecraft.particleManager.addParticle(new EntityCollisionParticle(this.minecraft.level, entity, this, -0.5f));
-    }
-
-    public int method_141() {
-        return this.inventory.method_687();
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void sendChatMessage(String s) {
         String orig = s;
         if ((s = s.toLowerCase()).equals("/day")) {
@@ -184,7 +235,7 @@ public class MixinClientPlayer extends Player {
             if (this.field_1642) {
                 this.isFlying = true;
             }
-            this.minecraft.overlay.addChatMessage(String.format("NoClip: %b", new Object[]{this.field_1642}));
+            this.minecraft.overlay.addChatMessage(String.format("NoClip: %b", this.field_1642));
         } else if (s.equals("/togglemelting")) {
             this.level.properties.iceMelts = !this.level.properties.iceMelts;
             this.minecraft.overlay.addChatMessage(String.format("Ice Melts: %b", new Object[]{this.level.properties.iceMelts}));
@@ -193,16 +244,14 @@ public class MixinClientPlayer extends Player {
                 float t;
                 try {
                     t = Float.valueOf(s.substring(11)).floatValue();
-                }
-                catch (StringIndexOutOfBoundsException e) {
+                } catch (StringIndexOutOfBoundsException e) {
                     this.minecraft.overlay.addChatMessage("/cameraadd must have a time specified for the point");
                     return;
-                }
-                catch (NumberFormatException e) {
+                } catch (NumberFormatException e) {
                     this.minecraft.overlay.addChatMessage("'" + s.substring(11) + "' is not a valid number");
                     return;
                 }
-                this.minecraft.activeCutsceneCamera.addCameraPoint(t, (float)this.x, (float)(this.y - (double)this.standingEyeHeight + (double)1.62f), (float)this.z, this.yaw, this.pitch, 2);
+                this.minecraft.activeCutsceneCamera.addCameraPoint(t, (float) this.x, (float) (this.y - (double) this.standingEyeHeight + (double) 1.62f), (float) this.z, this.yaw, this.pitch, 2);
                 this.minecraft.activeCutsceneCamera.loadCameraEntities();
                 this.minecraft.overlay.addChatMessage("Point Added");
             } else {
@@ -225,10 +274,10 @@ public class MixinClientPlayer extends Player {
             this.minecraft.openScreen(new GuiMapEditHUD(this.level));
         } else if (s.equals("/renderpaths")) {
             DebugMode.renderPaths = !DebugMode.renderPaths;
-            this.minecraft.overlay.addChatMessage(String.format("Render Paths: %b", new Object[]{DebugMode.renderPaths}));
+            this.minecraft.overlay.addChatMessage(String.format("Render Paths: %b", DebugMode.renderPaths));
         } else if (s.equals("/renderfov")) {
             DebugMode.renderFov = !DebugMode.renderFov;
-            this.minecraft.overlay.addChatMessage(String.format("Render FOV: %b", new Object[]{DebugMode.renderFov}));
+            this.minecraft.overlay.addChatMessage(String.format("Render FOV: %b", DebugMode.renderFov));
         } else if (s.equals("/fullbright")) {
             for (int i = 0; i < 16; ++i) {
                 this.level.dimension.field_2178[i] = 1.0f;
@@ -268,10 +317,10 @@ public class MixinClientPlayer extends Player {
         }
     }
 
-    public boolean method_1373() {
-        return this.keypressManager.sneak && !this.sleeping;
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void updateHealth(int i) {
         int j = this.health - i;
         if (j <= 0) {
@@ -289,23 +338,26 @@ public class MixinClientPlayer extends Player {
         }
     }
 
-    public void respawn() {
-        this.minecraft.respawn(false, 0);
-    }
-
-    public void method_494() {
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void sendTranslatedMessage(String key) {
         this.minecraft.overlay.method_1953(key);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void increaseStat(Stat state, int amount) {
         if (state == null) {
             return;
         }
         if (state.isAchievement()) {
-            Achievement achievement = (Achievement)state;
+            Achievement achievement = (Achievement) state;
             if (achievement.parent == null || this.minecraft.statManager.hasAchievement(achievement.parent)) {
                 if (!this.minecraft.statManager.hasAchievement(achievement)) {
                     this.minecraft.toastManager.setWithoutDescription(achievement);
@@ -317,16 +369,25 @@ public class MixinClientPlayer extends Player {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private boolean method_138(int i, int j, int k) {
         return this.level.canSuffocate(i, j, k);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     protected boolean method_1372(double d, double d1, double d2) {
         int i = MathsHelper.floor(d);
         int j = MathsHelper.floor(d1);
         int k = MathsHelper.floor(d2);
-        double d3 = d - (double)i;
-        double d4 = d2 - (double)k;
+        double d3 = d - (double) i;
+        double d4 = d2 - (double) k;
         if (this.method_138(i, j, k) || this.method_138(i, j + 1, k)) {
             boolean flag = !this.method_138(i - 1, j, k) && !this.method_138(i - 1, j + 1, k);
             boolean flag1 = !this.method_138(i + 1, j, k) && !this.method_138(i + 1, j + 1, k);

@@ -8,9 +8,10 @@ import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 public class BlockDarkness extends Tile {
+
     protected BlockDarkness(int i, int j) {
         super(i, j, Material.AIR);
-        method_1590(2);
+        this.method_1590(2);
     }
 
     @Override
@@ -19,10 +20,11 @@ public class BlockDarkness extends Tile {
     }
 
     @Override
-    public Box getCollisionShape(Level world, int i, int j, int k) {
+    public Box getCollisionShape(Level level, int x, int y, int z) {
         return null;
     }
 
+    @Override
     public boolean shouldRender(TileView blockAccess, int i, int j, int k) {
         return DebugMode.active;
     }

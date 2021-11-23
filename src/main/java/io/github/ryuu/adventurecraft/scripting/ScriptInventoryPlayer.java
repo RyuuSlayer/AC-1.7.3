@@ -4,6 +4,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemInstance;
 
 public class ScriptInventoryPlayer extends ScriptInventory {
+
     PlayerInventory invPlayer;
 
     ScriptInventoryPlayer(PlayerInventory i) {
@@ -13,20 +14,21 @@ public class ScriptInventoryPlayer extends ScriptInventory {
 
     public int getSlotContainingItem(int itemID) {
         int i = this.invPlayer.getSlotWithItem(itemID);
-        if (i == -1)
-            for (int j = 36; j < 40; j++) {
+        if (i == -1) {
+            for (int j = 36; j < 40; ++j) {
                 ItemInstance k = this.invPlayer.getInvItem(j);
-                if (k != null && k.itemId == itemID)
-                    return j;
+                if (k == null || k.itemId != itemID) continue;
+                return j;
             }
+        }
         return i;
     }
 
     public int getSlotContainingItemDamage(int itemID, int damage) {
-        for (int i = 0; i < this.invPlayer.getInvSize(); i++) {
+        for (int i = 0; i < this.invPlayer.getInvSize(); ++i) {
             ItemInstance j = this.invPlayer.getInvItem(i);
-            if (j != null && j.itemId == itemID && j.getDamage() == damage)
-                return i;
+            if (j == null || j.itemId != itemID || j.getDamage() != damage) continue;
+            return i;
         }
         return -1;
     }
@@ -53,8 +55,9 @@ public class ScriptInventoryPlayer extends ScriptInventory {
 
     public ScriptItem getCurrentItem() {
         ItemInstance i = this.invPlayer.getHeldItem();
-        if (i == null || i.itemId == 0)
+        if (i == null || i.itemId == 0) {
             return null;
+        }
         return new ScriptItem(i);
     }
 
@@ -64,8 +67,9 @@ public class ScriptInventoryPlayer extends ScriptInventory {
 
     public ScriptItem getOffhandItem() {
         ItemInstance i = this.invPlayer.getOffhandItem();
-        if (i == null || i.itemId == 0)
+        if (i == null || i.itemId == 0) {
             return null;
+        }
         return new ScriptItem(i);
     }
 
@@ -79,8 +83,9 @@ public class ScriptInventoryPlayer extends ScriptInventory {
 
     public ScriptItem getCursorItem() {
         ItemInstance i = this.invPlayer.getCursorItem();
-        if (i == null || i.itemId == 0)
+        if (i == null || i.itemId == 0) {
             return null;
+        }
         return new ScriptItem(i);
     }
 

@@ -4,18 +4,23 @@ import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.io.CompoundTag;
 
 public class TileEntityUrl extends TileEntity {
+
     public String url = "";
 
-    @Override
-    public void readIdentifyingData(CompoundTag nbttagcompound) {
-        super.readIdentifyingData(nbttagcompound);
-        this.url = nbttagcompound.getString("url");
+    TileEntityUrl() {
     }
 
     @Override
-    public void writeIdentifyingData(CompoundTag nbttagcompound) {
-        super.writeIdentifyingData(nbttagcompound);
-        if (this.url != null && !this.url.equals(""))
-            nbttagcompound.put("url", this.url);
+    public void readIdentifyingData(CompoundTag tag) {
+        super.readIdentifyingData(tag);
+        this.url = tag.getString("url");
+    }
+
+    @Override
+    public void writeIdentifyingData(CompoundTag tag) {
+        super.writeIdentifyingData(tag);
+        if (this.url != null && !this.url.equals("")) {
+            tag.put("url", this.url);
+        }
     }
 }

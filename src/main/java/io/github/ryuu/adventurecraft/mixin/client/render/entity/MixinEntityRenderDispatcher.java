@@ -1,8 +1,5 @@
 package io.github.ryuu.adventurecraft.mixin.client.render.entity;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import io.github.ryuu.adventurecraft.entities.*;
 import io.github.ryuu.adventurecraft.models.ModelBat;
 import io.github.ryuu.adventurecraft.models.ModelCamera;
@@ -27,14 +24,22 @@ import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 import net.minecraft.util.maths.MathsHelper;
 import org.lwjgl.opengl.GL11;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Mixin(EntityRenderDispatcher.class)
 public class MixinEntityRenderDispatcher {
-    private Map renderers = new HashMap();
+
     public static EntityRenderDispatcher INSTANCE = new EntityRenderDispatcher();
-    private TextRenderer font;
     public static double field_2490;
     public static double field_2491;
     public static double field_2492;
+    @Shadow()
+    private final Map renderers = new HashMap();
     public TextureManager textureManager;
     public HandItemRenderer field_2494;
     public Level level;
@@ -45,6 +50,7 @@ public class MixinEntityRenderDispatcher {
     public double field_2500;
     public double field_2501;
     public double field_2502;
+    private TextRenderer font;
 
     private MixinEntityRenderDispatcher() {
         this.renderers.put(Spider.class, new SpiderEyesRenderer());
@@ -89,8 +95,12 @@ public class MixinEntityRenderDispatcher {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public EntityRenderer get(Class entityClass) {
-        EntityRenderer render = (EntityRenderer)this.renderers.get(entityClass);
+        EntityRenderer render = (EntityRenderer) this.renderers.get(entityClass);
         if (render == null && entityClass != Entity.class) {
             render = this.get(entityClass.getSuperclass());
             this.renderers.put(entityClass, render);
@@ -98,10 +108,10 @@ public class MixinEntityRenderDispatcher {
         return render;
     }
 
-    public EntityRenderer get(Entity entity) {
-        return this.get(entity.getClass());
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_1917(Level world, TextureManager renderengine, TextRenderer fontrenderer, LivingEntity entityliving, GameOptions gamesettings, float f) {
         this.level = world;
         this.textureManager = renderengine;
@@ -120,21 +130,29 @@ public class MixinEntityRenderDispatcher {
             this.field_2497 = entityliving.prevYaw + (entityliving.yaw - entityliving.prevYaw) * f;
             this.field_2498 = entityliving.prevPitch + (entityliving.pitch - entityliving.prevPitch) * f;
         }
-        this.field_2500 = entityliving.prevRenderX + (entityliving.x - entityliving.prevRenderX) * (double)f;
-        this.field_2501 = entityliving.prevRenderY + (entityliving.y - entityliving.prevRenderY) * (double)f;
-        this.field_2502 = entityliving.prevRenderZ + (entityliving.z - entityliving.prevRenderZ) * (double)f;
+        this.field_2500 = entityliving.prevRenderX + (entityliving.x - entityliving.prevRenderX) * (double) f;
+        this.field_2501 = entityliving.prevRenderY + (entityliving.y - entityliving.prevRenderY) * (double) f;
+        this.field_2502 = entityliving.prevRenderZ + (entityliving.z - entityliving.prevRenderZ) * (double) f;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_1921(Entity entity, float f) {
-        double d = entity.prevRenderX + (entity.x - entity.prevRenderX) * (double)f;
-        double d1 = entity.prevRenderY + (entity.y - entity.prevRenderY) * (double)f;
-        double d2 = entity.prevRenderZ + (entity.z - entity.prevRenderZ) * (double)f;
+        double d = entity.prevRenderX + (entity.x - entity.prevRenderX) * (double) f;
+        double d1 = entity.prevRenderY + (entity.y - entity.prevRenderY) * (double) f;
+        double d2 = entity.prevRenderZ + (entity.z - entity.prevRenderZ) * (double) f;
         float f1 = entity.prevYaw + (entity.yaw - entity.prevYaw) * f;
         float f2 = entity.getBrightnessAtEyes(f);
         GL11.glColor3f(f2, f2, f2);
         this.method_1920(entity, d - field_2490, d1 - field_2491, d2 - field_2492, f1, f);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_1920(Entity entity, double x, double y, double z, float f, float f1) {
         EntityRenderer render = this.get(entity);
         if (render != null) {
@@ -143,18 +161,14 @@ public class MixinEntityRenderDispatcher {
         }
     }
 
-    public void setLevel(Level level) {
-        this.level = level;
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public double method_1915(double d, double d1, double d2) {
         double d3 = d - this.field_2500;
         double d4 = d1 - this.field_2501;
         double d5 = d2 - this.field_2502;
         return d3 * d3 + d4 * d4 + d5 * d5;
-    }
-
-    public TextRenderer getTextRenderer() {
-        return this.font;
     }
 }

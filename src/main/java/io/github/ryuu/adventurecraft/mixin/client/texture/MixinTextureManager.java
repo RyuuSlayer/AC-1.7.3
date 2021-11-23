@@ -1,5 +1,18 @@
 package io.github.ryuu.adventurecraft.mixin.client.texture;
 
+import io.github.ryuu.adventurecraft.util.TextureAnimated;
+import io.github.ryuu.adventurecraft.util.Vec2;
+import net.minecraft.client.*;
+import net.minecraft.client.options.GameOptions;
+import net.minecraft.client.render.TextureBinder;
+import net.minecraft.client.resource.TexturePack;
+import net.minecraft.client.texture.TextureManager;
+import org.lwjgl.opengl.GL11;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
+
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -7,41 +20,32 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import javax.imageio.ImageIO;
+import java.util.*;
 
-import io.github.ryuu.adventurecraft.util.TextureAnimated;
-import io.github.ryuu.adventurecraft.util.Vec2;
-import net.minecraft.client.*;
-import net.minecraft.client.options.GameOptions;
-import net.minecraft.client.render.TextureBinder;
-import net.minecraft.client.resource.TexturePack;
-import org.lwjgl.opengl.GL11;
-
+@Mixin(TextureManager.class)
 public class MixinTextureManager {
+
+    @Shadow()
     public static boolean field_1245 = false;
+    private final HashMap IMAGE_GRID_CACHE = new HashMap();
+    private final HashMap INT_TO_IMAGE = new HashMap();
+    private final IntBuffer atlasBuffer = GLAllocator.createIntBuffer(1);
+    private final List textureBinders = new ArrayList();
+    private final Map ID_TO_DOWNLOADER = new HashMap();
+    private final GameOptions gameOptions;
+    private final TexturePackManager texturePackManager;
+    private final BufferedImage defaultImage = new BufferedImage(64, 64, 2);
+    private final HashMap<Integer, net.minecraft.src.Vec2> textureResolutions;
+    private final HashMap<String, net.minecraft.src.TextureAnimated> textureAnimations;
     public HashMap TEXTURE_ID_MAP = new HashMap();
-    private HashMap IMAGE_GRID_CACHE = new HashMap();
-    private HashMap INT_TO_IMAGE = new HashMap();
-    private IntBuffer atlasBuffer = GLAllocator.createIntBuffer(1);
-    private ByteBuffer textureGridBuffer = GLAllocator.createByteBuffer(0x100000);
-    private List textureBinders = new ArrayList();
-    private Map ID_TO_DOWNLOADER = new HashMap();
-    private GameOptions gameOptions;
-    private boolean clamped = false;
-    private boolean blurred = false;
-    private TexturePackManager texturePackManager;
-    private BufferedImage defaultImage = new BufferedImage(64, 64, 2);
     public File mapDir;
     public ArrayList<String> replacedTextures;
-    private HashMap<Integer, Vec2> textureResolutions;
-    private HashMap<String, TextureAnimated> textureAnimations;
+    private ByteBuffer textureGridBuffer = GLAllocator.createByteBuffer(0x100000);
+    private boolean clamped = false;
+    private boolean blurred = false;
 
-    public TextureManager(TexturePackManager texturePackManager, GameOptions gameOptions) {
+    public MixinTextureManager(TexturePackManager texturePackManager, GameOptions gameOptions) {
         this.texturePackManager = texturePackManager;
         this.gameOptions = gameOptions;
         Graphics g = this.defaultImage.getGraphics();
@@ -55,9 +59,13 @@ public class MixinTextureManager {
         this.textureAnimations = new HashMap();
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public int[] getImageGrid(String id) {
         TexturePack texturepackbase = this.texturePackManager.texturePack;
-        int[] ai = (int[])this.IMAGE_GRID_CACHE.get(id);
+        int[] ai = (int[]) this.IMAGE_GRID_CACHE.get(id);
         if (ai != null) {
             return ai;
         }
@@ -79,8 +87,7 @@ public class MixinTextureManager {
             }
             this.IMAGE_GRID_CACHE.put(id, ai1);
             return ai1;
-        }
-        catch (IOException ioexception) {
+        } catch (IOException ioexception) {
             ioexception.printStackTrace();
             int[] ai2 = this.getRGBPixels(this.defaultImage);
             this.IMAGE_GRID_CACHE.put(id, ai2);
@@ -88,6 +95,10 @@ public class MixinTextureManager {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private int[] getRGBPixels(BufferedImage image) {
         int i = image.getWidth();
         int j = image.getHeight();
@@ -96,6 +107,10 @@ public class MixinTextureManager {
         return ai;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private int[] getRGBPixels(BufferedImage image, int[] pixels) {
         int i = image.getWidth();
         int j = image.getHeight();
@@ -103,9 +118,13 @@ public class MixinTextureManager {
         return pixels;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public int getTextureId(String stringId) {
         TexturePack texturepackbase = this.texturePackManager.texturePack;
-        Integer integer = (Integer)this.TEXTURE_ID_MAP.get(stringId);
+        Integer integer = (Integer) this.TEXTURE_ID_MAP.get(stringId);
         if (integer != null) {
             return integer;
         }
@@ -117,22 +136,34 @@ public class MixinTextureManager {
         return i;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void replaceTexture(String texToReplace, String replacement) {
         int texID = this.getTextureId(texToReplace);
         this.loadTexture(texID, replacement);
         if (!this.replacedTextures.contains(texToReplace)) {
-            this.replacedTextures.add((Object)texToReplace);
+            this.replacedTextures.add(texToReplace);
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void revertTextures() {
         for (String replacement : this.replacedTextures) {
-            Integer integer = (Integer)this.TEXTURE_ID_MAP.get(replacement);
+            Integer integer = (Integer) this.TEXTURE_ID_MAP.get(replacement);
             if (integer == null) continue;
             this.loadTexture(integer, replacement);
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void loadTexture(int texID, String texName) {
         String origTexName = texName;
         try {
@@ -168,26 +199,33 @@ public class MixinTextureManager {
                 image = this.method_1101(image);
             }
             this.glLoadImageWithId(image, texID);
-            this.textureResolutions.put((Object)new Integer(texID), (Object)new Vec2(image.getWidth(), image.getHeight()));
+            this.textureResolutions.put((Object) new Integer(texID), (Object) new Vec2(image.getWidth(), image.getHeight()));
             if (origTexName.startsWith("%clamp%")) {
                 this.clamped = false;
             } else if (origTexName.startsWith("%blur%")) {
                 this.blurred = false;
             }
             return;
-        }
-        catch (IOException ioexception) {
+        } catch (IOException ioexception) {
             ioexception.printStackTrace();
             this.glLoadImageWithId(this.defaultImage, texID);
             return;
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public BufferedImage getTextureImage(String texName) throws IOException {
         TexturePack texturepackbase = this.texturePackManager.texturePack;
         return this.readStream(texturepackbase.getResource(texName));
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private BufferedImage method_1101(BufferedImage image) {
         int i = image.getWidth() / 16;
         BufferedImage bufferedimage1 = new BufferedImage(16, image.getHeight() * i, 2);
@@ -199,6 +237,10 @@ public class MixinTextureManager {
         return bufferedimage1;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public int glLoadImage(BufferedImage image) {
         this.atlasBuffer.clear();
         GLAllocator.addTexture(this.atlasBuffer);
@@ -208,6 +250,10 @@ public class MixinTextureManager {
         return i;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void glLoadImageWithId(BufferedImage image, int id) {
         GL11.glBindTexture(3553, id);
         if (field_1245) {
@@ -246,10 +292,10 @@ public class MixinTextureManager {
                 j2 = l3;
                 l2 = j4;
             }
-            abyte0[l * 4 + 0] = (byte)l1;
-            abyte0[l * 4 + 1] = (byte)j2;
-            abyte0[l * 4 + 2] = (byte)l2;
-            abyte0[l * 4 + 3] = (byte)j1;
+            abyte0[l * 4 + 0] = (byte) l1;
+            abyte0[l * 4 + 1] = (byte) j2;
+            abyte0[l * 4 + 2] = (byte) l2;
+            abyte0[l * 4 + 3] = (byte) j1;
         }
         if (this.textureGridBuffer.capacity() < j * k * 4) {
             this.textureGridBuffer = GLAllocator.createByteBuffer(j * k * 4);
@@ -278,6 +324,10 @@ public class MixinTextureManager {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void method_1095(int[] grid, int i, int j, int textureId) {
         GL11.glBindTexture(3553, textureId);
         if (field_1245) {
@@ -312,10 +362,10 @@ public class MixinTextureManager {
                 k1 = j2;
                 l1 = k2;
             }
-            abyte0[l * 4 + 0] = (byte)j1;
-            abyte0[l * 4 + 1] = (byte)k1;
-            abyte0[l * 4 + 2] = (byte)l1;
-            abyte0[l * 4 + 3] = (byte)i1;
+            abyte0[l * 4 + 0] = (byte) j1;
+            abyte0[l * 4 + 1] = (byte) k1;
+            abyte0[l * 4 + 2] = (byte) l1;
+            abyte0[l * 4 + 3] = (byte) i1;
         }
         this.textureGridBuffer.clear();
         this.textureGridBuffer.put(abyte0);
@@ -323,6 +373,10 @@ public class MixinTextureManager {
         GL11.glTexSubImage2D(3553, 0, 0, 0, i, j, 6408, 5121, this.textureGridBuffer);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void removeTexture(int id) {
         this.INT_TO_IMAGE.remove(id);
         this.atlasBuffer.clear();
@@ -331,8 +385,12 @@ public class MixinTextureManager {
         GL11.glDeleteTextures(this.atlasBuffer);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public int getTextureId(String downloaderId, String stringId) {
-        ImageDownloader threaddownloadimagedata = (ImageDownloader)this.ID_TO_DOWNLOADER.get(downloaderId);
+        ImageDownloader threaddownloadimagedata = (ImageDownloader) this.ID_TO_DOWNLOADER.get(downloaderId);
         if (threaddownloadimagedata != null && threaddownloadimagedata.image != null && !threaddownloadimagedata.loaded) {
             if (threaddownloadimagedata.pointer < 0) {
                 threaddownloadimagedata.pointer = this.glLoadImage(threaddownloadimagedata.image);
@@ -350,8 +408,12 @@ public class MixinTextureManager {
         return threaddownloadimagedata.pointer;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public ImageDownloader getImageDownloader(String stringId, ImageProcessor imageProcessor) {
-        ImageDownloader threaddownloadimagedata = (ImageDownloader)this.ID_TO_DOWNLOADER.get(stringId);
+        ImageDownloader threaddownloadimagedata = (ImageDownloader) this.ID_TO_DOWNLOADER.get(stringId);
         if (threaddownloadimagedata == null) {
             this.ID_TO_DOWNLOADER.put(stringId, new ImageDownloader(stringId, imageProcessor));
         } else {
@@ -360,8 +422,12 @@ public class MixinTextureManager {
         return threaddownloadimagedata;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void removeDownloaded(String stringId) {
-        ImageDownloader threaddownloadimagedata = (ImageDownloader)this.ID_TO_DOWNLOADER.get(stringId);
+        ImageDownloader threaddownloadimagedata = (ImageDownloader) this.ID_TO_DOWNLOADER.get(stringId);
         if (threaddownloadimagedata != null) {
             --threaddownloadimagedata.downloading;
             if (threaddownloadimagedata.downloading == 0) {
@@ -373,6 +439,10 @@ public class MixinTextureManager {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void add(TextureBinder textureBinder) {
         this.textureBinders.add(textureBinder);
         Vec2 texRes = this.getTextureResolution(textureBinder.getTexture());
@@ -383,9 +453,13 @@ public class MixinTextureManager {
         textureBinder.onTick(texRes);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void tick() {
         for (int i = 0; i < this.textureBinders.size(); ++i) {
-            TextureBinder texturefx = (TextureBinder)this.textureBinders.get(i);
+            TextureBinder texturefx = (TextureBinder) this.textureBinders.get(i);
             Vec2 texRes = this.getTextureResolution(texturefx.getTexture());
             texturefx.render3d = this.gameOptions.anaglyph3d;
             texturefx.onTick(texRes);
@@ -418,7 +492,7 @@ public class MixinTextureManager {
             }
         }
         for (int j = 0; j < this.textureBinders.size(); ++j) {
-            TextureBinder texturefx1 = (TextureBinder)this.textureBinders.get(j);
+            TextureBinder texturefx1 = (TextureBinder) this.textureBinders.get(j);
             if (texturefx1.textureId <= 0) continue;
             this.textureGridBuffer.clear();
             this.textureGridBuffer.put(texturefx1.grid);
@@ -445,12 +519,20 @@ public class MixinTextureManager {
         this.updateTextureAnimations();
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private int method_1086(int grid, int grid2) {
         int k = (grid & 0xFF000000) >> 24 & 0xFF;
         int l = (grid2 & 0xFF000000) >> 24 & 0xFF;
         return (k + l >> 1 << 24) + ((grid & 0xFEFEFE) + (grid2 & 0xFEFEFE) >> 1);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private int method_1098(int i, int j) {
         int k = (i & 0xFF000000) >> 24 & 0xFF;
         int l = (j & 0xFF000000) >> 24 & 0xFF;
@@ -472,19 +554,23 @@ public class MixinTextureManager {
         return c << 24 | k2 << 16 | l2 << 8 | i3;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void reload() {
         TexturePack texturepackbase = this.texturePackManager.texturePack;
         Iterator iterator = this.INT_TO_IMAGE.keySet().iterator();
         while (iterator.hasNext()) {
-            int i = (Integer)iterator.next();
-            BufferedImage bufferedimage = (BufferedImage)this.INT_TO_IMAGE.get(i);
+            int i = (Integer) iterator.next();
+            BufferedImage bufferedimage = (BufferedImage) this.INT_TO_IMAGE.get(i);
             this.glLoadImageWithId(bufferedimage, i);
         }
         for (ImageDownloader threaddownloadimagedata : this.ID_TO_DOWNLOADER.values()) {
             threaddownloadimagedata.loaded = false;
         }
         for (String s : this.TEXTURE_ID_MAP.keySet()) {
-            int j = (Integer)this.TEXTURE_ID_MAP.get(s);
+            int j = (Integer) this.TEXTURE_ID_MAP.get(s);
             this.loadTexture(j, s);
         }
         for (String s1 : this.IMAGE_GRID_CACHE.keySet()) {
@@ -501,22 +587,29 @@ public class MixinTextureManager {
                 } else {
                     bufferedimage2 = this.readStream(texturepackbase.getResource(s1));
                 }
-                this.getRGBPixels(bufferedimage2, (int[])this.IMAGE_GRID_CACHE.get(s1));
+                this.getRGBPixels(bufferedimage2, (int[]) this.IMAGE_GRID_CACHE.get(s1));
                 this.blurred = false;
                 this.clamped = false;
-            }
-            catch (IOException ioexception1) {
+            } catch (IOException ioexception1) {
                 ioexception1.printStackTrace();
             }
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private BufferedImage readStream(InputStream stream) throws IOException {
         BufferedImage bufferedimage = ImageIO.read(stream);
         stream.close();
         return bufferedimage;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void bindTexture(int pointer) {
         if (pointer < 0) {
             return;
@@ -524,26 +617,46 @@ public class MixinTextureManager {
         GL11.glBindTexture(3553, pointer);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public Vec2 getTextureResolution(String texName) {
-        Integer i = (Integer)this.TEXTURE_ID_MAP.get(texName);
+        Integer i = (Integer) this.TEXTURE_ID_MAP.get(texName);
         if (i != null) {
-            return this.textureResolutions.get(i);
+            return (Vec2) this.textureResolutions.get(i);
         }
         return null;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void clearTextureAnimations() {
         this.textureAnimations.clear();
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void registerTextureAnimation(String name, TextureAnimated animTex) {
-        this.textureAnimations.put((Object)name, (Object)animTex);
+        this.textureAnimations.put((Object) name, (Object) animTex);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void unregisterTextureAnimation(String name) {
         this.textureAnimations.remove(name);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void updateTextureAnimations() {
         for (TextureAnimated animTex : this.textureAnimations.values()) {
             animTex.onTick();

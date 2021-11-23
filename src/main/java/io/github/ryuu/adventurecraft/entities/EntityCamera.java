@@ -1,18 +1,19 @@
 package io.github.ryuu.adventurecraft.entities;
 
-import io.github.ryuu.adventurecraft.mixin.client.MixinMinecraft;
 import io.github.ryuu.adventurecraft.gui.GuiCamera;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.util.io.CompoundTag;
 
 public class EntityCamera extends LivingEntity {
-    public float time;
 
-    public int type;
+    float time;
 
-    public int cameraID;
+    int type;
+
+    int cameraID;
 
     EntityCamera(Level world, float t, int ty, int id) {
         super(world);
@@ -26,16 +27,16 @@ public class EntityCamera extends LivingEntity {
     }
 
     public void deleteCameraPoint() {
-        MixinMinecraft.minecraftInstance.activeCutsceneCamera.deletePoint(this.cameraID);
-        MixinMinecraft.minecraftInstance.activeCutsceneCamera.loadCameraEntities();
+        Minecraft.minecraftInstance.activeCutsceneCamera.deletePoint(this.cameraID);
+        Minecraft.minecraftInstance.activeCutsceneCamera.loadCameraEntities();
     }
 
     @Override
-    public void readCustomDataFromTag(CompoundTag nbttagcompound) {
+    public void readCustomDataFromTag(CompoundTag tag) {
     }
 
     @Override
-    public void writeCustomDataToTag(CompoundTag nbttagcompound) {
+    public void writeCustomDataToTag(CompoundTag tag) {
     }
 
     @Override

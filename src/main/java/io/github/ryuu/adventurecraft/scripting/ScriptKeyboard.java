@@ -1,7 +1,5 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import java.util.HashMap;
-
 import net.minecraft.client.options.GameOptions;
 import net.minecraft.level.Level;
 import org.lwjgl.input.Keyboard;
@@ -9,35 +7,32 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
+import java.util.HashMap;
+
 public class ScriptKeyboard {
+
     private final GameOptions gameSettings;
-    public String keyForwardScript;
-    public String keyBackScript;
-    public String keyLeftScript;
-    public String keyRightScript;
-    public String keyJumpScript;
-    public String keySneakScript;
+    public String keyForwardScript = "";
+    public String keyBackScript = "";
+    public String keyLeftScript = "";
+    public String keyRightScript = "";
+    public String keyJumpScript = "";
+    public String keySneakScript = "";
     String allKeys;
     HashMap<Integer, String> keyBinds;
     Level world;
     Scriptable scope;
 
     ScriptKeyboard(Level w, GameOptions g, Scriptable s) {
-        this.keyForwardScript = "";
-        this.keyBackScript = "";
-        this.keyLeftScript = "";
-        this.keyRightScript = "";
-        this.keyJumpScript = "";
-        this.keySneakScript = "";
         this.world = w;
-        this.keyBinds = new HashMap<>();
+        this.keyBinds = new HashMap();
         this.allKeys = null;
         this.scope = s;
         this.gameSettings = g;
     }
 
     public void bindKey(int keyID, String script) {
-        this.keyBinds.put(new Integer(keyID), script);
+        this.keyBinds.put((Object) new Integer(keyID), (Object) script);
     }
 
     public void unbindKey(int keyID) {
@@ -53,18 +48,19 @@ public class ScriptKeyboard {
     }
 
     public void processKeyPress(int keyID) {
+        Object wrappedOut;
         boolean keyIDSet = false;
-        String script = this.keyBinds.get(Integer.valueOf(keyID));
+        String script = this.keyBinds.get(keyID);
         if (script != null) {
             keyIDSet = true;
-            Object wrappedOut = Context.javaToJS(Integer.valueOf(keyID), this.world.scope);
-            ScriptableObject.putProperty(this.world.scope, "keyID", wrappedOut);
+            wrappedOut = Context.javaToJS(keyID, (Scriptable) this.world.scope);
+            ScriptableObject.putProperty((Scriptable) this.world.scope, "keyID", wrappedOut);
             this.world.scriptHandler.runScript(script, this.world.scope);
         }
         if (this.allKeys != null) {
             if (!keyIDSet) {
-                Object wrappedOut = Context.javaToJS(Integer.valueOf(keyID), this.world.scope);
-                ScriptableObject.putProperty(this.world.scope, "keyID", wrappedOut);
+                wrappedOut = Context.javaToJS(keyID, (Scriptable) this.world.scope);
+                ScriptableObject.putProperty((Scriptable) this.world.scope, "keyID", wrappedOut);
             }
             this.world.scriptHandler.runScript(this.allKeys, this.world.scope);
         }
@@ -107,13 +103,14 @@ public class ScriptKeyboard {
     }
 
     private boolean runScript(String scriptName, int keyID, boolean keyState) {
-        Object wrappedOut = Context.javaToJS(Integer.valueOf(keyID), this.world.scope);
-        ScriptableObject.putProperty(this.world.scope, "keyID", wrappedOut);
-        wrappedOut = Context.javaToJS(Boolean.valueOf(keyState), this.scope);
+        Object wrappedOut = Context.javaToJS(keyID, (Scriptable) this.world.scope);
+        ScriptableObject.putProperty((Scriptable) this.world.scope, "keyID", wrappedOut);
+        wrappedOut = Context.javaToJS(keyState, this.scope);
         ScriptableObject.putProperty(this.scope, "keyState", wrappedOut);
         Object result = this.world.scriptHandler.runScript(scriptName, this.scope);
-        if (result == null || !(result instanceof Boolean))
+        if (result == null || !(result instanceof Boolean)) {
             return true;
-        return ((Boolean) result).booleanValue();
+        }
+        return (Boolean) result;
     }
 }

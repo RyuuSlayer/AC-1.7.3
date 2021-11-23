@@ -13,36 +13,43 @@ import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
+import net.minecraft.tile.DispenserTile;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.TileWithEntity;
 import net.minecraft.tile.entity.Dispenser;
-import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.MathsHelper;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.Random;
 
+@Mixin(DispenserTile.class)
 public class MixinDispenserTile extends TileWithEntity {
-    private Random rand = new Random();
 
-    protected DispenserTile(int id) {
+    @Shadow()
+    private final Random rand = new Random();
+
+    protected MixinDispenserTile(int id) {
         super(id, Material.STONE);
         this.tex = 45;
     }
 
-    public int getTickrate() {
-        return 4;
-    }
-
-    public int getDropId(int meta, Random rand) {
-        return Tile.DISPENSER.id;
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void method_1611(Level level, int x, int y, int z) {
         super.method_1611(level, x, y, z);
         this.method_1775(level, x, y, z);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void method_1775(Level world, int i, int j, int k) {
         if (world.isClient) {
             return;
@@ -67,6 +74,11 @@ public class MixinDispenserTile extends TileWithEntity {
         world.setTileMeta(i, j, k, byte0);
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public int method_1626(TileView iblockaccess, int i, int j, int k, int l) {
         if (l == 1) {
             return this.tex + 17;
@@ -81,6 +93,11 @@ public class MixinDispenserTile extends TileWithEntity {
         return this.tex + 1;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public int getTextureForSide(int side) {
         if (side == 1) {
             return this.tex + 17;
@@ -94,6 +111,11 @@ public class MixinDispenserTile extends TileWithEntity {
         return this.tex;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public boolean activate(Level level, int x, int y, int z, Player player) {
         if (!DebugMode.active) {
             return false;
@@ -101,11 +123,15 @@ public class MixinDispenserTile extends TileWithEntity {
         if (level.isClient) {
             return true;
         }
-        Dispenser tileentitydispenser = (Dispenser)level.getTileEntity(x, y, z);
+        Dispenser tileentitydispenser = (Dispenser) level.getTileEntity(x, y, z);
         player.openDispenserScreen(tileentitydispenser);
         return true;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     private void method_1774(Level world, int i, int j, int k, Random random) {
         int l = world.getTileMeta(i, j, k);
         int i1 = 0;
@@ -117,11 +143,11 @@ public class MixinDispenserTile extends TileWithEntity {
         } else {
             i1 = l == 5 ? 1 : -1;
         }
-        Dispenser tileentitydispenser = (Dispenser)world.getTileEntity(i, j, k);
+        Dispenser tileentitydispenser = (Dispenser) world.getTileEntity(i, j, k);
         ItemInstance itemstack = tileentitydispenser.getItemToDispense();
-        double d = (double)i + (double)i1 * 0.6 + 0.5;
-        double d1 = (double)j + 0.5;
-        double d2 = (double)k + (double)j1 * 0.6 + 0.5;
+        double d = (double) i + (double) i1 * 0.6 + 0.5;
+        double d1 = (double) j + 0.5;
+        double d2 = (double) k + (double) j1 * 0.6 + 0.5;
         if (itemstack == null) {
             world.playLevelEvent(1001, i, j, k, 0);
         } else {
@@ -149,12 +175,12 @@ public class MixinDispenserTile extends TileWithEntity {
             } else {
                 ItemEntity entityitem = new ItemEntity(world, d, d1 - 0.3, d2, itemstack);
                 double d3 = random.nextDouble() * 0.1 + 0.2;
-                entityitem.velocityX = (double)i1 * d3;
+                entityitem.velocityX = (double) i1 * d3;
                 entityitem.velocityY = 0.2f;
-                entityitem.velocityZ = (double)j1 * d3;
-                entityitem.velocityX += random.nextGaussian() * (double)0.0075f * 6.0;
-                entityitem.velocityY += random.nextGaussian() * (double)0.0075f * 6.0;
-                entityitem.velocityZ += random.nextGaussian() * (double)0.0075f * 6.0;
+                entityitem.velocityZ = (double) j1 * d3;
+                entityitem.velocityX += random.nextGaussian() * (double) 0.0075f * 6.0;
+                entityitem.velocityY += random.nextGaussian() * (double) 0.0075f * 6.0;
+                entityitem.velocityZ += random.nextGaussian() * (double) 0.0075f * 6.0;
                 world.spawnEntity(entityitem);
                 world.playLevelEvent(1000, i, j, k, 0);
             }
@@ -162,6 +188,11 @@ public class MixinDispenserTile extends TileWithEntity {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void method_1609(Level level, int x, int y, int z, int id) {
         if (id > 0 && Tile.BY_ID[id].emitsRedstonePower()) {
             boolean flag;
@@ -172,18 +203,24 @@ public class MixinDispenserTile extends TileWithEntity {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void onScheduledTick(Level level, int x, int y, int z, Random rand) {
         if (level.hasRedstonePower(x, y, z) || level.hasRedstonePower(x, y + 1, z)) {
             this.method_1774(level, x, y, z, rand);
         }
     }
 
-    protected TileEntity createTileEntity() {
-        return new Dispenser();
-    }
-
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void afterPlaced(Level world, int i, int j, int k, LivingEntity entityliving) {
-        int l = MathsHelper.floor((double)(entityliving.yaw * 4.0f / 360.0f) + 0.5) & 3;
+        int l = MathsHelper.floor((double) (entityliving.yaw * 4.0f / 360.0f) + 0.5) & 3;
         if (l == 0) {
             world.setTileMeta(i, j, k, 2);
         }
@@ -198,8 +235,13 @@ public class MixinDispenserTile extends TileWithEntity {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void onTileRemoved(Level level, int x, int y, int z) {
-        Dispenser tileentitydispenser = (Dispenser)level.getTileEntity(x, y, z);
+        Dispenser tileentitydispenser = (Dispenser) level.getTileEntity(x, y, z);
         for (int l = 0; l < tileentitydispenser.getInvSize(); ++l) {
             ItemInstance itemstack = tileentitydispenser.getInvItem(l);
             if (itemstack == null) continue;
@@ -212,11 +254,11 @@ public class MixinDispenserTile extends TileWithEntity {
                     i1 = itemstack.count;
                 }
                 itemstack.count -= i1;
-                ItemEntity entityitem = new ItemEntity(level, (float)x + f, (float)y + f1, (float)z + f2, new ItemInstance(itemstack.itemId, i1, itemstack.getDamage()));
+                ItemEntity entityitem = new ItemEntity(level, (float) x + f, (float) y + f1, (float) z + f2, new ItemInstance(itemstack.itemId, i1, itemstack.getDamage()));
                 float f3 = 0.05f;
-                entityitem.velocityX = (float)this.rand.nextGaussian() * f3;
-                entityitem.velocityY = (float)this.rand.nextGaussian() * f3 + 0.2f;
-                entityitem.velocityZ = (float)this.rand.nextGaussian() * f3;
+                entityitem.velocityX = (float) this.rand.nextGaussian() * f3;
+                entityitem.velocityY = (float) this.rand.nextGaussian() * f3 + 0.2f;
+                entityitem.velocityZ = (float) this.rand.nextGaussian() * f3;
                 level.spawnEntity(entityitem);
             }
         }

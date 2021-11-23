@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.entities.tile;
 import net.minecraft.util.io.CompoundTag;
 
 public class TileEntityRedstoneTrigger extends TileEntityMinMax {
+
     public boolean isActivated = false;
 
     public boolean visited;
@@ -10,16 +11,16 @@ public class TileEntityRedstoneTrigger extends TileEntityMinMax {
     public boolean resetOnTrigger;
 
     @Override
-    public void readIdentifyingData(CompoundTag nbttagcompound) {
-        super.readIdentifyingData(nbttagcompound);
-        this.resetOnTrigger = nbttagcompound.getBoolean("ResetOnTrigger");
-        this.isActivated = nbttagcompound.getBoolean("IsActivated");
+    public void readIdentifyingData(CompoundTag tag) {
+        super.readIdentifyingData(tag);
+        this.resetOnTrigger = tag.getBoolean("ResetOnTrigger");
+        this.isActivated = tag.getBoolean("IsActivated");
     }
 
     @Override
-    public void writeIdentifyingData(CompoundTag nbttagcompound) {
-        super.writeIdentifyingData(nbttagcompound);
-        nbttagcompound.put("ResetOnTrigger", this.resetOnTrigger);
-        nbttagcompound.put("IsActivated", this.isActivated);
+    public void writeIdentifyingData(CompoundTag tag) {
+        super.writeIdentifyingData(tag);
+        tag.put("ResetOnTrigger", this.resetOnTrigger);
+        tag.put("IsActivated", this.isActivated);
     }
 }

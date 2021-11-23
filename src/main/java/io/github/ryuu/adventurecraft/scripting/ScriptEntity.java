@@ -1,8 +1,5 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import io.github.ryuu.adventurecraft.entities.EntityLivingScript;
 import io.github.ryuu.adventurecraft.entities.EntityNPC;
 import io.github.ryuu.adventurecraft.util.UtilBullet;
@@ -18,7 +15,11 @@ import net.minecraft.util.hit.HitType;
 import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.Vec3f;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ScriptEntity {
+
     Entity entity;
 
     ScriptEntity(Entity e) {
@@ -26,28 +27,39 @@ public class ScriptEntity {
     }
 
     public static ScriptEntity getEntityClass(Entity e) {
-        if (e == null)
+        if (e == null) {
             return null;
-        if (e instanceof Player)
+        }
+        if (e instanceof Player) {
             return new ScriptEntityPlayer((Player) e);
-        if (e instanceof Monster)
+        }
+        if (e instanceof Monster) {
             return new ScriptEntityMob((Monster) e);
-        if (e instanceof Wolf)
+        }
+        if (e instanceof Wolf) {
             return new ScriptEntityWolf((Wolf) e);
-        if (e instanceof WalkingEntity)
+        }
+        if (e instanceof WalkingEntity) {
             return new ScriptEntityCreature((WalkingEntity) e);
-        if (e instanceof FlyingEntity)
+        }
+        if (e instanceof FlyingEntity) {
             return new ScriptEntityFlying((FlyingEntity) e);
-        if (e instanceof EntityNPC)
+        }
+        if (e instanceof EntityNPC) {
             return new ScriptEntityNPC((EntityNPC) e);
-        if (e instanceof EntityLivingScript)
+        }
+        if (e instanceof EntityLivingScript) {
             return new ScriptEntityLivingScript((EntityLivingScript) e);
-        if (e instanceof Slime)
+        }
+        if (e instanceof Slime) {
             return new ScriptEntitySlime((Slime) e);
-        if (e instanceof LivingEntity)
+        }
+        if (e instanceof LivingEntity) {
             return new ScriptEntityLiving((LivingEntity) e);
-        if (e instanceof Arrow)
+        }
+        if (e instanceof Arrow) {
             return new ScriptEntityArrow((Arrow) e);
+        }
         return new ScriptEntity(e);
     }
 
@@ -56,16 +68,16 @@ public class ScriptEntity {
     }
 
     public ScriptVec3 getPosition() {
-        return new ScriptVec3(this.entity.prevX, this.entity.prevY, this.entity.prevZ);
+        return new ScriptVec3(this.entity.x, this.entity.y, this.entity.z);
     }
 
     public void setPosition(ScriptVec3 p) {
-        setPosition(p.x, p.y, p.z);
+        this.setPosition(p.x, p.y, p.z);
     }
 
     ScriptVec3 getPosition(float f) {
-        float iF = 1.0F - f;
-        return new ScriptVec3(iF * this.entity.prevX + f * this.entity.x, iF * this.entity.prevY + f * this.entity.y, iF * this.entity.prevZ + f * this.entity.z);
+        float iF = 1.0f - f;
+        return new ScriptVec3((double) iF * this.entity.prevX + (double) f * this.entity.x, (double) iF * this.entity.prevY + (double) f * this.entity.y, (double) iF * this.entity.prevZ + (double) f * this.entity.z);
     }
 
     public void setPosition(double x, double y, double z) {
@@ -76,8 +88,8 @@ public class ScriptEntity {
         return new ScriptVecRot(this.entity.yaw, this.entity.pitch);
     }
 
-    public ScriptVecRot getRotation(float f) {
-        float iF = 1.0F - f;
+    ScriptVecRot getRotation(float f) {
+        float iF = 1.0f - f;
         return new ScriptVecRot(iF * this.entity.prevYaw + f * this.entity.yaw, iF * this.entity.prevPitch + f * this.entity.pitch);
     }
 
@@ -90,7 +102,7 @@ public class ScriptEntity {
     }
 
     public void setVelocity(ScriptVec3 v) {
-        setVelocity(v.x, v.y, v.z);
+        this.setVelocity(v.x, v.y, v.z);
     }
 
     public void setVelocity(double x, double y, double z) {
@@ -98,7 +110,7 @@ public class ScriptEntity {
     }
 
     public void addVelocity(ScriptVec3 v) {
-        addVelocity(v.x, v.y, v.z);
+        this.addVelocity(v.x, v.y, v.z);
     }
 
     public void addVelocity(double x, double y, double z) {
@@ -118,7 +130,7 @@ public class ScriptEntity {
     }
 
     public ScriptEntity getMountedEntity() {
-        return getEntityClass(this.entity.vehicle);
+        return ScriptEntity.getEntityClass(this.entity.vehicle);
     }
 
     public boolean isBurning() {
@@ -138,24 +150,25 @@ public class ScriptEntity {
     }
 
     public ScriptEntity[] getEntitiesWithinRange(double dist) {
-        Box bb = Box.create(this.entity.x - dist, this.entity.y - dist, this.entity.z - dist, this.entity.x + dist, this.entity.y + dist, this.entity.z + dist);
+        Box bb = Box.getOrCreate(this.entity.x - dist, this.entity.y - dist, this.entity.z - dist, this.entity.x + dist, this.entity.y + dist, this.entity.z + dist);
         List entities = this.entity.level.getEntities(this.entity, bb);
-        List<ScriptEntity> scriptEntities = new ArrayList<>();
+        ArrayList scriptEntities = new ArrayList();
         double sqDist = dist * dist;
         for (Object ent : entities) {
             Entity e = (Entity) ent;
-            if (e.method_1352(this.entity) < sqDist)
-                scriptEntities.add(getEntityClass(e));
+            if (!(e.method_1352(this.entity) < sqDist)) continue;
+            scriptEntities.add(ScriptEntity.getEntityClass(e));
         }
         int i = 0;
         ScriptEntity[] returnList = new ScriptEntity[scriptEntities.size()];
-        for (ScriptEntity e : scriptEntities)
+        for (ScriptEntity e : scriptEntities) {
             returnList[i++] = e;
+        }
         return returnList;
     }
 
     public ScriptEntity dropItem(ScriptItem item) {
-        return getEntityClass(this.entity.dropItem(item.item, 0.0F));
+        return ScriptEntity.getEntityClass(this.entity.dropItem(item.item, 0.0f));
     }
 
     public boolean isInsideOfWater() {
@@ -219,8 +232,9 @@ public class ScriptEntity {
     }
 
     public String getClassType() {
-        if (this.entity instanceof Player)
+        if (this.entity instanceof Player) {
             return "Player";
+        }
         return EntityRegistry.getEntityStringClimbing(this.entity);
     }
 
@@ -263,7 +277,7 @@ public class ScriptEntity {
     }
 
     public Object[] rayTrace(ScriptVec3 start, ScriptVec3 end) {
-        return rayTrace(start.x, start.y, start.z, end.x, end.y, end.z);
+        return this.rayTrace(start.x, start.y, start.z, end.x, end.y, end.z);
     }
 
     public Object[] rayTrace(double startX, double startY, double startZ, double endX, double endY, double endZ) {
@@ -274,7 +288,7 @@ public class ScriptEntity {
             if (hit.type == HitType.TILE) {
                 results[1] = new ScriptVec3(hit.x, hit.y, hit.z);
             } else {
-                results[2] = getEntityClass(hit.field_1989);
+                results[2] = ScriptEntity.getEntityClass(hit.field_1989);
             }
         }
         return results;

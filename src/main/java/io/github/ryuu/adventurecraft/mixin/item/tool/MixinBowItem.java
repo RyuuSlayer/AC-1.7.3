@@ -6,14 +6,24 @@ import net.minecraft.entity.player.Player;
 import net.minecraft.entity.projectile.Arrow;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
+import net.minecraft.item.tool.BowItem;
 import net.minecraft.level.Level;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 
+@Mixin(BowItem.class)
 public class MixinBowItem extends ItemType {
+
     public MixinBowItem(int id) {
         super(id);
         this.maxStackSize = 1;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public ItemInstance use(ItemInstance item, Level level, Player player) {
         ItemInstance curItem = player.inventory.getHeldItem();
         ItemInstance offItem = player.inventory.getOffhandItem();

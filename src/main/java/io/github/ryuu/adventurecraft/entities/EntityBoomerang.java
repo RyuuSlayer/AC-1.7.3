@@ -1,8 +1,5 @@
 package io.github.ryuu.adventurecraft.entities;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
@@ -13,7 +10,11 @@ import net.minecraft.tile.Tile;
 import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.MathsHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EntityBoomerang extends Entity {
+
     double bounceFactor;
 
     float prevBoomerangRotation;
@@ -26,7 +27,7 @@ public class EntityBoomerang extends Entity {
 
     Entity returnsTo;
 
-    List<Entity> itemsPickedUp;
+    List<net.minecraft.src.Entity> itemsPickedUp;
 
     ItemInstance item;
 
@@ -38,26 +39,26 @@ public class EntityBoomerang extends Entity {
 
     public EntityBoomerang(Level world) {
         super(world);
-        setSize(0.5F, 0.0625F);
-        this.standingEyeHeight = 0.03125F;
-        this.bounceFactor = 0.85D;
-        this.boomerangRotation = 0.0F;
+        this.setSize(0.5f, 0.0625f);
+        this.standingEyeHeight = 0.03125f;
+        this.bounceFactor = 0.85;
+        this.boomerangRotation = 0.0f;
         this.turningAround = true;
         this.timeBeforeTurnAround = 0;
-        this.itemsPickedUp = new ArrayList<>();
+        this.itemsPickedUp = new ArrayList();
         this.collidesWithClipBlocks = false;
     }
 
     public EntityBoomerang(Level world, Entity entity, ItemInstance b) {
         this(world);
         this.item = b;
-        setRotation(entity.yaw, entity.pitch);
-        double xHeading = -MathsHelper.sin(entity.yaw * 3.141593F / 180.0F);
-        double zHeading = MathsHelper.cos(entity.yaw * 3.141593F / 180.0F);
-        this.velocityX = 0.5D * xHeading * MathsHelper.cos(entity.pitch / 180.0F * 3.141593F);
-        this.velocityY = -0.5D * MathsHelper.sin(entity.pitch / 180.0F * 3.141593F);
-        this.velocityZ = 0.5D * zHeading * MathsHelper.cos(entity.pitch / 180.0F * 3.141593F);
-        setPosition(entity.x, entity.y, entity.z);
+        this.setRotation(entity.yaw, entity.pitch);
+        double xHeading = -MathsHelper.sin(entity.yaw * 3.141593f / 180.0f);
+        double zHeading = MathsHelper.cos(entity.yaw * 3.141593f / 180.0f);
+        this.velocityX = 0.5 * xHeading * (double) MathsHelper.cos(entity.pitch / 180.0f * 3.141593f);
+        this.velocityY = -0.5 * (double) MathsHelper.sin(entity.pitch / 180.0f * 3.141593f);
+        this.velocityZ = 0.5 * zHeading * (double) MathsHelper.cos(entity.pitch / 180.0f * 3.141593f);
+        this.setPosition(entity.x, entity.y, entity.z);
         this.prevX = this.x;
         this.prevY = this.y;
         this.prevZ = this.z;
@@ -80,7 +81,7 @@ public class EntityBoomerang extends Entity {
             double prevVelX = this.velocityX;
             double prevVelY = this.velocityY;
             double prevVelZ = this.velocityZ;
-            move(this.velocityX, this.velocityY, this.velocityZ);
+            this.move(this.velocityX, this.velocityY, this.velocityZ);
             boolean bounced = false;
             if (this.velocityX != prevVelX) {
                 this.velocityX = -prevVelX;
@@ -99,44 +100,48 @@ public class EntityBoomerang extends Entity {
                 this.velocityY *= this.bounceFactor;
                 this.velocityZ *= this.bounceFactor;
             }
-            if (this.timeBeforeTurnAround-- <= 0)
+            if (this.timeBeforeTurnAround-- <= 0) {
                 this.turningAround = true;
+            }
         } else if (this.returnsTo != null) {
             double deltaX = this.returnsTo.x - this.x;
             double deltaY = this.returnsTo.y - this.y;
             double deltaZ = this.returnsTo.z - this.z;
             double length = Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
-            if (length < 1.5D)
-                remove();
-            this.velocityX = 0.5D * deltaX / length;
-            this.velocityZ = 0.5D * deltaY / length;
-            this.velocityY = 0.5D * deltaZ / length;
-            setPosition(this.x + this.velocityX, this.y + this.velocityY, this.z + this.velocityZ);
-        } else {
-            remove();
-        }
-        determineRotation();
-        this.prevBoomerangRotation = this.boomerangRotation;
-        this.boomerangRotation += 36.0F;
-        while (this.boomerangRotation > 360.0F)
-            this.boomerangRotation -= 360.0F;
-        List<Entity> entitiesWithin = this.level.getEntities(this, this.boundingBox.expand(0.5D, 0.5D, 0.5D));
-        for (int i = 0; i < entitiesWithin.size(); i++) {
-            Entity e = entitiesWithin.get(i);
-            if (e instanceof ItemEntity) {
-                this.itemsPickedUp.add(e);
-            } else if (e instanceof LivingEntity && e != this.returnsTo) {
-                e.stunned = 20;
-                e.prevX = e.x;
-                e.prevY = e.y;
-                e.prevZ = e.z;
-                e.prevYaw = e.yaw;
-                e.prevPitch = e.pitch;
+            if (length < 1.5) {
+                this.remove();
             }
+            this.velocityX = 0.5 * deltaX / length;
+            this.velocityY = 0.5 * deltaY / length;
+            this.velocityZ = 0.5 * deltaZ / length;
+            this.setPosition(this.x + this.velocityX, this.y + this.velocityY, this.z + this.velocityZ);
+        } else {
+            this.remove();
+        }
+        this.determineRotation();
+        this.prevBoomerangRotation = this.boomerangRotation;
+        this.boomerangRotation += 36.0f;
+        while (this.boomerangRotation > 360.0f) {
+            this.boomerangRotation -= 360.0f;
+        }
+        List entitiesWithin = this.level.getEntities(this, this.boundingBox.expand(0.5, 0.5, 0.5));
+        for (int i = 0; i < entitiesWithin.size(); ++i) {
+            Entity e = (Entity) entitiesWithin.get(i);
+            if (e instanceof ItemEntity) {
+                this.itemsPickedUp.add((Object) e);
+                continue;
+            }
+            if (!(e instanceof LivingEntity) || e == this.returnsTo) continue;
+            e.stunned = 20;
+            e.prevX = e.x;
+            e.prevY = e.y;
+            e.prevZ = e.z;
+            e.prevYaw = e.yaw;
+            e.prevPitch = e.pitch;
         }
         for (Entity e : this.itemsPickedUp) {
-            if (!e.removed)
-                e.setPosition(this.x, this.y, this.z);
+            if (e.removed) continue;
+            e.setPosition(this.x, this.y, this.z);
         }
         int curChunkX = (int) Math.floor(this.x);
         int curChunkY = (int) Math.floor(this.y);
@@ -146,32 +151,33 @@ public class EntityBoomerang extends Entity {
             this.chunkY = curChunkY;
             this.chunkZ = curChunkZ;
             int blockID = this.level.getTileId(this.chunkX, this.chunkY, this.chunkZ);
-            if (blockID == Tile.LEVER.id)
-                if (this.returnsTo instanceof Player)
-                    Tile.LEVER.activate(this.level, this.chunkX, this.chunkY, this.chunkZ, (Player) this.returnsTo);
+            if (blockID == Tile.LEVER.id && this.returnsTo instanceof Player) {
+                Tile.LEVER.activate(this.level, this.chunkX, this.chunkY, this.chunkZ, (Player) this.returnsTo);
+            }
         }
     }
 
     @Override
     public void remove() {
         super.remove();
-        if (this.item != null)
+        if (this.item != null) {
             this.item.setDamage(0);
+        }
     }
 
     public void determineRotation() {
-        this.yaw = -57.29578F * (float) Math.atan2(this.velocityX, this.velocityZ);
+        this.yaw = -57.29578f * (float) Math.atan2(this.velocityX, this.velocityZ);
         double xzLength = Math.sqrt(this.velocityZ * this.velocityZ + this.velocityX * this.velocityX);
-        this.pitch = -57.29578F * (float) Math.atan2(this.velocityY, xzLength);
+        this.pitch = -57.29578f * (float) Math.atan2(this.velocityY, xzLength);
     }
 
     @Override
-    protected void writeCustomDataToTag(CompoundTag nbttagcompound) {
+    protected void writeCustomDataToTag(CompoundTag tag) {
     }
 
     @Override
-    public void readCustomDataFromTag(CompoundTag nbttagcompound) {
-        remove();
+    public void readCustomDataFromTag(CompoundTag tag) {
+        this.remove();
     }
 
     @Override
@@ -179,7 +185,7 @@ public class EntityBoomerang extends Entity {
     }
 
     @Override
-    public boolean damage(Entity entity, int i) {
+    public boolean damage(Entity target, int amount) {
         return false;
     }
 

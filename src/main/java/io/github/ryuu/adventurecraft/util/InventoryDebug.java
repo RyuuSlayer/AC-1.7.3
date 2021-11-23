@@ -2,11 +2,13 @@ package io.github.ryuu.adventurecraft.util;
 
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import net.minecraft.entity.player.Player;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.tile.Tile;
 
-public class InventoryDebug implements lw {
+public class InventoryDebug implements Inventory {
+
     private final String inventoryTitle;
     private final int size;
     private final ItemInstance[] inventoryContents;
@@ -543,33 +545,6 @@ public class InventoryDebug implements lw {
     public void fillInventory(int offset) {
         boolean filledFirst = false;
         this.atEnd = false;
-        for (int i = 0; i < this.size; i++) {
-            int id = getID(i + offset);
-            if (gm.c[id] != null) {
-                this.inventoryContents[i] = new iz(gm.c[id], -64);
-                this.inventoryContents[i].b(getSubtype(i + offset));
-                this.lastItem = i + offset;
-                if (!filledFirst) {
-                    this.firstItem = i + offset;
-                    filledFirst = true;
-                }
-            } else if (id < 31999) {
-                i--;
-                offset++;
-            } else {
-                this.atEnd = true;
-                while (i < this.size) {
-                    this.inventoryContents[i] = null;
-                    i++;
-                }
-                return;
-            }
-        }
-    }
-
-    public void fillInventory(int offset) {
-        boolean filledFirst = false;
-        this.atEnd = false;
         for (int i = 0; i < this.size; ++i) {
             int id = this.getID(i + offset);
             if (ItemType.byId[id] != null) {
@@ -622,10 +597,12 @@ public class InventoryDebug implements lw {
         }
     }
 
+    @Override
     public ItemInstance getInvItem(int i) {
         return this.inventoryContents[i];
     }
 
+    @Override
     public ItemInstance takeInvItem(int index, int j) {
         if (this.inventoryContents[index] != null) {
             return this.inventoryContents[index].copy();
@@ -633,26 +610,33 @@ public class InventoryDebug implements lw {
         return null;
     }
 
+    @Override
     public void setInvItem(int i, ItemInstance itemstack) {
         if (this.inventoryContents[i] != null) {
             this.inventoryContents[i] = this.inventoryContents[i].copy();
         }
     }
 
+    @Override
     public int getInvSize() {
         return this.size;
     }
 
+    @Override
     public String getContainerName() {
         return this.inventoryTitle;
     }
 
+    @Override
     public int getMaxItemCount() {
         return 64;
     }
 
+    @Override
     public void markDirty() {
     }
+
+    @Override
     public boolean canPlayerUse(Player entityplayer) {
         return true;
     }

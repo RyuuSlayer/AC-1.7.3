@@ -10,88 +10,24 @@ import net.minecraft.entity.projectile.ThrownEgg;
 import net.minecraft.entity.projectile.ThrownSnowball;
 import net.minecraft.level.Level;
 import net.minecraft.util.io.CompoundTag;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Mixin(EntityRegistry.class)
 public class MixinEntityRegistry {
-    private static Map STRING_ID_TO_CLASS = new HashMap();
-    private static Map CLASS_TO_STRING_ID = new HashMap();
-    private static Map ID_TO_CLASS = new HashMap();
-    private static Map CLASS_TO_ID = new HashMap();
 
-    private static void register(Class class1, String s, int i) {
-        STRING_ID_TO_CLASS.put(s, class1);
-        CLASS_TO_STRING_ID.put(class1, s);
-        ID_TO_CLASS.put(i, class1);
-        CLASS_TO_ID.put(class1, i);
-    }
+    @Shadow()
+    private static final Map STRING_ID_TO_CLASS = new HashMap();
 
-    public static Entity create(String s, Level world) {
-        Entity entity = null;
-        try {
-            Class class1 = (Class)STRING_ID_TO_CLASS.get(s);
-            if (class1 != null) {
-                entity = (Entity)class1.getConstructor(new Class[]{Level.class}).newInstance(new Object[]{world});
-            }
-        }
-        catch (Exception exception) {
-            exception.printStackTrace();
-        }
-        return entity;
-    }
+    private static final Map CLASS_TO_STRING_ID = new HashMap();
 
-    public static Entity create(CompoundTag nbttagcompound, Level world) {
-        Entity entity = null;
-        try {
-            Class class1 = (Class)STRING_ID_TO_CLASS.get(nbttagcompound.getString("id"));
-            if (class1 != null) {
-                entity = (Entity)class1.getConstructor(new Class[]{Level.class}).newInstance(new Object[]{world});
-            }
-        }
-        catch (Exception exception) {
-            exception.printStackTrace();
-        }
-        if (entity != null) {
-            entity.fromTag(nbttagcompound);
-        } else {
-            System.out.println("Skipping Entity with id " + nbttagcompound.getString("id"));
-        }
-        return entity;
-    }
+    private static final Map ID_TO_CLASS = new HashMap();
 
-    public static Entity create(int i, Level world) {
-        Entity entity = null;
-        try {
-            Class class1 = (Class)ID_TO_CLASS.get(i);
-            if (class1 != null) {
-                entity = (Entity)class1.getConstructor(new Class[]{Level.class}).newInstance(new Object[]{world});
-            }
-        }
-        catch (Exception exception) {
-            exception.printStackTrace();
-        }
-        if (entity == null) {
-            System.out.println("Skipping Entity with id " + i);
-        }
-        return entity;
-    }
-
-    public static int getId(Entity entity) {
-        return (Integer)CLASS_TO_ID.get(entity.getClass());
-    }
-
-    public static String getStringId(Entity entity) {
-        return (String)CLASS_TO_STRING_ID.get(entity.getClass());
-    }
-
-    public static String getEntityStringClimbing(Entity entity) {
-        String returning = null;
-        for (Class obj = entity.getClass(); returning == null && obj != null; obj = obj.getSuperclass()) {
-            returning = (String)CLASS_TO_STRING_ID.get(obj);
-        }
-        return returning;
-    }
+    private static final Map CLASS_TO_ID = new HashMap();
 
     static {
         EntityRegistry.register(Arrow.class, "Arrow", 10);
@@ -134,5 +70,87 @@ public class MixinEntityRegistry {
         EntityRegistry.register(EntityArrowBomb.class, "Bomb Arrow", 1002);
         EntityRegistry.register(EntityHookshot.class, "Hookshot", 1003);
         EntityRegistry.register(EntityLivingScript.class, "Script", 1004);
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    private static void register(Class class1, String s, int i) {
+        STRING_ID_TO_CLASS.put(s, class1);
+        CLASS_TO_STRING_ID.put(class1, s);
+        ID_TO_CLASS.put(i, class1);
+        CLASS_TO_ID.put(class1, i);
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static Entity create(String s, Level world) {
+        Entity entity = null;
+        try {
+            Class class1 = (Class) STRING_ID_TO_CLASS.get(s);
+            if (class1 != null) {
+                entity = (Entity) class1.getConstructor(new Class[]{Level.class}).newInstance(new Object[]{world});
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return entity;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static Entity create(CompoundTag nbttagcompound, Level world) {
+        Entity entity = null;
+        try {
+            Class class1 = (Class) STRING_ID_TO_CLASS.get(nbttagcompound.getString("id"));
+            if (class1 != null) {
+                entity = (Entity) class1.getConstructor(new Class[]{Level.class}).newInstance(new Object[]{world});
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        if (entity != null) {
+            entity.fromTag(nbttagcompound);
+        } else {
+            System.out.println("Skipping Entity with id " + nbttagcompound.getString("id"));
+        }
+        return entity;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static Entity create(int i, Level world) {
+        Entity entity = null;
+        try {
+            Class class1 = (Class) ID_TO_CLASS.get(i);
+            if (class1 != null) {
+                entity = (Entity) class1.getConstructor(new Class[]{Level.class}).newInstance(new Object[]{world});
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        if (entity == null) {
+            System.out.println("Skipping Entity with id " + i);
+        }
+        return entity;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static String getEntityStringClimbing(Entity entity) {
+        String returning = null;
+        for (Class obj = entity.getClass(); returning == null && obj != null; obj = obj.getSuperclass()) {
+            returning = (String) CLASS_TO_STRING_ID.get(obj);
+        }
+        return returning;
     }
 }

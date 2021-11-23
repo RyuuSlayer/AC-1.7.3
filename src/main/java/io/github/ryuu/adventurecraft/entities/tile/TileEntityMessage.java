@@ -4,22 +4,27 @@ import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.io.CompoundTag;
 
 public class TileEntityMessage extends TileEntity {
+
     public String message = "";
 
     public String sound = "";
 
-    @Override
-    public void readIdentifyingData(CompoundTag nbttagcompound) {
-        super.readIdentifyingData(nbttagcompound);
-        this.message = nbttagcompound.getString("message");
-        this.sound = nbttagcompound.getString("sound");
+    TileEntityMessage() {
     }
 
     @Override
-    public void writeIdentifyingData(CompoundTag nbttagcompound) {
-        super.writeIdentifyingData(nbttagcompound);
-        if (this.message != null && !this.message.equals(""))
-            nbttagcompound.put("message", this.message);
-        nbttagcompound.put("sound", this.sound);
+    public void readIdentifyingData(CompoundTag tag) {
+        super.readIdentifyingData(tag);
+        this.message = tag.getString("message");
+        this.sound = tag.getString("sound");
+    }
+
+    @Override
+    public void writeIdentifyingData(CompoundTag tag) {
+        super.writeIdentifyingData(tag);
+        if (this.message != null && !this.message.equals("")) {
+            tag.put("message", this.message);
+        }
+        tag.put("sound", this.sound);
     }
 }

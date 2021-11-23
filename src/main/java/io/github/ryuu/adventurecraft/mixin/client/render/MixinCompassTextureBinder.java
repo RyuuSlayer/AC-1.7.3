@@ -1,19 +1,29 @@
 package io.github.ryuu.adventurecraft.mixin.client.render;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import javax.imageio.ImageIO;
-
 import io.github.ryuu.adventurecraft.util.Vec2;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.CompassTextureBinder;
 import net.minecraft.client.render.TextureBinder;
 import net.minecraft.item.ItemType;
 import net.minecraft.util.Vec3i;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+@Mixin(CompassTextureBinder.class)
 public class MixinCompassTextureBinder extends TextureBinder {
-    private Minecraft field_1326;
-    private int[] field_1327 = new int[256];
+
+    @Shadow()
+    private final Minecraft field_1326;
+
+    private final int[] field_1327 = new int[256];
+
     private double field_1328;
+
     private double field_1329;
 
     public MixinCompassTextureBinder(Minecraft minecraft) {
@@ -25,12 +35,16 @@ public class MixinCompassTextureBinder extends TextureBinder {
             int i = this.field_1412 % 16 * 16;
             int j = this.field_1412 / 16 * 16;
             bufferedimage.getRGB(i, j, 16, 16, this.field_1327, 0, 16);
-        }
-        catch (IOException ioexception) {
+        } catch (IOException ioexception) {
             ioexception.printStackTrace();
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void onTick(Vec2 texRes) {
         double d1;
         for (int i = 0; i < 256; ++i) {
@@ -46,17 +60,17 @@ public class MixinCompassTextureBinder extends TextureBinder {
                 l = k1;
                 i1 = l1;
             }
-            this.grid[i * 4 + 0] = (byte)k;
-            this.grid[i * 4 + 1] = (byte)l;
-            this.grid[i * 4 + 2] = (byte)i1;
-            this.grid[i * 4 + 3] = (byte)j;
+            this.grid[i * 4 + 0] = (byte) k;
+            this.grid[i * 4 + 1] = (byte) l;
+            this.grid[i * 4 + 2] = (byte) i1;
+            this.grid[i * 4 + 3] = (byte) j;
         }
         double d = 0.0;
         if (this.field_1326.level != null && this.field_1326.player != null) {
             Vec3i chunkcoordinates = this.field_1326.level.getSpawnPosition();
-            double d2 = (double)chunkcoordinates.x - this.field_1326.player.x;
-            double d4 = (double)chunkcoordinates.z - this.field_1326.player.z;
-            d = (double)(this.field_1326.player.yaw - 90.0f) * Math.PI / 180.0 - Math.atan2((double)d4, (double)d2);
+            double d2 = (double) chunkcoordinates.x - this.field_1326.player.x;
+            double d4 = (double) chunkcoordinates.z - this.field_1326.player.z;
+            d = (double) (this.field_1326.player.yaw - 90.0f) * Math.PI / 180.0 - Math.atan2(d4, d2);
             if (this.field_1326.level.dimension.hasFog) {
                 d = Math.random() * 3.1415927410125732 * 2.0;
             }
@@ -78,8 +92,8 @@ public class MixinCompassTextureBinder extends TextureBinder {
         double d3 = Math.sin(this.field_1328);
         double d5 = Math.cos(this.field_1328);
         for (int i2 = -4; i2 <= 4; ++i2) {
-            int k2 = (int)(8.5 + d5 * (double)i2 * 0.3);
-            int i3 = (int)(7.5 - d3 * (double)i2 * 0.3 * 0.5);
+            int k2 = (int) (8.5 + d5 * (double) i2 * 0.3);
+            int i3 = (int) (7.5 - d3 * (double) i2 * 0.3 * 0.5);
             int k3 = i3 * 16 + k2;
             int i4 = 100;
             int k4 = 100;
@@ -93,14 +107,14 @@ public class MixinCompassTextureBinder extends TextureBinder {
                 k4 = i6;
                 i5 = k6;
             }
-            this.grid[k3 * 4 + 0] = (byte)i4;
-            this.grid[k3 * 4 + 1] = (byte)k4;
-            this.grid[k3 * 4 + 2] = (byte)i5;
-            this.grid[k3 * 4 + 3] = (byte)c;
+            this.grid[k3 * 4 + 0] = (byte) i4;
+            this.grid[k3 * 4 + 1] = (byte) k4;
+            this.grid[k3 * 4 + 2] = (byte) i5;
+            this.grid[k3 * 4 + 3] = (byte) c;
         }
         for (int j2 = -8; j2 <= 16; ++j2) {
-            int l2 = (int)(8.5 + d3 * (double)j2 * 0.3);
-            int j3 = (int)(7.5 + d5 * (double)j2 * 0.3 * 0.5);
+            int l2 = (int) (8.5 + d3 * (double) j2 * 0.3);
+            int j3 = (int) (7.5 + d5 * (double) j2 * 0.3 * 0.5);
             int l3 = j3 * 16 + l2;
             int j4 = j2 < 0 ? 100 : 255;
             int l4 = j2 < 0 ? 100 : 20;
@@ -114,10 +128,10 @@ public class MixinCompassTextureBinder extends TextureBinder {
                 l4 = j6;
                 j5 = l6;
             }
-            this.grid[l3 * 4 + 0] = (byte)j4;
-            this.grid[l3 * 4 + 1] = (byte)l4;
-            this.grid[l3 * 4 + 2] = (byte)j5;
-            this.grid[l3 * 4 + 3] = (byte)c1;
+            this.grid[l3 * 4 + 0] = (byte) j4;
+            this.grid[l3 * 4 + 1] = (byte) l4;
+            this.grid[l3 * 4 + 2] = (byte) j5;
+            this.grid[l3 * 4 + 3] = (byte) c1;
         }
     }
 }

@@ -14,6 +14,7 @@ import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
 
 public class BlockTriggerPushable extends BlockContainerColor {
+
     protected BlockTriggerPushable(int i, int j) {
         super(i, j, Material.STONE);
     }
@@ -24,30 +25,30 @@ public class BlockTriggerPushable extends BlockContainerColor {
     }
 
     private boolean checkBlock(Level world, int i, int j, int k, int m) {
-        return (world.getTileId(i, j, k) == Blocks.pushableBlock.id && world.getTileMeta(i, j, k) == m);
+        return world.getTileId(i, j, k) == Blocks.pushableBlock.id && world.getTileMeta(i, j, k) == m;
     }
 
     @Override
-    public void method_1609(Level world, int i, int j, int k, int l) {
-        TileEntityTriggerPushable obj = (TileEntityTriggerPushable) world.getTileEntity(i, j, k);
-        int metadata = world.getTileMeta(i, j, k);
-        boolean hasNeighbor = checkBlock(world, i + 1, j, k, metadata);
-        hasNeighbor |= checkBlock(world, i - 1, j, k, metadata);
-        hasNeighbor |= checkBlock(world, i, j + 1, k, metadata);
-        hasNeighbor |= checkBlock(world, i, j - 1, k, metadata);
-        hasNeighbor |= checkBlock(world, i, j, k + 1, metadata);
-        hasNeighbor |= checkBlock(world, i, j, k - 1, metadata);
+    public void method_1609(Level level, int x, int y, int z, int id) {
+        TileEntityTriggerPushable obj = (TileEntityTriggerPushable) level.getTileEntity(x, y, z);
+        int metadata = level.getTileMeta(x, y, z);
+        boolean hasNeighbor = this.checkBlock(level, x + 1, y, z, metadata);
+        hasNeighbor |= this.checkBlock(level, x - 1, y, z, metadata);
+        hasNeighbor |= this.checkBlock(level, x, y + 1, z, metadata);
+        hasNeighbor |= this.checkBlock(level, x, y - 1, z, metadata);
+        hasNeighbor |= this.checkBlock(level, x, y, z + 1, metadata);
+        hasNeighbor |= this.checkBlock(level, x, y, z - 1, metadata);
         if (obj.activated) {
             if (!hasNeighbor) {
                 obj.activated = false;
-                world.triggerManager.removeArea(i, j, k);
+                level.triggerManager.removeArea(x, y, z);
             }
         } else if (hasNeighbor) {
             obj.activated = true;
             if (!obj.resetOnTrigger) {
-                world.triggerManager.addArea(i, j, k, new TriggerArea(obj.minX, obj.minY, obj.minZ, obj.maxX, obj.maxY, obj.maxZ));
+                level.triggerManager.addArea(x, y, z, new TriggerArea(obj.minX, obj.minY, obj.minZ, obj.maxX, obj.maxY, obj.maxZ));
             } else {
-                Tile.resetArea(world, obj.minX, obj.minY, obj.minZ, obj.maxX, obj.maxY, obj.maxZ);
+                Tile.resetArea(level, obj.minX, obj.minY, obj.minZ, obj.maxX, obj.maxY, obj.maxZ);
             }
         }
     }
@@ -63,17 +64,18 @@ public class BlockTriggerPushable extends BlockContainerColor {
     }
 
     @Override
-    public boolean activate(Level world, int i, int j, int k, Player entityplayer) {
-        if (DebugMode.active && entityplayer.getHeldItem() != null && (entityplayer.getHeldItem()).itemId == Items.cursor.id) {
-            TileEntityTriggerPushable obj = (TileEntityTriggerPushable) world.getTileEntity(i, j, k);
+    public boolean activate(Level level, int x, int y, int z, Player player) {
+        if (DebugMode.active && player.getHeldItem() != null && player.getHeldItem().itemId == Items.cursor.id) {
+            TileEntityTriggerPushable obj = (TileEntityTriggerPushable) level.getTileEntity(x, y, z);
             GuiTriggerPushable.showUI(obj);
             return true;
         }
         return false;
     }
 
+    @Override
     public void incrementColor(Level world, int i, int j, int k) {
         super.incrementColor(world, i, j, k);
-        method_1609(world, i, j, k, 0);
+        this.method_1609(world, i, j, k, 0);
     }
 }

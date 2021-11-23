@@ -6,6 +6,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.maths.Vec3f;
 
 public class ScriptEntityLiving extends ScriptEntity {
+
     LivingEntity entityLiving;
 
     ScriptEntityLiving(LivingEntity e) {

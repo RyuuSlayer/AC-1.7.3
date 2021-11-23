@@ -1,17 +1,30 @@
 package io.github.ryuu.adventurecraft.mixin.level;
 
 import net.minecraft.level.Level;
+import net.minecraft.level.LightCalculator;
 import net.minecraft.level.LightType;
 import net.minecraft.level.chunk.Chunk;
 import net.minecraft.tile.Tile;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
+@Mixin(LightCalculator.class)
 public class MixinLightCalculator {
+
+    @Shadow()
     public final LightType type;
+
     public int field_1674;
+
     public int field_1675;
+
     public int field_1676;
+
     public int field_1677;
+
     public int field_1678;
+
     public int field_1679;
 
     public MixinLightCalculator(LightType enumskyblock, int i, int j, int k, int l, int i1, int j1) {
@@ -24,6 +37,10 @@ public class MixinLightCalculator {
         this.field_1679 = j1;
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public void calculateLight(Level world) {
         int i = this.field_1677 - this.field_1674 + 1;
         int j = this.field_1678 - this.field_1675 + 1;
@@ -131,6 +148,10 @@ public class MixinLightCalculator {
         }
     }
 
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public boolean propagateLight(int i, int j, int k, int l, int i1, int j1) {
         if (i >= this.field_1674 && j >= this.field_1675 && k >= this.field_1676 && l <= this.field_1677 && i1 <= this.field_1678 && j1 <= this.field_1679) {
             return true;

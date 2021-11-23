@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.scripting;
 import io.github.ryuu.adventurecraft.entities.EntityLivingScript;
 
 public class ScriptEntityLivingScript extends ScriptEntityLiving {
+
     EntityLivingScript entityLivingScript;
 
     ScriptEntityLivingScript(EntityLivingScript e) {

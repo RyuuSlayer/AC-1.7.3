@@ -1,9 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.item;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resource.language.I18n;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.*;
 import net.minecraft.item.armour.ArmourItem;
@@ -16,11 +13,15 @@ import net.minecraft.stat.Stats;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 import org.mozilla.javascript.Scriptable;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.Random;
 
+@Mixin(ItemType.class)
 public class MixinItemType {
-    protected static Random rand = new Random();
+
     public static ItemType[] byId = new ItemType[32000];
     public static ItemType shovelIron;
     public static ItemType pickaxeIron;
@@ -128,207 +129,8 @@ public class MixinItemType {
     public static Shears shears;
     public static ItemType record_13;
     public static ItemType record_cat;
-    public final int id;
-    protected int maxStackSize = 64;
-    protected int field_402 = 0;
-    protected int texturePosition;
-    protected boolean field_464 = false;
-    protected boolean field_465 = false;
-    private ItemType containerItemType = null;
-    private String translationKey;
-    public boolean decrementDamage;
-    public int itemUseDelay = 5;
-
-    protected ItemType(int id) {
-        this.id = 256 + id;
-        if (byId[256 + id] != null) {
-            System.out.println("CONFLICT @ " + id);
-        }
-        ItemType.byId[256 + id] = this;
-    }
-
-    public ItemType setTexturePosition(int texturePosition) {
-        this.texturePosition = texturePosition;
-        return this;
-    }
-
-    public ItemType setMaxStackSize(int maxStackSize) {
-        this.maxStackSize = maxStackSize;
-        return this;
-    }
-
-    public ItemType setTexturePosition(int x, int y) {
-        this.texturePosition = x + y * 16;
-        return this;
-    }
-
-    public int getTexturePosition(int damage) {
-        return this.texturePosition;
-    }
-
-    public final int getTexturePosition(ItemInstance item) {
-        int damage = 0;
-        if (item != null) {
-            damage = item.getDamage();
-        }
-        return this.getTexturePosition(damage);
-    }
-
-    public boolean useOnTile(ItemInstance item, Player player, Level level, int x, int y, int z, int facing) {
-        return false;
-    }
-
-    public boolean onItemUseLeftClick(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
-        return false;
-    }
-
-    public float method_438(ItemInstance item, Tile tile) {
-        return 1.0f;
-    }
-
-    public void onItemLeftClick(ItemInstance itemstack, Level world, Player entityplayer) {
-    }
-
-    public ItemInstance use(ItemInstance item, Level level, Player player) {
-        return item;
-    }
-
-    public int method_459() {
-        return this.maxStackSize;
-    }
-
-    public int method_470(int i) {
-        return 0;
-    }
-
-    public boolean method_462() {
-        return this.field_465;
-    }
-
-    protected ItemType method_457(boolean flag) {
-        this.field_465 = flag;
-        return this;
-    }
-
-    public int method_464() {
-        return this.field_402;
-    }
-
-    protected ItemType setDurability(int i) {
-        this.field_402 = i;
-        return this;
-    }
-
-    public boolean method_465() {
-        return this.field_402 > 0 && !this.field_465;
-    }
-
-    public boolean postHit(ItemInstance itemstack, LivingEntity entityliving, LivingEntity entityliving1) {
-        return false;
-    }
-
-    public boolean postMine(ItemInstance itemstack, int i, int j, int k, int l, LivingEntity entityliving) {
-        return false;
-    }
-
-    public int method_447(Entity entity) {
-        return 1;
-    }
-
-    public boolean isEffectiveOn(Tile tile) {
-        return false;
-    }
-
-    public void interactWithEntity(ItemInstance itemstack, LivingEntity entityliving) {
-    }
-
-    public ItemType method_466() {
-        this.field_464 = true;
-        return this;
-    }
-
-    public boolean shouldRenderLikeStick() {
-        return this.field_464;
-    }
-
-    public boolean shouldRotate180() {
-        return false;
-    }
-
-    public ItemType setName(String s) {
-        this.translationKey = "item." + s;
-        return this;
-    }
-
-    public String getTranslationKey() {
-        return this.translationKey;
-    }
-
-    public String getTranslationKey(ItemInstance item) {
-        return this.translationKey;
-    }
-
-    public ItemType setContainerItem(ItemType itemType) {
-        if (this.maxStackSize > 1) {
-            throw new IllegalArgumentException("Max stack size must be 1 for items with crafting results");
-        }
-        this.containerItemType = itemType;
-        return this;
-    }
-
-    public ItemType getContainerItemType() {
-        return this.containerItemType;
-    }
-
-    public boolean hasContainerItemType() {
-        return this.containerItemType != null;
-    }
-
-    public String getTranslatedName() {
-        return I18n.translate(this.getTranslationKey() + ".name");
-    }
-
-    public int getNameColour(int i) {
-        return 0xFFFFFF;
-    }
-
-    public void inventoryTick(ItemInstance itemstack, Level world, Entity entity, int i, boolean flag) {
-    }
-
-    public void method_461(ItemInstance itemstack, Level world, Player entityplayer) {
-    }
-
-    public boolean mainActionLeftClick() {
-        return false;
-    }
-
-    public boolean isLighting(ItemInstance itemstack) {
-        return false;
-    }
-
-    public boolean isMuzzleFlash(ItemInstance itemstack) {
-        return false;
-    }
-
-    public void onAddToSlot(Player entityPlayer, int slot, int damage) {
-        Scriptable scope = Minecraft.minecraftInstance.level.scope;
-        scope.put("slotID", scope, new Integer(slot));
-        if (this.method_462()) {
-            Minecraft.minecraftInstance.level.scriptHandler.runScript(String.format("item_onAddToSlot_%d_%d.js", new Object[]{this.id, damage}), scope, false);
-        } else {
-            Minecraft.minecraftInstance.level.scriptHandler.runScript(String.format("item_onAddToSlot_%d.js", new Object[]{this.id}), scope, false);
-        }
-    }
-
-    public void onRemovedFromSlot(Player entityPlayer, int slot, int damage) {
-        Scriptable scope = Minecraft.minecraftInstance.level.scope;
-        scope.put("slotID", scope, new Integer(slot));
-        if (this.method_462()) {
-            Minecraft.minecraftInstance.level.scriptHandler.runScript(String.format("item_onRemovedFromSlot_%d_%d.js", new Object[]{this.id, damage}), scope, false);
-        } else {
-            Minecraft.minecraftInstance.level.scriptHandler.runScript(String.format("item_onRemovedFromSlot_%d.js", new Object[]{this.id}), scope, false);
-        }
-    }
+    @Shadow()
+    protected static Random rand = new Random();
 
     static {
         flintAndSteel = new FlintAndSteelItem(3).setTexturePosition(5, 0).setName("flintAndSteel");
@@ -398,8 +200,8 @@ public class MixinItemType {
         sugar = new ItemType(97).setTexturePosition(13, 0).setName("sugar").method_466();
         bed = new BedItem(99).setMaxStackSize(1).setTexturePosition(13, 2).setName("bed");
         cookie = new CookieItem(101, 1, false, 8).setTexturePosition(12, 5).setName("cookie");
-        map = (MapItem)new MapItem(102).setTexturePosition(12, 3).setName("map");
-        shears = (Shears)new Shears(103).setTexturePosition(13, 5).setName("shears");
+        map = (MapItem) new MapItem(102).setTexturePosition(12, 3).setName("map");
+        shears = (Shears) new Shears(103).setTexturePosition(13, 5).setName("shears");
         record_13 = new RecordItem(2000, "13").setTexturePosition(0, 15).setName("record");
         record_cat = new RecordItem(2001, "cat").setTexturePosition(1, 15).setName("record");
         shovelIron = new ShovelItem(0, ToolMaterial.IRON).setTexturePosition(2, 5).setName("shovelIron");
@@ -438,5 +240,150 @@ public class MixinItemType {
         cake = new TileItem(98, Tile.CAKE).setMaxStackSize(1).setTexturePosition(13, 1).setName("cake");
         diode = new TileItem(100, Tile.REDSTONE_REPEATER).setTexturePosition(6, 5).setName("diode");
         Stats.onItemsRegistered();
+    }
+
+    public final int id;
+    private final ItemType containerItemType = null;
+    public boolean decrementDamage;
+    public int itemUseDelay = 5;
+    protected int maxStackSize = 64;
+    protected int field_402 = 0;
+    protected int texturePosition;
+    protected boolean field_464 = false;
+    protected boolean field_465 = false;
+    private String translationKey;
+
+    protected MixinItemType(int id) {
+        this.id = 256 + id;
+        if (byId[256 + id] != null) {
+            System.out.println("CONFLICT @ " + id);
+        }
+        ItemType.byId[256 + id] = this;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public ItemType setTexturePosition(int texturePosition) {
+        this.texturePosition = texturePosition;
+        return this;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public ItemType setMaxStackSize(int maxStackSize) {
+        this.maxStackSize = maxStackSize;
+        return this;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public ItemType setTexturePosition(int x, int y) {
+        this.texturePosition = x + y * 16;
+        return this;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public int getTexturePosition(int damage) {
+        return this.texturePosition;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public final int getTexturePosition(ItemInstance item) {
+        int damage = 0;
+        if (item != null) {
+            damage = item.getDamage();
+        }
+        return this.getTexturePosition(damage);
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public ItemInstance use(ItemInstance item, Level level, Player player) {
+        return item;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    protected ItemType method_457(boolean flag) {
+        this.field_465 = flag;
+        return this;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    protected ItemType setDurability(int i) {
+        this.field_402 = i;
+        return this;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public ItemType setName(String s) {
+        this.translationKey = "item." + s;
+        return this;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public boolean isLighting(ItemInstance itemstack) {
+        return false;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public boolean isMuzzleFlash(ItemInstance itemstack) {
+        return false;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public void onAddToSlot(Player entityPlayer, int slot, int damage) {
+        Scriptable scope = Minecraft.minecraftInstance.level.scope;
+        scope.put("slotID", scope, new Integer(slot));
+        if (this.method_462()) {
+            Minecraft.minecraftInstance.level.scriptHandler.runScript(String.format("item_onAddToSlot_%d_%d.js", new Object[]{this.id, damage}), scope, false);
+        } else {
+            Minecraft.minecraftInstance.level.scriptHandler.runScript(String.format("item_onAddToSlot_%d.js", new Object[]{this.id}), scope, false);
+        }
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public void onRemovedFromSlot(Player entityPlayer, int slot, int damage) {
+        Scriptable scope = Minecraft.minecraftInstance.level.scope;
+        scope.put("slotID", scope, new Integer(slot));
+        if (this.method_462()) {
+            Minecraft.minecraftInstance.level.scriptHandler.runScript(String.format("item_onRemovedFromSlot_%d_%d.js", new Object[]{this.id, damage}), scope, false);
+        } else {
+            Minecraft.minecraftInstance.level.scriptHandler.runScript(String.format("item_onRemovedFromSlot_%d.js", new Object[]{this.id}), scope, false);
+        }
     }
 }

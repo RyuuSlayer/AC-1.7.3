@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.util;
 
 public class DebugMode {
+
     public static boolean active = false;
 
     public static boolean levelEditing = false;
@@ -14,4 +15,7 @@ public class DebugMode {
     public static int reachDistance = 4;
 
     public static boolean renderFov = false;
+
+    private DebugMode() {
+    }
 }

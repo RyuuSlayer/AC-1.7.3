@@ -8,43 +8,44 @@ import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 public class BlockOverlay extends Tile implements IBlockColor {
+
     protected BlockOverlay(int i, int j) {
         super(i, j, Material.PLANT);
-        setBoundingBox(0.0F, 0.0F, 0.0F, 1.0F, 0.1F, 1.0F);
+        this.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 0.1f, 1.0f);
     }
 
     @Override
-    public int getTextureForSide(int i, int j) {
-        return this.tex + j;
+    public int getTextureForSide(int side, int meta) {
+        return this.tex + meta;
     }
 
     @Override
-    public Box getCollisionShape(Level world, int i, int j, int k) {
-        updateBounds(world, i, j, k);
+    public Box getCollisionShape(Level level, int x, int y, int z) {
+        this.updateBounds(level, x, y, z);
         return null;
     }
 
     @Override
-    public Box getOutlineShape(Level world, int i, int j, int k) {
-        updateBounds(world, i, j, k);
-        return super.getOutlineShape(world, i, j, k);
+    public Box getOutlineShape(Level level, int x, int y, int z) {
+        this.updateBounds(level, x, y, z);
+        return super.getOutlineShape(level, x, y, z);
     }
 
     public void updateBounds(TileView world, int i, int j, int k) {
         if (world.isFullOpaque(i, j - 1, k)) {
-            setBoundingBox(0.0F, 0.0F, 0.0F, 1.0F, 0.01F, 1.0F);
+            this.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 0.01f, 1.0f);
         } else if (world.isFullOpaque(i, j + 1, k)) {
-            setBoundingBox(0.0F, 0.99F, 0.0F, 1.0F, 1.0F, 1.0F);
+            this.setBoundingBox(0.0f, 0.99f, 0.0f, 1.0f, 1.0f, 1.0f);
         } else if (world.isFullOpaque(i - 1, j, k)) {
-            setBoundingBox(0.0F, 0.0F, 0.0F, 0.01F, 1.0F, 1.0F);
+            this.setBoundingBox(0.0f, 0.0f, 0.0f, 0.01f, 1.0f, 1.0f);
         } else if (world.isFullOpaque(i + 1, j, k)) {
-            setBoundingBox(0.99F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+            this.setBoundingBox(0.99f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
         } else if (world.isFullOpaque(i, j, k - 1)) {
-            setBoundingBox(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 0.01F);
+            this.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.01f);
         } else if (world.isFullOpaque(i, j, k + 1)) {
-            setBoundingBox(0.0F, 0.0F, 0.99F, 1.0F, 1.0F, 1.0F);
+            this.setBoundingBox(0.0f, 0.0f, 0.99f, 1.0f, 1.0f, 1.0f);
         } else {
-            setBoundingBox(0.0F, 0.0F, 0.0F, 1.0F, 0.01F, 1.0F);
+            this.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 0.01f, 1.0f);
         }
     }
 

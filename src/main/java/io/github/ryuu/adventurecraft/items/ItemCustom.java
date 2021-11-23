@@ -1,5 +1,15 @@
 package io.github.ryuu.adventurecraft.items;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
+import net.minecraft.script.ScriptItem;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Scriptable;
+import org.mozilla.javascript.ScriptableObject;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -7,103 +17,99 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
 
-import io.github.ryuu.adventurecraft.scripting.ScriptItem;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.Player;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.item.ItemType;
-import net.minecraft.level.Level;
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.ScriptableObject;
-
 public class ItemCustom extends ItemType {
-    static ArrayList<Integer> loadedItemIDs = new ArrayList<>();
+
+    static ArrayList<Integer> loadedItemIDs = new ArrayList();
     String fileName;
     String onItemUsedScript;
 
     public ItemCustom(int itemID, String fName, Properties p) {
         super(itemID - 256);
+        Integer maxStackSizeI;
+        String maxStackSizeS;
+        Integer maxItemDamageI;
+        String maxItemDamageS;
+        Integer iconIndexI;
         this.fileName = fName;
         String iconIndexS = p.getProperty("iconIndex");
-        if (iconIndexS != null) {
-            Integer iconIndexI = loadPropertyInt("iconIndex", iconIndexS);
-            if (iconIndexI != null)
-                setTexturePosition(iconIndexI.intValue());
+        if (iconIndexS != null && (iconIndexI = this.loadPropertyInt("iconIndex", iconIndexS)) != null) {
+            this.setTexturePosition(iconIndexI);
         }
-        String maxItemDamageS = p.getProperty("maxItemDamage");
-        if (maxItemDamageS != null) {
-            Integer maxItemDamageI = loadPropertyInt("maxItemDamage", maxItemDamageS);
-            if (maxItemDamageI != null)
-                this.a = maxItemDamageI.intValue(); // really high chance of being field_402, but it has private access for some reason
+        if ((maxItemDamageS = p.getProperty("maxItemDamage")) != null && (maxItemDamageI = this.loadPropertyInt("maxItemDamage", maxItemDamageS)) != null) {
+            this.field_402 = maxItemDamageI;
         }
-        String maxStackSizeS = p.getProperty("maxStackSize");
-        if (maxStackSizeS != null) {
-            Integer maxStackSizeI = loadPropertyInt("maxStackSize", maxStackSizeS);
-            if (maxStackSizeI != null)
-                this.maxStackSize = maxStackSizeI.intValue();
+        if ((maxStackSizeS = p.getProperty("maxStackSize")) != null && (maxStackSizeI = this.loadPropertyInt("maxStackSize", maxStackSizeS)) != null) {
+            this.maxStackSize = maxStackSizeI;
         }
-        setName(p.getProperty("name", "Unnamed"));
+        this.setName(p.getProperty("name", "Unnamed"));
         this.onItemUsedScript = p.getProperty("onItemUsedScript", "");
         this.itemUseDelay = 1;
     }
 
     private static ItemCustom loadScript(File descFile) {
-        Properties p = new Properties();
-        try {
-            p.load(new FileInputStream(descFile));
-            int itemID = Integer.parseInt(p.getProperty("itemID", "-1"));
-            if (itemID == -1) {
-                Minecraft.minecraftInstance.v.a(String.format("ItemID for %s is unspecified", new Object[]{descFile.getName()}));
-            } else if (itemID <= 0) {
-                Minecraft.minecraftInstance.v.a(String.format("ItemID for %s specifies a negative itemID", new Object[]{descFile.getName()}));
-            } else if (ItemType.c[itemID] != null) {
-                Minecraft.minecraftInstance.v.a(String.format("ItemID (%d) for %s is already in use by %s", new Object[]{Integer.valueOf(itemID), descFile.getName()}));
-            } else {
+        block7:
+        {
+            Properties p = new Properties();
+            try {
+                p.load(new FileInputStream(descFile));
+                int itemID = Integer.parseInt(p.getProperty("itemID", "-1"));
+                if (itemID == -1) {
+                    Minecraft.minecraftInstance.overlay.addChatMessage(String.format("ItemID for %s is unspecified", new Object[]{descFile.getName()}));
+                    break block7;
+                }
+                if (itemID <= 0) {
+                    Minecraft.minecraftInstance.overlay.addChatMessage(String.format("ItemID for %s specifies a negative itemID", new Object[]{descFile.getName()}));
+                    break block7;
+                }
+                if (ItemType.byId[itemID] != null) {
+                    Minecraft.minecraftInstance.overlay.addChatMessage(String.format("ItemID (%d) for %s is already in use by %s", new Object[]{itemID, descFile.getName()}));
+                    break block7;
+                }
                 return new ItemCustom(itemID, descFile.getName(), p);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (NumberFormatException e) {
+                Minecraft.minecraftInstance.overlay.addChatMessage(String.format("ItemID for %s is specified invalidly '%s'", new Object[]{descFile.getName(), p.getProperty("itemID")}));
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (NumberFormatException e) {
-            Minecraft.minecraftInstance.v.a(String.format("ItemID for %s is specified invalidly '%s'", new Object[]{descFile.getName(), p.getProperty("itemID")}));
         }
         return null;
     }
 
     static void loadItems(File itemFolder) {
-        for (Integer i : loadedItemIDs)
+        for (Integer i : loadedItemIDs) {
             ItemType.byId[i.intValue()] = null;
+        }
         loadedItemIDs.clear();
-        if (!itemFolder.exists())
+        if (!itemFolder.exists()) {
             return;
+        }
         for (File itemFile : itemFolder.listFiles()) {
-            if (itemFile.isFile()) {
-                ItemCustom item = loadScript(itemFile);
-                if (item != null)
-                    loadedItemIDs.add(Integer.valueOf(item.id));
-            }
+            ItemCustom item;
+            if (!itemFile.isFile() || (item = ItemCustom.loadScript(itemFile)) == null) continue;
+            loadedItemIDs.add(item.id);
         }
     }
 
     private Integer loadPropertyInt(String pName, String intString) {
         try {
-            Integer i = Integer.valueOf(Integer.parseInt(intString));
+            Integer i = Integer.parseInt(intString);
             return i;
         } catch (NumberFormatException e) {
-            Minecraft.minecraftInstance.v.a(String.format("Item File '%s' Property '%s' is specified invalidly '%s'", new Object[]{this.fileName, pName, intString}));
+            Minecraft.minecraftInstance.overlay.addChatMessage(String.format("Item File '%s' Property '%s' is specified invalidly '%s'", new Object[]{this.fileName, pName, intString}));
             return null;
         }
     }
 
     @Override
-    public ItemInstance use(ItemInstance itemstack, Level world, Player entityplayer) {
+    public ItemInstance use(ItemInstance item, Level level, Player player) {
         if (!this.onItemUsedScript.equals("")) {
-            ScriptItem item = new ScriptItem(itemstack);
-            Object wrappedOut = Context.javaToJS(item, world.scope);
-            ScriptableObject.putProperty(world.scope, "itemUsed", wrappedOut);
-            world.scriptHandler.runScript(this.onItemUsedScript, world.scope);
+            ScriptItem item2 = new ScriptItem(item);
+            Object wrappedOut = Context.javaToJS((Object) item2, (Scriptable) level.scope);
+            ScriptableObject.putProperty((Scriptable) level.scope, "itemUsed", wrappedOut);
+            level.scriptHandler.runScript(this.onItemUsedScript, level.scope);
         }
-        return itemstack;
+        return item;
     }
 }

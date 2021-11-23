@@ -5,13 +5,14 @@ import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 
 public class BlockSolid extends Tile implements IBlockColor {
+
     public BlockSolid(int i, int j) {
         super(i, j, Material.STONE);
     }
 
     @Override
-    public int getTextureForSide(int i, int j) {
-        return this.tex + j;
+    public int getTextureForSide(int side, int meta) {
+        return this.tex + meta;
     }
 
     @Override

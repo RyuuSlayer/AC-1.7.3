@@ -4,11 +4,13 @@ import net.minecraft.entity.player.Player;
 import net.minecraft.item.armour.ArmourItem;
 
 class ItemPegasusBoots extends ArmourItem {
-    public ItemPegasusBoots(int itemIndex) {
-        super(itemIndex, 0, 0, 3);
-        setTexturePosition(183);
+
+    public ItemPegasusBoots(int id) {
+        super(id, 0, 0, 3);
+        this.setTexturePosition(183);
     }
 
+    @Override
     public void onAddToSlot(Player entityPlayer, int slot, int damage) {
         super.onAddToSlot(entityPlayer, slot, damage);
         if (slot == 36) {
@@ -17,6 +19,7 @@ class ItemPegasusBoots extends ArmourItem {
         }
     }
 
+    @Override
     public void onRemovedFromSlot(Player entityPlayer, int slot, int damage) {
         super.onRemovedFromSlot(entityPlayer, slot, damage);
         if (slot == 36) {

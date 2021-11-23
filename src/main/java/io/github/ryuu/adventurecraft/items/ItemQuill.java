@@ -7,21 +7,21 @@ import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 
 public class ItemQuill extends ItemType {
-    protected ItemQuill(int i) {
-        super(i);
+
+    protected ItemQuill(int id) {
+        super(id);
     }
 
     @Override
-    public boolean useOnTile(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
-        double yToUse = 128.0D;
-        for (int y = j; y <= 128; y++) {
-            if (world.a(i, y, k) == 0) {
-                yToUse = (y + entityplayer.standingEyeHeight);
-                break;
-            }
+    public boolean useOnTile(ItemInstance item, Player player, Level level, int x, int y, int z, int facing) {
+        double yToUse = 128.0;
+        for (int y2 = y; y2 <= 128; ++y2) {
+            if (level.getTileId(x, y2, z) != 0) continue;
+            yToUse = (float) y2 + player.standingEyeHeight;
+            break;
         }
-        Minecraft.minecraftInstance.v.a(String.format("Teleporting to (%.1f, %.1f %.1f)", new Object[]{Double.valueOf(i + 0.5D), Double.valueOf(yToUse), Double.valueOf(k + 0.5D)}));
-        entityplayer.e(i + 0.5D, yToUse, k + 0.5D);
+        Minecraft.minecraftInstance.overlay.addChatMessage(String.format("Teleporting to (%.1f, %.1f %.1f)", new Object[]{(double) x + 0.5, yToUse, (double) z + 0.5}));
+        player.setPosition((double) x + 0.5, yToUse, (double) z + 0.5);
         return false;
     }
 }
