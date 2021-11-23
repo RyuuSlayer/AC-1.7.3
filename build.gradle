@@ -33,6 +33,8 @@ minecraft {
                 library.startsWith('net.sf.jopt-simple:jopt-simple:') ||
                 library.startsWith('org.ow2.asm:asm-all:'))
     }
+
+    AT = file('src/main/resources/adventurecraft.accessWidener')
 }
 
 dependencies {
@@ -85,6 +87,7 @@ jar {
     from("LICENSE") {
         rename { "${it}_${project.archivesBaseName}" }
     }
+	AT.include = false
 }
 
 // configure the maven publication

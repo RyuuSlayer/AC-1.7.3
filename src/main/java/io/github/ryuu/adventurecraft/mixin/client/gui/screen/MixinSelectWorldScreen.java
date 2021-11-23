@@ -3,185 +3,61 @@ package io.github.ryuu.adventurecraft.mixin.client.gui.screen;
 import io.github.ryuu.adventurecraft.gui.GuiMapSelect;
 import net.minecraft.class_520;
 import net.minecraft.class_97;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.screen.DeleteConfirmationScreen;
 import net.minecraft.client.gui.screen.EditLevelScreen;
 import net.minecraft.client.gui.screen.SelectWorldScreen;
 import net.minecraft.client.gui.widgets.Button;
-import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.resource.language.TranslationStorage;
-import net.minecraft.level.storage.LevelMetadata;
-import net.minecraft.level.storage.LevelStorage;
-import net.minecraft.util.maths.MathsHelper;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import org.spongepowered.asm.mixin.injection.Constant;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
 @Mixin(SelectWorldScreen.class)
-public class MixinSelectWorldScreen extends Screen {
+public abstract class MixinSelectWorldScreen extends Screen implements AccessSelectWorldScreen {
 
-    @Shadow()
-    private final DateFormat dateFormat = new SimpleDateFormat();
-
+    @Shadow
     protected Screen parent;
 
-    protected String title = "Select world";
+    @Shadow
+    protected String title;
 
-    private boolean field_2434 = false;
+    @Shadow
+    private boolean field_2434;
 
+    @Shadow
     private int field_2435;
 
-    private List field_2436;
+    @Shadow
+    private SelectWorldScreen.class_569 field_2437;
 
-    private class_569 field_2437;
-
-    private String field_2438;
-
-    private String field_2439;
-
+    @Shadow
     private boolean field_2440;
 
-    private Button renameButton;
-
+    @Shadow
     private Button selectButton;
 
+    @Shadow
     private Button deleteButton;
 
     public MixinSelectWorldScreen(Screen guiscreen) {
         this.parent = guiscreen;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    static List method_1884(SelectWorldScreen guiselectworld) {
-        return guiselectworld.field_2436;
-    }
+    @Shadow
+    protected abstract String method_1889(int i);
+
+    @Shadow
+    protected abstract String method_1887(int i);
 
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
-    static int method_1885(SelectWorldScreen guiselectworld, int i) {
-        guiselectworld.field_2435 = i;
-        return guiselectworld.field_2435;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    static int method_1886(SelectWorldScreen guiselectworld) {
-        return guiselectworld.field_2435;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    static Button method_1888(SelectWorldScreen guiselectworld) {
-        return guiselectworld.selectButton;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    static Button method_1890(SelectWorldScreen guiselectworld) {
-        return guiselectworld.renameButton;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    static Button method_1892(SelectWorldScreen guiselectworld) {
-        return guiselectworld.deleteButton;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    static String method_1893(SelectWorldScreen guiselectworld) {
-        return guiselectworld.field_2438;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    static DateFormat method_1894(SelectWorldScreen guiselectworld) {
-        return guiselectworld.dateFormat;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    static String method_1895(SelectWorldScreen guiselectworld) {
-        return guiselectworld.field_2439;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public void init() {
-        TranslationStorage stringtranslate = TranslationStorage.getInstance();
-        this.title = stringtranslate.translate("selectWorld.title");
-        this.field_2438 = stringtranslate.translate("selectWorld.world");
-        this.field_2439 = stringtranslate.translate("selectWorld.conversion");
-        this.method_1897();
-        this.field_2437 = new class_569(this);
-        this.field_2437.method_1258(this.buttons, 4, 5);
-        this.method_1896();
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    private void method_1897() {
-        LevelStorage isaveformat = this.minecraft.method_2127();
-        this.field_2436 = isaveformat.getMetadata();
-        Collections.sort(this.field_2436);
-        this.field_2435 = -1;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    protected String method_1887(int i) {
-        return ((LevelMetadata) this.field_2436.get(i)).getFileName();
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    protected String method_1889(int i) {
-        String s = ((LevelMetadata) this.field_2436.get(i)).getLevelName();
-        if (s == null || MathsHelper.isStringEmpty(s)) {
-            TranslationStorage stringtranslate = TranslationStorage.getInstance();
-            s = stringtranslate.translate("selectWorld.world") + " " + (i + 1);
-        }
-        return s;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
+    @Overwrite
     public void method_1896() {
         TranslationStorage stringtranslate = TranslationStorage.getInstance();
         this.selectButton = new Button(1, this.width / 2 - 152, this.height - 28, 100, 20, "Load Save");
@@ -197,7 +73,7 @@ public class MixinSelectWorldScreen extends Screen {
      * @author Ryuu, TechPizza, Phil
      */
     @Override
-    @Overwrite()
+    @Overwrite
     protected void buttonClicked(Button button) {
         if (!button.active) {
             return;
@@ -230,7 +106,7 @@ public class MixinSelectWorldScreen extends Screen {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void method_1891(int i) {
         this.minecraft.openScreen(null);
         if (this.field_2434) {
@@ -245,117 +121,35 @@ public class MixinSelectWorldScreen extends Screen {
         this.minecraft.createOrLoadWorld(s, this.method_1889(i), 0L);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public void updateServer(boolean flag, int i) {
-        if (this.field_2440) {
-            this.field_2440 = false;
-            if (flag) {
-                LevelStorage isaveformat = this.minecraft.method_2127();
-                isaveformat.method_1003();
-                isaveformat.method_1006(this.method_1887(i));
-                this.method_1897();
-            }
-            this.minecraft.openScreen(this);
+    @Mixin(SelectWorldScreen.class_569.class)
+    static abstract class class_569 extends class_97 {
+
+        @Final
+        @Shadow
+        SelectWorldScreen field_2444;
+
+        public class_569(Minecraft minecraft, int i, int j, int k, int i1, int i2) {
+            super(minecraft, i, j, k, i1, i2);
         }
-    }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public void render(int mouseX, int mouseY, float delta) {
-        this.field_2437.method_1256(mouseX, mouseY, delta);
-        this.drawTextWithShadowCentred(this.textManager, this.title, this.width / 2, 20, 0xFFFFFF);
-        super.render(mouseX, mouseY, delta);
-    }
-
-    class class_569 extends class_97 {
-
-        final SelectWorldScreen field_2444;
-
-        public MixinSelectWorldScreen(SelectWorldScreen guiselectworld) {
-            super(guiselectworld.minecraft, guiselectworld.width, guiselectworld.height, 32, guiselectworld.height - 32, 36);
-            this.field_2444 = guiselectworld;
+        @ModifyConstant(method = "<init>", constant = @Constant(intValue = 64))
+        private int initHeightOffset(int value) {
+            return 32;
         }
 
         /**
          * @author Ryuu, TechPizza, Phil
          */
         @Override
-        @Overwrite()
-        protected int method_1266() {
-            return SelectWorldScreen.method_1884(this.field_2444).size();
-        }
-
-        /**
-         * @author Ryuu, TechPizza, Phil
-         */
-        @Override
-        @Overwrite()
+        @Overwrite
         protected void method_1267(int i, boolean flag) {
             boolean flag1;
-            SelectWorldScreen.method_1885(this.field_2444, i);
-            SelectWorldScreen.method_1888((SelectWorldScreen) this.field_2444).active = flag1 = SelectWorldScreen.method_1886(this.field_2444) >= 0 && SelectWorldScreen.method_1886(this.field_2444) < this.method_1266();
-            SelectWorldScreen.method_1892((SelectWorldScreen) this.field_2444).active = flag1;
+            ((AccessSelectWorldScreen)this.field_2444).setField_2435(i);
+            ((AccessSelectWorldScreen)this.field_2444).getSelectButton().active = flag1 = ((AccessSelectWorldScreen)this.field_2444).getField_2435() >= 0 && ((AccessSelectWorldScreen)this.field_2444).getField_2435() < this.method_1266();
+            ((AccessSelectWorldScreen)this.field_2444).getDeleteButton().active = flag1;
             if (flag && flag1) {
                 this.field_2444.method_1891(i);
             }
-        }
-
-        /**
-         * @author Ryuu, TechPizza, Phil
-         */
-        @Override
-        @Overwrite()
-        protected boolean method_1270(int i) {
-            return i == SelectWorldScreen.method_1886(this.field_2444);
-        }
-
-        /**
-         * @author Ryuu, TechPizza, Phil
-         */
-        @Override
-        @Overwrite()
-        protected int method_1268() {
-            return SelectWorldScreen.method_1884(this.field_2444).size() * 36;
-        }
-
-        /**
-         * @author Ryuu, TechPizza, Phil
-         */
-        @Override
-        @Overwrite()
-        protected void method_1269() {
-            this.field_2444.renderBackground();
-        }
-
-        /**
-         * @author Ryuu, TechPizza, Phil
-         */
-        @Override
-        @Overwrite()
-        protected void method_1264(int i, int j, int k, int l, Tessellator tessellator) {
-            LevelMetadata saveformatcomparator = (LevelMetadata) SelectWorldScreen.method_1884(this.field_2444).get(i);
-            String s = saveformatcomparator.getLevelName();
-            if (s == null || MathsHelper.isStringEmpty(s)) {
-                s = SelectWorldScreen.method_1893(this.field_2444) + " " + (i + 1);
-            }
-            String s1 = saveformatcomparator.getFileName();
-            s1 = s1 + " (" + SelectWorldScreen.method_1894(this.field_2444).format(new Date(saveformatcomparator.getLastPlayedTime()));
-            long l1 = saveformatcomparator.getFileSize();
-            s1 = s1 + ", " + (float) (l1 / 1024L * 100L / 1024L) / 100.0f + " MB)";
-            String s2 = "";
-            if (saveformatcomparator.getVersion()) {
-                s2 = SelectWorldScreen.method_1895(this.field_2444) + " " + s2;
-            }
-            this.field_2444.drawTextWithShadow(this.field_2444.textManager, s, j + 2, k + 1, 0xFFFFFF);
-            this.field_2444.drawTextWithShadow(this.field_2444.textManager, s1, j + 2, k + 12, 0x808080);
-            this.field_2444.drawTextWithShadow(this.field_2444.textManager, s2, j + 2, k + 12 + 10, 0x808080);
         }
     }
 }

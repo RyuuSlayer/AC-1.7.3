@@ -3,16 +3,16 @@ package io.github.ryuu.adventurecraft.util;
 import net.minecraft.entity.Entity;
 import net.minecraft.level.Level;
 
-class MusicPlayer {
+public class MusicPlayer {
 
     MusicPlayer() {
     }
 
-    static void playNoteFromEntity(Level world, Entity ent, String instrument, char note, boolean sharp, float octave, float volume) {
+    public static void playNoteFromEntity(Level world, Entity ent, String instrument, char note, boolean sharp, float octave, float volume) {
         MusicPlayer.playNote(world, ent.x, ent.y, ent.z, instrument, note, sharp, octave, volume);
     }
 
-    static void playNote(Level world, double x, double y, double z, String instrument, char note, boolean sharp, float octave, float volume) {
+    public static void playNote(Level world, double x, double y, double z, String instrument, char note, boolean sharp, float octave, float volume) {
         float pitch = 1.189207f;
         switch (note) {
             case 'A': {
@@ -52,7 +52,7 @@ class MusicPlayer {
         world.playSound(x, y, z, instrument, volume, pitch * octave);
     }
 
-    static void playNoteFromSong(Level world, double x, double y, double z, String instrument, String song, int noteNum, float volume) {
+    public static void playNoteFromSong(Level world, double x, double y, double z, String instrument, String song, int noteNum, float volume) {
         int stringIndex;
         int onNote = 0;
         boolean flat = false;
@@ -93,7 +93,7 @@ class MusicPlayer {
         MusicPlayer.playNote(world, x, y, z, instrument, note, sharp, octave, volume);
     }
 
-    static int countNotes(String song) {
+    public static int countNotes(String song) {
         int onNote = 0;
         for (int stringIndex = 0; stringIndex < song.length(); ++stringIndex) {
             char curChar = song.charAt(stringIndex);

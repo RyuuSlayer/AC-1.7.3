@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.mixin.client;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.gui.GuiMapSelect;
 import io.github.ryuu.adventurecraft.gui.GuiStore;
+import io.github.ryuu.adventurecraft.mixin.client.gui.ScreenInputGrab;
 import io.github.ryuu.adventurecraft.scripting.ScriptItem;
 import io.github.ryuu.adventurecraft.scripting.ScriptVec3;
 import io.github.ryuu.adventurecraft.util.*;
@@ -194,77 +195,6 @@ public abstract class MixinMinecraft implements Runnable {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite()
-    public static File getWorkingDirectory(String s) {
-        File file;
-        String s1 = System.getProperty("user.home", ".");
-        switch (Minecraft.getOperatingSystem()) {
-            case linux:
-            case solaris: {
-                file = new File(s1, '.' + s + '/');
-                break;
-            }
-            case windows: {
-                String s2 = System.getenv("APPDATA");
-                if (s2 != null) {
-                    file = new File(s2, "." + s + '/');
-                    break;
-                }
-                file = new File(s1, '.' + s + '/');
-                break;
-            }
-            case macos: {
-                file = new File(s1, "Library/Application Support/" + s);
-                break;
-            }
-            default: {
-                file = new File(s1, s + '/');
-            }
-        }
-        if (!file.exists() && !file.mkdirs()) {
-            throw new RuntimeException("The working directory could not be created: " + file);
-        }
-        return file;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    private static OperatingSystem getOperatingSystem() {
-        String s = System.getProperty("os.name").toLowerCase();
-        if (s.contains("win")) {
-            return OperatingSystem.windows;
-        }
-        if (s.contains("mac")) {
-            return OperatingSystem.macos;
-        }
-        if (s.contains("solaris")) {
-            return OperatingSystem.solaris;
-        }
-        if (s.contains("sunos")) {
-            return OperatingSystem.solaris;
-        }
-        if (s.contains("linux")) {
-            return OperatingSystem.linux;
-        }
-        if (s.contains("unix")) {
-            return OperatingSystem.linux;
-        }
-        return OperatingSystem.unknown;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public static void start(String playerName, String s1) {
-        Minecraft.start(playerName, s1, null);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public static void start(String playerName, String s1, String s2) {
         boolean flag = false;
         String s3 = playerName;
@@ -362,16 +292,16 @@ public abstract class MixinMinecraft implements Runnable {
         }
         this.gameDir = Minecraft.getGameDirectory();
         this.levelStorage = new McRegionLevelStorage(new File(this.gameDir, "saves"));
-        this.options = new GameOptions(this, this.gameDir);
-        this.texturePackManager = new TexturePackManager(this, this.gameDir);
+        this.options = new GameOptions((Minecraft)(Object)this, this.gameDir);
+        this.texturePackManager = new TexturePackManager((Minecraft)(Object)this, this.gameDir);
         this.mapList = new MapList(this.gameDir);
         this.textureManager = new TextureManager(this.texturePackManager, this.options);
         this.textRenderer = new TextRenderer(this.options, "/font/default.png", this.textureManager);
         WaterColour.set(this.textureManager.getImageGrid("/misc/watercolor.png"));
         GrassColour.set(this.textureManager.getImageGrid("/misc/grasscolor.png"));
         FoliageColour.set(this.textureManager.getImageGrid("/misc/foliagecolor.png"));
-        this.gameRenderer = new GameRenderer(this);
-        EntityRenderDispatcher.INSTANCE.field_2494 = new HandItemRenderer(this);
+        this.gameRenderer = new GameRenderer((Minecraft)(Object)this);
+        EntityRenderDispatcher.INSTANCE.field_2494 = new HandItemRenderer((Minecraft)(Object)this);
         this.statManager = new StatManager(this.session, this.gameDir);
         Achievements.OPEN_INVENTORY.formatter(new class_637());
         this.method_2150();
@@ -408,19 +338,19 @@ public abstract class MixinMinecraft implements Runnable {
         this.textureManager.add(new FireTextureBinder(0));
         this.textureManager.add(new FireTextureBinder(1));
         this.textureManager.add(new TextureFanFX());
-        this.worldRenderer = new WorldRenderer(this, this.textureManager);
+        this.worldRenderer = new WorldRenderer((Minecraft)(Object)this, this.textureManager);
         GL11.glViewport(0, 0, this.actualWidth, this.actualHeight);
         this.particleManager = new ParticleManager(this.level, this.textureManager);
         try {
-            this.resourceDownloadThread = new ResourceDownloadThread(this.gameDir, this);
+            this.resourceDownloadThread = new ResourceDownloadThread(this.gameDir, (Minecraft)(Object)this);
             this.resourceDownloadThread.start();
             this.resourceDownloadThread.method_107();
         } catch (Exception exception) {
         }
         this.printOpenGLError("Post startup");
-        this.overlay = new Overlay(this);
+        this.overlay = new Overlay((Minecraft)(Object)this);
         if (this.serverIp != null) {
-            this.openScreen(new ServerConnectingScreen(this, this.serverIp, this.serverPort));
+            this.openScreen(new ServerConnectingScreen((Minecraft)(Object)this, this.serverIp, this.serverPort));
         } else {
             this.openScreen(new TitleScreen());
         }
@@ -469,22 +399,6 @@ public abstract class MixinMinecraft implements Runnable {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite()
-    public void method_2109(int i, int j, int k, int l, int i1, int j1) {
-        float f = 0.00390625f;
-        float f1 = 0.00390625f;
-        Tessellator tessellator = Tessellator.INSTANCE;
-        tessellator.start();
-        tessellator.vertex(i + 0, j + j1, 0.0, (float) (k + 0) * f, (float) (l + j1) * f1);
-        tessellator.vertex(i + i1, j + j1, 0.0, (float) (k + i1) * f, (float) (l + j1) * f1);
-        tessellator.vertex(i + i1, j + 0, 0.0, (float) (k + i1) * f, (float) (l + 0) * f1);
-        tessellator.vertex(i + 0, j + 0, 0.0, (float) (k + 0) * f, (float) (l + 0) * f1);
-        tessellator.draw();
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void openScreen(Screen screen) {
         if (this.currentScreen instanceof class_625) {
             return;
@@ -510,69 +424,13 @@ public abstract class MixinMinecraft implements Runnable {
             ScreenScaler scaledresolution = new ScreenScaler(this.options, this.actualWidth, this.actualHeight);
             int i = scaledresolution.getScaledWidth();
             int j = scaledresolution.getScaledHeight();
-            screen.init(this, i, j);
+            screen.init((Minecraft)(Object)this, i, j);
             this.skipGameRender = false;
         } else {
             this.lockCursor();
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    private void printOpenGLError(String s) {
-        int i = GL11.glGetError();
-        if (i != 0) {
-            String s1 = GLU.gluErrorString(i);
-            System.out.println("########## GL ERROR ##########");
-            System.out.println("@ " + s);
-            System.out.println(i + ": " + s1);
-        }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void stop() {
-        try {
-            this.statManager.method_1991();
-            this.statManager.sync();
-            if (this.minecraftApplet != null) {
-                this.minecraftApplet.method_2155();
-            }
-            try {
-                if (this.resourceDownloadThread != null) {
-                    this.resourceDownloadThread.method_111();
-                }
-            } catch (Exception exception) {
-            }
-            System.out.println("Stopping!");
-            try {
-                this.setLevel(null);
-            } catch (Throwable throwable) {
-            }
-            try {
-                GLAllocator.clear();
-            } catch (Throwable throwable) {
-            }
-            this.soundHelper.method_2014();
-            Mouse.destroy();
-            Keyboard.destroy();
-        } finally {
-            Display.destroy();
-            if (!this.field_2782) {
-                System.exit(0);
-            }
-        }
-        System.gc();
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public long getAvgFrameTime() {
         if (this.tFrameTimes[this.nextFrameTime] != 0L) {
             return (this.prevFrameTimeForAvg - this.tFrameTimes[this.nextFrameTime]) / 60L;
@@ -718,30 +576,6 @@ public abstract class MixinMinecraft implements Runnable {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite()
-    public void method_2131() {
-        try {
-            field_2800 = new byte[0];
-            this.worldRenderer.method_1558();
-        } catch (Throwable throwable) {
-        }
-        try {
-            System.gc();
-            Box.method_105();
-            Vec3f.method_1305();
-        } catch (Throwable throwable1) {
-        }
-        try {
-            System.gc();
-            this.setLevel(null);
-        } catch (Throwable throwable) {
-        }
-        System.gc();
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     private void method_2111(long l) {
         long l1 = 16666666L;
         if (this.field_2777 == -1L) {
@@ -820,16 +654,14 @@ public abstract class MixinMinecraft implements Runnable {
      */
     @Overwrite()
     public void lockCursor() {
-        if (!Display.isActive()) {
-            return;
+        if (Display.isActive()) {
+            if (!this.field_2778) {
+                this.field_2778 = true;
+                this.field_2767.method_1970();
+                this.openScreen(null);
+                this.field_2798 = this.field_2786 + 10000;
+            }
         }
-        if (this.field_2778) {
-            return;
-        }
-        this.field_2778 = true;
-        this.field_2767.method_1970();
-        this.openScreen(null);
-        this.field_2798 = this.field_2786 + 10000;
     }
 
     /**
@@ -837,7 +669,7 @@ public abstract class MixinMinecraft implements Runnable {
      */
     @Overwrite()
     private void method_2110(int i, boolean flag) {
-        if (this.interactionManager.field_2105) {
+        if (!this.interactionManager.field_2105) {
             return;
         }
         if (i == 0 && this.attackCooldown > 0) {
@@ -1047,26 +879,6 @@ public abstract class MixinMinecraft implements Runnable {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite()
-    private void method_2103() {
-        if (this.hitResult != null) {
-            int i = this.level.getTileId(this.hitResult.x, this.hitResult.y, this.hitResult.z);
-            if (i == Tile.GRASS.id) {
-                i = Tile.DIRT.id;
-            }
-            if (i == Tile.DOUBLE_STONE_SLAB.id) {
-                i = Tile.STONE_SLAB.id;
-            }
-            if (i == Tile.BEDROCK.id) {
-                i = Tile.STONE.id;
-            }
-            this.player.inventory.method_691(i, this.interactionManager instanceof class_537);
-        }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void tick() {
         LevelSource ichunkprovider;
         if (this.field_2786 == 6000) {
@@ -1096,17 +908,17 @@ public abstract class MixinMinecraft implements Runnable {
         } else if (this.currentScreen != null && this.currentScreen instanceof SleepingChatScreen && !this.player.isSleeping()) {
             this.openScreen(null);
         }
-        if (this.currentScreen != null && !this.currentScreen.disableInputGrabbing) {
+        if (this.currentScreen != null && !((ScreenInputGrab)this.currentScreen).getDisableInputGrabbing()) {
             this.field_2798 = this.field_2786 + 10000;
         }
-        if (this.currentScreen != null && !this.currentScreen.disableInputGrabbing) {
+        if (this.currentScreen != null && !((ScreenInputGrab)this.currentScreen).getDisableInputGrabbing()) {
             this.currentScreen.method_130();
             if (this.currentScreen != null) {
                 this.currentScreen.smokeRenderer.method_351();
                 this.currentScreen.tick();
             }
         }
-        if (this.currentScreen == null || this.currentScreen.passEvents || this.currentScreen.disableInputGrabbing) {
+        if (this.currentScreen == null || this.currentScreen.passEvents || ((ScreenInputGrab)this.currentScreen).getDisableInputGrabbing()) {
             while (Mouse.next()) {
                 long l = System.currentTimeMillis() - this.lastTickTime;
                 if (l > 200L) continue;
@@ -1143,7 +955,7 @@ public abstract class MixinMinecraft implements Runnable {
                         }
                     }
                 }
-                if (this.currentScreen == null || this.currentScreen.disableInputGrabbing) {
+                if (this.currentScreen == null || ((ScreenInputGrab)this.currentScreen).getDisableInputGrabbing()) {
                     if (!this.field_2778 && Mouse.getEventButtonState()) {
                         this.lockCursor();
                         continue;
@@ -1170,7 +982,7 @@ public abstract class MixinMinecraft implements Runnable {
                 if (Keyboard.getEventKey() == 87) {
                     this.toggleFullscreen();
                 } else {
-                    if (this.currentScreen != null && !this.currentScreen.disableInputGrabbing) {
+                    if (this.currentScreen != null && !((ScreenInputGrab)this.currentScreen).getDisableInputGrabbing()) {
                         this.currentScreen.onKeyboardEvent();
                     } else {
                         if (Keyboard.getEventKey() == 1) {
@@ -1295,10 +1107,6 @@ public abstract class MixinMinecraft implements Runnable {
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public String getMapUsed(String s) {
         File mcDir = Minecraft.getGameDirectory();
         File saveDir = new File(mcDir, "saves");
@@ -1317,10 +1125,6 @@ public abstract class MixinMinecraft implements Runnable {
         return null;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void saveMapUsed(String s, String mapName) {
         File mcDir = Minecraft.getGameDirectory();
         File saveDir = new File(mcDir, "saves");
@@ -1353,10 +1157,6 @@ public abstract class MixinMinecraft implements Runnable {
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void startWorld(String s, String s1, long l, String mapName) {
         this.setLevel(null);
         System.gc();
@@ -1386,10 +1186,6 @@ public abstract class MixinMinecraft implements Runnable {
         this.openScreen(null);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public Level getWorld(String saveName, long l, String mapName) {
         this.setLevel(null);
         System.gc();
@@ -1433,22 +1229,6 @@ public abstract class MixinMinecraft implements Runnable {
             this.level.updatePosition(this.player, false);
             new class_467().method_1530(this.level, this.player);
         }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void setLevel(Level world) {
-        this.notifyStatus(world, "");
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void notifyStatus(Level world, String s) {
-        this.method_2115(world, s, null);
     }
 
     /**
@@ -1523,17 +1303,6 @@ public abstract class MixinMinecraft implements Runnable {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite()
-    private void convertWorldFormat(String s, String s1) {
-        this.progressListener.notifyWithGameRunning("Converting World to " + this.levelStorage.getLevelFormat());
-        this.progressListener.notifySubMessage("This may take a while :)");
-        this.levelStorage.convertLevel(s, this.progressListener);
-        this.createOrLoadWorld(s, s1, 0L);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     private void method_2130(String s) {
         this.progressListener.notifyWithGameRunning(s);
         this.progressListener.notifySubMessage("Building terrain");
@@ -1562,27 +1331,6 @@ public abstract class MixinMinecraft implements Runnable {
         this.progressListener.notifySubMessage("Simulating world for a bit");
         j = 2000;
         this.level.method_292();
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void loadSoundFromDir(String s, File file) {
-        int i = s.indexOf("/");
-        String s1 = s.substring(0, i);
-        s = s.substring(i + 1);
-        if (s1.equalsIgnoreCase("sound")) {
-            this.soundHelper.method_2011(s, file);
-        } else if (s1.equalsIgnoreCase("newsound")) {
-            this.soundHelper.method_2011(s, file);
-        } else if (s1.equalsIgnoreCase("streaming")) {
-            this.soundHelper.method_2016(s, file);
-        } else if (s1.equalsIgnoreCase("music")) {
-            this.soundHelper.method_2018(s, file);
-        } else if (s1.equalsIgnoreCase("newmusic")) {
-            this.soundHelper.method_2018(s, file);
-        }
     }
 
     /**
@@ -1627,58 +1375,10 @@ public abstract class MixinMinecraft implements Runnable {
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean handleClientCommand(String chatMessage) {
-        if (!chatMessage.startsWith("/")) {
-        }
-        return false;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void updateStoreGUI() {
         ScreenScaler scaledresolution = new ScreenScaler(this.options, this.actualWidth, this.actualHeight);
         int i = scaledresolution.getScaledWidth();
         int j = scaledresolution.getScaledHeight();
-        this.storeGUI.init(this, i, j);
-    }
-
-    public class TimerHackThread extends Thread {
-
-        public MixinMinecraft(String string) {
-            super(string);
-            this.setDaemon(true);
-            this.start();
-        }
-    }
-
-    public class class_637 implements FormattedString {
-    }
-
-    public final class MinecraftWindowAdapter extends WindowAdapter {
-
-        final Thread field_2828;
-
-        public MixinMinecraft(Thread thread) {
-            this.field_2828 = thread;
-        }
-    }
-
-    public class LoginThread extends Thread {
-    }
-
-    public final class class_640 extends Minecraft {
-
-        final Frame field_2830;
-
-        public MixinMinecraft(Component component, Canvas canvas, MinecraftApplet minecraftApplet, int n, int n2, boolean bl, Frame frame) {
-            super(component, canvas, minecraftApplet, n, n2, bl);
-            this.field_2830 = frame;
-        }
+        this.storeGUI.init((Minecraft)(Object)this, i, j);
     }
 }

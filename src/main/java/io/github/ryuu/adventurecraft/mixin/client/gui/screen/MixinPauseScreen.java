@@ -5,7 +5,6 @@ import net.minecraft.client.gui.screen.*;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.stat.Stats;
-import net.minecraft.util.maths.MathsHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -13,8 +12,7 @@ import org.spongepowered.asm.mixin.Shadow;
 @Mixin(PauseScreen.class)
 public class MixinPauseScreen extends Screen {
 
-    private final int field_2205 = 0;
-    @Shadow()
+    @Shadow
     private int field_2204 = 0;
 
     /**
@@ -66,24 +64,5 @@ public class MixinPauseScreen extends Screen {
         if (button.id == 6) {
             this.minecraft.openScreen(new StatsScreen(this, this.minecraft.statManager));
         }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public void render(int mouseX, int mouseY, float delta) {
-        boolean flag;
-        this.renderBackground();
-        boolean bl = flag = !this.minecraft.level.method_274(this.field_2204++);
-        if (flag || this.field_2205 < 20) {
-            float f1 = ((float) (this.field_2205 % 10) + delta) / 10.0f;
-            f1 = MathsHelper.sin(f1 * 3.141593f * 2.0f) * 0.2f + 0.8f;
-            int k = (int) (255.0f * f1);
-            this.drawTextWithShadow(this.textManager, "Saving level..", 8, this.height - 16, k << 16 | k << 8 | k);
-        }
-        this.drawTextWithShadowCentred(this.textManager, "Game menu", this.width / 2, 40, 0xFFFFFF);
-        super.render(mouseX, mouseY, delta);
     }
 }

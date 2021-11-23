@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.gui;
 
+import io.github.ryuu.adventurecraft.mixin.client.gui.ScreenInputGrab;
 import io.github.ryuu.adventurecraft.util.MusicPlayer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Screen;
@@ -24,7 +25,7 @@ public class GuiMusicSheet extends Screen {
 
     public GuiMusicSheet(String i) {
         this.instrument = i;
-        this.notesPlayed = new ArrayList();
+        this.notesPlayed = new ArrayList<>();
         this.notesPlayedString = "";
         this.songPlayed = null;
     }
@@ -53,7 +54,7 @@ public class GuiMusicSheet extends Screen {
                     this.notesPlayedString = "";
                     this.spaceTaken = 0;
                 }
-                this.notesPlayed.add(new Integer(-key));
+                this.notesPlayed.add(-key);
                 this.spaceTaken += 14;
             }
             if (this.spaceTaken + 11 >= 168) {
@@ -62,7 +63,7 @@ public class GuiMusicSheet extends Screen {
                 this.spaceTaken = 0;
             }
             this.spaceTaken += 11;
-            this.notesPlayed.add(new Integer(key));
+            this.notesPlayed.add(key);
             if (key == 2) {
                 MusicPlayer.playNoteFromEntity(this.minecraft.level, this.minecraft.player, this.instrument, 'D', isSharp, 0.5f, 1.0f);
                 this.notesPlayedString = this.notesPlayedString + character;
@@ -99,7 +100,7 @@ public class GuiMusicSheet extends Screen {
                 this.songPlayed = songName;
                 this.timeToFade = 2500L + System.currentTimeMillis();
                 this.minecraft.field_2778 = true;
-                this.disableInputGrabbing = true;
+                ((ScreenInputGrab)this).setDisableInputGrabbing(true);
                 this.minecraft.field_2767.method_1970();
             }
         }
@@ -139,7 +140,7 @@ public class GuiMusicSheet extends Screen {
                 x += 11;
                 continue;
             }
-            this.drawSharp(x, -note.intValue());
+            this.drawSharp(x, -note);
             x += 14;
         }
         GL11.glEnable(3008);
