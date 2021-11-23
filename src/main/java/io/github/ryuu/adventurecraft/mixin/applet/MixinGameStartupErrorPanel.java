@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.mixin.applet;
 
 import io.github.ryuu.adventurecraft.util.Version;
+import net.minecraft.applet.GameStartupErrorPanel;
 import net.minecraft.applet.LogoCanvas;
 import net.minecraft.applet.SquareCanvas;
 import net.minecraft.client.GameStartupError;

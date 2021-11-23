@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.level.Level;
 import net.minecraft.level.chunk.Chunk;
 import net.minecraft.level.chunk.ChunkIO;
+import net.minecraft.level.chunk.ClientChunkCache;
 import net.minecraft.level.chunk.DummyChunk;
 import net.minecraft.level.source.LevelSource;
 import net.minecraft.util.ProgressListener;

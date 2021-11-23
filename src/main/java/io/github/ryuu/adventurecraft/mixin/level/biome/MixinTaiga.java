@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.mixin.level.biome;
 
 import net.minecraft.level.biome.Biome;
+import net.minecraft.level.biome.Taiga;
 import net.minecraft.level.structure.Feature;
 import net.minecraft.level.structure.PineTree;
 import net.minecraft.level.structure.SpruceTree;

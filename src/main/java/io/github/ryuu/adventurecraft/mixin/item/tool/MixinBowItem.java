@@ -6,6 +6,7 @@ import net.minecraft.entity.player.Player;
 import net.minecraft.entity.projectile.Arrow;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
+import net.minecraft.item.tool.BowItem;
 import net.minecraft.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;

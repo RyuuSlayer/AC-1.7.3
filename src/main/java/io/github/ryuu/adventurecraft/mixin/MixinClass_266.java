@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin;
 
+import net.minecraft.class_266;
 import net.minecraft.class_267;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -9,7 +10,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.util.*;
 
-@Mixin(Class_266.class)
+@Mixin(class_266.class)
 public class MixinClass_266 {
 
     @Shadow()

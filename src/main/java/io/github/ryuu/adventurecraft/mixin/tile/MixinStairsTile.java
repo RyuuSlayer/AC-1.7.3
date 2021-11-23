@@ -6,6 +6,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
+import net.minecraft.tile.StairsTile;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;

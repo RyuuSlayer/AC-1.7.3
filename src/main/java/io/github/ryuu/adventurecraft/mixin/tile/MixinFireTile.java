@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.mixin.tile;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
+import net.minecraft.tile.FireTile;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 import org.spongepowered.asm.mixin.Mixin;

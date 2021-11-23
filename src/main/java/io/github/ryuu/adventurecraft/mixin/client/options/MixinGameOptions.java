@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.mixin.client.options;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.options.Option;
 import net.minecraft.client.resource.language.I18n;

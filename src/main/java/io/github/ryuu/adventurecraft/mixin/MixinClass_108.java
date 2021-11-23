@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin;
 
+import net.minecraft.class_108;
 import net.minecraft.class_109;
 import net.minecraft.class_61;
 import net.minecraft.client.Minecraft;
@@ -18,7 +19,7 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.LinkedList;
 
-@Mixin(Class_108.class)
+@Mixin(class_108.class)
 public class MixinClass_108 {
 
     @Shadow()

@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.mixin.tile.entity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemInstance;
+import net.minecraft.tile.entity.Dispenser;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.io.ListTag;

@@ -4,6 +4,7 @@ import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
+import net.minecraft.tile.DoorTile;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.hit.HitResult;

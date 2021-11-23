@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.RenderHelper;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.TileRenderer;
+import net.minecraft.client.render.entity.tile.PistonRenderer;
 import net.minecraft.client.render.entity.tile.TileEntityRenderer;
 import net.minecraft.level.Level;
 import net.minecraft.tile.PistonTile;

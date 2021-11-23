@@ -6,6 +6,7 @@ import net.minecraft.client.*;
 import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.render.TextureBinder;
 import net.minecraft.client.resource.TexturePack;
+import net.minecraft.client.texture.TextureManager;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;

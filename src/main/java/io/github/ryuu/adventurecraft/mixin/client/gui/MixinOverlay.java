@@ -1,11 +1,13 @@
 package io.github.ryuu.adventurecraft.mixin.client.gui;
 
+import io.github.ryuu.adventurecraft.scripting.ScriptUIContainer;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.TerrainImage;
 import io.github.ryuu.adventurecraft.util.Version;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ChatMessage;
 import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.Overlay;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.render.RenderHelper;
 import net.minecraft.client.render.Tessellator;

@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.mixin.entity.projectile;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.projectile.Snowball;
 import net.minecraft.level.Level;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.io.CompoundTag;

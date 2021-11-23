@@ -3,6 +3,8 @@ package io.github.ryuu.adventurecraft.mixin.client;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.gui.GuiMapSelect;
 import io.github.ryuu.adventurecraft.gui.GuiStore;
+import io.github.ryuu.adventurecraft.scripting.ScriptItem;
+import io.github.ryuu.adventurecraft.scripting.ScriptVec3;
 import io.github.ryuu.adventurecraft.util.*;
 import net.minecraft.achievement.Achievements;
 import net.minecraft.*;

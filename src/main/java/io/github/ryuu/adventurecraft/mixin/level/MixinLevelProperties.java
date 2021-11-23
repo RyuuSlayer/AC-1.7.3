@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
+import net.minecraft.level.LevelProperties;
 import net.minecraft.util.io.AbstractTag;
 import net.minecraft.util.io.CompoundTag;
 import org.spongepowered.asm.mixin.Mixin;

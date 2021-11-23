@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.mixin.entity.monster;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.Lightning;
+import net.minecraft.entity.monster.Creeper;
 import net.minecraft.entity.monster.Monster;
 import net.minecraft.level.Level;
 import net.minecraft.util.io.CompoundTag;

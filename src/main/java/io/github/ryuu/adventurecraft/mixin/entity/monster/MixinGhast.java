@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.mixin.entity.monster;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.FlyingEntity;
 import net.minecraft.entity.MonsterEntityType;
+import net.minecraft.entity.monster.Ghast;
 import net.minecraft.entity.projectile.Snowball;
 import net.minecraft.level.Level;
 import net.minecraft.util.maths.Box;

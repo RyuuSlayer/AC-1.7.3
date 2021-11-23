@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.mixin.client.gui.screen.container;
 
 import net.minecraft.achievement.Achievements;
 import net.minecraft.client.gui.screen.container.ContainerScreen;
+import net.minecraft.client.gui.screen.container.PlayerInventoryScreen;
 import net.minecraft.client.render.RenderHelper;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.entity.player.Player;

@@ -5,6 +5,7 @@ import io.github.ryuu.adventurecraft.util.TerrainImage;
 import net.minecraft.entity.Entity;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
+import net.minecraft.tile.FluidTile;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Vec3f;

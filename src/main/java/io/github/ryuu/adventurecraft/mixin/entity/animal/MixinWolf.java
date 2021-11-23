@@ -5,6 +5,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.animal.Animal;
 import net.minecraft.entity.animal.Sheep;
+import net.minecraft.entity.animal.Wolf;
 import net.minecraft.entity.player.Player;
 import net.minecraft.entity.projectile.Arrow;
 import net.minecraft.item.ItemInstance;

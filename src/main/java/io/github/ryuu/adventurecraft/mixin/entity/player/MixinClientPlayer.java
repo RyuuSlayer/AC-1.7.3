@@ -21,6 +21,7 @@ import net.minecraft.client.util.Smoother;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.FurnaceEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.ClientPlayer;
 import net.minecraft.entity.player.Player;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.level.Level;

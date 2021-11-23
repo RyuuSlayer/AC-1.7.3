@@ -5,6 +5,7 @@ import net.minecraft.class_267;
 import net.minecraft.class_309;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.options.GameOptions;
+import net.minecraft.client.sound.SoundHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.maths.MathsHelper;
 import org.spongepowered.asm.mixin.Mixin;

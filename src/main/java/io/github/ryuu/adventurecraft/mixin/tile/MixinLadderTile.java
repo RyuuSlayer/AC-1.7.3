@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.mixin.tile;
 
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import net.minecraft.level.Level;
+import net.minecraft.tile.LadderTile;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;

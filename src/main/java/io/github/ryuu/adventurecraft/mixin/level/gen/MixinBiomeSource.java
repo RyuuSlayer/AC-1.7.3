@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.mixin.level.gen;
 import io.github.ryuu.adventurecraft.util.TerrainImage;
 import net.minecraft.level.Level;
 import net.minecraft.level.biome.Biome;
+import net.minecraft.level.gen.BiomeSource;
 import net.minecraft.util.maths.Vec2i;
 import net.minecraft.util.noise.SimplexOctaveNoise;
 import org.spongepowered.asm.mixin.Mixin;

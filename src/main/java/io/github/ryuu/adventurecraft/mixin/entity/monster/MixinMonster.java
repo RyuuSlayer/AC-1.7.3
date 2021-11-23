@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.mixin.entity.monster;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MonsterEntityType;
 import net.minecraft.entity.WalkingEntity;
+import net.minecraft.entity.monster.Monster;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.level.LightType;

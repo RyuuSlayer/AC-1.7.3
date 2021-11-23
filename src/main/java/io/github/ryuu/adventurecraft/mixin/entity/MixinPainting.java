@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.mixin.entity;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.Painting;
 import net.minecraft.entity.PaintingMotif;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;

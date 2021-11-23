@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.mixin.entity.monster;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.Zombie;
+import net.minecraft.entity.monster.ZombiePigman;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;

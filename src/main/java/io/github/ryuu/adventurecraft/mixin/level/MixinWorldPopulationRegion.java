@@ -5,6 +5,7 @@ import io.github.ryuu.adventurecraft.util.LightCache;
 import io.github.ryuu.adventurecraft.util.PlayerTorch;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
+import net.minecraft.level.WorldPopulationRegion;
 import net.minecraft.level.chunk.Chunk;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.entity.TileEntity;

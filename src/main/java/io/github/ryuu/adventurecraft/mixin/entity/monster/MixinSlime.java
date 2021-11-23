@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.mixin.entity.monster;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MonsterEntityType;
+import net.minecraft.entity.monster.Slime;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.util.io.CompoundTag;

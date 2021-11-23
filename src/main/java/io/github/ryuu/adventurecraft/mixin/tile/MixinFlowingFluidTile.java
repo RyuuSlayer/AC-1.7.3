@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.mixin.tile;
 
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.level.Level;
+import net.minecraft.tile.FlowingFluidTile;
 import net.minecraft.tile.FluidTile;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;

@@ -6,6 +6,7 @@ import net.minecraft.client.render.entity.tile.MobSpawnerRenderer;
 import net.minecraft.client.render.entity.tile.PistonRenderer;
 import net.minecraft.client.render.entity.tile.SignRenderer;
 import net.minecraft.client.render.entity.tile.TileEntityRenderer;
+import net.minecraft.client.render.tile.TileEntityRenderDispatcher;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.level.Level;

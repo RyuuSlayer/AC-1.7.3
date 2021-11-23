@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.mixin.entity.projectile;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
+import net.minecraft.entity.projectile.ThrownSnowball;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;

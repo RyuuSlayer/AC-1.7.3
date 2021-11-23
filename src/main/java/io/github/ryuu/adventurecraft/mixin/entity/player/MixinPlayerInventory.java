@@ -4,6 +4,7 @@ import io.github.ryuu.adventurecraft.items.IItemReload;
 import io.github.ryuu.adventurecraft.items.Items;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.Player;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;

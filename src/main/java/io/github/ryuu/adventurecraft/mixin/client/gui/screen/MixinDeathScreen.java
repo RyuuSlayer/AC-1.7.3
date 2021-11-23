@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.mixin.client.gui.screen;
 
 import net.minecraft.client.gui.Screen;
+import net.minecraft.client.gui.screen.DeathScreen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.widgets.Button;
 import org.lwjgl.opengl.GL11;

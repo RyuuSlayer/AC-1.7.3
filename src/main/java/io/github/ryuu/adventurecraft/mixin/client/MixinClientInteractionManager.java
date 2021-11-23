@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.client;
 
+import net.minecraft.client.ClientInteractionManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.Player;

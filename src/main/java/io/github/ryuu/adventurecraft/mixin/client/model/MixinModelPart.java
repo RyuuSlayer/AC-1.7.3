@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.mixin.client.model;
 
 import net.minecraft.class_290;
 import net.minecraft.class_552;
+import net.minecraft.client.model.ModelPart;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;

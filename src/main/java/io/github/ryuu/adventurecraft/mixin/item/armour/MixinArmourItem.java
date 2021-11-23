@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.mixin.item.armour;
 
 import net.minecraft.item.ItemType;
+import net.minecraft.item.armour.ArmourItem;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 

@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.mixin.client.render.entity;
 
 import net.minecraft.client.render.TileRenderer;
 import net.minecraft.client.render.entity.EntityRenderer;
+import net.minecraft.client.render.entity.FallingTileRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.FallingTile;
 import net.minecraft.level.Level;

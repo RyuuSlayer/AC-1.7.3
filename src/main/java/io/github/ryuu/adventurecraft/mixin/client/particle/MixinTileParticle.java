@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.mixin.client.particle;
 
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.TileParticle;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;

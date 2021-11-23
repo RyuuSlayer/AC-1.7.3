@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.mixin.client.render;
 
 import io.github.ryuu.adventurecraft.util.Vec2;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.FlowingLavaTextureBinder;
 import net.minecraft.client.render.TextureBinder;
 import net.minecraft.tile.Tile;
 import net.minecraft.util.maths.MathsHelper;

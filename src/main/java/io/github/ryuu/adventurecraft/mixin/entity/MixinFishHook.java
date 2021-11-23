@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.mixin.entity;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.FishHook;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;

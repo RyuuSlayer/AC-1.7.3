@@ -6,6 +6,7 @@ import net.minecraft.class_97;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.screen.DeleteConfirmationScreen;
 import net.minecraft.client.gui.screen.EditLevelScreen;
+import net.minecraft.client.gui.screen.SelectWorldScreen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.resource.language.TranslationStorage;

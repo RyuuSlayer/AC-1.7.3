@@ -4,6 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.level.LightType;
+import net.minecraft.level.chunk.Chunk;
 import net.minecraft.level.chunk.ChunkSubData;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.TileWithEntity;

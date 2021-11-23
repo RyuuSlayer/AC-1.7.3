@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.mixin;
 
 import io.github.ryuu.adventurecraft.util.CoordBlock;
 import io.github.ryuu.adventurecraft.util.LightCache;
+import net.minecraft.class_66;
 import net.minecraft.class_68;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.Tessellator;
@@ -25,7 +26,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-@Mixin(Class_66.class)
+@Mixin(class_66.class)
 public class MixinClass_66 {
 
     private static final Tessellator tesselator;

@@ -6,6 +6,7 @@ import net.minecraft.client.colour.GrassColour;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
 import net.minecraft.level.chunk.Chunk;
+import net.minecraft.tile.GrassTile;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 import org.spongepowered.asm.mixin.Mixin;

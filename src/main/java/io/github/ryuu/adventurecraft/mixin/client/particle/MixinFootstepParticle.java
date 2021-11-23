@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.client.particle;
 
+import net.minecraft.client.particle.FootstepParticle;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.texture.TextureManager;
