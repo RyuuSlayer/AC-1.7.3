@@ -1,8 +1,9 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import io.github.ryuu.adventurecraft.util.UtilBullet;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.maths.Vec3f;
 
 public class ScriptEntityLiving extends ScriptEntity {
 
@@ -71,12 +72,12 @@ public class ScriptEntityLiving extends ScriptEntity {
         return this.entityLiving.hurtTime;
     }
 
-    public int getHurtTimeResistance() {
-        return this.entityLiving.field_1058;
-    }
-
     public void setHurtTime(int i) {
         this.entityLiving.hurtTime = i;
+    }
+
+    public int getHurtTimeResistance() {
+        return this.entityLiving.field_1058;
     }
 
     public void setHurtTimeResistance(int i) {

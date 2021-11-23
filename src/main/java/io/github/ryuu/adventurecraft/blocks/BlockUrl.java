@@ -1,11 +1,16 @@
 package io.github.ryuu.adventurecraft.blocks;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import io.github.ryuu.adventurecraft.util.DebugMode;
-import io.github.ryuu.adventurecraft.gui.GuiUrlRequest;
-import io.github.ryuu.adventurecraft.gui.GuiUrl;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityUrl;
+import io.github.ryuu.adventurecraft.gui.GuiUrl;
+import io.github.ryuu.adventurecraft.gui.GuiUrlRequest;
+import io.github.ryuu.adventurecraft.util.DebugMode;
+import net.minecraft.entity.player.Player;
+import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
+import net.minecraft.tile.TileWithEntity;
+import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.tile.material.Material;
+import net.minecraft.util.maths.Box;
 
 public class BlockUrl extends TileWithEntity {
 
@@ -41,7 +46,7 @@ public class BlockUrl extends TileWithEntity {
     @Override
     public void onTriggerActivated(Level world, int i, int j, int k) {
         TileEntityUrl obj = (TileEntityUrl) world.getTileEntity(i, j, k);
-        if (obj.url != null && !obj.url.equals((Object) "")) {
+        if (obj.url != null && !obj.url.equals("")) {
             GuiUrlRequest.showUI(obj.url);
         }
     }

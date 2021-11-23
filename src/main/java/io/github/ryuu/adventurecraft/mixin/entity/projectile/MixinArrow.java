@@ -1,40 +1,41 @@
 package io.github.ryuu.adventurecraft.mixin.entity.projectile;
 
-import java.util.List;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import io.github.ryuu.adventurecraft.blocks.Blocks;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
+import net.minecraft.tile.LadderTile;
+import net.minecraft.tile.Tile;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.io.CompoundTag;
+import net.minecraft.util.maths.Box;
+import net.minecraft.util.maths.MathsHelper;
+import net.minecraft.util.maths.Vec3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import io.github.ryuu.adventurecraft.blocks.Blocks;
+
+import java.util.List;
 
 @Mixin(Arrow.class)
 public class MixinArrow extends Entity {
 
+    private final int attackStrength;
     @Shadow()
     public int xTile = -1;
-
     public int yTile = -1;
-
     public int zTile = -1;
-
     public int inTile = 0;
-
-    private int inData = 0;
-
-    private boolean inGround = false;
-
     public boolean player = false;
-
     public int shake = 0;
-
     public LivingEntity field_1576;
-
-    private int field_1583;
-
     protected int field_1584 = 0;
-
-    private int attackStrength;
+    private int inData = 0;
+    private boolean inGround = false;
+    private int field_1583;
 
     public MixinArrow(Level world) {
         super(world);
@@ -56,9 +57,9 @@ public class MixinArrow extends Entity {
         this.player = entityliving instanceof Player;
         this.setSize(0.5f, 0.5f);
         this.setPositionAndAngles(entityliving.x, entityliving.y + (double) entityliving.getStandingEyeHeight(), entityliving.z, entityliving.yaw, entityliving.pitch);
-        this.x -= (double) (MathsHelper.cos(this.yaw / 180.0f * 3.141593f) * 0.16f);
-        this.y -= (double) 0.1f;
-        this.z -= (double) (MathsHelper.sin(this.yaw / 180.0f * 3.141593f) * 0.16f);
+        this.x -= MathsHelper.cos(this.yaw / 180.0f * 3.141593f) * 0.16f;
+        this.y -= 0.1f;
+        this.z -= MathsHelper.sin(this.yaw / 180.0f * 3.141593f) * 0.16f;
         this.setPosition(this.x, this.y, this.z);
         this.standingEyeHeight = 0.0f;
         this.velocityX = -MathsHelper.sin(this.yaw / 180.0f * 3.141593f) * MathsHelper.cos(this.pitch / 180.0f * 3.141593f);
@@ -74,9 +75,9 @@ public class MixinArrow extends Entity {
         this.player = entityliving instanceof Player;
         this.setSize(0.5f, 0.5f);
         this.setPositionAndAngles(entityliving.x, entityliving.y + (double) entityliving.getStandingEyeHeight(), entityliving.z, entityliving.yaw, entityliving.pitch);
-        this.x -= (double) (MathsHelper.cos(this.yaw / 180.0f * 3.141593f) * 0.16f);
-        this.y -= (double) 0.1f;
-        this.z -= (double) (MathsHelper.sin(this.yaw / 180.0f * 3.141593f) * 0.16f);
+        this.x -= MathsHelper.cos(this.yaw / 180.0f * 3.141593f) * 0.16f;
+        this.y -= 0.1f;
+        this.z -= MathsHelper.sin(this.yaw / 180.0f * 3.141593f) * 0.16f;
         this.setPosition(this.x, this.y, this.z);
         this.standingEyeHeight = 0.0f;
         this.velocityX = -MathsHelper.sin(this.yaw / 180.0f * 3.141593f) * MathsHelper.cos(this.pitch / 180.0f * 3.141593f);
@@ -101,18 +102,18 @@ public class MixinArrow extends Entity {
     @Overwrite()
     public void method_1291(double d, double d1, double d2, float f, float f1) {
         float f2 = MathsHelper.sqrt(d * d + d1 * d1 + d2 * d2);
-        d /= (double) f2;
-        d1 /= (double) f2;
-        d2 /= (double) f2;
+        d /= f2;
+        d1 /= f2;
+        d2 /= f2;
         d += this.rand.nextGaussian() * (double) 0.0075f * (double) f1;
         d1 += this.rand.nextGaussian() * (double) 0.0075f * (double) f1;
         d2 += this.rand.nextGaussian() * (double) 0.0075f * (double) f1;
-        this.velocityX = d *= (double) f;
-        this.velocityY = d1 *= (double) f;
-        this.velocityZ = d2 *= (double) f;
+        this.velocityX = d *= f;
+        this.velocityY = d1 *= f;
+        this.velocityZ = d2 *= f;
         float f3 = MathsHelper.sqrt(d * d + d2 * d2);
-        this.prevYaw = this.yaw = (float) (Math.atan2((double) d, (double) d2) * 180.0 / 3.1415927410125732);
-        this.prevPitch = this.pitch = (float) (Math.atan2((double) d1, (double) f3) * 180.0 / 3.1415927410125732);
+        this.prevYaw = this.yaw = (float) (Math.atan2(d, d2) * 180.0 / 3.1415927410125732);
+        this.prevPitch = this.pitch = (float) (Math.atan2(d1, f3) * 180.0 / 3.1415927410125732);
         this.field_1583 = 0;
     }
 
@@ -127,8 +128,8 @@ public class MixinArrow extends Entity {
         this.velocityZ = d2;
         if (this.prevPitch == 0.0f && this.prevYaw == 0.0f) {
             float f = MathsHelper.sqrt(d * d + d2 * d2);
-            this.prevYaw = this.yaw = (float) (Math.atan2((double) d, (double) d2) * 180.0 / 3.1415927410125732);
-            this.prevPitch = this.pitch = (float) (Math.atan2((double) d1, (double) f) * 180.0 / 3.1415927410125732);
+            this.prevYaw = this.yaw = (float) (Math.atan2(d, d2) * 180.0 / 3.1415927410125732);
+            this.prevPitch = this.pitch = (float) (Math.atan2(d1, f) * 180.0 / 3.1415927410125732);
             this.prevPitch = this.pitch;
             this.prevYaw = this.yaw;
             this.setPositionAndAngles(this.x, this.y, this.z, this.yaw, this.pitch);
@@ -146,8 +147,8 @@ public class MixinArrow extends Entity {
         super.tick();
         if (this.prevPitch == 0.0f && this.prevYaw == 0.0f) {
             float f = MathsHelper.sqrt(this.velocityX * this.velocityX + this.velocityZ * this.velocityZ);
-            this.prevYaw = this.yaw = (float) (Math.atan2((double) this.velocityX, (double) this.velocityZ) * 180.0 / 3.1415927410125732);
-            this.prevPitch = this.pitch = (float) (Math.atan2((double) this.velocityY, (double) f) * 180.0 / 3.1415927410125732);
+            this.prevYaw = this.yaw = (float) (Math.atan2(this.velocityX, this.velocityZ) * 180.0 / 3.1415927410125732);
+            this.prevPitch = this.pitch = (float) (Math.atan2(this.velocityY, f) * 180.0 / 3.1415927410125732);
         }
         if ((i = this.level.getTileId(this.xTile, this.yTile, this.zTile)) > 0 && i != Blocks.clipBlock.id && !LadderTile.isLadderID(i)) {
             Tile.BY_ID[i].method_1616(this.level, this.xTile, this.yTile, this.zTile);
@@ -164,9 +165,9 @@ public class MixinArrow extends Entity {
             int k = this.level.getTileMeta(this.xTile, this.yTile, this.zTile);
             if (j != this.inTile || k != this.inData) {
                 this.inGround = false;
-                this.velocityX *= (double) (this.rand.nextFloat() * 0.2f);
-                this.velocityY *= (double) (this.rand.nextFloat() * 0.2f);
-                this.velocityZ *= (double) (this.rand.nextFloat() * 0.2f);
+                this.velocityX *= this.rand.nextFloat() * 0.2f;
+                this.velocityY *= this.rand.nextFloat() * 0.2f;
+                this.velocityZ *= this.rand.nextFloat() * 0.2f;
                 this.field_1583 = 0;
                 this.field_1584 = 0;
                 return;
@@ -228,8 +229,8 @@ public class MixinArrow extends Entity {
         this.y += this.velocityY;
         this.z += this.velocityZ;
         float f2 = MathsHelper.sqrt(this.velocityX * this.velocityX + this.velocityZ * this.velocityZ);
-        this.yaw = (float) (Math.atan2((double) this.velocityX, (double) this.velocityZ) * 180.0 / 3.1415927410125732);
-        this.pitch = (float) (Math.atan2((double) this.velocityY, (double) f2) * 180.0 / 3.1415927410125732);
+        this.yaw = (float) (Math.atan2(this.velocityX, this.velocityZ) * 180.0 / 3.1415927410125732);
+        this.pitch = (float) (Math.atan2(this.velocityY, f2) * 180.0 / 3.1415927410125732);
         while (this.pitch - this.prevPitch < -180.0f) {
             this.prevPitch -= 360.0f;
         }
@@ -253,10 +254,10 @@ public class MixinArrow extends Entity {
             }
             f3 = 0.8f;
         }
-        this.velocityX *= (double) f3;
-        this.velocityY *= (double) f3;
-        this.velocityZ *= (double) f3;
-        this.velocityY -= (double) f5;
+        this.velocityX *= f3;
+        this.velocityY *= f3;
+        this.velocityZ *= f3;
+        this.velocityY -= f5;
         this.setPosition(this.x, this.y, this.z);
     }
 
@@ -272,9 +273,9 @@ public class MixinArrow extends Entity {
             this.level.playSound(this, "random.drr", 1.0f, 1.2f / (this.rand.nextFloat() * 0.2f + 0.9f));
             this.remove();
         } else {
-            this.velocityX *= (double) -0.1f;
-            this.velocityY *= (double) -0.1f;
-            this.velocityZ *= (double) -0.1f;
+            this.velocityX *= -0.1f;
+            this.velocityY *= -0.1f;
+            this.velocityZ *= -0.1f;
             this.yaw += 180.0f;
             this.prevYaw += 180.0f;
             this.field_1584 = 0;

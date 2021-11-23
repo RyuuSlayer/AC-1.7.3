@@ -1,5 +1,9 @@
 package io.github.ryuu.adventurecraft.mixin.level;
 
+import net.minecraft.level.Level;
+import net.minecraft.level.LightType;
+import net.minecraft.level.chunk.Chunk;
+import net.minecraft.tile.Tile;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -66,8 +70,7 @@ public class MixinLightCalculator {
                     i1 = i2;
                     j1 = j2;
                 }
-                if (!flag2)
-                    continue;
+                if (!flag2) continue;
                 if (this.field_1675 < 0) {
                     this.field_1675 = 0;
                 }
@@ -122,8 +125,7 @@ public class MixinLightCalculator {
                             i3 = l3;
                         }
                     }
-                    if (l2 == i3)
-                        continue;
+                    if (l2 == i3) continue;
                     world.setLightLevel(this.type, k1, k2, l1, i3);
                     int j4 = i3 - 1;
                     if (j4 < 0) {
@@ -138,8 +140,7 @@ public class MixinLightCalculator {
                     if (k2 + 1 >= this.field_1678) {
                         world.method_165(this.type, k1, k2 + 1, l1, j4);
                     }
-                    if (l1 + 1 < this.field_1679)
-                        continue;
+                    if (l1 + 1 < this.field_1679) continue;
                     world.method_165(this.type, k1, k2, l1 + 1, j4);
                 }
             }

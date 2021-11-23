@@ -1,81 +1,59 @@
 package io.github.ryuu.adventurecraft.mixin.level.source;
 
-import java.util.Random;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.level.Level;
+import net.minecraft.level.biome.Biome;
+import net.minecraft.level.chunk.Chunk;
+import net.minecraft.level.gen.Cave;
+import net.minecraft.level.gen.OverworldCave;
+import net.minecraft.level.source.LevelSource;
+import net.minecraft.level.structure.*;
+import net.minecraft.tile.SandTile;
+import net.minecraft.tile.Tile;
+import net.minecraft.tile.material.Material;
+import net.minecraft.util.noise.PerlinOctaveNoise;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+
+import java.util.Random;
 
 @Mixin(OverworldLevelSource.class)
 public class MixinOverworldLevelSource implements LevelSource {
 
     @Shadow()
-    private Random rand;
-
-    private PerlinOctaveNoise upperInterpolationNoise;
-
-    private PerlinOctaveNoise lowerInterpolationNoise;
-
-    private PerlinOctaveNoise interpolationNoise;
-
-    private PerlinOctaveNoise beachNoise;
-
-    private PerlinOctaveNoise surfaceDepthNoise;
-
+    private final Random rand;
+    private final PerlinOctaveNoise upperInterpolationNoise;
+    private final PerlinOctaveNoise lowerInterpolationNoise;
+    private final PerlinOctaveNoise interpolationNoise;
+    private final PerlinOctaveNoise beachNoise;
+    private final PerlinOctaveNoise surfaceDepthNoise;
+    private final Level level;
+    private final Cave cave = new OverworldCave();
     public PerlinOctaveNoise biomeNoise;
-
     public PerlinOctaveNoise depthNoise;
-
     public PerlinOctaveNoise treeNoise;
-
-    private Level level;
-
-    private double[] noises;
-
-    private double[] sandNoises = new double[256];
-
-    private double[] gravelNoises = new double[256];
-
-    private double[] surfaceDepthNoises = new double[256];
-
-    private Cave cave = new OverworldCave();
-
-    private Biome[] biomes;
-
-    double[] interpolationNoises;
-
-    double[] upperInterpolationNoises;
-
-    double[] lowerInterpolationNoises;
-
-    double[] biomeNoises;
-
-    double[] depthNoises;
-
-    int[][] unusedVals = new int[32][32];
-
-    private double[] temperatureNoises;
-
     public double mapSize = 250.0;
-
     public int waterLevel = 64;
-
     public double fractureHorizontal = 1.0;
-
     public double fractureVertical = 1.0;
-
     public double maxAvgDepth = 0.0;
-
     public double maxAvgHeight = 0.0;
-
     public double volatility1 = 1.0;
-
     public double volatility2 = 1.0;
-
     public double volatilityWeight1 = 0.0;
-
     public double volatilityWeight2 = 1.0;
+    double[] interpolationNoises;
+    double[] upperInterpolationNoises;
+    double[] lowerInterpolationNoises;
+    double[] biomeNoises;
+    double[] depthNoises;
+    int[][] unusedVals = new int[32][32];
+    private double[] noises;
+    private double[] sandNoises = new double[256];
+    private double[] gravelNoises = new double[256];
+    private double[] surfaceDepthNoises = new double[256];
+    private Biome[] biomes;
+    private double[] temperatureNoises;
 
     public MixinOverworldLevelSource(Level level, long seed) {
         this.level = level;
@@ -125,9 +103,9 @@ public class MixinOverworldLevelSource implements LevelSource {
                             double d15 = d10;
                             double d16 = (d11 - d10) * d14;
                             for (int zInner = 0; zInner < 4; ++zInner) {
-                                int x = Math.abs((int) (chunkX * 16 + (xOuter * 4 + xInner)));
-                                int y = Math.abs((int) (chunkZ * 16 + (zOuter * 4 + zInner)));
-                                double reduceBy = Math.max((double) (Math.sqrt((double) (x * x + y * y)) - this.mapSize), (double) 0.0) / 2.0;
+                                int x = Math.abs(chunkX * 16 + (xOuter * 4 + xInner));
+                                int y = Math.abs(chunkZ * 16 + (zOuter * 4 + zInner));
+                                double reduceBy = Math.max(Math.sqrt(x * x + y * y) - this.mapSize, 0.0) / 2.0;
                                 double d17 = temperatures[(xOuter * 4 + xInner) * 16 + (zOuter * 4 + zInner)];
                                 int l2 = 0;
                                 if (yOuter * 8 + yInner < this.waterLevel) {
@@ -178,8 +156,7 @@ public class MixinOverworldLevelSource implements LevelSource {
                         j1 = -1;
                         continue;
                     }
-                    if (byte3 != Tile.STONE.id)
-                        continue;
+                    if (byte3 != Tile.STONE.id) continue;
                     if (j1 == -1) {
                         if (i1 <= 0) {
                             byte1 = 0;
@@ -211,11 +188,9 @@ public class MixinOverworldLevelSource implements LevelSource {
                         tiles[l1] = byte2;
                         continue;
                     }
-                    if (j1 <= 0)
-                        continue;
+                    if (j1 <= 0) continue;
                     tiles[l1] = byte2;
-                    if (--j1 != 0 || byte2 != Tile.SAND.id)
-                        continue;
+                    if (--j1 != 0 || byte2 != Tile.SAND.id) continue;
                     j1 = this.rand.nextInt(4);
                     byte2 = (byte) Tile.SANDSTONE.id;
                 }

@@ -1,7 +1,8 @@
 package io.github.ryuu.adventurecraft.items;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
 
 class ItemLantern extends ItemType {
 

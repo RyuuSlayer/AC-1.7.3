@@ -1,39 +1,45 @@
 package io.github.ryuu.adventurecraft.mixin.client.render;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import io.github.ryuu.adventurecraft.items.Items;
+import io.github.ryuu.adventurecraft.util.Vec2;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.ModelPart;
+import net.minecraft.client.render.MapRenderer;
+import net.minecraft.client.render.RenderHelper;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.TileRenderer;
+import net.minecraft.client.render.entity.EntityRenderDispatcher;
+import net.minecraft.client.render.entity.EntityRenderer;
+import net.minecraft.client.render.entity.PlayerRenderer;
+import net.minecraft.client.render.entity.model.BipedModel;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.ClientPlayer;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
+import net.minecraft.level.storage.MapStorage;
+import net.minecraft.tile.Tile;
+import net.minecraft.tile.material.Material;
+import net.minecraft.util.maths.MathsHelper;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import io.github.ryuu.adventurecraft.items.Items;
-import io.github.ryuu.adventurecraft.util.Vec2;
 
 @Mixin(HandItemRenderer.class)
 public class MixinHandItemRenderer {
 
     @Shadow()
-    private Minecraft minecraft;
-
-    private ItemInstance item = null;
-
-    private float field_2403 = 0.0f;
-
-    private float field_2404 = 0.0f;
-
-    private TileRenderer tileRenderer = new TileRenderer();
-
-    private MapRenderer mapRenderer;
-
-    private int field_2407 = -1;
-
-    private boolean itemRotate;
-
+    private final Minecraft minecraft;
+    private final TileRenderer tileRenderer = new TileRenderer();
+    private final MapRenderer mapRenderer;
+    private final BipedModel refBiped;
     public ModelPart powerGlove;
-
     public ModelPart powerGloveRuby;
-
-    private BipedModel refBiped;
+    private ItemInstance item = null;
+    private float field_2403 = 0.0f;
+    private float field_2404 = 0.0f;
+    private int field_2407 = -1;
+    private boolean itemRotate;
 
     public MixinHandItemRenderer(Minecraft minecraft) {
         this.minecraft = minecraft;
@@ -57,18 +63,18 @@ public class MixinHandItemRenderer {
         if (itemstack.itemId < 256 && TileRenderer.method_42(Tile.BY_ID[itemstack.itemId].method_1621())) {
             int textureNum = Tile.BY_ID[itemstack.itemId].getTextureNum();
             if (textureNum == 0) {
-                GL11.glBindTexture((int) 3553, (int) this.minecraft.textureManager.getTextureId("/terrain.png"));
+                GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId("/terrain.png"));
             } else {
-                GL11.glBindTexture((int) 3553, (int) this.minecraft.textureManager.getTextureId(String.format((String) "/terrain%d.png", (Object[]) new Object[] { textureNum })));
+                GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId(String.format("/terrain%d.png", textureNum)));
             }
             this.tileRenderer.method_48(Tile.BY_ID[itemstack.itemId], itemstack.getDamage(), entityliving.getBrightnessAtEyes(1.0f));
         } else {
             String textureName = "/gui/items.png";
             if (itemstack.itemId < 256) {
                 int textureNum = Tile.BY_ID[itemstack.itemId].getTextureNum();
-                textureName = textureNum == 0 ? "/terrain.png" : String.format((String) "/terrain%d.png", (Object[]) new Object[] { textureNum });
+                textureName = textureNum == 0 ? "/terrain.png" : String.format("/terrain%d.png", textureNum);
             }
-            GL11.glBindTexture((int) 3553, (int) this.minecraft.textureManager.getTextureId(textureName));
+            GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId(textureName));
             Vec2 texResolution = this.minecraft.textureManager.getTextureResolution(textureName);
             int width = texResolution.x / 16;
             int height = texResolution.y / 16;
@@ -83,15 +89,15 @@ public class MixinHandItemRenderer {
             float f4 = 1.0f;
             float f5 = 0.0f;
             float f6 = 0.3f;
-            GL11.glEnable((int) 32826);
-            GL11.glTranslatef((float) (-f5), (float) (-f6), (float) 0.0f);
+            GL11.glEnable(32826);
+            GL11.glTranslatef(-f5, -f6, 0.0f);
             float f7 = 1.5f;
-            GL11.glScalef((float) f7, (float) f7, (float) f7);
+            GL11.glScalef(f7, f7, f7);
             if (this.itemRotate) {
-                GL11.glRotatef((float) 50.0f, (float) 0.0f, (float) 1.0f, (float) 0.0f);
-                GL11.glRotatef((float) 335.0f, (float) 0.0f, (float) 0.0f, (float) 1.0f);
+                GL11.glRotatef(50.0f, 0.0f, 1.0f, 0.0f);
+                GL11.glRotatef(335.0f, 0.0f, 0.0f, 1.0f);
             }
-            GL11.glTranslatef((float) -0.9375f, (float) -0.0625f, (float) 0.0f);
+            GL11.glTranslatef(-0.9375f, -0.0625f, 0.0f);
             float f8 = 0.0625f;
             tessellator.start();
             tessellator.method_1697(0.0f, 0.0f, 1.0f);
@@ -158,7 +164,7 @@ public class MixinHandItemRenderer {
             if (ItemType.byId[itemstack.itemId].isMuzzleFlash(itemstack)) {
                 this.renderMuzzleFlash();
             }
-            GL11.glDisable((int) 32826);
+            GL11.glDisable(32826);
         }
         GL11.glPopMatrix();
     }
@@ -179,7 +185,7 @@ public class MixinHandItemRenderer {
         float tU = 0.4375f;
         float bV = 0.6875f;
         float tV = 0.75f;
-        GL11.glColor4f((float) 1.0f, (float) 1.0f, (float) 1.0f, (float) 1.0f);
+        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
         tessellator.start();
         tessellator.vertex(bX, tY, -6.0f * pixelSize, bU, bV);
         tessellator.vertex(tX, bY, -6.0f * pixelSize, tU, bV);
@@ -204,8 +210,8 @@ public class MixinHandItemRenderer {
         ClientPlayer entityplayersp = this.minecraft.player;
         float f2 = entityplayersp.prevPitch + (entityplayersp.pitch - entityplayersp.prevPitch) * f;
         GL11.glPushMatrix();
-        GL11.glRotatef((float) f2, (float) 1.0f, (float) 0.0f, (float) 0.0f);
-        GL11.glRotatef((float) (entityplayersp.prevYaw + (entityplayersp.yaw - entityplayersp.prevYaw) * f), (float) 0.0f, (float) 1.0f, (float) 0.0f);
+        GL11.glRotatef(f2, 1.0f, 0.0f, 0.0f);
+        GL11.glRotatef(entityplayersp.prevYaw + (entityplayersp.yaw - entityplayersp.prevYaw) * f, 0.0f, 1.0f, 0.0f);
         RenderHelper.enableLighting();
         GL11.glPopMatrix();
         ItemInstance itemstack = this.item;
@@ -215,9 +221,9 @@ public class MixinHandItemRenderer {
             f7 = (float) (i >> 16 & 0xFF) / 255.0f;
             float f11 = (float) (i >> 8 & 0xFF) / 255.0f;
             float f15 = (float) (i & 0xFF) / 255.0f;
-            GL11.glColor4f((float) (f3 * f7), (float) (f3 * f11), (float) (f3 * f15), (float) 1.0f);
+            GL11.glColor4f(f3 * f7, f3 * f11, f3 * f15, 1.0f);
         } else {
-            GL11.glColor4f((float) f3, (float) f3, (float) f3, (float) 1.0f);
+            GL11.glColor4f(f3, f3, f3, 1.0f);
         }
         if (itemstack != null && itemstack.itemId == ItemType.map.id) {
             GL11.glPushMatrix();
@@ -225,7 +231,7 @@ public class MixinHandItemRenderer {
             f7 = entityplayersp.method_930(f);
             f10 = MathsHelper.sin(f7 * 3.141593f);
             float f13 = MathsHelper.sin(MathsHelper.sqrt(f7) * 3.141593f);
-            GL11.glTranslatef((float) (-f13 * 0.4f), (float) (MathsHelper.sin(MathsHelper.sqrt(f7) * 3.141593f * 2.0f) * 0.2f), (float) (-f10 * 0.2f));
+            GL11.glTranslatef(-f13 * 0.4f, MathsHelper.sin(MathsHelper.sqrt(f7) * 3.141593f * 2.0f) * 0.2f, -f10 * 0.2f);
             f7 = 1.0f - f2 / 45.0f + 0.1f;
             if (f7 < 0.0f) {
                 f7 = 0.0f;
@@ -234,42 +240,42 @@ public class MixinHandItemRenderer {
                 f7 = 1.0f;
             }
             f7 = -MathsHelper.cos(f7 * 3.141593f) * 0.5f + 0.5f;
-            GL11.glTranslatef((float) 0.0f, (float) (0.0f * f4 - (1.0f - f1) * 1.2f - f7 * 0.5f + 0.04f), (float) (-0.9f * f4));
-            GL11.glRotatef((float) 90.0f, (float) 0.0f, (float) 1.0f, (float) 0.0f);
-            GL11.glRotatef((float) (f7 * -85.0f), (float) 0.0f, (float) 0.0f, (float) 1.0f);
-            GL11.glEnable((int) 32826);
-            GL11.glBindTexture((int) 3553, (int) this.minecraft.textureManager.getTextureId(this.minecraft.player.skinUrl, this.minecraft.player.method_1314()));
+            GL11.glTranslatef(0.0f, 0.0f * f4 - (1.0f - f1) * 1.2f - f7 * 0.5f + 0.04f, -0.9f * f4);
+            GL11.glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
+            GL11.glRotatef(f7 * -85.0f, 0.0f, 0.0f, 1.0f);
+            GL11.glEnable(32826);
+            GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId(this.minecraft.player.skinUrl, this.minecraft.player.method_1314()));
             for (f10 = 0.0f; f10 < 2.0f; f10 += 1.0f) {
                 f13 = f10 * 2.0f - 1.0f;
                 GL11.glPushMatrix();
-                GL11.glTranslatef((float) -0.0f, (float) -0.6f, (float) (1.1f * f13));
-                GL11.glRotatef((float) (-45.0f * f13), (float) 1.0f, (float) 0.0f, (float) 0.0f);
-                GL11.glRotatef((float) -90.0f, (float) 0.0f, (float) 0.0f, (float) 1.0f);
-                GL11.glRotatef((float) 59.0f, (float) 0.0f, (float) 0.0f, (float) 1.0f);
-                GL11.glRotatef((float) (-65.0f * f13), (float) 0.0f, (float) 1.0f, (float) 0.0f);
+                GL11.glTranslatef(-0.0f, -0.6f, 1.1f * f13);
+                GL11.glRotatef(-45.0f * f13, 1.0f, 0.0f, 0.0f);
+                GL11.glRotatef(-90.0f, 0.0f, 0.0f, 1.0f);
+                GL11.glRotatef(59.0f, 0.0f, 0.0f, 1.0f);
+                GL11.glRotatef(-65.0f * f13, 0.0f, 1.0f, 0.0f);
                 EntityRenderer render1 = EntityRenderDispatcher.INSTANCE.get(this.minecraft.player);
                 PlayerRenderer renderplayer1 = (PlayerRenderer) render1;
                 float f17 = 1.0f;
-                GL11.glScalef((float) f17, (float) f17, (float) f17);
+                GL11.glScalef(f17, f17, f17);
                 renderplayer1.method_345();
                 GL11.glPopMatrix();
             }
             f10 = entityplayersp.method_930(f);
             f13 = MathsHelper.sin(f10 * f10 * 3.141593f);
             float f16 = MathsHelper.sin(MathsHelper.sqrt(f10) * 3.141593f);
-            GL11.glRotatef((float) (-f13 * 20.0f), (float) 0.0f, (float) 1.0f, (float) 0.0f);
-            GL11.glRotatef((float) (-f16 * 20.0f), (float) 0.0f, (float) 0.0f, (float) 1.0f);
-            GL11.glRotatef((float) (-f16 * 80.0f), (float) 1.0f, (float) 0.0f, (float) 0.0f);
+            GL11.glRotatef(-f13 * 20.0f, 0.0f, 1.0f, 0.0f);
+            GL11.glRotatef(-f16 * 20.0f, 0.0f, 0.0f, 1.0f);
+            GL11.glRotatef(-f16 * 80.0f, 1.0f, 0.0f, 0.0f);
             f10 = 0.38f;
-            GL11.glScalef((float) f10, (float) f10, (float) f10);
-            GL11.glRotatef((float) 90.0f, (float) 0.0f, (float) 1.0f, (float) 0.0f);
-            GL11.glRotatef((float) 180.0f, (float) 0.0f, (float) 0.0f, (float) 1.0f);
-            GL11.glTranslatef((float) -1.0f, (float) -1.0f, (float) 0.0f);
+            GL11.glScalef(f10, f10, f10);
+            GL11.glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
+            GL11.glRotatef(180.0f, 0.0f, 0.0f, 1.0f);
+            GL11.glTranslatef(-1.0f, -1.0f, 0.0f);
             f13 = 0.015625f;
-            GL11.glScalef((float) f13, (float) f13, (float) f13);
+            GL11.glScalef(f13, f13, f13);
             this.minecraft.textureManager.bindTexture(this.minecraft.textureManager.getTextureId("/misc/mapbg.png"));
             Tessellator tessellator = Tessellator.INSTANCE;
-            GL11.glNormal3f((float) 0.0f, (float) 0.0f, (float) -1.0f);
+            GL11.glNormal3f(0.0f, 0.0f, -1.0f);
             tessellator.start();
             int byte0 = 7;
             tessellator.vertex(0 - byte0, 128 + byte0, 0.0, 0.0, 1.0);
@@ -286,18 +292,18 @@ public class MixinHandItemRenderer {
                 float ft3 = 0.8f;
                 f7 = MathsHelper.sin(swingProgress * 3.141593f);
                 float f9 = MathsHelper.sin(MathsHelper.sqrt(swingProgress) * 3.141593f);
-                GL11.glTranslatef((float) (-f9 * 0.4f), (float) (MathsHelper.sin(MathsHelper.sqrt(swingProgress) * 3.141593f * 2.0f) * 0.2f), (float) (-f7 * 0.2f));
-                GL11.glTranslatef((float) (0.7f * ft3), (float) (-0.65f * ft3 - (1.0f - f1) * 0.6f), (float) (-0.9f * ft3));
-                GL11.glRotatef((float) 45.0f, (float) 0.0f, (float) 1.0f, (float) 0.0f);
-                GL11.glEnable((int) 32826);
+                GL11.glTranslatef(-f9 * 0.4f, MathsHelper.sin(MathsHelper.sqrt(swingProgress) * 3.141593f * 2.0f) * 0.2f, -f7 * 0.2f);
+                GL11.glTranslatef(0.7f * ft3, -0.65f * ft3 - (1.0f - f1) * 0.6f, -0.9f * ft3);
+                GL11.glRotatef(45.0f, 0.0f, 1.0f, 0.0f);
+                GL11.glEnable(32826);
                 f7 = MathsHelper.sin(swingProgress * swingProgress * 3.141593f);
                 f9 = MathsHelper.sin(MathsHelper.sqrt(swingProgress) * 3.141593f);
-                GL11.glRotatef((float) (-f7 * 20.0f), (float) 0.0f, (float) 1.0f, (float) 0.0f);
-                GL11.glRotatef((float) (-f9 * 20.0f), (float) 0.0f, (float) 0.0f, (float) 1.0f);
-                GL11.glRotatef((float) (-f9 * 80.0f), (float) 1.0f, (float) 0.0f, (float) 0.0f);
-                GL11.glScalef((float) 0.4f, (float) 0.4f, (float) 0.4f);
+                GL11.glRotatef(-f7 * 20.0f, 0.0f, 1.0f, 0.0f);
+                GL11.glRotatef(-f9 * 20.0f, 0.0f, 0.0f, 1.0f);
+                GL11.glRotatef(-f9 * 80.0f, 1.0f, 0.0f, 0.0f);
+                GL11.glScalef(0.4f, 0.4f, 0.4f);
                 if (itemstack.getType().shouldRotate180()) {
-                    GL11.glRotatef((float) 180.0f, (float) 0.0f, (float) 1.0f, (float) 0.0f);
+                    GL11.glRotatef(180.0f, 0.0f, 1.0f, 0.0f);
                 }
                 this.method_1862(entityplayersp, itemstack);
                 GL11.glPopMatrix();
@@ -306,25 +312,25 @@ public class MixinHandItemRenderer {
                 float f4 = 0.8f;
                 f8 = MathsHelper.sin(swingProgress * 3.141593f);
                 f10 = MathsHelper.sin(MathsHelper.sqrt(swingProgress) * 3.141593f);
-                GL11.glTranslatef((float) (-f10 * 0.3f), (float) (MathsHelper.sin(MathsHelper.sqrt(swingProgress) * 3.141593f * 2.0f) * 0.4f), (float) (-f8 * 0.4f));
-                GL11.glTranslatef((float) (0.8f * f4), (float) (-0.75f * f4 - (1.0f - f1) * 0.6f), (float) (-0.9f * f4));
-                GL11.glRotatef((float) 45.0f, (float) 0.0f, (float) 1.0f, (float) 0.0f);
-                GL11.glEnable((int) 32826);
+                GL11.glTranslatef(-f10 * 0.3f, MathsHelper.sin(MathsHelper.sqrt(swingProgress) * 3.141593f * 2.0f) * 0.4f, -f8 * 0.4f);
+                GL11.glTranslatef(0.8f * f4, -0.75f * f4 - (1.0f - f1) * 0.6f, -0.9f * f4);
+                GL11.glRotatef(45.0f, 0.0f, 1.0f, 0.0f);
+                GL11.glEnable(32826);
                 f8 = MathsHelper.sin(swingProgress * swingProgress * 3.141593f);
                 f10 = MathsHelper.sin(MathsHelper.sqrt(swingProgress) * 3.141593f);
-                GL11.glRotatef((float) (f10 * 70.0f), (float) 0.0f, (float) 1.0f, (float) 0.0f);
-                GL11.glRotatef((float) (-f8 * 20.0f), (float) 0.0f, (float) 0.0f, (float) 1.0f);
-                GL11.glBindTexture((int) 3553, (int) this.minecraft.textureManager.getTextureId(this.minecraft.player.skinUrl, this.minecraft.player.method_1314()));
-                GL11.glTranslatef((float) -1.0f, (float) 3.6f, (float) 3.5f);
-                GL11.glRotatef((float) 120.0f, (float) 0.0f, (float) 0.0f, (float) 1.0f);
-                GL11.glRotatef((float) 200.0f, (float) 1.0f, (float) 0.0f, (float) 0.0f);
-                GL11.glRotatef((float) -135.0f, (float) 0.0f, (float) 1.0f, (float) 0.0f);
-                GL11.glScalef((float) 1.0f, (float) 1.0f, (float) 1.0f);
-                GL11.glTranslatef((float) 5.6f, (float) 0.0f, (float) 0.0f);
+                GL11.glRotatef(f10 * 70.0f, 0.0f, 1.0f, 0.0f);
+                GL11.glRotatef(-f8 * 20.0f, 0.0f, 0.0f, 1.0f);
+                GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId(this.minecraft.player.skinUrl, this.minecraft.player.method_1314()));
+                GL11.glTranslatef(-1.0f, 3.6f, 3.5f);
+                GL11.glRotatef(120.0f, 0.0f, 0.0f, 1.0f);
+                GL11.glRotatef(200.0f, 1.0f, 0.0f, 0.0f);
+                GL11.glRotatef(-135.0f, 0.0f, 1.0f, 0.0f);
+                GL11.glScalef(1.0f, 1.0f, 1.0f);
+                GL11.glTranslatef(5.6f, 0.0f, 0.0f);
                 EntityRenderer render = EntityRenderDispatcher.INSTANCE.get(this.minecraft.player);
                 PlayerRenderer renderplayer = (PlayerRenderer) render;
                 renderplayer.method_345();
-                GL11.glBindTexture((int) 3553, (int) this.minecraft.textureManager.getTextureId("/mob/powerGlove.png"));
+                GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId("/mob/powerGlove.png"));
                 this.refBiped.handSwingProgress = 0.0f;
                 this.refBiped.setAngles(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0625f);
                 this.powerGlove.pivotX = this.refBiped.rightArm.pivotX;
@@ -350,27 +356,27 @@ public class MixinHandItemRenderer {
             float f4 = 0.8f;
             f8 = MathsHelper.sin(swingProgress * 3.141593f);
             f10 = MathsHelper.sin(MathsHelper.sqrt(swingProgress) * 3.141593f);
-            GL11.glTranslatef((float) (-f10 * 0.3f), (float) (MathsHelper.sin(MathsHelper.sqrt(swingProgress) * 3.141593f * 2.0f) * 0.4f), (float) (-f8 * 0.4f));
-            GL11.glTranslatef((float) (0.8f * f4), (float) (-0.75f * f4 - (1.0f - f1) * 0.6f), (float) (-0.9f * f4));
-            GL11.glRotatef((float) 45.0f, (float) 0.0f, (float) 1.0f, (float) 0.0f);
-            GL11.glEnable((int) 32826);
+            GL11.glTranslatef(-f10 * 0.3f, MathsHelper.sin(MathsHelper.sqrt(swingProgress) * 3.141593f * 2.0f) * 0.4f, -f8 * 0.4f);
+            GL11.glTranslatef(0.8f * f4, -0.75f * f4 - (1.0f - f1) * 0.6f, -0.9f * f4);
+            GL11.glRotatef(45.0f, 0.0f, 1.0f, 0.0f);
+            GL11.glEnable(32826);
             f8 = MathsHelper.sin(swingProgress * swingProgress * 3.141593f);
             f10 = MathsHelper.sin(MathsHelper.sqrt(swingProgress) * 3.141593f);
-            GL11.glRotatef((float) (f10 * 70.0f), (float) 0.0f, (float) 1.0f, (float) 0.0f);
-            GL11.glRotatef((float) (-f8 * 20.0f), (float) 0.0f, (float) 0.0f, (float) 1.0f);
-            GL11.glBindTexture((int) 3553, (int) this.minecraft.textureManager.getTextureId(this.minecraft.player.skinUrl, this.minecraft.player.method_1314()));
-            GL11.glTranslatef((float) -1.0f, (float) 3.6f, (float) 3.5f);
-            GL11.glRotatef((float) 120.0f, (float) 0.0f, (float) 0.0f, (float) 1.0f);
-            GL11.glRotatef((float) 200.0f, (float) 1.0f, (float) 0.0f, (float) 0.0f);
-            GL11.glRotatef((float) -135.0f, (float) 0.0f, (float) 1.0f, (float) 0.0f);
-            GL11.glScalef((float) 1.0f, (float) 1.0f, (float) 1.0f);
-            GL11.glTranslatef((float) 5.6f, (float) 0.0f, (float) 0.0f);
+            GL11.glRotatef(f10 * 70.0f, 0.0f, 1.0f, 0.0f);
+            GL11.glRotatef(-f8 * 20.0f, 0.0f, 0.0f, 1.0f);
+            GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId(this.minecraft.player.skinUrl, this.minecraft.player.method_1314()));
+            GL11.glTranslatef(-1.0f, 3.6f, 3.5f);
+            GL11.glRotatef(120.0f, 0.0f, 0.0f, 1.0f);
+            GL11.glRotatef(200.0f, 1.0f, 0.0f, 0.0f);
+            GL11.glRotatef(-135.0f, 0.0f, 1.0f, 0.0f);
+            GL11.glScalef(1.0f, 1.0f, 1.0f);
+            GL11.glTranslatef(5.6f, 0.0f, 0.0f);
             EntityRenderer render = EntityRenderDispatcher.INSTANCE.get(this.minecraft.player);
             PlayerRenderer renderplayer = (PlayerRenderer) render;
             renderplayer.method_345();
             GL11.glPopMatrix();
         }
-        GL11.glDisable((int) 32826);
+        GL11.glDisable(32826);
         RenderHelper.disableLighting();
     }
 
@@ -382,24 +388,24 @@ public class MixinHandItemRenderer {
         float f1 = this.field_2404 + (this.field_2403 - this.field_2404) * f;
         ClientPlayer entityplayersp = this.minecraft.player;
         float f2 = this.minecraft.level.getBrightness(MathsHelper.floor(entityplayersp.x), MathsHelper.floor(entityplayersp.y), MathsHelper.floor(entityplayersp.z));
-        GL11.glColor4f((float) f2, (float) f2, (float) f2, (float) 1.0f);
+        GL11.glColor4f(f2, f2, f2, 1.0f);
         ItemInstance itemstack = new ItemInstance(Items.woodenShield);
         GL11.glPushMatrix();
         float f3 = 0.8f;
         if (otherHand == 0.0f) {
             float f7 = MathsHelper.sin(swingProgress * 3.141593f);
             float f9 = MathsHelper.sin(MathsHelper.sqrt(swingProgress) * 3.141593f);
-            GL11.glTranslatef((float) (-f9 * 0.4f), (float) (MathsHelper.sin(MathsHelper.sqrt(swingProgress) * 3.141593f * 2.0f) * 0.2f), (float) (-f7 * 0.2f));
-            GL11.glTranslatef((float) 1.0f, (float) (-0.65f * f3 - (1.0f - f1) * 0.6f), (float) (-0.9f * f3));
+            GL11.glTranslatef(-f9 * 0.4f, MathsHelper.sin(MathsHelper.sqrt(swingProgress) * 3.141593f * 2.0f) * 0.2f, -f7 * 0.2f);
+            GL11.glTranslatef(1.0f, -0.65f * f3 - (1.0f - f1) * 0.6f, -0.9f * f3);
         } else {
             float f7 = MathsHelper.sin(otherHand * 3.141593f);
             float f9 = MathsHelper.sin(MathsHelper.sqrt(otherHand) * 3.141593f);
-            GL11.glTranslatef((float) (f9 * 0.4f), (float) (MathsHelper.sin(MathsHelper.sqrt(otherHand) * 3.141593f * 2.0f) * 0.2f), (float) (-f7 * 0.2f));
-            GL11.glTranslatef((float) 1.0f, (float) (-0.65f * f3 - (1.0f - f1) * 0.6f), (float) (-0.9f * f3));
-            GL11.glRotatef((float) (-90.0f * f7), (float) 0.0f, (float) 1.0f, (float) 0.0f);
+            GL11.glTranslatef(f9 * 0.4f, MathsHelper.sin(MathsHelper.sqrt(otherHand) * 3.141593f * 2.0f) * 0.2f, -f7 * 0.2f);
+            GL11.glTranslatef(1.0f, -0.65f * f3 - (1.0f - f1) * 0.6f, -0.9f * f3);
+            GL11.glRotatef(-90.0f * f7, 0.0f, 1.0f, 0.0f);
         }
-        GL11.glEnable((int) 32826);
-        GL11.glScalef((float) 0.6f, (float) 0.6f, (float) 0.6f);
+        GL11.glEnable(32826);
+        GL11.glScalef(0.6f, 0.6f, 0.6f);
         this.itemRotate = false;
         this.method_1862(entityplayersp, itemstack);
         this.itemRotate = true;
@@ -411,10 +417,10 @@ public class MixinHandItemRenderer {
      */
     @Overwrite()
     public void method_1864(float f) {
-        GL11.glDisable((int) 3008);
+        GL11.glDisable(3008);
         if (!this.minecraft.cameraActive && this.minecraft.player.method_1359()) {
             int i = this.minecraft.textureManager.getTextureId("/terrain.png");
-            GL11.glBindTexture((int) 3553, (int) i);
+            GL11.glBindTexture(3553, i);
             this.method_1867(f);
         }
         if (this.minecraft.field_2807.isInsideWall()) {
@@ -422,7 +428,7 @@ public class MixinHandItemRenderer {
             int l = MathsHelper.floor(this.minecraft.field_2807.y);
             int i1 = MathsHelper.floor(this.minecraft.field_2807.z);
             int j1 = this.minecraft.textureManager.getTextureId("/terrain.png");
-            GL11.glBindTexture((int) 3553, (int) j1);
+            GL11.glBindTexture(3553, j1);
             int k1 = this.minecraft.level.getTileId(j, l, i1);
             if (this.minecraft.level.canSuffocate(j, l, i1) && this.minecraft.level.isFullOpaque(j, l, i1)) {
                 this.method_1861(f, Tile.BY_ID[k1].getTextureForSide(2));
@@ -445,10 +451,10 @@ public class MixinHandItemRenderer {
         }
         if (this.minecraft.field_2807.isInFluid(Material.WATER)) {
             int k = this.minecraft.textureManager.getTextureId("/misc/water.png");
-            GL11.glBindTexture((int) 3553, (int) k);
+            GL11.glBindTexture(3553, k);
             this.method_1866(f);
         }
-        GL11.glEnable((int) 3008);
+        GL11.glEnable(3008);
     }
 
     /**
@@ -462,7 +468,7 @@ public class MixinHandItemRenderer {
         Tessellator tessellator = Tessellator.INSTANCE;
         float f1 = this.minecraft.field_2807.getBrightnessAtEyes(f);
         f1 = 0.1f;
-        GL11.glColor4f((float) f1, (float) f1, (float) f1, (float) 0.5f);
+        GL11.glColor4f(f1, f1, f1, 0.5f);
         GL11.glPushMatrix();
         float f2 = -1.0f;
         float f3 = 1.0f;
@@ -481,7 +487,7 @@ public class MixinHandItemRenderer {
         tessellator.vertex(f2, f5, f6, f9, f10);
         tessellator.draw();
         GL11.glPopMatrix();
-        GL11.glColor4f((float) 1.0f, (float) 1.0f, (float) 1.0f, (float) 1.0f);
+        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
     /**
@@ -491,9 +497,9 @@ public class MixinHandItemRenderer {
     private void method_1866(float f) {
         Tessellator tessellator = Tessellator.INSTANCE;
         float f1 = this.minecraft.field_2807.getBrightnessAtEyes(f);
-        GL11.glColor4f((float) f1, (float) f1, (float) f1, (float) 0.5f);
-        GL11.glEnable((int) 3042);
-        GL11.glBlendFunc((int) 770, (int) 771);
+        GL11.glColor4f(f1, f1, f1, 0.5f);
+        GL11.glEnable(3042);
+        GL11.glBlendFunc(770, 771);
         GL11.glPushMatrix();
         float f2 = 4.0f;
         float f3 = -1.0f;
@@ -510,8 +516,8 @@ public class MixinHandItemRenderer {
         tessellator.vertex(f3, f6, f7, f2 + f8, 0.0f + f9);
         tessellator.draw();
         GL11.glPopMatrix();
-        GL11.glColor4f((float) 1.0f, (float) 1.0f, (float) 1.0f, (float) 1.0f);
-        GL11.glDisable((int) 3042);
+        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        GL11.glDisable(3042);
     }
 
     /**
@@ -520,9 +526,9 @@ public class MixinHandItemRenderer {
     @Overwrite()
     private void method_1867(float f) {
         Tessellator tessellator = Tessellator.INSTANCE;
-        GL11.glColor4f((float) 1.0f, (float) 1.0f, (float) 1.0f, (float) 0.9f);
-        GL11.glEnable((int) 3042);
-        GL11.glBlendFunc((int) 770, (int) 771);
+        GL11.glColor4f(1.0f, 1.0f, 1.0f, 0.9f);
+        GL11.glEnable(3042);
+        GL11.glBlendFunc(770, 771);
         float f1 = 1.0f;
         for (int i = 0; i < 2; ++i) {
             GL11.glPushMatrix();
@@ -538,8 +544,8 @@ public class MixinHandItemRenderer {
             float f8 = 0.0f - f1 / 2.0f;
             float f9 = f8 + f1;
             float f10 = -0.5f;
-            GL11.glTranslatef((float) ((float) (-(i * 2 - 1)) * 0.24f), (float) -0.3f, (float) 0.0f);
-            GL11.glRotatef((float) ((float) (i * 2 - 1) * 10.0f), (float) 0.0f, (float) 1.0f, (float) 0.0f);
+            GL11.glTranslatef((float) (-(i * 2 - 1)) * 0.24f, -0.3f, 0.0f);
+            GL11.glRotatef((float) (i * 2 - 1) * 10.0f, 0.0f, 1.0f, 0.0f);
             tessellator.start();
             tessellator.vertex(f6, f8, f10, f3, f5);
             tessellator.vertex(f7, f8, f10, f2, f5);
@@ -548,8 +554,8 @@ public class MixinHandItemRenderer {
             tessellator.draw();
             GL11.glPopMatrix();
         }
-        GL11.glColor4f((float) 1.0f, (float) 1.0f, (float) 1.0f, (float) 1.0f);
-        GL11.glDisable((int) 3042);
+        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        GL11.glDisable(3042);
     }
 
     /**

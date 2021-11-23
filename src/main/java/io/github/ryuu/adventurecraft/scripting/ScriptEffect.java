@@ -1,9 +1,10 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import io.github.ryuu.adventurecraft.blocks.BlockEffect;
 import io.github.ryuu.adventurecraft.util.TextureAnimated;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.WorldRenderer;
+import net.minecraft.level.Level;
 
 public class ScriptEffect {
 

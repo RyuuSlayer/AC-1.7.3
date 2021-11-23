@@ -3,8 +3,6 @@ package io.github.ryuu.adventurecraft.util;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 
 public class Profiler {
 
@@ -16,16 +14,16 @@ public class Profiler {
 
     public static void startTiming(String context) {
         if (profileStack != null) {
-            profileStack.push((Object) new ProfileContext(context));
+            profileStack.push(new ProfileContext(context));
         }
     }
 
     public static void stopTiming() {
         if (profileStack != null) {
-            ProfileContext c = (ProfileContext) profileStack.pop();
+            ProfileContext c = profileStack.pop();
             long t = c.getTime();
-            if (times.containsKey((Object) c.contextName)) {
-                times.put((Object) c.contextName, (Object) ((Long) times.get((Object) c.contextName) + t));
+            if (times.containsKey(c.contextName)) {
+                times.put((Object) c.contextName, (Object) (times.get(c.contextName) + t));
             } else {
                 times.put((Object) c.contextName, (Object) t);
             }
@@ -43,7 +41,7 @@ public class Profiler {
             long time = System.nanoTime() - startTime;
             if (time > 100000000L) {
                 for (Map.Entry e : times.entrySet()) {
-                    System.out.printf("%s\t\t%d\n", new Object[] { e.getKey(), e.getValue() });
+                    System.out.printf("%s\t\t%d\n", e.getKey(), e.getValue());
                 }
             }
             profileStack = null;

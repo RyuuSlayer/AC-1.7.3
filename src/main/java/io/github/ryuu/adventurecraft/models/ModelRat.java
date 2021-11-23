@@ -1,7 +1,7 @@
 package io.github.ryuu.adventurecraft.models;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.client.model.ModelPart;
+import net.minecraft.client.render.entity.model.EntityModel;
 import org.lwjgl.opengl.GL11;
 
 public class ModelRat extends EntityModel {
@@ -42,7 +42,7 @@ public class ModelRat extends EntityModel {
 
     @Override
     public void render(float f, float f1, float f2, float f3, float f4, float f5) {
-        GL11.glEnable((int) 2884);
+        GL11.glEnable(2884);
         this.setAngles(f, f1, f2, f3, f4, f5);
         this.theHead.render(f5);
         this.snout.render(f5);

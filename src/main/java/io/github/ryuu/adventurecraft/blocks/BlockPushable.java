@@ -1,13 +1,31 @@
 package io.github.ryuu.adventurecraft.blocks;
 
+import net.minecraft.entity.FallingTile;
+import net.minecraft.level.Level;
+import net.minecraft.tile.Tile;
+import net.minecraft.tile.material.Material;
+
 import java.util.Random;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 
 public class BlockPushable extends BlockColor {
 
     public BlockPushable(int id, int tex, Material material) {
         super(id, tex, material);
+    }
+
+    public static boolean canFallBelow(Level world, int i, int j, int k) {
+        int l = world.getTileId(i, j, k);
+        if (l == 0) {
+            return true;
+        }
+        if (l == Tile.FIRE.id) {
+            return true;
+        }
+        Material material = Tile.BY_ID[l].material;
+        if (material == Material.WATER) {
+            return true;
+        }
+        return material == Material.LAVA;
     }
 
     @Override
@@ -36,20 +54,5 @@ public class BlockPushable extends BlockColor {
     @Override
     public int getTickrate() {
         return 3;
-    }
-
-    public static boolean canFallBelow(Level world, int i, int j, int k) {
-        int l = world.getTileId(i, j, k);
-        if (l == 0) {
-            return true;
-        }
-        if (l == Tile.FIRE.id) {
-            return true;
-        }
-        Material material = Tile.BY_ID[l].material;
-        if (material == Material.WATER) {
-            return true;
-        }
-        return material == Material.LAVA;
     }
 }

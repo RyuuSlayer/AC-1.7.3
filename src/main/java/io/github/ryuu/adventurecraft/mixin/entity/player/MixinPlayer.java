@@ -1,15 +1,40 @@
 package io.github.ryuu.adventurecraft.mixin.entity.player;
 
-import java.util.List;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import io.github.ryuu.adventurecraft.blocks.Blocks;
+import io.github.ryuu.adventurecraft.items.Items;
+import io.github.ryuu.adventurecraft.util.DebugMode;
+import io.github.ryuu.adventurecraft.util.PlayerTorch;
+import net.minecraft.achievement.Achievements;
+import net.minecraft.container.Container;
+import net.minecraft.entity.*;
+import net.minecraft.entity.animal.Pig;
+import net.minecraft.entity.animal.Wolf;
+import net.minecraft.entity.monster.Creeper;
+import net.minecraft.entity.monster.Ghast;
+import net.minecraft.entity.monster.Monster;
+import net.minecraft.entity.player.PlayerContainer;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.projectile.Arrow;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
+import net.minecraft.level.source.LevelSource;
+import net.minecraft.stat.Stat;
+import net.minecraft.stat.Stats;
+import net.minecraft.tile.BedTile;
+import net.minecraft.tile.Tile;
+import net.minecraft.tile.material.Material;
+import net.minecraft.util.SleepStatus;
+import net.minecraft.util.Vec3i;
+import net.minecraft.util.io.CompoundTag;
+import net.minecraft.util.io.ListTag;
+import net.minecraft.util.maths.Box;
+import net.minecraft.util.maths.MathsHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import io.github.ryuu.adventurecraft.blocks.Blocks;
-import io.github.ryuu.adventurecraft.util.PlayerTorch;
-import io.github.ryuu.adventurecraft.items.Items;
-import io.github.ryuu.adventurecraft.util.DebugMode;
+
+import java.util.List;
 
 @Mixin(Player.class)
 public abstract class MixinPlayer extends LivingEntity {
@@ -50,50 +75,28 @@ public abstract class MixinPlayer extends LivingEntity {
     public double field_534;
 
     public double field_535;
-
-    protected boolean sleeping;
-
     public Vec3i bedPosition;
-
-    private int sleepTimer;
-
     public float field_509;
-
     public float field_507;
-
     public float field_510;
-
-    private Vec3i spawnPos;
-
-    private Vec3i field_517;
-
     public int field_511 = 20;
-
-    protected boolean field_512 = false;
-
     public float field_504;
-
     public float field_505;
-
     public float field_513;
-
-    private int field_518 = 0;
-
     public FishHook fishHook = null;
-
     public boolean isSwingingOffhand;
-
     public int swingProgressIntOffhand;
-
     public float prevSwingProgressOffhand;
-
     public float swingProgressOffhand;
-
     public boolean swappedItems;
-
     public int numHeartPieces;
-
     public String cloakTexture;
+    protected boolean sleeping;
+    protected boolean field_512 = false;
+    private int sleepTimer;
+    private Vec3i spawnPos;
+    private Vec3i field_517;
+    private int field_518 = 0;
 
     public MixinPlayer(Level world) {
         super(world);
@@ -111,6 +114,23 @@ public abstract class MixinPlayer extends LivingEntity {
         this.swingProgressIntOffhand = 0;
         this.swappedItems = false;
         this.numHeartPieces = 0;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static Vec3i getRespawnPos(Level level, Vec3i respawnPos) {
+        LevelSource ichunkprovider = level.getLevelSource();
+        ichunkprovider.loadChunk(respawnPos.x - 3 >> 4, respawnPos.z - 3 >> 4);
+        ichunkprovider.loadChunk(respawnPos.x + 3 >> 4, respawnPos.z - 3 >> 4);
+        ichunkprovider.loadChunk(respawnPos.x - 3 >> 4, respawnPos.z + 3 >> 4);
+        ichunkprovider.loadChunk(respawnPos.x + 3 >> 4, respawnPos.z + 3 >> 4);
+        if (level.getTileId(respawnPos.x, respawnPos.y, respawnPos.z) != Tile.BED.id) {
+            return null;
+        }
+        Vec3i chunkcoordinates1 = BedTile.findWakeUpPosition(level, respawnPos.x, respawnPos.y, respawnPos.z, 0);
+        return chunkcoordinates1;
     }
 
     /**
@@ -268,7 +288,7 @@ public abstract class MixinPlayer extends LivingEntity {
         this.field_524 = this.field_525;
         super.updateDespawnCounter();
         float f = MathsHelper.sqrt(this.velocityX * this.velocityX + this.velocityZ * this.velocityZ);
-        float f1 = (float) Math.atan((double) (-this.velocityY * (double) 0.2f)) * 15.0f;
+        float f1 = (float) Math.atan(-this.velocityY * (double) 0.2f) * 15.0f;
         if (f > 0.1f) {
             f = 0.1f;
         }
@@ -283,8 +303,7 @@ public abstract class MixinPlayer extends LivingEntity {
         if (this.health > 0 && (list = this.level.getEntities(this, this.boundingBox.expand(1.0, 0.0, 1.0))) != null) {
             for (int i = 0; i < list.size(); ++i) {
                 Entity entity = (Entity) list.get(i);
-                if (entity.removed)
-                    continue;
+                if (entity.removed) continue;
                 this.method_520(entity);
             }
         }
@@ -346,7 +365,7 @@ public abstract class MixinPlayer extends LivingEntity {
         this.setSize(0.2f, 0.2f);
         this.setPosition(this.x, this.y, this.z);
         this.velocityY = 0.1f;
-        if (this.name.equals((Object) "Notch")) {
+        if (this.name.equals("Notch")) {
             this.dropItem(new ItemInstance(ItemType.apple, 1), true);
         }
         if (entity != null) {
@@ -406,9 +425,9 @@ public abstract class MixinPlayer extends LivingEntity {
             entityitem.velocityY = -MathsHelper.sin(this.pitch / 180.0f * 3.141593f) * f1 + 0.1f;
             f1 = 0.02f;
             float f3 = this.rand.nextFloat() * 3.141593f * 2.0f;
-            entityitem.velocityX += Math.cos((double) f3) * (double) (f1 *= this.rand.nextFloat());
-            entityitem.velocityY += (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.1f);
-            entityitem.velocityZ += Math.sin((double) f3) * (double) f1;
+            entityitem.velocityX += Math.cos(f3) * (double) (f1 *= this.rand.nextFloat());
+            entityitem.velocityY += (this.rand.nextFloat() - this.rand.nextFloat()) * 0.1f;
+            entityitem.velocityZ += Math.sin(f3) * (double) f1;
         }
         this.spawnItem(entityitem);
         this.increaseStat(Stats.drop, 1);
@@ -575,7 +594,7 @@ public abstract class MixinPlayer extends LivingEntity {
         if (entityliving instanceof Creeper || entityliving instanceof Ghast) {
             return;
         }
-        if (entityliving instanceof Wolf && (entitywolf = (Wolf) entityliving).isTamed() && this.name.equals((Object) entitywolf.getOwner())) {
+        if (entityliving instanceof Wolf && (entitywolf = (Wolf) entityliving).isTamed() && this.name.equals(entitywolf.getOwner())) {
             return;
         }
         if (entityliving instanceof Player && !this.method_498()) {
@@ -584,7 +603,7 @@ public abstract class MixinPlayer extends LivingEntity {
         List list = this.level.getEntities(Wolf.class, Box.getOrCreate(this.x, this.y, this.z, this.x + 1.0, this.y + 1.0, this.z + 1.0).expand(16.0, 4.0, 16.0));
         for (Entity entity : list) {
             Wolf entitywolf1 = (Wolf) entity;
-            if (!entitywolf1.isTamed() || entitywolf1.method_634() != null || !this.name.equals((Object) entitywolf1.getOwner()) || flag && entitywolf1.isSitting())
+            if (!entitywolf1.isTamed() || entitywolf1.method_634() != null || !this.name.equals(entitywolf1.getOwner()) || flag && entitywolf1.isSitting())
                 continue;
             entitywolf1.setSitting(false);
             entitywolf1.method_636(entityliving);
@@ -716,7 +735,7 @@ public abstract class MixinPlayer extends LivingEntity {
             if (this.level.isDaylight()) {
                 return SleepStatus.NOT_POSSIBLE_NOW;
             }
-            if (Math.abs((double) (this.x - (double) x)) > 3.0 || Math.abs((double) (this.y - (double) y)) > 2.0 || Math.abs((double) (this.z - (double) z)) > 3.0) {
+            if (Math.abs(this.x - (double) x) > 3.0 || Math.abs(this.y - (double) y) > 2.0 || Math.abs(this.z - (double) z) > 3.0) {
                 return SleepStatus.TOO_FAR_AWAY;
             }
         }
@@ -727,26 +746,22 @@ public abstract class MixinPlayer extends LivingEntity {
             int i1 = BedTile.orientationOnly(l);
             float f = 0.5f;
             float f1 = 0.5f;
-            switch(i1) {
-                case 0:
-                    {
-                        f1 = 0.9f;
-                        break;
-                    }
-                case 2:
-                    {
-                        f1 = 0.1f;
-                        break;
-                    }
-                case 1:
-                    {
-                        f = 0.1f;
-                        break;
-                    }
-                case 3:
-                    {
-                        f = 0.9f;
-                    }
+            switch (i1) {
+                case 0: {
+                    f1 = 0.9f;
+                    break;
+                }
+                case 2: {
+                    f1 = 0.1f;
+                    break;
+                }
+                case 1: {
+                    f = 0.1f;
+                    break;
+                }
+                case 3: {
+                    f = 0.9f;
+                }
             }
             this.method_517(i1);
             this.setPosition((float) x + f, (float) y + 0.9375f, (float) z + f1);
@@ -772,26 +787,22 @@ public abstract class MixinPlayer extends LivingEntity {
     private void method_517(int i) {
         this.field_509 = 0.0f;
         this.field_510 = 0.0f;
-        switch(i) {
-            case 0:
-                {
-                    this.field_510 = -1.8f;
-                    break;
-                }
-            case 2:
-                {
-                    this.field_510 = 1.8f;
-                    break;
-                }
-            case 1:
-                {
-                    this.field_509 = 1.8f;
-                    break;
-                }
-            case 3:
-                {
-                    this.field_509 = -1.8f;
-                }
+        switch (i) {
+            case 0: {
+                this.field_510 = -1.8f;
+                break;
+            }
+            case 2: {
+                this.field_510 = 1.8f;
+                break;
+            }
+            case 1: {
+                this.field_509 = 1.8f;
+                break;
+            }
+            case 3: {
+                this.field_509 = -1.8f;
+            }
         }
     }
 
@@ -826,44 +837,23 @@ public abstract class MixinPlayer extends LivingEntity {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite()
-    public static Vec3i getRespawnPos(Level level, Vec3i respawnPos) {
-        LevelSource ichunkprovider = level.getLevelSource();
-        ichunkprovider.loadChunk(respawnPos.x - 3 >> 4, respawnPos.z - 3 >> 4);
-        ichunkprovider.loadChunk(respawnPos.x + 3 >> 4, respawnPos.z - 3 >> 4);
-        ichunkprovider.loadChunk(respawnPos.x - 3 >> 4, respawnPos.z + 3 >> 4);
-        ichunkprovider.loadChunk(respawnPos.x + 3 >> 4, respawnPos.z + 3 >> 4);
-        if (level.getTileId(respawnPos.x, respawnPos.y, respawnPos.z) != Tile.BED.id) {
-            return null;
-        }
-        Vec3i chunkcoordinates1 = BedTile.findWakeUpPosition(level, respawnPos.x, respawnPos.y, respawnPos.z, 0);
-        return chunkcoordinates1;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public float method_482() {
         if (this.bedPosition != null) {
             int i = this.level.getTileMeta(this.bedPosition.x, this.bedPosition.y, this.bedPosition.z);
             int j = BedTile.orientationOnly(i);
-            switch(j) {
-                case 0:
-                    {
-                        return 90.0f;
-                    }
-                case 1:
-                    {
-                        return 0.0f;
-                    }
-                case 2:
-                    {
-                        return 270.0f;
-                    }
-                case 3:
-                    {
-                        return 180.0f;
-                    }
+            switch (j) {
+                case 0: {
+                    return 90.0f;
+                }
+                case 1: {
+                    return 0.0f;
+                }
+                case 2: {
+                    return 270.0f;
+                }
+                case 3: {
+                    return 180.0f;
+                }
             }
         }
         return 0.0f;
@@ -907,26 +897,26 @@ public abstract class MixinPlayer extends LivingEntity {
             return;
         }
         if (this.isInFluid(Material.WATER)) {
-            int i = Math.round((float) (MathsHelper.sqrt(d * d + d1 * d1 + d2 * d2) * 100.0f));
+            int i = Math.round(MathsHelper.sqrt(d * d + d1 * d1 + d2 * d2) * 100.0f);
             if (i > 0) {
                 this.increaseStat(Stats.diveOneCm, i);
             }
         } else if (this.method_1334()) {
-            int j = Math.round((float) (MathsHelper.sqrt(d * d + d2 * d2) * 100.0f));
+            int j = Math.round(MathsHelper.sqrt(d * d + d2 * d2) * 100.0f);
             if (j > 0) {
                 this.increaseStat(Stats.swimOneCm, j);
             }
         } else if (this.isOnLadder()) {
             if (d1 > 0.0) {
-                this.increaseStat(Stats.climbOneCm, (int) Math.round((double) (d1 * 100.0)));
+                this.increaseStat(Stats.climbOneCm, (int) Math.round(d1 * 100.0));
             }
         } else if (this.onGround) {
-            int k = Math.round((float) (MathsHelper.sqrt(d * d + d2 * d2) * 100.0f));
+            int k = Math.round(MathsHelper.sqrt(d * d + d2 * d2) * 100.0f);
             if (k > 0) {
                 this.increaseStat(Stats.walkOneCm, k);
             }
         } else {
-            int l = Math.round((float) (MathsHelper.sqrt(d * d + d2 * d2) * 100.0f));
+            int l = Math.round(MathsHelper.sqrt(d * d + d2 * d2) * 100.0f);
             if (l > 25) {
                 this.increaseStat(Stats.flyOneCm, l);
             }
@@ -939,7 +929,7 @@ public abstract class MixinPlayer extends LivingEntity {
     @Overwrite()
     private void method_519(double d, double d1, double d2) {
         int i;
-        if (this.vehicle != null && (i = Math.round((float) (MathsHelper.sqrt(d * d + d1 * d1 + d2 * d2) * 100.0f))) > 0) {
+        if (this.vehicle != null && (i = Math.round(MathsHelper.sqrt(d * d + d1 * d1 + d2 * d2) * 100.0f)) > 0) {
             if (this.vehicle instanceof Minecart) {
                 this.increaseStat(Stats.minecartOneCm, i);
                 if (this.field_517 == null) {

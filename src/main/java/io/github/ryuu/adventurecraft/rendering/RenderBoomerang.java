@@ -1,11 +1,12 @@
 package io.github.ryuu.adventurecraft.rendering;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import org.lwjgl.opengl.GL11;
-import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.entities.EntityBoomerang;
+import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.Vec2;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.entity.EntityRenderer;
+import net.minecraft.entity.Entity;
+import org.lwjgl.opengl.GL11;
 
 public class RenderBoomerang extends EntityRenderer {
 
@@ -18,10 +19,10 @@ public class RenderBoomerang extends EntityRenderer {
         float pitchToUse = entityBoomerang.prevPitch + (entityBoomerang.pitch - entityBoomerang.prevPitch) * time;
         float boomerangRotation = entityBoomerang.prevBoomerangRotation + (entityBoomerang.boomerangRotation - entityBoomerang.prevBoomerangRotation) * time;
         GL11.glPushMatrix();
-        GL11.glTranslatef((float) ((float) d), (float) ((float) d1), (float) ((float) d2));
-        GL11.glRotatef((float) (-yaw), (float) 0.0f, (float) 1.0f, (float) 0.0f);
-        GL11.glRotatef((float) pitchToUse, (float) 1.0f, (float) 0.0f, (float) 0.0f);
-        GL11.glRotatef((float) entityBoomerang.boomerangRotation, (float) 0.0f, (float) 1.0f, (float) 0.0f);
+        GL11.glTranslatef((float) d, (float) d1, (float) d2);
+        GL11.glRotatef(-yaw, 0.0f, 1.0f, 0.0f);
+        GL11.glRotatef(pitchToUse, 1.0f, 0.0f, 0.0f);
+        GL11.glRotatef(entityBoomerang.boomerangRotation, 0.0f, 1.0f, 0.0f);
         this.bindTexture("/gui/items.png");
         Vec2 texResolution = this.dispatcher.textureManager.getTextureResolution("/gui/items.png");
         int width = texResolution.x / 16;
@@ -35,9 +36,9 @@ public class RenderBoomerang extends EntityRenderer {
         float f2 = ((float) (iconIndex / 16 * 16) + 0.0f) / 256.0f;
         float f3 = ((float) (iconIndex / 16 * 16) + 15.99f) / 256.0f;
         float f4 = 1.0f;
-        GL11.glEnable((int) 32826);
+        GL11.glEnable(32826);
         float f8 = 0.0625f;
-        GL11.glTranslatef((float) -0.5f, (float) 0.0f, (float) -0.5f);
+        GL11.glTranslatef(-0.5f, 0.0f, -0.5f);
         tessellator.start();
         tessellator.method_1697(0.0f, 0.0f, 1.0f);
         tessellator.vertex(0.0, 0.0 - (double) f8, 0.0, f1, f3);
@@ -100,7 +101,7 @@ public class RenderBoomerang extends EntityRenderer {
             tessellator.vertex(f4, 0.0, f20, f, f16);
         }
         tessellator.draw();
-        GL11.glDisable((int) 32826);
+        GL11.glDisable(32826);
         GL11.glPopMatrix();
     }
 

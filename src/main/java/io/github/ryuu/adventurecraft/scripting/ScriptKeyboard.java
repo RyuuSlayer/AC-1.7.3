@@ -1,35 +1,26 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import java.util.HashMap;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.client.options.GameOptions;
+import net.minecraft.level.Level;
 import org.lwjgl.input.Keyboard;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
+import java.util.HashMap;
+
 public class ScriptKeyboard {
 
-    private GameOptions gameSettings;
-
+    private final GameOptions gameSettings;
     public String keyForwardScript = "";
-
     public String keyBackScript = "";
-
     public String keyLeftScript = "";
-
     public String keyRightScript = "";
-
     public String keyJumpScript = "";
-
     public String keySneakScript = "";
-
     String allKeys;
-
     HashMap<Integer, String> keyBinds;
-
     Level world;
-
     Scriptable scope;
 
     ScriptKeyboard(Level w, GameOptions g, Scriptable s) {
@@ -45,7 +36,7 @@ public class ScriptKeyboard {
     }
 
     public void unbindKey(int keyID) {
-        this.keyBinds.remove((Object) new Integer(keyID));
+        this.keyBinds.remove(new Integer(keyID));
     }
 
     public void bindAllKeyScript(String script) {
@@ -59,32 +50,32 @@ public class ScriptKeyboard {
     public void processKeyPress(int keyID) {
         Object wrappedOut;
         boolean keyIDSet = false;
-        String script = (String) this.keyBinds.get((Object) keyID);
+        String script = this.keyBinds.get(keyID);
         if (script != null) {
             keyIDSet = true;
-            wrappedOut = Context.javaToJS((Object) keyID, (Scriptable) this.world.scope);
-            ScriptableObject.putProperty((Scriptable) this.world.scope, (String) "keyID", (Object) wrappedOut);
+            wrappedOut = Context.javaToJS(keyID, (Scriptable) this.world.scope);
+            ScriptableObject.putProperty((Scriptable) this.world.scope, "keyID", wrappedOut);
             this.world.scriptHandler.runScript(script, this.world.scope);
         }
         if (this.allKeys != null) {
             if (!keyIDSet) {
-                wrappedOut = Context.javaToJS((Object) keyID, (Scriptable) this.world.scope);
-                ScriptableObject.putProperty((Scriptable) this.world.scope, (String) "keyID", (Object) wrappedOut);
+                wrappedOut = Context.javaToJS(keyID, (Scriptable) this.world.scope);
+                ScriptableObject.putProperty((Scriptable) this.world.scope, "keyID", wrappedOut);
             }
             this.world.scriptHandler.runScript(this.allKeys, this.world.scope);
         }
     }
 
     public boolean isKeyDown(int keyID) {
-        return Keyboard.isKeyDown((int) keyID);
+        return Keyboard.isKeyDown(keyID);
     }
 
     public String getKeyName(int keyID) {
-        return Keyboard.getKeyName((int) keyID);
+        return Keyboard.getKeyName(keyID);
     }
 
     public int getKeyID(String keyName) {
-        return Keyboard.getKeyIndex((String) keyName);
+        return Keyboard.getKeyIndex(keyName);
     }
 
     public boolean processPlayerKeyPress(int keyID, boolean keyState) {
@@ -105,17 +96,17 @@ public class ScriptKeyboard {
         } else if (keyID == this.gameSettings.sneakKey.key) {
             scriptToRun = this.keySneakScript;
         }
-        if (scriptToRun != null && !scriptToRun.equals((Object) "")) {
+        if (scriptToRun != null && !scriptToRun.equals("")) {
             allowProcess = this.runScript(scriptToRun, keyID, keyState);
         }
         return allowProcess;
     }
 
     private boolean runScript(String scriptName, int keyID, boolean keyState) {
-        Object wrappedOut = Context.javaToJS((Object) keyID, (Scriptable) this.world.scope);
-        ScriptableObject.putProperty((Scriptable) this.world.scope, (String) "keyID", (Object) wrappedOut);
-        wrappedOut = Context.javaToJS((Object) keyState, (Scriptable) this.scope);
-        ScriptableObject.putProperty((Scriptable) this.scope, (String) "keyState", (Object) wrappedOut);
+        Object wrappedOut = Context.javaToJS(keyID, (Scriptable) this.world.scope);
+        ScriptableObject.putProperty((Scriptable) this.world.scope, "keyID", wrappedOut);
+        wrappedOut = Context.javaToJS(keyState, this.scope);
+        ScriptableObject.putProperty(this.scope, "keyState", wrappedOut);
         Object result = this.world.scriptHandler.runScript(scriptName, this.scope);
         if (result == null || !(result instanceof Boolean)) {
             return true;

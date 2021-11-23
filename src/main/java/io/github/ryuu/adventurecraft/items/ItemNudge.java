@@ -1,7 +1,12 @@
 package io.github.ryuu.adventurecraft.items;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
+import net.minecraft.util.maths.Vec3f;
 
 public class ItemNudge extends ItemType {
 
@@ -35,9 +40,9 @@ public class ItemNudge extends ItemType {
                     }
                 }
             }
-            double absX = Math.abs((double) lookDir.x);
-            double absY = Math.abs((double) lookDir.y);
-            double absZ = Math.abs((double) lookDir.z);
+            double absX = Math.abs(lookDir.x);
+            double absY = Math.abs(lookDir.y);
+            double absZ = Math.abs(lookDir.z);
             int xOffset = ItemCursor.minX;
             int yOffset = ItemCursor.minY;
             int zOffset = ItemCursor.minZ;
@@ -137,9 +142,9 @@ public class ItemNudge extends ItemType {
                     }
                 }
             }
-            double absX = Math.abs((double) lookDir.x);
-            double absY = Math.abs((double) lookDir.y);
-            double absZ = Math.abs((double) lookDir.z);
+            double absX = Math.abs(lookDir.x);
+            double absY = Math.abs(lookDir.y);
+            double absZ = Math.abs(lookDir.z);
             int xOffset = ItemCursor.minX;
             int yOffset = ItemCursor.minY;
             int zOffset = ItemCursor.minZ;

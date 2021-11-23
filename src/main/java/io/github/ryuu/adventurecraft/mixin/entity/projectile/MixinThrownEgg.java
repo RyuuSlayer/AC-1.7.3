@@ -1,28 +1,33 @@
 package io.github.ryuu.adventurecraft.mixin.entity.projectile;
 
-import java.util.List;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.animal.Chicken;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.io.CompoundTag;
+import net.minecraft.util.maths.Box;
+import net.minecraft.util.maths.MathsHelper;
+import net.minecraft.util.maths.Vec3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
+import java.util.List;
+
 @Mixin(ThrownEgg.class)
 public class MixinThrownEgg extends Entity {
 
+    public int shake = 0;
     @Shadow()
     private int xTile = -1;
-
     private int yTile = -1;
-
     private int zTile = -1;
-
     private int inTile = 0;
-
     private boolean inGround = false;
-
-    public int shake = 0;
-
     private LivingEntity field_2044;
 
     private int field_2045;
@@ -35,24 +40,14 @@ public class MixinThrownEgg extends Entity {
         this.collidesWithClipBlocks = false;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public boolean shouldRenderAtDistance(double d) {
-        double d1 = this.boundingBox.averageDimension() * 4.0;
-        return d < (d1 *= 64.0) * d1;
-    }
-
     public MixinThrownEgg(Level world, LivingEntity entityliving) {
         super(world);
         this.field_2044 = entityliving;
         this.setSize(0.25f, 0.25f);
         this.setPositionAndAngles(entityliving.x, entityliving.y + (double) entityliving.getStandingEyeHeight(), entityliving.z, entityliving.yaw, entityliving.pitch);
-        this.x -= (double) (MathsHelper.cos(this.yaw / 180.0f * 3.141593f) * 0.16f);
-        this.y -= (double) 0.1f;
-        this.z -= (double) (MathsHelper.sin(this.yaw / 180.0f * 3.141593f) * 0.16f);
+        this.x -= MathsHelper.cos(this.yaw / 180.0f * 3.141593f) * 0.16f;
+        this.y -= 0.1f;
+        this.z -= MathsHelper.sin(this.yaw / 180.0f * 3.141593f) * 0.16f;
         this.setPosition(this.x, this.y, this.z);
         this.standingEyeHeight = 0.0f;
         float f = 0.4f;
@@ -73,21 +68,31 @@ public class MixinThrownEgg extends Entity {
     /**
      * @author Ryuu, TechPizza, Phil
      */
+    @Override
+    @Overwrite()
+    public boolean shouldRenderAtDistance(double d) {
+        double d1 = this.boundingBox.averageDimension() * 4.0;
+        return d < (d1 *= 64.0) * d1;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
     @Overwrite()
     public void method_1682(double d, double d1, double d2, float f, float f1) {
         float f2 = MathsHelper.sqrt(d * d + d1 * d1 + d2 * d2);
-        d /= (double) f2;
-        d1 /= (double) f2;
-        d2 /= (double) f2;
+        d /= f2;
+        d1 /= f2;
+        d2 /= f2;
         d += this.rand.nextGaussian() * (double) 0.0075f * (double) f1;
         d1 += this.rand.nextGaussian() * (double) 0.0075f * (double) f1;
         d2 += this.rand.nextGaussian() * (double) 0.0075f * (double) f1;
-        this.velocityX = d *= (double) f;
-        this.velocityY = d1 *= (double) f;
-        this.velocityZ = d2 *= (double) f;
+        this.velocityX = d *= f;
+        this.velocityY = d1 *= f;
+        this.velocityZ = d2 *= f;
         float f3 = MathsHelper.sqrt(d * d + d2 * d2);
-        this.prevYaw = this.yaw = (float) (Math.atan2((double) d, (double) d2) * 180.0 / 3.1415927410125732);
-        this.prevPitch = this.pitch = (float) (Math.atan2((double) d1, (double) f3) * 180.0 / 3.1415927410125732);
+        this.prevYaw = this.yaw = (float) (Math.atan2(d, d2) * 180.0 / 3.1415927410125732);
+        this.prevPitch = this.pitch = (float) (Math.atan2(d1, f3) * 180.0 / 3.1415927410125732);
         this.field_2045 = 0;
     }
 
@@ -102,8 +107,8 @@ public class MixinThrownEgg extends Entity {
         this.velocityZ = d2;
         if (this.prevPitch == 0.0f && this.prevYaw == 0.0f) {
             float f = MathsHelper.sqrt(d * d + d2 * d2);
-            this.prevYaw = this.yaw = (float) (Math.atan2((double) d, (double) d2) * 180.0 / 3.1415927410125732);
-            this.prevPitch = this.pitch = (float) (Math.atan2((double) d1, (double) f) * 180.0 / 3.1415927410125732);
+            this.prevYaw = this.yaw = (float) (Math.atan2(d, d2) * 180.0 / 3.1415927410125732);
+            this.prevPitch = this.pitch = (float) (Math.atan2(d1, f) * 180.0 / 3.1415927410125732);
         }
     }
 
@@ -113,7 +118,8 @@ public class MixinThrownEgg extends Entity {
     @Override
     @Overwrite()
     public void tick() {
-        block21: {
+        block21:
+        {
             this.prevRenderX = this.x;
             this.prevRenderY = this.y;
             this.prevRenderZ = this.z;
@@ -125,9 +131,9 @@ public class MixinThrownEgg extends Entity {
                 int i = this.level.getTileId(this.xTile, this.yTile, this.zTile);
                 if (i != this.inTile) {
                     this.inGround = false;
-                    this.velocityX *= (double) (this.rand.nextFloat() * 0.2f);
-                    this.velocityY *= (double) (this.rand.nextFloat() * 0.2f);
-                    this.velocityZ *= (double) (this.rand.nextFloat() * 0.2f);
+                    this.velocityX *= this.rand.nextFloat() * 0.2f;
+                    this.velocityY *= this.rand.nextFloat() * 0.2f;
+                    this.velocityZ *= this.rand.nextFloat() * 0.2f;
                     this.field_2045 = 0;
                     this.field_2046 = 0;
                     break block21;
@@ -191,8 +197,8 @@ public class MixinThrownEgg extends Entity {
         this.y += this.velocityY;
         this.z += this.velocityZ;
         float f = MathsHelper.sqrt(this.velocityX * this.velocityX + this.velocityZ * this.velocityZ);
-        this.yaw = (float) (Math.atan2((double) this.velocityX, (double) this.velocityZ) * 180.0 / 3.1415927410125732);
-        this.pitch = (float) (Math.atan2((double) this.velocityY, (double) f) * 180.0 / 3.1415927410125732);
+        this.yaw = (float) (Math.atan2(this.velocityX, this.velocityZ) * 180.0 / 3.1415927410125732);
+        this.pitch = (float) (Math.atan2(this.velocityY, f) * 180.0 / 3.1415927410125732);
         while (this.pitch - this.prevPitch < -180.0f) {
             this.prevPitch -= 360.0f;
         }
@@ -216,10 +222,10 @@ public class MixinThrownEgg extends Entity {
             }
             f1 = 0.8f;
         }
-        this.velocityX *= (double) f1;
-        this.velocityY *= (double) f1;
-        this.velocityZ *= (double) f1;
-        this.velocityY -= (double) f2;
+        this.velocityX *= f1;
+        this.velocityY *= f1;
+        this.velocityZ *= f1;
+        this.velocityY -= f2;
         this.setPosition(this.x, this.y, this.z);
     }
 

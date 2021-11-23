@@ -1,7 +1,6 @@
 package io.github.ryuu.adventurecraft.items;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.item.ItemType;
 
 public class Items {
 

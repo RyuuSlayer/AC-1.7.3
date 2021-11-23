@@ -1,19 +1,28 @@
 package io.github.ryuu.adventurecraft.mixin.tile;
 
-import java.util.ArrayList;
-import java.util.Random;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import io.github.ryuu.adventurecraft.blocks.BlockColor;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
+import net.minecraft.tile.Tile;
+import net.minecraft.tile.material.Material;
+import net.minecraft.util.maths.Box;
+import net.minecraft.util.maths.MathsHelper;
+import net.minecraft.util.maths.Vec3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import io.github.ryuu.adventurecraft.blocks.BlockColor;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 @Mixin(StairsTile.class)
 public class MixinStairsTile extends BlockColor {
 
     @Shadow()
-    private Tile field_1672;
+    private final Tile field_1672;
 
     protected MixinStairsTile(int i, Tile block) {
         super(i, block.tex, block.material);

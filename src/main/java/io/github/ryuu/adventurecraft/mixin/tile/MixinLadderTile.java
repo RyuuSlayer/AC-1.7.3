@@ -1,18 +1,26 @@
 package io.github.ryuu.adventurecraft.mixin.tile;
 
-import java.util.Random;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import io.github.ryuu.adventurecraft.blocks.Blocks;
+import net.minecraft.level.Level;
+import net.minecraft.tile.Tile;
+import net.minecraft.tile.material.Material;
+import net.minecraft.util.maths.Box;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
-import io.github.ryuu.adventurecraft.blocks.Blocks;
 
 @Mixin(LadderTile.class)
 public class MixinLadderTile extends Tile {
 
     protected MixinLadderTile(int id, int texUVStart) {
         super(id, texUVStart, Material.DOODADS);
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static boolean isLadderID(int bID) {
+        return bID == Tile.LADDER.id || bID == Blocks.ladders1.id || bID == Blocks.ladders2.id || bID == Blocks.ladders3.id || bID == Blocks.ladders4.id;
     }
 
     /**
@@ -81,14 +89,6 @@ public class MixinLadderTile extends Tile {
             return true;
         }
         return level.canSuffocate(x, y, z + 1);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public static boolean isLadderID(int bID) {
-        return bID == Tile.LADDER.id || bID == Blocks.ladders1.id || bID == Blocks.ladders2.id || bID == Blocks.ladders3.id || bID == Blocks.ladders4.id;
     }
 
     /**

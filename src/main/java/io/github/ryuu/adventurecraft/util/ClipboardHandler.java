@@ -1,15 +1,8 @@
 package io.github.ryuu.adventurecraft.util;
 
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.ClipboardOwner;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.*;
+import java.awt.datatransfer.*;
 import java.io.IOException;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 
 class ClipboardHandler {
 
@@ -37,6 +30,6 @@ class ClipboardHandler {
     static void setClipboard(String c) {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         StringSelection contents = new StringSelection(c);
-        clipboard.setContents((Transferable) contents, (ClipboardOwner) contents);
+        clipboard.setContents(contents, contents);
     }
 }

@@ -1,22 +1,19 @@
 package io.github.ryuu.adventurecraft.util;
 
+import io.github.ryuu.adventurecraft.blocks.Blocks;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.TextureBinder;
+
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import io.github.ryuu.adventurecraft.blocks.Blocks;
 
 public class TextureFanFX extends TextureBinder {
 
     static int numFrames;
-
-    int curFrame = 0;
-
     private static int[] fanImage;
-
     private static int width;
-
     private static int height;
+    int curFrame = 0;
 
     public TextureFanFX() {
         super(Blocks.fan.tex);

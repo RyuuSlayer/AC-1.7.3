@@ -1,7 +1,8 @@
 package io.github.ryuu.adventurecraft.util;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.level.Level;
+import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.util.io.CompoundTag;
 
 class EditAction {
 

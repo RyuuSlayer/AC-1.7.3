@@ -1,26 +1,55 @@
 package io.github.ryuu.adventurecraft.mixin.tile;
 
-import java.util.Random;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.entity.FurnaceEntity;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
+import net.minecraft.tile.Tile;
+import net.minecraft.tile.TileWithEntity;
+import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.tile.material.Material;
+import net.minecraft.util.maths.MathsHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
+import java.util.Random;
+
 @Mixin(FurnaceTile.class)
 public class MixinFurnaceTile extends TileWithEntity {
 
-    @Shadow()
-    private Random rand = new Random();
-
-    private final boolean lit;
-
     private static boolean SETTING_TILE = false;
+    private final boolean lit;
+    @Shadow()
+    private final Random rand = new Random();
 
     protected MixinFurnaceTile(int i, boolean flag) {
         super(i, Material.STONE);
         this.lit = flag;
         this.tex = 45;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static void method_1403(boolean flag, Level world, int i, int j, int k) {
+        int l = world.getTileMeta(i, j, k);
+        TileEntity tileentity = world.getTileEntity(i, j, k);
+        SETTING_TILE = true;
+        if (flag) {
+            world.setTile(i, j, k, Tile.FURNACE_LIT.id);
+        } else {
+            world.setTile(i, j, k, Tile.FURNACE.id);
+        }
+        SETTING_TILE = false;
+        world.setTileMeta(i, j, k, l);
+        tileentity.validate();
+        world.setTileEntity(i, j, k, tileentity);
+        tileentity.validate();
     }
 
     /**
@@ -148,26 +177,6 @@ public class MixinFurnaceTile extends TileWithEntity {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
-    public static void method_1403(boolean flag, Level world, int i, int j, int k) {
-        int l = world.getTileMeta(i, j, k);
-        TileEntity tileentity = world.getTileEntity(i, j, k);
-        SETTING_TILE = true;
-        if (flag) {
-            world.setTile(i, j, k, Tile.FURNACE_LIT.id);
-        } else {
-            world.setTile(i, j, k, Tile.FURNACE.id);
-        }
-        SETTING_TILE = false;
-        world.setTileMeta(i, j, k, l);
-        tileentity.validate();
-        world.setTileEntity(i, j, k, tileentity);
-        tileentity.validate();
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
     @Override
     @Overwrite()
     public void afterPlaced(Level world, int i, int j, int k, LivingEntity entityliving) {
@@ -196,8 +205,7 @@ public class MixinFurnaceTile extends TileWithEntity {
             FurnaceEntity tileentityfurnace = (FurnaceEntity) level.getTileEntity(x, y, z);
             for (int l = 0; l < tileentityfurnace.getInvSize(); ++l) {
                 ItemInstance itemstack = tileentityfurnace.getInvItem(l);
-                if (itemstack == null)
-                    continue;
+                if (itemstack == null) continue;
                 float f = this.rand.nextFloat() * 0.8f + 0.1f;
                 float f1 = this.rand.nextFloat() * 0.8f + 0.1f;
                 float f2 = this.rand.nextFloat() * 0.8f + 0.1f;

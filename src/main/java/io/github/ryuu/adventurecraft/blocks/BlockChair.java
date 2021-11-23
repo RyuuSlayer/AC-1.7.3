@@ -1,7 +1,8 @@
 package io.github.ryuu.adventurecraft.blocks;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.level.Level;
+import net.minecraft.util.maths.MathsHelper;
 
 public class BlockChair extends BlockSolid {
 

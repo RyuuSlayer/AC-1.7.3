@@ -1,17 +1,23 @@
 package io.github.ryuu.adventurecraft.gui;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import io.github.ryuu.adventurecraft.entities.EntityNPC;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityNpcPath;
 import io.github.ryuu.adventurecraft.items.ItemCursor;
-import io.github.ryuu.adventurecraft.entities.EntityNPC;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
+import net.minecraft.client.gui.widgets.Button;
+import net.minecraft.client.gui.widgets.OptionButton;
 
 public class GuiNpcPath extends Screen {
 
-    private TileEntityNpcPath path;
+    private final TileEntityNpcPath path;
 
     public GuiNpcPath(TileEntityNpcPath npcPath) {
         this.path = npcPath;
+    }
+
+    public static void showUI(TileEntityNpcPath npcPath) {
+        Minecraft.minecraftInstance.openScreen(new GuiNpcPath(npcPath));
     }
 
     @Override
@@ -25,9 +31,9 @@ public class GuiNpcPath extends Screen {
         if (e != null) {
             entityName = e.npcName;
         }
-        this.buttons.add((Object) new OptionButton(0, 4, 20, String.format((String) "Set Path NPC: %s", (Object[]) new Object[] { entityName })));
-        this.buttons.add((Object) new OptionButton(1, 4, 80, "Use Current Selection"));
-        this.buttons.add((Object) new OptionButton(2, 4, 100, "Reset Target"));
+        this.buttons.add(new OptionButton(0, 4, 20, String.format("Set Path NPC: %s", entityName)));
+        this.buttons.add(new OptionButton(1, 4, 80, "Use Current Selection"));
+        this.buttons.add(new OptionButton(2, 4, 100, "Reset Target"));
     }
 
     @Override
@@ -60,14 +66,10 @@ public class GuiNpcPath extends Screen {
         if (e != null) {
             entityName = e.npcName;
         }
-        this.drawTextWithShadow(this.textManager, String.format((String) "NPC: %s", (Object[]) new Object[] { entityName }), 4, 4, 0xE0E0E0);
-        this.drawTextWithShadow(this.textManager, String.format((String) "Min: (%d, %d, %d)", (Object[]) new Object[] { this.path.minX, this.path.minY, this.path.minZ }), 4, 44, 0xE0E0E0);
-        this.drawTextWithShadow(this.textManager, String.format((String) "Max: (%d, %d, %d)", (Object[]) new Object[] { this.path.maxX, this.path.maxY, this.path.maxZ }), 4, 64, 0xE0E0E0);
+        this.drawTextWithShadow(this.textManager, String.format("NPC: %s", entityName), 4, 4, 0xE0E0E0);
+        this.drawTextWithShadow(this.textManager, String.format("Min: (%d, %d, %d)", this.path.minX, this.path.minY, this.path.minZ), 4, 44, 0xE0E0E0);
+        this.drawTextWithShadow(this.textManager, String.format("Max: (%d, %d, %d)", this.path.maxX, this.path.maxY, this.path.maxZ), 4, 64, 0xE0E0E0);
         super.render(mouseX, mouseY, delta);
-    }
-
-    public static void showUI(TileEntityNpcPath npcPath) {
-        Minecraft.minecraftInstance.openScreen(new GuiNpcPath(npcPath));
     }
 
     @Override

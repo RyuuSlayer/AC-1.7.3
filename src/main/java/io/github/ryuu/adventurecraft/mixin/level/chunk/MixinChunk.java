@@ -1,61 +1,53 @@
 package io.github.ryuu.adventurecraft.mixin.level.chunk;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.level.Level;
+import net.minecraft.level.LightType;
+import net.minecraft.level.chunk.ChunkSubData;
+import net.minecraft.tile.Tile;
+import net.minecraft.tile.TileWithEntity;
+import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.util.io.CompoundTag;
+import net.minecraft.util.maths.Box;
+import net.minecraft.util.maths.MathsHelper;
+import net.minecraft.util.maths.TilePos;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+
+import java.util.*;
 
 @Mixin(Chunk.class)
 public class MixinChunk {
 
     @Shadow()
     public static boolean field_953;
+    public static boolean isNotPopulating;
 
-    public byte[] tiles;
-
-    public boolean field_955;
-
-    public Level level;
-
-    public ChunkSubData meta;
-
-    public ChunkSubData skylight;
-
-    public ChunkSubData blocklight;
-
-    public byte[] heightmap;
-
-    public int field_961;
+    static {
+        isNotPopulating = true;
+    }
 
     public final int x;
-
     public final int z;
-
+    public byte[] tiles;
+    public boolean field_955;
+    public Level level;
+    public ChunkSubData meta;
+    public ChunkSubData skylight;
+    public ChunkSubData blocklight;
+    public byte[] heightmap;
+    public int field_961;
     public Map tileEntities = new HashMap();
-
     public List[] entities = new List[8];
-
     public boolean decorated = false;
-
     public boolean shouldSave = false;
-
     public boolean field_968;
-
     public boolean field_969 = false;
-
     public long lastUpdate = 0L;
-
     public double[] temperatures;
-
     public long lastUpdated;
-
-    public static boolean isNotPopulating;
 
     public MixinChunk(Level world, int i, int j, boolean createHeightMap) {
         this.level = world;
@@ -79,6 +71,28 @@ public class MixinChunk {
         this.meta = new ChunkSubData(tiles.length);
         this.skylight = new ChunkSubData(tiles.length);
         this.blocklight = new ChunkSubData(tiles.length);
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static int translate128(int bID) {
+        if (bID > 127) {
+            return -129 + (bID - 127);
+        }
+        return bID;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static int translate256(int bID) {
+        if (bID < 0) {
+            return bID + 256;
+        }
+        return bID;
     }
 
     /**
@@ -110,8 +124,7 @@ public class MixinChunk {
                 for (l = 127; l > 0 && Tile.field_1941[Chunk.translate256(this.tiles[i1 + l - 1])] == 0; --l) {
                 }
                 this.heightmap[k << 4 | j] = (byte) l;
-                if (l >= i)
-                    continue;
+                if (l >= i) continue;
                 i = l;
             }
         }
@@ -134,13 +147,11 @@ public class MixinChunk {
                 if (j1 < i) {
                     i = j1;
                 }
-                if (this.level.dimension.fixedSpawnPos)
-                    continue;
+                if (this.level.dimension.fixedSpawnPos) continue;
                 int l1 = 15;
                 int i2 = 127;
                 do {
-                    if ((l1 -= Tile.field_1941[Chunk.translate256(this.tiles[k1 + i2])]) <= 0)
-                        continue;
+                    if ((l1 -= Tile.field_1941[Chunk.translate256(this.tiles[k1 + i2])]) <= 0) continue;
                     this.skylight.set(j, i2, l, l1);
                 } while (--i2 > 0 && l1 > 0);
             }
@@ -205,8 +216,7 @@ public class MixinChunk {
             int k1 = 127;
             for (int i2 = 0; i2 < 16; ++i2) {
                 for (int k2 = 0; k2 < 16; ++k2) {
-                    if ((this.heightmap[k2 << 4 | i2] & 0xFF) >= k1)
-                        continue;
+                    if ((this.heightmap[k2 << 4 | i2] & 0xFF) >= k1) continue;
                     k1 = this.heightmap[k2 << 4 | i2] & 0xFF;
                 }
             }
@@ -461,7 +471,7 @@ public class MixinChunk {
         entity.chunkX = this.x;
         entity.chunkIndex = k;
         entity.chunkZ = this.z;
-        this.entities[k].add((Object) entity);
+        this.entities[k].add(entity);
     }
 
     /**
@@ -475,7 +485,7 @@ public class MixinChunk {
         if (i >= this.entities.length) {
             i = this.entities.length - 1;
         }
-        this.entities[i].remove((Object) entity);
+        this.entities[i].remove(entity);
     }
 
     /**
@@ -492,7 +502,7 @@ public class MixinChunk {
     @Overwrite()
     public TileEntity getTileEntity(int x, int y, int z) {
         TilePos chunkposition = new TilePos(x, y, z);
-        TileEntity tileentity = (TileEntity) this.tileEntities.get((Object) chunkposition);
+        TileEntity tileentity = (TileEntity) this.tileEntities.get(chunkposition);
         if (tileentity == null) {
             int l = this.getTileId(x, y, z);
             if (!Tile.HAS_TILE_ENTITY[l]) {
@@ -500,10 +510,10 @@ public class MixinChunk {
             }
             TileWithEntity blockcontainer = (TileWithEntity) Tile.BY_ID[l];
             blockcontainer.method_1611(this.level, this.x * 16 + x, y, this.z * 16 + z);
-            tileentity = (TileEntity) this.tileEntities.get((Object) chunkposition);
+            tileentity = (TileEntity) this.tileEntities.get(chunkposition);
         }
         if (tileentity != null && tileentity.isInvalid()) {
-            this.tileEntities.remove((Object) chunkposition);
+            this.tileEntities.remove(chunkposition);
             return null;
         }
         return tileentity;
@@ -515,7 +525,7 @@ public class MixinChunk {
     @Overwrite()
     public TileEntity getChunkBlockTileEntityDontCreate(int i, int j, int k) {
         TilePos chunkposition = new TilePos(i, j, k);
-        TileEntity tileentity = (TileEntity) this.tileEntities.get((Object) chunkposition);
+        TileEntity tileentity = (TileEntity) this.tileEntities.get(chunkposition);
         return tileentity;
     }
 
@@ -529,7 +539,7 @@ public class MixinChunk {
         int k = tileEntity.z - this.z * 16;
         this.placeTileEntity(i, j, k, tileEntity);
         if (this.field_955) {
-            this.level.tileEntities.add((Object) tileEntity);
+            this.level.tileEntities.add(tileEntity);
         }
     }
 
@@ -544,11 +554,11 @@ public class MixinChunk {
         tileEntity.y = y;
         tileEntity.z = this.z * 16 + z;
         if (this.getTileId(x, y, z) == 0 || !(Tile.BY_ID[this.getTileId(x, y, z)] instanceof TileWithEntity)) {
-            System.out.printf("No container :( BlockID: %d Tile Entity: %s Coord: %d, %d, %d\n", new Object[] { this.getTileId(x, y, z), tileEntity.getClassName(), tileEntity.x, tileEntity.y, tileEntity.z });
+            System.out.printf("No container :( BlockID: %d Tile Entity: %s Coord: %d, %d, %d\n", new Object[]{this.getTileId(x, y, z), tileEntity.getClassName(), tileEntity.x, tileEntity.y, tileEntity.z});
             return;
         }
         tileEntity.validate();
-        this.tileEntities.put((Object) chunkposition, (Object) tileEntity);
+        this.tileEntities.put(chunkposition, tileEntity);
     }
 
     /**
@@ -558,7 +568,7 @@ public class MixinChunk {
     public void removeTileEntity(int x, int y, int z) {
         TileEntity tileentity;
         TilePos chunkposition = new TilePos(x, y, z);
-        if (this.field_955 && (tileentity = (TileEntity) this.tileEntities.remove((Object) chunkposition)) != null) {
+        if (this.field_955 && (tileentity = (TileEntity) this.tileEntities.remove(chunkposition)) != null) {
             tileentity.invalidate();
         }
     }
@@ -608,9 +618,8 @@ public class MixinChunk {
             List list1 = this.entities[k];
             for (int l = 0; l < list1.size(); ++l) {
                 Entity entity1 = (Entity) list1.get(l);
-                if (entity1 == except || !entity1.boundingBox.intersects(box))
-                    continue;
-                entities.add((Object) entity1);
+                if (entity1 == except || !entity1.boundingBox.intersects(box)) continue;
+                entities.add(entity1);
             }
         }
     }
@@ -632,9 +641,8 @@ public class MixinChunk {
             List list1 = this.entities[k];
             for (int l = 0; l < list1.size(); ++l) {
                 Entity entity = (Entity) list1.get(l);
-                if (!entityClass.isAssignableFrom(entity.getClass()) || !entity.boundingBox.intersects(box))
-                    continue;
-                entities.add((Object) entity);
+                if (!entityClass.isAssignableFrom(entity.getClass()) || !entity.boundingBox.intersects(box)) continue;
+                entities.add(entity);
             }
         }
     }
@@ -662,7 +670,7 @@ public class MixinChunk {
             for (int l2 = k; l2 < j1; ++l2) {
                 int l3 = l1 << 11 | l2 << 7 | j;
                 int l4 = i1 - j;
-                System.arraycopy((Object) abyte0, (int) k1, (Object) this.tiles, (int) l3, (int) l4);
+                System.arraycopy(abyte0, k1, this.tiles, l3, l4);
                 k1 += l4;
             }
         }
@@ -671,7 +679,7 @@ public class MixinChunk {
             for (int i3 = k; i3 < j1; ++i3) {
                 int i4 = (i2 << 11 | i3 << 7 | j) >> 1;
                 int i5 = (i1 - j) / 2;
-                System.arraycopy((Object) abyte0, (int) k1, (Object) this.meta.data, (int) i4, (int) i5);
+                System.arraycopy(abyte0, k1, this.meta.data, i4, i5);
                 k1 += i5;
             }
         }
@@ -679,7 +687,7 @@ public class MixinChunk {
             for (int j3 = k; j3 < j1; ++j3) {
                 int j4 = (j2 << 11 | j3 << 7 | j) >> 1;
                 int j5 = (i1 - j) / 2;
-                System.arraycopy((Object) abyte0, (int) k1, (Object) this.blocklight.data, (int) j4, (int) j5);
+                System.arraycopy(abyte0, k1, this.blocklight.data, j4, j5);
                 k1 += j5;
             }
         }
@@ -687,7 +695,7 @@ public class MixinChunk {
             for (int k3 = k; k3 < j1; ++k3) {
                 int k4 = (k2 << 11 | k3 << 7 | j) >> 1;
                 int k5 = (i1 - j) / 2;
-                System.arraycopy((Object) abyte0, (int) k1, (Object) this.skylight.data, (int) k4, (int) k5);
+                System.arraycopy(abyte0, k1, this.skylight.data, k4, k5);
                 k1 += k5;
             }
         }
@@ -719,31 +727,5 @@ public class MixinChunk {
     @Overwrite()
     public void setTemperatureValue(int x, int z, double temp) {
         this.temperatures[z << 4 | x] = temp;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public static int translate128(int bID) {
-        if (bID > 127) {
-            return -129 + (bID - 127);
-        }
-        return bID;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public static int translate256(int bID) {
-        if (bID < 0) {
-            return bID + 256;
-        }
-        return bID;
-    }
-
-    static {
-        isNotPopulating = true;
     }
 }

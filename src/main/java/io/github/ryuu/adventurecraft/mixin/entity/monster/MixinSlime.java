@@ -1,7 +1,11 @@
 package io.github.ryuu.adventurecraft.mixin.entity.monster;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MonsterEntityType;
+import net.minecraft.entity.player.Player;
+import net.minecraft.level.Level;
+import net.minecraft.util.io.CompoundTag;
+import net.minecraft.util.maths.MathsHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -13,10 +17,8 @@ public class MixinSlime extends LivingEntity implements MonsterEntityType {
     public float field_1951;
 
     public float field_1952;
-
-    private int field_1953 = 0;
-
     public int attackStrength;
+    private int field_1953 = 0;
 
     public MixinSlime(Level world) {
         super(world);
@@ -118,7 +120,7 @@ public class MixinSlime extends LivingEntity implements MonsterEntityType {
             this.field_1951 = 1.0f;
             this.perpendicularMovement = 1.0f - this.rand.nextFloat() * 2.0f;
             this.parallelMovement = 1 * this.getSize();
-            float length = (float) Math.sqrt((double) (this.perpendicularMovement * this.perpendicularMovement + this.parallelMovement * this.parallelMovement));
+            float length = (float) Math.sqrt(this.perpendicularMovement * this.perpendicularMovement + this.parallelMovement * this.parallelMovement);
             this.perpendicularMovement /= length;
             this.parallelMovement /= length;
         } else {

@@ -1,18 +1,27 @@
 package io.github.ryuu.adventurecraft.mixin.tile;
 
-import java.util.Random;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.client.colour.FoliageColour;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
+import net.minecraft.stat.Stats;
+import net.minecraft.tile.FancyTile;
+import net.minecraft.tile.Tile;
+import net.minecraft.tile.material.Material;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+
+import java.util.Random;
 
 @Mixin(LeavesTile.class)
 public class MixinLeavesTile extends FancyTile {
 
     @Shadow()
-    private int field_1172;
-
+    private final int field_1172;
     int[] field_1171;
 
     protected MixinLeavesTile(int id, int meta) {
@@ -68,8 +77,7 @@ public class MixinLeavesTile extends FancyTile {
                 for (int k1 = -l; k1 <= l; ++k1) {
                     for (int l1 = -l; l1 <= l; ++l1) {
                         int i2 = level.getTileId(x + j1, y + k1, z + l1);
-                        if (i2 != Tile.LEAVES.id)
-                            continue;
+                        if (i2 != Tile.LEAVES.id) continue;
                         int j2 = level.getTileMeta(x + j1, y + k1, z + l1);
                         level.method_223(x + j1, y + k1, z + l1, j2 | 8);
                     }

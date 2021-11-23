@@ -1,7 +1,11 @@
 package io.github.ryuu.adventurecraft.items;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
+import net.minecraft.tile.Tile;
 
 public class ItemWrench extends ItemType {
 
@@ -14,22 +18,21 @@ public class ItemWrench extends ItemType {
         if (ItemCursor.bothSet) {
             int blockToSwapTo = level.getTileId(x, y, z);
             int metadata = level.getTileMeta(x, y, z);
-            Minecraft.minecraftInstance.overlay.addChatMessage(String.format((String) "Swapping blocks With BlockID %d", (Object[]) new Object[] { blockToSwapTo }));
-            int minX = Math.min((int) ItemCursor.oneX, (int) ItemCursor.twoX);
-            int maxX = Math.max((int) ItemCursor.oneX, (int) ItemCursor.twoX);
-            int minY = Math.min((int) ItemCursor.oneY, (int) ItemCursor.twoY);
-            int maxY = Math.max((int) ItemCursor.oneY, (int) ItemCursor.twoY);
-            int minZ = Math.min((int) ItemCursor.oneZ, (int) ItemCursor.twoZ);
-            int maxZ = Math.max((int) ItemCursor.oneZ, (int) ItemCursor.twoZ);
+            Minecraft.minecraftInstance.overlay.addChatMessage(String.format("Swapping blocks With BlockID %d", new Object[]{blockToSwapTo}));
+            int minX = Math.min(ItemCursor.oneX, ItemCursor.twoX);
+            int maxX = Math.max(ItemCursor.oneX, ItemCursor.twoX);
+            int minY = Math.min(ItemCursor.oneY, ItemCursor.twoY);
+            int maxY = Math.max(ItemCursor.oneY, ItemCursor.twoY);
+            int minZ = Math.min(ItemCursor.oneZ, ItemCursor.twoZ);
+            int maxZ = Math.max(ItemCursor.oneZ, ItemCursor.twoZ);
             for (int x2 = minX; x2 <= maxX; ++x2) {
                 for (int y2 = minY; y2 <= maxY; ++y2) {
                     for (int z2 = minZ; z2 <= maxZ; ++z2) {
                         int blockID = level.getTileId(x2, y2, z2);
-                        switch(blockID) {
-                            default:
-                                {
-                                    level.method_201(x2, y2, z2, blockToSwapTo, metadata);
-                                }
+                        switch (blockID) {
+                            default: {
+                                level.method_201(x2, y2, z2, blockToSwapTo, metadata);
+                            }
                             case 0:
                             case 23:
                             case 25:

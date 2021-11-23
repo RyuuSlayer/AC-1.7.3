@@ -1,21 +1,19 @@
 package io.github.ryuu.adventurecraft.util;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
+import net.minecraft.entity.player.Player;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
+import net.minecraft.tile.Tile;
 
 public class InventoryDebug implements Inventory {
 
-    private String inventoryTitle;
-
-    private int size;
-
-    private ItemInstance[] inventoryContents;
-
+    private final String inventoryTitle;
+    private final int size;
+    private final ItemInstance[] inventoryContents;
     public int firstItem;
-
     public int lastItem;
-
     public boolean atEnd;
 
     public InventoryDebug(String s, int i) {
@@ -27,13 +25,11 @@ public class InventoryDebug implements Inventory {
     private int getID(int i) {
         int j;
         for (j = 0; j < 4; ++j) {
-            if (i <= Tile.GRASS.id)
-                continue;
+            if (i <= Tile.GRASS.id) continue;
             --i;
         }
         for (j = 0; j < 3; ++j) {
-            if (i <= Tile.SAND.id)
-                continue;
+            if (i <= Tile.SAND.id) continue;
             --i;
         }
         if (i > Tile.LOG.id) {
@@ -43,198 +39,159 @@ public class InventoryDebug implements Inventory {
             --i;
         }
         for (j = 0; j < 2; ++j) {
-            if (i <= Tile.TALLGRASS.id)
-                continue;
+            if (i <= Tile.TALLGRASS.id) continue;
             --i;
         }
         for (j = 0; j < 15; ++j) {
-            if (i <= Tile.WOOL.id)
-                continue;
+            if (i <= Tile.WOOL.id) continue;
             --i;
         }
         for (j = 0; j < 3; ++j) {
-            if (i <= Tile.STONE_SLAB.id)
-                continue;
+            if (i <= Tile.STONE_SLAB.id) continue;
             --i;
         }
         for (j = 0; j < 15; ++j) {
-            if (i <= Blocks.pillarStone.id)
-                continue;
+            if (i <= Blocks.pillarStone.id) continue;
             --i;
         }
         for (j = 0; j < 15; ++j) {
-            if (i <= Blocks.pillarMetal.id)
-                continue;
+            if (i <= Blocks.pillarMetal.id) continue;
             --i;
         }
         for (j = 0; j < 15; ++j) {
-            if (i <= Blocks.plant1.id)
-                continue;
+            if (i <= Blocks.plant1.id) continue;
             --i;
         }
         for (j = 0; j < 15; ++j) {
-            if (i <= Blocks.trees.id)
-                continue;
+            if (i <= Blocks.trees.id) continue;
             --i;
         }
         for (j = 0; j < 15; ++j) {
-            if (i <= Blocks.glassBlocks.id)
-                continue;
+            if (i <= Blocks.glassBlocks.id) continue;
             --i;
         }
         for (j = 0; j < 9; ++j) {
-            if (i <= Blocks.cageBlocks.id)
-                continue;
+            if (i <= Blocks.cageBlocks.id) continue;
             --i;
         }
         for (j = 0; j < 15; ++j) {
-            if (i <= Blocks.stoneBlocks1.id)
-                continue;
+            if (i <= Blocks.stoneBlocks1.id) continue;
             --i;
         }
         for (j = 0; j < 15; ++j) {
-            if (i <= Blocks.stoneBlocks2.id)
-                continue;
+            if (i <= Blocks.stoneBlocks2.id) continue;
             --i;
         }
         for (j = 0; j < 15; ++j) {
-            if (i <= Blocks.stoneBlocks3.id)
-                continue;
+            if (i <= Blocks.stoneBlocks3.id) continue;
             --i;
         }
         for (j = 0; j < 15; ++j) {
-            if (i <= Blocks.woodBlocks.id)
-                continue;
+            if (i <= Blocks.woodBlocks.id) continue;
             --i;
         }
         for (j = 0; j < 15; ++j) {
-            if (i <= Blocks.halfSteps1.id)
-                continue;
+            if (i <= Blocks.halfSteps1.id) continue;
             --i;
         }
         for (j = 0; j < 15; ++j) {
-            if (i <= Blocks.halfSteps2.id)
-                continue;
+            if (i <= Blocks.halfSteps2.id) continue;
             --i;
         }
         for (j = 0; j < 15; ++j) {
-            if (i <= Blocks.halfSteps3.id)
-                continue;
+            if (i <= Blocks.halfSteps3.id) continue;
             --i;
         }
         for (j = 0; j < 15; ++j) {
-            if (i <= Blocks.tableBlocks.id)
-                continue;
+            if (i <= Blocks.tableBlocks.id) continue;
             --i;
         }
         for (j = 0; j < 3; ++j) {
-            if (i <= Blocks.chairBlocks1.id)
-                continue;
+            if (i <= Blocks.chairBlocks1.id) continue;
             --i;
         }
         for (j = 0; j < 3; ++j) {
-            if (i <= Blocks.chairBlocks2.id)
-                continue;
+            if (i <= Blocks.chairBlocks2.id) continue;
             --i;
         }
         for (j = 0; j < 14; ++j) {
-            if (i <= Blocks.ropes1.id)
-                continue;
+            if (i <= Blocks.ropes1.id) continue;
             --i;
         }
         for (j = 0; j < 14; ++j) {
-            if (i <= Blocks.ropes2.id)
-                continue;
+            if (i <= Blocks.ropes2.id) continue;
             --i;
         }
         for (j = 0; j < 8; ++j) {
-            if (i <= Blocks.chains.id)
-                continue;
+            if (i <= Blocks.chains.id) continue;
             --i;
         }
         for (j = 0; j < 3; ++j) {
-            if (i <= Blocks.ladders1.id)
-                continue;
+            if (i <= Blocks.ladders1.id) continue;
             --i;
         }
         for (j = 0; j < 3; ++j) {
-            if (i <= Blocks.ladders2.id)
-                continue;
+            if (i <= Blocks.ladders2.id) continue;
             --i;
         }
         for (j = 0; j < 3; ++j) {
-            if (i <= Blocks.ladders3.id)
-                continue;
+            if (i <= Blocks.ladders3.id) continue;
             --i;
         }
         for (j = 0; j < 3; ++j) {
-            if (i <= Blocks.ladders4.id)
-                continue;
+            if (i <= Blocks.ladders4.id) continue;
             --i;
         }
         for (j = 0; j < 13; ++j) {
-            if (i <= Blocks.lights1.id)
-                continue;
+            if (i <= Blocks.lights1.id) continue;
             --i;
         }
         for (j = 0; j < 15; ++j) {
-            if (i <= Blocks.plant2.id)
-                continue;
+            if (i <= Blocks.plant2.id) continue;
             --i;
         }
         for (j = 0; j < 15; ++j) {
-            if (i <= Blocks.plant3.id)
-                continue;
+            if (i <= Blocks.plant3.id) continue;
             --i;
         }
         for (j = 0; j < 6; ++j) {
-            if (i <= Blocks.overlay1.id)
-                continue;
+            if (i <= Blocks.overlay1.id) continue;
             --i;
         }
         for (j = 0; j < 3; ++j) {
-            if (i <= Blocks.stairs1.id)
-                continue;
+            if (i <= Blocks.stairs1.id) continue;
             --i;
         }
         for (j = 0; j < 3; ++j) {
-            if (i <= Blocks.stairs2.id)
-                continue;
+            if (i <= Blocks.stairs2.id) continue;
             --i;
         }
         for (j = 0; j < 3; ++j) {
-            if (i <= Blocks.stairs3.id)
-                continue;
+            if (i <= Blocks.stairs3.id) continue;
             --i;
         }
         for (j = 0; j < 3; ++j) {
-            if (i <= Blocks.stairs4.id)
-                continue;
+            if (i <= Blocks.stairs4.id) continue;
             --i;
         }
         for (j = 0; j < 3; ++j) {
-            if (i <= Blocks.slopes1.id)
-                continue;
+            if (i <= Blocks.slopes1.id) continue;
             --i;
         }
         for (j = 0; j < 3; ++j) {
-            if (i <= Blocks.slopes2.id)
-                continue;
+            if (i <= Blocks.slopes2.id) continue;
             --i;
         }
         for (j = 0; j < 3; ++j) {
-            if (i <= Blocks.slopes3.id)
-                continue;
+            if (i <= Blocks.slopes3.id) continue;
             --i;
         }
         for (j = 0; j < 3; ++j) {
-            if (i <= Blocks.slopes4.id)
-                continue;
+            if (i <= Blocks.slopes4.id) continue;
             --i;
         }
         for (j = 0; j < 15; ++j) {
-            if (i <= ItemType.dyePowder.id)
-                continue;
+            if (i <= ItemType.dyePowder.id) continue;
             --i;
         }
         return i;
@@ -244,8 +201,7 @@ public class InventoryDebug implements Inventory {
         int j;
         int subtype = 0;
         for (j = 0; j < 4; ++j) {
-            if (i <= Tile.GRASS.id)
-                continue;
+            if (i <= Tile.GRASS.id) continue;
             --i;
             ++subtype;
         }
@@ -253,8 +209,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 3; ++j) {
-            if (i <= Tile.SAND.id)
-                continue;
+            if (i <= Tile.SAND.id) continue;
             --i;
             ++subtype;
         }
@@ -273,8 +228,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 2; ++j) {
-            if (i <= Tile.TALLGRASS.id)
-                continue;
+            if (i <= Tile.TALLGRASS.id) continue;
             --i;
             ++subtype;
         }
@@ -282,8 +236,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 15; ++j) {
-            if (i <= Tile.WOOL.id)
-                continue;
+            if (i <= Tile.WOOL.id) continue;
             --i;
             ++subtype;
         }
@@ -291,8 +244,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 3; ++j) {
-            if (i <= Tile.STONE_SLAB.id)
-                continue;
+            if (i <= Tile.STONE_SLAB.id) continue;
             --i;
             ++subtype;
         }
@@ -300,8 +252,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 15; ++j) {
-            if (i <= Blocks.pillarStone.id)
-                continue;
+            if (i <= Blocks.pillarStone.id) continue;
             --i;
             ++subtype;
         }
@@ -309,8 +260,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 15; ++j) {
-            if (i <= Blocks.pillarMetal.id)
-                continue;
+            if (i <= Blocks.pillarMetal.id) continue;
             --i;
             ++subtype;
         }
@@ -318,8 +268,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 15; ++j) {
-            if (i <= Blocks.plant1.id)
-                continue;
+            if (i <= Blocks.plant1.id) continue;
             --i;
             ++subtype;
         }
@@ -327,8 +276,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 15; ++j) {
-            if (i <= Blocks.trees.id)
-                continue;
+            if (i <= Blocks.trees.id) continue;
             --i;
             ++subtype;
         }
@@ -336,8 +284,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 15; ++j) {
-            if (i <= Blocks.glassBlocks.id)
-                continue;
+            if (i <= Blocks.glassBlocks.id) continue;
             --i;
             ++subtype;
         }
@@ -345,8 +292,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 9; ++j) {
-            if (i <= Blocks.cageBlocks.id)
-                continue;
+            if (i <= Blocks.cageBlocks.id) continue;
             --i;
             ++subtype;
         }
@@ -354,8 +300,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 15; ++j) {
-            if (i <= Blocks.stoneBlocks1.id)
-                continue;
+            if (i <= Blocks.stoneBlocks1.id) continue;
             --i;
             ++subtype;
         }
@@ -363,8 +308,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 15; ++j) {
-            if (i <= Blocks.stoneBlocks2.id)
-                continue;
+            if (i <= Blocks.stoneBlocks2.id) continue;
             --i;
             ++subtype;
         }
@@ -372,8 +316,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 15; ++j) {
-            if (i <= Blocks.stoneBlocks3.id)
-                continue;
+            if (i <= Blocks.stoneBlocks3.id) continue;
             --i;
             ++subtype;
         }
@@ -381,8 +324,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 15; ++j) {
-            if (i <= Blocks.woodBlocks.id)
-                continue;
+            if (i <= Blocks.woodBlocks.id) continue;
             --i;
             ++subtype;
         }
@@ -390,8 +332,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 15; ++j) {
-            if (i <= Blocks.halfSteps1.id)
-                continue;
+            if (i <= Blocks.halfSteps1.id) continue;
             --i;
             ++subtype;
         }
@@ -399,8 +340,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 15; ++j) {
-            if (i <= Blocks.halfSteps2.id)
-                continue;
+            if (i <= Blocks.halfSteps2.id) continue;
             --i;
             ++subtype;
         }
@@ -408,8 +348,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 15; ++j) {
-            if (i <= Blocks.halfSteps3.id)
-                continue;
+            if (i <= Blocks.halfSteps3.id) continue;
             --i;
             ++subtype;
         }
@@ -417,8 +356,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 15; ++j) {
-            if (i <= Blocks.tableBlocks.id)
-                continue;
+            if (i <= Blocks.tableBlocks.id) continue;
             --i;
             ++subtype;
         }
@@ -426,8 +364,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 3; ++j) {
-            if (i <= Blocks.chairBlocks1.id)
-                continue;
+            if (i <= Blocks.chairBlocks1.id) continue;
             --i;
             subtype += 4;
         }
@@ -435,8 +372,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 3; ++j) {
-            if (i <= Blocks.chairBlocks2.id)
-                continue;
+            if (i <= Blocks.chairBlocks2.id) continue;
             --i;
             subtype += 4;
         }
@@ -444,8 +380,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 14; ++j) {
-            if (i <= Blocks.ropes1.id)
-                continue;
+            if (i <= Blocks.ropes1.id) continue;
             --i;
             ++subtype;
         }
@@ -453,8 +388,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 14; ++j) {
-            if (i <= Blocks.ropes2.id)
-                continue;
+            if (i <= Blocks.ropes2.id) continue;
             --i;
             ++subtype;
         }
@@ -462,8 +396,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 8; ++j) {
-            if (i <= Blocks.chains.id)
-                continue;
+            if (i <= Blocks.chains.id) continue;
             --i;
             ++subtype;
         }
@@ -471,8 +404,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 3; ++j) {
-            if (i <= Blocks.ladders1.id)
-                continue;
+            if (i <= Blocks.ladders1.id) continue;
             --i;
             subtype += 4;
         }
@@ -480,8 +412,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 3; ++j) {
-            if (i <= Blocks.ladders2.id)
-                continue;
+            if (i <= Blocks.ladders2.id) continue;
             --i;
             subtype += 4;
         }
@@ -489,8 +420,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 3; ++j) {
-            if (i <= Blocks.ladders3.id)
-                continue;
+            if (i <= Blocks.ladders3.id) continue;
             --i;
             subtype += 4;
         }
@@ -498,8 +428,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 3; ++j) {
-            if (i <= Blocks.ladders4.id)
-                continue;
+            if (i <= Blocks.ladders4.id) continue;
             --i;
             subtype += 4;
         }
@@ -507,8 +436,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 13; ++j) {
-            if (i <= Blocks.lights1.id)
-                continue;
+            if (i <= Blocks.lights1.id) continue;
             --i;
             ++subtype;
         }
@@ -516,8 +444,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 15; ++j) {
-            if (i <= Blocks.plant2.id)
-                continue;
+            if (i <= Blocks.plant2.id) continue;
             --i;
             ++subtype;
         }
@@ -525,8 +452,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 15; ++j) {
-            if (i <= Blocks.plant3.id)
-                continue;
+            if (i <= Blocks.plant3.id) continue;
             --i;
             ++subtype;
         }
@@ -534,8 +460,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 6; ++j) {
-            if (i <= Blocks.overlay1.id)
-                continue;
+            if (i <= Blocks.overlay1.id) continue;
             --i;
             ++subtype;
         }
@@ -543,8 +468,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 3; ++j) {
-            if (i <= Blocks.stairs1.id)
-                continue;
+            if (i <= Blocks.stairs1.id) continue;
             --i;
             subtype += 4;
         }
@@ -552,8 +476,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 3; ++j) {
-            if (i <= Blocks.stairs2.id)
-                continue;
+            if (i <= Blocks.stairs2.id) continue;
             --i;
             subtype += 4;
         }
@@ -561,8 +484,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 3; ++j) {
-            if (i <= Blocks.stairs3.id)
-                continue;
+            if (i <= Blocks.stairs3.id) continue;
             --i;
             subtype += 4;
         }
@@ -570,8 +492,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 3; ++j) {
-            if (i <= Blocks.stairs4.id)
-                continue;
+            if (i <= Blocks.stairs4.id) continue;
             --i;
             subtype += 4;
         }
@@ -579,8 +500,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 3; ++j) {
-            if (i <= Blocks.slopes1.id)
-                continue;
+            if (i <= Blocks.slopes1.id) continue;
             --i;
             subtype += 4;
         }
@@ -588,8 +508,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 3; ++j) {
-            if (i <= Blocks.slopes2.id)
-                continue;
+            if (i <= Blocks.slopes2.id) continue;
             --i;
             subtype += 4;
         }
@@ -597,8 +516,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 3; ++j) {
-            if (i <= Blocks.slopes3.id)
-                continue;
+            if (i <= Blocks.slopes3.id) continue;
             --i;
             subtype += 4;
         }
@@ -606,8 +524,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 3; ++j) {
-            if (i <= Blocks.slopes4.id)
-                continue;
+            if (i <= Blocks.slopes4.id) continue;
             --i;
             subtype += 4;
         }
@@ -615,8 +532,7 @@ public class InventoryDebug implements Inventory {
             subtype = 0;
         }
         for (j = 0; j < 15; ++j) {
-            if (i <= ItemType.dyePowder.id)
-                continue;
+            if (i <= ItemType.dyePowder.id) continue;
             --i;
             ++subtype;
         }
@@ -635,8 +551,7 @@ public class InventoryDebug implements Inventory {
                 this.inventoryContents[i] = new ItemInstance(ItemType.byId[id], -64);
                 this.inventoryContents[i].setDamage(this.getSubtype(i + offset));
                 this.lastItem = i + offset;
-                if (filledFirst)
-                    continue;
+                if (filledFirst) continue;
                 this.firstItem = i + offset;
                 filledFirst = true;
                 continue;
@@ -664,8 +579,7 @@ public class InventoryDebug implements Inventory {
                 this.inventoryContents[this.size - i - 1] = new ItemInstance(ItemType.byId[id], -64);
                 this.inventoryContents[this.size - i - 1].setDamage(this.getSubtype(offset - i));
                 this.firstItem = offset - i;
-                if (filledFirst)
-                    continue;
+                if (filledFirst) continue;
                 this.lastItem = offset - i;
                 filledFirst = true;
                 continue;

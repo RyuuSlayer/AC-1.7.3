@@ -1,7 +1,8 @@
 package io.github.ryuu.adventurecraft.util;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.client.Minecraft;
+import net.minecraft.level.Level;
+import net.minecraft.tile.Tile;
 
 public class PlayerTorch {
 
@@ -24,6 +25,12 @@ public class PlayerTorch {
     static int range;
 
     static float[] cache;
+
+    static {
+        torchBrightness = 15;
+        range = torchBrightness * 2 + 1;
+        cache = new float[range * range * range];
+    }
 
     public static boolean isTorchActive() {
         return torchActive;
@@ -83,7 +90,7 @@ public class PlayerTorch {
                         PlayerTorch.cache[index++] = 0.0f;
                         continue;
                     }
-                    float distance = (float) (Math.abs((double) ((double) i + 0.5 - (double) xDiff)) + Math.abs((double) ((double) j + 0.5 - (double) yDiff)) + Math.abs((double) ((double) k + 0.5 - (double) zDiff)));
+                    float distance = (float) (Math.abs((double) i + 0.5 - (double) xDiff) + Math.abs((double) j + 0.5 - (double) yDiff) + Math.abs((double) k + 0.5 - (double) zDiff));
                     if (distance <= (float) torchBrightness) {
                         if ((float) torchBrightness - distance > (float) world.getLightLevel(blockX, blockY, blockZ)) {
                             world.method_243(blockX, blockY, blockZ);
@@ -95,11 +102,5 @@ public class PlayerTorch {
                 }
             }
         }
-    }
-
-    static {
-        torchBrightness = 15;
-        range = torchBrightness * 2 + 1;
-        cache = new float[range * range * range];
     }
 }

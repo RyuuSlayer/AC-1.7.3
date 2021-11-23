@@ -1,57 +1,42 @@
 package io.github.ryuu.adventurecraft.mixin.entity.projectile;
 
-import java.util.List;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.level.Level;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.io.CompoundTag;
+import net.minecraft.util.maths.Box;
+import net.minecraft.util.maths.MathsHelper;
+import net.minecraft.util.maths.Vec3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
+import java.util.List;
+
 @Mixin(Snowball.class)
 public class MixinSnowball extends Entity {
 
+    private final float radius;
+    public int shake = 0;
+    public LivingEntity field_2193;
+    public double field_2194;
+    public double field_2195;
+    public double field_2196;
     @Shadow()
     private int xTile = -1;
-
     private int yTile = -1;
-
     private int zTile = -1;
-
     private int inTile = 0;
-
     private boolean inGround = false;
-
-    public int shake = 0;
-
-    public LivingEntity field_2193;
-
     private int field_2202;
-
     private int field_2203 = 0;
-
-    public double field_2194;
-
-    public double field_2195;
-
-    public double field_2196;
-
-    private float radius;
 
     public MixinSnowball(Level world) {
         super(world);
         this.setSize(1.0f, 1.0f);
         this.collidesWithClipBlocks = false;
         this.radius = 1.0f;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public boolean shouldRenderAtDistance(double d) {
-        double d1 = this.boundingBox.averageDimension() * 4.0;
-        return d < (d1 *= 64.0) * d1;
     }
 
     public MixinSnowball(Level level, double d, double d1, double d2, double d3, double d4, double d5) {
@@ -105,8 +90,19 @@ public class MixinSnowball extends Entity {
      */
     @Override
     @Overwrite()
+    public boolean shouldRenderAtDistance(double d) {
+        double d1 = this.boundingBox.averageDimension() * 4.0;
+        return d < (d1 *= 64.0) * d1;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Override
+    @Overwrite()
     public void tick() {
-        block17: {
+        block17:
+        {
             super.tick();
             this.fire = 10;
             if (this.shake > 0) {
@@ -116,9 +112,9 @@ public class MixinSnowball extends Entity {
                 int i = this.level.getTileId(this.xTile, this.yTile, this.zTile);
                 if (i != this.inTile) {
                     this.inGround = false;
-                    this.velocityX *= (double) (this.rand.nextFloat() * 0.2f);
-                    this.velocityY *= (double) (this.rand.nextFloat() * 0.2f);
-                    this.velocityZ *= (double) (this.rand.nextFloat() * 0.2f);
+                    this.velocityX *= this.rand.nextFloat() * 0.2f;
+                    this.velocityY *= this.rand.nextFloat() * 0.2f;
+                    this.velocityZ *= this.rand.nextFloat() * 0.2f;
                     this.field_2202 = 0;
                     this.field_2203 = 0;
                     break block17;
@@ -169,8 +165,8 @@ public class MixinSnowball extends Entity {
         this.y += this.velocityY;
         this.z += this.velocityZ;
         float f = MathsHelper.sqrt(this.velocityX * this.velocityX + this.velocityZ * this.velocityZ);
-        this.yaw = (float) (Math.atan2((double) this.velocityX, (double) this.velocityZ) * 180.0 / 3.1415927410125732);
-        this.pitch = (float) (Math.atan2((double) this.velocityY, (double) f) * 180.0 / 3.1415927410125732);
+        this.yaw = (float) (Math.atan2(this.velocityX, this.velocityZ) * 180.0 / 3.1415927410125732);
+        this.pitch = (float) (Math.atan2(this.velocityY, f) * 180.0 / 3.1415927410125732);
         while (this.pitch - this.prevPitch < -180.0f) {
             this.prevPitch -= 360.0f;
         }
@@ -196,9 +192,9 @@ public class MixinSnowball extends Entity {
         this.velocityX += this.field_2194;
         this.velocityY += this.field_2195;
         this.velocityZ += this.field_2196;
-        this.velocityX *= (double) f1;
-        this.velocityY *= (double) f1;
-        this.velocityZ *= (double) f1;
+        this.velocityX *= f1;
+        this.velocityY *= f1;
+        this.velocityZ *= f1;
         this.level.addParticle("smoke", this.x, this.y + 0.5, this.z, 0.0, 0.0, 0.0);
         this.setPosition(this.x, this.y, this.z);
     }

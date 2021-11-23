@@ -2,20 +2,14 @@ package io.github.ryuu.adventurecraft.util;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 
 final class CoordBlock {
 
-    public int x;
-
-    public int y;
-
-    public int z;
-
-    private static List<net.minecraft.src.CoordBlock> blockCoords = new ArrayList();
-
+    private static final List<net.minecraft.src.CoordBlock> blockCoords = new ArrayList();
     public static int numBlockCoordsInUse = 0;
+    public int x;
+    public int y;
+    public int z;
 
     public CoordBlock(int i, int j, int k) {
         this.x = i;

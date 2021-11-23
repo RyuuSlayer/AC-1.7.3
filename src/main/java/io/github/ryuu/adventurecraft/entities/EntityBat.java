@@ -1,8 +1,13 @@
 package io.github.ryuu.adventurecraft.entities;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.FlyingEntity;
+import net.minecraft.entity.MonsterEntityType;
+import net.minecraft.level.Level;
+import net.minecraft.util.maths.Box;
+import net.minecraft.util.maths.MathsHelper;
+
 import java.util.Random;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 
 public class EntityBat extends FlyingEntity implements MonsterEntityType {
 
@@ -13,16 +18,11 @@ public class EntityBat extends FlyingEntity implements MonsterEntityType {
     public double waypointY;
 
     public double waypointZ;
-
-    private Entity targetedEntity = null;
-
-    private int aggroCooldown = 0;
-
     boolean movingToTarget;
-
     int attackCooldown;
-
     Random bs;
+    private Entity targetedEntity = null;
+    private int aggroCooldown = 0;
 
     public EntityBat(Level world) {
         super(world);
@@ -54,7 +54,7 @@ public class EntityBat extends FlyingEntity implements MonsterEntityType {
                 this.aggroCooldown = 20;
             }
         }
-        if ((d3 = (double) MathsHelper.sqrt((d = this.waypointX - this.x) * d + (d1 = this.waypointY - this.y) * d1 + (d2 = this.waypointZ - this.z) * d2)) < 1.0 || d3 > 60.0 || this.bs.nextInt(20) == 0) {
+        if ((d3 = MathsHelper.sqrt((d = this.waypointX - this.x) * d + (d1 = this.waypointY - this.y) * d1 + (d2 = this.waypointZ - this.z) * d2)) < 1.0 || d3 > 60.0 || this.bs.nextInt(20) == 0) {
             if (this.targetedEntity == null || this.bs.nextInt(3) == 0) {
                 this.movingToTarget = false;
                 this.waypointX = this.x + (double) ((this.bs.nextFloat() * 2.0f - 1.0f) * 4.0f);
@@ -73,7 +73,7 @@ public class EntityBat extends FlyingEntity implements MonsterEntityType {
                 this.velocityX += d / d3 * 0.08;
                 this.velocityY += d1 / d3 * 0.08;
                 this.velocityZ += d2 / d3 * 0.08;
-                this.yaw = -((float) Math.atan2((double) this.velocityX, (double) this.velocityZ)) * 180.0f / 3.141593f;
+                this.yaw = -((float) Math.atan2(this.velocityX, this.velocityZ)) * 180.0f / 3.141593f;
             } else {
                 this.waypointX = this.x;
                 this.waypointY = this.y;
@@ -83,7 +83,7 @@ public class EntityBat extends FlyingEntity implements MonsterEntityType {
         if (this.targetedEntity != null) {
             double d5 = this.targetedEntity.x - this.x;
             double d7 = this.targetedEntity.z - this.z;
-            this.field_1012 = -((float) Math.atan2((double) d5, (double) d7)) * 180.0f / 3.141593f;
+            this.field_1012 = -((float) Math.atan2(d5, d7)) * 180.0f / 3.141593f;
             if (this.movingToTarget && this.targetedEntity.method_1352(this) < 2.25) {
                 this.velocityX = 0.0;
                 this.velocityY = 0.0;

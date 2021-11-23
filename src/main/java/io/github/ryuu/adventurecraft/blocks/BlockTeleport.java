@@ -1,11 +1,17 @@
 package io.github.ryuu.adventurecraft.blocks;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import io.github.ryuu.adventurecraft.util.DebugMode;
-import io.github.ryuu.adventurecraft.items.Items;
-import io.github.ryuu.adventurecraft.items.ItemCursor;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityTeleport;
+import io.github.ryuu.adventurecraft.items.ItemCursor;
+import io.github.ryuu.adventurecraft.items.Items;
+import io.github.ryuu.adventurecraft.util.DebugMode;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.Player;
+import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
+import net.minecraft.tile.TileWithEntity;
+import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.tile.material.Material;
+import net.minecraft.util.maths.Box;
 
 public class BlockTeleport extends TileWithEntity {
 
@@ -66,7 +72,7 @@ public class BlockTeleport extends TileWithEntity {
             obj.x = ItemCursor.minX;
             obj.y = ItemCursor.minY;
             obj.z = ItemCursor.minZ;
-            Minecraft.minecraftInstance.overlay.addChatMessage(String.format((String) "Setting Teleport (%d, %d, %d)", (Object[]) new Object[] { obj.x, obj.y, obj.z }));
+            Minecraft.minecraftInstance.overlay.addChatMessage(String.format("Setting Teleport (%d, %d, %d)", new Object[]{obj.x, obj.y, obj.z}));
             return true;
         }
         return false;

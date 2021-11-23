@@ -1,15 +1,22 @@
 package io.github.ryuu.adventurecraft.blocks;
 
+import io.github.ryuu.adventurecraft.entities.EntityAirFX;
+import io.github.ryuu.adventurecraft.util.DebugMode;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.FallingTile;
+import net.minecraft.entity.player.Player;
+import net.minecraft.level.Level;
+import net.minecraft.tile.Tile;
+import net.minecraft.tile.material.Material;
+import net.minecraft.util.maths.Box;
+
 import java.util.List;
 import java.util.Random;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import io.github.ryuu.adventurecraft.util.DebugMode;
-import io.github.ryuu.adventurecraft.entities.EntityAirFX;
 
 public class BlockFan extends Tile {
 
-    private boolean fanOn;
+    private final boolean fanOn;
 
     public BlockFan(int i, int j, boolean f) {
         super(i, j, Material.STONE);
@@ -58,48 +65,42 @@ public class BlockFan extends Tile {
             if (direction == 0) {
                 for (yOffset = -1; yOffset >= -4; --yOffset) {
                     blockID = level.getTileId(x, y + yOffset, z);
-                    if (!this.canGoThroughBlock(blockID))
-                        continue;
+                    if (!this.canGoThroughBlock(blockID)) continue;
                     ++yOffset;
                     break;
                 }
             } else if (direction == 1) {
                 for (yOffset = 1; yOffset <= 4; ++yOffset) {
                     blockID = level.getTileId(x, y + yOffset, z);
-                    if (!this.canGoThroughBlock(blockID))
-                        continue;
+                    if (!this.canGoThroughBlock(blockID)) continue;
                     --yOffset;
                     break;
                 }
             } else if (direction == 2) {
                 for (zOffset = -1; zOffset >= -4; --zOffset) {
                     blockID = level.getTileId(x, y, z + zOffset);
-                    if (!this.canGoThroughBlock(blockID))
-                        continue;
+                    if (!this.canGoThroughBlock(blockID)) continue;
                     ++zOffset;
                     break;
                 }
             } else if (direction == 3) {
                 for (zOffset = 1; zOffset <= 4; ++zOffset) {
                     blockID = level.getTileId(x, y, z + zOffset);
-                    if (!this.canGoThroughBlock(blockID))
-                        continue;
+                    if (!this.canGoThroughBlock(blockID)) continue;
                     --zOffset;
                     break;
                 }
             } else if (direction == 4) {
                 for (xOffset = -1; xOffset >= -4; --xOffset) {
                     blockID = level.getTileId(x + xOffset, y, z);
-                    if (!this.canGoThroughBlock(blockID))
-                        continue;
+                    if (!this.canGoThroughBlock(blockID)) continue;
                     ++xOffset;
                     break;
                 }
             } else if (direction == 5) {
                 for (xOffset = 1; xOffset <= 4; ++xOffset) {
                     blockID = level.getTileId(x + xOffset, y, z);
-                    if (!this.canGoThroughBlock(blockID))
-                        continue;
+                    if (!this.canGoThroughBlock(blockID)) continue;
                     --xOffset;
                     break;
                 }
@@ -108,20 +109,17 @@ public class BlockFan extends Tile {
             List entities = level.getEntities(Entity.class, aabb);
             for (Object obj : entities) {
                 e = (Entity) obj;
-                if (e instanceof FallingTile)
-                    continue;
-                dist = e.method_1350((double) x + 0.5, (double) y + 0.5, (double) z + 0.5) * (double) Math.abs((int) (xOffset + yOffset + zOffset)) / 4.0;
+                if (e instanceof FallingTile) continue;
+                dist = e.method_1350((double) x + 0.5, (double) y + 0.5, (double) z + 0.5) * (double) Math.abs(xOffset + yOffset + zOffset) / 4.0;
                 e.method_1322(0.07 * (double) xOffset / dist, 0.07 * (double) yOffset / dist, 0.07 * (double) zOffset / dist);
-                if (!(e instanceof Player) || !((Player) e).usingUmbrella())
-                    continue;
+                if (!(e instanceof Player) || !((Player) e).usingUmbrella()) continue;
                 e.method_1322(0.07 * (double) xOffset / dist, 0.07 * (double) yOffset / dist, 0.07 * (double) zOffset / dist);
             }
             entities = Minecraft.minecraftInstance.particleManager.getEffectsWithinAABB(aabb);
             for (Object obj : entities) {
                 e = (Entity) obj;
-                if (e instanceof FallingTile)
-                    continue;
-                dist = e.method_1350((double) x + 0.5, (double) y + 0.5, (double) z + 0.5) * (double) Math.abs((int) (xOffset + yOffset + zOffset)) / 4.0;
+                if (e instanceof FallingTile) continue;
+                dist = e.method_1350((double) x + 0.5, (double) y + 0.5, (double) z + 0.5) * (double) Math.abs(xOffset + yOffset + zOffset) / 4.0;
                 e.method_1322(0.03 * (double) xOffset / dist, 0.03 * (double) yOffset / dist, 0.03 * (double) zOffset / dist);
             }
             Minecraft.minecraftInstance.particleManager.addParticle(new EntityAirFX(level, (double) x + rand.nextDouble(), (double) y + rand.nextDouble(), (double) z + rand.nextDouble()));

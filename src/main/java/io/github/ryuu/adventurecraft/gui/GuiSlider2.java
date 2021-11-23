@@ -1,7 +1,7 @@
 package io.github.ryuu.adventurecraft.gui;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.widgets.Button;
 import org.lwjgl.opengl.GL11;
 
 public class GuiSlider2 extends Button {
@@ -34,7 +34,7 @@ public class GuiSlider2 extends Button {
                 this.sliderValue = 1.0f;
             }
         }
-        GL11.glColor4f((float) 1.0f, (float) 1.0f, (float) 1.0f, (float) 1.0f);
+        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
         this.blit(this.x + (int) (this.sliderValue * (float) (this.width - 8)), this.y, 0, 66, 4, 20);
         this.blit(this.x + (int) (this.sliderValue * (float) (this.width - 8)) + 4, this.y, 196, 66, 4, 20);
     }

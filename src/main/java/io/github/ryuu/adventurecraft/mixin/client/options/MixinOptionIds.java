@@ -1,9 +1,7 @@
 package io.github.ryuu.adventurecraft.mixin.client.options;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.client.options.Option;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(OptionIds.class)
@@ -11,9 +9,6 @@ class MixinOptionIds {
 
     @Shadow()
     static final int[] ids = new int[Option.values().length];
-
-    MixinOptionIds() {
-    }
 
     static {
         try {
@@ -44,5 +39,8 @@ class MixinOptionIds {
             OptionIds.ids[Option.GRASS_3D.ordinal()] = 8;
         } catch (NoSuchFieldError noSuchFieldError) {
         }
+    }
+
+    MixinOptionIds() {
     }
 }

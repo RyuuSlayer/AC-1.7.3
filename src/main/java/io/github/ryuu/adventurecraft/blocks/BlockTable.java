@@ -1,8 +1,5 @@
 package io.github.ryuu.adventurecraft.blocks;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-
 public class BlockTable extends BlockSolid {
 
     protected BlockTable(int i, int j) {

@@ -1,7 +1,5 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 
 public class TileEntityTriggerInverter extends TileEntityMinMax {

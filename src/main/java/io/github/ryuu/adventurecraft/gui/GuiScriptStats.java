@@ -1,9 +1,11 @@
 package io.github.ryuu.adventurecraft.gui;
 
-import java.util.Arrays;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import io.github.ryuu.adventurecraft.util.JScriptInfo;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
+import net.minecraft.client.gui.widgets.Button;
+
+import java.util.Arrays;
 
 public class GuiScriptStats extends Screen {
 
@@ -16,26 +18,27 @@ public class GuiScriptStats extends Screen {
         int numGood = 0;
         for (Object o : info) {
             JScriptInfo JScriptInfo = (JScriptInfo) o;
-            if (JScriptInfo.count <= 0)
-                continue;
+            if (JScriptInfo.count <= 0) continue;
             ++numGood;
         }
         int index = 0;
         this.scriptInfo = new JScriptInfo[numGood];
         for (Object object : info) {
             JScriptInfo sInfo = (JScriptInfo) object;
-            if (sInfo.count <= 0)
-                continue;
+            if (sInfo.count <= 0) continue;
             this.scriptInfo[index++] = sInfo;
         }
         for (JScriptInfo JScriptInfo : this.scriptInfo) {
             int s = Minecraft.minecraftInstance.textRenderer.getTextWidth(JScriptInfo.name);
-            if (s <= this.maxSize)
-                continue;
+            if (s <= this.maxSize) continue;
             this.maxSize = s;
         }
         this.maxSize += 10;
-        Arrays.sort((Object[]) this.scriptInfo);
+        Arrays.sort(this.scriptInfo);
+    }
+
+    public static void showUI() {
+        Minecraft.minecraftInstance.openScreen(new GuiScriptStats());
     }
 
     @Override
@@ -64,16 +67,12 @@ public class GuiScriptStats extends Screen {
             double avgTime = totTime / (double) sInfo.count;
             double maxTime = (double) sInfo.maxTime / 1000000.0;
             this.drawTextWithShadow(this.textManager, sInfo.name, 4, yOffset, 0xE0E0E0);
-            this.drawTextWithShadow(this.textManager, String.format((String) "%.2f", (Object[]) new Object[] { avgTime }), this.maxSize, yOffset, 0xE0E0E0);
-            this.drawTextWithShadow(this.textManager, String.format((String) "%.2f", (Object[]) new Object[] { maxTime }), this.maxSize + 50, yOffset, 0xE0E0E0);
-            this.drawTextWithShadow(this.textManager, String.format((String) "%.2f", (Object[]) new Object[] { totTime }), this.maxSize + 100, yOffset, 0xE0E0E0);
-            this.drawTextWithShadow(this.textManager, String.format((String) "%d", (Object[]) new Object[] { sInfo.count }), this.maxSize + 150, yOffset, 0xE0E0E0);
+            this.drawTextWithShadow(this.textManager, String.format("%.2f", avgTime), this.maxSize, yOffset, 0xE0E0E0);
+            this.drawTextWithShadow(this.textManager, String.format("%.2f", maxTime), this.maxSize + 50, yOffset, 0xE0E0E0);
+            this.drawTextWithShadow(this.textManager, String.format("%.2f", totTime), this.maxSize + 100, yOffset, 0xE0E0E0);
+            this.drawTextWithShadow(this.textManager, String.format("%d", sInfo.count), this.maxSize + 150, yOffset, 0xE0E0E0);
             yOffset += 10;
         }
         super.render(mouseX, mouseY, delta);
-    }
-
-    public static void showUI() {
-        Minecraft.minecraftInstance.openScreen(new GuiScriptStats());
     }
 }

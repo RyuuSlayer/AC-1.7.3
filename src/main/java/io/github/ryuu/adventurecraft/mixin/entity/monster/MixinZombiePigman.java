@@ -1,21 +1,25 @@
 package io.github.ryuu.adventurecraft.mixin.entity.monster;
 
-import java.util.List;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.monster.Zombie;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
+import net.minecraft.util.io.CompoundTag;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
+import java.util.List;
+
 @Mixin(ZombiePigman.class)
 public class MixinZombiePigman extends Zombie {
 
+    private static final ItemInstance field_2244 = new ItemInstance(ItemType.swordGold, 1);
     @Shadow()
     private int anger = 0;
-
     private int field_2243 = 0;
-
-    private static final ItemInstance field_2244 = new ItemInstance(ItemType.swordGold, 1);
 
     public MixinZombiePigman(Level world) {
         super(world);
@@ -69,8 +73,7 @@ public class MixinZombiePigman extends Zombie {
             List list = this.level.getEntities(this, this.boundingBox.expand(32.0, 32.0, 32.0));
             for (int j = 0; j < list.size(); ++j) {
                 Entity entity1 = (Entity) list.get(j);
-                if (!(entity1 instanceof ZombiePigman))
-                    continue;
+                if (!(entity1 instanceof ZombiePigman)) continue;
                 ZombiePigman entitypigzombie = (ZombiePigman) entity1;
                 entitypigzombie.method_1792(target);
             }

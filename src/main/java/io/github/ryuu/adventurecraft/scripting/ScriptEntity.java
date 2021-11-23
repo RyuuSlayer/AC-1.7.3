@@ -1,12 +1,22 @@
 package io.github.ryuu.adventurecraft.scripting;
 
+import io.github.ryuu.adventurecraft.entities.EntityLivingScript;
+import io.github.ryuu.adventurecraft.entities.EntityNPC;
+import io.github.ryuu.adventurecraft.util.UtilBullet;
+import net.minecraft.entity.*;
+import net.minecraft.entity.animal.Wolf;
+import net.minecraft.entity.monster.Monster;
+import net.minecraft.entity.monster.Slime;
+import net.minecraft.entity.player.Player;
+import net.minecraft.entity.projectile.Arrow;
+import net.minecraft.tile.material.Material;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.hit.HitType;
+import net.minecraft.util.maths.Box;
+import net.minecraft.util.maths.Vec3f;
+
 import java.util.ArrayList;
 import java.util.List;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import io.github.ryuu.adventurecraft.util.UtilBullet;
-import io.github.ryuu.adventurecraft.entities.EntityNPC;
-import io.github.ryuu.adventurecraft.entities.EntityLivingScript;
 
 public class ScriptEntity {
 
@@ -61,13 +71,13 @@ public class ScriptEntity {
         return new ScriptVec3(this.entity.x, this.entity.y, this.entity.z);
     }
 
+    public void setPosition(ScriptVec3 p) {
+        this.setPosition(p.x, p.y, p.z);
+    }
+
     ScriptVec3 getPosition(float f) {
         float iF = 1.0f - f;
         return new ScriptVec3((double) iF * this.entity.prevX + (double) f * this.entity.x, (double) iF * this.entity.prevY + (double) f * this.entity.y, (double) iF * this.entity.prevZ + (double) f * this.entity.z);
-    }
-
-    public void setPosition(ScriptVec3 p) {
-        this.setPosition(p.x, p.y, p.z);
     }
 
     public void setPosition(double x, double y, double z) {
@@ -146,9 +156,8 @@ public class ScriptEntity {
         double sqDist = dist * dist;
         for (Object ent : entities) {
             Entity e = (Entity) ent;
-            if (!(e.method_1352(this.entity) < sqDist))
-                continue;
-            scriptEntities.add((Object) ScriptEntity.getEntityClass(e));
+            if (!(e.method_1352(this.entity) < sqDist)) continue;
+            scriptEntities.add(ScriptEntity.getEntityClass(e));
         }
         int i = 0;
         ScriptEntity[] returnList = new ScriptEntity[scriptEntities.size()];
@@ -255,12 +264,12 @@ public class ScriptEntity {
         this.entity.setPosition(this.entity.x, this.entity.y, this.entity.z);
     }
 
-    public void setIsFlying(boolean b) {
-        this.entity.isFlying = b;
-    }
-
     public boolean getIsFlying() {
         return this.entity.isFlying;
+    }
+
+    public void setIsFlying(boolean b) {
+        this.entity.isFlying = b;
     }
 
     public boolean getOnGround() {

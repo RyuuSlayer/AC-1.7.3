@@ -1,7 +1,7 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.util.io.CompoundTag;
 
 public class TileEntityMessage extends TileEntity {
 
@@ -22,7 +22,7 @@ public class TileEntityMessage extends TileEntity {
     @Override
     public void writeIdentifyingData(CompoundTag tag) {
         super.writeIdentifyingData(tag);
-        if (this.message != null && !this.message.equals((Object) "")) {
+        if (this.message != null && !this.message.equals("")) {
             tag.put("message", this.message);
         }
         tag.put("sound", this.sound);

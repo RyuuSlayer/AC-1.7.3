@@ -1,15 +1,20 @@
 package io.github.ryuu.adventurecraft.gui;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityCamera;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
+import net.minecraft.client.gui.widgets.Button;
 
 public class GuiCameraBlock extends Screen {
 
-    private TileEntityCamera cam;
+    private final TileEntityCamera cam;
 
     public GuiCameraBlock(TileEntityCamera c) {
         this.cam = c;
+    }
+
+    public static void showUI(TileEntityCamera c) {
+        Minecraft.minecraftInstance.openScreen(new GuiCameraBlock(c));
     }
 
     @Override
@@ -20,12 +25,12 @@ public class GuiCameraBlock extends Screen {
         } else if (this.cam.type == 2) {
             b.text = "Quadratic Interpolation";
         }
-        this.buttons.add((Object) b);
+        this.buttons.add(b);
         b = new Button(1, 4, 24, 160, 18, "Pause Game");
         if (!this.cam.pauseGame) {
             b.text = "Game Runs";
         }
-        this.buttons.add((Object) b);
+        this.buttons.add(b);
     }
 
     @Override
@@ -47,9 +52,5 @@ public class GuiCameraBlock extends Screen {
     public void render(int mouseX, int mouseY, float delta) {
         this.renderBackground();
         super.render(mouseX, mouseY, delta);
-    }
-
-    public static void showUI(TileEntityCamera c) {
-        Minecraft.minecraftInstance.openScreen(new GuiCameraBlock(c));
     }
 }

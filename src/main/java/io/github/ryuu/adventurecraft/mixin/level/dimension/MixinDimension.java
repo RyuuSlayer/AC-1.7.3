@@ -1,31 +1,51 @@
 package io.github.ryuu.adventurecraft.mixin.level.dimension;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import io.github.ryuu.adventurecraft.util.ChunkProviderHeightMapGenerate;
+import net.minecraft.level.Level;
+import net.minecraft.level.LevelProperties;
+import net.minecraft.level.dimension.Nether;
+import net.minecraft.level.dimension.Overworld;
+import net.minecraft.level.dimension.Skylands;
+import net.minecraft.level.gen.BiomeSource;
+import net.minecraft.level.source.LevelSource;
+import net.minecraft.level.source.OverworldLevelSource;
+import net.minecraft.tile.FluidTile;
+import net.minecraft.tile.Tile;
+import net.minecraft.util.maths.MathsHelper;
+import net.minecraft.util.maths.Vec3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import io.github.ryuu.adventurecraft.util.ChunkProviderHeightMapGenerate;
 
 @Mixin(Dimension.class)
 public abstract class MixinDimension {
 
+    private final float[] field_2180 = new float[4];
     @Shadow()
     public Level level;
-
     public BiomeSource biomeSource;
-
     public boolean hasFog = false;
-
     public boolean field_2176 = false;
-
     public boolean fixedSpawnPos = false;
-
     public float[] field_2178 = new float[16];
-
     public int id = 0;
 
-    private float[] field_2180 = new float[4];
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static Dimension getByID(int id) {
+        if (id == -1) {
+            return new Nether();
+        }
+        if (id == 0) {
+            return new Overworld();
+        }
+        if (id == 1) {
+            return new Skylands();
+        }
+        return null;
+    }
 
     /**
      * @author Ryuu, TechPizza, Phil
@@ -85,7 +105,7 @@ public abstract class MixinDimension {
             f1 -= 1.0f;
         }
         float f2 = f1;
-        f1 = 1.0f - (float) ((Math.cos((double) ((double) f1 * Math.PI)) + 1.0) / 2.0);
+        f1 = 1.0f - (float) ((Math.cos((double) f1 * Math.PI) + 1.0) / 2.0);
         f1 = f2 + (f1 - f2) / 3.0f;
         return f1;
     }
@@ -127,22 +147,5 @@ public abstract class MixinDimension {
         float f4 = 0.8470588f;
         float f5 = 1.0f;
         return Vec3f.from(f3 *= f2 * 0.94f + 0.06f, f4 *= f2 * 0.94f + 0.06f, f5 *= f2 * 0.91f + 0.09f);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public static Dimension getByID(int id) {
-        if (id == -1) {
-            return new Nether();
-        }
-        if (id == 0) {
-            return new Overworld();
-        }
-        if (id == 1) {
-            return new Skylands();
-        }
-        return null;
     }
 }

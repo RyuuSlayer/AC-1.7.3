@@ -1,40 +1,68 @@
 package io.github.ryuu.adventurecraft.mixin.client.render;
 
-import java.awt.image.BufferedImage;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import io.github.ryuu.adventurecraft.util.Vec2;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.TextureBinder;
+import net.minecraft.tile.Tile;
+import net.minecraft.util.maths.MathsHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import io.github.ryuu.adventurecraft.util.Vec2;
+
+import java.awt.image.BufferedImage;
 
 @Mixin(FlowingLavaTextureBinder2.class)
 public class MixinFlowingLavaTextureBinder2 extends TextureBinder {
 
-    @Shadow()
-    protected float[] field_1166 = new float[256];
-
-    protected float[] field_1167 = new float[256];
-
-    protected float[] field_1168 = new float[256];
-
-    protected float[] field_1169 = new float[256];
-
-    int field_1170 = 0;
-
     static boolean hasImages;
-
     static int numFrames;
-
+    static int curFrame;
     private static int[] frameImages;
-
     private static int width;
 
-    static int curFrame;
+    static {
+        curFrame = 0;
+    }
+
+    @Shadow()
+    protected float[] field_1166 = new float[256];
+    protected float[] field_1167 = new float[256];
+    protected float[] field_1168 = new float[256];
+    protected float[] field_1169 = new float[256];
+    int field_1170 = 0;
 
     public MixinFlowingLavaTextureBinder2() {
         super(Tile.FLOWING_LAVA.tex + 1);
         this.field_1415 = 2;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static void loadImage() {
+        FlowingLavaTextureBinder2.loadImage("/custom_lava_flowing.png");
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static void loadImage(String texName) {
+        BufferedImage bufferedimage = null;
+        if (Minecraft.minecraftInstance.level != null) {
+            bufferedimage = Minecraft.minecraftInstance.level.loadMapTexture(texName);
+        }
+        curFrame = 0;
+        if (bufferedimage == null) {
+            hasImages = false;
+            return;
+        }
+        width = bufferedimage.getWidth();
+        numFrames = bufferedimage.getHeight() / bufferedimage.getWidth();
+        frameImages = new int[bufferedimage.getWidth() * bufferedimage.getHeight()];
+        bufferedimage.getRGB(0, 0, bufferedimage.getWidth(), bufferedimage.getHeight(), frameImages, 0, bufferedimage.getWidth());
+        hasImages = true;
     }
 
     /**
@@ -103,10 +131,10 @@ public class MixinFlowingLavaTextureBinder2 extends TextureBinder {
             this.field_1168 = new float[s];
             this.field_1169 = new float[s];
         }
-        int vw = (int) Math.sqrt((double) (w / 16));
-        int vh = (int) Math.sqrt((double) (h / 16));
+        int vw = (int) Math.sqrt(w / 16);
+        int vh = (int) Math.sqrt(h / 16);
         float totalWeight = (float) ((vw * 2 + 1) * (vh * 2 + 1)) * 1.1f;
-        int speed = (int) Math.sqrt((double) (w / 16));
+        int speed = (int) Math.sqrt(w / 16);
         this.field_1170 += speed;
         for (int i = 0; i < w; ++i) {
             for (int j = 0; j < h; ++j) {
@@ -128,8 +156,7 @@ public class MixinFlowingLavaTextureBinder2 extends TextureBinder {
                 }
                 int n2 = i + j * w;
                 this.field_1169[n2] = this.field_1169[n2] - 0.06f;
-                if (!(Math.random() < 0.005))
-                    continue;
+                if (!(Math.random() < 0.005)) continue;
                 this.field_1169[i + j * w] = 1.5f;
             }
         }
@@ -161,38 +188,5 @@ public class MixinFlowingLavaTextureBinder2 extends TextureBinder {
             this.grid[k * 4 + 2] = (byte) j2;
             this.grid[k * 4 + 3] = -1;
         }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public static void loadImage() {
-        FlowingLavaTextureBinder2.loadImage("/custom_lava_flowing.png");
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public static void loadImage(String texName) {
-        BufferedImage bufferedimage = null;
-        if (Minecraft.minecraftInstance.level != null) {
-            bufferedimage = Minecraft.minecraftInstance.level.loadMapTexture(texName);
-        }
-        curFrame = 0;
-        if (bufferedimage == null) {
-            hasImages = false;
-            return;
-        }
-        width = bufferedimage.getWidth();
-        numFrames = bufferedimage.getHeight() / bufferedimage.getWidth();
-        frameImages = new int[bufferedimage.getWidth() * bufferedimage.getHeight()];
-        bufferedimage.getRGB(0, 0, bufferedimage.getWidth(), bufferedimage.getHeight(), frameImages, 0, bufferedimage.getWidth());
-        hasImages = true;
-    }
-
-    static {
-        curFrame = 0;
     }
 }

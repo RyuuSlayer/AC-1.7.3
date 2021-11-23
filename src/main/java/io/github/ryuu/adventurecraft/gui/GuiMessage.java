@@ -1,22 +1,26 @@
 package io.github.ryuu.adventurecraft.gui;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityMessage;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
+import net.minecraft.client.gui.widgets.Button;
+import net.minecraft.level.Level;
+import net.minecraft.util.CharacterUtils;
 
 public class GuiMessage extends Screen {
 
-    private TileEntityMessage msg;
-
+    private final TileEntityMessage msg;
+    private final Level world;
     private TileEntityMessage soundFile;
-
-    private Level world;
-
     private int page;
 
     public GuiMessage(Level w, TileEntityMessage tileEntityMsg) {
         this.world = w;
         this.msg = tileEntityMsg;
+    }
+
+    public static void showUI(Level w, TileEntityMessage tileEntityMsg) {
+        Minecraft.minecraftInstance.openScreen(new GuiMessage(w, tileEntityMsg));
     }
 
     @Override
@@ -29,12 +33,12 @@ public class GuiMessage extends Screen {
                 soundName = this.world.soundList[i + maxEntries * this.page - 1];
             }
             b = new Button(i, 4 + i % 3 * this.width / 3, 60 + i / 3 * 20, (this.width - 16) / 3, 18, soundName);
-            this.buttons.add((Object) b);
+            this.buttons.add(b);
         }
         int numPages = this.world.soundList.length / maxEntries + 1;
         for (int i = 0; i < numPages; ++i) {
-            b = new Button(100 + i, 4 + i * 50, 40, 46, 18, String.format((String) "Page %d", (Object[]) new Object[] { i + 1 }));
-            this.buttons.add((Object) b);
+            b = new Button(100 + i, 4 + i * 50, 40, 46, 18, String.format("Page %d", i + 1));
+            this.buttons.add(b);
         }
     }
 
@@ -59,7 +63,7 @@ public class GuiMessage extends Screen {
         if (key == 14 && this.msg.message.length() > 0) {
             this.msg.message = this.msg.message.substring(0, this.msg.message.length() - 1);
         }
-        if (CharacterUtils.SUPPORTED_CHARS.indexOf((int) character) >= 0 && this.msg.message.length() < 30) {
+        if (CharacterUtils.SUPPORTED_CHARS.indexOf(character) >= 0 && this.msg.message.length() < 30) {
             this.msg.message = this.msg.message + character;
         }
     }
@@ -67,16 +71,12 @@ public class GuiMessage extends Screen {
     @Override
     public void render(int mouseX, int mouseY, float delta) {
         this.renderBackground();
-        this.drawTextWithShadow(this.textManager, String.format((String) "Message: '%s'", (Object[]) new Object[] { this.msg.message }), 4, 4, 0xE0E0E0);
+        this.drawTextWithShadow(this.textManager, String.format("Message: '%s'", this.msg.message), 4, 4, 0xE0E0E0);
         if (this.msg.sound != "") {
-            this.drawTextWithShadow(this.textManager, String.format((String) "Sound: %s", (Object[]) new Object[] { this.msg.sound }), 4, 24, 0xE0E0E0);
+            this.drawTextWithShadow(this.textManager, String.format("Sound: %s", this.msg.sound), 4, 24, 0xE0E0E0);
         } else {
-            this.drawTextWithShadow(this.textManager, String.format((String) "Sound: None", (Object[]) new Object[0]), 4, 24, 0xE0E0E0);
+            this.drawTextWithShadow(this.textManager, String.format("Sound: None"), 4, 24, 0xE0E0E0);
         }
         super.render(mouseX, mouseY, delta);
-    }
-
-    public static void showUI(Level w, TileEntityMessage tileEntityMsg) {
-        Minecraft.minecraftInstance.openScreen(new GuiMessage(w, tileEntityMsg));
     }
 }

@@ -1,31 +1,48 @@
 package io.github.ryuu.adventurecraft.mixin.entity.player;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import io.github.ryuu.adventurecraft.gui.GuiMapEditHUD;
+import io.github.ryuu.adventurecraft.gui.GuiPalette;
+import io.github.ryuu.adventurecraft.gui.GuiScriptStats;
+import io.github.ryuu.adventurecraft.gui.GuiWorldConfig;
+import io.github.ryuu.adventurecraft.util.DebugMode;
+import io.github.ryuu.adventurecraft.util.InventoryDebug;
+import io.github.ryuu.adventurecraft.util.JScriptInfo;
+import net.minecraft.achievement.Achievement;
+import net.minecraft.achievement.Achievements;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.PlayerKeypressManager;
+import net.minecraft.client.gui.screen.EditSignScreen;
+import net.minecraft.client.gui.screen.container.CraftingScreen;
+import net.minecraft.client.gui.screen.container.DispenserScreen;
+import net.minecraft.client.gui.screen.container.DoubleChestScreen;
+import net.minecraft.client.gui.screen.container.FurnaceScreen;
+import net.minecraft.client.util.Session;
+import net.minecraft.client.util.Smoother;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.FurnaceEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.level.Level;
+import net.minecraft.stat.Stat;
+import net.minecraft.tile.FluidTile;
+import net.minecraft.tile.entity.Dispenser;
+import net.minecraft.tile.entity.Sign;
+import net.minecraft.util.io.CompoundTag;
+import net.minecraft.util.maths.MathsHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import io.github.ryuu.adventurecraft.util.DebugMode;
-import io.github.ryuu.adventurecraft.gui.GuiScriptStats;
-import io.github.ryuu.adventurecraft.util.InventoryDebug;
-import io.github.ryuu.adventurecraft.gui.GuiPalette;
-import io.github.ryuu.adventurecraft.gui.GuiWorldConfig;
-import io.github.ryuu.adventurecraft.gui.GuiMapEditHUD;
-import io.github.ryuu.adventurecraft.util.JScriptInfo;
 
 @Mixin(ClientPlayer.class)
 public class MixinClientPlayer extends Player {
 
+    private final Smoother field_163 = new Smoother();
+    private final Smoother field_164 = new Smoother();
+    private final Smoother field_165 = new Smoother();
     @Shadow()
     public PlayerKeypressManager keypressManager;
-
     protected Minecraft minecraft;
-
-    private Smoother field_163 = new Smoother();
-
-    private Smoother field_164 = new Smoother();
-
-    private Smoother field_165 = new Smoother();
 
     public MixinClientPlayer(Minecraft minecraft, Level level, Session session, int dimensionId) {
         super(level);
@@ -157,7 +174,7 @@ public class MixinClientPlayer extends Player {
     public void displayGUIPalette() {
         InventoryDebug palette = new InventoryDebug("Palette", 54);
         palette.fillInventory(1);
-        this.minecraft.openScreen(new GuiPalette((Inventory) this.inventory, palette));
+        this.minecraft.openScreen(new GuiPalette(this.inventory, palette));
     }
 
     /**
@@ -193,40 +210,39 @@ public class MixinClientPlayer extends Player {
     @Overwrite()
     public void sendChatMessage(String s) {
         String orig = s;
-        if ((s = s.toLowerCase()).equals((Object) "/day")) {
+        if ((s = s.toLowerCase()).equals("/day")) {
             this.level.setTimeOfDay(0L);
-        } else if (s.equals((Object) "/night")) {
+        } else if (s.equals("/night")) {
             this.level.setTimeOfDay(12000L);
-        } else if (s.equals((Object) "/fly")) {
+        } else if (s.equals("/fly")) {
             this.isFlying = !this.isFlying;
-            this.minecraft.overlay.addChatMessage(String.format((String) "Flying: %b", (Object[]) new Object[] { this.isFlying }));
-        } else if (s.equals((Object) "/health")) {
+            this.minecraft.overlay.addChatMessage(String.format("Flying: %b", new Object[]{this.isFlying}));
+        } else if (s.equals("/health")) {
             this.health = 12;
             this.maxHealth = 12;
             this.numHeartPieces = 0;
-        } else if (s.equals((Object) "/mapedit")) {
+        } else if (s.equals("/mapedit")) {
             DebugMode.levelEditing = !DebugMode.levelEditing;
-        } else if (s.equals((Object) "/removemobs")) {
+        } else if (s.equals("/removemobs")) {
             for (Entity obj : this.level.entities) {
                 Entity e = obj;
-                if (!(e instanceof LivingEntity) || e instanceof Player)
-                    continue;
+                if (!(e instanceof LivingEntity) || e instanceof Player) continue;
                 e.removed = true;
             }
-        } else if (s.equals((Object) "/noclip")) {
+        } else if (s.equals("/noclip")) {
             boolean bl = this.field_1642 = !this.field_1642;
             if (this.field_1642) {
                 this.isFlying = true;
             }
-            this.minecraft.overlay.addChatMessage(String.format((String) "NoClip: %b", (Object[]) new Object[] { this.field_1642 }));
-        } else if (s.equals((Object) "/togglemelting")) {
+            this.minecraft.overlay.addChatMessage(String.format("NoClip: %b", this.field_1642));
+        } else if (s.equals("/togglemelting")) {
             this.level.properties.iceMelts = !this.level.properties.iceMelts;
-            this.minecraft.overlay.addChatMessage(String.format((String) "Ice Melts: %b", (Object[]) new Object[] { this.level.properties.iceMelts }));
+            this.minecraft.overlay.addChatMessage(String.format("Ice Melts: %b", new Object[]{this.level.properties.iceMelts}));
         } else if (s.startsWith("/cameraadd")) {
             if (this.minecraft.activeCutsceneCamera != null) {
                 float t;
                 try {
-                    t = Float.valueOf((String) s.substring(11)).floatValue();
+                    t = Float.valueOf(s.substring(11)).floatValue();
                 } catch (StringIndexOutOfBoundsException e) {
                     this.minecraft.overlay.addChatMessage("/cameraadd must have a time specified for the point");
                     return;
@@ -240,7 +256,7 @@ public class MixinClientPlayer extends Player {
             } else {
                 this.minecraft.overlay.addChatMessage("Need to be editing a camera block");
             }
-        } else if (s.equals((Object) "/cameraclear")) {
+        } else if (s.equals("/cameraclear")) {
             if (this.minecraft.activeCutsceneCamera != null) {
                 this.minecraft.activeCutsceneCamera.clearPoints();
                 this.minecraft.overlay.addChatMessage("Clearing Points");
@@ -248,29 +264,29 @@ public class MixinClientPlayer extends Player {
             } else {
                 this.minecraft.overlay.addChatMessage("Need to be editing a camera block");
             }
-        } else if (s.equals((Object) "/mobsburn")) {
+        } else if (s.equals("/mobsburn")) {
             this.level.properties.mobsBurn = !this.level.properties.mobsBurn;
-            this.minecraft.overlay.addChatMessage(String.format((String) "Mobs Burn in Daylight: %b", (Object[]) new Object[] { this.level.properties.mobsBurn }));
-        } else if (s.equals((Object) "/config")) {
+            this.minecraft.overlay.addChatMessage(String.format("Mobs Burn in Daylight: %b", new Object[]{this.level.properties.mobsBurn}));
+        } else if (s.equals("/config")) {
             this.minecraft.openScreen(new GuiWorldConfig(this.level));
-        } else if (s.equals((Object) "/test")) {
+        } else if (s.equals("/test")) {
             this.minecraft.openScreen(new GuiMapEditHUD(this.level));
-        } else if (s.equals((Object) "/renderpaths")) {
+        } else if (s.equals("/renderpaths")) {
             DebugMode.renderPaths = !DebugMode.renderPaths;
-            this.minecraft.overlay.addChatMessage(String.format((String) "Render Paths: %b", (Object[]) new Object[] { DebugMode.renderPaths }));
-        } else if (s.equals((Object) "/renderfov")) {
+            this.minecraft.overlay.addChatMessage(String.format("Render Paths: %b", DebugMode.renderPaths));
+        } else if (s.equals("/renderfov")) {
             DebugMode.renderFov = !DebugMode.renderFov;
-            this.minecraft.overlay.addChatMessage(String.format((String) "Render FOV: %b", (Object[]) new Object[] { DebugMode.renderFov }));
-        } else if (s.equals((Object) "/fullbright")) {
+            this.minecraft.overlay.addChatMessage(String.format("Render FOV: %b", DebugMode.renderFov));
+        } else if (s.equals("/fullbright")) {
             for (int i = 0; i < 16; ++i) {
                 this.level.dimension.field_2178[i] = 1.0f;
             }
             this.minecraft.worldRenderer.updateAllTheRenderers();
-        } else if (s.equals((Object) "/undo")) {
+        } else if (s.equals("/undo")) {
             this.level.undo();
-        } else if (s.equals((Object) "/redo")) {
+        } else if (s.equals("/redo")) {
             this.level.redo();
-        } else if (s.equals((Object) "/fluidcollision")) {
+        } else if (s.equals("/fluidcollision")) {
             FluidTile.isHittable = !FluidTile.isHittable;
         } else if (s.startsWith("/scriptstats")) {
             GuiScriptStats.showUI();

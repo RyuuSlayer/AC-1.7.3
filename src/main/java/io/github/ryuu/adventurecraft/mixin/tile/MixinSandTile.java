@@ -1,14 +1,15 @@
 package io.github.ryuu.adventurecraft.mixin.tile;
 
-import java.util.Random;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.api.EnvironmentInterface;
-import net.fabricmc.api.EnvironmentInterfaces;
+import io.github.ryuu.adventurecraft.blocks.IBlockColor;
+import net.minecraft.entity.FallingTile;
+import net.minecraft.level.Level;
+import net.minecraft.tile.Tile;
+import net.minecraft.tile.material.Material;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import io.github.ryuu.adventurecraft.blocks.IBlockColor;
+
+import java.util.Random;
 
 @Mixin(SandTile.class)
 public class MixinSandTile extends Tile implements IBlockColor {
@@ -18,6 +19,25 @@ public class MixinSandTile extends Tile implements IBlockColor {
 
     public MixinSandTile(int id, int j) {
         super(id, j, Material.SAND);
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static boolean method_435(Level world, int i, int j, int k) {
+        int l = world.getTileId(i, j, k);
+        if (l == 0) {
+            return true;
+        }
+        if (l == Tile.FIRE.id) {
+            return true;
+        }
+        Material material = Tile.BY_ID[l].material;
+        if (material == Material.WATER) {
+            return true;
+        }
+        return material == Material.LAVA;
     }
 
     /**
@@ -72,25 +92,6 @@ public class MixinSandTile extends Tile implements IBlockColor {
                 world.spawnEntity(entityfallingsand);
             }
         }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public static boolean method_435(Level world, int i, int j, int k) {
-        int l = world.getTileId(i, j, k);
-        if (l == 0) {
-            return true;
-        }
-        if (l == Tile.FIRE.id) {
-            return true;
-        }
-        Material material = Tile.BY_ID[l].material;
-        if (material == Material.WATER) {
-            return true;
-        }
-        return material == Material.LAVA;
     }
 
     /**

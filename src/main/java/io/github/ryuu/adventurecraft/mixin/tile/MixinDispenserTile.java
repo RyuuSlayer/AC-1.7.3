@@ -1,20 +1,34 @@
 package io.github.ryuu.adventurecraft.mixin.tile;
 
-import java.util.Random;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import io.github.ryuu.adventurecraft.entities.EntityArrowBomb;
+import io.github.ryuu.adventurecraft.items.Items;
+import io.github.ryuu.adventurecraft.util.DebugMode;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.entity.projectile.Arrow;
+import net.minecraft.entity.projectile.ThrownEgg;
+import net.minecraft.entity.projectile.ThrownSnowball;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
+import net.minecraft.tile.Tile;
+import net.minecraft.tile.TileWithEntity;
+import net.minecraft.tile.entity.Dispenser;
+import net.minecraft.tile.material.Material;
+import net.minecraft.util.maths.MathsHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import io.github.ryuu.adventurecraft.util.DebugMode;
-import io.github.ryuu.adventurecraft.items.Items;
-import io.github.ryuu.adventurecraft.entities.EntityArrowBomb;
+
+import java.util.Random;
 
 @Mixin(DispenserTile.class)
 public class MixinDispenserTile extends TileWithEntity {
 
     @Shadow()
-    private Random rand = new Random();
+    private final Random rand = new Random();
 
     protected MixinDispenserTile(int id) {
         super(id, Material.STONE);
@@ -229,8 +243,7 @@ public class MixinDispenserTile extends TileWithEntity {
         Dispenser tileentitydispenser = (Dispenser) level.getTileEntity(x, y, z);
         for (int l = 0; l < tileentitydispenser.getInvSize(); ++l) {
             ItemInstance itemstack = tileentitydispenser.getInvItem(l);
-            if (itemstack == null)
-                continue;
+            if (itemstack == null) continue;
             float f = this.rand.nextFloat() * 0.8f + 0.1f;
             float f1 = this.rand.nextFloat() * 0.8f + 0.1f;
             float f2 = this.rand.nextFloat() * 0.8f + 0.1f;

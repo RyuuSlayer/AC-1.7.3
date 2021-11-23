@@ -1,8 +1,10 @@
 package io.github.ryuu.adventurecraft.util;
 
+import net.minecraft.level.Level;
+import net.minecraft.level.chunk.Chunk;
+import net.minecraft.level.chunk.ChunkIO;
+
 import java.io.IOException;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 
 public class MapChunkLoader implements ChunkIO {
 

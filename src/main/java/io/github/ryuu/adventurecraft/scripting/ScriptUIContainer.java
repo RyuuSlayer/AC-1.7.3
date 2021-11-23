@@ -1,16 +1,17 @@
 package io.github.ryuu.adventurecraft.scripting;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.TextRenderer;
+import net.minecraft.client.texture.TextureManager;
+import org.lwjgl.opengl.GL11;
+
 import java.util.LinkedList;
 import java.util.List;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import org.lwjgl.opengl.GL11;
 
 public class ScriptUIContainer extends UIElement {
 
+    private final List<UIElement> uiElements;
     public String text = "";
-
-    private List<UIElement> uiElements;
 
     public ScriptUIContainer(float xPos, float yPos) {
         this(xPos, yPos, Minecraft.minecraftInstance.overlay.scriptUI);
@@ -31,7 +32,7 @@ public class ScriptUIContainer extends UIElement {
         float y = this.getYAtTime(partialTickTime);
         if (x != 0.0f || y != 0.0f) {
             GL11.glPushMatrix();
-            GL11.glTranslated((double) x, (double) y, (double) 0.0);
+            GL11.glTranslated(x, y, 0.0);
         }
         for (UIElement uie : this.uiElements) {
             uie.render(fontRenderer, renderEngine, partialTickTime);
@@ -45,7 +46,7 @@ public class ScriptUIContainer extends UIElement {
         if (uie.parent != null) {
             uie.parent.remove(uie);
         }
-        this.uiElements.add((Object) uie);
+        this.uiElements.add(uie);
         uie.parent = this;
     }
 
@@ -53,12 +54,12 @@ public class ScriptUIContainer extends UIElement {
         if (uie.parent != null) {
             uie.parent.remove(uie);
         }
-        this.uiElements.add(0, (Object) uie);
+        this.uiElements.add(0, uie);
         uie.parent = this;
     }
 
     public void remove(UIElement uie) {
-        this.uiElements.remove((Object) uie);
+        this.uiElements.remove(uie);
         uie.parent = null;
     }
 

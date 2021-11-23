@@ -1,28 +1,22 @@
 package io.github.ryuu.adventurecraft.util;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.level.Level;
+import net.minecraft.util.io.CompoundTag;
+
 import java.util.LinkedList;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 
 public class UndoStack {
 
-    boolean isRecording = false;
-
-    UndoSelection selection = null;
-
-    EditAction firstAction = null;
-
-    EditAction lastAction = null;
-
-    LinkedList<EditAction> undoStack = new LinkedList();
-
-    LinkedList<EditAction> redoStack = new LinkedList();
-
-    LinkedList<net.minecraft.src.UndoSelection> undoSelectionStack = new LinkedList();
-
-    LinkedList<net.minecraft.src.UndoSelection> redoSelectionStack = new LinkedList();
-
     static final int MAX_UNDO = 128;
+    boolean isRecording = false;
+    UndoSelection selection = null;
+    EditAction firstAction = null;
+    EditAction lastAction = null;
+    LinkedList<EditAction> undoStack = new LinkedList();
+    LinkedList<EditAction> redoStack = new LinkedList();
+    LinkedList<net.minecraft.src.UndoSelection> undoSelectionStack = new LinkedList();
+    LinkedList<net.minecraft.src.UndoSelection> redoSelectionStack = new LinkedList();
 
     UndoStack() {
     }
@@ -37,7 +31,7 @@ public class UndoStack {
         assert (this.isRecording);
         if (this.firstAction != null) {
             this.redoStack.clear();
-            this.undoStack.addLast((Object) this.firstAction);
+            this.undoStack.addLast(this.firstAction);
             if (this.undoStack.size() > 128) {
                 this.undoStack.removeFirst();
             }
@@ -79,9 +73,9 @@ public class UndoStack {
 
     public void undo(Level w) {
         if (!this.undoStack.isEmpty()) {
-            EditAction action = (EditAction) this.undoStack.removeLast();
+            EditAction action = this.undoStack.removeLast();
             action.undo(w);
-            this.redoStack.addLast((Object) action);
+            this.redoStack.addLast(action);
             if (this.redoStack.size() > 128) {
                 this.redoStack.removeFirst();
             }
@@ -91,15 +85,15 @@ public class UndoStack {
             if (this.redoSelectionStack.size() > 128) {
                 this.redoSelectionStack.removeFirst();
             }
-            Minecraft.minecraftInstance.overlay.addChatMessage(String.format((String) "Undo (Undo Actions Left: %d Redo Actions Left: %d)", (Object[]) new Object[] { this.undoStack.size(), this.redoStack.size() }));
+            Minecraft.minecraftInstance.overlay.addChatMessage(String.format("Undo (Undo Actions Left: %d Redo Actions Left: %d)", new Object[]{this.undoStack.size(), this.redoStack.size()}));
         }
     }
 
     public void redo(Level w) {
         if (!this.redoStack.isEmpty()) {
-            EditAction action = (EditAction) this.redoStack.removeLast();
+            EditAction action = this.redoStack.removeLast();
             action.redo(w);
-            this.undoStack.addLast((Object) action);
+            this.undoStack.addLast(action);
             if (this.undoStack.size() > 128) {
                 this.undoStack.removeFirst();
             }
@@ -109,7 +103,7 @@ public class UndoStack {
             if (this.undoSelectionStack.size() > 128) {
                 this.undoSelectionStack.removeFirst();
             }
-            Minecraft.minecraftInstance.overlay.addChatMessage(String.format((String) "Redo (Undo Actions Left: %d Redo Actions Left: %d)", (Object[]) new Object[] { this.undoStack.size(), this.redoStack.size() }));
+            Minecraft.minecraftInstance.overlay.addChatMessage(String.format("Redo (Undo Actions Left: %d Redo Actions Left: %d)", new Object[]{this.undoStack.size(), this.redoStack.size()}));
         }
     }
 }

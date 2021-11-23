@@ -1,10 +1,15 @@
 package io.github.ryuu.adventurecraft.mixin.tile;
 
-import java.util.Random;
+import io.github.ryuu.adventurecraft.util.DebugMode;
+import net.minecraft.level.Level;
+import net.minecraft.tile.FluidTile;
+import net.minecraft.tile.Tile;
+import net.minecraft.tile.material.Material;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import io.github.ryuu.adventurecraft.util.DebugMode;
+
+import java.util.Random;
 
 @Mixin(FlowingFluidTile.class)
 public class MixinFlowingFluidTile extends FluidTile {
@@ -142,8 +147,7 @@ public class MixinFlowingFluidTile extends FluidTile {
         int j1 = 1000;
         for (int k1 = 0; k1 < 4; ++k1) {
             int k2;
-            if (k1 == 0 && i1 == 1 || k1 == 1 && i1 == 0 || k1 == 2 && i1 == 3 || k1 == 3 && i1 == 2)
-                continue;
+            if (k1 == 0 && i1 == 1 || k1 == 1 && i1 == 0 || k1 == 2 && i1 == 3 || k1 == 3 && i1 == 2) continue;
             int l1 = i;
             int i2 = j;
             int j2 = k;
@@ -164,8 +168,7 @@ public class MixinFlowingFluidTile extends FluidTile {
             if (!this.method_1057(world, l1, i2 - 1, j2)) {
                 return l;
             }
-            if (l >= 4 || (k2 = this.method_1052(world, l1, i2, j2, l + 1, k1)) >= j1)
-                continue;
+            if (l >= 4 || (k2 = this.method_1052(world, l1, i2, j2, l + 1, k1)) >= j1) continue;
             j1 = k2;
         }
         return j1;
@@ -199,8 +202,7 @@ public class MixinFlowingFluidTile extends FluidTile {
         }
         int i1 = this.field_1234[0];
         for (int k1 = 1; k1 < 4; ++k1) {
-            if (this.field_1234[k1] >= i1)
-                continue;
+            if (this.field_1234[k1] >= i1) continue;
             i1 = this.field_1234[k1];
         }
         for (int l1 = 0; l1 < 4; ++l1) {

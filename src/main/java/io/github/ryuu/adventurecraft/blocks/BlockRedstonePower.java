@@ -1,8 +1,12 @@
 package io.github.ryuu.adventurecraft.blocks;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
+import net.minecraft.tile.Tile;
+import net.minecraft.tile.material.Material;
+
 import java.util.Random;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 
 public class BlockRedstonePower extends Tile {
 

@@ -1,12 +1,19 @@
 package io.github.ryuu.adventurecraft.mixin.entity.player;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import io.github.ryuu.adventurecraft.items.IItemReload;
+import io.github.ryuu.adventurecraft.items.Items;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
+import net.minecraft.item.armour.ArmourItem;
+import net.minecraft.tile.Tile;
+import net.minecraft.util.io.CompoundTag;
+import net.minecraft.util.io.ListTag;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import io.github.ryuu.adventurecraft.items.Items;
-import io.github.ryuu.adventurecraft.items.IItemReload;
 
 @Mixin(PlayerInventory.class)
 public class MixinPlayerInventory implements Inventory {
@@ -19,14 +26,10 @@ public class MixinPlayerInventory implements Inventory {
     public int selectedHotbarSlot = 0;
 
     public Player player;
-
-    private ItemInstance cursorStack;
-
     public boolean dirty = false;
-
     public int offhandItem;
-
     public int[] consumeInventory;
+    private ItemInstance cursorStack;
 
     public MixinPlayerInventory(Player player) {
         this.player = player;
@@ -58,8 +61,7 @@ public class MixinPlayerInventory implements Inventory {
     @Overwrite()
     public int getSlotWithItem(int id) {
         for (int j = 0; j < this.main.length; ++j) {
-            if (this.main[j] == null || this.main[j].itemId != id)
-                continue;
+            if (this.main[j] == null || this.main[j].itemId != id) continue;
             return j;
         }
         return -1;
@@ -153,19 +155,17 @@ public class MixinPlayerInventory implements Inventory {
     @Overwrite()
     public void inventoryTick() {
         for (int i = 0; i < this.main.length; ++i) {
-            if (this.main[i] == null)
-                continue;
+            if (this.main[i] == null) continue;
             ItemInstance itemStack = this.main[i];
             itemStack.inventoryTick(this.player.level, this.player, i, this.selectedHotbarSlot == i);
             if (itemStack.timeLeft > 0) {
                 --itemStack.timeLeft;
             }
             if ((i == this.selectedHotbarSlot || i == this.offhandItem) && itemStack.timeLeft == 0 && itemStack.isReloading) {
-                IItemReload item = (IItemReload) ((Object) ItemType.byId[itemStack.itemId]);
+                IItemReload item = (IItemReload) ItemType.byId[itemStack.itemId];
                 item.reload(itemStack, this.player.level, this.player);
             }
-            if (itemStack.getDamage() <= 0 || !ItemType.byId[itemStack.itemId].decrementDamage)
-                continue;
+            if (itemStack.getDamage() <= 0 || !ItemType.byId[itemStack.itemId].decrementDamage) continue;
             itemStack.setDamage(itemStack.getDamage() - 1);
         }
     }
@@ -299,16 +299,14 @@ public class MixinPlayerInventory implements Inventory {
     @Overwrite()
     public ListTag toTag(ListTag nbttaglist) {
         for (int i = 0; i < this.main.length; ++i) {
-            if (this.main[i] == null)
-                continue;
+            if (this.main[i] == null) continue;
             CompoundTag nbttagcompound = new CompoundTag();
             nbttagcompound.put("Slot", (byte) i);
             this.main[i].toTag(nbttagcompound);
             nbttaglist.add(nbttagcompound);
         }
         for (int j = 0; j < this.armour.length; ++j) {
-            if (this.armour[j] == null)
-                continue;
+            if (this.armour[j] == null) continue;
             CompoundTag nbttagcompound1 = new CompoundTag();
             nbttagcompound1.put("Slot", (byte) (j + 100));
             this.armour[j].toTag(nbttagcompound1);
@@ -328,13 +326,11 @@ public class MixinPlayerInventory implements Inventory {
             CompoundTag nbttagcompound = (CompoundTag) nbttaglist.get(i);
             int j = nbttagcompound.getByte("Slot") & 0xFF;
             ItemInstance itemstack = new ItemInstance(nbttagcompound);
-            if (itemstack.getType() == null)
-                continue;
+            if (itemstack.getType() == null) continue;
             if (j >= 0 && j < this.main.length) {
                 this.main[j] = itemstack;
             }
-            if (j < 100 || j >= this.armour.length + 100)
-                continue;
+            if (j < 100 || j >= this.armour.length + 100) continue;
             this.armour[j - 100] = itemstack;
         }
     }
@@ -397,8 +393,7 @@ public class MixinPlayerInventory implements Inventory {
         int j = 0;
         int k = 0;
         for (int l = 0; l < this.armour.length; ++l) {
-            if (this.armour[l] == null || !(this.armour[l].getType() instanceof ArmourItem))
-                continue;
+            if (this.armour[l] == null || !(this.armour[l].getType() instanceof ArmourItem)) continue;
             int i1 = this.armour[l].method_723();
             int j1 = this.armour[l].method_721();
             int k1 = i1 - j1;
@@ -418,11 +413,9 @@ public class MixinPlayerInventory implements Inventory {
     @Overwrite()
     public void damageArmour(int i) {
         for (int j = 0; j < this.armour.length; ++j) {
-            if (this.armour[j] == null || !(this.armour[j].getType() instanceof ArmourItem))
-                continue;
+            if (this.armour[j] == null || !(this.armour[j].getType() instanceof ArmourItem)) continue;
             this.armour[j].applyDamage(i, this.player);
-            if (this.armour[j].count != 0)
-                continue;
+            if (this.armour[j].count != 0) continue;
             int prevItemID = this.armour[j].itemId;
             int prevDamage = this.armour[j].getDamage();
             this.armour[j].method_700(this.player);
@@ -438,16 +431,14 @@ public class MixinPlayerInventory implements Inventory {
     public void dropInventory() {
         ItemInstance prevItem;
         for (int i = 0; i < this.main.length; ++i) {
-            if (this.main[i] == null)
-                continue;
+            if (this.main[i] == null) continue;
             prevItem = this.main[i];
             this.player.dropItem(this.main[i], true);
             this.main[i] = null;
             ItemType.byId[prevItem.itemId].onRemovedFromSlot(this.player, i, prevItem.getDamage());
         }
         for (int j = 0; j < this.armour.length; ++j) {
-            if (this.armour[j] == null)
-                continue;
+            if (this.armour[j] == null) continue;
             prevItem = this.armour[j];
             this.player.dropItem(this.armour[j], true);
             this.armour[j] = null;
@@ -482,13 +473,11 @@ public class MixinPlayerInventory implements Inventory {
     @Overwrite()
     public boolean containsItem(ItemInstance itemstack) {
         for (int i = 0; i < this.armour.length; ++i) {
-            if (this.armour[i] == null || !this.armour[i].isItemEqualIgnoreDamage(itemstack))
-                continue;
+            if (this.armour[i] == null || !this.armour[i].isItemEqualIgnoreDamage(itemstack)) continue;
             return true;
         }
         for (int j = 0; j < this.main.length; ++j) {
-            if (this.main[j] == null || !this.main[j].isItemEqualIgnoreDamage(itemstack))
-                continue;
+            if (this.main[j] == null || !this.main[j].isItemEqualIgnoreDamage(itemstack)) continue;
             return true;
         }
         return false;
@@ -503,11 +492,9 @@ public class MixinPlayerInventory implements Inventory {
         int slotsToUse = 0;
         int amountLeft = amount;
         for (i = 0; i < 36; ++i) {
-            if (this.main[i] == null || this.main[i].itemId != itemID || this.main[i].getDamage() != damage)
-                continue;
+            if (this.main[i] == null || this.main[i].itemId != itemID || this.main[i].getDamage() != damage) continue;
             this.consumeInventory[slotsToUse++] = i;
-            if ((amountLeft -= this.main[i].count) <= 0)
-                break;
+            if ((amountLeft -= this.main[i].count) <= 0) break;
         }
         if (amountLeft > 0) {
             return false;

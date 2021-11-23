@@ -1,12 +1,11 @@
 package io.github.ryuu.adventurecraft.mixin.client.render;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import io.github.ryuu.adventurecraft.util.Vec2;
+import net.minecraft.client.texture.TextureManager;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import io.github.ryuu.adventurecraft.util.Vec2;
 
 @Mixin(TextureBinder.class)
 public class MixinTextureBinder {
@@ -40,7 +39,7 @@ public class MixinTextureBinder {
      */
     @Overwrite()
     public void bindTexture(TextureManager manager) {
-        GL11.glBindTexture((int) 3553, (int) manager.getTextureId(this.getTexture()));
+        GL11.glBindTexture(3553, manager.getTextureId(this.getTexture()));
     }
 
     /**

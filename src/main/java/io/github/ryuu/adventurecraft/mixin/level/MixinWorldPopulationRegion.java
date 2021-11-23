@@ -1,25 +1,29 @@
 package io.github.ryuu.adventurecraft.mixin.level;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import io.github.ryuu.adventurecraft.blocks.BlockStairMulti;
+import io.github.ryuu.adventurecraft.util.LightCache;
+import io.github.ryuu.adventurecraft.util.PlayerTorch;
+import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
+import net.minecraft.level.chunk.Chunk;
+import net.minecraft.tile.Tile;
+import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.tile.material.Material;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import io.github.ryuu.adventurecraft.util.LightCache;
-import io.github.ryuu.adventurecraft.util.PlayerTorch;
-import io.github.ryuu.adventurecraft.blocks.BlockStairMulti;
 
 @Mixin(WorldPopulationRegion.class)
 public class MixinWorldPopulationRegion implements TileView {
 
     @Shadow()
-    private int field_166;
+    private final int field_166;
 
-    private int field_167;
+    private final int field_167;
 
-    private Chunk[][] chunks;
+    private final Chunk[][] chunks;
 
-    private Level level;
+    private final Level level;
 
     public MixinWorldPopulationRegion(Level world, int i, int j, int k, int l, int i1, int j1) {
         this.level = world;
@@ -86,11 +90,11 @@ public class MixinWorldPopulationRegion implements TileView {
             lightValue = l;
         }
         if ((float) lightValue < (torchLight = PlayerTorch.getTorchLight(this.level, i, j, k))) {
-            int floorValue = (int) Math.floor((double) torchLight);
+            int floorValue = (int) Math.floor(torchLight);
             if (floorValue == 15) {
                 return this.level.dimension.field_2178[15];
             }
-            int ceilValue = (int) Math.ceil((double) torchLight);
+            int ceilValue = (int) Math.ceil(torchLight);
             float lerpValue = torchLight - (float) floorValue;
             return (1.0f - lerpValue) * this.level.dimension.field_2178[floorValue] + lerpValue * this.level.dimension.field_2178[ceilValue];
         }
@@ -112,11 +116,11 @@ public class MixinWorldPopulationRegion implements TileView {
         }
         int lightValue = this.method_143(i, j, k);
         if ((float) lightValue < (torchLight = PlayerTorch.getTorchLight(this.level, i, j, k))) {
-            int floorValue = (int) Math.floor((double) torchLight);
+            int floorValue = (int) Math.floor(torchLight);
             if (floorValue == 15) {
                 return this.level.dimension.field_2178[15];
             }
-            int ceilValue = (int) Math.ceil((double) torchLight);
+            int ceilValue = (int) Math.ceil(torchLight);
             float lerpValue = torchLight - (float) floorValue;
             return (1.0f - lerpValue) * this.level.dimension.field_2178[floorValue] + lerpValue * this.level.dimension.field_2178[ceilValue];
         }

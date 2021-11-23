@@ -1,27 +1,22 @@
 package io.github.ryuu.adventurecraft.gui;
 
+import net.minecraft.client.gui.Screen;
+import net.minecraft.client.gui.widgets.Button;
+import net.minecraft.client.gui.widgets.Textbox;
+import net.minecraft.level.Level;
+
 import java.io.File;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 
 public class GuiWorldConfig extends Screen {
 
-    private int page = 0;
-
-    private Level world;
-
-    private Textbox playerName;
-
+    private final Level world;
+    private final Textbox[] lightLevels;
     int selectedID = 0;
-
+    private int page = 0;
+    private Textbox playerName;
     private Button setOnNewSave;
-
     private Button setOnLoad;
-
     private Button setOnUpdate;
-
-    private Textbox[] lightLevels;
-
     private boolean lightChanged = false;
 
     public GuiWorldConfig(Level w) {
@@ -43,9 +38,9 @@ public class GuiWorldConfig extends Screen {
     @Override
     public void init() {
         int buttonWidth = (this.width - 16) / 4;
-        this.buttons.add((Object) new Button(-1, 4, 0, buttonWidth, 18, "Misc"));
-        this.buttons.add((Object) new Button(-2, 4 + (4 + buttonWidth), 0, buttonWidth, 18, "Script"));
-        this.buttons.add((Object) new Button(-3, 4 + 2 * (4 + buttonWidth), 0, buttonWidth, 18, "Light Levels"));
+        this.buttons.add(new Button(-1, 4, 0, buttonWidth, 18, "Misc"));
+        this.buttons.add(new Button(-2, 4 + (4 + buttonWidth), 0, buttonWidth, 18, "Script"));
+        this.buttons.add(new Button(-3, 4 + 2 * (4 + buttonWidth), 0, buttonWidth, 18, "Light Levels"));
         buttonWidth = (this.width - 16) / 3;
         if (this.page == 0) {
             int w = this.textManager.getTextWidth("Player Name:") + 8;
@@ -53,7 +48,7 @@ public class GuiWorldConfig extends Screen {
             this.playerName.field_2420 = true;
             this.playerName.method_1878(32);
             Button b = new Button(0, 4, 44, buttonWidth, 18, "Crafting: Enabled");
-            this.buttons.add((Object) b);
+            this.buttons.add(b);
             if (!this.minecraft.level.properties.allowsInventoryCrafting) {
                 b.text = "Crafting: Disabled";
             }
@@ -62,25 +57,25 @@ public class GuiWorldConfig extends Screen {
             this.setOnNewSave = new Button(0, 4, 24, "OnNewSave (selected): " + this.world.properties.onNewSaveScript);
             this.setOnLoad = new Button(1, 4, 46, "OnLoad: " + this.world.properties.onLoadScript);
             this.setOnUpdate = new Button(2, 4, 68, "OnUpdate: " + this.world.properties.onUpdateScript);
-            this.buttons.add((Object) this.setOnNewSave);
-            this.buttons.add((Object) this.setOnLoad);
-            this.buttons.add((Object) this.setOnUpdate);
+            this.buttons.add(this.setOnNewSave);
+            this.buttons.add(this.setOnLoad);
+            this.buttons.add(this.setOnUpdate);
             Button b = new Button(3, 4, 90, 200, 20, "Reload Scripts");
-            this.buttons.add((Object) b);
+            this.buttons.add(b);
             b = new Button(4, 4, 112, 160, 18, "None");
-            this.buttons.add((Object) b);
+            this.buttons.add(b);
             String[] scripts = this.getScriptFiles();
             if (scripts != null) {
                 int i = 1;
                 for (String scriptFile : scripts) {
                     b = new Button(4 + i, 4 + i % 3 * this.width / 3, 112 + i / 3 * 20, 160, 18, scriptFile);
-                    this.buttons.add((Object) b);
+                    this.buttons.add(b);
                     ++i;
                 }
             }
         } else if (this.page == 2) {
             for (int i = 0; i < 16; ++i) {
-                this.lightLevels[i] = new Textbox(this, this.textManager, 80, 22 + 14 * i, 80, 11, String.format((String) "%.7f", (Object[]) new Object[] { Float.valueOf((float) this.minecraft.level.properties.brightness[i]) }));
+                this.lightLevels[i] = new Textbox(this, this.textManager, 80, 22 + 14 * i, 80, 11, String.format("%.7f", Float.valueOf((float) this.minecraft.level.properties.brightness[i])));
             }
         } else if (this.page == 3) {
         }
@@ -196,10 +191,10 @@ public class GuiWorldConfig extends Screen {
         } else if (this.page != 1) {
             if (this.page == 2) {
                 for (int k = 0; k < 16; ++k) {
-                    this.drawTextWithShadow(this.textManager, String.format((String) "Light Level %d", (Object[]) new Object[] { k }), 4, 24 + 14 * k, 0xA0A0A0);
+                    this.drawTextWithShadow(this.textManager, String.format("Light Level %d", k), 4, 24 + 14 * k, 0xA0A0A0);
                     this.lightLevels[k].method_1883();
                     try {
-                        Float value = Float.valueOf((String) this.lightLevels[k].method_1876());
+                        Float value = Float.valueOf(this.lightLevels[k].method_1876());
                         if (value == null || (double) value.floatValue() == Math.floor((double) (this.minecraft.level.properties.brightness[k] * 1.0E7f)) / 1.0E7)
                             continue;
                         this.minecraft.level.properties.brightness[k] = value.floatValue();

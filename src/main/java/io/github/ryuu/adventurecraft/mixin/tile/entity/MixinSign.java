@@ -1,29 +1,24 @@
 package io.github.ryuu.adventurecraft.mixin.tile.entity;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import io.github.ryuu.adventurecraft.util.MusicPlayer;
+import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.util.io.CompoundTag;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import io.github.ryuu.adventurecraft.util.MusicPlayer;
 
 @Mixin(Sign.class)
 public class MixinSign extends TileEntity {
 
     @Shadow()
-    public String[] lines = new String[] { "", "", "", "" };
+    public String[] lines = new String[]{"", "", "", ""};
 
     public int field_2270 = -1;
-
-    private boolean field_2271 = true;
-
     public boolean playSong;
-
     public String instrument;
-
     public int onNote;
-
     public int tickSinceStart;
+    private boolean field_2271 = true;
 
     /**
      * @author Ryuu, TechPizza, Phil
@@ -48,8 +43,7 @@ public class MixinSign extends TileEntity {
         super.readIdentifyingData(tag);
         for (int i = 0; i < 4; ++i) {
             this.lines[i] = tag.getString("Text" + (i + 1));
-            if (this.lines[i].length() <= 15)
-                continue;
+            if (this.lines[i].length() <= 15) continue;
             this.lines[i] = this.lines[i].substring(0, 15);
         }
     }

@@ -1,11 +1,17 @@
 package io.github.ryuu.adventurecraft.util;
 
+import io.github.ryuu.adventurecraft.entities.EntityCamera;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.ClientPlayer;
+import net.minecraft.src.Vec3D;
+import net.minecraft.util.maths.Vec3f;
+import org.lwjgl.opengl.GL11;
+
 import java.util.LinkedList;
 import java.util.List;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import org.lwjgl.opengl.GL11;
-import io.github.ryuu.adventurecraft.entities.EntityCamera;
 
 public class CutsceneCamera {
 
@@ -26,18 +32,16 @@ public class CutsceneCamera {
     void addCameraPoint(float time, float posX, float posY, float posZ, float yaw, float pitch, int type) {
         int index = 0;
         for (CutsceneCameraPoint p : this.cameraPoints) {
-            if (time < p.time)
-                break;
+            if (time < p.time) break;
             ++index;
         }
-        this.cameraPoints.add(index, (Object) new CutsceneCameraPoint(time, posX, posY, posZ, yaw, pitch, type));
+        this.cameraPoints.add(index, new CutsceneCameraPoint(time, posX, posY, posZ, yaw, pitch, type));
         this.fixYawPitch(0.0f, 0.0f);
     }
 
     public void loadCameraEntities() {
         for (Entity obj : Minecraft.minecraftInstance.level.entities) {
-            if (!(obj instanceof EntityCamera))
-                continue;
+            if (!(obj instanceof EntityCamera)) continue;
             obj.remove();
         }
         for (CutsceneCameraPoint p : this.cameraPoints) {
@@ -71,20 +75,20 @@ public class CutsceneCamera {
         double offX = entityplayer.prevRenderX + (entityplayer.x - entityplayer.prevRenderX) * (double) f;
         double offY = entityplayer.prevRenderY + (entityplayer.y - entityplayer.prevRenderY) * (double) f;
         double offZ = entityplayer.prevRenderZ + (entityplayer.z - entityplayer.prevRenderZ) * (double) f;
-        GL11.glEnable((int) 3042);
-        GL11.glBlendFunc((int) 770, (int) 771);
-        GL11.glColor4f((float) 1.0f, (float) 0.2f, (float) 0.0f, (float) 1.0f);
-        GL11.glLineWidth((float) 5.0f);
-        GL11.glDisable((int) 3553);
+        GL11.glEnable(3042);
+        GL11.glBlendFunc(770, 771);
+        GL11.glColor4f(1.0f, 0.2f, 0.0f, 1.0f);
+        GL11.glLineWidth(5.0f);
+        GL11.glDisable(3553);
         Tessellator tessellator = Tessellator.INSTANCE;
         tessellator.start(3);
         for (Vec3f v : this.lineVecs) {
             tessellator.pos(v.x - offX, v.y - offY, v.z - offZ);
         }
         tessellator.draw();
-        GL11.glLineWidth((float) 1.0f);
-        GL11.glEnable((int) 3553);
-        GL11.glDisable((int) 3042);
+        GL11.glLineWidth(1.0f);
+        GL11.glEnable(3553);
+        GL11.glDisable(3042);
     }
 
     private void fixYawPitch(float startYaw, float startPitch) {
@@ -159,7 +163,7 @@ public class CutsceneCamera {
     }
 
     float getLastTime() {
-        return ((CutsceneCameraPoint) this.cameraPoints.get((int) (this.cameraPoints.size() - 1))).time;
+        return this.cameraPoints.get(this.cameraPoints.size() - 1).time;
     }
 
     CutsceneCameraPoint getCurrentPoint(float partialTickTime) {
@@ -178,23 +182,21 @@ public class CutsceneCamera {
                 this.prevPoint = new CutsceneCameraPoint(0.0f, (float) player.x, (float) player.y, (float) player.z, player.yaw, player.pitch, this.startType);
                 this.fixYawPitch(player.yaw, player.pitch);
             } else {
-                CutsceneCameraPoint start = (CutsceneCameraPoint) this.cameraPoints.get(0);
+                CutsceneCameraPoint start = this.cameraPoints.get(0);
                 this.prevPoint = new CutsceneCameraPoint(0.0f, start.posX, start.posY, start.posZ, start.rotYaw, start.rotPitch, this.startType);
             }
         }
         if (this.prevPoint.time > elapsed || this.cameraPoints.isEmpty()) {
             return this.prevPoint;
         }
-        CutsceneCameraPoint nextPoint = (CutsceneCameraPoint) this.cameraPoints.get(0);
+        CutsceneCameraPoint nextPoint = this.cameraPoints.get(0);
         while (nextPoint != null && nextPoint.time < elapsed && !this.cameraPoints.isEmpty()) {
             this.prevPrevPoint = this.prevPoint;
-            this.prevPoint = (CutsceneCameraPoint) this.cameraPoints.remove(0);
+            this.prevPoint = this.cameraPoints.remove(0);
             nextPoint = null;
-            if (this.cameraPoints.isEmpty())
-                continue;
-            nextPoint = (CutsceneCameraPoint) this.cameraPoints.get(0);
-            if (this.prevPrevPoint == null)
-                continue;
+            if (this.cameraPoints.isEmpty()) continue;
+            nextPoint = this.cameraPoints.get(0);
+            if (this.prevPrevPoint == null) continue;
             float timeDiff1 = nextPoint.time - this.prevPoint.time;
             float timeDiff2 = this.prevPoint.time - this.prevPrevPoint.time;
             if (timeDiff2 > 0.0f) {
@@ -211,7 +213,7 @@ public class CutsceneCamera {
             this.prevPrevPoint = new CutsceneCameraPoint(0.0f, 2.0f * this.prevPoint.posX - nextPoint.posX, 2.0f * this.prevPoint.posY - nextPoint.posY, 2.0f * this.prevPoint.posZ - nextPoint.posZ, 2.0f * this.prevPoint.rotYaw - nextPoint.rotYaw, 2.0f * this.prevPoint.rotPitch - nextPoint.rotPitch, 0);
         }
         if (this.cameraPoints.size() > 1) {
-            nextNextPoint = (CutsceneCameraPoint) this.cameraPoints.get(1);
+            nextNextPoint = this.cameraPoints.get(1);
             float timeDiff1 = nextPoint.time - this.prevPoint.time;
             float timeDiff2 = nextNextPoint.time - nextPoint.time;
             if (timeDiff2 > 0.0f) {
@@ -225,33 +227,30 @@ public class CutsceneCamera {
         }
         float lerp = (elapsed - this.prevPoint.time) / (nextPoint.time - this.prevPoint.time);
         this.curPoint.time = elapsed;
-        switch(this.prevPoint.cameraBlendType) {
-            case 1:
-                {
-                    this.curPoint.posX = this.lerp(lerp, this.prevPoint.posX, nextPoint.posX);
-                    this.curPoint.posY = this.lerp(lerp, this.prevPoint.posY, nextPoint.posY);
-                    this.curPoint.posZ = this.lerp(lerp, this.prevPoint.posZ, nextPoint.posZ);
-                    this.curPoint.rotYaw = this.lerp(lerp, this.prevPoint.rotYaw, nextPoint.rotYaw);
-                    this.curPoint.rotPitch = this.lerp(lerp, this.prevPoint.rotPitch, nextPoint.rotPitch);
-                    break;
-                }
-            case 2:
-                {
-                    this.curPoint.posX = this.cubicInterpolation(lerp, this.prevPrevPoint.posX, this.prevPoint.posX, nextPoint.posX, nextNextPoint.posX);
-                    this.curPoint.posY = this.cubicInterpolation(lerp, this.prevPrevPoint.posY, this.prevPoint.posY, nextPoint.posY, nextNextPoint.posY);
-                    this.curPoint.posZ = this.cubicInterpolation(lerp, this.prevPrevPoint.posZ, this.prevPoint.posZ, nextPoint.posZ, nextNextPoint.posZ);
-                    this.curPoint.rotYaw = this.cubicInterpolation(lerp, this.prevPrevPoint.rotYaw, this.prevPoint.rotYaw, nextPoint.rotYaw, nextNextPoint.rotYaw);
-                    this.curPoint.rotPitch = this.cubicInterpolation(lerp, this.prevPrevPoint.rotPitch, this.prevPoint.rotPitch, nextPoint.rotPitch, nextNextPoint.rotPitch);
-                    break;
-                }
-            default:
-                {
-                    this.curPoint.posX = this.prevPoint.posX;
-                    this.curPoint.posY = this.prevPoint.posY;
-                    this.curPoint.posZ = this.prevPoint.posZ;
-                    this.curPoint.rotYaw = this.prevPoint.rotYaw;
-                    this.curPoint.rotPitch = this.prevPoint.rotPitch;
-                }
+        switch (this.prevPoint.cameraBlendType) {
+            case 1: {
+                this.curPoint.posX = this.lerp(lerp, this.prevPoint.posX, nextPoint.posX);
+                this.curPoint.posY = this.lerp(lerp, this.prevPoint.posY, nextPoint.posY);
+                this.curPoint.posZ = this.lerp(lerp, this.prevPoint.posZ, nextPoint.posZ);
+                this.curPoint.rotYaw = this.lerp(lerp, this.prevPoint.rotYaw, nextPoint.rotYaw);
+                this.curPoint.rotPitch = this.lerp(lerp, this.prevPoint.rotPitch, nextPoint.rotPitch);
+                break;
+            }
+            case 2: {
+                this.curPoint.posX = this.cubicInterpolation(lerp, this.prevPrevPoint.posX, this.prevPoint.posX, nextPoint.posX, nextNextPoint.posX);
+                this.curPoint.posY = this.cubicInterpolation(lerp, this.prevPrevPoint.posY, this.prevPoint.posY, nextPoint.posY, nextNextPoint.posY);
+                this.curPoint.posZ = this.cubicInterpolation(lerp, this.prevPrevPoint.posZ, this.prevPoint.posZ, nextPoint.posZ, nextNextPoint.posZ);
+                this.curPoint.rotYaw = this.cubicInterpolation(lerp, this.prevPrevPoint.rotYaw, this.prevPoint.rotYaw, nextPoint.rotYaw, nextNextPoint.rotYaw);
+                this.curPoint.rotPitch = this.cubicInterpolation(lerp, this.prevPrevPoint.rotPitch, this.prevPoint.rotPitch, nextPoint.rotPitch, nextNextPoint.rotPitch);
+                break;
+            }
+            default: {
+                this.curPoint.posX = this.prevPoint.posX;
+                this.curPoint.posY = this.prevPoint.posY;
+                this.curPoint.posZ = this.prevPoint.posZ;
+                this.curPoint.rotYaw = this.prevPoint.rotYaw;
+                this.curPoint.rotPitch = this.prevPoint.rotPitch;
+            }
         }
         return this.curPoint;
     }
@@ -259,8 +258,7 @@ public class CutsceneCamera {
     void deletePoint(int id) {
         CutsceneCameraPoint deleting = null;
         for (CutsceneCameraPoint p : this.cameraPoints) {
-            if (p.cameraID != id)
-                continue;
+            if (p.cameraID != id) continue;
             deleting = p;
             break;
         }
@@ -271,8 +269,7 @@ public class CutsceneCamera {
 
     void setPointType(int id, int type) {
         for (CutsceneCameraPoint p : this.cameraPoints) {
-            if (p.cameraID != id)
-                continue;
+            if (p.cameraID != id) continue;
             p.cameraBlendType = type;
             this.loadCameraEntities();
             return;
@@ -281,8 +278,7 @@ public class CutsceneCamera {
 
     void setTime(int id, float time) {
         for (CutsceneCameraPoint p : this.cameraPoints) {
-            if (p.cameraID != id)
-                continue;
+            if (p.cameraID != id) continue;
             p.time = time;
             this.loadCameraEntities();
             return;

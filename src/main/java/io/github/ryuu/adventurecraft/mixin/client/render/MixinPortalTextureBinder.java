@@ -1,35 +1,66 @@
 package io.github.ryuu.adventurecraft.mixin.client.render;
 
-import java.awt.image.BufferedImage;
-import java.util.Random;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import io.github.ryuu.adventurecraft.util.Vec2;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.TextureBinder;
+import net.minecraft.tile.Tile;
+import net.minecraft.util.maths.MathsHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import io.github.ryuu.adventurecraft.util.Vec2;
+
+import java.awt.image.BufferedImage;
+import java.util.Random;
 
 @Mixin(PortalTextureBinder.class)
 public class MixinPortalTextureBinder extends TextureBinder {
 
-    @Shadow()
-    private int field_1091 = 0;
-
-    private byte[][] field_1092;
-
     static boolean hasImages;
-
     static int numFrames;
-
+    static int curFrame;
     private static int[] frameImages;
-
     private static int width;
 
-    static int curFrame;
+    static {
+        curFrame = 0;
+    }
+
+    @Shadow()
+    private int field_1091 = 0;
+    private byte[][] field_1092;
 
     public MixinPortalTextureBinder() {
         super(Tile.PORTAL.tex);
         this.generatePortalData(16, 16);
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static void loadImage() {
+        PortalTextureBinder.loadImage("/custom_portal.png");
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static void loadImage(String texName) {
+        BufferedImage bufferedimage = null;
+        if (Minecraft.minecraftInstance.level != null) {
+            bufferedimage = Minecraft.minecraftInstance.level.loadMapTexture(texName);
+        }
+        curFrame = 0;
+        if (bufferedimage == null) {
+            hasImages = false;
+            return;
+        }
+        width = bufferedimage.getWidth();
+        numFrames = bufferedimage.getHeight() / bufferedimage.getWidth();
+        frameImages = new int[bufferedimage.getWidth() * bufferedimage.getHeight()];
+        bufferedimage.getRGB(0, 0, bufferedimage.getWidth(), bufferedimage.getHeight(), frameImages, 0, bufferedimage.getWidth());
+        hasImages = true;
     }
 
     /**
@@ -61,7 +92,7 @@ public class MixinPortalTextureBinder extends TextureBinder {
                             f4 -= 2.0f;
                         }
                         float f5 = f3 * f3 + f4 * f4;
-                        float f6 = (float) Math.atan2((double) f4, (double) f3) + ((float) i / 32.0f * 3.141593f * 2.0f - f5 * 10.0f + (float) (l * 2)) * (float) (l * 2 - 1);
+                        float f6 = (float) Math.atan2(f4, f3) + ((float) i / 32.0f * 3.141593f * 2.0f - f5 * 10.0f + (float) (l * 2)) * (float) (l * 2 - 1);
                         f6 = (MathsHelper.sin(f6) + 1.0f) / 2.0f;
                         f += (f6 /= f5 + 1.0f) * 0.5f;
                     }
@@ -162,38 +193,5 @@ public class MixinPortalTextureBinder extends TextureBinder {
             this.grid[i * 4 + 2] = (byte) l;
             this.grid[i * 4 + 3] = (byte) i1;
         }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public static void loadImage() {
-        PortalTextureBinder.loadImage("/custom_portal.png");
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public static void loadImage(String texName) {
-        BufferedImage bufferedimage = null;
-        if (Minecraft.minecraftInstance.level != null) {
-            bufferedimage = Minecraft.minecraftInstance.level.loadMapTexture(texName);
-        }
-        curFrame = 0;
-        if (bufferedimage == null) {
-            hasImages = false;
-            return;
-        }
-        width = bufferedimage.getWidth();
-        numFrames = bufferedimage.getHeight() / bufferedimage.getWidth();
-        frameImages = new int[bufferedimage.getWidth() * bufferedimage.getHeight()];
-        bufferedimage.getRGB(0, 0, bufferedimage.getWidth(), bufferedimage.getHeight(), frameImages, 0, bufferedimage.getWidth());
-        hasImages = true;
-    }
-
-    static {
-        curFrame = 0;
     }
 }

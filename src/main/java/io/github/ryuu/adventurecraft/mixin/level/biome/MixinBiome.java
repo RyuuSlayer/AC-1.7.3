@@ -1,14 +1,19 @@
 package io.github.ryuu.adventurecraft.mixin.level.biome;
 
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.entity.EntityType;
+import net.minecraft.level.biome.*;
+import net.minecraft.level.structure.Feature;
+import net.minecraft.level.structure.LargeOak;
+import net.minecraft.level.structure.OakTree;
+import net.minecraft.tile.Tile;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 @Mixin(Biome.class)
 public class MixinBiome {
@@ -39,28 +44,22 @@ public class MixinBiome {
     public static final Biome NETHER = new Hell().setGrassColour(0xFF0000).setName("Hell").setRainless();
 
     public static final Biome SKY = new Sky().setGrassColour(0x8080FF).setName("Sky").setRainless();
+    private static final Biome[] biomes = new Biome[4096];
 
+    static {
+        Biome.createBiomeArray();
+    }
+
+    private final boolean precipitates;
     public String biomeName;
-
     public int grassColour;
-
     public byte topTileId;
-
     public byte underTileId;
-
     public int foliageColour;
-
     protected List monsters;
-
     protected List creatures;
-
     protected List waterCreatures;
-
     private boolean snows;
-
-    private boolean precipitates;
-
-    private static Biome[] biomes = new Biome[4096];
 
     protected MixinBiome() {
         this.topTileId = (byte) Tile.GRASS.id;
@@ -70,44 +69,6 @@ public class MixinBiome {
         this.creatures = new ArrayList();
         this.waterCreatures = new ArrayList();
         this.precipitates = true;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public Feature getTree(Random rand) {
-        if (rand.nextInt(10) == 0) {
-            return new LargeOak();
-        }
-        return new OakTree();
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    protected Biome setName(String name) {
-        this.biomeName = name;
-        return this;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    protected Biome setFoliageColour(int colour) {
-        this.foliageColour = colour;
-        return this;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    protected Biome setGrassColour(int colour) {
-        this.grassColour = colour;
-        return this;
     }
 
     /**
@@ -163,6 +124,44 @@ public class MixinBiome {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite()
+    public Feature getTree(Random rand) {
+        if (rand.nextInt(10) == 0) {
+            return new LargeOak();
+        }
+        return new OakTree();
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    protected Biome setName(String name) {
+        this.biomeName = name;
+        return this;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    protected Biome setFoliageColour(int colour) {
+        this.foliageColour = colour;
+        return this;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    protected Biome setGrassColour(int colour) {
+        this.grassColour = colour;
+        return this;
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
     public int getSkyColour(float temperature) {
         if ((temperature /= 3.0f) < -1.0f) {
             temperature = -1.0f;
@@ -170,7 +169,7 @@ public class MixinBiome {
         if (temperature > 1.0f) {
             temperature = 1.0f;
         }
-        return Color.getHSBColor((float) (0.6222222f - temperature * 0.05f), (float) (0.5f + temperature * 0.1f), (float) 1.0f).getRGB();
+        return Color.getHSBColor(0.6222222f - temperature * 0.05f, 0.5f + temperature * 0.1f, 1.0f).getRGB();
     }
 
     /**
@@ -188,9 +187,5 @@ public class MixinBiome {
             return this.waterCreatures;
         }
         return null;
-    }
-
-    static {
-        Biome.createBiomeArray();
     }
 }

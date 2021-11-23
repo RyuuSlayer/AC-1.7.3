@@ -1,7 +1,10 @@
 package io.github.ryuu.adventurecraft.entities;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.monster.Skeleton;
+import net.minecraft.entity.projectile.Arrow;
+import net.minecraft.level.Level;
+import net.minecraft.util.maths.MathsHelper;
 
 public class EntitySkeletonBoss extends Skeleton {
 
@@ -28,7 +31,7 @@ public class EntitySkeletonBoss extends Skeleton {
             if (this.attackTime == 0) {
                 for (int i = 0; i < 5; ++i) {
                     Arrow entityarrow = new Arrow(this.level, this, this.attackDamage);
-                    entityarrow.y += (double) 1.4f;
+                    entityarrow.y += 1.4f;
                     double d2 = entity.y - (double) 0.2f - entityarrow.y;
                     float f1 = MathsHelper.sqrt(d * d + d1 * d1) * 0.2f;
                     this.level.playSound(this, "random.bow", 1.0f, 1.0f / (this.rand.nextFloat() * 0.4f + 0.8f));
@@ -37,7 +40,7 @@ public class EntitySkeletonBoss extends Skeleton {
                 }
                 this.attackTime = 30;
             }
-            this.yaw = (float) (Math.atan2((double) d1, (double) d) * 180.0 / 3.1415927410125732) - 90.0f;
+            this.yaw = (float) (Math.atan2(d1, d) * 180.0 / 3.1415927410125732) - 90.0f;
             if (f < 7.5f) {
                 this.field_663 = true;
             }

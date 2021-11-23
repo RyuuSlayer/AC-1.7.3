@@ -1,31 +1,37 @@
 package io.github.ryuu.adventurecraft.mixin.entity.animal;
 
-import java.util.List;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.class_61;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.animal.Animal;
+import net.minecraft.entity.animal.Sheep;
+import net.minecraft.entity.player.Player;
+import net.minecraft.entity.projectile.Arrow;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
+import net.minecraft.item.food.FoodItem;
+import net.minecraft.level.Level;
+import net.minecraft.util.io.CompoundTag;
+import net.minecraft.util.maths.Box;
+import net.minecraft.util.maths.MathsHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
+import java.util.List;
+
 @Mixin(Wolf.class)
 public class MixinWolf extends Animal {
 
+    public int attackStrength;
     @Shadow()
     private boolean begging = false;
-
     private float begAnimationProgress;
-
     private float lastBegAnimationProgress;
-
     private boolean wet;
-
     private boolean canShakeWaterOff;
-
     private float shakeProgress;
-
     private float lastShakeProgress;
-
-    public int attackStrength;
 
     public MixinWolf(Level world) {
         super(world);
@@ -246,11 +252,9 @@ public class MixinWolf extends Animal {
                     List list = this.level.getEntities(Wolf.class, Box.getOrCreate(this.x, this.y, this.z, this.x + 1.0, this.y + 1.0, this.z + 1.0).expand(16.0, 4.0, 16.0));
                     for (Entity entity1 : list) {
                         Wolf entitywolf = (Wolf) entity1;
-                        if (entitywolf.isTamed() || entitywolf.entity != null)
-                            continue;
+                        if (entitywolf.isTamed() || entitywolf.entity != null) continue;
                         entitywolf.entity = target;
-                        if (!(target instanceof Player))
-                            continue;
+                        if (!(target instanceof Player)) continue;
                         entitywolf.setAngry(true);
                     }
                 }

@@ -1,8 +1,5 @@
 package io.github.ryuu.adventurecraft.util;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-
 class LightCache {
 
     static final int cacheSize = 16384;
@@ -10,12 +7,9 @@ class LightCache {
     static final int cacheSizeThird = 5461;
 
     static final int cacheSizeTwoThird = 10922;
-
-    CoordBlock[] coords = new CoordBlock[16384];
-
-    float[] lightValues = new float[16384];
-
     static LightCache cache = new LightCache();
+    CoordBlock[] coords = new CoordBlock[16384];
+    float[] lightValues = new float[16384];
 
     public void clear() {
         for (int i = 0; i < 16384; ++i) {
@@ -50,12 +44,11 @@ class LightCache {
 
     private int findEntry(int x, int y, int z) {
         int i;
-        int h = i = Math.abs((int) this.calcHash(x, y, z)) % 16384;
+        int h = i = Math.abs(this.calcHash(x, y, z)) % 16384;
         int j = 0;
         while (this.coords[i] != null && !this.coords[i].isEqual(x, y, z)) {
             i = (i + 1) % 16384;
-            if (j++ <= 16384)
-                continue;
+            if (j++ <= 16384) continue;
             throw new RuntimeException("Light cache full");
         }
         return i;

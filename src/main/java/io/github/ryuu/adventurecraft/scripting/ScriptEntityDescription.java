@@ -1,8 +1,5 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-
 public class ScriptEntityDescription {
 
     public int health = 10;

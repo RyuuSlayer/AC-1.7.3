@@ -1,51 +1,31 @@
 package io.github.ryuu.adventurecraft.scripting;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.level.Level;
+import org.mozilla.javascript.*;
+
 import java.util.Iterator;
 import java.util.LinkedList;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import org.mozilla.javascript.ClassShutter;
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.ContextFactory;
-import org.mozilla.javascript.ContinuationPending;
-import org.mozilla.javascript.Scriptable;
-import org.mozilla.javascript.ScriptableObject;
 
 public class Script {
 
-    public Scriptable globalScope;
-
-    Scriptable curScope;
-
-    Scriptable runScope;
-
-    Context cx;
-
-    ScriptTime time;
-
-    ScriptWorld world;
-
-    ScriptEntityPlayer player;
-
-    ScriptChat chat;
-
-    ScriptWeather weather;
-
-    ScriptEffect effect;
-
-    ScriptSound sound;
-
-    ScriptUI ui;
-
-    ScriptScript script;
-
-    public ScriptKeyboard keyboard;
-
-    LinkedList<ScriptContinuation> sleepingScripts = new LinkedList();
-
-    LinkedList<ScriptContinuation> removeMe = new LinkedList();
-
     static boolean shutterSet = false;
+    public Scriptable globalScope;
+    public ScriptKeyboard keyboard;
+    Scriptable curScope;
+    Scriptable runScope;
+    Context cx;
+    ScriptTime time;
+    ScriptWorld world;
+    ScriptEntityPlayer player;
+    ScriptChat chat;
+    ScriptWeather weather;
+    ScriptEffect effect;
+    ScriptSound sound;
+    ScriptUI ui;
+    ScriptScript script;
+    LinkedList<ScriptContinuation> sleepingScripts = new LinkedList();
+    LinkedList<ScriptContinuation> removeMe = new LinkedList();
 
     public Script(Level w) {
         this.cx = ContextFactory.getGlobal().enterContext();
@@ -54,7 +34,7 @@ public class Script {
             this.cx.setClassShutter(new ClassShutter() {
 
                 public boolean visibleToScripts(String className) {
-                    return className.startsWith("net.minecraft.script") || className.equals((Object) "java.lang.Object") || className.equals((Object) "java.lang.String") || className.equals((Object) "java.lang.Double") || className.equals((Object) "java.lang.Boolean");
+                    return className.startsWith("net.minecraft.script") || className.equals("java.lang.Object") || className.equals("java.lang.String") || className.equals("java.lang.Double") || className.equals("java.lang.Boolean");
                 }
             });
             shutterSet = true;
@@ -71,29 +51,29 @@ public class Script {
         this.ui = new ScriptUI();
         this.script = new ScriptScript(w);
         this.keyboard = new ScriptKeyboard(w, Minecraft.minecraftInstance.options, this.getNewScope());
-        Object wrappedOut = Context.javaToJS((Object) this.time, (Scriptable) this.globalScope);
-        ScriptableObject.putProperty((Scriptable) this.globalScope, (String) "time", (Object) wrappedOut);
-        wrappedOut = Context.javaToJS((Object) this.world, (Scriptable) this.globalScope);
-        ScriptableObject.putProperty((Scriptable) this.globalScope, (String) "world", (Object) wrappedOut);
-        wrappedOut = Context.javaToJS((Object) this.chat, (Scriptable) this.globalScope);
-        ScriptableObject.putProperty((Scriptable) this.globalScope, (String) "chat", (Object) wrappedOut);
-        wrappedOut = Context.javaToJS((Object) this.weather, (Scriptable) this.globalScope);
-        ScriptableObject.putProperty((Scriptable) this.globalScope, (String) "weather", (Object) wrappedOut);
-        wrappedOut = Context.javaToJS((Object) this.effect, (Scriptable) this.globalScope);
-        ScriptableObject.putProperty((Scriptable) this.globalScope, (String) "effect", (Object) wrappedOut);
-        wrappedOut = Context.javaToJS((Object) this.sound, (Scriptable) this.globalScope);
-        ScriptableObject.putProperty((Scriptable) this.globalScope, (String) "sound", (Object) wrappedOut);
-        wrappedOut = Context.javaToJS((Object) this.ui, (Scriptable) this.globalScope);
-        ScriptableObject.putProperty((Scriptable) this.globalScope, (String) "ui", (Object) wrappedOut);
-        wrappedOut = Context.javaToJS((Object) Minecraft.minecraftInstance.overlay.scriptUI, (Scriptable) this.globalScope);
-        ScriptableObject.putProperty((Scriptable) this.globalScope, (String) "screen", (Object) wrappedOut);
-        wrappedOut = Context.javaToJS((Object) this.script, (Scriptable) this.globalScope);
-        ScriptableObject.putProperty((Scriptable) this.globalScope, (String) "script", (Object) wrappedOut);
-        wrappedOut = Context.javaToJS((Object) this.keyboard, (Scriptable) this.globalScope);
-        ScriptableObject.putProperty((Scriptable) this.globalScope, (String) "keyboard", (Object) wrappedOut);
-        wrappedOut = Context.javaToJS(null, (Scriptable) this.globalScope);
-        ScriptableObject.putProperty((Scriptable) this.globalScope, (String) "hitEntity", (Object) wrappedOut);
-        ScriptableObject.putProperty((Scriptable) this.globalScope, (String) "hitBlock", (Object) wrappedOut);
+        Object wrappedOut = Context.javaToJS(this.time, this.globalScope);
+        ScriptableObject.putProperty(this.globalScope, "time", wrappedOut);
+        wrappedOut = Context.javaToJS(this.world, this.globalScope);
+        ScriptableObject.putProperty(this.globalScope, "world", wrappedOut);
+        wrappedOut = Context.javaToJS(this.chat, this.globalScope);
+        ScriptableObject.putProperty(this.globalScope, "chat", wrappedOut);
+        wrappedOut = Context.javaToJS(this.weather, this.globalScope);
+        ScriptableObject.putProperty(this.globalScope, "weather", wrappedOut);
+        wrappedOut = Context.javaToJS(this.effect, this.globalScope);
+        ScriptableObject.putProperty(this.globalScope, "effect", wrappedOut);
+        wrappedOut = Context.javaToJS(this.sound, this.globalScope);
+        ScriptableObject.putProperty(this.globalScope, "sound", wrappedOut);
+        wrappedOut = Context.javaToJS(this.ui, this.globalScope);
+        ScriptableObject.putProperty(this.globalScope, "ui", wrappedOut);
+        wrappedOut = Context.javaToJS((Object) Minecraft.minecraftInstance.overlay.scriptUI, this.globalScope);
+        ScriptableObject.putProperty(this.globalScope, "screen", wrappedOut);
+        wrappedOut = Context.javaToJS(this.script, this.globalScope);
+        ScriptableObject.putProperty(this.globalScope, "script", wrappedOut);
+        wrappedOut = Context.javaToJS(this.keyboard, this.globalScope);
+        ScriptableObject.putProperty(this.globalScope, "keyboard", wrappedOut);
+        wrappedOut = Context.javaToJS(null, this.globalScope);
+        ScriptableObject.putProperty(this.globalScope, "hitEntity", wrappedOut);
+        ScriptableObject.putProperty(this.globalScope, "hitBlock", wrappedOut);
         this.runString("Item = net.minecraft.script.ScriptItem");
         this.runString("UILabel = net.minecraft.script.ScriptUILabel");
         this.runString("UISprite = net.minecraft.script.ScriptUISprite");
@@ -105,26 +85,26 @@ public class Script {
     }
 
     public void addObject(String name, Object o) {
-        Object wrappedOut = Context.javaToJS((Object) o, (Scriptable) this.globalScope);
-        ScriptableObject.putProperty((Scriptable) this.globalScope, (String) name, (Object) wrappedOut);
+        Object wrappedOut = Context.javaToJS(o, this.globalScope);
+        ScriptableObject.putProperty(this.globalScope, name, wrappedOut);
     }
 
     protected void finalize() {
         Script script = this;
-        script.cx.exit();
+        Context.exit();
     }
 
     public void initPlayer() {
         this.player = new ScriptEntityPlayer(Minecraft.minecraftInstance.player);
-        Object wrappedOut = Context.javaToJS((Object) this.player, (Scriptable) this.globalScope);
-        ScriptableObject.putProperty((Scriptable) this.globalScope, (String) "player", (Object) wrappedOut);
+        Object wrappedOut = Context.javaToJS(this.player, this.globalScope);
+        ScriptableObject.putProperty(this.globalScope, "player", wrappedOut);
     }
 
     public String runString(String script) {
         Object result;
         org.mozilla.javascript.Script s = this.compileString(script, "<cmd>");
         if (s != null && (result = this.runScript(s, this.runScope)) != null) {
-            return Context.toString((Object) result);
+            return Context.toString(result);
         }
         return null;
     }
@@ -164,9 +144,8 @@ public class Script {
 
     public void wakeupScripts(long tick) {
         for (ScriptContinuation c : this.sleepingScripts) {
-            if (c.wakeUp > tick)
-                continue;
-            this.removeMe.add((Object) c);
+            if (c.wakeUp > tick) continue;
+            this.removeMe.add(c);
         }
         Iterator i$ = this.removeMe.iterator();
         while (true) {
@@ -176,7 +155,7 @@ public class Script {
                 return;
             }
             c = (ScriptContinuation) i$.next();
-            this.sleepingScripts.remove((Object) c);
+            this.sleepingScripts.remove(c);
             try {
                 this.curScope = c.scope;
                 this.cx.resumeContinuation(c.contituation, c.scope, null);
@@ -197,7 +176,7 @@ public class Script {
     public void sleep(float t) {
         int ticks = (int) (20.0f * t);
         ContinuationPending cp = this.cx.captureContinuation();
-        this.sleepingScripts.add((Object) new ScriptContinuation(cp.getContinuation(), this.time.getTickCount() + (long) ticks, this.curScope));
+        this.sleepingScripts.add(new ScriptContinuation(cp.getContinuation(), this.time.getTickCount() + (long) ticks, this.curScope));
         throw cp;
     }
 }

@@ -1,10 +1,14 @@
 package io.github.ryuu.adventurecraft.mixin.item.tool;
 
+import io.github.ryuu.adventurecraft.entities.EntityArrowBomb;
+import io.github.ryuu.adventurecraft.items.Items;
+import net.minecraft.entity.player.Player;
+import net.minecraft.entity.projectile.Arrow;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
-import io.github.ryuu.adventurecraft.items.Items;
-import io.github.ryuu.adventurecraft.entities.EntityArrowBomb;
 
 @Mixin(BowItem.class)
 public class MixinBowItem extends ItemType {

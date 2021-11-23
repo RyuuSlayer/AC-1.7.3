@@ -1,18 +1,18 @@
 package io.github.ryuu.adventurecraft.gui;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import org.lwjgl.input.Keyboard;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.MapEditing;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
+import net.minecraft.client.gui.widgets.Button;
+import net.minecraft.level.Level;
+import org.lwjgl.input.Keyboard;
 
 public class GuiMapEditHUD extends Screen {
 
-    private Level world;
-
+    private final Level world;
+    private final GuiEditPalette palette;
     private long clickedTime;
-
-    private GuiEditPalette palette;
 
     public GuiMapEditHUD(Level w) {
         this.world = w;

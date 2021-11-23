@@ -1,5 +1,13 @@
 package io.github.ryuu.adventurecraft.mixin.entity.monster;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.FlyingEntity;
+import net.minecraft.entity.MonsterEntityType;
+import net.minecraft.entity.projectile.Snowball;
+import net.minecraft.level.Level;
+import net.minecraft.util.maths.Box;
+import net.minecraft.util.maths.MathsHelper;
+import net.minecraft.util.maths.Vec3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -15,14 +23,10 @@ public class MixinGhast extends FlyingEntity implements MonsterEntityType {
     public double field_1378;
 
     public double field_1379;
-
-    private Entity field_1382 = null;
-
-    private int field_1383 = 0;
-
     public int field_1380 = 0;
-
     public int field_1381 = 0;
+    private Entity field_1382 = null;
+    private int field_1383 = 0;
 
     public MixinGhast(Level world) {
         super(world);
@@ -100,7 +104,7 @@ public class MixinGhast extends FlyingEntity implements MonsterEntityType {
             double d5 = this.field_1382.x - this.x;
             double d6 = this.field_1382.boundingBox.minY + (double) (this.field_1382.height / 2.0f) - (this.y + (double) (this.height / 2.0f));
             double d7 = this.field_1382.z - this.z;
-            this.field_1012 = this.yaw = -((float) Math.atan2((double) d5, (double) d7)) * 180.0f / 3.141593f;
+            this.field_1012 = this.yaw = -((float) Math.atan2(d5, d7)) * 180.0f / 3.141593f;
             if (this.method_928(this.field_1382)) {
                 if (this.field_1381 == 10) {
                     this.level.playSound(this, "mob.ghast.charge", this.getSoundVolume(), (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2f + 1.0f);
@@ -121,7 +125,7 @@ public class MixinGhast extends FlyingEntity implements MonsterEntityType {
                 --this.field_1381;
             }
         } else {
-            this.field_1012 = this.yaw = -((float) Math.atan2((double) this.velocityX, (double) this.velocityZ)) * 180.0f / 3.141593f;
+            this.field_1012 = this.yaw = -((float) Math.atan2(this.velocityX, this.velocityZ)) * 180.0f / 3.141593f;
             if (this.field_1381 > 0) {
                 --this.field_1381;
             }

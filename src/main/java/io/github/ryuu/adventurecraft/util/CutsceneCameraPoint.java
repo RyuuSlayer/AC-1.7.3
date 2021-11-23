@@ -1,33 +1,19 @@
 package io.github.ryuu.adventurecraft.util;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-
 class CutsceneCameraPoint {
 
-    float time;
-
-    float posX;
-
-    float posY;
-
-    float posZ;
-
-    float rotYaw;
-
-    float rotPitch;
-
-    int cameraBlendType;
-
-    int cameraID;
-
-    static int startCameraID = 0;
-
     static final int NONE = 0;
-
     static final int LINEAR = 1;
-
     static final int QUADRATIC = 2;
+    static int startCameraID = 0;
+    float time;
+    float posX;
+    float posY;
+    float posZ;
+    float rotYaw;
+    float rotPitch;
+    int cameraBlendType;
+    int cameraID;
 
     CutsceneCameraPoint(float t, float x, float y, float z, float ya, float p, int i) {
         this.time = t;

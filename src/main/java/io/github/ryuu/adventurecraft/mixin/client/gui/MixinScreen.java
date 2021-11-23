@@ -1,40 +1,52 @@
 package io.github.ryuu.adventurecraft.mixin.client.gui;
 
-import java.awt.Toolkit;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.util.ArrayList;
-import java.util.List;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import org.lwjgl.input.Keyboard;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.SmokeRenderer;
+import net.minecraft.client.gui.widgets.Button;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.TextRenderer;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
+import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.util.ArrayList;
+import java.util.List;
+
 @Mixin(Screen.class)
 public class MixinScreen extends DrawableHelper {
 
+    public int width;
+    public int height;
+    public boolean passEvents = false;
+    public SmokeRenderer smokeRenderer;
+    public boolean disableInputGrabbing = false;
     @Shadow()
     protected Minecraft minecraft;
-
-    public int width;
-
-    public int height;
-
     protected List buttons = new ArrayList();
-
-    public boolean passEvents = false;
-
     protected TextRenderer textManager;
-
-    public SmokeRenderer smokeRenderer;
-
     protected Button lastClickedButton = null;
 
-    public boolean disableInputGrabbing = false;
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static String getClipboardContents() {
+        try {
+            Transferable transferable = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
+            if (transferable != null && transferable.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+                String s = (String) transferable.getTransferData(DataFlavor.stringFlavor);
+                return s;
+            }
+        } catch (Exception exception) {
+        }
+        return null;
+    }
 
     /**
      * @author Ryuu, TechPizza, Phil
@@ -62,28 +74,11 @@ public class MixinScreen extends DrawableHelper {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite()
-    public static String getClipboardContents() {
-        try {
-            Transferable transferable = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
-            if (transferable != null && transferable.isDataFlavorSupported(DataFlavor.stringFlavor)) {
-                String s = (String) transferable.getTransferData(DataFlavor.stringFlavor);
-                return s;
-            }
-        } catch (Exception exception) {
-        }
-        return null;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     protected void mouseClicked(int mouseX, int mouseY, int button) {
         if (button == 0) {
             for (int l = 0; l < this.buttons.size(); ++l) {
                 Button guibutton = (Button) this.buttons.get(l);
-                if (!guibutton.isMouseOver(this.minecraft, mouseX, mouseY))
-                    continue;
+                if (!guibutton.isMouseOver(this.minecraft, mouseX, mouseY)) continue;
                 this.lastClickedButton = guibutton;
                 this.minecraft.soundHelper.playSound("random.click", 1.0f, 1.0f);
                 this.buttonClicked(guibutton);
@@ -149,11 +144,11 @@ public class MixinScreen extends DrawableHelper {
      */
     @Overwrite()
     public void renderDirtBackground(int alpha) {
-        GL11.glDisable((int) 2896);
-        GL11.glDisable((int) 2912);
+        GL11.glDisable(2896);
+        GL11.glDisable(2912);
         Tessellator tessellator = Tessellator.INSTANCE;
-        GL11.glBindTexture((int) 3553, (int) this.minecraft.textureManager.getTextureId("/gui/background.png"));
-        GL11.glColor4f((float) 1.0f, (float) 1.0f, (float) 1.0f, (float) 1.0f);
+        GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId("/gui/background.png"));
+        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
         float f = 32.0f;
         tessellator.start();
         tessellator.colour(0x404040);

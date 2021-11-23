@@ -1,33 +1,26 @@
 package io.github.ryuu.adventurecraft.mixin.client.util;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.URL;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.client.Minecraft;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.*;
+import java.net.URL;
 
 @Mixin(ResourceDownloadThread.class)
 public class MixinResourceDownloadThread extends Thread {
 
+    private final Minecraft field_138;
+    private final boolean field_139 = false;
     @Shadow()
     public File workingDirectory;
-
-    private Minecraft field_138;
-
-    private boolean field_139 = false;
 
     public MixinResourceDownloadThread(File file, Minecraft minecraft) {
         this.field_138 = minecraft;
@@ -62,16 +55,13 @@ public class MixinResourceDownloadThread extends Thread {
             for (int i = 0; i < 2; ++i) {
                 for (int j = 0; j < nodelist.getLength(); ++j) {
                     Node node = nodelist.item(j);
-                    if (node.getNodeType() != 1)
-                        continue;
+                    if (node.getNodeType() != 1) continue;
                     Element element = (Element) node;
-                    String s = ((Element) element.getElementsByTagName("Key").item(0)).getChildNodes().item(0).getNodeValue();
-                    long l = Long.parseLong((String) ((Element) element.getElementsByTagName("Size").item(0)).getChildNodes().item(0).getNodeValue());
-                    if (l <= 0L)
-                        continue;
+                    String s = element.getElementsByTagName("Key").item(0).getChildNodes().item(0).getNodeValue();
+                    long l = Long.parseLong(element.getElementsByTagName("Size").item(0).getChildNodes().item(0).getNodeValue());
+                    if (l <= 0L) continue;
                     this.method_110(url, s, l, i);
-                    if (!this.field_139)
-                        continue;
+                    if (!this.field_139) continue;
                     return;
                 }
             }
@@ -109,7 +99,7 @@ public class MixinResourceDownloadThread extends Thread {
         try {
             int j = s.indexOf("/");
             String s1 = s.substring(0, j);
-            if (s1.equals((Object) "sound") || s1.equals((Object) "newsound") ? i != 0 : i != 1) {
+            if (s1.equals("sound") || s1.equals("newsound") ? i != 0 : i != 1) {
                 return;
             }
             File file = new File(this.workingDirectory, s);
@@ -134,12 +124,11 @@ public class MixinResourceDownloadThread extends Thread {
     private void method_109(URL url, File file, long l) throws IOException {
         byte[] abyte0 = new byte[4096];
         DataInputStream datainputstream = new DataInputStream(url.openStream());
-        DataOutputStream dataoutputstream = new DataOutputStream((OutputStream) new FileOutputStream(file));
+        DataOutputStream dataoutputstream = new DataOutputStream(new FileOutputStream(file));
         int i = 0;
         while ((i = datainputstream.read(abyte0)) >= 0) {
             dataoutputstream.write(abyte0, 0, i);
-            if (!this.field_139)
-                continue;
+            if (!this.field_139) continue;
             return;
         }
         datainputstream.close();

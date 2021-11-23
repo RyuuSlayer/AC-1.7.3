@@ -1,18 +1,21 @@
 package io.github.ryuu.adventurecraft.rendering;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import org.lwjgl.opengl.GL11;
 import io.github.ryuu.adventurecraft.entities.EntityHookshot;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.entity.EntityRenderer;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.maths.MathsHelper;
+import org.lwjgl.opengl.GL11;
 
 public class RenderHookshot extends EntityRenderer {
 
     public void doRenderFish(EntityHookshot entityHookshot, double d, double d1, double d2, float f, float f1) {
         this.bindTexture("/item/arrows.png");
         GL11.glPushMatrix();
-        GL11.glTranslatef((float) ((float) d), (float) ((float) d1), (float) ((float) d2));
-        GL11.glRotatef((float) (entityHookshot.prevYaw + (entityHookshot.yaw - entityHookshot.prevYaw) * f1 - 90.0f), (float) 0.0f, (float) 1.0f, (float) 0.0f);
-        GL11.glRotatef((float) (entityHookshot.prevPitch + (entityHookshot.pitch - entityHookshot.prevPitch) * f1), (float) 0.0f, (float) 0.0f, (float) 1.0f);
+        GL11.glTranslatef((float) d, (float) d1, (float) d2);
+        GL11.glRotatef(entityHookshot.prevYaw + (entityHookshot.yaw - entityHookshot.prevYaw) * f1 - 90.0f, 0.0f, 1.0f, 0.0f);
+        GL11.glRotatef(entityHookshot.prevPitch + (entityHookshot.pitch - entityHookshot.prevPitch) * f1, 0.0f, 0.0f, 1.0f);
         Tessellator tessellator = Tessellator.INSTANCE;
         int i = 0;
         float f2 = 0.0f;
@@ -24,18 +27,18 @@ public class RenderHookshot extends EntityRenderer {
         float f8 = (float) (5 + i * 10) / 32.0f;
         float f9 = (float) (10 + i * 10) / 32.0f;
         float f10 = 0.05625f;
-        GL11.glEnable((int) 32826);
-        GL11.glRotatef((float) 45.0f, (float) 1.0f, (float) 0.0f, (float) 0.0f);
-        GL11.glScalef((float) f10, (float) f10, (float) f10);
-        GL11.glTranslatef((float) -4.0f, (float) 0.0f, (float) 0.0f);
-        GL11.glNormal3f((float) f10, (float) 0.0f, (float) 0.0f);
+        GL11.glEnable(32826);
+        GL11.glRotatef(45.0f, 1.0f, 0.0f, 0.0f);
+        GL11.glScalef(f10, f10, f10);
+        GL11.glTranslatef(-4.0f, 0.0f, 0.0f);
+        GL11.glNormal3f(f10, 0.0f, 0.0f);
         tessellator.start();
         tessellator.vertex(-7.0, -2.0, -2.0, f6, f8);
         tessellator.vertex(-7.0, -2.0, 2.0, f7, f8);
         tessellator.vertex(-7.0, 2.0, 2.0, f7, f9);
         tessellator.vertex(-7.0, 2.0, -2.0, f6, f9);
         tessellator.draw();
-        GL11.glNormal3f((float) (-f10), (float) 0.0f, (float) 0.0f);
+        GL11.glNormal3f(-f10, 0.0f, 0.0f);
         tessellator.start();
         tessellator.vertex(-7.0, 2.0, -2.0, f6, f8);
         tessellator.vertex(-7.0, 2.0, 2.0, f7, f8);
@@ -43,8 +46,8 @@ public class RenderHookshot extends EntityRenderer {
         tessellator.vertex(-7.0, -2.0, -2.0, f6, f9);
         tessellator.draw();
         for (int j = 0; j < 4; ++j) {
-            GL11.glRotatef((float) 90.0f, (float) 1.0f, (float) 0.0f, (float) 0.0f);
-            GL11.glNormal3f((float) 0.0f, (float) 0.0f, (float) f10);
+            GL11.glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
+            GL11.glNormal3f(0.0f, 0.0f, f10);
             tessellator.start();
             tessellator.vertex(-8.0, -2.0, 0.0, f2, f4);
             tessellator.vertex(8.0, -2.0, 0.0, f3, f4);
@@ -52,7 +55,7 @@ public class RenderHookshot extends EntityRenderer {
             tessellator.vertex(-8.0, 2.0, 0.0, f2, f5);
             tessellator.draw();
         }
-        GL11.glDisable((int) 32826);
+        GL11.glDisable(32826);
         GL11.glPopMatrix();
         if (entityHookshot.returnsTo != null) {
             float f12 = (entityHookshot.returnsTo.prevYaw + (entityHookshot.returnsTo.yaw - entityHookshot.returnsTo.prevYaw) * f1) * 3.141593f / 180.0f;
@@ -83,9 +86,9 @@ public class RenderHookshot extends EntityRenderer {
             double d15 = (float) (d9 - d12);
             double d16 = (float) (d10 - d13);
             double d17 = (float) (d11 - d14);
-            GL11.glDisable((int) 3553);
-            GL11.glDisable((int) 2896);
-            GL11.glLineWidth((float) 3.0f);
+            GL11.glDisable(3553);
+            GL11.glDisable(2896);
+            GL11.glLineWidth(3.0f);
             tessellator.start(3);
             tessellator.colour(0);
             int j = 1;
@@ -94,8 +97,8 @@ public class RenderHookshot extends EntityRenderer {
                 tessellator.pos(d + d15 * (double) f12, d1 + d16 * (double) f12, d2 + d17 * (double) f12);
             }
             tessellator.draw();
-            GL11.glEnable((int) 2896);
-            GL11.glEnable((int) 3553);
+            GL11.glEnable(2896);
+            GL11.glEnable(3553);
         }
     }
 

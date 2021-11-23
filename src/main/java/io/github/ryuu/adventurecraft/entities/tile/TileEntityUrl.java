@@ -1,7 +1,7 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.util.io.CompoundTag;
 
 public class TileEntityUrl extends TileEntity {
 
@@ -19,7 +19,7 @@ public class TileEntityUrl extends TileEntity {
     @Override
     public void writeIdentifyingData(CompoundTag tag) {
         super.writeIdentifyingData(tag);
-        if (this.url != null && !this.url.equals((Object) "")) {
+        if (this.url != null && !this.url.equals("")) {
             tag.put("url", this.url);
         }
     }

@@ -1,7 +1,9 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.TextRenderer;
+import net.minecraft.client.texture.TextureManager;
 import org.lwjgl.opengl.GL11;
 
 public class ScriptUISprite extends UIElement {
@@ -52,7 +54,7 @@ public class ScriptUISprite extends UIElement {
         } else {
             renderEngine.bindTexture(renderEngine.getTextureId(this.texture));
         }
-        GL11.glColor4f((float) this.red, (float) this.green, (float) this.blue, (float) this.alpha);
+        GL11.glColor4f(this.red, this.green, this.blue, this.alpha);
         float x = this.getXAtTime(partialTickTime);
         float y = this.getYAtTime(partialTickTime);
         float f = 1.0f / this.imageWidth;

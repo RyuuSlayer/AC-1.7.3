@@ -1,8 +1,12 @@
 package io.github.ryuu.adventurecraft.items;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import io.github.ryuu.adventurecraft.gui.GuiMusicSheet;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
+import net.minecraft.tile.Tile;
+import net.minecraft.tile.entity.Sign;
 
 public class ItemInstrument extends ItemType {
 

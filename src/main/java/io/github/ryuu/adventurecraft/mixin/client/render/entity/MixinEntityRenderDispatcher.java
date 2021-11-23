@@ -1,107 +1,95 @@
 package io.github.ryuu.adventurecraft.mixin.client.render.entity;
 
-import java.util.HashMap;
-import java.util.Map;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import io.github.ryuu.adventurecraft.entities.*;
+import io.github.ryuu.adventurecraft.models.ModelBat;
+import io.github.ryuu.adventurecraft.models.ModelCamera;
+import io.github.ryuu.adventurecraft.models.ModelRat;
+import io.github.ryuu.adventurecraft.rendering.*;
+import net.minecraft.client.options.GameOptions;
+import net.minecraft.client.render.HandItemRenderer;
+import net.minecraft.client.render.TextRenderer;
+import net.minecraft.client.render.entity.*;
+import net.minecraft.client.render.entity.model.*;
+import net.minecraft.client.texture.TextureManager;
+import net.minecraft.entity.*;
+import net.minecraft.entity.animal.*;
+import net.minecraft.entity.monster.*;
+import net.minecraft.entity.player.Player;
+import net.minecraft.entity.projectile.Arrow;
+import net.minecraft.entity.projectile.Snowball;
+import net.minecraft.entity.projectile.ThrownEgg;
+import net.minecraft.entity.projectile.ThrownSnowball;
+import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
+import net.minecraft.tile.Tile;
+import net.minecraft.util.maths.MathsHelper;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import io.github.ryuu.adventurecraft.entities.EntitySkeletonBoss;
-import io.github.ryuu.adventurecraft.rendering.RenderBipedScaled;
-import io.github.ryuu.adventurecraft.entities.EntityBoomerang;
-import io.github.ryuu.adventurecraft.rendering.RenderBoomerang;
-import io.github.ryuu.adventurecraft.entities.EntityHookshot;
-import io.github.ryuu.adventurecraft.rendering.RenderHookshot;
-import io.github.ryuu.adventurecraft.entities.EntityBomb;
-import io.github.ryuu.adventurecraft.rendering.RenderBomb;
-import io.github.ryuu.adventurecraft.entities.EntityBat;
-import io.github.ryuu.adventurecraft.models.ModelBat;
-import io.github.ryuu.adventurecraft.entities.EntityRat;
-import io.github.ryuu.adventurecraft.models.ModelRat;
-import io.github.ryuu.adventurecraft.entities.EntityCamera;
-import io.github.ryuu.adventurecraft.rendering.RenderCamera;
-import io.github.ryuu.adventurecraft.models.ModelCamera;
-import io.github.ryuu.adventurecraft.entities.EntityNPC;
-import io.github.ryuu.adventurecraft.rendering.RenderNPC;
-import io.github.ryuu.adventurecraft.entities.EntityLivingScript;
-import io.github.ryuu.adventurecraft.rendering.RenderBipedScaledScripted;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Mixin(EntityRenderDispatcher.class)
 public class MixinEntityRenderDispatcher {
 
-    @Shadow()
-    private Map renderers = new HashMap();
-
     public static EntityRenderDispatcher INSTANCE = new EntityRenderDispatcher();
-
+    public static double field_2490;
+    public static double field_2491;
+    public static double field_2492;
+    @Shadow()
+    private final Map renderers = new HashMap();
+    public TextureManager textureManager;
+    public HandItemRenderer field_2494;
+    public Level level;
+    public LivingEntity entity;
+    public float field_2497;
+    public float field_2498;
+    public GameOptions options;
+    public double field_2500;
+    public double field_2501;
+    public double field_2502;
     private TextRenderer font;
 
-    public static double field_2490;
-
-    public static double field_2491;
-
-    public static double field_2492;
-
-    public TextureManager textureManager;
-
-    public HandItemRenderer field_2494;
-
-    public Level level;
-
-    public LivingEntity entity;
-
-    public float field_2497;
-
-    public float field_2498;
-
-    public GameOptions options;
-
-    public double field_2500;
-
-    public double field_2501;
-
-    public double field_2502;
-
     private MixinEntityRenderDispatcher() {
-        this.renderers.put(Spider.class, (Object) new SpiderEyesRenderer());
-        this.renderers.put(Pig.class, (Object) new PigRenderer(new PigModel(), new PigModel(0.5f), 0.7f));
-        this.renderers.put(Sheep.class, (Object) new SheepRenderer(new SheepModel(), new UnknownEntityModel2(), 0.7f));
-        this.renderers.put(Cow.class, (Object) new CowRenderer(new CowModel(), 0.7f));
-        this.renderers.put(Wolf.class, (Object) new WolfRenderer(new WolfModel(), 0.5f));
-        this.renderers.put(Chicken.class, (Object) new ChickenRenderer(new ChickenModel(), 0.3f));
-        this.renderers.put(Creeper.class, (Object) new CreeperRenderer());
-        this.renderers.put(Skeleton.class, (Object) new BipedEntityRenderer(new SkeletonModel(), 0.5f));
-        this.renderers.put(EntitySkeletonBoss.class, (Object) new RenderBipedScaled(new SkeletonModel(), 0.5f, 2.5f));
-        this.renderers.put(Zombie.class, (Object) new BipedEntityRenderer(new ZombieModel(), 0.5f));
-        this.renderers.put(Slime.class, (Object) new SlimeRenderer(new SlimeModel(16), new SlimeModel(0), 0.25f));
-        this.renderers.put(Player.class, (Object) new PlayerRenderer());
-        this.renderers.put(Giant.class, (Object) new GiantRenderer(new ZombieModel(), 0.5f, 6.0f));
-        this.renderers.put(Ghast.class, (Object) new GhastRenderer());
-        this.renderers.put(Squid.class, (Object) new SquidRenderer(new SquidModel(), 0.7f));
-        this.renderers.put(LivingEntity.class, (Object) new LivingEntityRenderer(new BipedModel(), 0.5f));
-        this.renderers.put(Entity.class, (Object) new GenericRenderer());
-        this.renderers.put(Painting.class, (Object) new PaintingRenderer());
-        this.renderers.put(Arrow.class, (Object) new ArrowRenderer());
-        this.renderers.put(ThrownSnowball.class, (Object) new ProjectileRenderer(ItemType.snowball.getTexturePosition(0)));
-        this.renderers.put(ThrownEgg.class, (Object) new ProjectileRenderer(ItemType.egg.getTexturePosition(0)));
-        this.renderers.put(Snowball.class, (Object) new SnowballRenderer());
-        this.renderers.put(ItemEntity.class, (Object) new ItemRenderer());
-        this.renderers.put(PrimedTnt.class, (Object) new PrimedTntRenderer());
-        this.renderers.put(FallingTile.class, (Object) new FallingTileRenderer());
-        this.renderers.put(Minecart.class, (Object) new MinecartRenderer());
-        this.renderers.put(Boat.class, (Object) new BoatRenderer());
-        this.renderers.put(FishHook.class, (Object) new FishHookRenderer());
-        this.renderers.put(Lightning.class, (Object) new LightningRenderer());
-        this.renderers.put(EntityBoomerang.class, (Object) new RenderBoomerang());
-        this.renderers.put(EntityHookshot.class, (Object) new RenderHookshot());
-        this.renderers.put(EntityBomb.class, (Object) new RenderBomb());
-        this.renderers.put(EntityBat.class, (Object) new LivingEntityRenderer(new ModelBat(), 0.3f));
-        this.renderers.put(EntityRat.class, (Object) new LivingEntityRenderer(new ModelRat(), 0.0f));
-        this.renderers.put(EntityCamera.class, (Object) new RenderCamera(new ModelCamera(), 0.0f));
-        this.renderers.put(EntityNPC.class, (Object) new RenderNPC(new BipedModel()));
-        this.renderers.put(EntityLivingScript.class, (Object) new RenderBipedScaledScripted(new BipedModel()));
+        this.renderers.put(Spider.class, new SpiderEyesRenderer());
+        this.renderers.put(Pig.class, new PigRenderer(new PigModel(), new PigModel(0.5f), 0.7f));
+        this.renderers.put(Sheep.class, new SheepRenderer(new SheepModel(), new UnknownEntityModel2(), 0.7f));
+        this.renderers.put(Cow.class, new CowRenderer(new CowModel(), 0.7f));
+        this.renderers.put(Wolf.class, new WolfRenderer(new WolfModel(), 0.5f));
+        this.renderers.put(Chicken.class, new ChickenRenderer(new ChickenModel(), 0.3f));
+        this.renderers.put(Creeper.class, new CreeperRenderer());
+        this.renderers.put(Skeleton.class, new BipedEntityRenderer(new SkeletonModel(), 0.5f));
+        this.renderers.put(EntitySkeletonBoss.class, new RenderBipedScaled(new SkeletonModel(), 0.5f, 2.5f));
+        this.renderers.put(Zombie.class, new BipedEntityRenderer(new ZombieModel(), 0.5f));
+        this.renderers.put(Slime.class, new SlimeRenderer(new SlimeModel(16), new SlimeModel(0), 0.25f));
+        this.renderers.put(Player.class, new PlayerRenderer());
+        this.renderers.put(Giant.class, new GiantRenderer(new ZombieModel(), 0.5f, 6.0f));
+        this.renderers.put(Ghast.class, new GhastRenderer());
+        this.renderers.put(Squid.class, new SquidRenderer(new SquidModel(), 0.7f));
+        this.renderers.put(LivingEntity.class, new LivingEntityRenderer(new BipedModel(), 0.5f));
+        this.renderers.put(Entity.class, new GenericRenderer());
+        this.renderers.put(Painting.class, new PaintingRenderer());
+        this.renderers.put(Arrow.class, new ArrowRenderer());
+        this.renderers.put(ThrownSnowball.class, new ProjectileRenderer(ItemType.snowball.getTexturePosition(0)));
+        this.renderers.put(ThrownEgg.class, new ProjectileRenderer(ItemType.egg.getTexturePosition(0)));
+        this.renderers.put(Snowball.class, new SnowballRenderer());
+        this.renderers.put(ItemEntity.class, new ItemRenderer());
+        this.renderers.put(PrimedTnt.class, new PrimedTntRenderer());
+        this.renderers.put(FallingTile.class, new FallingTileRenderer());
+        this.renderers.put(Minecart.class, new MinecartRenderer());
+        this.renderers.put(Boat.class, new BoatRenderer());
+        this.renderers.put(FishHook.class, new FishHookRenderer());
+        this.renderers.put(Lightning.class, new LightningRenderer());
+        this.renderers.put(EntityBoomerang.class, new RenderBoomerang());
+        this.renderers.put(EntityHookshot.class, new RenderHookshot());
+        this.renderers.put(EntityBomb.class, new RenderBomb());
+        this.renderers.put(EntityBat.class, new LivingEntityRenderer(new ModelBat(), 0.3f));
+        this.renderers.put(EntityRat.class, new LivingEntityRenderer(new ModelRat(), 0.0f));
+        this.renderers.put(EntityCamera.class, new RenderCamera(new ModelCamera(), 0.0f));
+        this.renderers.put(EntityNPC.class, new RenderNPC(new BipedModel()));
+        this.renderers.put(EntityLivingScript.class, new RenderBipedScaledScripted(new BipedModel()));
         for (EntityRenderer render : this.renderers.values()) {
             render.setDispatcher(this);
         }
@@ -112,10 +100,10 @@ public class MixinEntityRenderDispatcher {
      */
     @Overwrite()
     public EntityRenderer get(Class entityClass) {
-        EntityRenderer render = (EntityRenderer) this.renderers.get((Object) entityClass);
+        EntityRenderer render = (EntityRenderer) this.renderers.get(entityClass);
         if (render == null && entityClass != Entity.class) {
             render = this.get(entityClass.getSuperclass());
-            this.renderers.put((Object) entityClass, (Object) render);
+            this.renderers.put(entityClass, render);
         }
         return render;
     }
@@ -157,7 +145,7 @@ public class MixinEntityRenderDispatcher {
         double d2 = entity.prevRenderZ + (entity.z - entity.prevRenderZ) * (double) f;
         float f1 = entity.prevYaw + (entity.yaw - entity.prevYaw) * f;
         float f2 = entity.getBrightnessAtEyes(f);
-        GL11.glColor3f((float) f2, (float) f2, (float) f2);
+        GL11.glColor3f(f2, f2, f2);
         this.method_1920(entity, d - field_2490, d1 - field_2491, d2 - field_2492, f1, f);
     }
 

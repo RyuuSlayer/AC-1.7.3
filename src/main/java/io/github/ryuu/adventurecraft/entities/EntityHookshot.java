@@ -1,21 +1,28 @@
 package io.github.ryuu.adventurecraft.entities;
 
-import java.util.List;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
+import io.github.ryuu.adventurecraft.items.Items;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.level.Level;
+import net.minecraft.tile.Tile;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.hit.HitType;
+import net.minecraft.util.io.CompoundTag;
+import net.minecraft.util.maths.MathsHelper;
+import net.minecraft.util.maths.Vec3f;
+
+import java.util.List;
 
 public class EntityHookshot extends Entity {
 
-    int timeBeforeTurnAround;
-
-    boolean turningAround;
-
     public boolean attachedToSurface;
-
     public boolean mainHand;
-
+    int timeBeforeTurnAround;
+    boolean turningAround;
     LivingEntity returnsTo;
 
     Entity entityGrabbed;
@@ -53,14 +60,14 @@ public class EntityHookshot extends Entity {
 
     public void setHeading() {
         float f3 = MathsHelper.sqrt(this.velocityX * this.velocityX + this.velocityZ * this.velocityZ);
-        this.prevYaw = this.yaw = (float) (Math.atan2((double) this.velocityX, (double) this.velocityZ) * 180.0 / 3.1415927410125732);
-        this.prevPitch = this.pitch = (float) (Math.atan2((double) this.velocityY, (double) f3) * 180.0 / 3.1415927410125732);
+        this.prevYaw = this.yaw = (float) (Math.atan2(this.velocityX, this.velocityZ) * 180.0 / 3.1415927410125732);
+        this.prevPitch = this.pitch = (float) (Math.atan2(this.velocityY, f3) * 180.0 / 3.1415927410125732);
     }
 
     public void setHeadingReverse() {
         float f3 = MathsHelper.sqrt(this.velocityX * this.velocityX + this.velocityZ * this.velocityZ);
-        this.prevYaw = this.yaw = (float) (Math.atan2((double) (-this.velocityX), (double) (-this.velocityZ)) * 180.0 / 3.1415927410125732);
-        this.prevPitch = this.pitch = (float) (Math.atan2((double) (-this.velocityY), (double) f3) * 180.0 / 3.1415927410125732);
+        this.prevYaw = this.yaw = (float) (Math.atan2(-this.velocityX, -this.velocityZ) * 180.0 / 3.1415927410125732);
+        this.prevPitch = this.pitch = (float) (Math.atan2(-this.velocityY, f3) * 180.0 / 3.1415927410125732);
     }
 
     @Override
@@ -110,7 +117,7 @@ public class EntityHookshot extends Entity {
             double deltaX = this.returnsTo.x - this.x;
             double deltaY = this.returnsTo.y - this.y;
             double deltaZ = this.returnsTo.z - this.z;
-            double length = Math.sqrt((double) (deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ));
+            double length = Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
             this.velocityX = 0.75 * deltaX / length;
             this.velocityY = 0.75 * deltaY / length;
             this.velocityZ = 0.75 * deltaZ / length;
@@ -136,8 +143,7 @@ public class EntityHookshot extends Entity {
             for (int i = 0; i < entitiesWithin.size(); ++i) {
                 Entity e = (Entity) entitiesWithin.get(i);
                 boolean isItem = e instanceof ItemEntity;
-                if (!isItem && (!(e instanceof LivingEntity) || e == this.returnsTo))
-                    continue;
+                if (!isItem && (!(e instanceof LivingEntity) || e == this.returnsTo)) continue;
                 if (isItem) {
                     this.level.playSound(this, "damage.fallsmall", 1.0f, 1.2f / (this.rand.nextFloat() * 0.2f + 0.9f));
                 } else {

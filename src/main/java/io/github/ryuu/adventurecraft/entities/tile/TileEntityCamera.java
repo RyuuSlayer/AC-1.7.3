@@ -1,9 +1,10 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import io.github.ryuu.adventurecraft.util.CutsceneCamera;
 import io.github.ryuu.adventurecraft.util.CutsceneCameraPoint;
+import net.minecraft.client.Minecraft;
+import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.util.io.CompoundTag;
 
 public class TileEntityCamera extends TileEntity {
 
@@ -12,10 +13,8 @@ public class TileEntityCamera extends TileEntity {
     public String sound;
 
     public CutsceneCamera camera = new CutsceneCamera();
-
-    int type = 2;
-
     public boolean pauseGame = true;
+    int type = 2;
 
     TileEntityCamera() {
     }
@@ -41,7 +40,7 @@ public class TileEntityCamera extends TileEntity {
         super.readIdentifyingData(tag);
         int numPoints = tag.getInt("numPoints");
         for (int i = 0; i < numPoints; ++i) {
-            this.readPointTag(tag.getCompoundTag(String.format((String) "point%d", (Object[]) new Object[] { i })));
+            this.readPointTag(tag.getCompoundTag(String.format("point%d", i)));
         }
         if (tag.containsKey("type")) {
             this.type = tag.getByte("type");
@@ -56,7 +55,7 @@ public class TileEntityCamera extends TileEntity {
         super.writeIdentifyingData(tag);
         int numPoints = 0;
         for (CutsceneCameraPoint p : this.camera.cameraPoints) {
-            tag.put(String.format((String) "point%d", (Object[]) new Object[] { numPoints }), this.getPointTag(p));
+            tag.put(String.format("point%d", numPoints), this.getPointTag(p));
             ++numPoints;
         }
         tag.put("numPoints", numPoints);

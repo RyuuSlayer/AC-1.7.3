@@ -1,9 +1,11 @@
 package io.github.ryuu.adventurecraft.entities;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.UtilBullet;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.monster.Skeleton;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.level.Level;
 
 public class EntitySkeletonRifle extends Skeleton {
 
@@ -35,7 +37,7 @@ public class EntitySkeletonRifle extends Skeleton {
             }
             double d = entity.x - this.x;
             double d1 = entity.z - this.z;
-            this.yaw = (float) (Math.atan2((double) d1, (double) d) * 180.0 / 3.1415927410125732) - 90.0f;
+            this.yaw = (float) (Math.atan2(d1, d) * 180.0 / 3.1415927410125732) - 90.0f;
             this.field_663 = true;
         }
     }

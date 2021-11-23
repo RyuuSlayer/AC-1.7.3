@@ -1,17 +1,23 @@
 package io.github.ryuu.adventurecraft.mixin.tile.entity;
 
-import java.util.Random;
+import net.minecraft.entity.player.Player;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.util.io.CompoundTag;
+import net.minecraft.util.io.ListTag;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
+import java.util.Random;
+
 @Mixin(Dispenser.class)
 public class MixinDispenser extends TileEntity implements Inventory {
 
+    private final Random rand = new Random();
     @Shadow()
     private ItemInstance[] contents = new ItemInstance[9];
-
-    private Random rand = new Random();
 
     /**
      * @author Ryuu, TechPizza, Phil
@@ -58,8 +64,7 @@ public class MixinDispenser extends TileEntity implements Inventory {
         int i = -1;
         int j = 1;
         for (int k = 0; k < this.contents.length; ++k) {
-            if (this.contents[k] == null || this.rand.nextInt(j++) != 0)
-                continue;
+            if (this.contents[k] == null || this.rand.nextInt(j++) != 0) continue;
             i = k;
         }
         if (i >= 0) {
@@ -93,8 +98,7 @@ public class MixinDispenser extends TileEntity implements Inventory {
         for (int i = 0; i < nbttaglist.size(); ++i) {
             CompoundTag nbttagcompound1 = (CompoundTag) nbttaglist.get(i);
             int j = nbttagcompound1.getByte("Slot") & 0xFF;
-            if (j < 0 || j >= this.contents.length)
-                continue;
+            if (j < 0 || j >= this.contents.length) continue;
             this.contents[j] = new ItemInstance(nbttagcompound1);
         }
     }
@@ -108,8 +112,7 @@ public class MixinDispenser extends TileEntity implements Inventory {
         super.writeIdentifyingData(tag);
         ListTag nbttaglist = new ListTag();
         for (int i = 0; i < this.contents.length; ++i) {
-            if (this.contents[i] == null)
-                continue;
+            if (this.contents[i] == null) continue;
             CompoundTag nbttagcompound1 = new CompoundTag();
             nbttagcompound1.put("Slot", (byte) i);
             this.contents[i].toTag(nbttagcompound1);

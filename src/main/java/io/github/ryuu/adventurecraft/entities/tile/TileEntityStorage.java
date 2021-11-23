@@ -1,10 +1,15 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
-import java.util.ArrayList;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import io.github.ryuu.adventurecraft.items.ItemCursor;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
+import io.github.ryuu.adventurecraft.items.ItemCursor;
+import net.minecraft.client.Minecraft;
+import net.minecraft.level.chunk.Chunk;
+import net.minecraft.src.NBTTagCompound;
+import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.util.io.AbstractTag;
+import net.minecraft.util.io.CompoundTag;
+
+import java.util.ArrayList;
 
 public class TileEntityStorage extends TileEntityMinMax {
 
@@ -93,7 +98,7 @@ public class TileEntityStorage extends TileEntityMinMax {
             this.tileEntities.clear();
             int numTiles = tag.getInt("numTiles");
             for (int i = 0; i < numTiles; ++i) {
-                this.tileEntities.add((Object) tag.getCompoundTag(String.format((String) "tile%d", (Object[]) new Object[] { i })));
+                this.tileEntities.add((Object) tag.getCompoundTag(String.format("tile%d", i)));
             }
         }
         if (!tag.containsKey("acVersion") && Minecraft.minecraftInstance.level.properties.originallyFromAC) {
@@ -113,7 +118,7 @@ public class TileEntityStorage extends TileEntityMinMax {
         if (!this.tileEntities.isEmpty()) {
             int i = 0;
             for (CompoundTag tag2 : this.tileEntities) {
-                tag.put(String.format((String) "tile%d", (Object[]) new Object[] { i }), (AbstractTag) tag2);
+                tag.put(String.format("tile%d", i), (AbstractTag) tag2);
                 ++i;
             }
             tag.put("numTiles", i);

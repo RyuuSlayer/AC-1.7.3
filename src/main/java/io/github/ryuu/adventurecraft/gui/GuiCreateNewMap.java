@@ -1,62 +1,44 @@
 package io.github.ryuu.adventurecraft.gui;
 
-import java.util.Random;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import org.lwjgl.input.Keyboard;
 import io.github.ryuu.adventurecraft.util.DebugMode;
+import net.minecraft.class_520;
+import net.minecraft.client.gui.Screen;
+import net.minecraft.client.gui.widgets.Button;
+import net.minecraft.client.gui.widgets.Textbox;
+import net.minecraft.client.resource.language.TranslationStorage;
+import net.minecraft.level.Level;
+import net.minecraft.util.maths.MathsHelper;
+import org.lwjgl.input.Keyboard;
+
+import java.util.Random;
 
 public class GuiCreateNewMap extends Screen {
 
-    private Screen parent;
-
-    private Textbox textboxMapName;
-
-    private Textbox textboxSeed;
-
-    private String folderName;
-
-    private boolean createClicked;
-
+    private final Screen parent;
     public double mapSize = 250.0;
-
     public int waterLevel = 64;
-
     public double fractureHorizontal = 1.0;
-
     public double fractureVertical = 1.0;
-
     public double maxAvgDepth = 0.0;
-
     public double maxAvgHeight = 0.0;
-
     public double volatility1 = 1.0;
-
     public double volatility2 = 1.0;
-
     public double volatilityWeight1 = 0.0;
-
     public double volatilityWeight2 = 1.0;
-
     GuiSlider2 sliderMapSize;
-
     GuiSlider2 sliderWaterLevel;
-
     GuiSlider2 sliderFracHorizontal;
-
     GuiSlider2 sliderFracVertical;
-
     GuiSlider2 sliderMaxAvgDepth;
-
     GuiSlider2 sliderMaxAvgHeight;
-
     GuiSlider2 sliderVolatility1;
-
     GuiSlider2 sliderVolatility2;
-
     GuiSlider2 sliderVolatilityWeight1;
-
     GuiSlider2 sliderVolatilityWeight2;
+    private Textbox textboxMapName;
+    private Textbox textboxSeed;
+    private String folderName;
+    private boolean createClicked;
 
     public GuiCreateNewMap(Screen guiscreen) {
         this.parent = guiscreen;
@@ -71,10 +53,10 @@ public class GuiCreateNewMap extends Screen {
     @Override
     public void init() {
         TranslationStorage stringtranslate = TranslationStorage.getInstance();
-        Keyboard.enableRepeatEvents((boolean) true);
+        Keyboard.enableRepeatEvents(true);
         this.buttons.clear();
-        this.buttons.add((Object) new Button(0, this.width / 2 - 205, 200, "Create Map"));
-        this.buttons.add((Object) new Button(1, this.width / 2 + 5, 200, stringtranslate.translate("gui.cancel")));
+        this.buttons.add(new Button(0, this.width / 2 - 205, 200, "Create Map"));
+        this.buttons.add(new Button(1, this.width / 2 + 5, 200, stringtranslate.translate("gui.cancel")));
         this.textboxMapName = new Textbox(this, this.textManager, this.width / 2 - 100, 38, 200, 20, stringtranslate.translate("selectWorld.newWorld"));
         this.textboxMapName.field_2420 = true;
         this.textboxMapName.method_1878(32);
@@ -92,16 +74,16 @@ public class GuiCreateNewMap extends Screen {
         this.sliderVolatilityWeight1 = new GuiSlider2(2, xPos1, 172, 10, "", (float) (this.volatilityWeight1 + 0.5));
         this.sliderVolatilityWeight2 = new GuiSlider2(2, xPos2, 172, 10, "", (float) (this.volatilityWeight2 - 0.5));
         this.updateSliders();
-        this.buttons.add((Object) this.sliderMapSize);
-        this.buttons.add((Object) this.sliderWaterLevel);
-        this.buttons.add((Object) this.sliderFracHorizontal);
-        this.buttons.add((Object) this.sliderFracVertical);
-        this.buttons.add((Object) this.sliderMaxAvgDepth);
-        this.buttons.add((Object) this.sliderMaxAvgHeight);
-        this.buttons.add((Object) this.sliderVolatility1);
-        this.buttons.add((Object) this.sliderVolatility2);
-        this.buttons.add((Object) this.sliderVolatilityWeight1);
-        this.buttons.add((Object) this.sliderVolatilityWeight2);
+        this.buttons.add(this.sliderMapSize);
+        this.buttons.add(this.sliderWaterLevel);
+        this.buttons.add(this.sliderFracHorizontal);
+        this.buttons.add(this.sliderFracVertical);
+        this.buttons.add(this.sliderMaxAvgDepth);
+        this.buttons.add(this.sliderMaxAvgHeight);
+        this.buttons.add(this.sliderVolatility1);
+        this.buttons.add(this.sliderVolatility2);
+        this.buttons.add(this.sliderVolatilityWeight1);
+        this.buttons.add(this.sliderVolatilityWeight2);
     }
 
     private void updateSliders() {
@@ -115,21 +97,21 @@ public class GuiCreateNewMap extends Screen {
         this.volatility2 = (double) this.sliderVolatility2.sliderValue * 5.0;
         this.volatilityWeight1 = (double) this.sliderVolatilityWeight1.sliderValue - 0.5;
         this.volatilityWeight2 = (double) this.sliderVolatilityWeight2.sliderValue + 0.5;
-        this.sliderMapSize.text = String.format((String) "Map Size: %.1f", (Object[]) new Object[] { this.mapSize });
-        this.sliderWaterLevel.text = String.format((String) "Water Level: %d", (Object[]) new Object[] { this.waterLevel });
-        this.sliderFracHorizontal.text = String.format((String) "Fracture Horizontal: %.2f", (Object[]) new Object[] { this.fractureHorizontal });
-        this.sliderFracVertical.text = String.format((String) "Fracture Vertical: %.2f", (Object[]) new Object[] { this.fractureVertical });
-        this.sliderMaxAvgDepth.text = String.format((String) "Max Avg Depth: %.2f", (Object[]) new Object[] { this.maxAvgDepth });
-        this.sliderMaxAvgHeight.text = String.format((String) "Max Avg Height: %.2f", (Object[]) new Object[] { this.maxAvgHeight });
-        this.sliderVolatility1.text = String.format((String) "Volatility 1: %.2f", (Object[]) new Object[] { this.volatility1 });
-        this.sliderVolatility2.text = String.format((String) "Volatility 2: %.2f", (Object[]) new Object[] { this.volatility2 });
-        this.sliderVolatilityWeight1.text = String.format((String) "Volatility Weight 1: %.2f", (Object[]) new Object[] { this.volatilityWeight1 });
-        this.sliderVolatilityWeight2.text = String.format((String) "Volatility Weight 2: %.2f", (Object[]) new Object[] { this.volatilityWeight2 });
+        this.sliderMapSize.text = String.format("Map Size: %.1f", this.mapSize);
+        this.sliderWaterLevel.text = String.format("Water Level: %d", this.waterLevel);
+        this.sliderFracHorizontal.text = String.format("Fracture Horizontal: %.2f", this.fractureHorizontal);
+        this.sliderFracVertical.text = String.format("Fracture Vertical: %.2f", this.fractureVertical);
+        this.sliderMaxAvgDepth.text = String.format("Max Avg Depth: %.2f", this.maxAvgDepth);
+        this.sliderMaxAvgHeight.text = String.format("Max Avg Height: %.2f", this.maxAvgHeight);
+        this.sliderVolatility1.text = String.format("Volatility 1: %.2f", this.volatility1);
+        this.sliderVolatility2.text = String.format("Volatility 2: %.2f", this.volatility2);
+        this.sliderVolatilityWeight1.text = String.format("Volatility Weight 1: %.2f", this.volatilityWeight1);
+        this.sliderVolatilityWeight2.text = String.format("Volatility Weight 2: %.2f", this.volatilityWeight2);
     }
 
     @Override
     public void onClose() {
-        Keyboard.enableRepeatEvents((boolean) false);
+        Keyboard.enableRepeatEvents(false);
     }
 
     @Override
@@ -149,7 +131,7 @@ public class GuiCreateNewMap extends Screen {
             String s = this.textboxSeed.method_1876();
             if (!MathsHelper.isStringEmpty(s)) {
                 try {
-                    long l1 = Long.parseLong((String) s);
+                    long l1 = Long.parseLong(s);
                     if (l1 != 0L) {
                         l = l1;
                     }
@@ -186,7 +168,7 @@ public class GuiCreateNewMap extends Screen {
         if (character == '\r') {
             this.buttonClicked((Button) this.buttons.get(0));
         }
-        ((Button) this.buttons.get((int) 0)).active = this.textboxMapName.method_1876().length() > 0;
+        ((Button) this.buttons.get(0)).active = this.textboxMapName.method_1876().length() > 0;
     }
 
     @Override

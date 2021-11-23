@@ -1,28 +1,24 @@
 package io.github.ryuu.adventurecraft.entities;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.class_61;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.level.Level;
+import net.minecraft.util.io.CompoundTag;
 
 public class EntityNPC extends EntityLivingScript {
 
     public String npcName;
 
     public String chatMsg;
-
-    boolean initialSpot = false;
-
     public double spawnX;
-
     public double spawnY;
-
     public double spawnZ;
-
     public boolean pathToHome = true;
-
     public boolean trackPlayer = true;
-
     public boolean isAttackable = false;
-
+    boolean initialSpot = false;
     int ticksTillNewPath = 0;
 
     class_61 pathToPoint = null;
@@ -66,13 +62,13 @@ public class EntityNPC extends EntityLivingScript {
             float delta;
             double d4 = this.entityToTrack.x - this.x;
             double d5 = this.entityToTrack.z - this.z;
-            float desiredYaw = (float) (Math.atan2((double) d5, (double) d4) * 180.0 / 3.1415927410125732) - 90.0f;
+            float desiredYaw = (float) (Math.atan2(d5, d4) * 180.0 / 3.1415927410125732) - 90.0f;
             for (delta = desiredYaw - this.yaw; delta < -180.0f; delta += 360.0f) {
             }
             while (delta > 180.0f) {
                 delta -= 360.0f;
             }
-            delta = Math.max((float) Math.min((float) delta, (float) 10.0f), (float) -10.0f);
+            delta = Math.max(Math.min(delta, 10.0f), -10.0f);
             this.yaw += delta;
         }
     }
@@ -148,8 +144,8 @@ public class EntityNPC extends EntityLivingScript {
     @Override
     public boolean interact(Player entityplayer) {
         if (super.interact(entityplayer)) {
-            if (this.chatMsg != null && !this.chatMsg.equals((Object) "")) {
-                Minecraft.minecraftInstance.overlay.addChatMessage(String.format((String) "<%s> %s", (Object[]) new Object[] { this.npcName, this.chatMsg }));
+            if (this.chatMsg != null && !this.chatMsg.equals("")) {
+                Minecraft.minecraftInstance.overlay.addChatMessage(String.format("<%s> %s", new Object[]{this.npcName, this.chatMsg}));
             }
             return true;
         }

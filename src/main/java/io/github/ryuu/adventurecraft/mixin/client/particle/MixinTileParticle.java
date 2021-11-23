@@ -1,7 +1,9 @@
 package io.github.ryuu.adventurecraft.mixin.client.particle;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.level.Level;
+import net.minecraft.tile.Tile;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -10,7 +12,7 @@ import org.spongepowered.asm.mixin.Shadow;
 public class MixinTileParticle extends Particle {
 
     @Shadow()
-    private Tile field_2383;
+    private final Tile field_2383;
 
     public MixinTileParticle(Level world, double d, double d1, double d2, double d3, double d4, double d5, Tile block, int i, int j) {
         super(world, d, d1, d2, d3, d4, d5);

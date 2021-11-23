@@ -1,11 +1,18 @@
 package io.github.ryuu.adventurecraft.mixin.tile;
 
-import java.util.Random;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
+import net.minecraft.tile.Tile;
+import net.minecraft.tile.material.Material;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.maths.Box;
+import net.minecraft.util.maths.Vec3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
+
+import java.util.Random;
 
 @Mixin(DoorTile.class)
 public class MixinDoorTile extends Tile {
@@ -19,6 +26,14 @@ public class MixinDoorTile extends Tile {
         float f = 0.5f;
         float f1 = 1.0f;
         this.setBoundingBox(0.5f - f, 0.0f, 0.5f - f, 0.5f + f, f1, 0.5f + f);
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static boolean method_840(int i) {
+        return (i & 4) != 0;
     }
 
     /**
@@ -306,13 +321,5 @@ public class MixinDoorTile extends Tile {
             return false;
         }
         return level.canSuffocate(x, y - 1, z) && super.canPlaceAt(level, x, y, z) && super.canPlaceAt(level, x, y + 1, z);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public static boolean method_840(int i) {
-        return (i & 4) != 0;
     }
 }

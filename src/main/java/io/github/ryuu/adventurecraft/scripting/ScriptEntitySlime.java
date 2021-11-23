@@ -1,7 +1,6 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.entity.monster.Slime;
 
 public class ScriptEntitySlime extends ScriptEntityLiving {
 
@@ -12,19 +11,19 @@ public class ScriptEntitySlime extends ScriptEntityLiving {
         this.entitySlime = e;
     }
 
-    public void setAttackStrength(int i) {
-        this.entitySlime.attackStrength = i;
-    }
-
     public int getAttackStrength() {
         return this.entitySlime.attackStrength;
     }
 
-    public void setSlimeSize(int i) {
-        this.entitySlime.setSize(i);
+    public void setAttackStrength(int i) {
+        this.entitySlime.attackStrength = i;
     }
 
     public int getSlimeSize() {
         return this.entitySlime.getSize();
+    }
+
+    public void setSlimeSize(int i) {
+        this.entitySlime.setSize(i);
     }
 }

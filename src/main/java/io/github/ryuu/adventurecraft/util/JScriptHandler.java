@@ -1,23 +1,17 @@
 package io.github.ryuu.adventurecraft.util;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
-import java.util.HashMap;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.client.Minecraft;
+import net.minecraft.level.Level;
 import org.mozilla.javascript.Scriptable;
+
+import java.io.*;
+import java.util.HashMap;
 
 public class JScriptHandler {
 
-    Level world;
-
-    File scriptDir;
-
     public HashMap<String, JScriptInfo> scripts;
+    Level world;
+    File scriptDir;
 
     JScriptHandler(Level w, File mapDir) {
         this.world = w;
@@ -31,9 +25,8 @@ public class JScriptHandler {
         if (this.scriptDir.exists()) {
             for (File f : this.scriptDir.listFiles()) {
                 String fileName = f.getName().toLowerCase();
-                if (!fileName.endsWith(".js"))
-                    continue;
-                System.out.printf("Compiling %s\n", new Object[] { fileName });
+                if (!fileName.endsWith(".js")) continue;
+                System.out.printf("Compiling %s\n", fileName);
                 String script = this.readFile(f);
                 this.scripts.put((Object) fileName, (Object) new JScriptInfo(f.getName(), this.world.script.compileString(script, f.getName())));
             }
@@ -45,7 +38,7 @@ public class JScriptHandler {
     }
 
     public Object runScript(String fileName, Scriptable scope, boolean verbose) {
-        JScriptInfo scriptInfo = (JScriptInfo) this.scripts.get((Object) fileName.toLowerCase());
+        JScriptInfo scriptInfo = this.scripts.get(fileName.toLowerCase());
         if (scriptInfo != null) {
             fileName = fileName.toLowerCase();
             long startTime = System.nanoTime();
@@ -57,14 +50,14 @@ public class JScriptHandler {
             }
         }
         if (verbose) {
-            Minecraft.minecraftInstance.overlay.addChatMessage(String.format((String) "Missing '%s'", (Object[]) new Object[] { fileName }));
+            Minecraft.minecraftInstance.overlay.addChatMessage(String.format("Missing '%s'", new Object[]{fileName}));
         }
         return null;
     }
 
     private String readFile(File f) {
         try {
-            BufferedReader reader = new BufferedReader((Reader) new FileReader(f));
+            BufferedReader reader = new BufferedReader(new FileReader(f));
             String buffer = "";
             try {
                 while (reader.ready()) {

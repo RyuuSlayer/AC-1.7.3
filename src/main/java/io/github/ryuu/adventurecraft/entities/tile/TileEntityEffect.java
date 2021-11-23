@@ -1,72 +1,43 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
+import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.util.io.CompoundTag;
+
 import java.util.Random;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 
 public class TileEntityEffect extends TileEntity {
 
+    private static final Random rand = new Random();
     public boolean checkTrigger = true;
-
     public String particleType = "heart";
-
     public int particlesPerSpawn = 1;
-
     public int ticksBetweenParticles = 1;
-
     public boolean isActivated = false;
-
     public int ticksBeforeParticle = 0;
-
     public float offsetX = 0.0f;
-
     public float offsetY = 0.0f;
-
     public float offsetZ = 0.0f;
-
     public float randX = 0.0f;
-
     public float randY = 0.0f;
-
     public float randZ = 0.0f;
-
     public float floatArg1 = 0.0f;
-
     public float floatArg2 = 0.0f;
-
     public float floatArg3 = 0.0f;
-
     public float floatRand1 = 0.0f;
-
     public float floatRand2 = 0.0f;
-
     public float floatRand3 = 0.0f;
-
     public int changeFogColor;
-
     public float fogR;
-
     public float fogG;
-
     public float fogB;
-
     public int changeFogDensity;
-
     public float fogStart;
-
     public float fogEnd;
-
     public boolean setOverlay = false;
-
     public String overlay = "";
-
     public boolean revertTextures = false;
-
     public boolean replaceTextures = false;
-
     public String textureReplacement = "";
-
-    private static Random rand = new Random();
 
     @Override
     public void readIdentifyingData(CompoundTag tag) {
@@ -104,7 +75,7 @@ public class TileEntityEffect extends TileEntity {
     @Override
     public void writeIdentifyingData(CompoundTag tag) {
         super.writeIdentifyingData(tag);
-        if (!this.particleType.equals((Object) "")) {
+        if (!this.particleType.equals("")) {
             tag.put("particleType", this.particleType);
         }
         tag.put("particlesPerSpawn", this.particlesPerSpawn);

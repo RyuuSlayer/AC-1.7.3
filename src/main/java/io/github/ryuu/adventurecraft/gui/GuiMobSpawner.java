@@ -1,37 +1,76 @@
 package io.github.ryuu.adventurecraft.gui;
 
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityMobSpawner;
+import io.github.ryuu.adventurecraft.items.Items;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
+import net.minecraft.client.gui.widgets.Button;
+import net.minecraft.item.ItemType;
+import net.minecraft.script.EntityDescriptions;
+
 import java.io.File;
 import java.util.ArrayList;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import io.github.ryuu.adventurecraft.scripting.EntityDescriptions;
-import io.github.ryuu.adventurecraft.items.Items;
-import io.github.ryuu.adventurecraft.entities.tile.TileEntityMobSpawner;
 
 public class GuiMobSpawner extends Screen {
 
-    private TileEntityMobSpawner mobSpawner;
+    private static final ArrayList<String> entityTypes = new ArrayList();
 
-    private static ArrayList<String> entityTypes = new ArrayList();
+    static {
+        entityTypes.add("Bat");
+        entityTypes.add("Boat");
+        entityTypes.add("Chicken");
+        entityTypes.add("Cow");
+        entityTypes.add("Creeper");
+        entityTypes.add("Falling Block");
+        entityTypes.add("Ghast");
+        entityTypes.add("Giant");
+        entityTypes.add("Item");
+        entityTypes.add("Minecart");
+        entityTypes.add("Minecart Chest");
+        entityTypes.add("Minecart Furnace");
+        entityTypes.add("Pig Zombie");
+        entityTypes.add("Pig");
+        entityTypes.add("Primed Tnt");
+        entityTypes.add("Rat");
+        entityTypes.add("Sheep");
+        entityTypes.add("Skeleton");
+        entityTypes.add("Skeleton Boss");
+        entityTypes.add("Skeleton Rifle");
+        entityTypes.add("Skeleton Shotgun");
+        entityTypes.add("Skeleton Sword");
+        entityTypes.add("Slime");
+        entityTypes.add("Slime Size: 1");
+        entityTypes.add("Slime Size: 2");
+        entityTypes.add("Slime Size: 4");
+        entityTypes.add("Slime Size: 8");
+        entityTypes.add("Slime Size: 16");
+        entityTypes.add("Squid");
+        entityTypes.add("Spider");
+        entityTypes.add("Spider Skeleton");
+        entityTypes.add("Spider Skeleton Sword");
+        entityTypes.add("Wolf");
+        entityTypes.add("Wolf (Angry)");
+        entityTypes.add("Wolf (Tame)");
+        entityTypes.add("Zombie");
+        entityTypes.add("ZombiePistol");
+    }
 
-    private GuiSlider2 spawnCountSlider;
-
-    private GuiSlider2 respawnSlider;
-
-    private String newSliderString;
-
-    private int displayScreen;
-
+    private final TileEntityMobSpawner mobSpawner;
     Button setOnTrigger;
-
     Button setOnDetrigger;
-
     Button setOnUpdate;
-
     int selectedID;
+    private GuiSlider2 spawnCountSlider;
+    private GuiSlider2 respawnSlider;
+    private String newSliderString;
+    private int displayScreen;
 
     public GuiMobSpawner(TileEntityMobSpawner ms) {
         this.mobSpawner = ms;
+    }
+
+    public static void showUI(TileEntityMobSpawner ms) {
+        Minecraft.minecraftInstance.openScreen(new GuiMobSpawner(ms));
     }
 
     @Override
@@ -40,50 +79,52 @@ public class GuiMobSpawner extends Screen {
 
     @Override
     public void init() {
-        block15: {
+        block15:
+        {
             Button b;
-            block17: {
-                block16: {
-                    block14: {
+            block17:
+            {
+                block16:
+                {
+                    block14:
+                    {
                         this.buttons.clear();
-                        this.spawnCountSlider = new GuiSlider2(50, 4, 44, 10, String.format((String) "Spawn Count: %d", (Object[]) new Object[] { this.mobSpawner.spawnNumber }), (float) this.mobSpawner.spawnNumber / 15.0f);
-                        this.respawnSlider = new GuiSlider2(51, this.width / 2, 44, 10, String.format((String) "Respawn Delay: %.1f", (Object[]) new Object[] { Float.valueOf((float) ((float) this.mobSpawner.respawnDelay / 20.0f)) }), (float) this.mobSpawner.respawnDelay / 12000.0f);
+                        this.spawnCountSlider = new GuiSlider2(50, 4, 44, 10, String.format("Spawn Count: %d", this.mobSpawner.spawnNumber), (float) this.mobSpawner.spawnNumber / 15.0f);
+                        this.respawnSlider = new GuiSlider2(51, this.width / 2, 44, 10, String.format("Respawn Delay: %.1f", Float.valueOf((float) this.mobSpawner.respawnDelay / 20.0f)), (float) this.mobSpawner.respawnDelay / 12000.0f);
                         this.spawnCountSlider.width = 200;
                         this.respawnSlider.width = 200;
-                        this.buttons.add((Object) this.spawnCountSlider);
-                        this.buttons.add((Object) this.respawnSlider);
+                        this.buttons.add(this.spawnCountSlider);
+                        this.buttons.add(this.respawnSlider);
                         b = new Button(53, this.width / 2, 4, 200, 18, "Spawn On Trigger");
                         if (!this.mobSpawner.spawnOnTrigger) {
                             b.text = this.mobSpawner.spawnOnDetrigger ? "Spawn on Detrigger" : "Spawn on Timer";
                         }
-                        this.buttons.add((Object) b);
-                        b = new Button(55, this.width / 2, 24, 200, 18, String.format((String) "Spawn: (%d, %d, %d), (%d, %d, %d)", (Object[]) new Object[] { this.mobSpawner.minSpawnVec.x, this.mobSpawner.minSpawnVec.y, this.mobSpawner.minSpawnVec.z, this.mobSpawner.maxSpawnVec.x, this.mobSpawner.maxSpawnVec.y, this.mobSpawner.maxSpawnVec.z }));
-                        this.buttons.add((Object) b);
+                        this.buttons.add(b);
+                        b = new Button(55, this.width / 2, 24, 200, 18, String.format("Spawn: (%d, %d, %d), (%d, %d, %d)", this.mobSpawner.minSpawnVec.x, this.mobSpawner.minSpawnVec.y, this.mobSpawner.minSpawnVec.z, this.mobSpawner.maxSpawnVec.x, this.mobSpawner.maxSpawnVec.y, this.mobSpawner.maxSpawnVec.z));
+                        this.buttons.add(b);
                         int buttonWidth = (this.width - 16) / 4;
-                        this.buttons.add((Object) new Button(57, 4, 64, buttonWidth, 18, "Select Spawn"));
-                        this.buttons.add((Object) new Button(58, 4 + (4 + buttonWidth), 64, buttonWidth, 18, "Select Drops"));
-                        this.buttons.add((Object) new Button(59, 4 + 2 * (4 + buttonWidth), 64, buttonWidth, 18, "Select Triggers"));
-                        this.buttons.add((Object) new Button(60, 4 + 3 * (4 + buttonWidth), 64, buttonWidth, 18, "Select Scripts"));
-                        if (this.displayScreen != 0)
-                            break block14;
+                        this.buttons.add(new Button(57, 4, 64, buttonWidth, 18, "Select Spawn"));
+                        this.buttons.add(new Button(58, 4 + (4 + buttonWidth), 64, buttonWidth, 18, "Select Drops"));
+                        this.buttons.add(new Button(59, 4 + 2 * (4 + buttonWidth), 64, buttonWidth, 18, "Select Triggers"));
+                        this.buttons.add(new Button(60, 4 + 3 * (4 + buttonWidth), 64, buttonWidth, 18, "Select Scripts"));
+                        if (this.displayScreen != 0) break block14;
                         int i = 0;
                         String itemToSpawn = "Spawn Item/Block: None";
                         if (ItemType.byId[this.mobSpawner.spawnID] != null) {
-                            itemToSpawn = String.format((String) "Spawn Item/Block: %s", (Object[]) new Object[] { ItemType.byId[this.mobSpawner.spawnID].getTranslationKey() });
+                            itemToSpawn = String.format("Spawn Item/Block: %s", ItemType.byId[this.mobSpawner.spawnID].getTranslationKey());
                         }
-                        this.buttons.add((Object) new Button(56, 2, 84, 200, 14, itemToSpawn));
+                        this.buttons.add(new Button(56, 2, 84, 200, 14, itemToSpawn));
                         for (String entityID : entityTypes) {
-                            this.buttons.add((Object) new Button(i, 2 + (buttonWidth + 4) * (i % 4), (i / 4 + 1) * 14 + 84, buttonWidth, 13, entityID));
+                            this.buttons.add(new Button(i, 2 + (buttonWidth + 4) * (i % 4), (i / 4 + 1) * 14 + 84, buttonWidth, 13, entityID));
                             ++i;
                         }
                         for (String descName : EntityDescriptions.getDescriptions()) {
-                            this.buttons.add((Object) new Button(i, 2 + (buttonWidth + 4) * (i % 4), (i / 4 + 1) * 14 + 84, buttonWidth, 13, descName + " (Scripted)"));
+                            this.buttons.add(new Button(i, 2 + (buttonWidth + 4) * (i % 4), (i / 4 + 1) * 14 + 84, buttonWidth, 13, descName + " (Scripted)"));
                             ++i;
                         }
                         break block15;
                     }
-                    if (this.displayScreen != 1)
-                        break block16;
+                    if (this.displayScreen != 1) break block16;
                     b = new Button(52, 4, 84, 200, 18, "Drop Nothing");
                     if (this.mobSpawner.dropItem > 0) {
                         if (this.mobSpawner.dropItem == Items.doorKey.id) {
@@ -94,38 +135,36 @@ public class GuiMobSpawner extends Screen {
                             b.text = "Drop boss key";
                         }
                     }
-                    this.buttons.add((Object) b);
+                    this.buttons.add(b);
                     break block15;
                 }
-                if (this.displayScreen != 2)
-                    break block17;
+                if (this.displayScreen != 2) break block17;
                 for (int trigger = 0; trigger < 8; ++trigger) {
                     String isSet = ": Not Set";
                     if (this.mobSpawner.isTriggerSet(trigger)) {
                         isSet = ": Set";
                     }
-                    b = trigger < 4 ? new Button(70 + trigger, 4, 84 + trigger * 19, 200, 18, "Trigger ".concat(Integer.toString((int) trigger)).concat(isSet)) : new Button(70 + trigger, this.width / 2, 84 + (trigger - 4) * 19, 200, 18, "OnDeath Trigger ".concat(Integer.toString((int) trigger)).concat(isSet));
-                    this.buttons.add((Object) b);
+                    b = trigger < 4 ? new Button(70 + trigger, 4, 84 + trigger * 19, 200, 18, "Trigger ".concat(Integer.toString(trigger)).concat(isSet)) : new Button(70 + trigger, this.width / 2, 84 + (trigger - 4) * 19, 200, 18, "OnDeath Trigger ".concat(Integer.toString(trigger)).concat(isSet));
+                    this.buttons.add(b);
                 }
                 break block15;
             }
-            if (this.displayScreen != 3)
-                break block15;
+            if (this.displayScreen != 3) break block15;
             this.selectedID = 0;
             this.setOnTrigger = new Button(61, 4, 84, "OnSpawn (selected): " + this.mobSpawner.onTriggerScriptFile);
             this.setOnDetrigger = new Button(62, this.width / 2, 84, "OnDeath: " + this.mobSpawner.onDetriggerScriptFile);
             this.setOnUpdate = new Button(63, 4, 104, "OnUpdate: " + this.mobSpawner.onUpdateScriptFile);
-            this.buttons.add((Object) this.setOnTrigger);
-            this.buttons.add((Object) this.setOnDetrigger);
-            this.buttons.add((Object) this.setOnUpdate);
-            this.buttons.add((Object) new Button(64, this.width / 2, 104, 200, 20, "Reload Scripts"));
-            this.buttons.add((Object) new Button(65, 4, 124, (this.width - 12) / 3, 18, "None"));
+            this.buttons.add(this.setOnTrigger);
+            this.buttons.add(this.setOnDetrigger);
+            this.buttons.add(this.setOnUpdate);
+            this.buttons.add(new Button(64, this.width / 2, 104, 200, 20, "Reload Scripts"));
+            this.buttons.add(new Button(65, 4, 124, (this.width - 12) / 3, 18, "None"));
             String[] scripts = this.getScriptFiles();
             if (scripts != null) {
                 int i = 1;
                 for (String scriptFile : scripts) {
                     b = new Button(119 + i, 4 + i % 3 * (this.width - 8) / 3, 124 + i / 3 * 20, (this.width - 12) / 3, 18, scriptFile);
-                    this.buttons.add((Object) b);
+                    this.buttons.add(b);
                     ++i;
                 }
             }
@@ -164,7 +203,7 @@ public class GuiMobSpawner extends Screen {
             }
         } else if (button.id == 55) {
             this.mobSpawner.setSpawnVec();
-            button.text = String.format((String) "Spawn: (%d, %d, %d), (%d, %d, %d)", (Object[]) new Object[] { this.mobSpawner.minSpawnVec.x, this.mobSpawner.minSpawnVec.y, this.mobSpawner.minSpawnVec.z, this.mobSpawner.maxSpawnVec.x, this.mobSpawner.maxSpawnVec.y, this.mobSpawner.maxSpawnVec.z });
+            button.text = String.format("Spawn: (%d, %d, %d), (%d, %d, %d)", this.mobSpawner.minSpawnVec.x, this.mobSpawner.minSpawnVec.y, this.mobSpawner.minSpawnVec.z, this.mobSpawner.maxSpawnVec.x, this.mobSpawner.maxSpawnVec.y, this.mobSpawner.maxSpawnVec.z);
         } else if (button.id == 56) {
             if (this.minecraft.player.inventory.getHeldItem() != null) {
                 this.mobSpawner.spawnID = this.minecraft.player.inventory.getHeldItem().itemId;
@@ -175,7 +214,7 @@ public class GuiMobSpawner extends Screen {
             }
             String itemToSpawn = "Spawn Item/Block: None";
             if (ItemType.byId[this.mobSpawner.spawnID] != null) {
-                itemToSpawn = String.format((String) "Spawn Item/Block: %s", (Object[]) new Object[] { ItemType.byId[this.mobSpawner.spawnID].getTranslationKey() });
+                itemToSpawn = String.format("Spawn Item/Block: %s", ItemType.byId[this.mobSpawner.spawnID].getTranslationKey());
             }
             button.text = itemToSpawn;
         } else if (button.id >= 57 && button.id <= 60) {
@@ -198,10 +237,10 @@ public class GuiMobSpawner extends Screen {
             if (this.mobSpawner.isTriggerSet(i)) {
                 this.mobSpawner.setCursor(i);
                 this.mobSpawner.clearTrigger(i);
-                button.text = "Trigger ".concat(Integer.toString((int) i)).concat(": Not Set");
+                button.text = "Trigger ".concat(Integer.toString(i)).concat(": Not Set");
             } else {
                 this.mobSpawner.setTrigger(i);
-                button.text = "Trigger ".concat(Integer.toString((int) i)).concat(": Set");
+                button.text = "Trigger ".concat(Integer.toString(i)).concat(": Set");
             }
         }
     }
@@ -209,24 +248,20 @@ public class GuiMobSpawner extends Screen {
     @Override
     public void render(int mouseX, int mouseY, float delta) {
         this.fill(0, 0, this.width, this.height, Integer.MIN_VALUE);
-        this.drawTextWithShadow(this.textManager, String.format((String) "Entity Spawn: %s", (Object[]) new Object[] { this.mobSpawner.entityID }), 4, 4, 0xE0E0E0);
-        this.drawTextWithShadow(this.textManager, String.format((String) "Entities Alive: %d", (Object[]) new Object[] { this.mobSpawner.getNumAlive() }), 4, 14, 0xE0E0E0);
-        this.drawTextWithShadow(this.textManager, String.format((String) "Respawn In: %.1fs", (Object[]) new Object[] { Float.valueOf((float) ((float) this.mobSpawner.delay / 20.0f)) }), 4, 24, 0xE0E0E0);
+        this.drawTextWithShadow(this.textManager, String.format("Entity Spawn: %s", this.mobSpawner.entityID), 4, 4, 0xE0E0E0);
+        this.drawTextWithShadow(this.textManager, String.format("Entities Alive: %d", this.mobSpawner.getNumAlive()), 4, 14, 0xE0E0E0);
+        this.drawTextWithShadow(this.textManager, String.format("Respawn In: %.1fs", Float.valueOf((float) this.mobSpawner.delay / 20.0f)), 4, 24, 0xE0E0E0);
         if (this.mobSpawner.hasDroppedItem) {
             this.drawTextWithShadow(this.textManager, "Has Dropped An Item", 4, 34, 0xE0E0E0);
         } else {
             this.drawTextWithShadow(this.textManager, "Has Not Dropped An Item", 4, 34, 0xE0E0E0);
         }
         this.mobSpawner.spawnNumber = (int) (this.spawnCountSlider.sliderValue * 15.0f + 0.5f);
-        this.spawnCountSlider.text = String.format((String) "Spawn Count: %d", (Object[]) new Object[] { this.mobSpawner.spawnNumber });
+        this.spawnCountSlider.text = String.format("Spawn Count: %d", this.mobSpawner.spawnNumber);
         this.mobSpawner.respawnDelay = (int) (this.respawnSlider.sliderValue * 12000.0f + 0.5f);
-        this.respawnSlider.text = String.format((String) "Respawn Delay: %.1fs", (Object[]) new Object[] { Float.valueOf((float) ((float) this.mobSpawner.respawnDelay / 20.0f)) });
+        this.respawnSlider.text = String.format("Respawn Delay: %.1fs", Float.valueOf((float) this.mobSpawner.respawnDelay / 20.0f));
         super.render(mouseX, mouseY, delta);
         this.mobSpawner.level.getChunk(this.mobSpawner.x, this.mobSpawner.z).method_885();
-    }
-
-    public static void showUI(TileEntityMobSpawner ms) {
-        Minecraft.minecraftInstance.openScreen(new GuiMobSpawner(ms));
     }
 
     @Override
@@ -269,45 +304,5 @@ public class GuiMobSpawner extends Screen {
             return fileNames;
         }
         return null;
-    }
-
-    static {
-        entityTypes.add((Object) "Bat");
-        entityTypes.add((Object) "Boat");
-        entityTypes.add((Object) "Chicken");
-        entityTypes.add((Object) "Cow");
-        entityTypes.add((Object) "Creeper");
-        entityTypes.add((Object) "Falling Block");
-        entityTypes.add((Object) "Ghast");
-        entityTypes.add((Object) "Giant");
-        entityTypes.add((Object) "Item");
-        entityTypes.add((Object) "Minecart");
-        entityTypes.add((Object) "Minecart Chest");
-        entityTypes.add((Object) "Minecart Furnace");
-        entityTypes.add((Object) "Pig Zombie");
-        entityTypes.add((Object) "Pig");
-        entityTypes.add((Object) "Primed Tnt");
-        entityTypes.add((Object) "Rat");
-        entityTypes.add((Object) "Sheep");
-        entityTypes.add((Object) "Skeleton");
-        entityTypes.add((Object) "Skeleton Boss");
-        entityTypes.add((Object) "Skeleton Rifle");
-        entityTypes.add((Object) "Skeleton Shotgun");
-        entityTypes.add((Object) "Skeleton Sword");
-        entityTypes.add((Object) "Slime");
-        entityTypes.add((Object) "Slime Size: 1");
-        entityTypes.add((Object) "Slime Size: 2");
-        entityTypes.add((Object) "Slime Size: 4");
-        entityTypes.add((Object) "Slime Size: 8");
-        entityTypes.add((Object) "Slime Size: 16");
-        entityTypes.add((Object) "Squid");
-        entityTypes.add((Object) "Spider");
-        entityTypes.add((Object) "Spider Skeleton");
-        entityTypes.add((Object) "Spider Skeleton Sword");
-        entityTypes.add((Object) "Wolf");
-        entityTypes.add((Object) "Wolf (Angry)");
-        entityTypes.add((Object) "Wolf (Tame)");
-        entityTypes.add((Object) "Zombie");
-        entityTypes.add((Object) "ZombiePistol");
     }
 }

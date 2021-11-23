@@ -1,7 +1,5 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import org.mozilla.javascript.Scriptable;
 
 class ScriptContinuation {

@@ -1,7 +1,7 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.util.io.CompoundTag;
 
 public class TileEntityMusic extends TileEntity {
 
@@ -22,7 +22,7 @@ public class TileEntityMusic extends TileEntity {
     @Override
     public void writeIdentifyingData(CompoundTag tag) {
         super.writeIdentifyingData(tag);
-        if (this.musicName != null && !this.musicName.equals((Object) "")) {
+        if (this.musicName != null && !this.musicName.equals("")) {
             tag.put("musicName", this.musicName);
         }
         tag.put("fadeOut", this.fadeOut);

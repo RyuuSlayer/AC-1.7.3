@@ -1,7 +1,7 @@
 package io.github.ryuu.adventurecraft.blocks;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.level.Level;
+import net.minecraft.tile.LadderTile;
 
 public class BlockLadderSubtypes extends LadderTile implements IBlockColor {
 
@@ -36,7 +36,7 @@ public class BlockLadderSubtypes extends LadderTile implements IBlockColor {
         if ((side == 0 || facing == 5) && level.isFullOpaque(x - 1, y, z)) {
             side = 5;
         }
-        level.setTileMeta(x, y, z, meta += Math.max((int) (side - 2), (int) 0) % 4);
+        level.setTileMeta(x, y, z, meta += Math.max(side - 2, 0) % 4);
     }
 
     @Override

@@ -1,41 +1,35 @@
 package io.github.ryuu.adventurecraft.mixin.level.chunk;
 
-import java.io.IOException;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.client.Minecraft;
+import net.minecraft.level.Level;
+import net.minecraft.level.chunk.Chunk;
+import net.minecraft.level.chunk.ChunkIO;
+import net.minecraft.level.chunk.DummyChunk;
+import net.minecraft.level.source.LevelSource;
+import net.minecraft.util.ProgressListener;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+
+import java.io.IOException;
 
 @Mixin(ClientChunkCache.class)
 public class MixinClientChunkCache implements LevelSource {
 
     @Shadow()
-    private Chunk nullChunk;
-
-    private LevelSource chunkGenerator;
-
-    private ChunkIO io;
-
-    private Chunk[] cache;
-
-    private Level level;
-
+    private final Chunk nullChunk;
+    private final LevelSource chunkGenerator;
+    private final ChunkIO io;
+    private final Level level;
     int cachedX;
-
     int cachedZ;
-
-    private Chunk cachedChunk;
-
-    private int spawnX;
-
-    private int spawnZ;
-
     boolean isVeryFar;
-
     int mask;
-
     int chunksWide;
+    private Chunk[] cache;
+    private Chunk cachedChunk;
+    private int spawnX;
+    private int spawnZ;
 
     public MixinClientChunkCache(Level world, ChunkIO ichunkloader, LevelSource ichunkprovider) {
         this.isVeryFar = Minecraft.minecraftInstance.options.viewDistance != 0;
@@ -75,8 +69,7 @@ public class MixinClientChunkCache implements LevelSource {
             if (oldChunks != null) {
                 for (int i = 0; i < oldChunks.length; ++i) {
                     Chunk c = oldChunks[i];
-                    if (c == null || !this.isSpawnChunk(c.x, c.z))
-                        continue;
+                    if (c == null || !this.isSpawnChunk(c.x, c.z)) continue;
                     int k = c.x & this.mask;
                     int l = c.z & this.mask;
                     int i1 = k + l * this.chunksWide;
@@ -168,13 +161,13 @@ public class MixinClientChunkCache implements LevelSource {
             if (!this.cache[i1].decorated && this.isChunkLoaded(x + 1, z + 1) && this.isChunkLoaded(x, z + 1) && this.isChunkLoaded(x + 1, z)) {
                 this.decorate(this, x, z);
             }
-            if (this.isChunkLoaded(x - 1, z) && !this.getChunk((int) (x - 1), (int) z).decorated && this.isChunkLoaded(x - 1, z + 1) && this.isChunkLoaded(x, z + 1) && this.isChunkLoaded(x - 1, z)) {
+            if (this.isChunkLoaded(x - 1, z) && !this.getChunk(x - 1, z).decorated && this.isChunkLoaded(x - 1, z + 1) && this.isChunkLoaded(x, z + 1) && this.isChunkLoaded(x - 1, z)) {
                 this.decorate(this, x - 1, z);
             }
-            if (this.isChunkLoaded(x, z - 1) && !this.getChunk((int) x, (int) (z - 1)).decorated && this.isChunkLoaded(x + 1, z - 1) && this.isChunkLoaded(x, z - 1) && this.isChunkLoaded(x + 1, z)) {
+            if (this.isChunkLoaded(x, z - 1) && !this.getChunk(x, z - 1).decorated && this.isChunkLoaded(x + 1, z - 1) && this.isChunkLoaded(x, z - 1) && this.isChunkLoaded(x + 1, z)) {
                 this.decorate(this, x, z - 1);
             }
-            if (this.isChunkLoaded(x - 1, z - 1) && !this.getChunk((int) (x - 1), (int) (z - 1)).decorated && this.isChunkLoaded(x - 1, z - 1) && this.isChunkLoaded(x, z - 1) && this.isChunkLoaded(x - 1, z)) {
+            if (this.isChunkLoaded(x - 1, z - 1) && !this.getChunk(x - 1, z - 1).decorated && this.isChunkLoaded(x - 1, z - 1) && this.isChunkLoaded(x, z - 1) && this.isChunkLoaded(x - 1, z)) {
                 this.decorate(this, x - 1, z - 1);
             }
         }
@@ -248,27 +241,23 @@ public class MixinClientChunkCache implements LevelSource {
         int j = 0;
         if (listener != null) {
             for (int k = 0; k < this.cache.length; ++k) {
-                if (this.cache[k] == null || !this.cache[k].method_871(flag))
-                    continue;
+                if (this.cache[k] == null || !this.cache[k].method_871(flag)) continue;
                 ++j;
             }
         }
         int l = 0;
         for (int i1 = 0; i1 < this.cache.length; ++i1) {
-            if (this.cache[i1] == null)
-                continue;
+            if (this.cache[i1] == null) continue;
             if (flag && !this.cache[i1].field_968) {
                 this.method_1240(this.cache[i1]);
             }
-            if (!this.cache[i1].method_871(flag))
-                continue;
+            if (!this.cache[i1].method_871(flag)) continue;
             this.method_1241(this.cache[i1]);
             this.cache[i1].shouldSave = false;
             if (++i == 2 && !flag) {
                 return false;
             }
-            if (listener == null || ++l % 10 != 0)
-                continue;
+            if (listener == null || ++l % 10 != 0) continue;
             listener.progressStagePercentage(l * 100 / j);
         }
         if (flag) {

@@ -1,23 +1,23 @@
 package io.github.ryuu.adventurecraft.mixin.util.io;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.src.NBTBase;
+import net.minecraft.util.io.*;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 @Mixin(CompoundTag.class)
 public class MixinCompoundTag extends AbstractTag {
 
     @Shadow()
-    private Map<String, NBTBase> data = new HashMap();
+    private final Map<String, NBTBase> data = new HashMap();
 
     /**
      * @author Ryuu, TechPizza, Phil
@@ -149,7 +149,7 @@ public class MixinCompoundTag extends AbstractTag {
      */
     @Overwrite()
     public boolean containsKey(String key) {
-        return this.data.containsKey((Object) key);
+        return this.data.containsKey(key);
     }
 
     /**
@@ -157,10 +157,10 @@ public class MixinCompoundTag extends AbstractTag {
      */
     @Overwrite()
     public byte getByte(String key) {
-        if (!this.data.containsKey((Object) key)) {
+        if (!this.data.containsKey(key)) {
             return 0;
         }
-        return ((ByteTag) this.data.get((Object) key)).data;
+        return ((ByteTag) this.data.get(key)).data;
     }
 
     /**
@@ -168,11 +168,11 @@ public class MixinCompoundTag extends AbstractTag {
      */
     @Overwrite()
     public short getShort(String key) {
-        if (!this.data.containsKey((Object) key)) {
+        if (!this.data.containsKey(key)) {
             return 0;
         }
         try {
-            return ((ShortTag) this.data.get((Object) key)).data;
+            return ((ShortTag) this.data.get(key)).data;
         } catch (ClassCastException e) {
             return this.getByte(key);
         }
@@ -183,11 +183,11 @@ public class MixinCompoundTag extends AbstractTag {
      */
     @Overwrite()
     public int getInt(String key) {
-        if (!this.data.containsKey((Object) key)) {
+        if (!this.data.containsKey(key)) {
             return 0;
         }
         try {
-            return ((IntTag) this.data.get((Object) key)).data;
+            return ((IntTag) this.data.get(key)).data;
         } catch (ClassCastException e) {
             return this.getShort(key);
         }
@@ -198,11 +198,11 @@ public class MixinCompoundTag extends AbstractTag {
      */
     @Overwrite()
     public long getLong(String key) {
-        if (!this.data.containsKey((Object) key)) {
+        if (!this.data.containsKey(key)) {
             return 0L;
         }
         try {
-            return ((LongTag) this.data.get((Object) key)).data;
+            return ((LongTag) this.data.get(key)).data;
         } catch (ClassCastException e) {
             return this.getInt(key);
         }
@@ -213,10 +213,10 @@ public class MixinCompoundTag extends AbstractTag {
      */
     @Overwrite()
     public float getFloat(String key) {
-        if (!this.data.containsKey((Object) key)) {
+        if (!this.data.containsKey(key)) {
             return 0.0f;
         }
-        return ((FloatTag) this.data.get((Object) key)).data;
+        return ((FloatTag) this.data.get(key)).data;
     }
 
     /**
@@ -224,10 +224,10 @@ public class MixinCompoundTag extends AbstractTag {
      */
     @Overwrite()
     public double getDouble(String key) {
-        if (!this.data.containsKey((Object) key)) {
+        if (!this.data.containsKey(key)) {
             return 0.0;
         }
-        return ((DoubleTag) this.data.get((Object) key)).data;
+        return ((DoubleTag) this.data.get(key)).data;
     }
 
     /**
@@ -235,10 +235,10 @@ public class MixinCompoundTag extends AbstractTag {
      */
     @Overwrite()
     public String getString(String key) {
-        if (!this.data.containsKey((Object) key)) {
+        if (!this.data.containsKey(key)) {
             return "";
         }
-        return ((StringTag) this.data.get((Object) key)).data;
+        return ((StringTag) this.data.get(key)).data;
     }
 
     /**
@@ -246,10 +246,10 @@ public class MixinCompoundTag extends AbstractTag {
      */
     @Overwrite()
     public byte[] getByteArray(String key) {
-        if (!this.data.containsKey((Object) key)) {
+        if (!this.data.containsKey(key)) {
             return new byte[0];
         }
-        return ((ByteArrayTag) this.data.get((Object) key)).data;
+        return ((ByteArrayTag) this.data.get(key)).data;
     }
 
     /**
@@ -257,10 +257,10 @@ public class MixinCompoundTag extends AbstractTag {
      */
     @Overwrite()
     public CompoundTag getCompoundTag(String key) {
-        if (!this.data.containsKey((Object) key)) {
+        if (!this.data.containsKey(key)) {
             return new CompoundTag();
         }
-        return (CompoundTag) this.data.get((Object) key);
+        return (CompoundTag) this.data.get(key);
     }
 
     /**
@@ -268,10 +268,10 @@ public class MixinCompoundTag extends AbstractTag {
      */
     @Overwrite()
     public ListTag getListTag(String key) {
-        if (!this.data.containsKey((Object) key)) {
+        if (!this.data.containsKey(key)) {
             return new ListTag();
         }
-        return (ListTag) this.data.get((Object) key);
+        return (ListTag) this.data.get(key);
     }
 
     /**

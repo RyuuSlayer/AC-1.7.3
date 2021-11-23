@@ -1,13 +1,21 @@
 package io.github.ryuu.adventurecraft.blocks;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
+import net.minecraft.tile.Tile;
+import net.minecraft.util.maths.Box;
+import net.minecraft.util.maths.MathsHelper;
+import net.minecraft.util.maths.Vec3f;
+
 import java.util.ArrayList;
 import java.util.Random;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 
 public class BlockStairMulti extends Tile implements IBlockColor {
 
-    private Tile modelBlock;
+    private final Tile modelBlock;
 
     protected BlockStairMulti(int i, Tile block, int textureID) {
         super(i, textureID, block.material);

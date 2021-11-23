@@ -1,153 +1,97 @@
 package io.github.ryuu.adventurecraft.mixin.client.render;
 
-import java.util.Random;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import io.github.ryuu.adventurecraft.blocks.BlockOverlay;
+import io.github.ryuu.adventurecraft.blocks.Blocks;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityTree;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
+import net.minecraft.sortme.MagicBedNumbers;
+import net.minecraft.tile.*;
+import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.tile.material.Material;
+import net.minecraft.util.maths.MathsHelper;
+import net.minecraft.util.maths.Vec3f;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import io.github.ryuu.adventurecraft.blocks.Blocks;
-import io.github.ryuu.adventurecraft.entities.tile.TileEntityTree;
-import io.github.ryuu.adventurecraft.blocks.BlockOverlay;
+
+import java.util.Random;
 
 @Mixin(TileRenderer.class)
 public class MixinTileRenderer {
 
+    public static boolean field_67 = true;
+    private final int field_55 = 1;
+    private final Random rand;
+    private final int curTextureNum = -1;
     @Shadow()
     public TileView field_82;
-
-    private int field_83 = -1;
-
-    private boolean field_84 = false;
-
-    private boolean field_85 = false;
-
-    public static boolean field_67 = true;
-
     public boolean field_81 = true;
-
+    private int field_83 = -1;
+    private boolean field_84 = false;
+    private boolean field_85 = false;
     private int field_86 = 0;
-
     private int field_87 = 0;
-
     private int field_88 = 0;
-
     private int field_89 = 0;
-
     private int field_90 = 0;
-
     private int field_91 = 0;
-
     private boolean field_92;
-
     private float field_93;
-
     private float field_94;
-
     private float field_95;
-
     private float field_96;
-
     private float field_97;
-
     private float field_98;
-
     private float field_99;
-
     private float field_100;
-
     private float field_101;
-
     private float field_102;
-
     private float field_103;
-
     private float field_104;
-
     private float field_105;
-
     private float field_41;
-
     private float field_42;
-
     private float field_43;
-
     private float field_44;
-
     private float field_45;
-
     private float field_46;
-
     private float field_47;
-
     private float field_48;
-
     private float field_49;
-
     private float field_50;
-
     private float field_51;
-
     private float field_52;
-
     private float field_53;
-
     private float field_54;
-
-    private int field_55 = 1;
-
     private float field_56;
-
     private float field_57;
-
     private float field_58;
-
     private float field_59;
-
     private float field_60;
-
     private float field_61;
-
     private float field_62;
-
     private float field_63;
-
     private float field_64;
-
     private float field_65;
-
     private float field_66;
-
     private float field_68;
-
     private boolean field_69;
-
     private boolean field_70;
-
     private boolean field_71;
-
     private boolean field_72;
-
     private boolean field_73;
-
     private boolean field_74;
-
     private boolean field_75;
-
     private boolean field_76;
-
     private boolean field_77;
-
     private boolean field_78;
-
     private boolean field_79;
-
     private boolean field_80;
-
-    private Random rand;
-
-    private int curTextureNum = -1;
 
     public MixinTileRenderer(TileView iblockaccess) {
         this.field_82 = iblockaccess;
@@ -156,6 +100,26 @@ public class MixinTileRenderer {
 
     public MixinTileRenderer() {
         this.rand = new Random();
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static boolean method_42(int i) {
+        if (i == 0) {
+            return true;
+        }
+        if (i == 13) {
+            return true;
+        }
+        if (i == 10) {
+            return true;
+        }
+        if (i == 11) {
+            return true;
+        }
+        return i == 16;
     }
 
     /**
@@ -379,21 +343,18 @@ public class MixinTileRenderer {
             f17 = MagicBedNumbers.field_792[MagicBedNumbers.field_793[i1]];
         }
         j1 = 4;
-        switch(i1) {
-            case 0:
-                {
-                    j1 = 5;
-                    break;
-                }
-            case 3:
-                {
-                    j1 = 2;
-                    break;
-                }
-            case 1:
-                {
-                    j1 = 3;
-                }
+        switch (i1) {
+            case 0: {
+                j1 = 5;
+                break;
+            }
+            case 3: {
+                j1 = 2;
+                break;
+            }
+            case 1: {
+                j1 = 3;
+            }
         }
         if (f17 != 2 && (this.field_85 || block.method_1618(this.field_82, i, j, k - 1, 2))) {
             float f18 = block.method_1604(this.field_82, i, j, k - 1);
@@ -484,30 +445,26 @@ public class MixinTileRenderer {
         double d2 = 0.0;
         double d3 = 0.0;
         double d4 = 0.0;
-        switch(i1) {
-            case 0:
-                {
-                    d4 = -0.3125;
-                    d2 = RedstoneRepeaterTile.field_2123[j1];
-                    break;
-                }
-            case 2:
-                {
-                    d4 = 0.3125;
-                    d2 = -RedstoneRepeaterTile.field_2123[j1];
-                    break;
-                }
-            case 3:
-                {
-                    d3 = -0.3125;
-                    d1 = RedstoneRepeaterTile.field_2123[j1];
-                    break;
-                }
-            case 1:
-                {
-                    d3 = 0.3125;
-                    d1 = -RedstoneRepeaterTile.field_2123[j1];
-                }
+        switch (i1) {
+            case 0: {
+                d4 = -0.3125;
+                d2 = RedstoneRepeaterTile.field_2123[j1];
+                break;
+            }
+            case 2: {
+                d4 = 0.3125;
+                d2 = -RedstoneRepeaterTile.field_2123[j1];
+                break;
+            }
+            case 3: {
+                d3 = -0.3125;
+                d1 = RedstoneRepeaterTile.field_2123[j1];
+                break;
+            }
+            case 1: {
+                d3 = 0.3125;
+                d1 = -RedstoneRepeaterTile.field_2123[j1];
+            }
         }
         this.method_45(block, (double) i + d1, (double) j + d, (double) k + d2, 0.0, 0.0);
         this.method_45(block, (double) i + d3, (double) j + d, (double) k + d4, 0.0, 0.0);
@@ -570,54 +527,48 @@ public class MixinTileRenderer {
         boolean flag1 = flag || (l & 8) != 0;
         int i1 = PistonTile.method_760(l);
         if (flag1) {
-            switch(i1) {
-                case 0:
-                    {
-                        this.field_86 = 3;
-                        this.field_87 = 3;
-                        this.field_88 = 3;
-                        this.field_89 = 3;
-                        block.setBoundingBox(0.0f, 0.25f, 0.0f, 1.0f, 1.0f, 1.0f);
-                        break;
-                    }
-                case 1:
-                    {
-                        block.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 0.75f, 1.0f);
-                        break;
-                    }
-                case 2:
-                    {
-                        this.field_88 = 1;
-                        this.field_89 = 2;
-                        block.setBoundingBox(0.0f, 0.0f, 0.25f, 1.0f, 1.0f, 1.0f);
-                        break;
-                    }
-                case 3:
-                    {
-                        this.field_88 = 2;
-                        this.field_89 = 1;
-                        this.field_90 = 3;
-                        this.field_91 = 3;
-                        block.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.75f);
-                        break;
-                    }
-                case 4:
-                    {
-                        this.field_86 = 1;
-                        this.field_87 = 2;
-                        this.field_90 = 2;
-                        this.field_91 = 1;
-                        block.setBoundingBox(0.25f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
-                        break;
-                    }
-                case 5:
-                    {
-                        this.field_86 = 2;
-                        this.field_87 = 1;
-                        this.field_90 = 1;
-                        this.field_91 = 2;
-                        block.setBoundingBox(0.0f, 0.0f, 0.0f, 0.75f, 1.0f, 1.0f);
-                    }
+            switch (i1) {
+                case 0: {
+                    this.field_86 = 3;
+                    this.field_87 = 3;
+                    this.field_88 = 3;
+                    this.field_89 = 3;
+                    block.setBoundingBox(0.0f, 0.25f, 0.0f, 1.0f, 1.0f, 1.0f);
+                    break;
+                }
+                case 1: {
+                    block.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 0.75f, 1.0f);
+                    break;
+                }
+                case 2: {
+                    this.field_88 = 1;
+                    this.field_89 = 2;
+                    block.setBoundingBox(0.0f, 0.0f, 0.25f, 1.0f, 1.0f, 1.0f);
+                    break;
+                }
+                case 3: {
+                    this.field_88 = 2;
+                    this.field_89 = 1;
+                    this.field_90 = 3;
+                    this.field_91 = 3;
+                    block.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.75f);
+                    break;
+                }
+                case 4: {
+                    this.field_86 = 1;
+                    this.field_87 = 2;
+                    this.field_90 = 2;
+                    this.field_91 = 1;
+                    block.setBoundingBox(0.25f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
+                    break;
+                }
+                case 5: {
+                    this.field_86 = 2;
+                    this.field_87 = 1;
+                    this.field_90 = 1;
+                    this.field_91 = 2;
+                    block.setBoundingBox(0.0f, 0.0f, 0.0f, 0.75f, 1.0f, 1.0f);
+                }
             }
             this.method_76(block, i, j, k);
             this.field_86 = 0;
@@ -628,44 +579,39 @@ public class MixinTileRenderer {
             this.field_91 = 0;
             block.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
         } else {
-            switch(i1) {
-                case 0:
-                    {
-                        this.field_86 = 3;
-                        this.field_87 = 3;
-                        this.field_88 = 3;
-                        this.field_89 = 3;
-                        break;
-                    }
-                case 2:
-                    {
-                        this.field_88 = 1;
-                        this.field_89 = 2;
-                        break;
-                    }
-                case 3:
-                    {
-                        this.field_88 = 2;
-                        this.field_89 = 1;
-                        this.field_90 = 3;
-                        this.field_91 = 3;
-                        break;
-                    }
-                case 4:
-                    {
-                        this.field_86 = 1;
-                        this.field_87 = 2;
-                        this.field_90 = 2;
-                        this.field_91 = 1;
-                        break;
-                    }
-                case 5:
-                    {
-                        this.field_86 = 2;
-                        this.field_87 = 1;
-                        this.field_90 = 1;
-                        this.field_91 = 2;
-                    }
+            switch (i1) {
+                case 0: {
+                    this.field_86 = 3;
+                    this.field_87 = 3;
+                    this.field_88 = 3;
+                    this.field_89 = 3;
+                    break;
+                }
+                case 2: {
+                    this.field_88 = 1;
+                    this.field_89 = 2;
+                    break;
+                }
+                case 3: {
+                    this.field_88 = 2;
+                    this.field_89 = 1;
+                    this.field_90 = 3;
+                    this.field_91 = 3;
+                    break;
+                }
+                case 4: {
+                    this.field_86 = 1;
+                    this.field_87 = 2;
+                    this.field_90 = 2;
+                    this.field_91 = 1;
+                    break;
+                }
+                case 5: {
+                    this.field_86 = 2;
+                    this.field_87 = 1;
+                    this.field_90 = 1;
+                    this.field_91 = 2;
+                }
             }
             this.method_76(block, i, j, k);
             this.field_86 = 0;
@@ -767,84 +713,78 @@ public class MixinTileRenderer {
         float f = block.method_1604(this.field_82, i, j, k);
         float f1 = flag ? 1.0f : 0.5f;
         double d = flag ? 16.0 : 8.0;
-        switch(i1) {
-            case 0:
-                {
-                    this.field_86 = 3;
-                    this.field_87 = 3;
-                    this.field_88 = 3;
-                    this.field_89 = 3;
-                    block.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 0.25f, 1.0f);
-                    this.method_76(block, i, j, k);
-                    this.method_41((float) i + 0.375f, (float) i + 0.625f, (float) j + 0.25f, (float) j + 0.25f + f1, (float) k + 0.625f, (float) k + 0.625f, f * 0.8f, d);
-                    this.method_41((float) i + 0.625f, (float) i + 0.375f, (float) j + 0.25f, (float) j + 0.25f + f1, (float) k + 0.375f, (float) k + 0.375f, f * 0.8f, d);
-                    this.method_41((float) i + 0.375f, (float) i + 0.375f, (float) j + 0.25f, (float) j + 0.25f + f1, (float) k + 0.375f, (float) k + 0.625f, f * 0.6f, d);
-                    this.method_41((float) i + 0.625f, (float) i + 0.625f, (float) j + 0.25f, (float) j + 0.25f + f1, (float) k + 0.625f, (float) k + 0.375f, f * 0.6f, d);
-                    break;
-                }
-            case 1:
-                {
-                    block.setBoundingBox(0.0f, 0.75f, 0.0f, 1.0f, 1.0f, 1.0f);
-                    this.method_76(block, i, j, k);
-                    this.method_41((float) i + 0.375f, (float) i + 0.625f, (float) j - 0.25f + 1.0f - f1, (float) j - 0.25f + 1.0f, (float) k + 0.625f, (float) k + 0.625f, f * 0.8f, d);
-                    this.method_41((float) i + 0.625f, (float) i + 0.375f, (float) j - 0.25f + 1.0f - f1, (float) j - 0.25f + 1.0f, (float) k + 0.375f, (float) k + 0.375f, f * 0.8f, d);
-                    this.method_41((float) i + 0.375f, (float) i + 0.375f, (float) j - 0.25f + 1.0f - f1, (float) j - 0.25f + 1.0f, (float) k + 0.375f, (float) k + 0.625f, f * 0.6f, d);
-                    this.method_41((float) i + 0.625f, (float) i + 0.625f, (float) j - 0.25f + 1.0f - f1, (float) j - 0.25f + 1.0f, (float) k + 0.625f, (float) k + 0.375f, f * 0.6f, d);
-                    break;
-                }
-            case 2:
-                {
-                    this.field_88 = 1;
-                    this.field_89 = 2;
-                    block.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.25f);
-                    this.method_76(block, i, j, k);
-                    this.method_54((float) i + 0.375f, (float) i + 0.375f, (float) j + 0.625f, (float) j + 0.375f, (float) k + 0.25f, (float) k + 0.25f + f1, f * 0.6f, d);
-                    this.method_54((float) i + 0.625f, (float) i + 0.625f, (float) j + 0.375f, (float) j + 0.625f, (float) k + 0.25f, (float) k + 0.25f + f1, f * 0.6f, d);
-                    this.method_54((float) i + 0.375f, (float) i + 0.625f, (float) j + 0.375f, (float) j + 0.375f, (float) k + 0.25f, (float) k + 0.25f + f1, f * 0.5f, d);
-                    this.method_54((float) i + 0.625f, (float) i + 0.375f, (float) j + 0.625f, (float) j + 0.625f, (float) k + 0.25f, (float) k + 0.25f + f1, f, d);
-                    break;
-                }
-            case 3:
-                {
-                    this.field_88 = 2;
-                    this.field_89 = 1;
-                    this.field_90 = 3;
-                    this.field_91 = 3;
-                    block.setBoundingBox(0.0f, 0.0f, 0.75f, 1.0f, 1.0f, 1.0f);
-                    this.method_76(block, i, j, k);
-                    this.method_54((float) i + 0.375f, (float) i + 0.375f, (float) j + 0.625f, (float) j + 0.375f, (float) k - 0.25f + 1.0f - f1, (float) k - 0.25f + 1.0f, f * 0.6f, d);
-                    this.method_54((float) i + 0.625f, (float) i + 0.625f, (float) j + 0.375f, (float) j + 0.625f, (float) k - 0.25f + 1.0f - f1, (float) k - 0.25f + 1.0f, f * 0.6f, d);
-                    this.method_54((float) i + 0.375f, (float) i + 0.625f, (float) j + 0.375f, (float) j + 0.375f, (float) k - 0.25f + 1.0f - f1, (float) k - 0.25f + 1.0f, f * 0.5f, d);
-                    this.method_54((float) i + 0.625f, (float) i + 0.375f, (float) j + 0.625f, (float) j + 0.625f, (float) k - 0.25f + 1.0f - f1, (float) k - 0.25f + 1.0f, f, d);
-                    break;
-                }
-            case 4:
-                {
-                    this.field_86 = 1;
-                    this.field_87 = 2;
-                    this.field_90 = 2;
-                    this.field_91 = 1;
-                    block.setBoundingBox(0.0f, 0.0f, 0.0f, 0.25f, 1.0f, 1.0f);
-                    this.method_76(block, i, j, k);
-                    this.method_60((float) i + 0.25f, (float) i + 0.25f + f1, (float) j + 0.375f, (float) j + 0.375f, (float) k + 0.625f, (float) k + 0.375f, f * 0.5f, d);
-                    this.method_60((float) i + 0.25f, (float) i + 0.25f + f1, (float) j + 0.625f, (float) j + 0.625f, (float) k + 0.375f, (float) k + 0.625f, f, d);
-                    this.method_60((float) i + 0.25f, (float) i + 0.25f + f1, (float) j + 0.375f, (float) j + 0.625f, (float) k + 0.375f, (float) k + 0.375f, f * 0.6f, d);
-                    this.method_60((float) i + 0.25f, (float) i + 0.25f + f1, (float) j + 0.625f, (float) j + 0.375f, (float) k + 0.625f, (float) k + 0.625f, f * 0.6f, d);
-                    break;
-                }
-            case 5:
-                {
-                    this.field_86 = 2;
-                    this.field_87 = 1;
-                    this.field_90 = 1;
-                    this.field_91 = 2;
-                    block.setBoundingBox(0.75f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
-                    this.method_76(block, i, j, k);
-                    this.method_60((float) i - 0.25f + 1.0f - f1, (float) i - 0.25f + 1.0f, (float) j + 0.375f, (float) j + 0.375f, (float) k + 0.625f, (float) k + 0.375f, f * 0.5f, d);
-                    this.method_60((float) i - 0.25f + 1.0f - f1, (float) i - 0.25f + 1.0f, (float) j + 0.625f, (float) j + 0.625f, (float) k + 0.375f, (float) k + 0.625f, f, d);
-                    this.method_60((float) i - 0.25f + 1.0f - f1, (float) i - 0.25f + 1.0f, (float) j + 0.375f, (float) j + 0.625f, (float) k + 0.375f, (float) k + 0.375f, f * 0.6f, d);
-                    this.method_60((float) i - 0.25f + 1.0f - f1, (float) i - 0.25f + 1.0f, (float) j + 0.625f, (float) j + 0.375f, (float) k + 0.625f, (float) k + 0.625f, f * 0.6f, d);
-                }
+        switch (i1) {
+            case 0: {
+                this.field_86 = 3;
+                this.field_87 = 3;
+                this.field_88 = 3;
+                this.field_89 = 3;
+                block.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 0.25f, 1.0f);
+                this.method_76(block, i, j, k);
+                this.method_41((float) i + 0.375f, (float) i + 0.625f, (float) j + 0.25f, (float) j + 0.25f + f1, (float) k + 0.625f, (float) k + 0.625f, f * 0.8f, d);
+                this.method_41((float) i + 0.625f, (float) i + 0.375f, (float) j + 0.25f, (float) j + 0.25f + f1, (float) k + 0.375f, (float) k + 0.375f, f * 0.8f, d);
+                this.method_41((float) i + 0.375f, (float) i + 0.375f, (float) j + 0.25f, (float) j + 0.25f + f1, (float) k + 0.375f, (float) k + 0.625f, f * 0.6f, d);
+                this.method_41((float) i + 0.625f, (float) i + 0.625f, (float) j + 0.25f, (float) j + 0.25f + f1, (float) k + 0.625f, (float) k + 0.375f, f * 0.6f, d);
+                break;
+            }
+            case 1: {
+                block.setBoundingBox(0.0f, 0.75f, 0.0f, 1.0f, 1.0f, 1.0f);
+                this.method_76(block, i, j, k);
+                this.method_41((float) i + 0.375f, (float) i + 0.625f, (float) j - 0.25f + 1.0f - f1, (float) j - 0.25f + 1.0f, (float) k + 0.625f, (float) k + 0.625f, f * 0.8f, d);
+                this.method_41((float) i + 0.625f, (float) i + 0.375f, (float) j - 0.25f + 1.0f - f1, (float) j - 0.25f + 1.0f, (float) k + 0.375f, (float) k + 0.375f, f * 0.8f, d);
+                this.method_41((float) i + 0.375f, (float) i + 0.375f, (float) j - 0.25f + 1.0f - f1, (float) j - 0.25f + 1.0f, (float) k + 0.375f, (float) k + 0.625f, f * 0.6f, d);
+                this.method_41((float) i + 0.625f, (float) i + 0.625f, (float) j - 0.25f + 1.0f - f1, (float) j - 0.25f + 1.0f, (float) k + 0.625f, (float) k + 0.375f, f * 0.6f, d);
+                break;
+            }
+            case 2: {
+                this.field_88 = 1;
+                this.field_89 = 2;
+                block.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.25f);
+                this.method_76(block, i, j, k);
+                this.method_54((float) i + 0.375f, (float) i + 0.375f, (float) j + 0.625f, (float) j + 0.375f, (float) k + 0.25f, (float) k + 0.25f + f1, f * 0.6f, d);
+                this.method_54((float) i + 0.625f, (float) i + 0.625f, (float) j + 0.375f, (float) j + 0.625f, (float) k + 0.25f, (float) k + 0.25f + f1, f * 0.6f, d);
+                this.method_54((float) i + 0.375f, (float) i + 0.625f, (float) j + 0.375f, (float) j + 0.375f, (float) k + 0.25f, (float) k + 0.25f + f1, f * 0.5f, d);
+                this.method_54((float) i + 0.625f, (float) i + 0.375f, (float) j + 0.625f, (float) j + 0.625f, (float) k + 0.25f, (float) k + 0.25f + f1, f, d);
+                break;
+            }
+            case 3: {
+                this.field_88 = 2;
+                this.field_89 = 1;
+                this.field_90 = 3;
+                this.field_91 = 3;
+                block.setBoundingBox(0.0f, 0.0f, 0.75f, 1.0f, 1.0f, 1.0f);
+                this.method_76(block, i, j, k);
+                this.method_54((float) i + 0.375f, (float) i + 0.375f, (float) j + 0.625f, (float) j + 0.375f, (float) k - 0.25f + 1.0f - f1, (float) k - 0.25f + 1.0f, f * 0.6f, d);
+                this.method_54((float) i + 0.625f, (float) i + 0.625f, (float) j + 0.375f, (float) j + 0.625f, (float) k - 0.25f + 1.0f - f1, (float) k - 0.25f + 1.0f, f * 0.6f, d);
+                this.method_54((float) i + 0.375f, (float) i + 0.625f, (float) j + 0.375f, (float) j + 0.375f, (float) k - 0.25f + 1.0f - f1, (float) k - 0.25f + 1.0f, f * 0.5f, d);
+                this.method_54((float) i + 0.625f, (float) i + 0.375f, (float) j + 0.625f, (float) j + 0.625f, (float) k - 0.25f + 1.0f - f1, (float) k - 0.25f + 1.0f, f, d);
+                break;
+            }
+            case 4: {
+                this.field_86 = 1;
+                this.field_87 = 2;
+                this.field_90 = 2;
+                this.field_91 = 1;
+                block.setBoundingBox(0.0f, 0.0f, 0.0f, 0.25f, 1.0f, 1.0f);
+                this.method_76(block, i, j, k);
+                this.method_60((float) i + 0.25f, (float) i + 0.25f + f1, (float) j + 0.375f, (float) j + 0.375f, (float) k + 0.625f, (float) k + 0.375f, f * 0.5f, d);
+                this.method_60((float) i + 0.25f, (float) i + 0.25f + f1, (float) j + 0.625f, (float) j + 0.625f, (float) k + 0.375f, (float) k + 0.625f, f, d);
+                this.method_60((float) i + 0.25f, (float) i + 0.25f + f1, (float) j + 0.375f, (float) j + 0.625f, (float) k + 0.375f, (float) k + 0.375f, f * 0.6f, d);
+                this.method_60((float) i + 0.25f, (float) i + 0.25f + f1, (float) j + 0.625f, (float) j + 0.375f, (float) k + 0.625f, (float) k + 0.625f, f * 0.6f, d);
+                break;
+            }
+            case 5: {
+                this.field_86 = 2;
+                this.field_87 = 1;
+                this.field_90 = 1;
+                this.field_91 = 2;
+                block.setBoundingBox(0.75f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
+                this.method_76(block, i, j, k);
+                this.method_60((float) i - 0.25f + 1.0f - f1, (float) i - 0.25f + 1.0f, (float) j + 0.375f, (float) j + 0.375f, (float) k + 0.625f, (float) k + 0.375f, f * 0.5f, d);
+                this.method_60((float) i - 0.25f + 1.0f - f1, (float) i - 0.25f + 1.0f, (float) j + 0.625f, (float) j + 0.625f, (float) k + 0.375f, (float) k + 0.625f, f, d);
+                this.method_60((float) i - 0.25f + 1.0f - f1, (float) i - 0.25f + 1.0f, (float) j + 0.375f, (float) j + 0.625f, (float) k + 0.375f, (float) k + 0.375f, f * 0.6f, d);
+                this.method_60((float) i - 0.25f + 1.0f - f1, (float) i - 0.25f + 1.0f, (float) j + 0.625f, (float) j + 0.375f, (float) k + 0.625f, (float) k + 0.625f, f * 0.6f, d);
+            }
         }
         this.field_86 = 0;
         this.field_87 = 0;
@@ -944,12 +884,12 @@ public class MixinTileRenderer {
                     avec3d[i2].method_1308(-1.570796f);
                 }
                 avec3d[i2].x += (double) i + 0.5;
-                avec3d[i2].y += (double) ((float) j + 0.5f);
+                avec3d[i2].y += (float) j + 0.5f;
                 avec3d[i2].z += (double) k + 0.5;
                 continue;
             }
             avec3d[i2].x += (double) i + 0.5;
-            avec3d[i2].y += (double) ((float) j + 0.125f);
+            avec3d[i2].y += (float) j + 0.125f;
             avec3d[i2].z += (double) k + 0.5;
         }
         Vec3f vec3d = null;
@@ -1941,7 +1881,7 @@ public class MixinTileRenderer {
         Tessellator tessellator = Tessellator.INSTANCE;
         boolean flag = block.method_1618(this.field_82, i, j + 1, k, 1);
         boolean flag1 = block.method_1618(this.field_82, i, j - 1, k, 0);
-        boolean[] aflag = new boolean[] { block.method_1618(this.field_82, i, j, k - 1, 2), block.method_1618(this.field_82, i, j, k + 1, 3), block.method_1618(this.field_82, i - 1, j, k, 4), block.method_1618(this.field_82, i + 1, j, k, 5) };
+        boolean[] aflag = new boolean[]{block.method_1618(this.field_82, i, j, k - 1, 2), block.method_1618(this.field_82, i, j, k + 1, 3), block.method_1618(this.field_82, i - 1, j, k, 4), block.method_1618(this.field_82, i + 1, j, k, 5)};
         if (!(flag || flag1 || aflag[0] || aflag[1] || aflag[2] || aflag[3])) {
             return false;
         }
@@ -2019,8 +1959,7 @@ public class MixinTileRenderer {
             int i3 = block.getTextureForSide(k1 + 2, i1);
             int j3 = (i3 & 0xF) << 4;
             int k3 = i3 & 0xF0;
-            if (!this.field_85 && !aflag[k1])
-                continue;
+            if (!this.field_85 && !aflag[k1]) continue;
             if (k1 == 0) {
                 f13 = f7;
                 f15 = f10;
@@ -2094,8 +2033,7 @@ public class MixinTileRenderer {
                 ++l;
                 continue;
             }
-            if (material1.isSolid())
-                continue;
+            if (material1.isSolid()) continue;
             f += 1.0f;
             ++l;
         }
@@ -2108,7 +2046,7 @@ public class MixinTileRenderer {
     @Overwrite()
     public void method_53(Tile block, Level world, int i, int j, int k) {
         GL11.glTranslatef((float) (-i), (float) (-j), (float) (-k));
-        GL11.glTranslatef((float) -0.5f, (float) -0.5f, (float) -0.5f);
+        GL11.glTranslatef(-0.5f, -0.5f, -0.5f);
         this.startRenderingBlocks(world);
         this.method_57(block, i, j, k);
         this.stopRenderingBlocks();
@@ -2121,7 +2059,7 @@ public class MixinTileRenderer {
     public void startRenderingBlocks(Level world) {
         this.field_82 = world;
         if (Minecraft.isSmoothLightingEnabled()) {
-            GL11.glShadeModel((int) 7425);
+            GL11.glShadeModel(7425);
         }
         Tessellator.INSTANCE.start();
         this.field_85 = true;
@@ -2135,7 +2073,7 @@ public class MixinTileRenderer {
         this.field_85 = false;
         Tessellator.INSTANCE.draw();
         if (Minecraft.isSmoothLightingEnabled()) {
-            GL11.glShadeModel((int) 7424);
+            GL11.glShadeModel(7424);
         }
         this.field_82 = null;
     }
@@ -2249,10 +2187,10 @@ public class MixinTileRenderer {
             this.field_66 = this.field_68 = (flag1 ? f2 : 1.0f) * 0.5f;
             this.field_65 = this.field_68;
             this.field_64 = this.field_68;
-            lerpLeft = 1.0f - (float) Math.max((double) block.minX, (double) 0.0);
-            lerpRight = 1.0f - (float) Math.min((double) block.maxX, (double) 1.0);
-            lerpTop = (float) Math.min((double) block.maxZ, (double) 1.0);
-            lerpBottom = (float) Math.max((double) block.minZ, (double) 0.0);
+            lerpLeft = 1.0f - (float) Math.max(block.minX, 0.0);
+            lerpRight = 1.0f - (float) Math.min(block.maxX, 1.0);
+            lerpTop = (float) Math.min(block.maxZ, 1.0);
+            lerpBottom = (float) Math.max(block.minZ, 0.0);
             topLeft = lerpTop * (lerpLeft * f4 + (1.0f - lerpLeft) * f25) + (1.0f - lerpTop) * (lerpLeft * f11 + (1.0f - lerpLeft) * f18);
             bottomLeft = lerpBottom * (lerpLeft * f4 + (1.0f - lerpLeft) * f25) + (1.0f - lerpBottom) * (lerpLeft * f11 + (1.0f - lerpLeft) * f18);
             topRight = lerpTop * (lerpRight * f4 + (1.0f - lerpRight) * f25) + (1.0f - lerpTop) * (lerpRight * f11 + (1.0f - lerpRight) * f18);
@@ -2312,10 +2250,10 @@ public class MixinTileRenderer {
             this.field_66 = this.field_68;
             this.field_65 = this.field_68;
             this.field_64 = this.field_68;
-            lerpLeft = 1.0f - (float) Math.max((double) block.minX, (double) 0.0);
-            lerpRight = 1.0f - (float) Math.min((double) block.maxX, (double) 1.0);
-            lerpTop = (float) Math.max((double) block.minZ, (double) 0.0);
-            lerpBottom = (float) Math.min((double) block.maxZ, (double) 1.0);
+            lerpLeft = 1.0f - (float) Math.max(block.minX, 0.0);
+            lerpRight = 1.0f - (float) Math.min(block.maxX, 1.0);
+            lerpTop = (float) Math.max(block.minZ, 0.0);
+            lerpBottom = (float) Math.min(block.maxZ, 1.0);
             topLeft = lerpTop * (lerpLeft * f26 + (1.0f - lerpLeft) * f5) + (1.0f - lerpTop) * (lerpLeft * f19 + (1.0f - lerpLeft) * f12);
             float topRight2 = lerpTop * (lerpRight * f26 + (1.0f - lerpRight) * f5) + (1.0f - lerpTop) * (lerpRight * f19 + (1.0f - lerpRight) * f12);
             float bottomLeft2 = lerpBottom * (lerpLeft * f26 + (1.0f - lerpLeft) * f5) + (1.0f - lerpBottom) * (lerpLeft * f19 + (1.0f - lerpLeft) * f12);
@@ -2372,10 +2310,10 @@ public class MixinTileRenderer {
             this.field_66 = this.field_68 = (flag3 ? f2 : 1.0f) * 0.8f;
             this.field_65 = this.field_68;
             this.field_64 = this.field_68;
-            lerpLeft = (float) Math.min((double) block.maxX, (double) 1.0);
-            lerpRight = (float) Math.max((double) block.minX, (double) 0.0);
-            lerpTop = (float) Math.min((double) block.maxY, (double) 1.0);
-            lerpBottom = (float) Math.max((double) block.minY, (double) 0.0);
+            lerpLeft = (float) Math.min(block.maxX, 1.0);
+            lerpRight = (float) Math.max(block.minX, 0.0);
+            lerpTop = (float) Math.min(block.maxY, 1.0);
+            lerpBottom = (float) Math.max(block.minY, 0.0);
             topLeft = lerpTop * (lerpLeft * f13 + (1.0f - lerpLeft) * f6) + (1.0f - lerpTop) * (lerpLeft * f20 + (1.0f - lerpLeft) * f27);
             bottomLeft = lerpBottom * (lerpLeft * f13 + (1.0f - lerpLeft) * f6) + (1.0f - lerpBottom) * (lerpLeft * f20 + (1.0f - lerpLeft) * f27);
             topRight = lerpTop * (lerpRight * f13 + (1.0f - lerpRight) * f6) + (1.0f - lerpTop) * (lerpRight * f20 + (1.0f - lerpRight) * f27);
@@ -2448,10 +2386,10 @@ public class MixinTileRenderer {
             this.field_66 = this.field_68 = (flag4 ? f2 : 1.0f) * 0.8f;
             this.field_65 = this.field_68;
             this.field_64 = this.field_68;
-            lerpLeft = (float) Math.min((double) (1.0 - block.minX), (double) 1.0);
-            lerpRight = (float) Math.max((double) (1.0 - block.maxX), (double) 0.0);
-            lerpTop = (float) Math.min((double) block.maxY, (double) 1.0);
-            lerpBottom = (float) Math.max((double) block.minY, (double) 0.0);
+            lerpLeft = (float) Math.min(1.0 - block.minX, 1.0);
+            lerpRight = (float) Math.max(1.0 - block.maxX, 0.0);
+            lerpTop = (float) Math.min(block.maxY, 1.0);
+            lerpBottom = (float) Math.max(block.minY, 0.0);
             topLeft = lerpTop * (lerpLeft * f7 + (1.0f - lerpLeft) * f28) + (1.0f - lerpTop) * (lerpLeft * f14 + (1.0f - lerpLeft) * f21);
             bottomLeft = lerpBottom * (lerpLeft * f7 + (1.0f - lerpLeft) * f28) + (1.0f - lerpBottom) * (lerpLeft * f14 + (1.0f - lerpLeft) * f21);
             topRight = lerpTop * (lerpRight * f7 + (1.0f - lerpRight) * f28) + (1.0f - lerpTop) * (lerpRight * f14 + (1.0f - lerpRight) * f21);
@@ -2524,10 +2462,10 @@ public class MixinTileRenderer {
             this.field_66 = this.field_68 = (flag5 ? f2 : 1.0f) * 0.6f;
             this.field_65 = this.field_68;
             this.field_64 = this.field_68;
-            lerpLeft = (float) Math.min((double) (1.0 - block.minZ), (double) 1.0);
-            lerpRight = (float) Math.max((double) (1.0 - block.maxZ), (double) 0.0);
-            lerpTop = (float) Math.min((double) block.maxY, (double) 1.0);
-            lerpBottom = (float) Math.max((double) block.minY, (double) 0.0);
+            lerpLeft = (float) Math.min(1.0 - block.minZ, 1.0);
+            lerpRight = (float) Math.max(1.0 - block.maxZ, 0.0);
+            lerpTop = (float) Math.min(block.maxY, 1.0);
+            lerpBottom = (float) Math.max(block.minY, 0.0);
             topLeft = lerpTop * (lerpLeft * f15 + (1.0f - lerpLeft) * f8) + (1.0f - lerpTop) * (lerpLeft * f22 + (1.0f - lerpLeft) * f29);
             bottomLeft = lerpBottom * (lerpLeft * f15 + (1.0f - lerpLeft) * f8) + (1.0f - lerpBottom) * (lerpLeft * f22 + (1.0f - lerpLeft) * f29);
             topRight = lerpTop * (lerpRight * f15 + (1.0f - lerpRight) * f8) + (1.0f - lerpTop) * (lerpRight * f22 + (1.0f - lerpRight) * f29);
@@ -2600,10 +2538,10 @@ public class MixinTileRenderer {
             this.field_66 = this.field_68 = (flag6 ? f2 : 1.0f) * 0.6f;
             this.field_65 = this.field_68;
             this.field_64 = this.field_68;
-            lerpLeft = (float) Math.min((double) (1.0 - block.minZ), (double) 1.0);
-            lerpRight = (float) Math.max((double) (1.0 - block.maxZ), (double) 0.0);
-            lerpTop = (float) Math.min((double) block.maxY, (double) 1.0);
-            lerpBottom = (float) Math.max((double) block.minY, (double) 0.0);
+            lerpLeft = (float) Math.min(1.0 - block.minZ, 1.0);
+            lerpRight = (float) Math.max(1.0 - block.maxZ, 0.0);
+            lerpTop = (float) Math.min(block.maxY, 1.0);
+            lerpBottom = (float) Math.max(block.minY, 0.0);
             topLeft = lerpTop * (lerpLeft * f23 + (1.0f - lerpLeft) * f30) + (1.0f - lerpTop) * (lerpLeft * f16 + (1.0f - lerpLeft) * f9);
             bottomLeft = lerpBottom * (lerpLeft * f23 + (1.0f - lerpLeft) * f30) + (1.0f - lerpBottom) * (lerpLeft * f16 + (1.0f - lerpLeft) * f9);
             topRight = lerpTop * (lerpRight * f23 + (1.0f - lerpRight) * f30) + (1.0f - lerpTop) * (lerpRight * f16 + (1.0f - lerpRight) * f9);
@@ -4284,14 +4222,14 @@ public class MixinTileRenderer {
             float f1 = (float) (j >> 16 & 0xFF) / 255.0f;
             float f3 = (float) (j >> 8 & 0xFF) / 255.0f;
             float f5 = (float) (j & 0xFF) / 255.0f;
-            GL11.glColor4f((float) (f1 * f), (float) (f3 * f), (float) (f5 * f), (float) 1.0f);
+            GL11.glColor4f(f1 * f, f3 * f, f5 * f, 1.0f);
         }
         if ((k = block.method_1621()) == 0 || k == 16) {
             if (k == 16) {
                 i = 1;
             }
             block.method_1605();
-            GL11.glTranslatef((float) -0.5f, (float) -0.5f, (float) -0.5f);
+            GL11.glTranslatef(-0.5f, -0.5f, -0.5f);
             tessellator.start();
             tessellator.method_1697(0.0f, -1.0f, 0.0f);
             this.method_46(block, 0.0, 0.0, 0.0, block.getTextureForSide(0, i));
@@ -4316,7 +4254,7 @@ public class MixinTileRenderer {
             tessellator.method_1697(1.0f, 0.0f, 0.0f);
             this.method_69(block, 0.0, 0.0, 0.0, block.getTextureForSide(5, i));
             tessellator.draw();
-            GL11.glTranslatef((float) 0.5f, (float) 0.5f, (float) 0.5f);
+            GL11.glTranslatef(0.5f, 0.5f, 0.5f);
         } else if (k == 1) {
             tessellator.start();
             tessellator.method_1697(0.0f, -1.0f, 0.0f);
@@ -4324,7 +4262,7 @@ public class MixinTileRenderer {
             tessellator.draw();
         } else if (k == 13) {
             block.method_1605();
-            GL11.glTranslatef((float) -0.5f, (float) -0.5f, (float) -0.5f);
+            GL11.glTranslatef(-0.5f, -0.5f, -0.5f);
             float f2 = 0.0625f;
             tessellator.start();
             tessellator.method_1697(0.0f, -1.0f, 0.0f);
@@ -4358,7 +4296,7 @@ public class MixinTileRenderer {
             this.method_69(block, 0.0, 0.0, 0.0, block.getTextureForSide(5, i));
             tessellator.changePrevPos(f2, 0.0f, 0.0f);
             tessellator.draw();
-            GL11.glTranslatef((float) 0.5f, (float) 0.5f, (float) 0.5f);
+            GL11.glTranslatef(0.5f, 0.5f, 0.5f);
         } else if (k == 6) {
             tessellator.start();
             tessellator.method_1697(0.0f, -1.0f, 0.0f);
@@ -4377,7 +4315,7 @@ public class MixinTileRenderer {
                 if (l == 1) {
                     block.setBoundingBox(0.0f, 0.0f, 0.5f, 1.0f, 0.5f, 1.0f);
                 }
-                GL11.glTranslatef((float) -0.5f, (float) -0.5f, (float) -0.5f);
+                GL11.glTranslatef(-0.5f, -0.5f, -0.5f);
                 tessellator.start();
                 tessellator.method_1697(0.0f, -1.0f, 0.0f);
                 this.method_46(block, 0.0, 0.0, 0.0, block.getTextureForSide(0, i));
@@ -4402,7 +4340,7 @@ public class MixinTileRenderer {
                 tessellator.method_1697(1.0f, 0.0f, 0.0f);
                 this.method_69(block, 0.0, 0.0, 0.0, block.getTextureForSide(5, i));
                 tessellator.draw();
-                GL11.glTranslatef((float) 0.5f, (float) 0.5f, (float) 0.5f);
+                GL11.glTranslatef(0.5f, 0.5f, 0.5f);
             }
         } else if (k == 11) {
             for (int i1 = 0; i1 < 4; ++i1) {
@@ -4420,7 +4358,7 @@ public class MixinTileRenderer {
                 if (i1 == 3) {
                     block.setBoundingBox(0.5f - f4, 0.5f - f4 * 3.0f, -f4 * 2.0f, 0.5f + f4, 0.5f - f4, 1.0f + f4 * 2.0f);
                 }
-                GL11.glTranslatef((float) -0.5f, (float) -0.5f, (float) -0.5f);
+                GL11.glTranslatef(-0.5f, -0.5f, -0.5f);
                 tessellator.start();
                 tessellator.method_1697(0.0f, -1.0f, 0.0f);
                 this.method_46(block, 0.0, 0.0, 0.0, block.getTextureForSide(0));
@@ -4445,30 +4383,10 @@ public class MixinTileRenderer {
                 tessellator.method_1697(1.0f, 0.0f, 0.0f);
                 this.method_69(block, 0.0, 0.0, 0.0, block.getTextureForSide(5));
                 tessellator.draw();
-                GL11.glTranslatef((float) 0.5f, (float) 0.5f, (float) 0.5f);
+                GL11.glTranslatef(0.5f, 0.5f, 0.5f);
             }
             block.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
         }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public static boolean method_42(int i) {
-        if (i == 0) {
-            return true;
-        }
-        if (i == 13) {
-            return true;
-        }
-        if (i == 10) {
-            return true;
-        }
-        if (i == 11) {
-            return true;
-        }
-        return i == 16;
     }
 
     /**
@@ -4491,7 +4409,7 @@ public class MixinTileRenderer {
         double d = i;
         double d1 = (float) j - 0.0625f + 1.0f;
         double d2 = k;
-        this.rand.setSeed((long) (i * i * 3121 + i * 45238971 + k * k * 418711 + k * 13761 + j));
+        this.rand.setSeed(i * i * 3121 + i * 45238971 + k * k * 418711 + k * 13761 + j);
         j = 168;
         int u = (j & 0xF) << 4;
         int v = j & 0xF0;
@@ -4592,30 +4510,26 @@ public class MixinTileRenderer {
     public boolean renderChair(Tile block, int i, int j, int k) {
         boolean rendered = this.method_76(block, i, j, k);
         int side = this.field_82.getTileMeta(i, j, k) % 4;
-        switch(side) {
-            case 0:
-                {
-                    block.setBoundingBox(0.125f, 0.625f, 0.125f, 0.25f, 1.25f, 0.875f);
-                    rendered |= this.method_76(block, i, j, k);
-                    break;
-                }
-            case 1:
-                {
-                    block.setBoundingBox(0.125f, 0.625f, 0.125f, 0.875f, 1.25f, 0.25f);
-                    rendered |= this.method_76(block, i, j, k);
-                    break;
-                }
-            case 2:
-                {
-                    block.setBoundingBox(0.75f, 0.625f, 0.125f, 0.875f, 1.25f, 0.875f);
-                    rendered |= this.method_76(block, i, j, k);
-                    break;
-                }
-            case 3:
-                {
-                    block.setBoundingBox(0.125f, 0.625f, 0.75f, 0.875f, 1.25f, 0.875f);
-                    rendered |= this.method_76(block, i, j, k);
-                }
+        switch (side) {
+            case 0: {
+                block.setBoundingBox(0.125f, 0.625f, 0.125f, 0.25f, 1.25f, 0.875f);
+                rendered |= this.method_76(block, i, j, k);
+                break;
+            }
+            case 1: {
+                block.setBoundingBox(0.125f, 0.625f, 0.125f, 0.875f, 1.25f, 0.25f);
+                rendered |= this.method_76(block, i, j, k);
+                break;
+            }
+            case 2: {
+                block.setBoundingBox(0.75f, 0.625f, 0.125f, 0.875f, 1.25f, 0.875f);
+                rendered |= this.method_76(block, i, j, k);
+                break;
+            }
+            case 3: {
+                block.setBoundingBox(0.125f, 0.625f, 0.75f, 0.875f, 1.25f, 0.875f);
+                rendered |= this.method_76(block, i, j, k);
+            }
         }
         block.setBoundingBox(0.125f, 0.0f, 0.125f, 0.25f, 0.5f, 0.25f);
         rendered |= this.method_76(block, i, j, k);

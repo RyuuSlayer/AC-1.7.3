@@ -1,11 +1,17 @@
 package io.github.ryuu.adventurecraft.blocks;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import io.github.ryuu.adventurecraft.util.DebugMode;
-import io.github.ryuu.adventurecraft.items.Items;
-import io.github.ryuu.adventurecraft.gui.GuiMusic;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityMusic;
+import io.github.ryuu.adventurecraft.gui.GuiMusic;
+import io.github.ryuu.adventurecraft.items.Items;
+import io.github.ryuu.adventurecraft.util.DebugMode;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.Player;
+import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
+import net.minecraft.tile.TileWithEntity;
+import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.tile.material.Material;
+import net.minecraft.util.maths.Box;
 
 public class BlockMusic extends TileWithEntity {
 
@@ -41,7 +47,7 @@ public class BlockMusic extends TileWithEntity {
     @Override
     public void onTriggerActivated(Level world, int i, int j, int k) {
         TileEntityMusic obj = (TileEntityMusic) world.getTileEntity(i, j, k);
-        if (!obj.musicName.equals((Object) "")) {
+        if (!obj.musicName.equals("")) {
             Minecraft.minecraftInstance.soundHelper.playMusicFromStreaming(obj.musicName, obj.fadeOut, obj.fadeIn);
         } else {
             Minecraft.minecraftInstance.soundHelper.stopMusic();

@@ -1,26 +1,31 @@
 package io.github.ryuu.adventurecraft.mixin.client.particle;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.TileParticle;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.texture.TextureManager;
+import net.minecraft.entity.Entity;
+import net.minecraft.level.Level;
+import net.minecraft.tile.Tile;
+import net.minecraft.util.maths.Box;
+import net.minecraft.util.maths.MathsHelper;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 @Mixin(ParticleManager.class)
 public class MixinParticleManager {
 
+    private final List[] particles = new List[6];
+    private final TextureManager textureManager;
+    private final Random rand = new Random();
     @Shadow()
     protected Level level;
-
-    private List[] particles = new List[6];
-
-    private TextureManager textureManager;
-
-    private Random rand = new Random();
 
     public MixinParticleManager(Level world, TextureManager textureManager) {
         if (world != null) {
@@ -41,7 +46,7 @@ public class MixinParticleManager {
         if (this.particles[i].size() >= 4000) {
             this.particles[i].remove(0);
         }
-        this.particles[i].add((Object) particle);
+        this.particles[i].add(particle);
     }
 
     /**
@@ -53,8 +58,7 @@ public class MixinParticleManager {
             for (int j = 0; j < this.particles[i].size(); ++j) {
                 Particle entityfx = (Particle) this.particles[i].get(j);
                 entityfx.tick();
-                if (!entityfx.removed)
-                    continue;
+                if (!entityfx.removed) continue;
                 this.particles[i].remove(j--);
             }
         }
@@ -71,7 +75,7 @@ public class MixinParticleManager {
                 Entity p = (Entity) obj;
                 if (!(axisalignedbb.minX <= p.x) || !(axisalignedbb.maxX >= p.x) || !(axisalignedbb.minY <= p.y) || !(axisalignedbb.maxY >= p.y) || !(axisalignedbb.minZ <= p.z) || !(axisalignedbb.maxZ >= p.z))
                     continue;
-                arraylist.add((Object) p);
+                arraylist.add(p);
             }
         }
         return arraylist;
@@ -91,8 +95,7 @@ public class MixinParticleManager {
         Particle.field_2646 = entity.prevRenderY + (entity.y - entity.prevRenderY) * (double) f;
         Particle.field_2647 = entity.prevRenderZ + (entity.z - entity.prevRenderZ) * (double) f;
         for (int i = 0; i < 5; ++i) {
-            if (this.particles[i].size() == 0)
-                continue;
+            if (this.particles[i].size() == 0) continue;
             int j = 0;
             if (i == 0) {
                 j = this.textureManager.getTextureId("/particles.png");
@@ -109,7 +112,7 @@ public class MixinParticleManager {
             if (i == 4) {
                 j = this.textureManager.getTextureId("/terrain3.png");
             }
-            GL11.glBindTexture((int) 3553, (int) j);
+            GL11.glBindTexture(3553, j);
             Tessellator tessellator = Tessellator.INSTANCE;
             tessellator.start();
             for (int k = 0; k < this.particles[i].size(); ++k) {

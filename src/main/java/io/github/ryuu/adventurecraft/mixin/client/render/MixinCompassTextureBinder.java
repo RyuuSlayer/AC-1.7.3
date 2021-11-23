@@ -1,23 +1,25 @@
 package io.github.ryuu.adventurecraft.mixin.client.render;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.URL;
-import javax.imageio.ImageIO;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import io.github.ryuu.adventurecraft.util.Vec2;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.TextureBinder;
+import net.minecraft.item.ItemType;
+import net.minecraft.util.Vec3i;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import io.github.ryuu.adventurecraft.util.Vec2;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 @Mixin(CompassTextureBinder.class)
 public class MixinCompassTextureBinder extends TextureBinder {
 
     @Shadow()
-    private Minecraft field_1326;
+    private final Minecraft field_1326;
 
-    private int[] field_1327 = new int[256];
+    private final int[] field_1327 = new int[256];
 
     private double field_1328;
 
@@ -28,7 +30,7 @@ public class MixinCompassTextureBinder extends TextureBinder {
         this.field_1326 = minecraft;
         this.renderMode = 1;
         try {
-            BufferedImage bufferedimage = ImageIO.read((URL) Minecraft.class.getResource("/gui/items.png"));
+            BufferedImage bufferedimage = ImageIO.read(Minecraft.class.getResource("/gui/items.png"));
             int i = this.field_1412 % 16 * 16;
             int j = this.field_1412 / 16 * 16;
             bufferedimage.getRGB(i, j, 16, 16, this.field_1327, 0, 16);
@@ -67,7 +69,7 @@ public class MixinCompassTextureBinder extends TextureBinder {
             Vec3i chunkcoordinates = this.field_1326.level.getSpawnPosition();
             double d2 = (double) chunkcoordinates.x - this.field_1326.player.x;
             double d4 = (double) chunkcoordinates.z - this.field_1326.player.z;
-            d = (double) (this.field_1326.player.yaw - 90.0f) * Math.PI / 180.0 - Math.atan2((double) d4, (double) d2);
+            d = (double) (this.field_1326.player.yaw - 90.0f) * Math.PI / 180.0 - Math.atan2(d4, d2);
             if (this.field_1326.level.dimension.hasFog) {
                 d = Math.random() * 3.1415927410125732 * 2.0;
             }
@@ -86,8 +88,8 @@ public class MixinCompassTextureBinder extends TextureBinder {
         this.field_1329 += d1 * 0.1;
         this.field_1329 *= 0.8;
         this.field_1328 += this.field_1329;
-        double d3 = Math.sin((double) this.field_1328);
-        double d5 = Math.cos((double) this.field_1328);
+        double d3 = Math.sin(this.field_1328);
+        double d5 = Math.cos(this.field_1328);
         for (int i2 = -4; i2 <= 4; ++i2) {
             int k2 = (int) (8.5 + d5 * (double) i2 * 0.3);
             int i3 = (int) (7.5 - d3 * (double) i2 * 0.3 * 0.5);

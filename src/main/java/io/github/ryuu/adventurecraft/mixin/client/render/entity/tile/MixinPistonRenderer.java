@@ -1,7 +1,15 @@
 package io.github.ryuu.adventurecraft.mixin.client.render.entity.tile;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.RenderHelper;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.TileRenderer;
+import net.minecraft.client.render.entity.tile.TileEntityRenderer;
+import net.minecraft.level.Level;
+import net.minecraft.tile.PistonTile;
+import net.minecraft.tile.Tile;
+import net.minecraft.tile.entity.Piston;
+import net.minecraft.tile.entity.TileEntity;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -22,16 +30,16 @@ public class MixinPistonRenderer extends TileEntityRenderer {
         if (block != null && tileentitypiston.method_1519(f) < 1.0f) {
             Tessellator tessellator = Tessellator.INSTANCE;
             int textureNum = block.getTextureNum();
-            String textureName = textureNum == 0 ? "/terrain.png" : String.format((String) "/terrain%d.png", (Object[]) new Object[] { textureNum });
+            String textureName = textureNum == 0 ? "/terrain.png" : String.format("/terrain%d.png", textureNum);
             this.bindTexture(textureName);
             RenderHelper.disableLighting();
-            GL11.glBlendFunc((int) 770, (int) 771);
-            GL11.glEnable((int) 3042);
-            GL11.glDisable((int) 2884);
+            GL11.glBlendFunc(770, 771);
+            GL11.glEnable(3042);
+            GL11.glDisable(2884);
             if (Minecraft.isSmoothLightingEnabled()) {
-                GL11.glShadeModel((int) 7425);
+                GL11.glShadeModel(7425);
             } else {
-                GL11.glShadeModel((int) 7424);
+                GL11.glShadeModel(7424);
             }
             tessellator.start();
             tessellator.prevPos((float) d - (float) tileentitypiston.x + tileentitypiston.method_1524(f), (float) d1 - (float) tileentitypiston.y + tileentitypiston.method_1525(f), (float) d2 - (float) tileentitypiston.z + tileentitypiston.method_1526(f));

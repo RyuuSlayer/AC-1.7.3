@@ -1,11 +1,17 @@
 package io.github.ryuu.adventurecraft.mixin.item;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import io.github.ryuu.adventurecraft.items.Items;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
+import net.minecraft.stat.Stats;
+import net.minecraft.tile.Tile;
+import net.minecraft.util.io.CompoundTag;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import io.github.ryuu.adventurecraft.items.Items;
 
 @Mixin(ItemInstance.class)
 public final class MixinItemInstance {
@@ -16,14 +22,10 @@ public final class MixinItemInstance {
     public int cooldown;
 
     public int itemId;
-
-    private int damage;
-
     public int timeLeft;
-
     public boolean isReloading = false;
-
     public boolean justReloaded = false;
+    private int damage;
 
     public MixinItemInstance(Tile tile) {
         this(tile, 1);
@@ -57,6 +59,28 @@ public final class MixinItemInstance {
 
     public MixinItemInstance(CompoundTag tag) {
         this.fromTag(tag);
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static boolean method_703(ItemInstance itemstack, ItemInstance itemstack1) {
+        if (itemstack == null && itemstack1 == null) {
+            return true;
+        }
+        if (itemstack == null || itemstack1 == null) {
+            return false;
+        }
+        return itemstack.method_718(itemstack1);
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite()
+    public static ItemInstance copy(ItemInstance itemstack) {
+        return itemstack != null ? itemstack.copy() : null;
     }
 
     /**
@@ -199,20 +223,6 @@ public final class MixinItemInstance {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite()
-    public static boolean method_703(ItemInstance itemstack, ItemInstance itemstack1) {
-        if (itemstack == null && itemstack1 == null) {
-            return true;
-        }
-        if (itemstack == null || itemstack1 == null) {
-            return false;
-        }
-        return itemstack.method_718(itemstack1);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     private boolean method_718(ItemInstance itemstack) {
         if (this.count != itemstack.count) {
             return false;
@@ -229,14 +239,6 @@ public final class MixinItemInstance {
     @Overwrite()
     public boolean isEqualIgnoreFlags(ItemInstance itemstack) {
         return this.itemId == itemstack.itemId && this.damage == itemstack.damage;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public static ItemInstance copy(ItemInstance itemstack) {
-        return itemstack != null ? itemstack.copy() : null;
     }
 
     /**

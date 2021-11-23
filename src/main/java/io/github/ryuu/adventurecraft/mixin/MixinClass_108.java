@@ -1,23 +1,34 @@
 package io.github.ryuu.adventurecraft.mixin;
 
-import java.util.LinkedList;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.class_109;
+import net.minecraft.class_61;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
+import net.minecraft.level.TileView;
+import net.minecraft.tile.DoorTile;
+import net.minecraft.tile.Tile;
+import net.minecraft.tile.material.Material;
+import net.minecraft.util.Int2ObjectLinkedHashMap;
+import net.minecraft.util.maths.Box;
+import net.minecraft.util.maths.MathsHelper;
+import net.minecraft.util.maths.Vec3i;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+
+import java.util.LinkedList;
 
 @Mixin(Class_108.class)
 public class MixinClass_108 {
 
     @Shadow()
-    private TileView field_333;
+    private final TileView field_333;
 
-    private class_109 field_334 = new class_109();
+    private final class_109 field_334 = new class_109();
 
-    private Int2ObjectLinkedHashMap field_335 = new Int2ObjectLinkedHashMap();
+    private final Int2ObjectLinkedHashMap field_335 = new Int2ObjectLinkedHashMap();
 
-    private Vec3i[] field_336 = new Vec3i[32];
+    private final Vec3i[] field_336 = new Vec3i[32];
 
     public MixinClass_108(TileView iblockaccess) {
         this.field_333 = iblockaccess;
@@ -77,8 +88,7 @@ public class MixinClass_108 {
             for (int j = 0; j < i; ++j) {
                 Vec3i pathpoint5 = this.field_336[j];
                 float f1 = pathpoint4.field_144 + pathpoint4.getSquaredDistance(pathpoint5);
-                if (pathpoint5.method_112() && !(f1 < pathpoint5.field_144))
-                    continue;
+                if (pathpoint5.method_112() && !(f1 < pathpoint5.field_144)) continue;
                 pathpoint5.field_147 = pathpoint4;
                 pathpoint5.field_144 = f1;
                 pathpoint5.field_145 = pathpoint5.getSquaredDistance(pathpoint1);
@@ -145,8 +155,7 @@ public class MixinClass_108 {
                 if (++i1 >= 4) {
                     return null;
                 }
-                if (--j <= 0)
-                    continue;
+                if (--j <= 0) continue;
                 pathpoint1 = this.method_400(i, j, k);
             }
             if (j1 == -2) {
@@ -184,12 +193,10 @@ public class MixinClass_108 {
                         return 0;
                     }
                     int k1 = this.field_333.getTileId(l, i1, j1);
-                    if (k1 <= 0)
-                        continue;
+                    if (k1 <= 0) continue;
                     if (k1 == Tile.DOOR_IRON.id || k1 == Tile.DOOR_WOOD.id) {
                         int l1 = this.field_333.getTileMeta(l, i1, j1);
-                        if (DoorTile.method_840(l1))
-                            continue;
+                        if (DoorTile.method_840(l1)) continue;
                         return 0;
                     }
                     Material material = Tile.BY_ID[k1].material;
@@ -199,8 +206,7 @@ public class MixinClass_108 {
                     if (material == Material.WATER) {
                         return -1;
                     }
-                    if (material != Material.LAVA)
-                        continue;
+                    if (material != Material.LAVA) continue;
                     return -2;
                 }
             }
@@ -245,21 +251,20 @@ public class MixinClass_108 {
         boolean addRestThePoints = false;
         for (Vec3i point : p.field_2691) {
             int sign;
-            if (index++ < p.field_2692)
-                continue;
+            if (index++ < p.field_2692) continue;
             if (addRestThePoints) {
-                points.add((Object) point);
+                points.add(point);
                 continue;
             }
             if (prevPoint == null) {
                 prevPoint = point;
-                points.add((Object) point);
+                points.add(point);
                 continue;
             }
             if (potentialPoint == null) {
                 if (prevPoint.y != point.y) {
                     prevPoint = point;
-                    points.add((Object) point);
+                    points.add(point);
                     addRestThePoints = true;
                     continue;
                 }
@@ -269,7 +274,7 @@ public class MixinClass_108 {
             }
             if (lastPoint.y != point.y) {
                 points.add(lastPoint);
-                points.add((Object) point);
+                points.add(point);
                 prevPoint = point;
                 potentialPoint = null;
                 lastPoint = null;
@@ -278,17 +283,17 @@ public class MixinClass_108 {
             }
             int dX = point.x - prevPoint.x;
             int dZ = point.z - prevPoint.z;
-            if (Math.abs((int) dX) < Math.abs((int) dZ)) {
+            if (Math.abs(dX) < Math.abs(dZ)) {
                 float xOffset = 0.0f;
-                float xChange = (float) dX / (float) Math.abs((int) dZ);
+                float xChange = (float) dX / (float) Math.abs(dZ);
                 sign = 1;
                 if (dZ < 0) {
                     sign = -1;
                 }
-                for (int zOffset = 1; zOffset < Math.abs((int) dZ); ++zOffset) {
+                for (int zOffset = 1; zOffset < Math.abs(dZ); ++zOffset) {
                     if (this.method_404(null, prevPoint.x + (int) xOffset, prevPoint.y, prevPoint.z + zOffset * sign, clearSize) != 1 || this.method_404(null, prevPoint.x + (int) xOffset, prevPoint.y - 1, prevPoint.z + zOffset * sign, clearSize) == 1 || this.method_404(null, prevPoint.x + (int) xOffset + 1, prevPoint.y, prevPoint.z + zOffset * sign, clearSize) != 1 || this.method_404(null, prevPoint.x + (int) xOffset + 1, prevPoint.y - 1, prevPoint.z + zOffset * sign, clearSize) == 1 || this.method_404(null, prevPoint.x + (int) xOffset - 1, prevPoint.y, prevPoint.z + zOffset * sign, clearSize) != 1 || this.method_404(null, prevPoint.x + (int) xOffset - 1, prevPoint.y - 1, prevPoint.z + zOffset * sign, clearSize) == 1) {
-                        points.add((Object) potentialPoint);
-                        points.add((Object) point);
+                        points.add(potentialPoint);
+                        points.add(point);
                         addRestThePoints = true;
                         continue;
                     }
@@ -296,16 +301,16 @@ public class MixinClass_108 {
                 }
             } else {
                 float zOffset = 0.0f;
-                float zChange = (float) dZ / (float) Math.abs((int) dX);
+                float zChange = (float) dZ / (float) Math.abs(dX);
                 sign = 1;
                 if (dX < 0) {
                     sign = -1;
                 }
-                for (int xOffset = 1; xOffset < Math.abs((int) dX); ++xOffset) {
+                for (int xOffset = 1; xOffset < Math.abs(dX); ++xOffset) {
                     if (this.method_404(null, prevPoint.x + xOffset * sign, prevPoint.y, prevPoint.z + (int) zOffset, clearSize) != 1 || this.method_404(null, prevPoint.x + xOffset * sign, prevPoint.y - 1, prevPoint.z + (int) zOffset, clearSize) == 1 || this.method_404(null, prevPoint.x + xOffset * sign, prevPoint.y, prevPoint.z + (int) zOffset + 1, clearSize) != 1 || this.method_404(null, prevPoint.x + xOffset * sign, prevPoint.y - 1, prevPoint.z + (int) zOffset + 1, clearSize) == 1 || this.method_404(null, prevPoint.x + xOffset * sign, prevPoint.y, prevPoint.z + (int) zOffset - 1, clearSize) != 1 || this.method_404(null, prevPoint.x + xOffset * sign, prevPoint.y - 1, prevPoint.z + (int) zOffset - 1, clearSize) == 1) {
                         prevPoint = potentialPoint;
-                        points.add((Object) potentialPoint);
-                        points.add((Object) point);
+                        points.add(potentialPoint);
+                        points.add(point);
                         addRestThePoints = true;
                         continue;
                     }

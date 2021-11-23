@@ -4,19 +4,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.Set;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 
 public class EntityDescriptions {
 
     static final HashMap<String, ScriptEntityDescription> descriptions = new HashMap();
 
     public static ScriptEntityDescription getDescription(String descName) {
-        return (ScriptEntityDescription) descriptions.get((Object) descName);
+        return descriptions.get(descName);
     }
 
     static void addDescription(String descName, ScriptEntityDescription desc) {
@@ -31,8 +28,7 @@ public class EntityDescriptions {
         EntityDescriptions.clearDescriptions();
         if (dir != null && dir.exists() && dir.isDirectory()) {
             for (File f : dir.listFiles()) {
-                if (!f.isFile() || !f.getName().endsWith(".txt"))
-                    continue;
+                if (!f.isFile() || !f.getName().endsWith(".txt")) continue;
                 EntityDescriptions.loadDescription(f);
             }
         }
@@ -41,23 +37,23 @@ public class EntityDescriptions {
     private static void loadDescription(File descFile) {
         Properties p = new Properties();
         try {
-            p.load((InputStream) new FileInputStream(descFile));
+            p.load(new FileInputStream(descFile));
             ScriptEntityDescription desc = new ScriptEntityDescription(descFile.getName().split("\\.")[0]);
             try {
-                Integer health = Integer.parseInt((String) p.getProperty("health", "10"));
+                Integer health = Integer.parseInt(p.getProperty("health", "10"));
                 desc.health = health;
             } catch (NumberFormatException e) {
             }
             try {
-                desc.width = Float.parseFloat((String) p.getProperty("width", "0.6"));
+                desc.width = Float.parseFloat(p.getProperty("width", "0.6"));
             } catch (NumberFormatException e) {
             }
             try {
-                desc.height = Float.parseFloat((String) p.getProperty("height", "1.8"));
+                desc.height = Float.parseFloat(p.getProperty("height", "1.8"));
             } catch (NumberFormatException e) {
             }
             try {
-                desc.moveSpeed = Float.parseFloat((String) p.getProperty("moveSpeed", "0.7"));
+                desc.moveSpeed = Float.parseFloat(p.getProperty("moveSpeed", "0.7"));
             } catch (NumberFormatException numberFormatException) {
             }
             desc.texture = p.getProperty("texture", "/mob/char.png");

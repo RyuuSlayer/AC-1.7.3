@@ -1,9 +1,17 @@
 package io.github.ryuu.adventurecraft.entities;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.level.Level;
+import net.minecraft.tile.Tile;
+import net.minecraft.util.io.CompoundTag;
+import net.minecraft.util.maths.MathsHelper;
+
 import java.util.ArrayList;
 import java.util.List;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 
 public class EntityBoomerang extends Entity {
 
@@ -57,9 +65,9 @@ public class EntityBoomerang extends Entity {
         this.timeBeforeTurnAround = 30;
         this.turningAround = false;
         this.returnsTo = entity;
-        this.chunkX = (int) Math.floor((double) this.x);
-        this.chunkY = (int) Math.floor((double) this.y);
-        this.chunkZ = (int) Math.floor((double) this.z);
+        this.chunkX = (int) Math.floor(this.x);
+        this.chunkY = (int) Math.floor(this.y);
+        this.chunkZ = (int) Math.floor(this.z);
     }
 
     @Override
@@ -99,7 +107,7 @@ public class EntityBoomerang extends Entity {
             double deltaX = this.returnsTo.x - this.x;
             double deltaY = this.returnsTo.y - this.y;
             double deltaZ = this.returnsTo.z - this.z;
-            double length = Math.sqrt((double) (deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ));
+            double length = Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
             if (length < 1.5) {
                 this.remove();
             }
@@ -123,8 +131,7 @@ public class EntityBoomerang extends Entity {
                 this.itemsPickedUp.add((Object) e);
                 continue;
             }
-            if (!(e instanceof LivingEntity) || e == this.returnsTo)
-                continue;
+            if (!(e instanceof LivingEntity) || e == this.returnsTo) continue;
             e.stunned = 20;
             e.prevX = e.x;
             e.prevY = e.y;
@@ -133,13 +140,12 @@ public class EntityBoomerang extends Entity {
             e.prevPitch = e.pitch;
         }
         for (Entity e : this.itemsPickedUp) {
-            if (e.removed)
-                continue;
+            if (e.removed) continue;
             e.setPosition(this.x, this.y, this.z);
         }
-        int curChunkX = (int) Math.floor((double) this.x);
-        int curChunkY = (int) Math.floor((double) this.y);
-        int curChunkZ = (int) Math.floor((double) this.z);
+        int curChunkX = (int) Math.floor(this.x);
+        int curChunkY = (int) Math.floor(this.y);
+        int curChunkZ = (int) Math.floor(this.z);
         if (curChunkX != this.chunkX || curChunkY != this.chunkY || curChunkZ != this.chunkZ) {
             this.chunkX = curChunkX;
             this.chunkY = curChunkY;
@@ -160,9 +166,9 @@ public class EntityBoomerang extends Entity {
     }
 
     public void determineRotation() {
-        this.yaw = -57.29578f * (float) Math.atan2((double) this.velocityX, (double) this.velocityZ);
-        double xzLength = Math.sqrt((double) (this.velocityZ * this.velocityZ + this.velocityX * this.velocityX));
-        this.pitch = -57.29578f * (float) Math.atan2((double) this.velocityY, (double) xzLength);
+        this.yaw = -57.29578f * (float) Math.atan2(this.velocityX, this.velocityZ);
+        double xzLength = Math.sqrt(this.velocityZ * this.velocityZ + this.velocityX * this.velocityX);
+        this.pitch = -57.29578f * (float) Math.atan2(this.velocityY, xzLength);
     }
 
     @Override

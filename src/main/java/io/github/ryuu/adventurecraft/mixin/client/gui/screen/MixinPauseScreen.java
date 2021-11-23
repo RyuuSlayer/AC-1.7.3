@@ -1,7 +1,14 @@
 package io.github.ryuu.adventurecraft.mixin.client.gui.screen;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.Screen;
+import net.minecraft.client.gui.screen.AchievementsScreen;
+import net.minecraft.client.gui.screen.OptionsScreen;
+import net.minecraft.client.gui.screen.StatsScreen;
+import net.minecraft.client.gui.screen.TitleScreen;
+import net.minecraft.client.gui.widgets.Button;
+import net.minecraft.client.resource.language.I18n;
+import net.minecraft.stat.Stats;
+import net.minecraft.util.maths.MathsHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -9,10 +16,9 @@ import org.spongepowered.asm.mixin.Shadow;
 @Mixin(PauseScreen.class)
 public class MixinPauseScreen extends Screen {
 
+    private final int field_2205 = 0;
     @Shadow()
     private int field_2204 = 0;
-
-    private int field_2205 = 0;
 
     /**
      * @author Ryuu, TechPizza, Phil
@@ -23,14 +29,14 @@ public class MixinPauseScreen extends Screen {
         this.field_2204 = 0;
         this.buttons.clear();
         int byte0 = -16;
-        this.buttons.add((Object) new Button(1, this.width / 2 - 100, this.height / 4 + 120 + byte0, "Save and quit to title"));
+        this.buttons.add(new Button(1, this.width / 2 - 100, this.height / 4 + 120 + byte0, "Save and quit to title"));
         if (this.minecraft.isConnectedToServer()) {
-            ((Button) this.buttons.get((int) 0)).text = "Disconnect";
+            ((Button) this.buttons.get(0)).text = "Disconnect";
         }
-        this.buttons.add((Object) new Button(4, this.width / 2 - 100, this.height / 4 + 24 + byte0, "Back to game"));
-        this.buttons.add((Object) new Button(0, this.width / 2 - 100, this.height / 4 + 96 + byte0, "Options..."));
-        this.buttons.add((Object) new Button(5, this.width / 2 - 100, this.height / 4 + 48 + byte0, 98, 20, I18n.translate("gui.achievements")));
-        this.buttons.add((Object) new Button(6, this.width / 2 + 2, this.height / 4 + 48 + byte0, 98, 20, I18n.translate("gui.stats")));
+        this.buttons.add(new Button(4, this.width / 2 - 100, this.height / 4 + 24 + byte0, "Back to game"));
+        this.buttons.add(new Button(0, this.width / 2 - 100, this.height / 4 + 96 + byte0, "Options..."));
+        this.buttons.add(new Button(5, this.width / 2 - 100, this.height / 4 + 48 + byte0, 98, 20, I18n.translate("gui.achievements")));
+        this.buttons.add(new Button(6, this.width / 2 + 2, this.height / 4 + 48 + byte0, 98, 20, I18n.translate("gui.stats")));
     }
 
     /**

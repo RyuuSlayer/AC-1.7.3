@@ -1,20 +1,23 @@
 package io.github.ryuu.adventurecraft.mixin.tile;
 
-import java.util.Random;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import io.github.ryuu.adventurecraft.util.DebugMode;
+import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
+import net.minecraft.tile.Tile;
+import net.minecraft.tile.material.Material;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import io.github.ryuu.adventurecraft.util.DebugMode;
+
+import java.util.Random;
 
 @Mixin(FireTile.class)
 public class MixinFireTile extends Tile {
 
     @Shadow()
-    private int[] flammabilities = new int[256];
+    private final int[] flammabilities = new int[256];
 
-    private int[] spreadabilities = new int[256];
+    private final int[] spreadabilities = new int[256];
 
     protected MixinFireTile(int id, int j) {
         super(id, j, Material.FIRE);
@@ -74,8 +77,7 @@ public class MixinFireTile extends Tile {
                 for (int k1 = y - 1; k1 <= y + 4; ++k1) {
                     int j2;
                     int i2;
-                    if (i1 == x && k1 == y && j1 == z)
-                        continue;
+                    if (i1 == x && k1 == y && j1 == z) continue;
                     int l1 = 100;
                     if (k1 > y + 1) {
                         l1 += (k1 - (y + 1)) * 100;
@@ -220,13 +222,14 @@ public class MixinFireTile extends Tile {
     @Override
     @Overwrite()
     public void randomDisplayTick(Level level, int x, int y, int z, Random rand) {
-        block12: {
-            block11: {
+        block12:
+        {
+            block11:
+            {
                 if (rand.nextInt(24) == 0) {
                     level.playSound((float) x + 0.5f, (float) y + 0.5f, (float) z + 0.5f, "fire.fire", 1.0f + rand.nextFloat(), rand.nextFloat() * 0.7f + 0.3f);
                 }
-                if (!level.canSuffocate(x, y - 1, z) && !Tile.FIRE.method_1824(level, x, y - 1, z))
-                    break block11;
+                if (!level.canSuffocate(x, y - 1, z) && !Tile.FIRE.method_1824(level, x, y - 1, z)) break block11;
                 for (int l = 0; l < 3; ++l) {
                     float f = (float) x + rand.nextFloat();
                     float f6 = (float) y + rand.nextFloat() * 0.5f + 0.5f;
@@ -267,8 +270,7 @@ public class MixinFireTile extends Tile {
                     level.addParticle("largesmoke", f4, f10, f16, 0.0, 0.0, 0.0);
                 }
             }
-            if (!Tile.FIRE.method_1824(level, x, y + 1, z))
-                break block12;
+            if (!Tile.FIRE.method_1824(level, x, y + 1, z)) break block12;
             for (int i2 = 0; i2 < 2; ++i2) {
                 float f5 = (float) x + rand.nextFloat();
                 float f11 = (float) (y + 1) - rand.nextFloat() * 0.1f;

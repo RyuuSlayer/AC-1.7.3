@@ -1,8 +1,8 @@
 package io.github.ryuu.adventurecraft.util;
 
+import net.minecraft.client.Minecraft;
+
 import java.awt.image.BufferedImage;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 
 public class TextureAnimated {
 
@@ -44,15 +44,15 @@ public class TextureAnimated {
         }
         this.curFrame = 0;
         if (bufferedimage == null) {
-            Minecraft.minecraftInstance.overlay.addChatMessage(String.format((String) "Unable to load texture '%s'", (Object[]) new Object[] { animatedTex }));
+            Minecraft.minecraftInstance.overlay.addChatMessage(String.format("Unable to load texture '%s'", new Object[]{animatedTex}));
             return;
         }
         if (this.width != bufferedimage.getWidth()) {
-            Minecraft.minecraftInstance.overlay.addChatMessage(String.format((String) "Animated texture width of %d didn't match the specified width of %d", (Object[]) new Object[] { bufferedimage.getWidth(), this.width }));
+            Minecraft.minecraftInstance.overlay.addChatMessage(String.format("Animated texture width of %d didn't match the specified width of %d", new Object[]{bufferedimage.getWidth(), this.width}));
             return;
         }
         if (0 != bufferedimage.getHeight() % this.height) {
-            Minecraft.minecraftInstance.overlay.addChatMessage(String.format((String) "Animated texture height of %d isn't a multiple of the specified height of %d", (Object[]) new Object[] { bufferedimage.getHeight(), this.height }));
+            Minecraft.minecraftInstance.overlay.addChatMessage(String.format("Animated texture height of %d isn't a multiple of the specified height of %d", new Object[]{bufferedimage.getHeight(), this.height}));
             return;
         }
         this.numFrames = bufferedimage.getHeight() / this.height;

@@ -1,27 +1,30 @@
 package io.github.ryuu.adventurecraft.mixin.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.PaintingMotif;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
+import net.minecraft.tile.material.Material;
+import net.minecraft.util.io.CompoundTag;
+import net.minecraft.util.maths.MathsHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Mixin(Painting.class)
 public class MixinPainting extends Entity {
 
     @Shadow()
-    private int field_1389 = 0;
-
+    private final int field_1389 = 0;
     public int dir = 0;
-
     public int tileX;
-
     public int tileY;
-
     public int tileZ;
-
     public PaintingMotif motive;
 
     public MixinPainting(Level world) {
@@ -42,12 +45,11 @@ public class MixinPainting extends Entity {
             PaintingMotif enumart;
             this.motive = enumart = aenumart[j1];
             this.setDir(l);
-            if (!this.method_1193())
-                continue;
-            arraylist.add((Object) enumart);
+            if (!this.method_1193()) continue;
+            arraylist.add(enumart);
         }
         if (arraylist.size() > 0) {
-            this.motive = (PaintingMotif) ((Object) arraylist.get(this.rand.nextInt(arraylist.size())));
+            this.motive = (PaintingMotif) arraylist.get(this.rand.nextInt(arraylist.size()));
         }
         this.setDir(l);
     }
@@ -58,8 +60,7 @@ public class MixinPainting extends Entity {
         this.tileY = j;
         this.tileZ = k;
         for (PaintingMotif enumart : PaintingMotif.values()) {
-            if (!enumart.id.equals((Object) s))
-                continue;
+            if (!enumart.id.equals(s)) continue;
             this.motive = enumart;
             break;
         }
@@ -157,15 +158,13 @@ public class MixinPainting extends Entity {
         for (int j1 = 0; j1 < i; ++j1) {
             for (int k1 = 0; k1 < j; ++k1) {
                 Material material = this.dir == 0 || this.dir == 2 ? this.level.getMaterial(k + j1, l + k1, this.tileZ) : this.level.getMaterial(this.tileX, l + k1, i1 + j1);
-                if (material.isSolid())
-                    continue;
+                if (material.isSolid()) continue;
                 return false;
             }
         }
         List list = this.level.getEntities(this, this.boundingBox);
         for (int l1 = 0; l1 < list.size(); ++l1) {
-            if (!(list.get(l1) instanceof Painting))
-                continue;
+            if (!(list.get(l1) instanceof Painting)) continue;
             return false;
         }
         return true;
@@ -196,8 +195,7 @@ public class MixinPainting extends Entity {
         this.tileZ = tag.getInt("TileZ");
         String s = tag.getString("Motive");
         for (PaintingMotif enumart : PaintingMotif.values()) {
-            if (!enumart.id.equals((Object) s))
-                continue;
+            if (!enumart.id.equals(s)) continue;
             this.motive = enumart;
         }
         if (this.motive == null) {

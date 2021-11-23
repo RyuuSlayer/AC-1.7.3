@@ -1,7 +1,9 @@
 package io.github.ryuu.adventurecraft.mixin.entity;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.level.Level;
+import net.minecraft.tile.Tile;
+import net.minecraft.util.maths.MathsHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -25,9 +27,9 @@ public class MixinFlyingEntity extends LivingEntity {
         if (this.method_1334()) {
             this.movementInputToVelocity(f, f1, 0.02f);
             this.move(this.velocityX, this.velocityY, this.velocityZ);
-            this.velocityX *= (double) 0.8f;
-            this.velocityY *= (double) 0.8f;
-            this.velocityZ *= (double) 0.8f;
+            this.velocityX *= 0.8f;
+            this.velocityY *= 0.8f;
+            this.velocityZ *= 0.8f;
         } else if (this.method_1335()) {
             this.movementInputToVelocity(f, f1, 0.02f);
             this.move(this.velocityX, this.velocityY, this.velocityZ);
@@ -54,9 +56,9 @@ public class MixinFlyingEntity extends LivingEntity {
                 }
             }
             this.move(this.velocityX, this.velocityY, this.velocityZ);
-            this.velocityX *= (double) f2;
-            this.velocityY *= (double) f2;
-            this.velocityZ *= (double) f2;
+            this.velocityX *= f2;
+            this.velocityY *= f2;
+            this.velocityZ *= f2;
         }
         this.field_1048 = this.limbDistance;
         double d = this.x - this.prevX;

@@ -1,5 +1,17 @@
 package io.github.ryuu.adventurecraft.mixin.entity.player;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.container.Container;
+import net.minecraft.container.slot.CraftingResultSlot;
+import net.minecraft.container.slot.Slot;
+import net.minecraft.entity.player.Player;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.CraftingResultInventory;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.armour.ArmourItem;
+import net.minecraft.tile.Tile;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -67,8 +79,7 @@ public class MixinPlayerContainer extends Container {
         super.onClosed(entityplayer);
         for (int i = 0; i < 4; ++i) {
             ItemInstance itemstack = this.craftingInv.getInvItem(i);
-            if (itemstack == null)
-                continue;
+            if (itemstack == null) continue;
             entityplayer.dropItem(itemstack);
             this.craftingInv.setInvItem(i, null);
         }

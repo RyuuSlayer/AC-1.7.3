@@ -1,7 +1,12 @@
 package io.github.ryuu.adventurecraft.entities;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.entity.projectile.Arrow;
+import net.minecraft.level.Level;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.io.CompoundTag;
 
 public class EntityArrowBomb extends Arrow {
 
@@ -33,9 +38,9 @@ public class EntityArrowBomb extends Arrow {
 
     @Override
     public void handleHitEntity(HitResult movingobjectposition) {
-        this.velocityX *= (double) -0.1f;
-        this.velocityY *= (double) -0.1f;
-        this.velocityZ *= (double) -0.1f;
+        this.velocityX *= -0.1f;
+        this.velocityY *= -0.1f;
+        this.velocityZ *= -0.1f;
         this.yaw += 180.0f;
         this.prevYaw += 180.0f;
         this.field_1584 = 0;

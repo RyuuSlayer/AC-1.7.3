@@ -1,5 +1,15 @@
 package io.github.ryuu.adventurecraft.mixin.entity;
 
+import net.minecraft.achievement.Achievements;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.item.ItemType;
+import net.minecraft.level.Level;
+import net.minecraft.tile.Tile;
+import net.minecraft.tile.material.Material;
+import net.minecraft.util.io.CompoundTag;
+import net.minecraft.util.maths.MathsHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -9,16 +19,11 @@ public class MixinItemEntity extends Entity {
 
     @Shadow()
     public ItemInstance item;
-
-    private int field_568;
-
     public int age = 0;
-
     public int pickupDelay;
-
-    private int health = 5;
-
     public float field_567 = (float) (Math.random() * Math.PI * 2.0);
+    private int field_568;
+    private int health = 5;
 
     public MixinItemEntity(Level world, double d, double d1, double d2, ItemInstance itemstack) {
         super(world);
@@ -54,7 +59,7 @@ public class MixinItemEntity extends Entity {
         this.prevX = this.x;
         this.prevY = this.y;
         this.prevZ = this.z;
-        this.velocityY -= (double) 0.04f;
+        this.velocityY -= 0.04f;
         if (this.level.getMaterial(MathsHelper.floor(this.x), MathsHelper.floor(this.y), MathsHelper.floor(this.z)) == Material.LAVA) {
             this.velocityY = 0.2f;
             this.velocityX = (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2f;
@@ -71,9 +76,9 @@ public class MixinItemEntity extends Entity {
                 f = Tile.BY_ID[i].field_1901 * 0.98f;
             }
         }
-        this.velocityX *= (double) f;
-        this.velocityY *= (double) 0.98f;
-        this.velocityZ *= (double) f;
+        this.velocityX *= f;
+        this.velocityY *= 0.98f;
+        this.velocityZ *= f;
         if (this.onGround) {
             this.velocityY *= -0.5;
         }

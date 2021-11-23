@@ -1,21 +1,20 @@
 package io.github.ryuu.adventurecraft.gui;
 
-import java.io.File;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import io.github.ryuu.adventurecraft.entities.tile.TileEntityNpcPath;
 import io.github.ryuu.adventurecraft.entities.EntityNPC;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityNpcPath;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
+import net.minecraft.client.gui.widgets.Button;
+import net.minecraft.client.gui.widgets.Textbox;
+
+import java.io.File;
 
 public class GuiNPC extends Screen {
 
-    private EntityNPC npc;
-
-    private Textbox npcName;
-
-    private Textbox chatMsg;
-
+    private final EntityNPC npc;
     int selectedID = 0;
-
+    private Textbox npcName;
+    private Textbox chatMsg;
     private Button setOnCreated;
 
     private Button setOnUpdate;
@@ -34,6 +33,11 @@ public class GuiNPC extends Screen {
         this.npc = n;
     }
 
+    public static void showUI(EntityNPC n) {
+        TileEntityNpcPath.lastEntity = n;
+        Minecraft.minecraftInstance.openScreen(new GuiNPC(n));
+    }
+
     @Override
     public void tick() {
         if (this.page == 0) {
@@ -44,14 +48,15 @@ public class GuiNPC extends Screen {
 
     @Override
     public void init() {
-        block8: {
-            block7: {
+        block8:
+        {
+            block7:
+            {
                 this.buttons.clear();
                 int buttonWidth = (this.width - 16) / 4;
-                this.buttons.add((Object) new Button(-20, 4, 0, buttonWidth, 18, "Misc"));
-                this.buttons.add((Object) new Button(-21, 4 + (4 + buttonWidth), 0, buttonWidth, 18, "Script"));
-                if (this.page != 0)
-                    break block7;
+                this.buttons.add(new Button(-20, 4, 0, buttonWidth, 18, "Misc"));
+                this.buttons.add(new Button(-21, 4 + (4 + buttonWidth), 0, buttonWidth, 18, "Script"));
+                if (this.page != 0) break block7;
                 this.npcName = new Textbox(this, this.textManager, 4, 40, 160, 20, this.npc.npcName);
                 this.npcName.field_2420 = true;
                 this.npcName.method_1878(32);
@@ -59,19 +64,19 @@ public class GuiNPC extends Screen {
                 this.chatMsg.field_2420 = false;
                 this.chatMsg.method_1878(32);
                 Button b = new Button(-1, 4, 104, 160, 18, "Delete NPC");
-                this.buttons.add((Object) b);
+                this.buttons.add(b);
                 b = new Button(-2, 170, 24, 160, 18, "Path To Home");
-                this.buttons.add((Object) b);
+                this.buttons.add(b);
                 if (!this.npc.pathToHome) {
                     b.text = "Don't Path Home";
                 }
                 b = new Button(-3, 170, 42, 160, 18, "Track Player");
-                this.buttons.add((Object) b);
+                this.buttons.add(b);
                 if (!this.npc.trackPlayer) {
                     b.text = "Don't Track Player";
                 }
                 b = new Button(-4, 170, 64, 160, 18, "Can be attacked");
-                this.buttons.add((Object) b);
+                this.buttons.add(b);
                 if (!this.npc.isAttackable) {
                     b.text = "Can't be attacked";
                 }
@@ -79,12 +84,11 @@ public class GuiNPC extends Screen {
                 int i = 1;
                 buttonWidth = (this.width - 16) / 3;
                 b = new Button(0, 4, 124, buttonWidth, 18, "Player Skin");
-                this.buttons.add((Object) b);
-                if (!npcSkins.isDirectory())
-                    break block8;
+                this.buttons.add(b);
+                if (!npcSkins.isDirectory()) break block8;
                 for (File f : npcSkins.listFiles()) {
                     b = new Button(i, 4 + (buttonWidth + 4) * (i % 3), 124 + i / 3 * 20, buttonWidth, 18, f.getName().split("\\.")[0]);
-                    this.buttons.add((Object) b);
+                    this.buttons.add(b);
                     ++i;
                 }
                 break block8;
@@ -97,22 +101,22 @@ public class GuiNPC extends Screen {
                 this.setOnAttacked = new Button(3, this.width / 2, 46, "OnAttacked: " + this.npc.onAttacked);
                 this.setOnDeath = new Button(4, 4, 68, "OnDeath: " + this.npc.onDeath);
                 this.setOnInteraction = new Button(5, this.width / 2, 68, "OnInteraction: " + this.npc.onInteraction);
-                this.buttons.add((Object) this.setOnCreated);
-                this.buttons.add((Object) this.setOnUpdate);
-                this.buttons.add((Object) this.setOnPathReached);
-                this.buttons.add((Object) this.setOnAttacked);
-                this.buttons.add((Object) this.setOnDeath);
-                this.buttons.add((Object) this.setOnInteraction);
+                this.buttons.add(this.setOnCreated);
+                this.buttons.add(this.setOnUpdate);
+                this.buttons.add(this.setOnPathReached);
+                this.buttons.add(this.setOnAttacked);
+                this.buttons.add(this.setOnDeath);
+                this.buttons.add(this.setOnInteraction);
                 Button b = new Button(6, 4, 90, 200, 20, "Reload Scripts");
-                this.buttons.add((Object) b);
+                this.buttons.add(b);
                 b = new Button(7, 4, 112, 160, 18, "None");
-                this.buttons.add((Object) b);
+                this.buttons.add(b);
                 String[] scripts = this.getScriptFiles();
                 if (scripts != null) {
                     int i = 1;
                     for (String scriptFile : scripts) {
                         b = new Button(7 + i, 6 + i % 3 * this.width / 3, 112 + i / 3 * 20, 160, 18, scriptFile);
-                        this.buttons.add((Object) b);
+                        this.buttons.add(b);
                         ++i;
                     }
                 }
@@ -146,7 +150,7 @@ public class GuiNPC extends Screen {
     @Override
     protected void buttonClicked(Button button) {
         if (button.id <= -20) {
-            this.page = Math.abs((int) (button.id + 20));
+            this.page = Math.abs(button.id + 20);
             this.init();
             return;
         }
@@ -245,10 +249,5 @@ public class GuiNPC extends Screen {
             this.npc.chatMsg = this.chatMsg.method_1876();
         }
         super.render(mouseX, mouseY, delta);
-    }
-
-    public static void showUI(EntityNPC n) {
-        TileEntityNpcPath.lastEntity = n;
-        Minecraft.minecraftInstance.openScreen(new GuiNPC(n));
     }
 }

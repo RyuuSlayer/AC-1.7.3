@@ -1,61 +1,51 @@
 package io.github.ryuu.adventurecraft.entities;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityNpcPath;
+import io.github.ryuu.adventurecraft.util.CoordBlock;
+import io.github.ryuu.adventurecraft.util.IEntityPather;
+import net.minecraft.class_61;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.level.Level;
+import net.minecraft.script.EntityDescriptions;
+import net.minecraft.script.ScopeTag;
+import net.minecraft.script.ScriptEntity;
+import net.minecraft.script.ScriptEntityDescription;
+import net.minecraft.util.io.AbstractTag;
+import net.minecraft.util.io.CompoundTag;
+import net.minecraft.util.maths.MathsHelper;
+import net.minecraft.util.maths.Vec3f;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
-import io.github.ryuu.adventurecraft.scripting.ScriptEntity;
-import io.github.ryuu.adventurecraft.scripting.EntityDescriptions;
-import io.github.ryuu.adventurecraft.scripting.ScopeTag;
-import io.github.ryuu.adventurecraft.util.CoordBlock;
-import io.github.ryuu.adventurecraft.entities.tile.TileEntityNpcPath;
-import io.github.ryuu.adventurecraft.scripting.ScriptEntityDescription;
-import io.github.ryuu.adventurecraft.util.IEntityPather;
 
 public class EntityLivingScript extends LivingEntity implements IEntityPather {
 
-    String initDescTo;
-
-    String descriptionName;
-
-    float prevWidth = 0.6f;
-
-    float prevHeight = 1.8f;
-
-    protected Scriptable scope;
-
     public String onCreated = "";
-
     public String onUpdate = "";
-
     public String onPathReached = "";
-
     public String onAttacked = "";
-
     public String onDeath = "";
-
     public String onInteraction = "";
-
-    private class_61 path;
-
-    private Entity pathToEntity;
-
-    private CoordBlock pathToVec;
-
-    public Float maxPathDistance = Float.valueOf((float) 64.0f);
-
-    private int nextPathIn;
-
-    private double prevDistToPoint = 999999.0;
-
+    public Float maxPathDistance = Float.valueOf(64.0f);
+    protected Scriptable scope;
+    String initDescTo;
+    String descriptionName;
+    float prevWidth = 0.6f;
+    float prevHeight = 1.8f;
     TileEntityNpcPath triggerOnPath = null;
+    private class_61 path;
+    private Entity pathToEntity;
+    private CoordBlock pathToVec;
+    private int nextPathIn;
+    private double prevDistToPoint = 999999.0;
 
     public EntityLivingScript(Level w) {
         super(w);
         this.scope = w.script.getNewScope();
-        Object wrappedOut = Context.javaToJS((Object) ScriptEntity.getEntityClass(this), (Scriptable) this.scope);
-        ScriptableObject.putProperty((Scriptable) this.scope, (String) "entity", (Object) wrappedOut);
+        Object wrappedOut = Context.javaToJS((Object) ScriptEntity.getEntityClass(this), this.scope);
+        ScriptableObject.putProperty(this.scope, "entity", wrappedOut);
     }
 
     public void setEntityDescription(String descName) {
@@ -91,7 +81,7 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
     @Override
     public void tick() {
         if (this.initDescTo != null) {
-            if (!this.initDescTo.equals((Object) "")) {
+            if (!this.initDescTo.equals("")) {
                 this.setEntityDescription(this.initDescTo, false);
             }
             this.initDescTo = null;
@@ -105,10 +95,10 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
 
     @Override
     public boolean damage(Entity target, int amount) {
-        Object wrappedOut = Context.javaToJS((Object) ScriptEntity.getEntityClass(target), (Scriptable) this.scope);
-        ScriptableObject.putProperty((Scriptable) this.scope, (String) "attackingEntity", (Object) wrappedOut);
-        wrappedOut = Context.javaToJS((Object) new Integer(amount), (Scriptable) this.scope);
-        ScriptableObject.putProperty((Scriptable) this.scope, (String) "attackingDamage", (Object) wrappedOut);
+        Object wrappedOut = Context.javaToJS((Object) ScriptEntity.getEntityClass(target), this.scope);
+        ScriptableObject.putProperty(this.scope, "attackingEntity", wrappedOut);
+        wrappedOut = Context.javaToJS(new Integer(amount), this.scope);
+        ScriptableObject.putProperty(this.scope, "attackingDamage", wrappedOut);
         if (this.runOnAttackedScript()) {
             return super.damage(target, amount);
         }
@@ -117,10 +107,10 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
 
     @Override
     public boolean attackEntityFromMulti(Entity entity, int i) {
-        Object wrappedOut = Context.javaToJS((Object) ScriptEntity.getEntityClass(entity), (Scriptable) this.scope);
-        ScriptableObject.putProperty((Scriptable) this.scope, (String) "attackingEntity", (Object) wrappedOut);
-        wrappedOut = Context.javaToJS((Object) new Integer(i), (Scriptable) this.scope);
-        ScriptableObject.putProperty((Scriptable) this.scope, (String) "attackingDamage", (Object) wrappedOut);
+        Object wrappedOut = Context.javaToJS((Object) ScriptEntity.getEntityClass(entity), this.scope);
+        ScriptableObject.putProperty(this.scope, "attackingEntity", wrappedOut);
+        wrappedOut = Context.javaToJS(new Integer(i), this.scope);
+        ScriptableObject.putProperty(this.scope, "attackingDamage", wrappedOut);
         if (this.runOnAttackedScript()) {
             return super.attackEntityFromMulti(entity, i);
         }
@@ -141,25 +131,25 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
     @Override
     public void writeCustomDataToTag(CompoundTag tag) {
         super.writeCustomDataToTag(tag);
-        if (this.descriptionName != null && !this.descriptionName.equals((Object) "")) {
+        if (this.descriptionName != null && !this.descriptionName.equals("")) {
             tag.put("descriptionName", this.descriptionName);
         }
-        if (!this.onCreated.equals((Object) "")) {
+        if (!this.onCreated.equals("")) {
             tag.put("onCreated", this.onCreated);
         }
-        if (!this.onUpdate.equals((Object) "")) {
+        if (!this.onUpdate.equals("")) {
             tag.put("onUpdate", this.onUpdate);
         }
-        if (!this.onPathReached.equals((Object) "")) {
+        if (!this.onPathReached.equals("")) {
             tag.put("onPathReached", this.onPathReached);
         }
-        if (!this.onAttacked.equals((Object) "")) {
+        if (!this.onAttacked.equals("")) {
             tag.put("onAttacked", this.onAttacked);
         }
-        if (!this.onDeath.equals((Object) "")) {
+        if (!this.onDeath.equals("")) {
             tag.put("onDeath", this.onDeath);
         }
-        if (!this.onInteraction.equals((Object) "")) {
+        if (!this.onInteraction.equals("")) {
             tag.put("onInteraction", this.onInteraction);
         }
         if (tag.containsKey("scope")) {
@@ -181,25 +171,25 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
     }
 
     public void runCreatedScript() {
-        if (!this.onCreated.equals((Object) "")) {
+        if (!this.onCreated.equals("")) {
             this.level.scriptHandler.runScript(this.onCreated, this.scope);
         }
     }
 
     private void runUpdateScript() {
-        if (!this.onUpdate.equals((Object) "")) {
+        if (!this.onUpdate.equals("")) {
             this.level.scriptHandler.runScript(this.onUpdate, this.scope);
         }
     }
 
     private void runPathCompletedScript() {
-        if (!this.onPathReached.equals((Object) "")) {
+        if (!this.onPathReached.equals("")) {
             this.level.scriptHandler.runScript(this.onPathReached, this.scope);
         }
     }
 
     private boolean runOnAttackedScript() {
-        if (!this.onAttacked.equals((Object) "")) {
+        if (!this.onAttacked.equals("")) {
             Object obj = this.level.scriptHandler.runScript(this.onAttacked, this.scope);
             if (obj == null || !(obj instanceof Boolean)) {
                 return true;
@@ -210,13 +200,13 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
     }
 
     private void runDeathScript() {
-        if (!this.onDeath.equals((Object) "")) {
+        if (!this.onDeath.equals("")) {
             this.level.scriptHandler.runScript(this.onDeath, this.scope);
         }
     }
 
     private boolean runOnInteractionScript() {
-        if (!this.onInteraction.equals((Object) "")) {
+        if (!this.onInteraction.equals("")) {
             Object obj = this.level.scriptHandler.runScript(this.onInteraction, this.scope);
             if (obj == null || !(obj instanceof Boolean)) {
                 return true;
@@ -297,7 +287,7 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
                 double dX = vec3d.x - this.x;
                 double dZ = vec3d.z - this.z;
                 double dY = vec3d.y - (double) MathsHelper.floor(this.boundingBox.minY + 0.5);
-                float yawDir = (float) (Math.atan2((double) dZ, (double) dX) * 180.0 / 3.1415927410125732) - 90.0f;
+                float yawDir = (float) (Math.atan2(dZ, dX) * 180.0 / 3.1415927410125732) - 90.0f;
                 this.parallelMovement = this.movementSpeed;
                 for (yawDelta = yawDir - this.yaw; yawDelta < -180.0f; yawDelta += 360.0f) {
                 }

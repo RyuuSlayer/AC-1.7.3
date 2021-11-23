@@ -1,14 +1,17 @@
 package io.github.ryuu.adventurecraft.mixin.tile;
 
-import java.util.Random;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.api.EnvironmentInterface;
-import net.fabricmc.api.EnvironmentInterfaces;
+import io.github.ryuu.adventurecraft.blocks.IBlockColor;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.colour.GrassColour;
+import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
+import net.minecraft.level.chunk.Chunk;
+import net.minecraft.tile.Tile;
+import net.minecraft.tile.material.Material;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
-import io.github.ryuu.adventurecraft.blocks.IBlockColor;
+
+import java.util.Random;
 
 @Mixin(GrassTile.class)
 public class MixinGrassTile extends Tile implements IBlockColor {
@@ -128,19 +131,16 @@ public class MixinGrassTile extends Tile implements IBlockColor {
      */
     @Overwrite()
     public float grassMultiplier(int metadata) {
-        switch(metadata) {
-            case 2:
-                {
-                    return 0.62f;
-                }
-            case 3:
-                {
-                    return 0.85f;
-                }
-            case 4:
-                {
-                    return -1.0f;
-                }
+        switch (metadata) {
+            case 2: {
+                return 0.62f;
+            }
+            case 3: {
+                return 0.85f;
+            }
+            case 4: {
+                return -1.0f;
+            }
         }
         return 1.0f;
     }

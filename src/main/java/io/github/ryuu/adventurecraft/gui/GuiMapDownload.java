@@ -1,74 +1,46 @@
 package io.github.ryuu.adventurecraft.gui;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Reader;
+import net.minecraft.class_520;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Screen;
+import net.minecraft.client.gui.widgets.Button;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.script.ScriptUIContainer;
+import org.lwjgl.opengl.GL11;
+
+import javax.swing.*;
+import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-import javax.swing.SwingUtilities;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import org.lwjgl.opengl.GL11;
-import io.github.ryuu.adventurecraft.scripting.ScriptUIContainer;
 
 class GuiMapDownload extends Screen {
 
     static final String url = "http://www.adventurecraft.org/";
-
+    private final File mapDownloadFolder;
+    private final ArrayList<net.minecraft.src.GuiMapElement> maps = new ArrayList();
+    private final Random rand;
     public ScriptUIContainer ui = new ScriptUIContainer(0.0f, 26.0f, null);
-
     protected Screen parentScreen;
-
-    private File mapDownloadFolder;
-
     private GuiMapElement mouseOver;
-
-    private ArrayList<net.minecraft.src.GuiMapElement> maps = new ArrayList();
-
     private boolean downloading = true;
-
     private int mapImagesDownloaded = 0;
-
     private int totalMaps = 0;
-
     private boolean downloadingMap = false;
-
     private String downloadingMapName;
-
     private int downloadedAmount;
-
     private int downloadSize;
-
     private String mapUrl;
-
     private String mapName;
-
     private GuiMapElement downloadingMapElement;
-
     private boolean rightClickDown = false;
-
     private int mouseY;
-
     private int maxOffset;
-
     private int scrollBarX;
-
     private boolean scrolling = false;
-
-    private Random rand;
 
     GuiMapDownload(Screen guiscreen) {
         this.mapDownloadFolder = new File("./mapDownloads/");
@@ -76,7 +48,7 @@ class GuiMapDownload extends Screen {
             this.mapDownloadFolder.mkdirs();
         }
         this.rand = new Random();
-        SwingUtilities.invokeLater((Runnable) new Runnable() {
+        SwingUtilities.invokeLater(new Runnable() {
 
             public void run() {
                 GuiMapDownload.this.downloadAndLoadMapInfo();
@@ -89,7 +61,7 @@ class GuiMapDownload extends Screen {
 
     @Override
     public void init() {
-        this.buttons.add((Object) new Button(0, 2, 2, 50, 20, "Back"));
+        this.buttons.add(new Button(0, 2, 2, 50, 20, "Back"));
     }
 
     @Override
@@ -123,7 +95,7 @@ class GuiMapDownload extends Screen {
                         this.downloading = true;
                         this.downloadingMap = true;
                         this.downloadingMapName = this.mapName;
-                        SwingUtilities.invokeLater((Runnable) new Runnable() {
+                        SwingUtilities.invokeLater(new Runnable() {
 
                             public void run() {
                                 GuiMapDownload.this.downloadMap();
@@ -132,7 +104,7 @@ class GuiMapDownload extends Screen {
                     }
                 }
                 if (this.maxOffset < 26 && mouseX >= this.scrollBarX && mouseX <= this.scrollBarX + 8 && mouseY > 26) {
-                    float yOffset = Math.max((float) Math.min((float) ((float) (mouseY - 8 - 26) / ((float) this.height - 26.0f - 16.0f - 32.0f)), (float) 1.0f), (float) 0.0f);
+                    float yOffset = Math.max(Math.min((float) (mouseY - 8 - 26) / ((float) this.height - 26.0f - 16.0f - 32.0f), 1.0f), 0.0f);
                     this.ui.curY = 26 - (int) (yOffset * (float) (26 - this.maxOffset));
                     this.scrolling = true;
                 }
@@ -155,7 +127,7 @@ class GuiMapDownload extends Screen {
                     this.ui.curY = this.maxOffset;
                 }
             } else if (this.scrolling) {
-                float yOffset = Math.max((float) Math.min((float) ((float) (mouseY - 8 - 26) / ((float) this.height - 26.0f - 16.0f - 32.0f)), (float) 1.0f), (float) 0.0f);
+                float yOffset = Math.max(Math.min((float) (mouseY - 8 - 26) / ((float) this.height - 26.0f - 16.0f - 32.0f), 1.0f), 0.0f);
                 this.ui.curY = 26 - (int) (yOffset * (float) (26 - this.maxOffset));
             }
             this.ui.onUpdate();
@@ -192,12 +164,12 @@ class GuiMapDownload extends Screen {
                 }
             }
             this.mouseOver = newMap;
-            GL11.glEnable((int) 3042);
-            GL11.glBlendFunc((int) 770, (int) 771);
-            GL11.glDisable((int) 3008);
-            GL11.glDisable((int) 2929);
+            GL11.glEnable(3042);
+            GL11.glBlendFunc(770, 771);
+            GL11.glDisable(3008);
+            GL11.glDisable(2929);
             this.ui.render(this.textManager, this.minecraft.textureManager, delta);
-            GL11.glEnable((int) 2929);
+            GL11.glEnable(2929);
             if (this.maxOffset < 26) {
                 this.fill(this.scrollBarX, 26, this.scrollBarX + 8, this.height - 32, Integer.MIN_VALUE);
                 float yOffset = 1.0f - (this.ui.curY - (float) this.maxOffset) / (26.0f - (float) this.maxOffset);
@@ -206,10 +178,10 @@ class GuiMapDownload extends Screen {
             }
             this.drawBackground(0, 24, 255, 255);
             this.drawBackground(this.height - 32, this.height, 255, 255);
-            GL11.glEnable((int) 3042);
-            GL11.glBlendFunc((int) 770, (int) 771);
-            GL11.glDisable((int) 3008);
-            GL11.glDisable((int) 2929);
+            GL11.glEnable(3042);
+            GL11.glBlendFunc(770, 771);
+            GL11.glDisable(3008);
+            GL11.glDisable(2929);
             int w = this.textManager.getTextWidth("Maps Available For Download");
             this.textManager.drawTextWithoutShadow("Maps Available For Download", this.width / 2 - w / 2, 8, 0xFFFFFF);
             String s = "Additional maps can be found on the AdventureCraft Wiki";
@@ -218,9 +190,9 @@ class GuiMapDownload extends Screen {
             s = "http://adventurecraft.wikkii.com/";
             w = this.textManager.getTextWidth(s);
             this.textManager.drawTextWithoutShadow(s, this.width / 2 - w / 2, this.height - 14, 0xFFFFFF);
-            GL11.glDisable((int) 3042);
-            GL11.glEnable((int) 3008);
-            GL11.glEnable((int) 3553);
+            GL11.glDisable(3042);
+            GL11.glEnable(3008);
+            GL11.glEnable(3553);
             super.render(mouseX, mouseY, delta);
         } else if (!this.downloadingMap) {
             this.drawStatus("Downloading Map Info", this.mapImagesDownloaded, this.totalMaps);
@@ -229,7 +201,7 @@ class GuiMapDownload extends Screen {
             if (this.downloadSize != 0) {
                 float downloadedAmountMegs = (float) this.downloadedAmount / 1024.0f / 1024.0f;
                 float downloadSizeMegs = (float) this.downloadSize / 1024.0f / 1024.0f;
-                String downloaded = String.format((String) "Downloaded %.2f/%.2f MBs", (Object[]) new Object[] { Float.valueOf((float) downloadedAmountMegs), Float.valueOf((float) downloadSizeMegs) });
+                String downloaded = String.format("Downloaded %.2f/%.2f MBs", Float.valueOf(downloadedAmountMegs), Float.valueOf(downloadSizeMegs));
                 int w = this.textManager.getTextWidth(downloaded);
                 this.textManager.drawTextWithoutShadow(downloaded, this.width / 2 - w / 2, this.height / 2 + 15, 0xFFFFFF);
             }
@@ -251,7 +223,7 @@ class GuiMapDownload extends Screen {
         super.init(minecraft, width, height);
         this.ui.setX(width / 2 - 152);
         this.scrollBarX = 1 + this.width / 2 + 152;
-        this.maxOffset = Math.min((int) (this.height - 32 - 102 * (this.maps.size() + 2) / 3), (int) 26);
+        this.maxOffset = Math.min(this.height - 32 - 102 * (this.maps.size() + 2) / 3, 26);
         if (this.ui.curY < (float) this.maxOffset) {
             this.ui.setY(this.maxOffset);
         }
@@ -261,7 +233,7 @@ class GuiMapDownload extends Screen {
         int i = this.maps.size();
         GuiMapElement r = new GuiMapElement(102 * (i % 3), 102 * (i / 3), this.ui, title, topDescription, description, texture, mURL, mapID, totalRating, numRatings);
         this.maps.add((Object) r);
-        this.maxOffset = Math.min((int) (this.height - 32 - 102 * (this.maps.size() + 2) / 3), (int) 26);
+        this.maxOffset = Math.min(this.height - 32 - 102 * (this.maps.size() + 2) / 3, 26);
         return r;
     }
 
@@ -269,8 +241,7 @@ class GuiMapDownload extends Screen {
         for (GuiMapElement m : this.maps) {
             int dX = (int) ((float) x - (m.curX + this.ui.curX));
             int dY = (int) ((float) y - (m.curY + this.ui.curY));
-            if (dX < 0 || dX >= 100 || dY < 0 || dY >= 100)
-                continue;
+            if (dX < 0 || dX >= 100 || dY < 0 || dY >= 100) continue;
             return m;
         }
         return null;
@@ -280,12 +251,12 @@ class GuiMapDownload extends Screen {
         File mapInfo = new File(this.mapDownloadFolder, "mapInfo.txt");
         if (mapInfo.exists()) {
             try {
-                BufferedReader input = new BufferedReader((Reader) new FileReader(mapInfo));
+                BufferedReader input = new BufferedReader(new FileReader(mapInfo));
                 ArrayList lines = new ArrayList();
                 while (input.ready()) {
                     String line = input.readLine();
-                    line = line.replace((CharSequence) "\\n", (CharSequence) "\n");
-                    lines.add((Object) line);
+                    line = line.replace("\\n", "\n");
+                    lines.add(line);
                 }
                 this.totalMaps = lines.size();
                 for (String line : lines) {
@@ -294,16 +265,16 @@ class GuiMapDownload extends Screen {
                         int mapID = new Integer(parts[9]);
                         String mapName = parts[0];
                         String mapDescription = parts[4];
-                        String mapTexture = "http://www.adventurecraft.org/mapThumbnails/" + parts[0].replace((CharSequence) " ", (CharSequence) "%20") + ".png";
+                        String mapTexture = "http://www.adventurecraft.org/mapThumbnails/" + parts[0].replace(" ", "%20") + ".png";
                         String mapURL = parts[12];
-                        mapTexture = mapTexture.replace((CharSequence) " ", (CharSequence) "%20");
+                        mapTexture = mapTexture.replace(" ", "%20");
                         boolean first = true;
                         String topDescription = "";
-                        if (!parts[2].equals((Object) "")) {
+                        if (!parts[2].equals("")) {
                             topDescription = topDescription + "by " + parts[2];
                             first = false;
                         }
-                        if (!parts[8].equals((Object) "")) {
+                        if (!parts[8].equals("")) {
                             if (!first) {
                                 topDescription = topDescription + "\n";
                             }
@@ -337,8 +308,8 @@ class GuiMapDownload extends Screen {
     }
 
     private void downloadMap() {
-        String[] dropboxIDs = new String[] { "51083669", "51083634", "51083701", "51083780" };
-        this.downloadFile(this.mapUrl.replace((CharSequence) "51083780", (CharSequence) dropboxIDs[this.rand.nextInt(4)]), "./mapDownloads/map.zip");
+        String[] dropboxIDs = new String[]{"51083669", "51083634", "51083701", "51083780"};
+        this.downloadFile(this.mapUrl.replace("51083780", dropboxIDs[this.rand.nextInt(4)]), "./mapDownloads/map.zip");
         File mapZip = new File(this.mapDownloadFolder, "map.zip");
         File mapDir = new File("./maps/" + this.mapName);
         if (mapDir.exists()) {
@@ -351,7 +322,7 @@ class GuiMapDownload extends Screen {
         ZipInputStream zipinputstream = null;
         try {
             byte[] buf = new byte[8192];
-            zipinputstream = new ZipInputStream((InputStream) new FileInputStream(mapZip));
+            zipinputstream = new ZipInputStream(new FileInputStream(mapZip));
             ZipEntry zipentry = zipinputstream.getNextEntry();
             while (zipentry != null) {
                 String entryName = zipentry.getName();
@@ -394,7 +365,7 @@ class GuiMapDownload extends Screen {
         File saveDir = new File(mcDir, "saves");
         int i = 1;
         do {
-            saveName = String.format((String) "%s - Save %d", (Object[]) new Object[] { this.mapName, i });
+            saveName = String.format("%s - Save %d", this.mapName, i);
             worldDir = new File(saveDir, saveName);
             ++i;
         } while (worldDir.exists());
@@ -419,7 +390,7 @@ class GuiMapDownload extends Screen {
             output.createNewFile();
             FileOutputStream fos = new FileOutputStream(output);
             bis = new BufferedInputStream(urlconnection.getInputStream());
-            bos = new BufferedOutputStream((OutputStream) fos);
+            bos = new BufferedOutputStream(fos);
             this.downloadedAmount = 0;
             this.downloadSize = urlconnection.getContentLength();
             byte[] buffer = new byte[65536];
@@ -437,8 +408,8 @@ class GuiMapDownload extends Screen {
 
     public void drawBackground(int top, int bottom, int topAlpha, int bottomAlpha) {
         Tessellator tessellator = Tessellator.INSTANCE;
-        GL11.glBindTexture((int) 3553, (int) this.minecraft.textureManager.getTextureId("/gui/background.png"));
-        GL11.glColor4f((float) 1.0f, (float) 1.0f, (float) 1.0f, (float) 1.0f);
+        GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId("/gui/background.png"));
+        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
         float f = 32.0f;
         tessellator.start();
         tessellator.colour(0x404040, bottomAlpha);

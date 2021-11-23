@@ -1,25 +1,26 @@
 package io.github.ryuu.adventurecraft.mixin.client.render;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.URL;
-import javax.imageio.ImageIO;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import io.github.ryuu.adventurecraft.util.Vec2;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.TextureBinder;
+import net.minecraft.item.ItemType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import io.github.ryuu.adventurecraft.util.Vec2;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 @Mixin(ClockTextureBinder.class)
 public class MixinClockTextureBinder extends TextureBinder {
 
     @Shadow()
-    private Minecraft field_1437;
+    private final Minecraft field_1437;
 
-    private int[] field_1438 = new int[256];
+    private final int[] field_1438 = new int[256];
 
-    private int[] field_1439 = new int[256];
+    private final int[] field_1439 = new int[256];
 
     private double field_1440;
 
@@ -30,11 +31,11 @@ public class MixinClockTextureBinder extends TextureBinder {
         this.field_1437 = minecraft;
         this.renderMode = 1;
         try {
-            BufferedImage bufferedimage = ImageIO.read((URL) Minecraft.class.getResource("/gui/items.png"));
+            BufferedImage bufferedimage = ImageIO.read(Minecraft.class.getResource("/gui/items.png"));
             int i = this.field_1412 % 16 * 16;
             int j = this.field_1412 / 16 * 16;
             bufferedimage.getRGB(i, j, 16, 16, this.field_1438, 0, 16);
-            bufferedimage = ImageIO.read((URL) Minecraft.class.getResource("/misc/dial.png"));
+            bufferedimage = ImageIO.read(Minecraft.class.getResource("/misc/dial.png"));
             bufferedimage.getRGB(0, 0, 16, 16, this.field_1439, 0, 16);
         } catch (IOException ioexception) {
             ioexception.printStackTrace();
@@ -70,8 +71,8 @@ public class MixinClockTextureBinder extends TextureBinder {
         this.field_1441 += d1 * 0.1;
         this.field_1441 *= 0.8;
         this.field_1440 += this.field_1441;
-        double d2 = Math.sin((double) this.field_1440);
-        double d3 = Math.cos((double) this.field_1440);
+        double d2 = Math.sin(this.field_1440);
+        double d3 = Math.cos(this.field_1440);
         for (int i = 0; i < 256; ++i) {
             int j = this.field_1438[i] >> 24 & 0xFF;
             int k = this.field_1438[i] >> 16 & 0xFF;

@@ -1,14 +1,17 @@
 package io.github.ryuu.adventurecraft.blocks;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import io.github.ryuu.adventurecraft.items.ItemCursor;
-import io.github.ryuu.adventurecraft.util.DebugMode;
-import io.github.ryuu.adventurecraft.items.Items;
-import io.github.ryuu.adventurecraft.gui.GuiTriggerPushable;
-import io.github.ryuu.adventurecraft.entities.tile.TileEntityTriggerPushable;
-import io.github.ryuu.adventurecraft.util.TriggerArea;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityMinMax;
+import io.github.ryuu.adventurecraft.entities.tile.TileEntityTriggerPushable;
+import io.github.ryuu.adventurecraft.gui.GuiTriggerPushable;
+import io.github.ryuu.adventurecraft.items.ItemCursor;
+import io.github.ryuu.adventurecraft.items.Items;
+import io.github.ryuu.adventurecraft.util.DebugMode;
+import io.github.ryuu.adventurecraft.util.TriggerArea;
+import net.minecraft.entity.player.Player;
+import net.minecraft.level.Level;
+import net.minecraft.tile.Tile;
+import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.tile.material.Material;
 
 public class BlockTriggerPushable extends BlockContainerColor {
 
