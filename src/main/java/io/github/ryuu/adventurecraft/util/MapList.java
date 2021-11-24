@@ -2,14 +2,17 @@ package io.github.ryuu.adventurecraft.util;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MapList {
 
     private final File mapDir;
-    private List<MapInfo> availableMaps = new ArrayList();
+    private List<MapInfo> availableMaps = new ArrayList<>();
 
     public MapList(File file) {
         this.mapDir = new File(file, "../maps");
@@ -20,10 +23,13 @@ public class MapList {
     }
 
     public void findMaps() {
-        ArrayList arraylist = new ArrayList();
+        ArrayList<MapInfo> arraylist = new ArrayList<>();
         if (this.mapDir.exists() && this.mapDir.isDirectory()) {
-            File[] afile;
-            for (File file : afile = this.mapDir.listFiles()) {
+            File[] files = this.mapDir.listFiles();
+            if (files == null)
+                return;
+
+            for (File file : files) {
                 if (!file.isDirectory()) continue;
                 String mapName = file.getName();
                 String description1 = "";
@@ -33,14 +39,12 @@ public class MapList {
                     BufferedReader input = new BufferedReader(new FileReader(infoFile));
                     description1 = input.readLine();
                     description2 = input.readLine();
-                } catch (FileNotFoundException e) {
                 } catch (IOException e) {
                 }
                 File thumbnailFile = new File(file, "thumbnail.png");
                 BufferedImage thumbnail = null;
                 try {
                     thumbnail = ImageIO.read(thumbnailFile);
-                } catch (FileNotFoundException e) {
                 } catch (IOException e) {
                 }
                 arraylist.add(new MapInfo(mapName, description1, description2, thumbnail));
@@ -49,7 +53,7 @@ public class MapList {
         this.availableMaps = arraylist;
     }
 
-    public List<MapInfo> availableMaps() {
-        return new ArrayList(this.availableMaps);
+    public List<MapInfo> getAvailableMaps() {
+        return new ArrayList<>(this.availableMaps);
     }
 }

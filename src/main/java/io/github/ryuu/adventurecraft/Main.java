@@ -9,6 +9,14 @@ import tk.valoeghese.zoesteriaconfig.api.template.ConfigTemplate;
 import java.io.IOException;
 
 public class Main implements ModInitializer {
+
+    public static long[] updateTimes;
+    public static long updateRendererTime;
+
+    static {
+        updateTimes = new long[512];
+    }
+
     private static WritableConfig config;
 
     @Override

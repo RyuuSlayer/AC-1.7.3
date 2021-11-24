@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.gui;
 
+import io.github.ryuu.adventurecraft.util.MapInfo;
 import net.minecraft.class_520;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Screen;
@@ -110,7 +111,7 @@ public class GuiMapSelect extends Screen {
             this.minecraft.texturePackManager.findTexturePacks();
             this.field_6454_o += 20;
         }
-        List<MapInfo> list = this.minecraft.mapList.availableMaps();
+        List<MapInfo> list = this.minecraft.mapList.getAvailableMaps();
         if (Mouse.isButtonDown(0)) {
             if (this.field_6455_n == -1) {
                 if (mouseY >= this.field_6459_i && mouseY <= this.field_6458_j) {
