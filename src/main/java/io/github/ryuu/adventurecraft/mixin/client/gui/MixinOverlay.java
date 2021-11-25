@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.client.gui;
 
+
 import io.github.ryuu.adventurecraft.scripting.ScriptUIContainer;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.TerrainImage;
@@ -13,11 +14,10 @@ import net.minecraft.client.render.RenderHelper;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.TextRenderer;
 import net.minecraft.client.render.entity.ItemRenderer;
-import net.minecraft.client.resource.language.TranslationStorage;
+import net.minecraft.client.texture.TextureManager;
 import net.minecraft.client.util.ScreenScaler;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemInstance;
-import net.minecraft.script.ScriptUIContainer;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.MathsHelper;
@@ -25,40 +25,59 @@ import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-@Mixin(Overlay.class)
-public class MixinOverlay extends DrawableHelper {
+@Mixin(Overlay.class) // TODO method_1946 needs alot of casts
+public abstract class MixinOverlay extends DrawableHelper {
 
-    @Shadow()
-    private static final ItemRenderer itemRenderer = new ItemRenderer();
-    private final List chatMessages = new ArrayList();
-    private final Random rand = new Random();
-    private final Minecraft minecraft;
-    public String field_2541 = null;
-    public float field_2542;
     public ScriptUIContainer scriptUI;
-    public boolean hudEnabled = true;
-    float field_2543 = 1.0f;
-    private int field_2548 = 0;
-    private String jukeboxMessage = "";
-    private int jukeboxMessageTime = 0;
-    private boolean field_2551 = false;
 
-    public MixinOverlay(Minecraft minecraft) {
-        this.minecraft = minecraft;
+    @Shadow
+    private Minecraft minecraft;
+
+    @Shadow
+    protected abstract void method_1945(float f, int i, int j);
+
+    @Shadow
+    protected abstract void method_1947(int i, int j);
+
+    @Shadow
+    protected abstract void method_1951(float f, int i, int j);
+
+    @Shadow
+    private Random rand;
+
+    @Shadow
+    private int field_2548;
+
+    @Shadow
+    protected abstract void method_1948(int i, int j, int k, float f);
+
+    @Shadow private int jukeboxMessageTime;
+
+    @Shadow private boolean field_2551;
+
+    @Shadow private String jukeboxMessage;
+
+    @Shadow private List chatMessages;
+
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void Overlay(Minecraft minecraft, CallbackInfo ci) {
         this.scriptUI = new ScriptUIContainer(0.0f, 0.0f, null);
     }
 
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
-    public void render(float f, boolean flag, int i, int j) {
+    @Overwrite
+    public void render (float f, boolean flag, int i, int j) {
         float f1;
         ScreenScaler scaledresolution = new ScreenScaler(this.minecraft.options, this.minecraft.actualWidth, this.minecraft.actualHeight);
         int scaledWidth = scaledresolution.getScaledWidth();
@@ -70,23 +89,23 @@ public class MixinOverlay extends DrawableHelper {
             this.method_1945(this.minecraft.player.getBrightnessAtEyes(f), scaledWidth, scaledHeight);
         }
         ItemInstance itemstack = this.minecraft.player.inventory.getArmourItem(3);
-        if (!this.minecraft.options.thirdPerson && !this.minecraft.cameraActive && itemstack != null && itemstack.itemId == Tile.PUMPKIN.id) {
+        if (!this.minecraft.options.thirdPerson && !this.minecraft.cameraActive && itemstack != null && itemstack.itemId == Tile.PUMPKIN.id) { // TODO Needs cast
             this.method_1947(scaledWidth, scaledHeight);
         }
-        if (this.minecraft.level != null && !this.minecraft.level.properties.overlay.isEmpty()) {
-            this.renderOverlay(scaledWidth, scaledHeight, this.minecraft.level.properties.overlay);
+        if (this.minecraft.level != null && !this.minecraft.level.properties.overlay.isEmpty()) { // TODO Needs cast
+            this.adventurecraft$renderOverlay(scaledWidth, scaledHeight, this.minecraft.level.properties.overlay); // TODO Needs cast
         }
         if ((f1 = this.minecraft.player.field_505 + (this.minecraft.player.field_504 - this.minecraft.player.field_505) * f) > 0.0f) {
             this.method_1951(f1, scaledWidth, scaledHeight);
         }
-        if (this.hudEnabled) {
+        if (this.hudEnabled) { // TODO Needs cast
             boolean flag1;
             GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
             GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId("/gui/gui.png"));
             PlayerInventory inventoryplayer = this.minecraft.player.inventory;
             this.zOffset = -90.0f;
             this.blit(scaledWidth / 2 - 91, scaledHeight - 22, 0, 0, 182, 22);
-            this.blit(scaledWidth / 2 - 91 - 1 + inventoryplayer.offhandItem * 20, scaledHeight - 22 - 1, 24, 22, 48, 22);
+            this.blit(scaledWidth / 2 - 91 - 1 + inventoryplayer.offhandItem * 20, scaledHeight - 22 - 1, 24, 22, 48, 22); // TODO Needs cast
             this.blit(scaledWidth / 2 - 91 - 1 + inventoryplayer.selectedHotbarSlot * 20, scaledHeight - 22 - 1, 0, 22, 24, 22);
             GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId("/gui/icons.png"));
             GL11.glEnable(3042);
@@ -120,8 +139,8 @@ public class MixinOverlay extends DrawableHelper {
                     if (health <= 8) {
                         yPos += this.rand.nextInt(2);
                     }
-                    for (int healthRow = 0; healthRow <= (this.minecraft.player.maxHealth - 1) / 40; ++healthRow) {
-                        if ((index + 1 + healthRow * 10) * 4 <= this.minecraft.player.maxHealth) {
+                    for (int healthRow = 0; healthRow <= (this.minecraft.player.maxHealth - 1) / 40; ++healthRow) { // TODO Needs cast
+                        if ((index + 1 + healthRow * 10) * 4 <= this.minecraft.player.maxHealth) { // TODO Needs cast
                             int k5 = 0;
                             if (flag1) {
                                 k5 = 1;
@@ -153,7 +172,7 @@ public class MixinOverlay extends DrawableHelper {
                 }
             }
             if (this.minecraft.player.isInFluid(Material.WATER)) {
-                int yOffset = -9 * ((this.minecraft.player.maxHealth - 1) / 40);
+                int yOffset = -9 * ((this.minecraft.player.maxHealth - 1) / 40); // TODO Needs cast
                 int k2 = (int) Math.ceil((double) (this.minecraft.player.air - 2) * 10.0 / 300.0);
                 int l3 = (int) Math.ceil((double) this.minecraft.player.air * 10.0 / 300.0) - k2;
                 for (int l5 = 0; l5 < k2 + l3; ++l5) {
@@ -166,7 +185,7 @@ public class MixinOverlay extends DrawableHelper {
             }
         }
         GL11.glDisable(3042);
-        if (this.hudEnabled) {
+        if (this.hudEnabled) { // TODO Needs cast
             GL11.glEnable(32826);
             GL11.glPushMatrix();
             GL11.glRotatef(120.0f, 1.0f, 0.0f, 0.0f);
@@ -215,9 +234,9 @@ public class MixinOverlay extends DrawableHelper {
             this.drawTextWithShadow(fontrenderer, "y: " + this.minecraft.player.y, 2, 72, 0xE0E0E0);
             this.drawTextWithShadow(fontrenderer, "z: " + this.minecraft.player.z, 2, 80, 0xE0E0E0);
             this.drawTextWithShadow(fontrenderer, "f: " + (MathsHelper.floor((double) (this.minecraft.player.yaw * 4.0f / 360.0f) + 0.5) & 3), 2, 88, 0xE0E0E0);
-            this.drawTextWithShadow(fontrenderer, String.format("Use Terrain Images: %b", new Object[]{this.minecraft.level.properties.useImages}), 2, 96, 0xE0E0E0);
-            this.drawTextWithShadow(fontrenderer, String.format("Collide X: %d Z: %d", new Object[]{this.minecraft.player.collisionX, this.minecraft.player.collisionZ}), 2, 104, 0xE0E0E0);
-            if (this.minecraft.level.properties.useImages) {
+            this.drawTextWithShadow(fontrenderer, String.format("Use Terrain Images: %b", new Object[]{this.minecraft.level.properties.useImages}), 2, 96, 0xE0E0E0); // TODO Needs cast
+            this.drawTextWithShadow(fontrenderer, String.format("Collide X: %d Z: %d", new Object[]{this.minecraft.player.collisionX, this.minecraft.player.collisionZ}), 2, 104, 0xE0E0E0); // TODO Needs cast
+            if (this.minecraft.level.properties.useImages) { // TODO Needs cast
                 int x = (int) this.minecraft.player.x;
                 int z = (int) this.minecraft.player.z;
                 int terrainHeight = TerrainImage.getTerrainHeight(x, z);
@@ -300,98 +319,7 @@ public class MixinOverlay extends DrawableHelper {
         GL11.glDisable(3042);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    private void method_1947(int i, int j) {
-        GL11.glDisable(2929);
-        GL11.glDepthMask(false);
-        GL11.glBlendFunc(770, 771);
-        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-        GL11.glDisable(3008);
-        GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId("%blur%/misc/pumpkinblur.png"));
-        Tessellator tessellator = Tessellator.INSTANCE;
-        tessellator.start();
-        tessellator.vertex(0.0, j, -90.0, 0.0, 1.0);
-        tessellator.vertex(i, j, -90.0, 1.0, 1.0);
-        tessellator.vertex(i, 0.0, -90.0, 1.0, 0.0);
-        tessellator.vertex(0.0, 0.0, -90.0, 0.0, 0.0);
-        tessellator.draw();
-        GL11.glDepthMask(true);
-        GL11.glEnable(2929);
-        GL11.glEnable(3008);
-        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    private void method_1945(float f, int i, int j) {
-        if ((f = 1.0f - f) < 0.0f) {
-            f = 0.0f;
-        }
-        if (f > 1.0f) {
-            f = 1.0f;
-        }
-        this.field_2543 = (float) ((double) this.field_2543 + (double) (f - this.field_2543) * 0.01);
-        GL11.glDisable(2929);
-        GL11.glDepthMask(false);
-        GL11.glBlendFunc(0, 769);
-        GL11.glColor4f(this.field_2543, this.field_2543, this.field_2543, 1.0f);
-        GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId("%blur%/misc/vignette.png"));
-        Tessellator tessellator = Tessellator.INSTANCE;
-        tessellator.start();
-        tessellator.vertex(0.0, j, -90.0, 0.0, 1.0);
-        tessellator.vertex(i, j, -90.0, 1.0, 1.0);
-        tessellator.vertex(i, 0.0, -90.0, 1.0, 0.0);
-        tessellator.vertex(0.0, 0.0, -90.0, 0.0, 0.0);
-        tessellator.draw();
-        GL11.glDepthMask(true);
-        GL11.glEnable(2929);
-        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-        GL11.glBlendFunc(770, 771);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    private void method_1951(float f, int i, int j) {
-        if (f < 1.0f) {
-            f *= f;
-            f *= f;
-            f = f * 0.8f + 0.2f;
-        }
-        GL11.glDisable(3008);
-        GL11.glDisable(2929);
-        GL11.glDepthMask(false);
-        GL11.glBlendFunc(770, 771);
-        GL11.glColor4f(1.0f, 1.0f, 1.0f, f);
-        GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId("/terrain.png"));
-        float f1 = (float) (Tile.PORTAL.tex % 16) / 16.0f;
-        float f2 = (float) (Tile.PORTAL.tex / 16) / 16.0f;
-        float f3 = (float) (Tile.PORTAL.tex % 16 + 1) / 16.0f;
-        float f4 = (float) (Tile.PORTAL.tex / 16 + 1) / 16.0f;
-        Tessellator tessellator = Tessellator.INSTANCE;
-        tessellator.start();
-        tessellator.vertex(0.0, j, -90.0, f1, f4);
-        tessellator.vertex(i, j, -90.0, f3, f4);
-        tessellator.vertex(i, 0.0, -90.0, f3, f2);
-        tessellator.vertex(0.0, 0.0, -90.0, f1, f2);
-        tessellator.draw();
-        GL11.glDepthMask(true);
-        GL11.glEnable(2929);
-        GL11.glEnable(3008);
-        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    private void renderOverlay(int i, int j, String overlay) {
+    private void adventurecraft$renderOverlay(int i, int j, String overlay) {
         GL11.glDisable(2929);
         GL11.glDepthMask(false);
         GL11.glBlendFunc(770, 771);
@@ -411,80 +339,13 @@ public class MixinOverlay extends DrawableHelper {
         GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    private void method_1948(int i, int j, int k, float f) {
-        ItemInstance itemstack = this.minecraft.player.inventory.main[i];
-        if (itemstack == null) {
-            return;
-        }
-        float f1 = (float) itemstack.cooldown - f;
-        if (f1 > 0.0f) {
-            GL11.glPushMatrix();
-            float f2 = 1.0f + f1 / 5.0f;
-            GL11.glTranslatef((float) (j + 8), (float) (k + 12), 0.0f);
-            GL11.glScalef(1.0f / f2, (f2 + 1.0f) / 2.0f, 1.0f);
-            GL11.glTranslatef((float) (-(j + 8)), (float) (-(k + 12)), 0.0f);
-        }
-        itemRenderer.renderItemInstance(this.minecraft.textRenderer, this.minecraft.textureManager, itemstack, j, k);
-        if (f1 > 0.0f) {
-            GL11.glPopMatrix();
-        }
-        itemRenderer.method_1488(this.minecraft.textRenderer, this.minecraft.textureManager, itemstack, j, k);
+    @Redirect(method = "method_1948", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/ItemRenderer;renderItemInstance(Lnet/minecraft/client/render/TextRenderer;Lnet/minecraft/client/texture/TextureManager;Lnet/minecraft/item/ItemInstance;II)V"))
+    private void renderItemInstance(ItemRenderer itemRenderer, TextRenderer arg1, TextureManager arg2, ItemInstance itemstack, int j, int k) {
+        itemRenderer.renderItemInstance(this.minecraft.textRenderer, this.minecraft.textureManager, itemstack, j, k); // TODO cast renderItemInstance
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_1944() {
-        if (this.jukeboxMessageTime > 0) {
-            --this.jukeboxMessageTime;
-        }
-        ++this.field_2548;
-        for (int i = 0; i < this.chatMessages.size(); ++i) {
-            ++((ChatMessage) this.chatMessages.get(i)).field_2470;
-        }
+    @Inject(method = "method_1944", at = @At("TAIL"))
+    public void method_1944(CallbackInfo ci) {
         this.scriptUI.onUpdate();
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void addChatMessage(String s) {
-        while (this.minecraft.textRenderer.getTextWidth(s) > 320) {
-            int i;
-            for (i = 1; i < s.length() && this.minecraft.textRenderer.getTextWidth(s.substring(0, i + 1)) <= 320; ++i) {
-            }
-            this.addChatMessage(s.substring(0, i));
-            s = s.substring(i);
-        }
-        this.chatMessages.add(0, new ChatMessage(s));
-        while (this.chatMessages.size() > 50) {
-            this.chatMessages.remove(this.chatMessages.size() - 1);
-        }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_1952(String s) {
-        this.jukeboxMessage = "Now playing: " + s;
-        this.jukeboxMessageTime = 60;
-        this.field_2551 = true;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_1953(String s) {
-        TranslationStorage stringtranslate = TranslationStorage.getInstance();
-        String s1 = stringtranslate.translate(s);
-        this.addChatMessage(s1);
     }
 }

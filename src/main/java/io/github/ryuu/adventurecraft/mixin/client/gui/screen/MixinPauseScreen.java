@@ -1,68 +1,23 @@
 package io.github.ryuu.adventurecraft.mixin.client.gui.screen;
 
 import net.minecraft.client.gui.Screen;
-import net.minecraft.client.gui.screen.*;
+import net.minecraft.client.gui.screen.PauseScreen;
 import net.minecraft.client.gui.widgets.Button;
-import net.minecraft.client.resource.language.I18n;
-import net.minecraft.stat.Stats;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(PauseScreen.class)
+@Mixin(PauseScreen.class) // TODO scriptUI, cameraActive and stopMusic is missing
 public class MixinPauseScreen extends Screen {
-
-    @Shadow
-    private int field_2204 = 0;
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public void init() {
-        this.field_2204 = 0;
-        this.buttons.clear();
-        int byte0 = -16;
-        this.buttons.add(new Button(1, this.width / 2 - 100, this.height / 4 + 120 + byte0, "Save and quit to title"));
-        if (this.minecraft.isConnectedToServer()) {
-            ((Button) this.buttons.get(0)).text = "Disconnect";
-        }
-        this.buttons.add(new Button(4, this.width / 2 - 100, this.height / 4 + 24 + byte0, "Back to game"));
-        this.buttons.add(new Button(0, this.width / 2 - 100, this.height / 4 + 96 + byte0, "Options..."));
-        this.buttons.add(new Button(5, this.width / 2 - 100, this.height / 4 + 48 + byte0, 98, 20, I18n.translate("gui.achievements")));
-        this.buttons.add(new Button(6, this.width / 2 + 2, this.height / 4 + 48 + byte0, 98, 20, I18n.translate("gui.stats")));
+    @Inject(method = "buttonClicked", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;setLevel(Lnet/minecraft/level/Level;)V"))
+    private void buttonClicked(Button button, CallbackInfo ci) {
+        this.minecraft.overlay.scriptUI.clear(); // TODO Needs cast
+        this.minecraft.cameraActive = false; // TODO Needs cast
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    protected void buttonClicked(Button button) {
-        if (button.id == 0) {
-            this.minecraft.openScreen(new OptionsScreen(this, this.minecraft.options));
-        }
-        if (button.id == 1) {
-            this.minecraft.statManager.incrementStat(Stats.leaveGame, 1);
-            if (this.minecraft.isConnectedToServer()) {
-                this.minecraft.level.disconnect();
-            }
-            this.minecraft.setLevel(null);
-            this.minecraft.overlay.scriptUI.clear();
-            this.minecraft.cameraActive = false;
-            this.minecraft.openScreen(new TitleScreen());
-            this.minecraft.soundHelper.stopMusic();
-        }
-        if (button.id == 4) {
-            this.minecraft.openScreen(null);
-            this.minecraft.lockCursor();
-        }
-        if (button.id == 5) {
-            this.minecraft.openScreen(new AchievementsScreen(this.minecraft.statManager));
-        }
-        if (button.id == 6) {
-            this.minecraft.openScreen(new StatsScreen(this, this.minecraft.statManager));
-        }
+    @Inject(method = "buttonClicked", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;openScreen(Lnet/minecraft/client/gui/Screen;)V", ordinal = 1))
+    private void buttonClicked(Button button, CallbackInfo ci) {
+        this.minecraft.soundHelper.stopMusic(); // TODO Needs cast
     }
 }

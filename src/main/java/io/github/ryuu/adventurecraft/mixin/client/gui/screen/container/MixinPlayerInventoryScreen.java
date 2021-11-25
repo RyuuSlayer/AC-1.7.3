@@ -14,13 +14,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerInventoryScreen.class)
 public abstract class MixinPlayerInventoryScreen extends ContainerScreen {
-
-    @Shadow
-    private float mouseX;
-
-    @Shadow
-    private float mouseY;
-
     public MixinPlayerInventoryScreen(Container arg) {
         super(arg);
     }

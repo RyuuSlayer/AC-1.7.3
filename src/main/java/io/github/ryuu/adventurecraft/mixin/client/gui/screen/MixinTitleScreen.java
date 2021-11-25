@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 import java.util.Random;
 
-@Mixin(TitleScreen.class) // TODO minecraftInstance missing
+@Mixin(TitleScreen.class) // TODO minecraftInstance is missing
 public class MixinTitleScreen extends Screen {
 
 
