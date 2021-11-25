@@ -38,8 +38,6 @@ public class MixinTitleScreen extends Screen {
     private void TitleScreen(CallbackInfo ci) {
         ScriptModel.clearAll();
         Minecraft.minecraftInstance.soundHelper.stopMusic();
-        this.ticksOpened = 0.0f;
-        this.splashMessage = "missingno";
     }
 
     @Inject(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/resource/language/TranslationStorage;getInstance()Lnet/minecraft/client/resource/language/TranslationStorage;", shift = At.Shift.BEFORE))
