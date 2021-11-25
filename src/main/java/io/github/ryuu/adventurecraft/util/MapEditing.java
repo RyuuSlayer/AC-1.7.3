@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.util;
 
 import io.github.ryuu.adventurecraft.items.ItemCursor;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.TileRenderer;
@@ -20,7 +21,7 @@ import org.lwjgl.util.glu.GLU;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
-class MapEditing {
+public class MapEditing {
 
     private final TileRenderer renderBlocks;
     Minecraft mc;
@@ -29,7 +30,7 @@ class MapEditing {
     int selectedBlockID;
     int selectedMetadata;
 
-    MapEditing(Minecraft mcInstance, Level w) {
+    public MapEditing(Minecraft mcInstance, Level w) {
         this.mc = mcInstance;
         this.world = w;
         this.renderBlocks = new TileRenderer(w);
@@ -108,7 +109,7 @@ class MapEditing {
     }
 
     public void render(float time) {
-        LivingEntity camera = Minecraft.minecraftInstance.field_2807;
+        LivingEntity camera = AccessMinecraft.getInstance().field_2807;
         if (!this.mc.field_2778) {
             this.drawCursor(camera, time);
             if (this.cursor != null) {
@@ -132,7 +133,7 @@ class MapEditing {
 
     public void renderSelection(float time) {
         if (ItemCursor.bothSet) {
-            LivingEntity camera = Minecraft.minecraftInstance.field_2807;
+            LivingEntity camera = AccessMinecraft.getInstance().field_2807;
             float x = (float) (camera.prevRenderX + (camera.x - camera.prevRenderX) * (double) time);
             float y = (float) (camera.prevRenderY + (camera.y - camera.prevRenderY) * (double) time);
             float z = (float) (camera.prevRenderZ + (camera.z - camera.prevRenderZ) * (double) time);
@@ -274,7 +275,7 @@ class MapEditing {
         }
     }
 
-    void setBlock(int bID, int m) {
+    public void setBlock(int bID, int m) {
         this.selectedBlockID = bID;
         this.selectedMetadata = m;
     }

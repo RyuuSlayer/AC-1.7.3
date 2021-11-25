@@ -1,7 +1,7 @@
 package io.github.ryuu.adventurecraft.mixin.level;
 
 import io.github.ryuu.adventurecraft.blocks.BlockEffect;
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
@@ -258,8 +258,8 @@ public class MixinLevelProperties {
         tag.put("volatilityWeight1", this.volatilityWeight1);
         tag.put("volatilityWeight2", this.volatilityWeight2);
         tag.put("iceMelts", this.iceMelts);
-        if (Minecraft.minecraftInstance.level != null && Minecraft.minecraftInstance.level.triggerManager != null) {
-            tag.put("triggerAreas", (AbstractTag) Minecraft.minecraftInstance.level.triggerManager.getTagCompound());
+        if (AccessMinecraft.getInstance().level != null && AccessMinecraft.getInstance().level.triggerManager != null) {
+            tag.put("triggerAreas", (AbstractTag) AccessMinecraft.getInstance().level.triggerManager.getTagCompound());
         }
         tag.put("timeOfDay", this.timeOfDay);
         tag.put("timeRate", this.timeRate);

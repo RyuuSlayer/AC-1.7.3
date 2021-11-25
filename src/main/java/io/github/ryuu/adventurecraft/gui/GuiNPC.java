@@ -2,7 +2,7 @@ package io.github.ryuu.adventurecraft.gui;
 
 import io.github.ryuu.adventurecraft.entities.EntityNPC;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityNpcPath;
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.Textbox;
@@ -35,7 +35,7 @@ public class GuiNPC extends Screen {
 
     public static void showUI(EntityNPC n) {
         TileEntityNpcPath.lastEntity = n;
-        Minecraft.minecraftInstance.openScreen(new GuiNPC(n));
+        AccessMinecraft.getInstance().openScreen(new GuiNPC(n));
     }
 
     @Override
@@ -80,7 +80,7 @@ public class GuiNPC extends Screen {
                 if (!this.npc.isAttackable) {
                     b.text = "Can't be attacked";
                 }
-                File npcSkins = new File(Minecraft.minecraftInstance.level.levelDir, "npc");
+                File npcSkins = new File(AccessMinecraft.getInstance().level.levelDir, "npc");
                 int i = 1;
                 buttonWidth = (this.width - 16) / 3;
                 b = new Button(0, 4, 124, buttonWidth, 18, "Player Skin");
@@ -159,7 +159,7 @@ public class GuiNPC extends Screen {
             File[] skins;
             if (button.id == -1) {
                 this.npc.remove();
-                Minecraft.minecraftInstance.openScreen(null);
+                AccessMinecraft.getInstance().openScreen(null);
             } else if (button.id == -2) {
                 boolean bl = this.npc.pathToHome = !this.npc.pathToHome;
                 button.text = this.npc.pathToHome ? "Path To Home" : "Don't Path Home";
@@ -171,7 +171,7 @@ public class GuiNPC extends Screen {
                 button.text = this.npc.isAttackable ? "Can be attacked" : "Can't be attacked";
             } else if (button.id == 0) {
                 this.npc.texture = "/mob/char.png";
-            } else if (button.id > 0 && button.id - 1 < (skins = (npcSkins = new File(Minecraft.minecraftInstance.level.levelDir, "npc")).listFiles()).length) {
+            } else if (button.id > 0 && button.id - 1 < (skins = (npcSkins = new File(AccessMinecraft.getInstance().level.levelDir, "npc")).listFiles()).length) {
                 this.npc.texture = "/npc/" + skins[button.id - 1].getName();
             }
         } else if (this.page == 1) {

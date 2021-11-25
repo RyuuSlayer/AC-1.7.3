@@ -1,9 +1,9 @@
 package io.github.ryuu.adventurecraft.mixin.client.sound;
 
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.class_266;
 import net.minecraft.class_267;
 import net.minecraft.class_309;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.sound.SoundHelper;
 import net.minecraft.entity.LivingEntity;
@@ -224,8 +224,8 @@ public class MixinSoundHelper {
             soundSystem.setVolume("BgMusic", this.gameOptions.music);
             soundSystem.play("BgMusic");
             this.currentSoundName = soundpoolentry.field_2126;
-            if (Minecraft.minecraftInstance.level != null) {
-                Minecraft.minecraftInstance.level.properties.playingMusic = s;
+            if (AccessMinecraft.getInstance().level != null) {
+                AccessMinecraft.getInstance().level.properties.playingMusic = s;
             }
         }
     }
@@ -237,8 +237,8 @@ public class MixinSoundHelper {
     public void stopMusic() {
         if (field_2673 && soundSystem != null && soundSystem.playing("BgMusic")) {
             soundSystem.stop("BgMusic");
-            if (Minecraft.minecraftInstance.level != null) {
-                Minecraft.minecraftInstance.level.properties.playingMusic = "";
+            if (AccessMinecraft.getInstance().level != null) {
+                AccessMinecraft.getInstance().level.properties.playingMusic = "";
             }
         }
     }

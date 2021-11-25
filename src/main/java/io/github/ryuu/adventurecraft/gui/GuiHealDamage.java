@@ -1,7 +1,7 @@
 package io.github.ryuu.adventurecraft.gui;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityHealDamage;
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.level.Level;
 
@@ -15,7 +15,7 @@ public class GuiHealDamage extends Screen {
     }
 
     public static void showUI(Level worldArg, TileEntityHealDamage w) {
-        Minecraft.minecraftInstance.openScreen(new GuiHealDamage(w));
+        AccessMinecraft.getInstance().openScreen(new GuiHealDamage(w));
     }
 
     @Override

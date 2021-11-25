@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.items;
 
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
@@ -8,33 +8,33 @@ import net.minecraft.level.Level;
 
 public class ItemCursor extends ItemType {
 
-    static boolean bothSet;
+    public static boolean bothSet;
 
     static boolean firstPosition;
 
-    static int oneX;
+    public static int oneX;
 
-    static int oneY;
+    public static int oneY;
 
-    static int oneZ;
+    public static int oneZ;
 
-    static int twoX;
+    public static int twoX;
 
-    static int twoY;
+    public static int twoY;
 
-    static int twoZ;
+    public static int twoZ;
 
-    static int minX;
+    public static int minX;
 
-    static int minY;
+    public static int minY;
 
-    static int minZ;
+    public static int minZ;
 
-    static int maxX;
+    public static int maxX;
 
-    static int maxY;
+    public static int maxY;
 
-    static int maxZ;
+    public static int maxZ;
 
     static {
         firstPosition = true;
@@ -45,7 +45,6 @@ public class ItemCursor extends ItemType {
         super(id);
     }
 
-    @Override
     public boolean onItemUseLeftClick(ItemInstance itemstack, Player entityplayer, Level world, int i, int j, int k, int l) {
         return this.useOnTile(itemstack, entityplayer, world, i, j, k, l);
     }
@@ -53,12 +52,12 @@ public class ItemCursor extends ItemType {
     @Override
     public boolean useOnTile(ItemInstance item, Player player, Level level, int x, int y, int z, int facing) {
         if (firstPosition) {
-            Minecraft.minecraftInstance.overlay.addChatMessage(String.format("Setting Cursor Position 1 (%d, %d, %d)", new Object[]{x, y, z}));
+            AccessMinecraft.getInstance().overlay.addChatMessage(String.format("Setting Cursor Position 1 (%d, %d, %d)", x, y, z));
             oneX = x;
             oneY = y;
             oneZ = z;
         } else {
-            Minecraft.minecraftInstance.overlay.addChatMessage(String.format("Setting Cursor Position 2 (%d, %d, %d)", new Object[]{x, y, z}));
+            AccessMinecraft.getInstance().overlay.addChatMessage(String.format("Setting Cursor Position 2 (%d, %d, %d)", x, y, z));
             twoX = x;
             twoY = y;
             twoZ = z;

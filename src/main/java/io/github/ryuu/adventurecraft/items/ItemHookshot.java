@@ -3,10 +3,9 @@ package io.github.ryuu.adventurecraft.items;
 import io.github.ryuu.adventurecraft.entities.EntityHookshot;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
-import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 
-class ItemHookshot extends ItemType {
+class ItemHookshot extends ACItemType {
 
     public EntityHookshot mainHookshot = null;
 

@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.items;
 
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
@@ -15,7 +15,7 @@ public class ItemEraser extends ItemType {
     @Override
     public boolean useOnTile(ItemInstance item, Player player, Level level, int x, int y, int z, int facing) {
         if (ItemCursor.bothSet) {
-            Minecraft.minecraftInstance.overlay.addChatMessage("Erasing Area");
+            AccessMinecraft.getInstance().overlay.addChatMessage("Erasing Area");
             int minX = Math.min(ItemCursor.oneX, ItemCursor.twoX);
             int maxX = Math.max(ItemCursor.oneX, ItemCursor.twoX);
             int minY = Math.min(ItemCursor.oneY, ItemCursor.twoY);

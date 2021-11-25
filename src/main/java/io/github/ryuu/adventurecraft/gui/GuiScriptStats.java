@@ -1,7 +1,7 @@
 package io.github.ryuu.adventurecraft.gui;
 
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.util.JScriptInfo;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 
@@ -14,7 +14,7 @@ public class GuiScriptStats extends Screen {
     JScriptInfo[] scriptInfo;
 
     public GuiScriptStats() {
-        Object[] info = Minecraft.minecraftInstance.level.scriptHandler.scripts.values().toArray();
+        Object[] info = AccessMinecraft.getInstance().level.scriptHandler.scripts.values().toArray();
         int numGood = 0;
         for (Object o : info) {
             JScriptInfo JScriptInfo = (JScriptInfo) o;
@@ -29,7 +29,7 @@ public class GuiScriptStats extends Screen {
             this.scriptInfo[index++] = sInfo;
         }
         for (JScriptInfo JScriptInfo : this.scriptInfo) {
-            int s = Minecraft.minecraftInstance.textRenderer.getTextWidth(JScriptInfo.name);
+            int s = AccessMinecraft.getInstance().textRenderer.getTextWidth(JScriptInfo.name);
             if (s <= this.maxSize) continue;
             this.maxSize = s;
         }
@@ -38,7 +38,7 @@ public class GuiScriptStats extends Screen {
     }
 
     public static void showUI() {
-        Minecraft.minecraftInstance.openScreen(new GuiScriptStats());
+        AccessMinecraft.getInstance().openScreen(new GuiScriptStats());
     }
 
     @Override

@@ -1,10 +1,10 @@
 package io.github.ryuu.adventurecraft.mixin;
 
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.util.CoordBlock;
 import io.github.ryuu.adventurecraft.util.LightCache;
 import net.minecraft.class_66;
 import net.minecraft.class_68;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.TileRenderer;
 import net.minecraft.client.render.entity.ItemRenderer;
@@ -163,9 +163,9 @@ public class MixinClass_66 {
                             if (!startedDrawing) {
                                 startedDrawing = true;
                                 if (texNum == 0) {
-                                    GL11.glBindTexture(3553, (int) Minecraft.minecraftInstance.textureManager.getTextureId("/terrain.png"));
+                                    GL11.glBindTexture(3553, (int) AccessMinecraft.getInstance().textureManager.getTextureId("/terrain.png"));
                                 } else {
-                                    GL11.glBindTexture(3553, (int) Minecraft.minecraftInstance.textureManager.getTextureId(String.format("/terrain%d.png", new Object[]{texNum})));
+                                    GL11.glBindTexture(3553, (int) AccessMinecraft.getInstance().textureManager.getTextureId(String.format("/terrain%d.png", new Object[]{texNum})));
                                 }
                                 tesselator.start();
                                 tesselator.prevPos(-this.field_231, -this.field_232, -this.field_233);

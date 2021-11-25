@@ -1,11 +1,12 @@
 package io.github.ryuu.adventurecraft.scripting;
 
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ScreenScaler;
 
 public class ScriptUI {
 
-    Minecraft mc = Minecraft.minecraftInstance;
+    Minecraft mc = AccessMinecraft.getInstance();
 
     ScriptUI() {
     }

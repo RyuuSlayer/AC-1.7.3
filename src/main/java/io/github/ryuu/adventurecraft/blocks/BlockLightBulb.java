@@ -1,8 +1,8 @@
 package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.gui.GuiLightBulb;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.util.DebugMode;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
@@ -52,7 +52,7 @@ public class BlockLightBulb extends Tile {
 
     @Override
     public int getBlockLightValue(TileView iblockaccess, int i, int j, int k) {
-        if (!Minecraft.minecraftInstance.level.triggerManager.isActivated(i, j, k)) {
+        if (!AccessMinecraft.getInstance().level.triggerManager.isActivated(i, j, k)) {
             return iblockaccess.getTileMeta(i, j, k);
         }
         return 0;

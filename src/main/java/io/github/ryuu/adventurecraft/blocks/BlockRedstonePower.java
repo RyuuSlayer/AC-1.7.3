@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.blocks;
 
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
 import net.minecraft.tile.Tile;
@@ -24,7 +24,7 @@ public class BlockRedstonePower extends Tile {
     @Override
     public int method_1626(TileView iblockaccess, int i, int j, int k, int l) {
         if (l <= 1) {
-            if (Minecraft.minecraftInstance.level.triggerManager.isActivated(i, j, k)) {
+            if (AccessMinecraft.getInstance().level.triggerManager.isActivated(i, j, k)) {
                 return 185;
             }
             return 186;
@@ -82,7 +82,7 @@ public class BlockRedstonePower extends Tile {
 
     @Override
     public boolean method_1568(TileView iblockaccess, int i, int j, int k, int l) {
-        return Minecraft.minecraftInstance.level.triggerManager.isActivated(i, j, k);
+        return AccessMinecraft.getInstance().level.triggerManager.isActivated(i, j, k);
     }
 
     @Override
@@ -103,7 +103,7 @@ public class BlockRedstonePower extends Tile {
 
     @Override
     public int getBlockLightValue(TileView iblockaccess, int i, int j, int k) {
-        if (Minecraft.minecraftInstance.level.triggerManager.isActivated(i, j, k)) {
+        if (AccessMinecraft.getInstance().level.triggerManager.isActivated(i, j, k)) {
             return 14;
         }
         return 0;

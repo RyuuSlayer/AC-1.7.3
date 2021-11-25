@@ -1,8 +1,8 @@
 package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.entities.EntityAirFX;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.util.DebugMode;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.FallingTile;
 import net.minecraft.entity.player.Player;
@@ -115,14 +115,14 @@ public class BlockFan extends Tile {
                 if (!(e instanceof Player) || !((Player) e).usingUmbrella()) continue;
                 e.method_1322(0.07 * (double) xOffset / dist, 0.07 * (double) yOffset / dist, 0.07 * (double) zOffset / dist);
             }
-            entities = Minecraft.minecraftInstance.particleManager.getEffectsWithinAABB(aabb);
+            entities = AccessMinecraft.getInstance().particleManager.getEffectsWithinAABB(aabb);
             for (Object obj : entities) {
                 e = (Entity) obj;
                 if (e instanceof FallingTile) continue;
                 dist = e.method_1350((double) x + 0.5, (double) y + 0.5, (double) z + 0.5) * (double) Math.abs(xOffset + yOffset + zOffset) / 4.0;
                 e.method_1322(0.03 * (double) xOffset / dist, 0.03 * (double) yOffset / dist, 0.03 * (double) zOffset / dist);
             }
-            Minecraft.minecraftInstance.particleManager.addParticle(new EntityAirFX(level, (double) x + rand.nextDouble(), (double) y + rand.nextDouble(), (double) z + rand.nextDouble()));
+            AccessMinecraft.getInstance().particleManager.addParticle(new EntityAirFX(level, (double) x + rand.nextDouble(), (double) y + rand.nextDouble(), (double) z + rand.nextDouble()));
         }
     }
 

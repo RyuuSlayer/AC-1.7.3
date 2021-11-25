@@ -1,12 +1,14 @@
 package io.github.ryuu.adventurecraft.items;
 
+import io.github.ryuu.adventurecraft.accessors.items.ItemTypeLightEmitter;
+import io.github.ryuu.adventurecraft.accessors.items.ItemTypeMuzzleFlash;
 import io.github.ryuu.adventurecraft.util.UtilBullet;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 
-class ItemShotgun extends ItemType implements IItemReload {
+class ItemShotgun extends ItemType implements IItemReload, ItemTypeLightEmitter, ItemTypeMuzzleFlash {
 
     public ItemShotgun(int id) {
         super(id);

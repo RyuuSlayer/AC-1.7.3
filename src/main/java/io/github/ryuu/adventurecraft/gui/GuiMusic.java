@@ -1,7 +1,7 @@
 package io.github.ryuu.adventurecraft.gui;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityMusic;
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.level.Level;
@@ -24,7 +24,7 @@ public class GuiMusic extends Screen {
     }
 
     public static void showUI(Level w, TileEntityMusic m) {
-        Minecraft.minecraftInstance.openScreen(new GuiMusic(w, m));
+        AccessMinecraft.getInstance().openScreen(new GuiMusic(w, m));
     }
 
     @Override

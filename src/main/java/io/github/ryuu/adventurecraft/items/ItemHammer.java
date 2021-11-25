@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.items;
 
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
@@ -18,7 +18,7 @@ public class ItemHammer extends ItemType {
         if (ItemCursor.bothSet) {
             int blockToSwapTo = level.getTileId(x, y, z);
             int metadata = level.getTileMeta(x, y, z);
-            Minecraft.minecraftInstance.overlay.addChatMessage(String.format("Swapping Area With BlockID %d", new Object[]{blockToSwapTo}));
+            AccessMinecraft.getInstance().overlay.addChatMessage(String.format("Swapping Area With BlockID %d", new Object[]{blockToSwapTo}));
             int minX = Math.min(ItemCursor.oneX, ItemCursor.twoX);
             int maxX = Math.max(ItemCursor.oneX, ItemCursor.twoX);
             int minY = Math.min(ItemCursor.oneY, ItemCursor.twoY);

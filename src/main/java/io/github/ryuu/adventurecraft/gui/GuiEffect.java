@@ -1,7 +1,7 @@
 package io.github.ryuu.adventurecraft.gui;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityEffect;
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 
@@ -55,7 +55,7 @@ public class GuiEffect extends Screen {
     }
 
     public static void showUI(TileEntityEffect m) {
-        Minecraft.minecraftInstance.openScreen(new GuiEffect(m));
+        AccessMinecraft.getInstance().openScreen(new GuiEffect(m));
     }
 
     @Override

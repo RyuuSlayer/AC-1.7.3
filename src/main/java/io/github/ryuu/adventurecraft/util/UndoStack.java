@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.util;
 
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.level.Level;
 import net.minecraft.util.io.CompoundTag;
 
@@ -13,12 +13,12 @@ public class UndoStack {
     UndoSelection selection = null;
     EditAction firstAction = null;
     EditAction lastAction = null;
-    LinkedList<EditAction> undoStack = new LinkedList();
-    LinkedList<EditAction> redoStack = new LinkedList();
-    LinkedList<net.minecraft.src.UndoSelection> undoSelectionStack = new LinkedList();
-    LinkedList<net.minecraft.src.UndoSelection> redoSelectionStack = new LinkedList();
+    LinkedList<EditAction> undoStack = new LinkedList<>();
+    LinkedList<EditAction> redoStack = new LinkedList<>();
+    LinkedList<UndoSelection> undoSelectionStack = new LinkedList<>();
+    LinkedList<UndoSelection> redoSelectionStack = new LinkedList<>();
 
-    UndoStack() {
+    public UndoStack() {
     }
 
     public void startRecording() {
@@ -36,7 +36,7 @@ public class UndoStack {
                 this.undoStack.removeFirst();
             }
             this.selection.after.record();
-            this.undoSelectionStack.addLast((Object) this.selection);
+            this.undoSelectionStack.addLast(this.selection);
             if (this.undoSelectionStack.size() > 128) {
                 this.undoSelectionStack.removeFirst();
             }
@@ -47,11 +47,11 @@ public class UndoStack {
         this.isRecording = false;
     }
 
-    boolean isRecording() {
+    public boolean isRecording() {
         return this.isRecording;
     }
 
-    void recordChange(int x, int y, int z, int prevBlockID, int prevMeta, CompoundTag prevTag, int nextBlockID, int nextMeta, CompoundTag nextTag) {
+    public void recordChange(int x, int y, int z, int prevBlockID, int prevMeta, CompoundTag prevTag, int nextBlockID, int nextMeta, CompoundTag nextTag) {
         EditAction newAction = new EditAction(x, y, z, prevBlockID, prevMeta, prevTag, nextBlockID, nextMeta, nextTag);
         if (this.firstAction == null) {
             this.firstAction = newAction;
@@ -79,13 +79,13 @@ public class UndoStack {
             if (this.redoStack.size() > 128) {
                 this.redoStack.removeFirst();
             }
-            UndoSelection sel = (UndoSelection) this.undoSelectionStack.removeLast();
+            UndoSelection sel = this.undoSelectionStack.removeLast();
             sel.before.load();
-            this.redoSelectionStack.addLast((Object) sel);
+            this.redoSelectionStack.addLast(sel);
             if (this.redoSelectionStack.size() > 128) {
                 this.redoSelectionStack.removeFirst();
             }
-            Minecraft.minecraftInstance.overlay.addChatMessage(String.format("Undo (Undo Actions Left: %d Redo Actions Left: %d)", new Object[]{this.undoStack.size(), this.redoStack.size()}));
+            AccessMinecraft.getInstance().overlay.addChatMessage(String.format("Undo (Undo Actions Left: %d Redo Actions Left: %d)", new Object[]{this.undoStack.size(), this.redoStack.size()}));
         }
     }
 
@@ -97,13 +97,13 @@ public class UndoStack {
             if (this.undoStack.size() > 128) {
                 this.undoStack.removeFirst();
             }
-            UndoSelection sel = (UndoSelection) this.redoSelectionStack.removeLast();
+            UndoSelection sel = this.redoSelectionStack.removeLast();
             sel.after.load();
-            this.undoSelectionStack.addLast((Object) sel);
+            this.undoSelectionStack.addLast(sel);
             if (this.undoSelectionStack.size() > 128) {
                 this.undoSelectionStack.removeFirst();
             }
-            Minecraft.minecraftInstance.overlay.addChatMessage(String.format("Redo (Undo Actions Left: %d Redo Actions Left: %d)", new Object[]{this.undoStack.size(), this.redoStack.size()}));
+            AccessMinecraft.getInstance().overlay.addChatMessage(String.format("Redo (Undo Actions Left: %d Redo Actions Left: %d)", new Object[]{this.undoStack.size(), this.redoStack.size()}));
         }
     }
 }

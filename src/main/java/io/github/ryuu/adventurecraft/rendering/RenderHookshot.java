@@ -1,7 +1,7 @@
 package io.github.ryuu.adventurecraft.rendering;
 
 import io.github.ryuu.adventurecraft.entities.EntityHookshot;
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.entity.Entity;
@@ -72,7 +72,7 @@ public class RenderHookshot extends EntityRenderer {
             double d9 = entityHookshot.returnsTo.prevX + (entityHookshot.returnsTo.x - entityHookshot.returnsTo.prevX) * (double) f1 - d5 * xOffset - d3 * yOffset * d8;
             double d10 = entityHookshot.returnsTo.prevY + (entityHookshot.returnsTo.y - entityHookshot.returnsTo.prevY) * (double) f1 - d7 * yOffset;
             double d11 = entityHookshot.returnsTo.prevZ + (entityHookshot.returnsTo.z - entityHookshot.returnsTo.prevZ) * (double) f1 - d3 * xOffset + d5 * yOffset * d8;
-            if (this.dispatcher.options.thirdPerson || Minecraft.minecraftInstance.cameraActive) {
+            if (this.dispatcher.options.thirdPerson || AccessMinecraft.getInstance().cameraActive) {
                 float f13 = (entityHookshot.returnsTo.field_1013 + (entityHookshot.returnsTo.field_1012 - entityHookshot.returnsTo.field_1013) * f1) * 3.141593f / 180.0f;
                 double d4 = MathsHelper.sin(f13);
                 double d6 = MathsHelper.cos(f13);

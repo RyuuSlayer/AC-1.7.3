@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.util;
 
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.level.Level;
 import org.mozilla.javascript.Scriptable;
 
@@ -50,7 +50,7 @@ public class JScriptHandler {
             }
         }
         if (verbose) {
-            Minecraft.minecraftInstance.overlay.addChatMessage(String.format("Missing '%s'", new Object[]{fileName}));
+            AccessMinecraft.getInstance().overlay.addChatMessage(String.format("Missing '%s'", new Object[]{fileName}));
         }
         return null;
     }

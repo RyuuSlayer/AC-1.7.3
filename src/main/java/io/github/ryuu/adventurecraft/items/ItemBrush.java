@@ -1,7 +1,7 @@
 package io.github.ryuu.adventurecraft.items;
 
 import io.github.ryuu.adventurecraft.blocks.IBlockColor;
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
@@ -21,7 +21,7 @@ public class ItemBrush extends ItemType {
             ((IBlockColor) b).incrementColor(level, x, y, z);
             level.method_243(x, y, z);
         } else {
-            Minecraft.minecraftInstance.overlay.addChatMessage("Doesn't implement Color :(");
+            AccessMinecraft.getInstance().overlay.addChatMessage("Doesn't implement Color :(");
         }
         return false;
     }

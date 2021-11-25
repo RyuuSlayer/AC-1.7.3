@@ -1,7 +1,7 @@
 package io.github.ryuu.adventurecraft.blocks;
 
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.util.DebugMode;
-import net.minecraft.client.Minecraft;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
 import net.minecraft.tile.Tile;
@@ -27,7 +27,7 @@ public class BlockTriggeredDoor extends Tile {
 
     @Override
     public boolean shouldRender(TileView blockAccess, int i, int j, int k) {
-        return DebugMode.active || Minecraft.minecraftInstance.level.triggerManager.isActivated(i, j, k);
+        return DebugMode.active || AccessMinecraft.getInstance().level.triggerManager.isActivated(i, j, k);
     }
 
     @Override

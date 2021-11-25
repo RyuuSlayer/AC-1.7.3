@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.items;
 
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 
@@ -17,7 +17,7 @@ class ItemLantern extends ItemType {
             itemstack.setDamage(itemstack.getDamage() + 1);
             return true;
         }
-        if (itemstack.getDamage() == itemstack.method_723() && Minecraft.minecraftInstance.player.inventory.decreaseAmountOfItem(Items.oil.id)) {
+        if (itemstack.getDamage() == itemstack.method_723() && AccessMinecraft.getInstance().player.inventory.decreaseAmountOfItem(Items.oil.id)) {
             itemstack.setDamage(0);
             return true;
         }

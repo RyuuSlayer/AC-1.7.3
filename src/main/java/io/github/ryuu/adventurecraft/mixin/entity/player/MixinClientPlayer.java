@@ -36,7 +36,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(ClientPlayer.class)
-public class MixinClientPlayer extends Player {
+public abstract class MixinClientPlayer extends Player {
 
     private final Smoother field_163 = new Smoother();
     private final Smoother field_164 = new Smoother();

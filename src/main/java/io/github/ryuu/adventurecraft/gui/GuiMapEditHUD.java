@@ -1,8 +1,8 @@
 package io.github.ryuu.adventurecraft.gui;
 
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.MapEditing;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.level.Level;
@@ -18,7 +18,7 @@ public class GuiMapEditHUD extends Screen {
         this.world = w;
         DebugMode.editMode = true;
         if (DebugMode.mapEditing == null) {
-            DebugMode.mapEditing = new MapEditing(Minecraft.minecraftInstance, w);
+            DebugMode.mapEditing = new MapEditing(AccessMinecraft.getInstance(), w);
         } else {
             DebugMode.mapEditing.updateWorld(w);
         }

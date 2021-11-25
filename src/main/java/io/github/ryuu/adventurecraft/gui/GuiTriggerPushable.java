@@ -2,7 +2,7 @@ package io.github.ryuu.adventurecraft.gui;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityTriggerPushable;
 import io.github.ryuu.adventurecraft.items.ItemCursor;
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.OptionButton;
@@ -16,7 +16,7 @@ public class GuiTriggerPushable extends Screen {
     }
 
     public static void showUI(TileEntityTriggerPushable triggerClicked) {
-        Minecraft.minecraftInstance.openScreen(new GuiTriggerPushable(triggerClicked));
+        AccessMinecraft.getInstance().openScreen(new GuiTriggerPushable(triggerClicked));
     }
 
     @Override

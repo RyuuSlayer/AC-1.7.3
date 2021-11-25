@@ -2,7 +2,7 @@ package io.github.ryuu.adventurecraft.gui;
 
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityTriggerInverter;
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.OptionButton;
@@ -29,7 +29,7 @@ public class GuiTriggerInverter extends Screen {
     }
 
     public static void showUI(Level w, int x, int y, int z, TileEntityTriggerInverter triggerClicked) {
-        Minecraft.minecraftInstance.openScreen(new GuiTriggerInverter(w, x, y, z, triggerClicked));
+        AccessMinecraft.getInstance().openScreen(new GuiTriggerInverter(w, x, y, z, triggerClicked));
     }
 
     @Override

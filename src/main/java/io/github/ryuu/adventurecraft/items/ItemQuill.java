@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.items;
 
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
@@ -20,7 +20,7 @@ public class ItemQuill extends ItemType {
             yToUse = (float) y2 + player.standingEyeHeight;
             break;
         }
-        Minecraft.minecraftInstance.overlay.addChatMessage(String.format("Teleporting to (%.1f, %.1f %.1f)", new Object[]{(double) x + 0.5, yToUse, (double) z + 0.5}));
+        AccessMinecraft.getInstance().overlay.addChatMessage(String.format("Teleporting to (%.1f, %.1f %.1f)", new Object[]{(double) x + 0.5, yToUse, (double) z + 0.5}));
         player.setPosition((double) x + 0.5, yToUse, (double) z + 0.5);
         return false;
     }

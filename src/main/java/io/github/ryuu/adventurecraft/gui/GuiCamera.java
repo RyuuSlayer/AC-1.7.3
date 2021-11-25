@@ -1,11 +1,10 @@
 package io.github.ryuu.adventurecraft.gui;
 
 import io.github.ryuu.adventurecraft.entities.EntityCamera;
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.Textbox;
-import net.minecraft.entity.Entity;
 
 public class GuiCamera extends Screen {
 
@@ -18,7 +17,7 @@ public class GuiCamera extends Screen {
     }
 
     public static void showUI(EntityCamera c) {
-        Minecraft.minecraftInstance.openScreen(new GuiCamera(c));
+        AccessMinecraft.getInstance().openScreen(new GuiCamera(c));
     }
 
     @Override
@@ -32,7 +31,7 @@ public class GuiCamera extends Screen {
             b.text = "Quadratic Interpolation";
         }
         this.buttons.add(b);
-        this.timerText = new Textbox(this, this.textManager, 80, 46, 70, 16, String.format("%.2f", Float.valueOf(this.cam.time)));
+        this.timerText = new Textbox(this, this.textManager, 80, 46, 70, 16, String.format("%.2f", this.cam.time));
     }
 
     @Override
@@ -58,16 +57,18 @@ public class GuiCamera extends Screen {
     protected void buttonClicked(Button button) {
         if (button.id == 0) {
             this.cam.deleteCameraPoint();
-            Minecraft.minecraftInstance.openScreen(null);
+            AccessMinecraft.getInstance().openScreen(null);
         } else if (button.id == 1) {
             this.cam.type = (this.cam.type + 1) % 3;
             this.minecraft.activeCutsceneCamera.setPointType(this.cam.cameraID, this.cam.type);
-            for (Entity obj : this.minecraft.level.entities) {
-                EntityCamera c;
-                if (!(obj instanceof EntityCamera) || !(c = (EntityCamera) obj).isAlive() || c.cameraID != this.cam.cameraID)
-                    continue;
-                this.cam = c;
-                break;
+            for (Object obj : this.minecraft.level.entities) {
+                if (obj instanceof EntityCamera) {
+                    EntityCamera c = (EntityCamera) obj;
+                    if (c.isAlive() && c.cameraID == this.cam.cameraID) {
+                        this.cam = c;
+                        break;
+                    }
+                }
             }
             button.text = this.cam.type == 1 ? "Linear Interpolation" : (this.cam.type == 2 ? "Quadratic Interpolation" : "No Interpolation");
         }
@@ -77,9 +78,9 @@ public class GuiCamera extends Screen {
     public void render(int mouseX, int mouseY, float delta) {
         this.renderBackground();
         try {
-            Float value = Float.valueOf(this.timerText.method_1876());
-            this.cam.time = value.floatValue();
-            this.minecraft.activeCutsceneCamera.setTime(this.cam.cameraID, value.floatValue());
+            float value = Float.parseFloat(this.timerText.method_1876());
+            this.cam.time = value;
+            this.minecraft.activeCutsceneCamera.setTime(this.cam.cameraID, (float) value);
         } catch (NumberFormatException e) {
         }
         this.drawTextWithShadow(this.textManager, "Active At:", 4, 49, 0xE0E0E0);

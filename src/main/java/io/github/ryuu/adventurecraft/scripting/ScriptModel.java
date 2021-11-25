@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.level.Level;
@@ -159,8 +159,8 @@ public class ScriptModel {
     }
 
     private void render(float f) {
-        Level w = Minecraft.minecraftInstance.level;
-        TextureManager renderEngine = Minecraft.minecraftInstance.textureManager;
+        Level w = AccessMinecraft.getInstance().level;
+        TextureManager renderEngine = AccessMinecraft.getInstance().textureManager;
         if (this.texture != null && !this.texture.equals("")) {
             renderEngine.bindTexture(renderEngine.getTextureId(this.texture));
         }

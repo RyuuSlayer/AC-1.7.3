@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.mixin.client;
 
 import io.github.ryuu.adventurecraft.Main;
+import io.github.ryuu.adventurecraft.accessors.items.ClickableItemInstance;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.gui.GuiMapSelect;
 import io.github.ryuu.adventurecraft.gui.GuiStore;
@@ -68,7 +69,7 @@ import java.awt.*;
 import java.io.*;
 
 @Mixin(Minecraft.class)
-public abstract class MixinMinecraft implements Runnable {
+public abstract class MixinMinecraft implements Runnable, AccessMinecraft {
 
     @Shadow
     public static int field_2771;
@@ -414,7 +415,7 @@ public abstract class MixinMinecraft implements Runnable {
                 if (i == 0) {
                     this.interactionManager.method_1707(j, k, l, this.hitResult.field_1987);
                     if (itemUsing != null) {
-                        itemUsing.useItemLeftClick(this.player, this.level, j, k, l, i1);
+                        ((ClickableItemInstance)itemUsing).useItemLeftClick(this.player, this.level, j, k, l, i1);
                     }
                 } else {
                     int j1;

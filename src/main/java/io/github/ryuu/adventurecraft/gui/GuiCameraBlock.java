@@ -1,7 +1,7 @@
 package io.github.ryuu.adventurecraft.gui;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityCamera;
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 
@@ -14,7 +14,7 @@ public class GuiCameraBlock extends Screen {
     }
 
     public static void showUI(TileEntityCamera c) {
-        Minecraft.minecraftInstance.openScreen(new GuiCameraBlock(c));
+        AccessMinecraft.getInstance().openScreen(new GuiCameraBlock(c));
     }
 
     @Override

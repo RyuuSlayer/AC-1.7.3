@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.level.chunk;
 
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.level.Level;
 import net.minecraft.level.chunk.Chunk;
 import net.minecraft.level.chunk.ChunkIO;
@@ -33,7 +33,7 @@ public class MixinClientChunkCache implements LevelSource {
     private int spawnZ;
 
     public MixinClientChunkCache(Level world, ChunkIO ichunkloader, LevelSource ichunkprovider) {
-        this.isVeryFar = Minecraft.minecraftInstance.options.viewDistance != 0;
+        this.isVeryFar = AccessMinecraft.getInstance().options.viewDistance != 0;
         this.updateVeryFar();
         this.cachedX = -999999999;
         this.cachedZ = -999999999;
@@ -49,7 +49,7 @@ public class MixinClientChunkCache implements LevelSource {
     @Overwrite()
     public void updateVeryFar() {
         boolean curVeryFar;
-        boolean bl = curVeryFar = Minecraft.minecraftInstance.options.viewDistance == 0;
+        boolean bl = curVeryFar = AccessMinecraft.getInstance().options.viewDistance == 0;
         if (this.isVeryFar != curVeryFar) {
             this.isVeryFar = curVeryFar;
             this.cachedX = -999999999;

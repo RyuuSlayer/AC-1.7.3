@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.mixin.client.render;
 
 import io.github.ryuu.adventurecraft.items.ItemCursor;
 import io.github.ryuu.adventurecraft.items.Items;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.scripting.ScriptModel;
 import io.github.ryuu.adventurecraft.util.CutsceneCameraPoint;
 import io.github.ryuu.adventurecraft.util.DebugMode;
@@ -930,7 +931,7 @@ public class MixinWorldRenderer implements LevelListener {
         int i1 = 0;
         long avgTime = 0L;
         if (PlayerTorch.isTorchActive()) {
-            avgTime = Minecraft.minecraftInstance.getAvgFrameTime();
+            avgTime = AccessMinecraft.getInstance().getAvgFrameTime();
         }
         for (int j1 = 0; j1 < l; ++j1) {
             class_66 worldrenderer1 = (class_66) this.field_1807.get(j1);

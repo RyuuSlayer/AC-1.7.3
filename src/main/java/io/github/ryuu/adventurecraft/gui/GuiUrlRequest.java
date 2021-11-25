@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.gui;
 
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.OptionButton;
@@ -26,11 +26,11 @@ public class GuiUrlRequest extends Screen {
     }
 
     public static void showUI(String url) {
-        Minecraft.minecraftInstance.openScreen(new GuiUrlRequest(url));
+        AccessMinecraft.getInstance().openScreen(new GuiUrlRequest(url));
     }
 
     public static void showUI(String url, String msg) {
-        Minecraft.minecraftInstance.openScreen(new GuiUrlRequest(url, msg));
+        AccessMinecraft.getInstance().openScreen(new GuiUrlRequest(url, msg));
     }
 
     @Override

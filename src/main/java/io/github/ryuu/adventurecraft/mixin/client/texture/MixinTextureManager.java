@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.client.texture;
 
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.util.TextureAnimated;
 import io.github.ryuu.adventurecraft.util.Vec2;
 import net.minecraft.client.*;
@@ -178,8 +179,8 @@ public class MixinTextureManager {
                 texName = texName.substring(6);
             }
             BufferedImage image = null;
-            if (Minecraft.minecraftInstance.level != null) {
-                image = Minecraft.minecraftInstance.level.loadMapTexture(texName);
+            if (AccessMinecraft.getInstance().level != null) {
+                image = AccessMinecraft.getInstance().level.loadMapTexture(texName);
             }
             if (image == null) {
                 InputStream inputstream = texturepackbase.getResource(texName);

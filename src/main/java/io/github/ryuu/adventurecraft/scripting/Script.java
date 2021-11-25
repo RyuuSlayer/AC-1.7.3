@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.level.Level;
 import org.mozilla.javascript.*;
 
@@ -46,11 +46,11 @@ public class Script {
         this.world = new ScriptWorld(w);
         this.chat = new ScriptChat();
         this.weather = new ScriptWeather(w);
-        this.effect = new ScriptEffect(w, Minecraft.minecraftInstance.worldRenderer);
-        this.sound = new ScriptSound(Minecraft.minecraftInstance.soundHelper);
+        this.effect = new ScriptEffect(w, AccessMinecraft.getInstance().worldRenderer);
+        this.sound = new ScriptSound(AccessMinecraft.getInstance().soundHelper);
         this.ui = new ScriptUI();
         this.script = new ScriptScript(w);
-        this.keyboard = new ScriptKeyboard(w, Minecraft.minecraftInstance.options, this.getNewScope());
+        this.keyboard = new ScriptKeyboard(w, AccessMinecraft.getInstance().options, this.getNewScope());
         Object wrappedOut = Context.javaToJS(this.time, this.globalScope);
         ScriptableObject.putProperty(this.globalScope, "time", wrappedOut);
         wrappedOut = Context.javaToJS(this.world, this.globalScope);
@@ -65,7 +65,7 @@ public class Script {
         ScriptableObject.putProperty(this.globalScope, "sound", wrappedOut);
         wrappedOut = Context.javaToJS(this.ui, this.globalScope);
         ScriptableObject.putProperty(this.globalScope, "ui", wrappedOut);
-        wrappedOut = Context.javaToJS((Object) Minecraft.minecraftInstance.overlay.scriptUI, this.globalScope);
+        wrappedOut = Context.javaToJS((Object) AccessMinecraft.getInstance().overlay.scriptUI, this.globalScope);
         ScriptableObject.putProperty(this.globalScope, "screen", wrappedOut);
         wrappedOut = Context.javaToJS(this.script, this.globalScope);
         ScriptableObject.putProperty(this.globalScope, "script", wrappedOut);
@@ -95,7 +95,7 @@ public class Script {
     }
 
     public void initPlayer() {
-        this.player = new ScriptEntityPlayer(Minecraft.minecraftInstance.player);
+        this.player = new ScriptEntityPlayer(AccessMinecraft.getInstance().player);
         Object wrappedOut = Context.javaToJS(this.player, this.globalScope);
         ScriptableObject.putProperty(this.globalScope, "player", wrappedOut);
     }
@@ -113,7 +113,7 @@ public class Script {
         try {
             return this.cx.compileString(script, sourceName, 1, null);
         } catch (Exception e) {
-            Minecraft.minecraftInstance.overlay.addChatMessage("Javascript Error: " + e.getMessage());
+            AccessMinecraft.getInstance().overlay.addChatMessage("Javascript Error: " + e.getMessage());
             return null;
         }
     }
@@ -132,7 +132,7 @@ public class Script {
                 return object;
             } catch (ContinuationPending e) {
             } catch (Exception e) {
-                Minecraft.minecraftInstance.overlay.addChatMessage("Javascript Error: " + e.getMessage());
+                AccessMinecraft.getInstance().overlay.addChatMessage("Javascript Error: " + e.getMessage());
             } finally {
                 this.curScope = null;
             }
@@ -163,7 +163,7 @@ public class Script {
             } catch (ContinuationPending e) {
                 continue;
             } catch (Exception e) {
-                Minecraft.minecraftInstance.overlay.addChatMessage("Javascript Error: " + e.getMessage());
+                AccessMinecraft.getInstance().overlay.addChatMessage("Javascript Error: " + e.getMessage());
                 continue;
             } finally {
                 this.curScope = null;

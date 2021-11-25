@@ -2,7 +2,7 @@ package io.github.ryuu.adventurecraft.gui;
 
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityRedstoneTrigger;
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.OptionButton;
@@ -29,7 +29,7 @@ public class GuiRedstoneTrigger extends Screen {
     }
 
     public static void showUI(Level w, int x, int y, int z, TileEntityRedstoneTrigger triggerClicked) {
-        Minecraft.minecraftInstance.openScreen(new GuiRedstoneTrigger(w, x, y, z, triggerClicked));
+        AccessMinecraft.getInstance().openScreen(new GuiRedstoneTrigger(w, x, y, z, triggerClicked));
     }
 
     @Override

@@ -1,7 +1,7 @@
 package io.github.ryuu.adventurecraft.util;
 
 import io.github.ryuu.adventurecraft.blocks.Blocks;
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.render.TextureBinder;
 
 import java.awt.image.BufferedImage;
@@ -23,11 +23,11 @@ public class TextureFanFX extends TextureBinder {
     public static void loadImage() {
         try {
             BufferedImage bufferedimage = null;
-            if (Minecraft.minecraftInstance.level != null) {
-                bufferedimage = Minecraft.minecraftInstance.level.loadMapTexture("/misc/fan.png");
+            if (AccessMinecraft.getInstance().level != null) {
+                bufferedimage = AccessMinecraft.getInstance().level.loadMapTexture("/misc/fan.png");
             }
             if (bufferedimage == null) {
-                bufferedimage = Minecraft.minecraftInstance.textureManager.getTextureImage("/misc/fan.png");
+                bufferedimage = AccessMinecraft.getInstance().textureManager.getTextureImage("/misc/fan.png");
             }
             width = bufferedimage.getWidth();
             height = bufferedimage.getHeight();

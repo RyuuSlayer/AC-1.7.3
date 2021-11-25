@@ -1,12 +1,12 @@
 package io.github.ryuu.adventurecraft.gui;
 
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
+import io.github.ryuu.adventurecraft.scripting.ScriptUIContainer;
+import io.github.ryuu.adventurecraft.scripting.ScriptUILabel;
+import io.github.ryuu.adventurecraft.scripting.ScriptUIRect;
+import io.github.ryuu.adventurecraft.scripting.ScriptUISprite;
 import net.minecraft.client.render.TextRenderer;
 import net.minecraft.client.texture.TextureManager;
-import net.minecraft.script.ScriptUIContainer;
-import net.minecraft.script.ScriptUILabel;
-import net.minecraft.script.ScriptUIRect;
-import net.minecraft.script.ScriptUISprite;
 
 import javax.swing.*;
 import java.net.URL;
@@ -44,7 +44,7 @@ public class GuiMapElement extends ScriptUIContainer {
     public GuiMapElement(int xPos, int yPos, ScriptUIContainer p, String mName, String topDescription, String description, String texture, String mURL, int mID, int tRating, int nRatings) {
         super(xPos, yPos, p);
         String[] labels;
-        ArrayList splitLines = new ArrayList();
+        ArrayList<String> splitLines = new ArrayList<>();
         this.background = new ScriptUISprite(texture, 0.0f, 0.0f, 100.0f, 100.0f, 0.0, 0.0, this);
         this.topBack = new ScriptUIRect(0.0f, 0.0f, 100.0f, 12.0f, 0.0f, 0.0f, 0.0f, 0.5f, this);
         this.mapID = mID;
@@ -56,7 +56,7 @@ public class GuiMapElement extends ScriptUIContainer {
         int i = 0;
         for (String label : labels = mName.split("\n")) {
             splitLines.clear();
-            this.getLines(label, (List<String>) splitLines);
+            this.getLines(label, splitLines);
             for (String line : splitLines) {
                 new ScriptUILabel(line, 2.0f, 2 + i * 10, this);
                 ++i;
@@ -125,7 +125,6 @@ public class GuiMapElement extends ScriptUIContainer {
         }
         this.voted = mouseX / 13 + 1;
         SwingUtilities.invokeLater(new Runnable() {
-
             public void run() {
                 try {
                     URL url = new URL(String.format("http://www.adventurecraft.org/cgi-bin/vote.py?mapID=%d&rating=%d", GuiMapElement.this.mapID, GuiMapElement.this.voted));
@@ -148,7 +147,7 @@ public class GuiMapElement extends ScriptUIContainer {
                 continue;
             }
             String potential = curLine + " " + part;
-            if (Minecraft.minecraftInstance.textRenderer.getTextWidth(potential) > 100) {
+            if (AccessMinecraft.getInstance().textRenderer.getTextWidth(potential) > 100) {
                 lines.add(curLine);
                 curLine = part;
                 continue;
@@ -206,7 +205,7 @@ public class GuiMapElement extends ScriptUIContainer {
 
     public void setAsDownloaded() {
         if (!this.downloaded) {
-            int stringLength = Minecraft.minecraftInstance.textRenderer.getTextWidth("Downloaded");
+            int stringLength = AccessMinecraft.getInstance().textRenderer.getTextWidth("Downloaded");
             new ScriptUIRect(0.0f, 0.0f, 100.0f, 100.0f, 0.0f, 0.0f, 0.0f, 0.5f, this);
             new ScriptUILabel("Downloaded", 50 - stringLength / 2, 46.0f, this);
             this.downloaded = true;

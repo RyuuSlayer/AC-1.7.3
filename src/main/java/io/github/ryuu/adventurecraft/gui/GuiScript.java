@@ -1,7 +1,7 @@
 package io.github.ryuu.adventurecraft.gui;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityScript;
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 
@@ -24,7 +24,7 @@ public class GuiScript extends Screen {
     }
 
     public static void showUI(TileEntityScript s) {
-        Minecraft.minecraftInstance.openScreen(new GuiScript(s));
+        AccessMinecraft.getInstance().openScreen(new GuiScript(s));
     }
 
     @Override

@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.util;
 
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.level.Level;
@@ -20,7 +20,7 @@ public class UtilBullet {
         HitResult hit = UtilBullet.findHit(worldObj, e, spread);
         if (hit != null) {
             Vec3f hitLoc = hit.field_1988;
-            Minecraft.minecraftInstance.worldRenderer.addParticle("smoke", hitLoc.x, hitLoc.y, hitLoc.z, 0.0, 0.0, 0.0);
+            AccessMinecraft.getInstance().worldRenderer.addParticle("smoke", hitLoc.x, hitLoc.y, hitLoc.z, 0.0, 0.0, 0.0);
             if (hit.type == HitType.ENTITY) {
                 Entity attacking = hit.field_1989;
                 attacking.attackEntityFromMulti(e, damage);

@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.script.ScopeTag;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.io.AbstractTag;
@@ -26,18 +26,18 @@ public class TileEntityScript extends TileEntity {
     boolean loaded = false;
 
     public TileEntityScript() {
-        this.scope = Minecraft.minecraftInstance.level.script.getNewScope();
+        this.scope = AccessMinecraft.getInstance().level.script.getNewScope();
     }
 
     @Override
     public void tick() {
         if (!this.inited) {
             this.inited = true;
-            Object wrappedOut = Context.javaToJS(new Integer(this.x), this.scope);
+            Object wrappedOut = Context.javaToJS(this.x, this.scope);
             ScriptableObject.putProperty(this.scope, "xCoord", wrappedOut);
-            wrappedOut = Context.javaToJS(new Integer(this.y), this.scope);
+            wrappedOut = Context.javaToJS(this.y, this.scope);
             ScriptableObject.putProperty(this.scope, "yCoord", wrappedOut);
-            wrappedOut = Context.javaToJS(new Integer(this.z), this.scope);
+            wrappedOut = Context.javaToJS(this.z, this.scope);
             ScriptableObject.putProperty(this.scope, "zCoord", wrappedOut);
         }
         if (this.checkTrigger) {

@@ -3,8 +3,8 @@ package io.github.ryuu.adventurecraft.blocks;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityTeleport;
 import io.github.ryuu.adventurecraft.items.ItemCursor;
 import io.github.ryuu.adventurecraft.items.Items;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.util.DebugMode;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
@@ -72,7 +72,7 @@ public class BlockTeleport extends TileWithEntity {
             obj.x = ItemCursor.minX;
             obj.y = ItemCursor.minY;
             obj.z = ItemCursor.minZ;
-            Minecraft.minecraftInstance.overlay.addChatMessage(String.format("Setting Teleport (%d, %d, %d)", new Object[]{obj.x, obj.y, obj.z}));
+            AccessMinecraft.getInstance().overlay.addChatMessage(String.format("Setting Teleport (%d, %d, %d)", new Object[]{obj.x, obj.y, obj.z}));
             return true;
         }
         return false;

@@ -2,7 +2,7 @@ package io.github.ryuu.adventurecraft.gui;
 
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityTimer;
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.OptionButton;
@@ -36,7 +36,7 @@ public class GuiTimer extends Screen {
     }
 
     public static void showUI(Level w, int x, int y, int z, TileEntityTimer timerClicked) {
-        Minecraft.minecraftInstance.openScreen(new GuiTimer(w, x, y, z, timerClicked));
+        AccessMinecraft.getInstance().openScreen(new GuiTimer(w, x, y, z, timerClicked));
     }
 
     @Override

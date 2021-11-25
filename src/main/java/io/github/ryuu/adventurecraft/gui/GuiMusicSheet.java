@@ -1,8 +1,8 @@
 package io.github.ryuu.adventurecraft.gui;
 
 import io.github.ryuu.adventurecraft.accessors.client.gui.ScreenInputGrab;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.util.MusicPlayer;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Screen;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
@@ -31,7 +31,7 @@ public class GuiMusicSheet extends Screen {
     }
 
     public static void showUI(String i) {
-        Minecraft.minecraftInstance.openScreen(new GuiMusicSheet(i));
+        AccessMinecraft.getInstance().openScreen(new GuiMusicSheet(i));
     }
 
     @Override

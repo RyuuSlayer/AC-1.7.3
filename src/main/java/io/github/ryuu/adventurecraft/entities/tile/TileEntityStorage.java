@@ -2,9 +2,8 @@ package io.github.ryuu.adventurecraft.entities.tile;
 
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.items.ItemCursor;
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.level.chunk.Chunk;
-import net.minecraft.src.NBTTagCompound;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.io.AbstractTag;
 import net.minecraft.util.io.CompoundTag;
@@ -17,7 +16,7 @@ public class TileEntityStorage extends TileEntityMinMax {
 
     byte[] metadatas = null;
 
-    ArrayList<NBTTagCompound> tileEntities = new ArrayList();
+    ArrayList<CompoundTag> tileEntities = new ArrayList<>();
 
     TileEntityStorage() {
     }
@@ -101,7 +100,7 @@ public class TileEntityStorage extends TileEntityMinMax {
                 this.tileEntities.add((Object) tag.getCompoundTag(String.format("tile%d", i)));
             }
         }
-        if (!tag.containsKey("acVersion") && Minecraft.minecraftInstance.level.properties.originallyFromAC) {
+        if (!tag.containsKey("acVersion") && AccessMinecraft.getInstance().level.properties.originallyFromAC) {
             Blocks.convertACVersion(this.blockIDs);
         }
     }

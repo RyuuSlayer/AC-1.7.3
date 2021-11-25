@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.util;
 
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 
 import java.awt.image.BufferedImage;
 
@@ -39,20 +39,20 @@ public class TextureAnimated {
     public void loadImage(String animatedTex) {
         this.hasImages = false;
         BufferedImage bufferedimage = null;
-        if (Minecraft.minecraftInstance.level != null) {
-            bufferedimage = Minecraft.minecraftInstance.level.loadMapTexture(animatedTex);
+        if (AccessMinecraft.getInstance().level != null) {
+            bufferedimage = AccessMinecraft.getInstance().level.loadMapTexture(animatedTex);
         }
         this.curFrame = 0;
         if (bufferedimage == null) {
-            Minecraft.minecraftInstance.overlay.addChatMessage(String.format("Unable to load texture '%s'", new Object[]{animatedTex}));
+            AccessMinecraft.getInstance().overlay.addChatMessage(String.format("Unable to load texture '%s'", new Object[]{animatedTex}));
             return;
         }
         if (this.width != bufferedimage.getWidth()) {
-            Minecraft.minecraftInstance.overlay.addChatMessage(String.format("Animated texture width of %d didn't match the specified width of %d", new Object[]{bufferedimage.getWidth(), this.width}));
+            AccessMinecraft.getInstance().overlay.addChatMessage(String.format("Animated texture width of %d didn't match the specified width of %d", new Object[]{bufferedimage.getWidth(), this.width}));
             return;
         }
         if (0 != bufferedimage.getHeight() % this.height) {
-            Minecraft.minecraftInstance.overlay.addChatMessage(String.format("Animated texture height of %d isn't a multiple of the specified height of %d", new Object[]{bufferedimage.getHeight(), this.height}));
+            AccessMinecraft.getInstance().overlay.addChatMessage(String.format("Animated texture height of %d isn't a multiple of the specified height of %d", new Object[]{bufferedimage.getHeight(), this.height}));
             return;
         }
         this.numFrames = bufferedimage.getHeight() / this.height;

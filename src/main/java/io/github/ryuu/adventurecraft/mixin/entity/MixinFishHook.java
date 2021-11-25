@@ -1,17 +1,14 @@
 package io.github.ryuu.adventurecraft.mixin.entity;
 
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.FishHook;
-import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
-import net.minecraft.stat.Stats;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.MathsHelper;
 import net.minecraft.util.maths.Vec3f;
@@ -22,139 +19,58 @@ import org.spongepowered.asm.mixin.Shadow;
 import java.util.List;
 
 @Mixin(FishHook.class)
-public class MixinFishHook extends Entity {
+public abstract class MixinFishHook extends Entity {
 
+    @Shadow
     public int shake = 0;
+    @Shadow
     public Player field_1067;
-    public Entity field_1068 = null;
-    @Shadow()
-    private int xTile = -1;
-    private int yTile = -1;
-    private int zTile = -1;
-    private int inTile = 0;
-    private boolean inGround = false;
+    @Shadow
+    public Entity field_1068;
+    @Shadow
+    private int xTile;
+    @Shadow
+    private int yTile;
+    @Shadow
+    private int zTile;
+    @Shadow
+    private int inTile;
+    @Shadow
+    private boolean inGround;
+    @Shadow
     private int field_1074;
+    @Shadow
     private int field_1075 = 0;
+    @Shadow
     private int field_1076 = 0;
+    @Shadow
     private int field_1077;
-
+    @Shadow
     private double field_1078;
-
+    @Shadow
     private double field_1079;
-
+    @Shadow
     private double field_1080;
-
+    @Shadow
     private double field_1081;
-
+    @Shadow
     private double field_1082;
 
-    private double field_1083;
-
-    private double field_1084;
-
-    private double field_1085;
-
-    public MixinFishHook(Level world) {
-        super(world);
-        this.setSize(0.25f, 0.25f);
-        this.field_1622 = true;
-    }
-
-    public MixinFishHook(Level world, double d, double d1, double d2) {
-        this(world);
-        this.setPosition(d, d1, d2);
-        this.field_1622 = true;
-    }
-
-    public MixinFishHook(Level world, Player entityplayer) {
-        super(world);
-        this.field_1622 = true;
-        this.field_1067 = entityplayer;
-        this.field_1067.fishHook = this;
-        this.setSize(0.25f, 0.25f);
-        this.setPositionAndAngles(entityplayer.x, entityplayer.y + 1.62 - (double) entityplayer.standingEyeHeight, entityplayer.z, entityplayer.yaw, entityplayer.pitch);
-        this.x -= MathsHelper.cos(this.yaw / 180.0f * 3.141593f) * 0.16f;
-        this.y -= 0.1f;
-        this.z -= MathsHelper.sin(this.yaw / 180.0f * 3.141593f) * 0.16f;
-        this.setPosition(this.x, this.y, this.z);
-        this.standingEyeHeight = 0.0f;
-        float f = 0.4f;
-        this.velocityX = -MathsHelper.sin(this.yaw / 180.0f * 3.141593f) * MathsHelper.cos(this.pitch / 180.0f * 3.141593f) * f;
-        this.velocityZ = MathsHelper.cos(this.yaw / 180.0f * 3.141593f) * MathsHelper.cos(this.pitch / 180.0f * 3.141593f) * f;
-        this.velocityY = -MathsHelper.sin(this.pitch / 180.0f * 3.141593f) * f;
-        this.method_955(this.velocityX, this.velocityY, this.velocityZ, 1.5f, 1.0f);
+    public MixinFishHook(Level arg) {
+        super(arg);
     }
 
     /**
      * @author Ryuu, TechPizza, Phil
      */
     @Override
-    @Overwrite()
-    public boolean shouldRenderAtDistance(double d) {
-        double d1 = this.boundingBox.averageDimension() * 4.0;
-        return d < (d1 *= 64.0) * d1;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_955(double d, double d1, double d2, float f, float f1) {
-        float f2 = MathsHelper.sqrt(d * d + d1 * d1 + d2 * d2);
-        d /= f2;
-        d1 /= f2;
-        d2 /= f2;
-        d += this.rand.nextGaussian() * (double) 0.0075f * (double) f1;
-        d1 += this.rand.nextGaussian() * (double) 0.0075f * (double) f1;
-        d2 += this.rand.nextGaussian() * (double) 0.0075f * (double) f1;
-        this.velocityX = d *= f;
-        this.velocityY = d1 *= f;
-        this.velocityZ = d2 *= f;
-        float f3 = MathsHelper.sqrt(d * d + d2 * d2);
-        this.prevYaw = this.yaw = (float) (Math.atan2(d, d2) * 180.0 / 3.1415927410125732);
-        this.prevPitch = this.pitch = (float) (Math.atan2(d1, f3) * 180.0 / 3.1415927410125732);
-        this.field_1074 = 0;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public void method_1311(double d, double d1, double d2, float f, float f1, int i) {
-        this.field_1078 = d;
-        this.field_1079 = d1;
-        this.field_1080 = d2;
-        this.field_1081 = f;
-        this.field_1082 = f1;
-        this.field_1077 = i;
-        this.velocityX = this.field_1083;
-        this.velocityY = this.field_1084;
-        this.velocityZ = this.field_1085;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public void setVelocity(double d, double d1, double d2) {
-        this.field_1083 = this.velocityX = d;
-        this.field_1084 = this.velocityY = d1;
-        this.field_1085 = this.velocityZ = d2;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
+    @Overwrite
     public void tick() {
         block37:
         {
             if (this.field_1067 == null) {
-                this.field_1067 = Minecraft.minecraftInstance.player;
-                Minecraft.minecraftInstance.player.fishHook = this;
+                this.field_1067 = AccessMinecraft.getInstance().player;
+                AccessMinecraft.getInstance().player.fishHook = (FishHook) (Object) this;
             }
             super.tick();
             if (this.field_1077 > 0) {
@@ -327,71 +243,5 @@ public class MixinFishHook extends Entity {
         this.velocityY *= f1;
         this.velocityZ *= f1;
         this.setPosition(this.x, this.y, this.z);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public void writeCustomDataToTag(CompoundTag tag) {
-        tag.put("xTile", (short) this.xTile);
-        tag.put("yTile", (short) this.yTile);
-        tag.put("zTile", (short) this.zTile);
-        tag.put("inTile", (byte) this.inTile);
-        tag.put("shake", (byte) this.shake);
-        tag.put("inGround", (byte) (this.inGround ? 1 : 0));
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public void readCustomDataFromTag(CompoundTag tag) {
-        this.xTile = tag.getShort("xTile");
-        this.yTile = tag.getShort("yTile");
-        this.zTile = tag.getShort("zTile");
-        this.inTile = tag.getByte("inTile") & 0xFF;
-        this.shake = tag.getByte("shake") & 0xFF;
-        this.inGround = tag.getByte("inGround") == 1;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public int method_956() {
-        int byte0 = 0;
-        if (this.field_1068 != null) {
-            double d = this.field_1067.x - this.x;
-            double d2 = this.field_1067.y - this.y;
-            double d4 = this.field_1067.z - this.z;
-            double d6 = MathsHelper.sqrt(d * d + d2 * d2 + d4 * d4);
-            double d8 = 0.1;
-            this.field_1068.velocityX += d * d8;
-            this.field_1068.velocityY += d2 * d8 + (double) MathsHelper.sqrt(d6) * 0.08;
-            this.field_1068.velocityZ += d4 * d8;
-            byte0 = 3;
-        } else if (this.field_1076 > 0) {
-            ItemEntity entityitem = new ItemEntity(this.level, this.x, this.y, this.z, new ItemInstance(ItemType.fishRaw));
-            double d1 = this.field_1067.x - this.x;
-            double d3 = this.field_1067.y - this.y;
-            double d5 = this.field_1067.z - this.z;
-            double d7 = MathsHelper.sqrt(d1 * d1 + d3 * d3 + d5 * d5);
-            double d9 = 0.1;
-            entityitem.velocityX = d1 * d9;
-            entityitem.velocityY = d3 * d9 + (double) MathsHelper.sqrt(d7) * 0.08;
-            entityitem.velocityZ = d5 * d9;
-            this.level.spawnEntity(entityitem);
-            this.field_1067.increaseStat(Stats.fishCaught, 1);
-            byte0 = 1;
-        }
-        if (this.inGround) {
-            byte0 = 2;
-        }
-        this.remove();
-        this.field_1067.fishHook = null;
-        return byte0;
     }
 }

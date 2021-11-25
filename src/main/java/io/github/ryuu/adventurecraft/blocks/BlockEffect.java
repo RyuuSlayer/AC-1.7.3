@@ -3,9 +3,9 @@ package io.github.ryuu.adventurecraft.blocks;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityEffect;
 import io.github.ryuu.adventurecraft.gui.GuiEffect;
 import io.github.ryuu.adventurecraft.items.Items;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.TerrainImage;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.colour.FoliageColour;
 import net.minecraft.client.colour.GrassColour;
 import net.minecraft.client.render.*;
@@ -28,13 +28,13 @@ public class BlockEffect extends TileWithEntity {
     }
 
     public static void revertTextures(Level world) {
-        Minecraft.minecraftInstance.textureManager.revertTextures();
+        AccessMinecraft.getInstance().textureManager.revertTextures();
         if (needsReloadForRevert) {
             GrassColour.loadGrass("/misc/grasscolor.png");
             FoliageColour.loadFoliage("/misc/foliagecolor.png");
             TerrainImage.loadWaterMap(new File(world.levelDir, "watermap.png"));
             TerrainImage.loadBiomeMap(new File(world.levelDir, "biomemap.png"));
-            Minecraft.minecraftInstance.worldRenderer.method_1148();
+            AccessMinecraft.getInstance().worldRenderer.method_1148();
             needsReloadForRevert = false;
         }
         world.properties.revertTextures();
@@ -89,7 +89,7 @@ public class BlockEffect extends TileWithEntity {
             FlowingWaterTextureBinder2.loadImage(replacementTexture);
             return true;
         }
-        Minecraft.minecraftInstance.textureManager.replaceTexture(textureToReplace, replacementTexture);
+        AccessMinecraft.getInstance().textureManager.replaceTexture(textureToReplace, replacementTexture);
         return false;
     }
 
@@ -174,7 +174,7 @@ public class BlockEffect extends TileWithEntity {
             }
         }
         if (needsReload) {
-            Minecraft.minecraftInstance.worldRenderer.method_1148();
+            AccessMinecraft.getInstance().worldRenderer.method_1148();
         }
     }
 

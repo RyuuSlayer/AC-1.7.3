@@ -1,8 +1,8 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.util.CutsceneCamera;
 import io.github.ryuu.adventurecraft.util.CutsceneCameraPoint;
-import net.minecraft.client.Minecraft;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.io.CompoundTag;
 
@@ -20,12 +20,12 @@ public class TileEntityCamera extends TileEntity {
     }
 
     public void loadCamera() {
-        this.copyCamera(this.camera, Minecraft.minecraftInstance.cutsceneCamera);
-        Minecraft.minecraftInstance.cutsceneCamera.startType = this.type;
+        this.copyCamera(this.camera, AccessMinecraft.getInstance().cutsceneCamera);
+        AccessMinecraft.getInstance().cutsceneCamera.startType = this.type;
     }
 
     public void saveCamera() {
-        this.copyCamera(Minecraft.minecraftInstance.cutsceneCamera, this.camera);
+        this.copyCamera(AccessMinecraft.getInstance().cutsceneCamera, this.camera);
     }
 
     private void copyCamera(CutsceneCamera src, CutsceneCamera tgt) {

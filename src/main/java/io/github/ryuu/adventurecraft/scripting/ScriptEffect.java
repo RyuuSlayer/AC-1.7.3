@@ -1,8 +1,8 @@
 package io.github.ryuu.adventurecraft.scripting;
 
 import io.github.ryuu.adventurecraft.blocks.BlockEffect;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.util.TextureAnimated;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.level.Level;
 
@@ -77,7 +77,7 @@ public class ScriptEffect {
     public void setLightRampValue(int i, float f) {
         this.worldObj.properties.brightness[i] = f;
         this.worldObj.loadBrightness();
-        Minecraft.minecraftInstance.worldRenderer.updateAllTheRenderers();
+        AccessMinecraft.getInstance().worldRenderer.updateAllTheRenderers();
     }
 
     public void resetLightRampValues() {
@@ -87,15 +87,15 @@ public class ScriptEffect {
             this.worldObj.properties.brightness[i] = (1.0f - f1) / (f1 * 3.0f + 1.0f) * (1.0f - f) + f;
         }
         this.worldObj.loadBrightness();
-        Minecraft.minecraftInstance.worldRenderer.updateAllTheRenderers();
+        AccessMinecraft.getInstance().worldRenderer.updateAllTheRenderers();
     }
 
     public void registerTextureAnimation(String animName, String texName, String animatedTex, int x, int y, int width, int height) {
-        Minecraft.minecraftInstance.textureManager.registerTextureAnimation(animName, new TextureAnimated(texName, animatedTex, x, y, width, height));
+        AccessMinecraft.getInstance().textureManager.registerTextureAnimation(animName, new TextureAnimated(texName, animatedTex, x, y, width, height));
     }
 
     public void unregisterTextureAnimation(String animName) {
-        Minecraft.minecraftInstance.textureManager.unregisterTextureAnimation(animName);
+        AccessMinecraft.getInstance().textureManager.unregisterTextureAnimation(animName);
     }
 
     public void explode(ScriptEntity owner, double x, double y, double z, float strength, boolean flaming) {
@@ -103,14 +103,14 @@ public class ScriptEffect {
     }
 
     public float getFovModifier() {
-        return Minecraft.minecraftInstance.gameRenderer.field_2365;
+        return AccessMinecraft.getInstance().gameRenderer.field_2365;
     }
 
     public void setFovModifier(float f) {
-        Minecraft.minecraftInstance.gameRenderer.field_2365 = f;
+        AccessMinecraft.getInstance().gameRenderer.field_2365 = f;
     }
 
     public void cancelCutscene() {
-        Minecraft.minecraftInstance.cameraActive = false;
+        AccessMinecraft.getInstance().cameraActive = false;
     }
 }

@@ -1,7 +1,7 @@
 package io.github.ryuu.adventurecraft.entities;
 
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.class_61;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
@@ -145,7 +145,7 @@ public class EntityNPC extends EntityLivingScript {
     public boolean interact(Player entityplayer) {
         if (super.interact(entityplayer)) {
             if (this.chatMsg != null && !this.chatMsg.equals("")) {
-                Minecraft.minecraftInstance.overlay.addChatMessage(String.format("<%s> %s", new Object[]{this.npcName, this.chatMsg}));
+                AccessMinecraft.getInstance().overlay.addChatMessage(String.format("<%s> %s", new Object[]{this.npcName, this.chatMsg}));
             }
             return true;
         }

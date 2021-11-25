@@ -1,7 +1,7 @@
 package io.github.ryuu.adventurecraft.items;
 
 import io.github.ryuu.adventurecraft.entities.EntityAirFX;
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.FallingTile;
 import net.minecraft.entity.player.Player;
@@ -56,7 +56,7 @@ class ItemUmbrella extends ItemType {
             dist = Math.max(dist, 3.0);
             e.method_1322(3.0 * dX / dist, 3.0 * dY / dist, 3.0 * dZ / dist);
         }
-        entities = Minecraft.minecraftInstance.particleManager.getEffectsWithinAABB(aabb);
+        entities = AccessMinecraft.getInstance().particleManager.getEffectsWithinAABB(aabb);
         for (Object obj : entities) {
             e = (Entity) obj;
             dist = e.method_1352(player);
@@ -73,7 +73,7 @@ class ItemUmbrella extends ItemType {
             fx.velocityX = lookVec.x * (1.0 + 0.05 * level.rand.nextGaussian()) + 0.2 * level.rand.nextGaussian();
             fx.velocityY = lookVec.y * (1.0 + 0.05 * level.rand.nextGaussian()) + 0.2 * level.rand.nextGaussian();
             fx.velocityZ = lookVec.z * (1.0 + 0.05 * level.rand.nextGaussian()) + 0.2 * level.rand.nextGaussian();
-            Minecraft.minecraftInstance.particleManager.addParticle(fx);
+            AccessMinecraft.getInstance().particleManager.addParticle(fx);
         }
         player.swingHand();
         item.setDamage(10);

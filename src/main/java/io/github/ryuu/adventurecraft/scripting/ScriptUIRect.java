@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.TextRenderer;
 import net.minecraft.client.texture.TextureManager;
@@ -21,7 +21,7 @@ public class ScriptUIRect extends UIElement {
     public float alpha = 1.0f;
 
     public ScriptUIRect(float xPos, float yPos, float w, float h, float r, float g, float b, float a) {
-        this(xPos, yPos, w, h, r, g, b, a, Minecraft.minecraftInstance.overlay.scriptUI);
+        this(xPos, yPos, w, h, r, g, b, a, AccessMinecraft.getInstance().overlay.scriptUI);
     }
 
     public ScriptUIRect(float xPos, float yPos, float w, float h, float r, float g, float b, float a, ScriptUIContainer parent) {

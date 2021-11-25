@@ -3,10 +3,9 @@ package io.github.ryuu.adventurecraft.items;
 import io.github.ryuu.adventurecraft.entities.EntityBoomerang;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
-import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 
-class ItemBoomerang extends ItemType {
+class ItemBoomerang extends ACItemType {
 
     public ItemBoomerang(int id) {
         super(id);

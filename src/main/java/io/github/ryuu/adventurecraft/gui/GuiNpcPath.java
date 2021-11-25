@@ -3,7 +3,7 @@ package io.github.ryuu.adventurecraft.gui;
 import io.github.ryuu.adventurecraft.entities.EntityNPC;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityNpcPath;
 import io.github.ryuu.adventurecraft.items.ItemCursor;
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.OptionButton;
@@ -17,7 +17,7 @@ public class GuiNpcPath extends Screen {
     }
 
     public static void showUI(TileEntityNpcPath npcPath) {
-        Minecraft.minecraftInstance.openScreen(new GuiNpcPath(npcPath));
+        AccessMinecraft.getInstance().openScreen(new GuiNpcPath(npcPath));
     }
 
     @Override

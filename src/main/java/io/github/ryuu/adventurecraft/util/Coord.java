@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.util;
 
-class Coord {
+public class Coord {
 
     public int x;
 

@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.mixin.client.render;
 import io.github.ryuu.adventurecraft.blocks.BlockOverlay;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityTree;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.Tessellator;
@@ -216,7 +217,7 @@ public class MixinTileRenderer {
         }
         if (l == 31) {
             boolean rendered = this.method_76(block, i, j, k);
-            if (Minecraft.minecraftInstance.level.triggerManager.isActivated(i, j, k)) {
+            if (AccessMinecraft.getInstance().level.triggerManager.isActivated(i, j, k)) {
                 Tessellator.INSTANCE.colour(1.0f, 1.0f, 1.0f);
                 this.field_83 = 99;
             } else {

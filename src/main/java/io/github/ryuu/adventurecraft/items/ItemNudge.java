@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.items;
 
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
@@ -22,7 +22,7 @@ public class ItemNudge extends ItemType {
             int k;
             int j;
             int i;
-            LivingEntity camera = Minecraft.minecraftInstance.field_2807;
+            LivingEntity camera = AccessMinecraft.getInstance().field_2807;
             Vec3f lookDir = camera.method_1320();
             int width = ItemCursor.maxX - ItemCursor.minX + 1;
             int height = ItemCursor.maxY - ItemCursor.minY + 1;
@@ -124,7 +124,7 @@ public class ItemNudge extends ItemType {
             int k;
             int j;
             int i;
-            LivingEntity camera = Minecraft.minecraftInstance.field_2807;
+            LivingEntity camera = AccessMinecraft.getInstance().field_2807;
             Vec3f lookDir = camera.method_1320();
             int width = ItemCursor.maxX - ItemCursor.minX + 1;
             int height = ItemCursor.maxY - ItemCursor.minY + 1;

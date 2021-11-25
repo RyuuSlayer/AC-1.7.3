@@ -3,9 +3,9 @@ package io.github.ryuu.adventurecraft.entities.tile;
 import io.github.ryuu.adventurecraft.entities.EntityLivingScript;
 import io.github.ryuu.adventurecraft.entities.EntitySkeletonSword;
 import io.github.ryuu.adventurecraft.items.ItemCursor;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.util.Coord;
 import io.github.ryuu.adventurecraft.util.TriggerArea;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
 import net.minecraft.entity.animal.Wolf;
 import net.minecraft.entity.monster.Skeleton;
@@ -67,7 +67,7 @@ public class TileEntityMobSpawner extends TileEntityScript {
         this.minSpawnVec = new Coord();
         this.maxSpawnVec = new Coord();
         this.delayLoadData = null;
-        this.scope = Minecraft.minecraftInstance.level.script.getNewScope();
+        this.scope = AccessMinecraft.getInstance().level.script.getNewScope();
     }
 
     public int getNumAlive() {
@@ -166,7 +166,7 @@ public class TileEntityMobSpawner extends TileEntityScript {
                 w.setHasOwner(true);
                 w.setTarget(null);
                 w.health = 20;
-                w.setOwner(Minecraft.minecraftInstance.player.name);
+                w.setOwner(AccessMinecraft.getInstance().player.name);
                 w.spawnBoneParticles(true);
                 this.level.method_185(w, (byte) 7);
             }

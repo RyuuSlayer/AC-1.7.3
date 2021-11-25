@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.render.TextRenderer;
 import net.minecraft.client.texture.TextureManager;
 
@@ -16,7 +16,7 @@ public class ScriptUILabel extends UIElement {
     private String[] textLines;
 
     public ScriptUILabel(String label, float xPos, float yPos) {
-        this(label, xPos, yPos, Minecraft.minecraftInstance.overlay.scriptUI);
+        this(label, xPos, yPos, AccessMinecraft.getInstance().overlay.scriptUI);
     }
 
     public ScriptUILabel(String label, float xPos, float yPos, ScriptUIContainer parent) {

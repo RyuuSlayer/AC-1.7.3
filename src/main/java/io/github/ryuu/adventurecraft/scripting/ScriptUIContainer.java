@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.render.TextRenderer;
 import net.minecraft.client.texture.TextureManager;
 import org.lwjgl.opengl.GL11;
@@ -14,13 +14,13 @@ public class ScriptUIContainer extends UIElement {
     public String text = "";
 
     public ScriptUIContainer(float xPos, float yPos) {
-        this(xPos, yPos, Minecraft.minecraftInstance.overlay.scriptUI);
+        this(xPos, yPos, AccessMinecraft.getInstance().overlay.scriptUI);
     }
 
     public ScriptUIContainer(float xPos, float yPos, ScriptUIContainer p) {
         this.prevX = this.curX = xPos;
         this.prevY = this.curY = yPos;
-        this.uiElements = new LinkedList();
+        this.uiElements = new LinkedList<>();
         if (p != null) {
             p.add(this);
         }

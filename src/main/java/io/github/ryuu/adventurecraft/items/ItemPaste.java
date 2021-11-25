@@ -1,7 +1,7 @@
 package io.github.ryuu.adventurecraft.items;
 
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.util.DebugMode;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
@@ -23,7 +23,7 @@ public class ItemPaste extends ItemType {
             int k;
             int j;
             int i;
-            LivingEntity camera = Minecraft.minecraftInstance.field_2807;
+            LivingEntity camera = AccessMinecraft.getInstance().field_2807;
             Vec3f lookDir = camera.method_1320();
             int width = ItemCursor.maxX - ItemCursor.minX + 1;
             int height = ItemCursor.maxY - ItemCursor.minY + 1;

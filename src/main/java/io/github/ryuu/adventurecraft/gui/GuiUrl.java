@@ -1,8 +1,8 @@
 package io.github.ryuu.adventurecraft.gui;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityUrl;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.util.ClipboardHandler;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.level.Level;
@@ -21,7 +21,7 @@ public class GuiUrl extends Screen {
     }
 
     public static void showUI(Level w, TileEntityUrl tileEntityMsg) {
-        Minecraft.minecraftInstance.openScreen(new GuiUrl(w, tileEntityMsg));
+        AccessMinecraft.getInstance().openScreen(new GuiUrl(w, tileEntityMsg));
     }
 
     @Override

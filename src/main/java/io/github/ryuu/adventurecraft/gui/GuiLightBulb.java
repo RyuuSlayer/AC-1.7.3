@@ -1,7 +1,7 @@
 package io.github.ryuu.adventurecraft.gui;
 
 import io.github.ryuu.adventurecraft.blocks.Blocks;
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.level.Level;
@@ -24,7 +24,7 @@ public class GuiLightBulb extends Screen {
     }
 
     public static void showUI(Level w, int x, int y, int z) {
-        Minecraft.minecraftInstance.openScreen(new GuiLightBulb(w, x, y, z));
+        AccessMinecraft.getInstance().openScreen(new GuiLightBulb(w, x, y, z));
     }
 
     @Override

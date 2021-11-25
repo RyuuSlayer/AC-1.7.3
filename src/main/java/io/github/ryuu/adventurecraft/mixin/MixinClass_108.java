@@ -1,9 +1,9 @@
 package io.github.ryuu.adventurecraft.mixin;
 
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.class_108;
 import net.minecraft.class_109;
 import net.minecraft.class_61;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.level.TileView;
 import net.minecraft.tile.DoorTile;
@@ -201,7 +201,7 @@ public class MixinClass_108 {
                         return 0;
                     }
                     Material material = Tile.BY_ID[k1].material;
-                    if (Tile.BY_ID[k1].method_1576() && (collision = Tile.BY_ID[k1].getCollisionShape(Minecraft.minecraftInstance.level, l, i1, j1)) != null) {
+                    if (Tile.BY_ID[k1].method_1576() && (collision = Tile.BY_ID[k1].getCollisionShape(AccessMinecraft.getInstance().level, l, i1, j1)) != null) {
                         return 0;
                     }
                     if (material == Material.WATER) {

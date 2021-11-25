@@ -4,6 +4,7 @@ import io.github.ryuu.adventurecraft.blocks.BlockStairMulti;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityNpcPath;
 import io.github.ryuu.adventurecraft.items.ItemCustom;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.scripting.EntityDescriptions;
 import io.github.ryuu.adventurecraft.scripting.ScopeTag;
 import io.github.ryuu.adventurecraft.scripting.Script;
@@ -386,13 +387,13 @@ public class MixinLevel implements TileView {
      */
     @Overwrite()
     public void loadMapTextures() {
-        Minecraft.minecraftInstance.textureManager.reload();
-        for (Object obj : Minecraft.minecraftInstance.textureManager.TEXTURE_ID_MAP.entrySet()) {
+        AccessMinecraft.getInstance().textureManager.reload();
+        for (Object obj : AccessMinecraft.getInstance().textureManager.TEXTURE_ID_MAP.entrySet()) {
             Map.Entry entry = (Map.Entry) obj;
             String texName = (String) entry.getKey();
             int texID = (Integer) entry.getValue();
             try {
-                Minecraft.minecraftInstance.textureManager.loadTexture(texID, texName);
+                AccessMinecraft.getInstance().textureManager.loadTexture(texID, texName);
             } catch (IllegalArgumentException ignoreNulls) {
             }
         }
@@ -414,7 +415,7 @@ public class MixinLevel implements TileView {
      */
     @Overwrite()
     private void loadTextureAnimations() {
-        Minecraft.minecraftInstance.textureManager.clearTextureAnimations();
+        AccessMinecraft.getInstance().textureManager.clearTextureAnimations();
         File animationFile = new File(this.levelDir, "animations.txt");
         if (!animationFile.exists()) return;
         try {
@@ -432,7 +433,7 @@ public class MixinLevel implements TileView {
                         int w = Integer.parseInt(parts[5].trim());
                         int h = Integer.parseInt(parts[6].trim());
                         TextureAnimated t = new TextureAnimated(texName, animTex, x, y, w, h);
-                        Minecraft.minecraftInstance.textureManager.registerTextureAnimation(parts[0].trim(), t);
+                        AccessMinecraft.getInstance().textureManager.registerTextureAnimation(parts[0].trim(), t);
                     } catch (Exception e) {
                     }
                 }
@@ -1766,7 +1767,7 @@ public class MixinLevel implements TileView {
                 entity2.vehicle.passenger = null;
                 entity2.vehicle = null;
             }
-            if (!(entity2.removed || Minecraft.minecraftInstance.cameraActive && Minecraft.minecraftInstance.cameraPause || DebugMode.active && !(entity2 instanceof Player))) {
+            if (!(entity2.removed || AccessMinecraft.getInstance().cameraActive && AccessMinecraft.getInstance().cameraPause || DebugMode.active && !(entity2 instanceof Player))) {
                 this.forceUpdatePosition(entity2);
                 Box.method_85();
             }
@@ -3186,7 +3187,7 @@ public class MixinLevel implements TileView {
             for (File musicFile : musicFiles = musicDir.listFiles()) {
                 if (!musicFile.isFile() || !musicFile.getName().endsWith(".ogg")) continue;
                 streamName = String.format("music/%s", musicFile.getName().toLowerCase());
-                Minecraft.minecraftInstance.soundHelper.method_2016(streamName, musicFile);
+                AccessMinecraft.getInstance().soundHelper.method_2016(streamName, musicFile);
                 ++musicCount;
             }
             this.musicList = new String[musicCount];
@@ -3200,7 +3201,7 @@ public class MixinLevel implements TileView {
             this.musicList = new String[0];
         }
         if (!this.properties.playingMusic.equals((Object) "")) {
-            Minecraft.minecraftInstance.soundHelper.playMusicFromStreaming(this.properties.playingMusic, 0, 0);
+            AccessMinecraft.getInstance().soundHelper.playMusicFromStreaming(this.properties.playingMusic, 0, 0);
         }
     }
 
@@ -3217,7 +3218,7 @@ public class MixinLevel implements TileView {
             for (File soundFile : soundFiles = soundDir.listFiles()) {
                 if (!soundFile.isFile() || !soundFile.getName().endsWith(".ogg")) continue;
                 streamName = String.format("sound/%s", soundFile.getName().toLowerCase());
-                Minecraft.minecraftInstance.soundHelper.method_2011(streamName, soundFile);
+                AccessMinecraft.getInstance().soundHelper.method_2011(streamName, soundFile);
                 ++soundCount;
             }
             this.soundList = new String[soundCount];
@@ -3237,10 +3238,10 @@ public class MixinLevel implements TileView {
      */
     @Overwrite()
     public void loadSoundOverrides() {
-        Minecraft.minecraftInstance.resourceDownloadThread.method_107();
+        AccessMinecraft.getInstance().resourceDownloadThread.method_107();
         File soundDir = new File(this.levelDir, "soundOverrides");
         if (soundDir.exists()) {
-            Minecraft.minecraftInstance.resourceDownloadThread.method_108(soundDir, "");
+            AccessMinecraft.getInstance().resourceDownloadThread.method_108(soundDir, "");
         }
     }
 

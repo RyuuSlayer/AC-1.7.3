@@ -2,8 +2,8 @@ package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityMessage;
 import io.github.ryuu.adventurecraft.gui.GuiMessage;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.util.DebugMode;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
@@ -47,7 +47,7 @@ public class BlockMessage extends TileWithEntity {
     public void onTriggerActivated(Level world, int i, int j, int k) {
         TileEntityMessage obj = (TileEntityMessage) world.getTileEntity(i, j, k);
         if (!obj.message.equals("")) {
-            Minecraft.minecraftInstance.overlay.addChatMessage(obj.message);
+            AccessMinecraft.getInstance().overlay.addChatMessage(obj.message);
         }
         if (!obj.sound.equals("")) {
             world.playSound((double) i + 0.5, (double) j + 0.5, (double) k + 0.5, obj.sound, 1.0f, 1.0f);

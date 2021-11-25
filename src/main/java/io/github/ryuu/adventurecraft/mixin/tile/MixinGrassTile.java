@@ -1,7 +1,7 @@
 package io.github.ryuu.adventurecraft.mixin.tile;
 
 import io.github.ryuu.adventurecraft.blocks.IBlockColor;
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.colour.GrassColour;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
@@ -111,7 +111,7 @@ public class MixinGrassTile extends Tile implements IBlockColor {
     @Override
     @Overwrite()
     public int method_1621() {
-        if (Minecraft.minecraftInstance.options.grass3d) {
+        if (AccessMinecraft.getInstance().options.grass3d) {
             return 30;
         }
         return super.method_1621();

@@ -2,11 +2,11 @@ package io.github.ryuu.adventurecraft.gui;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityMobSpawner;
 import io.github.ryuu.adventurecraft.items.Items;
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
+import io.github.ryuu.adventurecraft.scripting.EntityDescriptions;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.item.ItemType;
-import net.minecraft.script.EntityDescriptions;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -70,7 +70,7 @@ public class GuiMobSpawner extends Screen {
     }
 
     public static void showUI(TileEntityMobSpawner ms) {
-        Minecraft.minecraftInstance.openScreen(new GuiMobSpawner(ms));
+        AccessMinecraft.getInstance().openScreen(new GuiMobSpawner(ms));
     }
 
     @Override

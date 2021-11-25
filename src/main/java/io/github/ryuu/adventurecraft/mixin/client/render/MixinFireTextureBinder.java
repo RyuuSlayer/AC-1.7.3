@@ -1,7 +1,7 @@
 package io.github.ryuu.adventurecraft.mixin.client.render;
 
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.util.Vec2;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.FireTextureBinder;
 import net.minecraft.client.render.TextureBinder;
 import net.minecraft.tile.Tile;
@@ -46,8 +46,8 @@ public class MixinFireTextureBinder extends TextureBinder {
     @Overwrite()
     public static void loadImage(String texName) {
         BufferedImage bufferedimage = null;
-        if (Minecraft.minecraftInstance.level != null) {
-            bufferedimage = Minecraft.minecraftInstance.level.loadMapTexture(texName);
+        if (AccessMinecraft.getInstance().level != null) {
+            bufferedimage = AccessMinecraft.getInstance().level.loadMapTexture(texName);
         }
         curFrame = 0;
         if (bufferedimage == null) {

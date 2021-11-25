@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.entity.player;
 
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.container.Container;
 import net.minecraft.container.slot.CraftingResultSlot;
 import net.minecraft.container.slot.Slot;
@@ -33,7 +33,7 @@ public class MixinPlayerContainer extends Container {
 
     public MixinPlayerContainer(PlayerInventory inventoryplayer, boolean local) {
         this.local = local;
-        if (Minecraft.minecraftInstance.level.properties.allowsInventoryCrafting) {
+        if (AccessMinecraft.getInstance().level.properties.allowsInventoryCrafting) {
             this.addSlot(new CraftingResultSlot(inventoryplayer.player, this.craftingInv, this.resultInv, 0, 144, 52));
             for (int i = 0; i < 2; ++i) {
                 for (int i1 = 0; i1 < 2; ++i1) {

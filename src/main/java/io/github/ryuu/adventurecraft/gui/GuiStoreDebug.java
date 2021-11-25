@@ -2,8 +2,8 @@ package io.github.ryuu.adventurecraft.gui;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityStore;
 import io.github.ryuu.adventurecraft.items.ItemCursor;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.util.TriggerArea;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.OptionButton;
@@ -20,7 +20,7 @@ public class GuiStoreDebug extends Screen {
     }
 
     public static void showUI(TileEntityStore s) {
-        Minecraft.minecraftInstance.openScreen(new GuiStoreDebug(s));
+        AccessMinecraft.getInstance().openScreen(new GuiStoreDebug(s));
     }
 
     @Override

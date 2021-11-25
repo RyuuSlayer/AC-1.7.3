@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.render.TextRenderer;
 import net.minecraft.client.texture.TextureManager;
 
@@ -17,8 +17,8 @@ public class UIElement {
     protected ScriptUIContainer parent;
 
     public void addToScreen() {
-        if (Minecraft.minecraftInstance.overlay != null) {
-            Minecraft.minecraftInstance.overlay.scriptUI.add(this);
+        if (AccessMinecraft.getInstance().overlay != null) {
+            AccessMinecraft.getInstance().overlay.scriptUI.add(this);
         }
     }
 

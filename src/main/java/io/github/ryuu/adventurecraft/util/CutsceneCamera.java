@@ -1,12 +1,10 @@
 package io.github.ryuu.adventurecraft.util;
 
 import io.github.ryuu.adventurecraft.entities.EntityCamera;
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.render.Tessellator;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ClientPlayer;
-import net.minecraft.src.Vec3D;
 import net.minecraft.util.maths.Vec3f;
 import org.lwjgl.opengl.GL11;
 
@@ -23,13 +21,13 @@ public class CutsceneCamera {
 
     CutsceneCameraPoint prevPoint;
 
-    List<CutsceneCameraPoint> cameraPoints = new LinkedList();
+    List<CutsceneCameraPoint> cameraPoints = new LinkedList<>();
 
-    List<Vec3D> lineVecs = new LinkedList();
+    List<Vec3f> lineVecs = new LinkedList<>();
 
     int startType = 2;
 
-    void addCameraPoint(float time, float posX, float posY, float posZ, float yaw, float pitch, int type) {
+    public void addCameraPoint(float time, float posX, float posY, float posZ, float yaw, float pitch, int type) {
         int index = 0;
         for (CutsceneCameraPoint p : this.cameraPoints) {
             if (time < p.time) break;
@@ -40,14 +38,15 @@ public class CutsceneCamera {
     }
 
     public void loadCameraEntities() {
-        for (Entity obj : Minecraft.minecraftInstance.level.entities) {
-            if (!(obj instanceof EntityCamera)) continue;
-            obj.remove();
+        for (Object obj : AccessMinecraft.getInstance().level.entities) {
+            if (obj instanceof EntityCamera) {
+                ((EntityCamera)obj).remove();
+            }
         }
         for (CutsceneCameraPoint p : this.cameraPoints) {
-            EntityCamera e = new EntityCamera(Minecraft.minecraftInstance.level, p.time, p.cameraBlendType, p.cameraID);
+            EntityCamera e = new EntityCamera(AccessMinecraft.getInstance().level, p.time, p.cameraBlendType, p.cameraID);
             e.method_1338(p.posX, p.posY, p.posZ, p.rotYaw, p.rotPitch);
-            Minecraft.minecraftInstance.level.spawnEntity(e);
+            AccessMinecraft.getInstance().level.spawnEntity(e);
         }
         CutsceneCamera c = new CutsceneCamera();
         for (CutsceneCameraPoint p : this.cameraPoints) {
@@ -62,10 +61,10 @@ public class CutsceneCamera {
                     float time = this.lerp(lerpValue, prev.time, p.time);
                     CutsceneCameraPoint point = c.getPoint(time);
                     Vec3f v = Vec3f.method_1293(point.posX, point.posY, point.posZ);
-                    this.lineVecs.add((Object) v);
+                    this.lineVecs.add(v);
                 }
             } else {
-                this.lineVecs.add((Object) Vec3f.method_1293(p.posX, p.posY, p.posZ));
+                this.lineVecs.add(Vec3f.method_1293(p.posX, p.posY, p.posZ));
             }
             prev = p;
         }
@@ -133,16 +132,16 @@ public class CutsceneCamera {
         }
     }
 
-    void clearPoints() {
+    public void clearPoints() {
         this.prevPrevPoint = null;
         this.prevPoint = null;
         this.cameraPoints.clear();
     }
 
-    void startCamera() {
+    public void startCamera() {
         this.prevPrevPoint = null;
         this.prevPoint = null;
-        this.startTime = Minecraft.minecraftInstance.level.getLevelTime();
+        this.startTime = AccessMinecraft.getInstance().level.getLevelTime();
     }
 
     private float cubicInterpolation(float mu, float y0, float y1, float y2, float y3) {
@@ -158,27 +157,27 @@ public class CutsceneCamera {
         return (1.0f - mu) * y0 + mu * y1;
     }
 
-    boolean isEmpty() {
+    public boolean isEmpty() {
         return this.cameraPoints.isEmpty();
     }
 
-    float getLastTime() {
+    public float getLastTime() {
         return this.cameraPoints.get(this.cameraPoints.size() - 1).time;
     }
 
-    CutsceneCameraPoint getCurrentPoint(float partialTickTime) {
-        float elapsed = ((float) (Minecraft.minecraftInstance.level.getLevelTime() - this.startTime) + partialTickTime) / 20.0f;
+    public CutsceneCameraPoint getCurrentPoint(float partialTickTime) {
+        float elapsed = ((float) (AccessMinecraft.getInstance().level.getLevelTime() - this.startTime) + partialTickTime) / 20.0f;
         return this.getPoint(elapsed);
     }
 
-    CutsceneCameraPoint getPoint(float elapsed) {
+    public CutsceneCameraPoint getPoint(float elapsed) {
         CutsceneCameraPoint nextNextPoint;
         if (this.prevPoint == null) {
             if (this.cameraPoints.isEmpty()) {
                 return this.curPoint;
             }
             if (this.startType != 0) {
-                ClientPlayer player = Minecraft.minecraftInstance.player;
+                ClientPlayer player = AccessMinecraft.getInstance().player;
                 this.prevPoint = new CutsceneCameraPoint(0.0f, (float) player.x, (float) player.y, (float) player.z, player.yaw, player.pitch, this.startType);
                 this.fixYawPitch(player.yaw, player.pitch);
             } else {
@@ -255,7 +254,7 @@ public class CutsceneCamera {
         return this.curPoint;
     }
 
-    void deletePoint(int id) {
+    public void deletePoint(int id) {
         CutsceneCameraPoint deleting = null;
         for (CutsceneCameraPoint p : this.cameraPoints) {
             if (p.cameraID != id) continue;
@@ -267,7 +266,7 @@ public class CutsceneCamera {
         }
     }
 
-    void setPointType(int id, int type) {
+    public void setPointType(int id, int type) {
         for (CutsceneCameraPoint p : this.cameraPoints) {
             if (p.cameraID != id) continue;
             p.cameraBlendType = type;
@@ -276,7 +275,7 @@ public class CutsceneCamera {
         }
     }
 
-    void setTime(int id, float time) {
+    public void setTime(int id, float time) {
         for (CutsceneCameraPoint p : this.cameraPoints) {
             if (p.cameraID != id) continue;
             p.time = time;

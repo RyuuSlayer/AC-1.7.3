@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.client.colour;
 
-import net.minecraft.client.Minecraft;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.colour.FoliageColour;
 import net.minecraft.client.colour.GrassColour;
 import org.spongepowered.asm.mixin.Mixin;
@@ -39,7 +39,7 @@ public class MixinGrassColour {
      */
     @Overwrite()
     static void loadGrass(String foliageName) {
-        BufferedImage bufferedimage = Minecraft.minecraftInstance.level.loadMapTexture(foliageName);
+        BufferedImage bufferedimage = AccessMinecraft.getInstance().level.loadMapTexture(foliageName);
         if (bufferedimage == null) {
             try {
                 bufferedimage = ImageIO.read(FoliageColour.class.getResource(foliageName));

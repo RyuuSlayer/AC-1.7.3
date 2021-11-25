@@ -2,8 +2,8 @@ package io.github.ryuu.adventurecraft.mixin.client.gui.screen;
 
 import io.github.ryuu.adventurecraft.gui.GuiMapDownload;
 import io.github.ryuu.adventurecraft.gui.GuiMapSelect;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.scripting.ScriptModel;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.widgets.Button;
@@ -37,7 +37,7 @@ public class MixinTitleScreen extends Screen {
     @Inject(method = "<init>", at = @At("TAIL"))
     private void TitleScreen(CallbackInfo ci) {
         ScriptModel.clearAll();
-        Minecraft.minecraftInstance.soundHelper.stopMusic();
+        AccessMinecraft.getInstance().soundHelper.stopMusic();
     }
 
     @Inject(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/resource/language/TranslationStorage;getInstance()Lnet/minecraft/client/resource/language/TranslationStorage;", shift = At.Shift.BEFORE))
