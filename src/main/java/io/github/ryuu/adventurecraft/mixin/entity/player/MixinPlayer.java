@@ -38,7 +38,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import java.util.List;
 
 @Mixin(Player.class)
-public abstract class MixinPlayer extends LivingEntity {
+public class MixinPlayer extends LivingEntity implements PlayerAccessor {
 
     @Shadow()
     public PlayerInventory inventory = new PlayerInventory(this);
@@ -988,5 +988,10 @@ public abstract class MixinPlayer extends LivingEntity {
     @Overwrite()
     public boolean usingUmbrella() {
         return this.inventory.getHeldItem() != null && this.inventory.getHeldItem().itemId == Items.umbrella.id || this.inventory.getOffhandItem() != null && this.inventory.getOffhandItem().itemId == Items.umbrella.id;
+    }
+
+    @Override
+    public int getHeartPieces() {
+        return numHeartPieces;
     }
 }

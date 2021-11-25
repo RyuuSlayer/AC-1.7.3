@@ -17,7 +17,7 @@ import java.util.Random;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-class GuiMapDownload extends Screen {
+public class GuiMapDownload extends Screen {
 
     static final String url = "http://www.adventurecraft.org/";
     private final File mapDownloadFolder;
@@ -42,7 +42,7 @@ class GuiMapDownload extends Screen {
     private int scrollBarX;
     private boolean scrolling = false;
 
-    GuiMapDownload(Screen guiscreen) {
+    public GuiMapDownload(Screen guiscreen) {
         this.mapDownloadFolder = new File("./mapDownloads/");
         if (!this.mapDownloadFolder.exists()) {
             this.mapDownloadFolder.mkdirs();
