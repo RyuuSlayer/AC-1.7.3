@@ -1,4 +1,4 @@
-package io.github.ryuu.adventurecraft.mixin.client.gui;
+package io.github.ryuu.adventurecraft.accessors.client.gui;
 
 public interface ScreenInputGrab {
     boolean getDisableInputGrabbing();

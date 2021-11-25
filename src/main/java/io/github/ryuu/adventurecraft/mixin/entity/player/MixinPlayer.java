@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.entity.player;
 
+import io.github.ryuu.adventurecraft.accessors.entity.player.PlayerAccessor;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.DebugMode;

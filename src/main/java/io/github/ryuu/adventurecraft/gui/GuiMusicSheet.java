@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.gui;
 
-import io.github.ryuu.adventurecraft.mixin.client.gui.ScreenInputGrab;
+import io.github.ryuu.adventurecraft.accessors.client.gui.ScreenInputGrab;
 import io.github.ryuu.adventurecraft.util.MusicPlayer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Screen;

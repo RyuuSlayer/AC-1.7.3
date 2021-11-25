@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.client.gui.screen.container;
 
-import io.github.ryuu.adventurecraft.mixin.entity.player.PlayerAccessor;
+import io.github.ryuu.adventurecraft.accessors.entity.player.PlayerAccessor;
 import net.minecraft.client.gui.screen.container.ContainerScreen;
 import net.minecraft.client.gui.screen.container.PlayerInventoryScreen;
 import net.minecraft.container.Container;
