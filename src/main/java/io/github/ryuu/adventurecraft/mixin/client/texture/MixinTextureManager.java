@@ -459,8 +459,8 @@ public class MixinTextureManager {
      */
     @Overwrite()
     public void tick() {
-        for (int i = 0; i < this.textureBinders.size(); ++i) {
-            TextureBinder texturefx = (TextureBinder) this.textureBinders.get(i);
+        for (Object textureBinder : this.textureBinders) {
+            TextureBinder texturefx = (TextureBinder) textureBinder;
             Vec2 texRes = this.getTextureResolution(texturefx.getTexture());
             texturefx.render3d = this.gameOptions.anaglyph3d;
             texturefx.onTick(texRes);
@@ -492,8 +492,8 @@ public class MixinTextureManager {
                 }
             }
         }
-        for (int j = 0; j < this.textureBinders.size(); ++j) {
-            TextureBinder texturefx1 = (TextureBinder) this.textureBinders.get(j);
+        for (Object textureBinder : this.textureBinders) {
+            TextureBinder texturefx1 = (TextureBinder) textureBinder;
             if (texturefx1.textureId <= 0) continue;
             this.textureGridBuffer.clear();
             this.textureGridBuffer.put(texturefx1.grid);

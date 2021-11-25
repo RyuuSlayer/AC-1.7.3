@@ -59,9 +59,9 @@ public class UtilBullet {
         Box aabb = Box.getOrCreate(Math.min(startVec.x, hitLoc.x), Math.min(startVec.y, hitLoc.y), Math.min(startVec.z, hitLoc.z), Math.max(startVec.x, hitLoc.x), Math.max(startVec.y, hitLoc.y), Math.max(startVec.z, hitLoc.z)).expand(f1, f1, f1);
         List list = worldObj.getEntities(ignore, aabb);
         double d2 = d;
-        for (int i = 0; i < list.size(); ++i) {
+        for (Object o : list) {
             double d3;
-            Entity entity = (Entity) list.get(i);
+            Entity entity = (Entity) o;
             if (!entity.method_1356()) continue;
             float f2 = entity.method_1369();
             Box axisalignedbb = entity.boundingBox.expand(f2, f2, f2);

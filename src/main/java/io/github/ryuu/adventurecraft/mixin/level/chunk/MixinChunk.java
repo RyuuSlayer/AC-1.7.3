@@ -581,8 +581,8 @@ public class MixinChunk {
     public void method_881() {
         this.field_955 = true;
         this.level.method_181(this.tileEntities.values());
-        for (int i = 0; i < this.entities.length; ++i) {
-            this.level.addEntities(this.entities[i]);
+        for (List entity : this.entities) {
+            this.level.addEntities(entity);
         }
         this.temperatures = this.level.getBiomeSource().getTemperatures(this.temperatures, this.x * 16, this.z * 16, 16, 16);
     }
@@ -597,8 +597,8 @@ public class MixinChunk {
             tileentity.killedFromSaving = true;
             tileentity.invalidate();
         }
-        for (int i = 0; i < this.entities.length; ++i) {
-            this.level.method_209(this.entities[i]);
+        for (List entity : this.entities) {
+            this.level.method_209(entity);
         }
     }
 
@@ -617,8 +617,8 @@ public class MixinChunk {
         }
         for (int k = i; k <= j; ++k) {
             List list1 = this.entities[k];
-            for (int l = 0; l < list1.size(); ++l) {
-                Entity entity1 = (Entity) list1.get(l);
+            for (Object o : list1) {
+                Entity entity1 = (Entity) o;
                 if (entity1 == except || !entity1.boundingBox.intersects(box)) continue;
                 entities.add(entity1);
             }
@@ -640,8 +640,8 @@ public class MixinChunk {
         }
         for (int k = i; k <= j; ++k) {
             List list1 = this.entities[k];
-            for (int l = 0; l < list1.size(); ++l) {
-                Entity entity = (Entity) list1.get(l);
+            for (Object o : list1) {
+                Entity entity = (Entity) o;
                 if (!entityClass.isAssignableFrom(entity.getClass()) || !entity.boundingBox.intersects(box)) continue;
                 entities.add(entity);
             }

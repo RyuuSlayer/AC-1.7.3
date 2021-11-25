@@ -159,12 +159,12 @@ public class MixinThrownSnowball extends Entity {
             Entity entity = null;
             List list = this.level.getEntities(this, this.boundingBox.add(this.velocityX, this.velocityY, this.velocityZ).expand(1.0, 1.0, 1.0));
             double d = 0.0;
-            for (int l = 0; l < list.size(); ++l) {
+            for (Object o : list) {
                 double d1;
                 float f4;
                 Box axisalignedbb;
                 HitResult movingobjectposition1;
-                Entity entity1 = (Entity) list.get(l);
+                Entity entity1 = (Entity) o;
                 if (!entity1.method_1356() || entity1 == this.field_1996 && this.field_1998 < 5 || (movingobjectposition1 = (axisalignedbb = entity1.boundingBox.expand(f4 = 0.3f, f4, f4)).method_89(vec3d, vec3d1)) == null || !((d1 = vec3d.method_1294(movingobjectposition1.field_1988)) < d) && d != 0.0)
                     continue;
                 entity = entity1;

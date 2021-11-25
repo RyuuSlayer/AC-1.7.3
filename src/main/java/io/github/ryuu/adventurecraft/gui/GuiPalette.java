@@ -43,8 +43,8 @@ public class GuiPalette extends DoubleChestScreen {
         GL11.glPushMatrix();
         GL11.glDisable(2896);
         GL11.glDisable(2929);
-        for (int k = 0; k < this.buttons.size(); ++k) {
-            Button guibutton = (Button) this.buttons.get(k);
+        for (Object button : this.buttons) {
+            Button guibutton = (Button) button;
             guibutton.render(this.minecraft, mouseX, mouseY);
         }
         GL11.glEnable(2896);
@@ -59,8 +59,8 @@ public class GuiPalette extends DoubleChestScreen {
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int button) {
         if (button == 0) {
-            for (int l = 0; l < this.buttons.size(); ++l) {
-                Button guibutton = (Button) this.buttons.get(l);
+            for (Object o : this.buttons) {
+                Button guibutton = (Button) o;
                 if (!guibutton.isMouseOver(this.minecraft, mouseX, mouseY)) continue;
                 this.a = guibutton;
                 this.minecraft.soundHelper.playSound("random.click", 1.0f, 1.0f);

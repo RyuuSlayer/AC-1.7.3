@@ -93,8 +93,8 @@ public class MixinModelPart {
         this.field_2302[4] = new class_552(new class_290[]{positiontexturevertex1, positiontexturevertex, positiontexturevertex3, positiontexturevertex2}, this.xTexOffset + k, this.yTexOffset + k, this.xTexOffset + k + i, this.yTexOffset + k + j, this.tWidth, this.tHeight);
         this.field_2302[5] = new class_552(new class_290[]{positiontexturevertex4, positiontexturevertex5, positiontexturevertex6, positiontexturevertex7}, this.xTexOffset + k + i + k, this.yTexOffset + k, this.xTexOffset + k + i + k + i, this.yTexOffset + k + j, this.tWidth, this.tHeight);
         if (this.mirror) {
-            for (int l = 0; l < this.field_2302.length; ++l) {
-                this.field_2302[l].method_1925();
+            for (net.minecraft.class_552 class_552 : this.field_2302) {
+                class_552.method_1925();
             }
         }
     }
@@ -143,8 +143,8 @@ public class MixinModelPart {
         this.field_2302[4] = new class_552(new class_290[]{positiontexturevertex1, positiontexturevertex, positiontexturevertex3, positiontexturevertex2}, this.xTexOffset + k + i + k + i, this.yTexOffset + k + j, this.xTexOffset + k + i + k, this.yTexOffset + k, this.tWidth, this.tHeight);
         this.field_2302[5] = new class_552(new class_290[]{positiontexturevertex4, positiontexturevertex5, positiontexturevertex6, positiontexturevertex7}, this.xTexOffset + k + i, this.yTexOffset + k + j, this.xTexOffset + k, this.yTexOffset + k, this.tWidth, this.tHeight);
         if (this.mirror) {
-            for (int l = 0; l < this.field_2302.length; ++l) {
-                this.field_2302[l].method_1925();
+            for (net.minecraft.class_552 class_552 : this.field_2302) {
+                class_552.method_1925();
             }
         }
     }

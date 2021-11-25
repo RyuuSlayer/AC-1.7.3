@@ -125,8 +125,8 @@ public class EntityBoomerang extends Entity {
             this.boomerangRotation -= 360.0f;
         }
         List entitiesWithin = this.level.getEntities(this, this.boundingBox.expand(0.5, 0.5, 0.5));
-        for (int i = 0; i < entitiesWithin.size(); ++i) {
-            Entity e = (Entity) entitiesWithin.get(i);
+        for (Object o : entitiesWithin) {
+            Entity e = (Entity) o;
             if (e instanceof ItemEntity) {
                 this.itemsPickedUp.add((Object) e);
                 continue;

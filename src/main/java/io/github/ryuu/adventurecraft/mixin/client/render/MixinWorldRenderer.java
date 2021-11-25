@@ -231,8 +231,8 @@ public class MixinWorldRenderer implements LevelListener {
         Tile.LEAVES.setFastGraphics(this.client.options.fancyGraphics);
         this.field_1782 = this.client.options.viewDistance;
         if (this.field_1809 != null) {
-            for (int i = 0; i < this.field_1809.length; ++i) {
-                this.field_1809[i].method_302();
+            for (net.minecraft.class_66 class_66 : this.field_1809) {
+                class_66.method_302();
             }
         }
         int j = 64 << 4 - this.field_1782;
@@ -256,8 +256,8 @@ public class MixinWorldRenderer implements LevelListener {
         this.field_1779 = this.field_1810;
         this.field_1780 = this.field_1811;
         this.field_1781 = this.field_1812;
-        for (int i1 = 0; i1 < this.field_1807.size(); ++i1) {
-            ((class_66) this.field_1807.get(i1)).field_249 = false;
+        for (Object o : this.field_1807) {
+            ((class_66) o).field_249 = false;
         }
         this.field_1807.clear();
         this.field_1795.clear();
@@ -315,8 +315,8 @@ public class MixinWorldRenderer implements LevelListener {
             if (!entity.shouldRenderFrom(vec3d)) continue;
             EntityRenderDispatcher.INSTANCE.method_1921(entity, f);
         }
-        for (int j = 0; j < list.size(); ++j) {
-            Entity entity1 = (Entity) list.get(j);
+        for (Object o : list) {
+            Entity entity1 = (Entity) o;
             if (!entity1.shouldRenderFrom(vec3d) || !entity1.field_1622 && !icamera.method_2007(entity1.boundingBox) || entity1 == this.client.field_2807 && !this.client.options.thirdPerson && !this.client.field_2807.isSleeping())
                 continue;
             int l = MathsHelper.floor(entity1.y);
@@ -338,8 +338,8 @@ public class MixinWorldRenderer implements LevelListener {
         GL11.glTranslated(-EntityRenderDispatcher.field_2490, -EntityRenderDispatcher.field_2491, -EntityRenderDispatcher.field_2492);
         ScriptModel.renderAll(f);
         GL11.glPopMatrix();
-        for (int k = 0; k < this.field_1795.size(); ++k) {
-            TileEntityRenderDispatcher.INSTANCE.renderTileEntity((TileEntity) this.field_1795.get(k), f);
+        for (Object o : this.field_1795) {
+            TileEntityRenderDispatcher.INSTANCE.renderTileEntity((TileEntity) o, f);
         }
     }
 
@@ -566,11 +566,11 @@ public class MixinWorldRenderer implements LevelListener {
         double d2 = entityliving.prevRenderY + (entityliving.y - entityliving.prevRenderY) * d;
         double d3 = entityliving.prevRenderZ + (entityliving.z - entityliving.prevRenderZ) * d;
         int k1 = 0;
-        for (int l1 = 0; l1 < this.field_1794.length; ++l1) {
-            this.field_1794[l1].method_1913();
+        for (net.minecraft.class_472 class_472 : this.field_1794) {
+            class_472.method_1913();
         }
-        for (int i2 = 0; i2 < this.field_1793.size(); ++i2) {
-            class_66 worldrenderer = (class_66) this.field_1793.get(i2);
+        for (Object o : this.field_1793) {
+            class_66 worldrenderer = (class_66) o;
             int j2 = -1;
             for (int k2 = 0; k2 < k1; ++k2) {
                 if (!this.field_1794[k2].method_1911(worldrenderer.field_237, worldrenderer.field_238, worldrenderer.field_239))
@@ -592,8 +592,8 @@ public class MixinWorldRenderer implements LevelListener {
      */
     @Overwrite()
     public void method_1540(int i, double d) {
-        for (int j = 0; j < this.field_1794.length; ++j) {
-            this.field_1794[j].method_1909();
+        for (net.minecraft.class_472 class_472 : this.field_1794) {
+            class_472.method_1909();
         }
     }
 
@@ -1422,11 +1422,11 @@ public class MixinWorldRenderer implements LevelListener {
      */
     @Overwrite()
     public void updateAllTheRenderers() {
-        for (int i = 0; i < this.field_1809.length; ++i) {
-            if (!this.field_1809[i].field_249) {
-                this.field_1807.add(this.field_1809[i]);
+        for (net.minecraft.class_66 class_66 : this.field_1809) {
+            if (!class_66.field_249) {
+                this.field_1807.add(class_66);
             }
-            this.field_1809[i].method_305();
+            class_66.method_305();
         }
     }
 
@@ -1524,10 +1524,10 @@ public class MixinWorldRenderer implements LevelListener {
     @Overwrite()
     private void doReset(boolean forDeath) {
         Tile.resetActive = true;
-        for (int i = 0; i < this.field_1809.length; ++i) {
-            int xOffset = this.field_1809[i].field_231;
-            int yOffset = this.field_1809[i].field_232;
-            int zOffset = this.field_1809[i].field_233;
+        for (net.minecraft.class_66 class_66 : this.field_1809) {
+            int xOffset = class_66.field_231;
+            int yOffset = class_66.field_232;
+            int zOffset = class_66.field_233;
             if (!this.level.isRegionLoaded(xOffset, yOffset, zOffset, xOffset + 15, yOffset + 15, zOffset + 15))
                 continue;
             for (int x = 0; x < 16; ++x) {

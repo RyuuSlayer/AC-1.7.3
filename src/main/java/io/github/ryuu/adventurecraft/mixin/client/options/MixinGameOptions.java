@@ -423,9 +423,9 @@ public class MixinGameOptions {
                     if (as[0].equals("grass3d")) {
                         this.grass3d = as[1].equals("true");
                     }
-                    for (int i = 0; i < this.keyBindings.length; ++i) {
-                        if (!as[0].equals("key_" + this.keyBindings[i].name)) continue;
-                        this.keyBindings[i].key = Integer.parseInt(as[1]);
+                    for (KeyBinding keyBinding : this.keyBindings) {
+                        if (!as[0].equals("key_" + keyBinding.name)) continue;
+                        keyBinding.key = Integer.parseInt(as[1]);
                     }
                 } catch (Exception exception1) {
                     System.out.println("Skipping bad option: " + s);
@@ -476,8 +476,8 @@ public class MixinGameOptions {
             printwriter.println("lastServer:" + this.lastServer);
             printwriter.println("autoFarClip:" + this.autoFarClip);
             printwriter.println("grass3d:" + this.grass3d);
-            for (int i = 0; i < this.keyBindings.length; ++i) {
-                printwriter.println("key_" + this.keyBindings[i].name + ":" + this.keyBindings[i].key);
+            for (KeyBinding keyBinding : this.keyBindings) {
+                printwriter.println("key_" + keyBinding.name + ":" + keyBinding.key);
             }
             printwriter.close();
         } catch (Exception exception) {

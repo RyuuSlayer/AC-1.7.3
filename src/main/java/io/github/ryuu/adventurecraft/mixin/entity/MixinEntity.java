@@ -328,8 +328,8 @@ public abstract class MixinEntity {
             }
         }
         List list = this.level.method_190(this, this.boundingBox.add(d, d1, d2));
-        for (int i3 = 0; i3 < list.size(); ++i3) {
-            d1 = ((Box) list.get(i3)).method_97(this.boundingBox, d1);
+        for (Object o : list) {
+            d1 = ((Box) o).method_97(this.boundingBox, d1);
         }
         this.boundingBox.method_102(0.0, d1, 0.0);
         if (!this.field_1629 && d6 != d1) {
@@ -338,8 +338,8 @@ public abstract class MixinEntity {
             d = 0.0;
         }
         boolean flag1 = this.onGround || d6 != d1 && d6 < 0.0;
-        for (int j = 0; j < list.size(); ++j) {
-            d = ((Box) list.get(j)).method_91(this.boundingBox, d);
+        for (Object o : list) {
+            d = ((Box) o).method_91(this.boundingBox, d);
         }
         this.boundingBox.method_102(d, 0.0, 0.0);
         if (!this.field_1629 && d5 != d) {
@@ -347,8 +347,8 @@ public abstract class MixinEntity {
             d1 = 0.0;
             d = 0.0;
         }
-        for (int k = 0; k < list.size(); ++k) {
-            d2 = ((Box) list.get(k)).method_101(this.boundingBox, d2);
+        for (Object o : list) {
+            d2 = ((Box) o).method_101(this.boundingBox, d2);
         }
         this.boundingBox.method_102(0.0, 0.0, d2);
         if (!this.field_1629 && d7 != d2) {
@@ -366,8 +366,8 @@ public abstract class MixinEntity {
             Box axisalignedbb1 = this.boundingBox.method_92();
             this.boundingBox.method_96(axisalignedbb);
             List list1 = this.level.method_190(this, this.boundingBox.add(d, d1, d2));
-            for (int j2 = 0; j2 < list1.size(); ++j2) {
-                d1 = ((Box) list1.get(j2)).method_97(this.boundingBox, d1);
+            for (Object o : list1) {
+                d1 = ((Box) o).method_97(this.boundingBox, d1);
             }
             this.boundingBox.method_102(0.0, d1, 0.0);
             if (!this.field_1629 && d6 != d1) {
@@ -375,8 +375,8 @@ public abstract class MixinEntity {
                 d1 = 0.0;
                 d = 0.0;
             }
-            for (int k2 = 0; k2 < list1.size(); ++k2) {
-                d = ((Box) list1.get(k2)).method_91(this.boundingBox, d);
+            for (Object o : list1) {
+                d = ((Box) o).method_91(this.boundingBox, d);
             }
             this.boundingBox.method_102(d, 0.0, 0.0);
             if (!this.field_1629 && d5 != d) {
@@ -384,8 +384,8 @@ public abstract class MixinEntity {
                 d1 = 0.0;
                 d = 0.0;
             }
-            for (int l2 = 0; l2 < list1.size(); ++l2) {
-                d2 = ((Box) list1.get(l2)).method_101(this.boundingBox, d2);
+            for (Object o : list1) {
+                d2 = ((Box) o).method_101(this.boundingBox, d2);
             }
             this.boundingBox.method_102(0.0, 0.0, d2);
             if (!this.field_1629 && d7 != d2) {
@@ -399,8 +399,8 @@ public abstract class MixinEntity {
                 d = 0.0;
             } else {
                 d1 = -this.field_1641;
-                for (int i3 = 0; i3 < list1.size(); ++i3) {
-                    d1 = ((Box) list1.get(i3)).method_97(this.boundingBox, d1);
+                for (Object o : list1) {
+                    d1 = ((Box) o).method_97(this.boundingBox, d1);
                 }
                 this.boundingBox.method_102(0.0, d1, 0.0);
             }
@@ -950,8 +950,8 @@ public abstract class MixinEntity {
         List list = this.level.method_190(this, this.boundingBox.method_104(0.03125, 0.0, 0.03125));
         if (list.size() > 0) {
             double d3 = 0.0;
-            for (int j = 0; j < list.size(); ++j) {
-                Box axisalignedbb = (Box) list.get(j);
+            for (Object o : list) {
+                Box axisalignedbb = (Box) o;
                 if (!(axisalignedbb.maxY > d3)) continue;
                 d3 = axisalignedbb.maxY;
             }

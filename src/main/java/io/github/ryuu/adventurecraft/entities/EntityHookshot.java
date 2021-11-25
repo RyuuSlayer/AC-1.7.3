@@ -140,8 +140,8 @@ public class EntityHookshot extends Entity {
         }
         if (!this.turningAround) {
             List entitiesWithin = this.level.getEntities(this, this.boundingBox.expand(0.5, 0.5, 0.5));
-            for (int i = 0; i < entitiesWithin.size(); ++i) {
-                Entity e = (Entity) entitiesWithin.get(i);
+            for (Object o : entitiesWithin) {
+                Entity e = (Entity) o;
                 boolean isItem = e instanceof ItemEntity;
                 if (!isItem && (!(e instanceof LivingEntity) || e == this.returnsTo)) continue;
                 if (isItem) {

@@ -68,8 +68,7 @@ public class MixinClientChunkCache implements LevelSource {
                 this.chunksWide = 32;
             }
             if (oldChunks != null) {
-                for (int i = 0; i < oldChunks.length; ++i) {
-                    Chunk c = oldChunks[i];
+                for (Chunk c : oldChunks) {
                     if (c == null || !this.isSpawnChunk(c.x, c.z)) continue;
                     int k = c.x & this.mask;
                     int l = c.z & this.mask;
@@ -241,20 +240,20 @@ public class MixinClientChunkCache implements LevelSource {
         int i = 0;
         int j = 0;
         if (listener != null) {
-            for (int k = 0; k < this.cache.length; ++k) {
-                if (this.cache[k] == null || !this.cache[k].method_871(flag)) continue;
+            for (Chunk chunk : this.cache) {
+                if (chunk == null || !chunk.method_871(flag)) continue;
                 ++j;
             }
         }
         int l = 0;
-        for (int i1 = 0; i1 < this.cache.length; ++i1) {
-            if (this.cache[i1] == null) continue;
-            if (flag && !this.cache[i1].field_968) {
-                this.method_1240(this.cache[i1]);
+        for (Chunk chunk : this.cache) {
+            if (chunk == null) continue;
+            if (flag && !chunk.field_968) {
+                this.method_1240(chunk);
             }
-            if (!this.cache[i1].method_871(flag)) continue;
-            this.method_1241(this.cache[i1]);
-            this.cache[i1].shouldSave = false;
+            if (!chunk.method_871(flag)) continue;
+            this.method_1241(chunk);
+            chunk.shouldSave = false;
             if (++i == 2 && !flag) {
                 return false;
             }

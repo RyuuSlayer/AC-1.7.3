@@ -143,12 +143,12 @@ public abstract class MixinFishHook extends Entity {
         Entity entity = null;
         List list = this.level.getEntities(this, this.boundingBox.add(this.velocityX, this.velocityY, this.velocityZ).expand(1.0, 1.0, 1.0));
         double d3 = 0.0;
-        for (int j = 0; j < list.size(); ++j) {
+        for (Object o : list) {
             double d6;
             float f2;
             Box axisalignedbb;
             HitResult movingobjectposition1;
-            Entity entity1 = (Entity) list.get(j);
+            Entity entity1 = (Entity) o;
             if (!entity1.method_1356() || entity1 == this.field_1067 && this.field_1075 < 5 || (movingobjectposition1 = (axisalignedbb = entity1.boundingBox.expand(f2 = 0.3f, f2, f2)).method_89(vec3d, vec3d1)) == null || !((d6 = vec3d.method_1294(movingobjectposition1.field_1988)) < d3) && d3 != 0.0)
                 continue;
             entity = entity1;

@@ -159,12 +159,12 @@ public class MixinThrownEgg extends Entity {
             Entity entity = null;
             List list = this.level.getEntities(this, this.boundingBox.add(this.velocityX, this.velocityY, this.velocityZ).expand(1.0, 1.0, 1.0));
             double d = 0.0;
-            for (int i1 = 0; i1 < list.size(); ++i1) {
+            for (Object o : list) {
                 double d1;
                 float f4;
                 Box axisalignedbb;
                 HitResult movingobjectposition1;
-                Entity entity1 = (Entity) list.get(i1);
+                Entity entity1 = (Entity) o;
                 if (!entity1.method_1356() || entity1 == this.field_2044 && this.field_2046 < 5 || (movingobjectposition1 = (axisalignedbb = entity1.boundingBox.expand(f4 = 0.3f, f4, f4)).method_89(vec3d, vec3d1)) == null || !((d1 = vec3d.method_1294(movingobjectposition1.field_1988)) < d) && d != 0.0)
                     continue;
                 entity = entity1;

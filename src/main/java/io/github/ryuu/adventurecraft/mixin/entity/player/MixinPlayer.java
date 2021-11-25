@@ -172,8 +172,8 @@ public abstract class MixinPlayer extends LivingEntity implements PlayerAccessor
         this.field_525 += (f - this.field_525) * 0.4f;
         this.field_1044 += (f1 - this.field_1044) * 0.8f;
         if (this.health > 0 && (list = this.level.getEntities(this, this.boundingBox.expand(1.0, 0.0, 1.0))) != null) {
-            for (int i = 0; i < list.size(); ++i) {
-                Entity entity = (Entity) list.get(i);
+            for (Object o : list) {
+                Entity entity = (Entity) o;
                 if (!entity.removed) {
                     this.method_520(entity);
                 }

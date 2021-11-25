@@ -78,16 +78,16 @@ public class MixinResourceDownloadThread extends Thread {
     @Overwrite()
     void method_108(File file, String s) {
         File[] afile = file.listFiles();
-        for (int i = 0; i < afile.length; ++i) {
-            if (afile[i].isDirectory()) {
-                this.method_108(afile[i], s + afile[i].getName() + "/");
+        for (File value : afile) {
+            if (value.isDirectory()) {
+                this.method_108(value, s + value.getName() + "/");
                 continue;
             }
             try {
-                this.field_138.loadSoundFromDir(s + afile[i].getName(), afile[i]);
+                this.field_138.loadSoundFromDir(s + value.getName(), value);
                 continue;
             } catch (Exception exception) {
-                System.out.println("Failed to add " + s + afile[i].getName());
+                System.out.println("Failed to add " + s + value.getName());
             }
         }
     }

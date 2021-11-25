@@ -754,8 +754,8 @@ public abstract class MixinLivingEntity extends Entity {
             List list1 = this.level.method_190(this, this.boundingBox.method_104(0.03125, 0.0, 0.03125));
             if (list1.size() > 0) {
                 double d4 = 0.0;
-                for (int j = 0; j < list1.size(); ++j) {
-                    Box axisalignedbb = (Box) list1.get(j);
+                for (Object o : list1) {
+                    Box axisalignedbb = (Box) o;
                     if (!(axisalignedbb.maxY > d4)) continue;
                     d4 = axisalignedbb.maxY;
                 }
@@ -826,8 +826,8 @@ public abstract class MixinLivingEntity extends Entity {
         this.travel(this.perpendicularMovement, this.parallelMovement);
         List list = this.level.getEntities(this, this.boundingBox.expand(0.2f, 0.0, 0.2f));
         if (list != null && list.size() > 0) {
-            for (int i = 0; i < list.size(); ++i) {
-                Entity entity = (Entity) list.get(i);
+            for (Object o : list) {
+                Entity entity = (Entity) o;
                 if (!entity.method_1380()) continue;
                 entity.method_1353(this);
             }

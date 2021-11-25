@@ -72,8 +72,8 @@ public class MixinZombiePigman extends Zombie {
     public boolean damage(Entity target, int amount) {
         if (target instanceof Player) {
             List list = this.level.getEntities(this, this.boundingBox.expand(32.0, 32.0, 32.0));
-            for (int j = 0; j < list.size(); ++j) {
-                Entity entity1 = (Entity) list.get(j);
+            for (Object o : list) {
+                Entity entity1 = (Entity) o;
                 if (!(entity1 instanceof ZombiePigman)) continue;
                 ZombiePigman entitypigzombie = (ZombiePigman) entity1;
                 entitypigzombie.method_1792(target);

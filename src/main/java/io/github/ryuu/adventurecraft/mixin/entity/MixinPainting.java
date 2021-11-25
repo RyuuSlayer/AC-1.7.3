@@ -42,9 +42,9 @@ public class MixinPainting extends Entity {
         ArrayList arraylist = new ArrayList();
         PaintingMotif[] aenumart = PaintingMotif.values();
         int i1 = aenumart.length;
-        for (int j1 = 0; j1 < i1; ++j1) {
+        for (PaintingMotif paintingMotif : aenumart) {
             PaintingMotif enumart;
-            this.motive = enumart = aenumart[j1];
+            this.motive = enumart = paintingMotif;
             this.setDir(l);
             if (!this.method_1193()) continue;
             arraylist.add(enumart);
@@ -164,8 +164,8 @@ public class MixinPainting extends Entity {
             }
         }
         List list = this.level.getEntities(this, this.boundingBox);
-        for (int l1 = 0; l1 < list.size(); ++l1) {
-            if (!(list.get(l1) instanceof Painting)) continue;
+        for (Object o : list) {
+            if (!(o instanceof Painting)) continue;
             return false;
         }
         return true;

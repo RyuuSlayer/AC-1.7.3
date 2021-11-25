@@ -158,9 +158,9 @@ public class MixinGameRenderer {
         float f1 = 1.0f;
         List list = this.minecraft.level.getEntities(this.minecraft.field_2807, this.minecraft.field_2807.boundingBox.add(vec3d1.x * d, vec3d1.y * d, vec3d1.z * d).expand(f1, f1, f1));
         double d2 = 0.0;
-        for (int i = 0; i < list.size(); ++i) {
+        for (Object o : list) {
             double d3;
-            Entity entity = (Entity) list.get(i);
+            Entity entity = (Entity) o;
             if (!entity.method_1356()) continue;
             float f2 = entity.method_1369();
             Box axisalignedbb = entity.boundingBox.expand(f2, f2, f2);

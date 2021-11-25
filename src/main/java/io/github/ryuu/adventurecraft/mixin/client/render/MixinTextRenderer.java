@@ -237,9 +237,9 @@ public class MixinTextRenderer {
     public void drawMultilineText(String text, int x, int y, int width, int colour) {
         String[] as = text.split("\n");
         if (as.length > 1) {
-            for (int i1 = 0; i1 < as.length; ++i1) {
-                this.drawMultilineText(as[i1], x, y, width, colour);
-                y += this.getLineWidth(as[i1], width);
+            for (String a : as) {
+                this.drawMultilineText(a, x, y, width, colour);
+                y += this.getLineWidth(a, width);
             }
             return;
         }
@@ -275,8 +275,8 @@ public class MixinTextRenderer {
         String[] as = text.split("\n");
         if (as.length > 1) {
             int j = 0;
-            for (int k = 0; k < as.length; ++k) {
-                j += this.getLineWidth(as[k], width);
+            for (String a : as) {
+                j += this.getLineWidth(a, width);
             }
             return j;
         }

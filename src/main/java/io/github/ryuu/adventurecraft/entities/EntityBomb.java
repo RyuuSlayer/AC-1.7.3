@@ -52,8 +52,8 @@ public class EntityBomb extends ItemEntity {
         exploding.remove();
         worldObj.playSound(posX, posY, posZ, "random.explode", 4.0f, 1.0f);
         List list = worldObj.getEntities(exploding, Box.getOrCreate(Math.floor(posX - 5.0), Math.floor(posY - 5.0), Math.floor(posZ - 5.0), Math.ceil(posX + 5.0), Math.ceil(posY + 5.0), Math.ceil(posZ + 5.0)));
-        for (int i = 0; i < list.size(); ++i) {
-            Entity entity = (Entity) list.get(i);
+        for (Object o : list) {
+            Entity entity = (Entity) o;
             double dist = entity.method_1350(posX, posY, posZ);
             if (!(dist < 5.0)) continue;
             dist = (5.0 - dist) / 5.0;
