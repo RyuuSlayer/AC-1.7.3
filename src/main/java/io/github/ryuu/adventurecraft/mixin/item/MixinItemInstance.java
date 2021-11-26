@@ -1,7 +1,7 @@
 package io.github.ryuu.adventurecraft.mixin.item;
 
-import io.github.ryuu.adventurecraft.accessors.items.ClickableItemInstance;
-import io.github.ryuu.adventurecraft.accessors.items.ClickableItemType;
+import io.github.ryuu.adventurecraft.extensions.items.ExItemInstance;
+import io.github.ryuu.adventurecraft.extensions.items.ExItemType;
 import io.github.ryuu.adventurecraft.items.Items;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ItemInstance.class)
-public abstract class MixinItemInstance implements ClickableItemInstance {
+public abstract class MixinItemInstance implements ExItemInstance {
 
     @Shadow
     public int count;
@@ -28,7 +28,7 @@ public abstract class MixinItemInstance implements ClickableItemInstance {
     public abstract ItemType getType();
 
     public boolean useItemLeftClick(Player entityplayer, Level world, int i, int j, int k, int l) {
-        return ((ClickableItemType)this.getType()).onItemUseLeftClick((ItemInstance) (Object) this, entityplayer, world, i, j, k, l);
+        return ((ExItemType)this.getType()).onItemUseLeftClick((ItemInstance) (Object) this, entityplayer, world, i, j, k, l);
     }
 
     @Inject(method = "fromTag", at = @At("TAIL"))

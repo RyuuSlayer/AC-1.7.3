@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.items;
 
-import io.github.ryuu.adventurecraft.accessors.items.ClickableItemType;
+import io.github.ryuu.adventurecraft.extensions.items.ExItemType;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.util.TriggerArea;
 import net.minecraft.entity.player.Player;
@@ -8,7 +8,7 @@ import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 
-public class ItemTriggerStick extends ItemType implements ClickableItemType {
+public class ItemTriggerStick extends ItemType implements ExItemType {
 
     protected ItemTriggerStick(int id) {
         super(id);

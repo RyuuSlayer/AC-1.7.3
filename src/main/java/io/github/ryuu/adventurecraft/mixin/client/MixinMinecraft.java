@@ -3,9 +3,12 @@ package io.github.ryuu.adventurecraft.mixin.client;
 import io.github.ryuu.adventurecraft.Main;
 import io.github.ryuu.adventurecraft.accessors.items.ClickableItemInstance;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
+import io.github.ryuu.adventurecraft.extensions.client.ExMinecraft;
+import io.github.ryuu.adventurecraft.extensions.client.gui.ExScreen;
+import io.github.ryuu.adventurecraft.extensions.items.ExItemInstance;
+import io.github.ryuu.adventurecraft.extensions.items.ExItemType;
 import io.github.ryuu.adventurecraft.gui.GuiMapSelect;
 import io.github.ryuu.adventurecraft.gui.GuiStore;
-import io.github.ryuu.adventurecraft.accessors.client.gui.ScreenInputGrab;
 import io.github.ryuu.adventurecraft.scripting.ScriptEntity;
 import io.github.ryuu.adventurecraft.scripting.ScriptItem;
 import io.github.ryuu.adventurecraft.scripting.ScriptVec3;
@@ -69,7 +72,7 @@ import java.awt.*;
 import java.io.*;
 
 @Mixin(Minecraft.class)
-public abstract class MixinMinecraft implements Runnable, AccessMinecraft, io.github.ryuu.adventurecraft.accessors.client.AccessMinecraft {
+public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMinecraft {
 
     @Shadow
     public static int field_2771;
@@ -378,7 +381,7 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, io.gi
             } else {
                 this.rightMouseTicksRan = this.field_2786 + itemUseDelay;
             }
-            i = itemUsing != null && ItemType.byId[itemUsing.itemId].mainActionLeftClick() ? 0 : 1;
+            i = itemUsing != null && ((ExItemType)ItemType.byId[itemUsing.itemId]).mainActionLeftClick() ? 0 : 1;
         } else {
             this.field_2798 = this.field_2786 + 5;
             this.rightMouseTicksRan = this.field_2786 + 5;
@@ -415,7 +418,7 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, io.gi
                 if (i == 0) {
                     this.interactionManager.method_1707(j, k, l, this.hitResult.field_1987);
                     if (itemUsing != null) {
-                        ((ClickableItemInstance)itemUsing).useItemLeftClick(this.player, this.level, j, k, l, i1);
+                        ((ExItemInstance)itemUsing).useItemLeftClick(this.player, this.level, j, k, l, i1);
                     }
                 } else {
                     int j1;
@@ -443,7 +446,7 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, io.gi
             }
         }
         if (flag && i == 0 && itemUsing != null && ItemType.byId[itemUsing.itemId] != null) {
-            ItemType.byId[itemUsing.itemId].onItemLeftClick(itemUsing, this.level, this.player);
+            ((ExItemType)ItemType.byId[itemUsing.itemId]).onItemLeftClick(itemUsing, this.level, this.player);
         }
         if (flag && i == 1 && itemUsing != null && this.interactionManager.useItem(this.player, this.level, itemUsing)) {
             this.gameRenderer.handItemRenderer.method_1865();
@@ -560,17 +563,17 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, io.gi
         } else if (this.currentScreen != null && this.currentScreen instanceof SleepingChatScreen && !this.player.isSleeping()) {
             this.openScreen(null);
         }
-        if (this.currentScreen != null && !((ScreenInputGrab) this.currentScreen).getDisableInputGrabbing()) {
+        if (this.currentScreen != null && !((ExScreen) this.currentScreen).getDisableInputGrabbing()) {
             this.field_2798 = this.field_2786 + 10000;
         }
-        if (this.currentScreen != null && !((ScreenInputGrab) this.currentScreen).getDisableInputGrabbing()) {
+        if (this.currentScreen != null && !((ExScreen) this.currentScreen).getDisableInputGrabbing()) {
             this.currentScreen.method_130();
             if (this.currentScreen != null) {
                 this.currentScreen.smokeRenderer.method_351();
                 this.currentScreen.tick();
             }
         }
-        if (this.currentScreen == null || this.currentScreen.passEvents || ((ScreenInputGrab) this.currentScreen).getDisableInputGrabbing()) {
+        if (this.currentScreen == null || this.currentScreen.passEvents || ((ExScreen) this.currentScreen).getDisableInputGrabbing()) {
             while (Mouse.next()) {
                 long l = System.currentTimeMillis() - this.lastTickTime;
                 if (l > 200L) continue;
@@ -607,7 +610,7 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, io.gi
                         }
                     }
                 }
-                if (this.currentScreen == null || ((ScreenInputGrab) this.currentScreen).getDisableInputGrabbing()) {
+                if (this.currentScreen == null || ((ExScreen) this.currentScreen).getDisableInputGrabbing()) {
                     if (!this.field_2778 && Mouse.getEventButtonState()) {
                         this.lockCursor();
                         continue;
@@ -634,7 +637,7 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, io.gi
                 if (Keyboard.getEventKey() == 87) {
                     this.toggleFullscreen();
                 } else {
-                    if (this.currentScreen != null && !((ScreenInputGrab) this.currentScreen).getDisableInputGrabbing()) {
+                    if (this.currentScreen != null && !((ExScreen) this.currentScreen).getDisableInputGrabbing()) {
                         this.currentScreen.onKeyboardEvent();
                     } else {
                         if (Keyboard.getEventKey() == 1) {
@@ -707,7 +710,7 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, io.gi
                 if (this.level == null) continue;
                 this.level.script.keyboard.processKeyPress(Keyboard.getEventKey());
             }
-            if (this.currentScreen == null || ((ScreenInputGrab) this.currentScreen).getDisableInputGrabbing()) {
+            if (this.currentScreen == null || ((ExScreen) this.currentScreen).getDisableInputGrabbing()) {
                 if (Mouse.isButtonDown(0) && (float) (this.field_2786 - this.field_2798) >= 0.0f && this.field_2778) {
                     this.method_2107(0);
                 }
@@ -715,7 +718,7 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, io.gi
                     this.method_2107(1);
                 }
             }
-            this.method_2110(0, (this.currentScreen == null || ((ScreenInputGrab) this.currentScreen).getDisableInputGrabbing()) && Mouse.isButtonDown(0) && this.field_2778);
+            this.method_2110(0, (this.currentScreen == null || ((ExScreen) this.currentScreen).getDisableInputGrabbing()) && Mouse.isButtonDown(0) && this.field_2778);
         }
         if (this.level != null) {
             if (this.player != null) {

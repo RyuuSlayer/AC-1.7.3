@@ -1,12 +1,12 @@
 package io.github.ryuu.adventurecraft.mixin.client.gui;
 
 
-import io.github.ryuu.adventurecraft.accessors.client.AccessMinecraft;
-import io.github.ryuu.adventurecraft.accessors.entity.AccessEntity;
-import io.github.ryuu.adventurecraft.accessors.entity.AccessLivingEntity;
-import io.github.ryuu.adventurecraft.accessors.entity.player.AccessPlayerInventory;
-import io.github.ryuu.adventurecraft.accessors.level.AccessLevel;
-import io.github.ryuu.adventurecraft.accessors.level.AccessLevelProperties;
+import io.github.ryuu.adventurecraft.extensions.client.ExMinecraft;
+import io.github.ryuu.adventurecraft.extensions.entity.ExEntity;
+import io.github.ryuu.adventurecraft.extensions.entity.ExLivingEntity;
+import io.github.ryuu.adventurecraft.extensions.entity.player.ExPlayerInventory;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevelProperties;
 import io.github.ryuu.adventurecraft.scripting.ScriptUIContainer;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.TerrainImage;
@@ -97,11 +97,11 @@ public abstract class MixinOverlay extends DrawableHelper {
             this.method_1945(this.minecraft.player.getBrightnessAtEyes(f), scaledWidth, scaledHeight);
         }
         ItemInstance itemstack = this.minecraft.player.inventory.getArmourItem(3);
-        if (!this.minecraft.options.thirdPerson && !((AccessMinecraft) this.minecraft).isCameraActive() && itemstack != null && itemstack.itemId == Tile.PUMPKIN.id) {
+        if (!this.minecraft.options.thirdPerson && !((ExMinecraft) this.minecraft).isCameraActive() && itemstack != null && itemstack.itemId == Tile.PUMPKIN.id) {
             this.method_1947(scaledWidth, scaledHeight);
         }
-        if (this.minecraft.level != null && !((AccessLevelProperties) ((AccessLevel) this.minecraft.level).getProperties()).getOverlay().isEmpty()) {
-            this.adventurecraft$renderOverlay(scaledWidth, scaledHeight, ((AccessLevelProperties) ((AccessLevel) this.minecraft.level).getProperties()).getOverlay());
+        if (this.minecraft.level != null && !((ExLevelProperties) ((ExLevel) this.minecraft.level).getProperties()).getOverlay().isEmpty()) {
+            this.adventurecraft$renderOverlay(scaledWidth, scaledHeight, ((ExLevelProperties) ((ExLevel) this.minecraft.level).getProperties()).getOverlay());
         }
         if ((f1 = this.minecraft.player.field_505 + (this.minecraft.player.field_504 - this.minecraft.player.field_505) * f) > 0.0f) {
             this.method_1951(f1, scaledWidth, scaledHeight);
@@ -113,7 +113,7 @@ public abstract class MixinOverlay extends DrawableHelper {
             PlayerInventory inventoryplayer = this.minecraft.player.inventory;
             this.zOffset = -90.0f;
             this.blit(scaledWidth / 2 - 91, scaledHeight - 22, 0, 0, 182, 22);
-            this.blit(scaledWidth / 2 - 91 - 1 + ((AccessPlayerInventory) inventoryplayer).getOffhandItemID() * 20, scaledHeight - 22 - 1, 24, 22, 48, 22);
+            this.blit(scaledWidth / 2 - 91 - 1 + ((ExPlayerInventory) inventoryplayer).getOffhandItemID() * 20, scaledHeight - 22 - 1, 24, 22, 48, 22);
             this.blit(scaledWidth / 2 - 91 - 1 + inventoryplayer.selectedHotbarSlot * 20, scaledHeight - 22 - 1, 0, 22, 24, 22);
             GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId("/assets/adventurecraft/gui/icons.png"));
             GL11.glEnable(3042);
@@ -147,8 +147,8 @@ public abstract class MixinOverlay extends DrawableHelper {
                     if (health <= 8) {
                         yPos += this.rand.nextInt(2);
                     }
-                    for (int healthRow = 0; healthRow <= (((AccessLivingEntity) this.minecraft.player).getMaxHealth() - 1) / 40; ++healthRow) {
-                        if ((index + 1 + healthRow * 10) * 4 <= ((AccessLivingEntity) this.minecraft.player).getMaxHealth() - 1) {
+                    for (int healthRow = 0; healthRow <= (((ExLivingEntity) this.minecraft.player).getMaxHealth() - 1) / 40; ++healthRow) {
+                        if ((index + 1 + healthRow * 10) * 4 <= ((ExLivingEntity) this.minecraft.player).getMaxHealth() - 1) {
                             int k5 = 0;
                             if (flag1) {
                                 k5 = 1;
@@ -180,7 +180,7 @@ public abstract class MixinOverlay extends DrawableHelper {
                 }
             }
             if (this.minecraft.player.isInFluid(Material.WATER)) {
-                int yOffset = -9 * ((((AccessLivingEntity) this.minecraft.player).getMaxHealth() - 1) / 40);
+                int yOffset = -9 * ((((ExLivingEntity) this.minecraft.player).getMaxHealth() - 1) / 40);
                 int k2 = (int) Math.ceil((double) (this.minecraft.player.air - 2) * 10.0 / 300.0);
                 int l3 = (int) Math.ceil((double) this.minecraft.player.air * 10.0 / 300.0) - k2;
                 for (int l5 = 0; l5 < k2 + l3; ++l5) {
@@ -242,9 +242,9 @@ public abstract class MixinOverlay extends DrawableHelper {
             this.drawTextWithShadow(fontrenderer, "y: " + this.minecraft.player.y, 2, 72, 0xE0E0E0);
             this.drawTextWithShadow(fontrenderer, "z: " + this.minecraft.player.z, 2, 80, 0xE0E0E0);
             this.drawTextWithShadow(fontrenderer, "f: " + (MathsHelper.floor((double) (this.minecraft.player.yaw * 4.0f / 360.0f) + 0.5) & 3), 2, 88, 0xE0E0E0);
-            this.drawTextWithShadow(fontrenderer, String.format("Use Terrain Images: %b", ((AccessLevelProperties) ((AccessLevel) this.minecraft.level).getProperties()).isUsingImages()), 2, 96, 0xE0E0E0);
-            this.drawTextWithShadow(fontrenderer, String.format("Collide X: %d Z: %d", ((AccessEntity) this.minecraft.player).getCollisionX(), ((AccessEntity) this.minecraft.player).getCollisionZ()), 2, 104, 0xE0E0E0);
-            if (((AccessLevelProperties) ((AccessLevel) this.minecraft.level).getProperties()).isUsingImages()) {
+            this.drawTextWithShadow(fontrenderer, String.format("Use Terrain Images: %b", ((ExLevelProperties) ((ExLevel) this.minecraft.level).getProperties()).isUsingImages()), 2, 96, 0xE0E0E0);
+            this.drawTextWithShadow(fontrenderer, String.format("Collide X: %d Z: %d", ((ExEntity) this.minecraft.player).getCollisionX(), ((ExEntity) this.minecraft.player).getCollisionZ()), 2, 104, 0xE0E0E0);
+            if (((ExLevelProperties) ((ExLevel) this.minecraft.level).getProperties()).isUsingImages()) {
                 int x = (int) this.minecraft.player.x;
                 int z = (int) this.minecraft.player.z;
                 int terrainHeight = TerrainImage.getTerrainHeight(x, z);
