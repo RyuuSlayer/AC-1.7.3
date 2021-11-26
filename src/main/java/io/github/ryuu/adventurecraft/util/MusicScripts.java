@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.util;
 
-import net.minecraft.script.Script;
+import io.github.ryuu.adventurecraft.scripting.Script;
 import org.mozilla.javascript.Scriptable;
 
 import java.io.*;
@@ -9,10 +9,10 @@ import java.util.ArrayList;
 public class MusicScripts {
 
     public Scriptable scope;
-    ArrayList<MusicScriptEntry> musicEntries = new ArrayList();
+    ArrayList<MusicScriptEntry> musicEntries = new ArrayList<>();
     JScriptHandler handler;
 
-    MusicScripts(Script script, File mapDir, JScriptHandler h) {
+    public MusicScripts(Script script, File mapDir, JScriptHandler h) {
         this.handler = h;
         this.scope = script.getNewScope();
         this.loadMusic(mapDir);

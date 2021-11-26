@@ -1,6 +1,5 @@
 package io.github.ryuu.adventurecraft.mixin.level;
 
-import io.github.ryuu.adventurecraft.accessors.level.AccessLevel;
 import io.github.ryuu.adventurecraft.blocks.BlockStairMulti;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityNpcPath;
@@ -31,11 +30,6 @@ import net.minecraft.level.dimension.DimensionData;
 import net.minecraft.level.dimension.McRegionDimensionFile;
 import net.minecraft.level.source.LevelSource;
 import net.minecraft.level.storage.MapStorageBase;
-import net.minecraft.script.EntityDescriptions;
-import net.minecraft.script.ScopeTag;
-import net.minecraft.script.Script;
-import net.minecraft.script.ScriptModel;
-import net.minecraft.src.Entity;
 import net.minecraft.tile.FluidTile;
 import net.minecraft.tile.LadderTile;
 import net.minecraft.tile.Tile;
@@ -59,7 +53,7 @@ import java.io.*;
 import java.util.*;
 
 @Mixin(Level.class)
-public class MixinLevel implements TileView, AccessLevel {
+public abstract class MixinLevel implements TileView, AccessLevel {
 
     static int field_179 = 0;
     public final Dimension dimension;
@@ -315,11 +309,11 @@ public class MixinLevel implements TileView, AccessLevel {
         this.initWeatherGradients();
         this.loadMapMusic();
         this.loadMapSounds();
-        this.script = new Script(this);
+        this.script = new Script((Level) (Object) this);
         if (this.properties.globalScope != null) {
             ScopeTag.loadScopeFromTag(this.script.globalScope, this.properties.globalScope);
         }
-        this.scriptHandler = new JScriptHandler(this, levelFile);
+        this.scriptHandler = new JScriptHandler((Level) (Object) this, levelFile);
         this.musicScripts = new MusicScripts(this.script, levelFile, this.scriptHandler);
         if (this.properties.musicScope != null) {
             ScopeTag.loadScopeFromTag(this.musicScripts.scope, this.properties.musicScope);
@@ -390,7 +384,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void loadMapTextures() {
         AccessMinecraft.getInstance().textureManager.reload();
         for (Object obj : AccessMinecraft.getInstance().textureManager.TEXTURE_ID_MAP.entrySet()) {
@@ -418,7 +412,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     private void loadTextureAnimations() {
         AccessMinecraft.getInstance().textureManager.clearTextureAnimations();
         File animationFile = new File(this.levelDir, "animations.txt");
@@ -455,7 +449,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public BufferedImage loadMapTexture(String texName) {
         File terrainTexture = new File(this.levelDir, texName);
         if (terrainTexture.exists()) {
@@ -471,7 +465,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void updateChunkProvider() {
         this.cache = this.createChunkCache();
     }
@@ -479,7 +473,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     protected LevelSource createChunkCache() {
         ChunkIO ichunkloader;
         if (this.dimensionData == null) {
@@ -490,13 +484,13 @@ public class MixinLevel implements TileView, AccessLevel {
                 ichunkloader = new MapChunkLoader(this.mapHandler.getChunkIO(this.dimension), ichunkloader);
             }
         }
-        return new ClientChunkCache(this, ichunkloader, this.dimension.createLevelSource());
+        return new ClientChunkCache((Level) (Object) this, ichunkloader, this.dimension.createLevelSource());
     }
 
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     protected void computeSpawnPosition() {
         this.forceLoadChunks = true;
         int i = 0;
@@ -513,7 +507,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void revalidateSpawnPos() {
         if (this.properties.getSpawnY() <= 0) {
             this.properties.setSpawnY(64);
@@ -532,7 +526,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public int getFirstUncoveredBlockY(int i, int j) {
         int k;
         for (k = 127; this.isAir(i, k, j) && k > 0; --k) {
@@ -543,7 +537,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public int getTileAtSurface(int x, int z) {
         int k;
         for (k = 127; this.isAir(x, k, z) && k > 0; --k) {
@@ -554,7 +548,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void addPlayer(Player player) {
         try {
             CompoundTag nbttagcompound = this.properties.getPlayerData();
@@ -577,7 +571,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void saveLevel(boolean flag, ProgressListener listener) {
         if (!this.cache.isClean()) {
             return;
@@ -595,7 +589,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     private void prepareSaveLevel() {
         this.checkSessionLock();
         this.properties.globalScope = ScopeTag.getTagFromScope(this.script.globalScope);
@@ -613,7 +607,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public boolean method_274(int i) {
         if (!this.cache.isClean()) {
             return true;
@@ -628,7 +622,7 @@ public class MixinLevel implements TileView, AccessLevel {
      * @author Ryuu, TechPizza, Phil
      */
     @Override
-    @Overwrite()
+    @Overwrite
     public int getTileId(int x, int y, int z) {
         if (x < -32000000 || z < -32000000 || x >= 32000000 || z > 32000000) {
             return 0;
@@ -645,7 +639,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public boolean isAir(int x, int y, int z) {
         return this.getTileId(x, y, z) == 0;
     }
@@ -653,7 +647,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public boolean isTileLoaded(int x, int y, int z) {
         if (y < 0 || y >= 128) {
             return false;
@@ -664,7 +658,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public boolean isRegionLoaded(int x, int y, int z, int radius) {
         return this.isRegionLoaded(x - radius, y - radius, z - radius, x + radius, y + radius, z + radius);
     }
@@ -672,7 +666,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public boolean isRegionLoaded(int startX, int startY, int startZ, int endX, int endY, int endZ) {
         if (endY < 0 || startY >= 128) {
             return false;
@@ -695,7 +689,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     private boolean isChunkLoaded(int chunkX, int chunkY) {
         return this.cache.isChunkLoaded(chunkX, chunkY);
     }
@@ -703,7 +697,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public Chunk getChunk(int x, int z) {
         return this.getChunkFromCache(x >> 4, z >> 4);
     }
@@ -711,7 +705,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public Chunk getChunkFromCache(int x, int z) {
         return this.cache.getChunk(x, z);
     }
@@ -719,7 +713,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public boolean setTileWithMetadata(int x, int y, int z, int tileId, int metadata) {
         if (x < -32000000 || z < -32000000 || x >= 32000000 || z > 32000000) {
             return false;
@@ -737,7 +731,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public boolean setBlockAndMetadataTemp(int i, int j, int k, int l, int i1) {
         if (i < -32000000 || k < -32000000 || i >= 32000000 || k > 32000000) {
             return false;
@@ -755,7 +749,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public boolean setTileInChunk(int x, int y, int z, int tileId) {
         if (x < -32000000 || z < -32000000 || x >= 32000000 || z > 32000000) {
             return false;
@@ -774,7 +768,7 @@ public class MixinLevel implements TileView, AccessLevel {
      * @author Ryuu, TechPizza, Phil
      */
     @Override
-    @Overwrite()
+    @Overwrite
     public Material getMaterial(int x, int y, int z) {
         int l = this.getTileId(x, y, z);
         if (l == 0) {
@@ -787,7 +781,7 @@ public class MixinLevel implements TileView, AccessLevel {
      * @author Ryuu, TechPizza, Phil
      */
     @Override
-    @Overwrite()
+    @Overwrite
     public int getTileMeta(int x, int y, int z) {
         if (x < -32000000 || z < -32000000 || x >= 32000000 || z > 32000000) {
             return 0;
@@ -805,7 +799,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void setTileMeta(int x, int y, int z, int meta) {
         if (this.method_223(x, y, z, meta)) {
             int i1 = this.getTileId(x, y, z);
@@ -820,7 +814,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public boolean method_223(int i, int j, int k, int l) {
         if (i < -32000000 || k < -32000000 || i >= 32000000 || k > 32000000) {
             return false;
@@ -839,7 +833,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public boolean setTile(int i, int j, int k, int l) {
         if (this.setTileInChunk(i, j, k, l)) {
             this.method_235(i, j, k, l);
@@ -851,7 +845,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public boolean method_201(int i, int j, int k, int l, int i1) {
         if (this.setTileWithMetadata(i, j, k, l, i1)) {
             this.method_235(i, j, k, l);
@@ -863,7 +857,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void method_243(int i, int j, int k) {
         for (Object listener : this.listeners) {
             ((LevelListener) listener).method_1149(i, j, k);
@@ -873,7 +867,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     protected void method_235(int i, int j, int k, int l) {
         this.method_243(i, j, k);
         this.method_244(i, j, k, l);
@@ -882,7 +876,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void method_240(int i, int j, int k, int l) {
         if (k > l) {
             int i1 = l;
@@ -895,7 +889,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void method_246(int i, int j, int k) {
         for (Object listener : this.listeners) {
             ((LevelListener) listener).method_1150(i, j, k, i, j, k);
@@ -905,7 +899,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void updateRedstone(int i, int j, int k, int l, int i1, int j1) {
         for (Object listener : this.listeners) {
             ((LevelListener) listener).method_1150(i, j, k, l, i1, j1);
@@ -915,7 +909,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void method_244(int i, int j, int k, int l) {
         this.method_253(i - 1, j, k, l);
         this.method_253(i + 1, j, k, l);
@@ -928,7 +922,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     private void method_253(int i, int j, int k, int l) {
         if (this.field_211 || this.isClient) {
             return;
@@ -942,7 +936,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public boolean isAboveGroundCached(int x, int y, int z) {
         return this.getChunkFromCache(x >> 4, z >> 4).isAboveGround(x & 0xF, y, z & 0xF);
     }
@@ -950,7 +944,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public int method_252(int i, int j, int k) {
         if (j < 0) {
             return 0;
@@ -964,7 +958,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public int getLightLevel(int i, int j, int k) {
         return this.placeTile(i, j, k, true);
     }
@@ -972,7 +966,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public int placeTile(int x, int y, int z, boolean flag) {
         int l;
         if (x < -32000000 || z < -32000000 || x >= 32000000 || z > 32000000) {
@@ -1011,7 +1005,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public boolean isAboveGround(int x, int y, int z) {
         if (x < -32000000 || z < -32000000 || x >= 32000000 || z > 32000000) {
             return false;
@@ -1032,7 +1026,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public int getHeight(int x, int z) {
         if (x < -32000000 || z < -32000000 || x >= 32000000 || z > 32000000) {
             return 0;
@@ -1047,7 +1041,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void method_165(LightType tpe, int i, int j, int k, int l) {
         int i1;
         if (this.dimension.fixedSpawnPos && tpe == LightType.Sky) {
@@ -1071,7 +1065,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public int getLightLevel(LightType enumskyblock, int i, int j, int k) {
         if (j < 0) {
             j = 0;
@@ -1094,7 +1088,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void setLightLevel(LightType type, int x, int y, int z, int light) {
         if (x < -32000000 || z < -32000000 || x >= 32000000 || z > 32000000) {
             return;
@@ -1118,7 +1112,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public float getLightValue(int i, int j, int k) {
         float torchLight;
         int lightValue = this.getLightLevel(i, j, k);
@@ -1131,7 +1125,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     private float getBrightnessLevel(float lightValue) {
         int floorValue = (int) Math.floor(lightValue);
         if ((float) floorValue != lightValue) {
@@ -1146,7 +1140,7 @@ public class MixinLevel implements TileView, AccessLevel {
      * @author Ryuu, TechPizza, Phil
      */
     @Override
-    @Overwrite()
+    @Overwrite
     public float method_1784(int i, int j, int k, int l) {
         float lightValue = this.getLightValue(i, j, k);
         if (lightValue < (float) l) {
@@ -1159,7 +1153,7 @@ public class MixinLevel implements TileView, AccessLevel {
      * @author Ryuu, TechPizza, Phil
      */
     @Override
-    @Overwrite()
+    @Overwrite
     public float getBrightness(int i, int j, int k) {
         float lightValue = this.getLightValue(i, j, k);
         return this.getBrightnessLevel(lightValue);
@@ -1168,7 +1162,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public float getDayLight() {
         int lightValue = 15 - this.field_202;
         return this.dimension.field_2178[lightValue];
@@ -1177,7 +1171,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public HitResult raycast(Vec3f vec3d, Vec3f vec3d1) {
         return this.raycast(vec3d, vec3d1, false, false);
     }
@@ -1185,7 +1179,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public HitResult raycast(Vec3f vec3d, Vec3f vec3d1, boolean flag) {
         return this.raycast(vec3d, vec3d1, flag, false);
     }
@@ -1193,15 +1187,11 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public HitResult raycast(Vec3f vec3d, Vec3f vec3d1, boolean flag, boolean flag1) {
         return this.rayTraceBlocks2(vec3d, vec3d1, flag, flag1, true);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public HitResult rayTraceBlocks2(Vec3f vec3d, Vec3f vec3d1, boolean flag, boolean flag1, boolean collideWithClip) {
         HitResult movingobjectposition;
         if (Double.isNaN(vec3d.x) || Double.isNaN(vec3d.y) || Double.isNaN(vec3d.z)) {
@@ -1219,7 +1209,7 @@ public class MixinLevel implements TileView, AccessLevel {
         int k1 = this.getTileId(l, i1, j1);
         int i2 = this.getTileMeta(l, i1, j1);
         Tile block = Tile.BY_ID[k1];
-        if ((!flag1 || block == null || block.getCollisionShape(this, l, i1, j1) != null) && k1 > 0 && block.method_1571(i2, flag) && (collideWithClip || k1 != Blocks.clipBlock.id && !LadderTile.isLadderID(k1)) && (movingobjectposition = block.raycast(this, l, i1, j1, vec3d, vec3d1)) != null) {
+        if ((!flag1 || block == null || block.getCollisionShape((Level) (Object) this, l, i1, j1) != null) && k1 > 0 && block.method_1571(i2, flag) && (collideWithClip || k1 != Blocks.clipBlock.id && !LadderTile.isLadderID(k1)) && (movingobjectposition = block.raycast((Level) (Object) this, l, i1, j1, vec3d, vec3d1)) != null) {
             return movingobjectposition;
         }
         int l1 = 200;
@@ -1312,7 +1302,7 @@ public class MixinLevel implements TileView, AccessLevel {
             int j2 = this.getTileId(l, i1, j1);
             int k2 = this.getTileMeta(l, i1, j1);
             Tile block1 = Tile.BY_ID[j2];
-            if (flag1 && block1 != null && block1.getCollisionShape(this, l, i1, j1) == null || j2 <= 0 || !block1.method_1571(k2, flag) || !block1.shouldRender(this, l, i1, j1) || (movingobjectposition1 = block1.raycast(this, l, i1, j1, vec3d, vec3d1)) == null || !collideWithClip && (block1.id == Blocks.clipBlock.id || LadderTile.isLadderID(block1.id)))
+            if (flag1 && block1 != null && block1.getCollisionShape((Level) (Object) this, l, i1, j1) == null || j2 <= 0 || !block1.method_1571(k2, flag) || !block1.shouldRender((Level) (Object) this, l, i1, j1) || (movingobjectposition1 = block1.raycast((Level) (Object) this, l, i1, j1, vec3d, vec3d1)) == null || !collideWithClip && (block1.id == Blocks.clipBlock.id || LadderTile.isLadderID(block1.id)))
                 continue;
             return movingobjectposition1;
         }
@@ -1322,7 +1312,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void playSound(net.minecraft.entity.Entity entity, String sound, float f, float f1) {
         for (Object listener : this.listeners) {
             ((LevelListener) listener).playSound(sound, entity.x, entity.y - (double) entity.standingEyeHeight, entity.z, f, f1);
@@ -1332,7 +1322,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void playSound(double x, double y, double z, String sound, float f, float f1) {
         for (Object listener : this.listeners) {
             ((LevelListener) listener).playSound(sound, x, y, z, f, f1);
@@ -1342,7 +1332,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void method_179(String s, int i, int j, int k) {
         for (Object listener : this.listeners) {
             ((LevelListener) listener).method_1155(s, i, j, k);
@@ -1352,7 +1342,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void addParticle(String particle, double d, double d1, double d2, double d3, double d4, double d5) {
         for (Object listener : this.listeners) {
             ((LevelListener) listener).addParticle(particle, d, d1, d2, d3, d4, d5);
@@ -1362,7 +1352,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public boolean method_184(net.minecraft.entity.Entity entity) {
         this.field_201.add(entity);
         return true;
@@ -1371,7 +1361,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public boolean spawnEntity(net.minecraft.entity.Entity entity) {
         int i = MathsHelper.floor(entity.x / 16.0);
         int j = MathsHelper.floor(entity.z / 16.0);
@@ -1395,7 +1385,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     protected void onEntityAdded(net.minecraft.entity.Entity entity) {
         for (Object listener : this.listeners) {
             ((LevelListener) listener).onEntityAdded(entity);
@@ -1405,7 +1395,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     protected void onEntityRemoved(net.minecraft.entity.Entity entity) {
         for (Object listener : this.listeners) {
             ((LevelListener) listener).onEntityRemoved(entity);
@@ -1415,7 +1405,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void removeEntity(net.minecraft.entity.Entity entity) {
         if (entity.passenger != null) {
             entity.passenger.startRiding(null);
@@ -1433,7 +1423,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void removeEntityFromChunk(net.minecraft.entity.Entity entity) {
         entity.remove();
         if (entity instanceof Player) {
@@ -1452,7 +1442,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void addListener(LevelListener listener) {
         this.listeners.add(listener);
     }
@@ -1460,7 +1450,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void removeListener(LevelListener listener) {
         this.listeners.remove(listener);
     }
@@ -1468,7 +1458,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public List method_190(net.minecraft.entity.Entity entity, Box axisalignedbb) {
         this.field_189.clear();
         int i = MathsHelper.floor(axisalignedbb.minX);
@@ -1484,7 +1474,7 @@ public class MixinLevel implements TileView, AccessLevel {
                     Tile block = Tile.BY_ID[this.getTileId(k1, i2, l1)];
                     if (block == null || !entity.collidesWithClipBlocks && (block.id == Blocks.clipBlock.id || LadderTile.isLadderID(block.id)))
                         continue;
-                    block.intersectsInLevel(this, k1, i2, l1, axisalignedbb, this.field_189);
+                    block.intersectsInLevel((Level) (Object) this, k1, i2, l1, axisalignedbb, this.field_189);
                 }
             }
         }
@@ -1505,7 +1495,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public int computeWeatherGradients(float f) {
         float f1 = this.method_198(f);
         float f2 = 1.0f - (MathsHelper.cos(f1 * 3.141593f * 2.0f) * 2.0f + 0.5f);
@@ -1525,7 +1515,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public Vec3f method_279(net.minecraft.entity.Entity entity, float f) {
         float f9;
         float f1 = this.method_198(f);
@@ -1576,7 +1566,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public float method_198(float f) {
         return this.dimension.method_1771(this.properties.getTimeOfDay(), f * this.properties.getTimeRate());
     }
@@ -1584,7 +1574,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public Vec3f method_282(float f) {
         float f1 = this.method_198(f);
         float f2 = MathsHelper.cos(f1 * 3.141593f * 2.0f) * 2.0f + 0.5f;
@@ -1622,7 +1612,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public Vec3f getSkyColour(float f) {
         float f1 = this.method_198(f);
         Vec3f returnColor = this.dimension.getSkyColour(f1, f);
@@ -1643,7 +1633,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public float getFogStart(float start, float f) {
         if (this.properties.overrideFogDensity) {
             if (this.fogDensityOverridden) {
@@ -1657,7 +1647,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public float getFogEnd(float end, float f) {
         if (this.properties.overrideFogDensity) {
             if (this.fogDensityOverridden) {
@@ -1671,7 +1661,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public int getOceanFloorHeight(int x, int z) {
         int k;
         Chunk chunk = this.getChunk(x, z);
@@ -1695,7 +1685,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public float method_286(float f) {
         float f1 = this.method_198(f);
         float f2 = 1.0f - (MathsHelper.cos(f1 * 3.141593f * 2.0f) * 2.0f + 0.75f);
@@ -1711,14 +1701,14 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void method_216(int i, int j, int k, int l, int i1) {
         class_366 nextticklistentry = new class_366(i, j, k, l);
         int byte0 = 8;
         if (this.field_197) {
             int j1;
             if (this.isRegionLoaded(nextticklistentry.field_1400 - byte0, nextticklistentry.field_1401 - byte0, nextticklistentry.field_1402 - byte0, nextticklistentry.field_1400 + byte0, nextticklistentry.field_1401 + byte0, nextticklistentry.field_1402 + byte0) && (j1 = this.getTileId(nextticklistentry.field_1400, nextticklistentry.field_1401, nextticklistentry.field_1402)) == nextticklistentry.field_1403 && j1 > 0) {
-                Tile.BY_ID[j1].onScheduledTick(this, nextticklistentry.field_1400, nextticklistentry.field_1401, nextticklistentry.field_1402, this.rand);
+                Tile.BY_ID[j1].onScheduledTick((Level) (Object) this, nextticklistentry.field_1400, nextticklistentry.field_1401, nextticklistentry.field_1402, this.rand);
             }
             return;
         }
@@ -1736,7 +1726,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void cancelBlockUpdate(int i, int j, int k, int l) {
         class_366 nextticklistentry = new class_366(i, j, k, l);
         this.field_184.remove(nextticklistentry);
@@ -1745,7 +1735,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void method_227() {
         for (int i = 0; i < this.field_201.size(); ++i) {
             net.minecraft.entity.Entity entity = (net.minecraft.entity.Entity) this.field_201.get(i);
@@ -1819,7 +1809,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void forceUpdatePosition(net.minecraft.entity.Entity entity) {
         this.updatePosition(entity, true);
     }
@@ -1827,7 +1817,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void updatePosition(net.minecraft.entity.Entity entity, boolean flag) {
         int i = MathsHelper.floor(entity.x);
         int j = MathsHelper.floor(entity.z);
@@ -1891,7 +1881,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public boolean canSpawnEntity(Box box) {
         List list = this.getEntities((net.minecraft.entity.Entity) null, box);
         for (Object o : list) {
@@ -1905,7 +1895,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public boolean method_218(Box axisalignedbb) {
         int i = MathsHelper.floor(axisalignedbb.minX);
         int j = MathsHelper.floor(axisalignedbb.maxX + 1.0);
@@ -1937,7 +1927,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public boolean method_225(Box axisalignedbb) {
         int j1;
         int i = MathsHelper.floor(axisalignedbb.minX);
@@ -1962,7 +1952,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public boolean method_170(Box axisalignedbb, Material material, net.minecraft.entity.Entity entity) {
         int j1;
         int i = MathsHelper.floor(axisalignedbb.minX);
@@ -1983,7 +1973,7 @@ public class MixinLevel implements TileView, AccessLevel {
                     if (block == null || block.material != material || !((double) l >= (d1 = (float) (l1 + 1) - FluidTile.method_1218(this.getTileMeta(k1, l1, i2)))))
                         continue;
                     flag = true;
-                    block.method_1572(this, k1, l1, i2, entity, vec3d);
+                    block.method_1572((Level) (Object) this, k1, l1, i2, entity, vec3d);
                 }
             }
         }
@@ -2000,7 +1990,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public boolean method_169(Box axisalignedbb, Material material) {
         int i = MathsHelper.floor(axisalignedbb.minX);
         int j = MathsHelper.floor(axisalignedbb.maxX + 1.0);
@@ -2023,7 +2013,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public boolean method_207(Box axisalignedbb, Material material) {
         int i = MathsHelper.floor(axisalignedbb.minX);
         int j = MathsHelper.floor(axisalignedbb.maxX + 1.0);
@@ -2052,7 +2042,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public Explosion createExplosion(net.minecraft.entity.Entity cause, double x, double y, double z, float power) {
         return this.createExplosion(cause, x, y, z, power, false);
     }
@@ -2060,9 +2050,9 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public Explosion createExplosion(net.minecraft.entity.Entity cause, double x, double y, double z, float power, boolean flag) {
-        Explosion explosion = new Explosion(this, cause, x, y, z, power);
+        Explosion explosion = new Explosion((Level) (Object) this, cause, x, y, z, power);
         explosion.causeFires = flag;
         explosion.kaboomPhase1();
         explosion.kaboomPhase2(true);
@@ -2072,7 +2062,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public float method_163(Vec3f vec3d, Box axisalignedbb) {
         double d = 1.0 / ((axisalignedbb.maxX - axisalignedbb.minX) * 2.0 + 1.0);
         double d1 = 1.0 / ((axisalignedbb.maxY - axisalignedbb.minY) * 2.0 + 1.0);
@@ -2104,7 +2094,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void method_172(Player entityplayer, int i, int j, int k, int l) {
         if (l == 0) {
             --j;
@@ -2134,7 +2124,7 @@ public class MixinLevel implements TileView, AccessLevel {
      * @author Ryuu, TechPizza, Phil
      */
     @Override
-    @Overwrite()
+    @Overwrite
     public TileEntity getTileEntity(int i, int j, int k) {
         Chunk chunk = this.getChunkFromCache(i >> 4, k >> 4);
         if (chunk != null) {
@@ -2146,7 +2136,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public TileEntity getBlockTileEntityDontCreate(int i, int j, int k) {
         Chunk chunk = this.getChunkFromCache(i >> 4, k >> 4);
         if (chunk != null) {
@@ -2158,7 +2148,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void setTileEntity(int i, int j, int k, TileEntity tileentity) {
         if (!tileentity.isInvalid()) {
             this.removeTileEntity(i, j, k);
@@ -2180,7 +2170,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void removeTileEntity(int i, int j, int k) {
         TileEntity tileentity = this.getBlockTileEntityDontCreate(i, j, k);
         if (tileentity != null && this.field_190) {
@@ -2200,7 +2190,7 @@ public class MixinLevel implements TileView, AccessLevel {
      * @author Ryuu, TechPizza, Phil
      */
     @Override
-    @Overwrite()
+    @Overwrite
     public boolean isFullOpaque(int i, int j, int k) {
         Tile block = Tile.BY_ID[this.getTileId(i, j, k)];
         if (block == null) {
@@ -2213,7 +2203,7 @@ public class MixinLevel implements TileView, AccessLevel {
      * @author Ryuu, TechPizza, Phil
      */
     @Override
-    @Overwrite()
+    @Overwrite
     public boolean canSuffocate(int i, int j, int k) {
         Tile block = Tile.BY_ID[this.getTileId(i, j, k)];
         if (block == null) {
@@ -2225,7 +2215,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void method_280(ProgressListener iprogressupdate) {
         this.saveLevel(true, iprogressupdate);
     }
@@ -2233,7 +2223,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public boolean method_232() {
         if (this.field_191 >= 50) {
             return false;
@@ -2260,7 +2250,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void method_166(LightType enumskyblock, int i, int j, int k, int l, int i1, int j1) {
         this.method_167(enumskyblock, i, j, k, l, i1, j1, true);
     }
@@ -2268,7 +2258,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void method_167(LightType enumskyblock, int i, int j, int k, int l, int i1, int j1, boolean flag) {
         if (this.dimension.fixedSpawnPos && enumskyblock == LightType.Sky) {
             return;
@@ -2313,7 +2303,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void method_237() {
         int i = this.computeWeatherGradients(1.0f);
         if (i != this.field_202) {
@@ -2324,7 +2314,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void method_196(boolean flag, boolean flag1) {
         this.field_192 = flag;
         this.field_193 = flag1;
@@ -2333,7 +2323,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void method_242() {
         long l1;
         if (this.firstTick) {
@@ -2376,7 +2366,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     protected void method_245() {
         if (this.dimension.fixedSpawnPos) {
             return;
@@ -2405,7 +2395,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     private void DoSnowModUpdate() {
         if (this.isClient) {
             return;
@@ -2439,7 +2429,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     protected void method_248() {
         for (Object player : this.players) {
             Player entityplayer = (Player) player;
@@ -2460,7 +2450,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     protected void updateChunk(int chunkX, int chunkZ) {
         Chunk chunk = this.getChunkFromCache(chunkX, chunkZ);
         if (chunk.lastUpdated == this.getLevelTime()) {
@@ -2476,7 +2466,7 @@ public class MixinLevel implements TileView, AccessLevel {
             int i4 = coordZ + (l1 >> 8 & 0xF);
             int i5 = this.getOceanFloorHeight(i3, i4);
             if (this.canRainAt(i3, i5, i4)) {
-                this.method_184(new Lightning(this, i3, i5, i4));
+                this.method_184(new Lightning((Level) (Object) this, i3, i5, i4));
                 this.field_209 = 2;
             }
         }
@@ -2488,14 +2478,14 @@ public class MixinLevel implements TileView, AccessLevel {
             int j6 = k3 >> 16 & 0x7F;
             int l6 = chunk.tiles[k4 << 11 | k5 << 7 | j6] & 0xFF;
             if (!Tile.TICKS_RANDOMLY[l6]) continue;
-            Tile.BY_ID[l6].onScheduledTick(this, k4 + coordX, j6, k5 + coordZ, this.rand);
+            Tile.BY_ID[l6].onScheduledTick((Level) (Object) this, k4 + coordX, j6, k5 + coordZ, this.rand);
         }
     }
 
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public boolean method_194(boolean flag) {
         int i = this.field_183.size();
         if (i > 1000) {
@@ -2509,7 +2499,7 @@ public class MixinLevel implements TileView, AccessLevel {
             this.field_183.remove(nextticklistentry);
             if (!this.field_184.remove(nextticklistentry) || !this.isRegionLoaded(nextticklistentry.field_1400 - (byte0 = 8), nextticklistentry.field_1401 - byte0, nextticklistentry.field_1402 - byte0, nextticklistentry.field_1400 + byte0, nextticklistentry.field_1401 + byte0, nextticklistentry.field_1402 + byte0) || (k = this.getTileId(nextticklistentry.field_1400, nextticklistentry.field_1401, nextticklistentry.field_1402)) != nextticklistentry.field_1403 || k <= 0)
                 continue;
-            Tile.BY_ID[k].onScheduledTick(this, nextticklistentry.field_1400, nextticklistentry.field_1401, nextticklistentry.field_1402, this.rand);
+            Tile.BY_ID[k].onScheduledTick((Level) (Object) this, nextticklistentry.field_1400, nextticklistentry.field_1401, nextticklistentry.field_1402, this.rand);
             Box.method_85();
         }
         return this.field_183.size() != 0;
@@ -2518,7 +2508,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void method_294(int i, int j, int k) {
         int byte0 = 16;
         Random random = new Random();
@@ -2528,14 +2518,14 @@ public class MixinLevel implements TileView, AccessLevel {
             int i1 = i + this.rand.nextInt(byte0) - this.rand.nextInt(byte0);
             int l1 = this.getTileId(i1, j1 = j + this.rand.nextInt(byte0) - this.rand.nextInt(byte0), k1 = k + this.rand.nextInt(byte0) - this.rand.nextInt(byte0));
             if (l1 <= 0) continue;
-            Tile.BY_ID[l1].randomDisplayTick(this, i1, j1, k1, random);
+            Tile.BY_ID[l1].randomDisplayTick((Level) (Object) this, i1, j1, k1, random);
         }
     }
 
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public List getEntities(net.minecraft.entity.Entity entity, Box axisalignedbb) {
         this.field_196.clear();
         int i = MathsHelper.floor((axisalignedbb.minX - 2.0) / 16.0);
@@ -2554,7 +2544,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public List getEntities(Class class1, Box axisalignedbb) {
         int i = MathsHelper.floor((axisalignedbb.minX - 2.0) / 16.0);
         int j = MathsHelper.floor((axisalignedbb.maxX + 2.0) / 16.0);
@@ -2573,7 +2563,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void method_203(int i, int j, int k, TileEntity tileentity) {
         if (this.isTileLoaded(i, j, k)) {
             this.getChunk(i, k).method_885();
@@ -2586,7 +2576,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public int method_174(Class class1) {
         int i = 0;
         for (Entity value : this.entities) {
@@ -2600,7 +2590,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void addEntities(List entities) {
         this.entities.addAll(entities);
         for (Object entity : entities) {
@@ -2611,12 +2601,12 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public boolean canPlaceTile(int id, int x, int y, int z, boolean flag, int meta) {
         int j1 = this.getTileId(x, y, z);
         Tile block = Tile.BY_ID[j1];
         Tile block1 = Tile.BY_ID[id];
-        Box axisalignedbb = block1.getCollisionShape(this, x, y, z);
+        Box axisalignedbb = block1.getCollisionShape((Level) (Object) this, x, y, z);
         if (flag) {
             axisalignedbb = null;
         }
@@ -2626,13 +2616,13 @@ public class MixinLevel implements TileView, AccessLevel {
         if (block == Tile.FLOWING_WATER || block == Tile.STILL_WATER || block == Tile.FLOWING_LAVA || block == Tile.STILL_LAVA || block == Tile.FIRE || block == Tile.SNOW) {
             block = null;
         }
-        return id > 0 && block == null && block1.canPlaceAt(this, x, y, z, meta);
+        return id > 0 && block == null && block1.canPlaceAt((Level) (Object) this, x, y, z, meta);
     }
 
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public class_61 method_192(net.minecraft.entity.Entity entity, net.minecraft.entity.Entity entity1, float f) {
         int i = MathsHelper.floor(entity.x);
         int j = MathsHelper.floor(entity.y);
@@ -2644,14 +2634,14 @@ public class MixinLevel implements TileView, AccessLevel {
         int l1 = i + l;
         int i2 = j + l;
         int j2 = k + l;
-        WorldPopulationRegion chunkcache = new WorldPopulationRegion(this, i1, j1, k1, l1, i2, j2);
+        WorldPopulationRegion chunkcache = new WorldPopulationRegion((Level) (Object) this, i1, j1, k1, l1, i2, j2);
         return new class_108(chunkcache).method_407(entity, entity1, f);
     }
 
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public class_61 method_189(net.minecraft.entity.Entity entity, int i, int j, int k, float f) {
         int l = MathsHelper.floor(entity.x);
         int i1 = MathsHelper.floor(entity.y);
@@ -2663,26 +2653,26 @@ public class MixinLevel implements TileView, AccessLevel {
         int k2 = l + k1;
         int l2 = i1 + k1;
         int i3 = j1 + k1;
-        WorldPopulationRegion chunkcache = new WorldPopulationRegion(this, l1, i2, j2, k2, l2, i3);
+        WorldPopulationRegion chunkcache = new WorldPopulationRegion((Level) (Object) this, l1, i2, j2, k2, l2, i3);
         return new class_108(chunkcache).method_403(entity, i, j, k, f);
     }
 
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public boolean method_247(int i, int j, int k, int l) {
         int i1 = this.getTileId(i, j, k);
         if (i1 == 0) {
             return false;
         }
-        return Tile.BY_ID[i1].method_1570(this, i, j, k, l);
+        return Tile.BY_ID[i1].method_1570((Level) (Object) this, i, j, k, l);
     }
 
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public boolean method_263(int i, int j, int k) {
         if (this.method_247(i, j - 1, k, 0)) {
             return true;
@@ -2705,7 +2695,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public boolean method_250(int i, int j, int k, int l) {
         if (this.canSuffocate(i, j, k)) {
             return this.method_263(i, j, k);
@@ -2720,7 +2710,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public boolean hasRedstonePower(int x, int y, int z) {
         if (this.method_250(x, y - 1, z, 0)) {
             return true;
@@ -2743,7 +2733,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public Player getClosestPlayerTo(net.minecraft.entity.Entity entity, double d) {
         return this.getClosestPlayer(entity.x, entity.y, entity.z, d);
     }
@@ -2751,7 +2741,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public Player getClosestPlayer(double d, double d1, double d2, double d3) {
         double d4 = -1.0;
         Player entityplayer = null;
@@ -2768,7 +2758,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public Player getPlayerByName(String s) {
         for (Object player : this.players) {
             if (!s.equals(((Player) player).name)) continue;
@@ -2780,7 +2770,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void method_275(int i, int j, int k, int l, int i1, int j1, byte[] abyte0) {
         int k1 = i >> 4;
         int l1 = k >> 4;
@@ -2822,7 +2812,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void checkSessionLock() {
         if (this.dimensionData != null) {
             this.dimensionData.checkSessionLock();
@@ -2834,7 +2824,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void setLevelTime(long time) {
         this.properties.setTime(time);
     }
@@ -2842,7 +2832,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public float getTimeOfDay() {
         return this.properties.getTimeOfDay();
     }
@@ -2850,7 +2840,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void setTimeOfDay(long l) {
         this.properties.setTimeOfDay(l);
     }
@@ -2858,7 +2848,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void setSpawnPosition(Vec3i chunkcoordinates) {
         this.properties.setSpawnPosition(chunkcoordinates.x, chunkcoordinates.y, chunkcoordinates.z);
     }
@@ -2866,7 +2856,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public float getSpawnYaw() {
         return this.properties.spawnYaw;
     }
@@ -2874,7 +2864,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void setSpawnYaw(float y) {
         this.properties.spawnYaw = y;
     }
@@ -2882,7 +2872,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void method_287(net.minecraft.entity.Entity entity) {
         int i = MathsHelper.floor(entity.x / 16.0);
         int j = MathsHelper.floor(entity.z / 16.0);
@@ -2900,14 +2890,14 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void method_185(net.minecraft.entity.Entity entity, byte byte0) {
     }
 
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void method_295() {
         this.entities.removeAll((Collection) this.field_182);
         for (Object o : this.field_182) {
@@ -2942,18 +2932,18 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void method_224(int i, int j, int k, int l, int i1) {
         int j1 = this.getTileId(i, j, k);
         if (j1 > 0) {
-            Tile.BY_ID[j1].onTileAction(this, i, j, k, l, i1);
+            Tile.BY_ID[j1].onTileAction((Level) (Object) this, i, j, k, l, i1);
         }
     }
 
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void areAllPlayersSleeping() {
         this.allPlayersSleeping = !this.players.isEmpty();
         for (Player entityplayer : this.players) {
@@ -2966,7 +2956,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     protected void wakeUpSleepingPlayers() {
         this.allPlayersSleeping = false;
         for (Player entityplayer : this.players) {
@@ -2979,7 +2969,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public boolean canSkipNight() {
         if (this.allPlayersSleeping && !this.isClient) {
             for (Player entityplayer : this.players) {
@@ -2994,7 +2984,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public float getThunderGradient(float tickProgress) {
         return (this.prevThunderGradient + (this.thunderGradient - this.prevThunderGradient) * tickProgress) * this.getRainGradient(tickProgress);
     }
@@ -3002,7 +2992,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public float getRainGradient(float tickProgress) {
         return this.prevRainGradient + (this.rainGradient - this.prevRainGradient) * tickProgress;
     }
@@ -3010,7 +3000,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void setRainGradient(float gradient) {
         this.prevRainGradient = gradient;
         this.rainGradient = gradient;
@@ -3019,7 +3009,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public boolean canRainAt(int x, int y, int z) {
         if (!this.raining()) {
             return false;
@@ -3040,7 +3030,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void putMapStorage(String name, MapStorageBase mapdatabase) {
         this.data.putMapStorage(name, mapdatabase);
     }
@@ -3048,7 +3038,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public MapStorageBase getOrCreateMapStorage(Class clazz, String name) {
         return this.data.getOrCreateMapStorage(clazz, name);
     }
@@ -3056,7 +3046,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public int method_208(String s) {
         return this.data.writeIdCount(s);
     }
@@ -3064,7 +3054,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void playLevelEvent(int i, int j, int k, int l, int i1) {
         this.playLevelEvent(null, i, j, k, l, i1);
     }
@@ -3072,7 +3062,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void playLevelEvent(Player entityplayer, int i, int j, int k, int l, int i1) {
         for (Object listener : this.listeners) {
             ((LevelListener) listener).playLevelEvent(entityplayer, i, j, k, l, i1);
@@ -3082,7 +3072,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public double getTemperatureValue(int x, int z) {
         if (x < -32000000 || z < -32000000 || x >= 32000000 || z > 32000000) {
             return 0.0;
@@ -3093,7 +3083,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void setTemperatureValue(int x, int z, double temp) {
         if (x < -32000000 || z < -32000000 || x >= 32000000 || z > 32000000) {
             return;
@@ -3108,7 +3098,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void resetCoordOrder() {
         this.coordOrder = null;
     }
@@ -3116,7 +3106,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     private void initCoordOrder() {
         int i;
         Random r = new Random();
@@ -3136,7 +3126,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public boolean SnowModUpdate(int x, int z) {
         int height = this.getOceanFloorHeight(x, z);
         if (height < 0) {
@@ -3179,10 +3169,6 @@ public class MixinLevel implements TileView, AccessLevel {
         return false;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void loadMapMusic() {
         File musicDir = new File(this.levelDir, "music");
         if (musicDir.exists() && musicDir.isDirectory()) {
@@ -3210,10 +3196,6 @@ public class MixinLevel implements TileView, AccessLevel {
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void loadMapSounds() {
         File soundDir = new File(this.levelDir, "sound");
         if (soundDir.exists() && soundDir.isDirectory()) {
@@ -3241,7 +3223,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void loadSoundOverrides() {
         AccessMinecraft.getInstance().resourceDownloadThread.method_107();
         File soundDir = new File(this.levelDir, "soundOverrides");
@@ -3253,25 +3235,17 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void loadBrightness() {
         for (int i = 0; i < 16; ++i) {
             this.dimension.field_2178[i] = this.properties.brightness[i];
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void undo() {
         this.undoStack.undo(this);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void redo() {
         this.undoStack.redo(this);
     }
@@ -3279,7 +3253,7 @@ public class MixinLevel implements TileView, AccessLevel {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public net.minecraft.entity.Entity getEntityByID(int entityID) {
         for (net.minecraft.entity.Entity e : this.entities) {
             if (e.id != entityID) continue;

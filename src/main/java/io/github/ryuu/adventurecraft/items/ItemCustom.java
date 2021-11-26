@@ -1,25 +1,25 @@
 package io.github.ryuu.adventurecraft.items;
 
+import io.github.ryuu.adventurecraft.extensions.items.ExItemType;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
+import io.github.ryuu.adventurecraft.scripting.ScriptItem;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
-import net.minecraft.script.ScriptItem;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
 
-public class ItemCustom extends ItemType {
+public class ItemCustom extends ACItemType implements ExItemType {
 
-    static ArrayList<Integer> loadedItemIDs = new ArrayList();
+    static ArrayList<Integer> loadedItemIDs = new ArrayList<>();
     String fileName;
     String onItemUsedScript;
 
@@ -43,7 +43,11 @@ public class ItemCustom extends ItemType {
         }
         this.setName(p.getProperty("name", "Unnamed"));
         this.onItemUsedScript = p.getProperty("onItemUsedScript", "");
-        this.itemUseDelay = 1;
+    }
+
+    @Override
+    public int getItemUseDelay() {
+        return 1;
     }
 
     private static ItemCustom loadScript(File descFile) {
@@ -75,7 +79,7 @@ public class ItemCustom extends ItemType {
         return null;
     }
 
-    static void loadItems(File itemFolder) {
+    public static void loadItems(File itemFolder) {
         for (Integer i : loadedItemIDs) {
             ItemType.byId[i] = null;
         }
@@ -104,7 +108,7 @@ public class ItemCustom extends ItemType {
     public ItemInstance use(ItemInstance item, Level level, Player player) {
         if (!this.onItemUsedScript.equals("")) {
             ScriptItem item2 = new ScriptItem(item);
-            Object wrappedOut = Context.javaToJS((Object) item2, (Scriptable) level.scope);
+            Object wrappedOut = Context.javaToJS(item2, (Scriptable) level.scope);
             ScriptableObject.putProperty((Scriptable) level.scope, "itemUsed", wrappedOut);
             level.scriptHandler.runScript(this.onItemUsedScript, level.scope);
         }

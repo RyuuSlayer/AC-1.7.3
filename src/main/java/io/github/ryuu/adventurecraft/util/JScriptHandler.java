@@ -13,7 +13,7 @@ public class JScriptHandler {
     Level world;
     File scriptDir;
 
-    JScriptHandler(Level w, File mapDir) {
+    public JScriptHandler(Level w, File mapDir) {
         this.world = w;
         this.scriptDir = new File(mapDir, "scripts");
         this.scripts = new HashMap();
