@@ -2,7 +2,7 @@ package io.github.ryuu.adventurecraft.util;
 
 import org.mozilla.javascript.Script;
 
-public class JScriptInfo implements Comparable<net.minecraft.src.JScriptInfo> {
+public class JScriptInfo implements Comparable<JScriptInfo> {
 
     public String name;
 

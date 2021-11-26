@@ -38,6 +38,10 @@ minecraft {
 }
 
 dependencies {
+    // Compiles rhino, our javascript dependency, releases can be found here: https://github.com/mozilla/rhino/releases
+    // There are more archived versions on this website: https://www-archive.mozilla.org/rhino/rhino16r2
+    compile 'rhino:js:1.6R2'
+
     // To change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "io.github.minecraft-cursed-legacy:plasma:b1.7.3-build.${project.plasma_build}"

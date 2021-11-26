@@ -31,12 +31,7 @@ public class Script {
         this.cx = ContextFactory.getGlobal().enterContext();
         this.cx.setOptimizationLevel(-1);
         if (!shutterSet) {
-            this.cx.setClassShutter(new ClassShutter() {
-
-                public boolean visibleToScripts(String className) {
-                    return className.startsWith("net.minecraft.script") || className.equals("java.lang.Object") || className.equals("java.lang.String") || className.equals("java.lang.Double") || className.equals("java.lang.Boolean");
-                }
-            });
+            this.cx.setClassShutter(className -> className.startsWith("net.minecraft.script") || className.equals("java.lang.Object") || className.equals("java.lang.String") || className.equals("java.lang.Double") || className.equals("java.lang.Boolean"));
             shutterSet = true;
         }
         this.globalScope = this.cx.initStandardObjects();

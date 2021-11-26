@@ -19,7 +19,7 @@ public class ScriptKeyboard {
     public String keyJumpScript = "";
     public String keySneakScript = "";
     String allKeys;
-    HashMap<Integer, String> keyBinds;
+    HashMap<Object, Object> keyBinds;
     Level world;
     Scriptable scope;
 
@@ -32,7 +32,7 @@ public class ScriptKeyboard {
     }
 
     public void bindKey(int keyID, String script) {
-        this.keyBinds.put((Object) new Integer(keyID), (Object) script);
+        this.keyBinds.put(keyID, script);
     }
 
     public void unbindKey(int keyID) {
@@ -50,7 +50,7 @@ public class ScriptKeyboard {
     public void processKeyPress(int keyID) {
         Object wrappedOut;
         boolean keyIDSet = false;
-        String script = this.keyBinds.get(keyID);
+        Object script = this.keyBinds.get(keyID);
         if (script != null) {
             keyIDSet = true;
             wrappedOut = Context.javaToJS(keyID, (Scriptable) this.world.scope);
