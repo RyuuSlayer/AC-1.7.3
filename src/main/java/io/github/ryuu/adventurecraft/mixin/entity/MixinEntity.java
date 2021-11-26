@@ -1,46 +1,33 @@
 package io.github.ryuu.adventurecraft.mixin.entity;
 
-import io.github.ryuu.adventurecraft.accessors.entity.AccessEntity;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
+import io.github.ryuu.adventurecraft.extensions.entity.ExEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
-import net.minecraft.tile.FluidTile;
-import net.minecraft.tile.Tile;
-import net.minecraft.tile.TileSounds;
-import net.minecraft.tile.material.Material;
-import net.minecraft.util.io.CompoundTag;
-import net.minecraft.util.io.DoubleTag;
-import net.minecraft.util.io.FloatTag;
-import net.minecraft.util.io.ListTag;
 import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.MathsHelper;
-import net.minecraft.util.maths.Vec3f;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import java.util.List;
 import java.util.Random;
 
 @Mixin(Entity.class)
-public abstract class MixinEntity implements AccessEntity {
-
-    @Shadow
-    private static int field_1590 = 0; // once was public
+public abstract class MixinEntity implements ExEntity {
 
     @Final
     @Shadow
-    public final Box boundingBox = Box.create(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+    public Box boundingBox;
 
     @Shadow
     public int id;
-
-    @Shadow
-    public double renderDistanceMultiplier = 1.0;
 
     @Shadow
     public boolean field_1593 = false;
@@ -94,43 +81,22 @@ public abstract class MixinEntity implements AccessEntity {
     public float prevPitch;
 
     @Shadow
-    public boolean onGround = false;
+    public boolean onGround;
 
     @Shadow
     public boolean field_1624;
 
     @Shadow
-    public boolean field_1625;
+    public boolean removed;
 
     @Shadow
-    public boolean field_1626 = false;
+    public float standingEyeHeight;
 
     @Shadow
-    public boolean shouldSendVelocityUpdate = false;
+    public float width;
 
     @Shadow
-    public boolean inCobweb;
-
-    @Shadow
-    public boolean field_1629 = true;
-
-    @Shadow
-    public boolean removed = false;
-
-    @Shadow
-    public float standingEyeHeight = 0.0f;
-
-    @Shadow
-    public float width = 0.6f;
-
-    @Shadow
-    public float height = 1.8f;
-
-    @Shadow
-    public float field_1634 = 0.0f;
-
-    @Shadow
-    public float field_1635 = 0.0f;
+    public float height;
 
     @Shadow
     public double prevRenderX;
@@ -142,94 +108,37 @@ public abstract class MixinEntity implements AccessEntity {
     public double prevRenderZ;
 
     @Shadow
-    public float field_1640 = 0.0f;
+    public float field_1641;
 
     @Shadow
-    public float field_1641 = 0.0f;
+    public boolean field_1642;
 
     @Shadow
-    public boolean field_1642 = false;
+    public int field_1645;
 
     @Shadow
-    public float field_1643 = 0.0f;
+    public int field_1646;
 
     @Shadow
-    public int field_1645 = 0;
+    public int fire;
 
     @Shadow
-    public int field_1646 = 1;
+    protected int field_1648;
 
     @Shadow
-    public int fire = 0;
+    public int field_1613;
 
     @Shadow
-    protected int field_1648 = 300; // once was public
+    public int air;
 
     @Shadow
-    public int field_1613 = 0;
+    protected boolean immuneToFire;
 
     @Shadow
-    public int air = 300;
-
-    @Shadow
-    public String skinUrl;
-
-    @Shadow
-    public String cloakUrl;
-
-    @Shadow
-    protected boolean immuneToFire = false; // once was public
-
-    @Shadow
-    public float field_1617 = 0.0f;
-
-    @Shadow
-    public boolean shouldTick = false;
-
-    @Shadow
-    public int chunkX;
-
-    @Shadow
-    public int chunkIndex;
-
-    @Shadow
-    public int chunkZ;
-
-    @Shadow
-    public int field_1654;
-
-    @Shadow
-    public int field_1655;
-
-    @Shadow
-    public int field_1656;
-
-    @Shadow
-    public boolean field_1622;
-
-    @Shadow
-    protected float fallDistance = 0.0f;
+    protected float fallDistance;
 
     @Shadow
     protected Random rand;
-
-    @Shadow
-    protected boolean field_1612 = false;
-
-    @Shadow
-    protected DataTracker dataTracker;
-
-    @Shadow
-    private int field_1611 = 1;
-
-    @Shadow
-    private boolean field_1649 = true;
-
-    @Shadow
-    private double field_1650;
-
-    @Shadow
-    private double field_1651;
 
     public boolean isFlying;
     public int stunned;
@@ -238,317 +147,40 @@ public abstract class MixinEntity implements AccessEntity {
     public int collisionZ;
     public float moveYawOffset = 0.0f;
 
-    public MixinEntity(Level world) {
-        this.id = field_1590++;
-        this.rand = new Random();
-        this.dataTracker = new DataTracker();
-        this.level = world;
-        this.setPosition(0.0, 0.0, 0.0);
-        this.dataTracker.startTracking(0, (byte) 0);
-        this.initDataTracker();
-        this.isFlying = false;
-    }
+    @Shadow
+    public abstract boolean isAlive();
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    protected void afterSpawn() {
-        if (this.level == null) {
-            return;
-        }
-        while (!(this.y <= 0.0)) {
-            this.setPosition(this.x, this.y, this.z);
-            if (this.level.method_190(this, this.boundingBox).size() == 0) break;
-            this.y += 1.0;
-        }
-        this.velocityZ = 0.0;
-        this.velocityY = 0.0;
-        this.velocityX = 0.0;
-        this.pitch = 0.0f;
-    }
+    @Shadow
+    public abstract float getStandingEyeHeight();
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    protected void setSize(float width, float height) {
-        this.width = width;
-        this.height = height;
-    }
+    @Shadow
+    public abstract boolean damage(Entity arg, int i);
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void setRotation(float f, float f1) {
-        this.yaw = f % 360.0f;
-        this.pitch = f1 % 360.0f;
-    }
+    @Shadow
+    protected abstract void handleFallDamage(float f);
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void setPosition(double d, double d1, double d2) {
-        this.x = d;
-        this.y = d1;
-        this.z = d2;
-        float f = this.width / 2.0f;
-        float f1 = this.height;
-        this.boundingBox.set(d - (double) f, d1 - (double) this.standingEyeHeight + (double) this.field_1640, d2 - (double) f, d + (double) f, d1 - (double) this.standingEyeHeight + (double) this.field_1640 + (double) f1, d2 + (double) f);
-    }
+    @Shadow
+    public abstract void method_1322(double d, double d1, double d2);
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_1362(float f, float f1) {
-        float f2 = this.pitch;
-        float f3 = this.yaw;
-        this.yaw = (float) ((double) this.yaw + (double) f * 0.15);
-        this.pitch = (float) ((double) this.pitch - (double) f1 * 0.15);
-        if (this.pitch < -90.0f) {
-            this.pitch = -90.0f;
-        }
-        if (this.pitch > 90.0f) {
-            this.pitch = 90.0f;
-        }
-        this.prevPitch += this.pitch - f2;
-        this.prevYaw += this.yaw - f3;
-    }
+    @Shadow
+    public abstract boolean method_1334();
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void baseTick() {
-        if (this.vehicle != null && this.vehicle.removed) {
-            this.vehicle = null;
-        }
-        ++this.field_1645;
-        this.field_1634 = this.field_1635;
-        this.prevX = this.x;
-        this.prevY = this.y;
-        this.prevZ = this.z;
-        this.prevPitch = this.pitch;
-        this.prevYaw = this.yaw;
-        if (this.method_1393()) {
-            if (!this.field_1612 && !this.field_1649) {
-                float f = MathsHelper.sqrt(this.velocityX * this.velocityX * (double) 0.2f + this.velocityY * this.velocityY + this.velocityZ * this.velocityZ * (double) 0.2f) * 0.2f;
-                if (f > 1.0f) {
-                    f = 1.0f;
-                }
-                this.level.playSound(this, "random.splash", f, 1.0f + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.4f);
-                float f1 = MathsHelper.floor(this.boundingBox.minY);
-                int i = 0;
-                while ((float) i < 1.0f + this.width * 20.0f) {
-                    float f2 = (this.rand.nextFloat() * 2.0f - 1.0f) * this.width;
-                    float f4 = (this.rand.nextFloat() * 2.0f - 1.0f) * this.width;
-                    this.level.addParticle("bubble", this.x + (double) f2, f1 + 1.0f, this.z + (double) f4, this.velocityX, this.velocityY - (double) (this.rand.nextFloat() * 0.2f), this.velocityZ);
-                    ++i;
-                }
-                int j = 0;
-                while ((float) j < 1.0f + this.width * 20.0f) {
-                    float f3 = (this.rand.nextFloat() * 2.0f - 1.0f) * this.width;
-                    float f5 = (this.rand.nextFloat() * 2.0f - 1.0f) * this.width;
-                    this.level.addParticle("splash", this.x + (double) f3, f1 + 1.0f, this.z + (double) f5, this.velocityX, this.velocityY, this.velocityZ);
-                    ++j;
-                }
-            }
-            this.fallDistance = 0.0f;
-            this.field_1612 = true;
-            this.fire = 0;
-        } else {
-            this.field_1612 = false;
-        }
-        if (this.level.isClient) {
-            this.fire = 0;
-        } else if (this.fire > 0) {
-            if (this.immuneToFire) {
-                this.fire -= 4;
-                if (this.fire < 0) {
-                    this.fire = 0;
-                }
-            } else {
-                if (this.fire % 20 == 0) {
-                    this.damage(null, 1);
-                }
-                --this.fire;
-            }
-        }
-        if (this.method_1335()) {
-            this.method_1332();
-        }
-        if (this.y < -64.0) {
-            this.destroy();
-        }
-        if (!this.level.isClient) {
-            this.method_1326(0, this.fire > 0);
-            this.method_1326(2, this.vehicle != null);
-        }
-        this.field_1649 = false;
-    }
+    @Shadow
+    public abstract boolean method_1335();
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean method_1344(double d, double d1, double d2) {
-        Box axisalignedbb = this.boundingBox.move(d, d1, d2);
-        List list = this.level.method_190(this, axisalignedbb);
-        if (list.size() > 0) {
-            return false;
-        }
-        return !this.level.method_218(axisalignedbb);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void move(double d, double d1, double d2) {
-        int i4;
-        int l3;
-        int k3;
-        int i2;
-        int k1;
-        int i1;
-        int i;
-        boolean flag;
-        if (this.field_1642) {
-            this.boundingBox.method_102(d, d1, d2);
-            this.x = (this.boundingBox.minX + this.boundingBox.maxX) / 2.0;
-            this.y = this.boundingBox.minY + (double) this.standingEyeHeight - (double) this.field_1640;
-            this.z = (this.boundingBox.minZ + this.boundingBox.maxZ) / 2.0;
-            return;
-        }
-        this.field_1640 *= 0.4f;
-        double d3 = this.x;
-        double d4 = this.z;
-        if (this.inCobweb) {
-            this.inCobweb = false;
-            d *= 0.25;
-            d1 *= 0.05f;
-            d2 *= 0.25;
-            this.velocityX = 0.0;
-            this.velocityY = 0.0;
-            this.velocityZ = 0.0;
-        }
-        double d5 = d;
-        double d6 = d1;
-        double d7 = d2;
-        Box axisalignedbb = this.boundingBox.method_92();
-        boolean bl = flag = this.onGround && this.method_1373();
-        if (flag) {
-            double d8 = 0.05;
-            while (d != 0.0 && this.level.method_190(this, this.boundingBox.move(d, -1.0, 0.0)).size() == 0) {
-                d = d < d8 && d >= -d8 ? 0.0 : (d > 0.0 ? (d -= d8) : (d += d8));
-                d5 = d;
-            }
-            while (d2 != 0.0 && this.level.method_190(this, this.boundingBox.move(0.0, -1.0, d2)).size() == 0) {
-                d2 = d2 < d8 && d2 >= -d8 ? 0.0 : (d2 > 0.0 ? (d2 -= d8) : (d2 += d8));
-                d7 = d2;
-            }
-        }
-        List list = this.level.method_190(this, this.boundingBox.add(d, d1, d2));
-        for (Object o : list) {
-            d1 = ((Box) o).method_97(this.boundingBox, d1);
-        }
-        this.boundingBox.method_102(0.0, d1, 0.0);
-        if (!this.field_1629 && d6 != d1) {
-            d2 = 0.0;
-            d1 = 0.0;
-            d = 0.0;
-        }
-        boolean flag1 = this.onGround || d6 != d1 && d6 < 0.0;
-        for (Object o : list) {
-            d = ((Box) o).method_91(this.boundingBox, d);
-        }
-        this.boundingBox.method_102(d, 0.0, 0.0);
-        if (!this.field_1629 && d5 != d) {
-            d2 = 0.0;
-            d1 = 0.0;
-            d = 0.0;
-        }
-        for (Object o : list) {
-            d2 = ((Box) o).method_101(this.boundingBox, d2);
-        }
-        this.boundingBox.method_102(0.0, 0.0, d2);
-        if (!this.field_1629 && d7 != d2) {
-            d2 = 0.0;
-            d1 = 0.0;
-            d = 0.0;
-        }
-        if (this.field_1641 > 0.0f && flag1 && (flag || this.field_1640 < 0.05f) && (d5 != d || d7 != d2)) {
-            double d9 = d;
-            double d11 = d1;
-            double d13 = d2;
-            d = d5;
-            d1 = this.field_1641;
-            d2 = d7;
-            Box axisalignedbb1 = this.boundingBox.method_92();
-            this.boundingBox.method_96(axisalignedbb);
-            List list1 = this.level.method_190(this, this.boundingBox.add(d, d1, d2));
-            for (Object o : list1) {
-                d1 = ((Box) o).method_97(this.boundingBox, d1);
-            }
-            this.boundingBox.method_102(0.0, d1, 0.0);
-            if (!this.field_1629 && d6 != d1) {
-                d2 = 0.0;
-                d1 = 0.0;
-                d = 0.0;
-            }
-            for (Object o : list1) {
-                d = ((Box) o).method_91(this.boundingBox, d);
-            }
-            this.boundingBox.method_102(d, 0.0, 0.0);
-            if (!this.field_1629 && d5 != d) {
-                d2 = 0.0;
-                d1 = 0.0;
-                d = 0.0;
-            }
-            for (Object o : list1) {
-                d2 = ((Box) o).method_101(this.boundingBox, d2);
-            }
-            this.boundingBox.method_102(0.0, 0.0, d2);
-            if (!this.field_1629 && d7 != d2) {
-                d2 = 0.0;
-                d1 = 0.0;
-                d = 0.0;
-            }
-            if (!this.field_1629 && d6 != d1) {
-                d2 = 0.0;
-                d1 = 0.0;
-                d = 0.0;
-            } else {
-                d1 = -this.field_1641;
-                for (Object o : list1) {
-                    d1 = ((Box) o).method_97(this.boundingBox, d1);
-                }
-                this.boundingBox.method_102(0.0, d1, 0.0);
-            }
-            if (d9 * d9 + d13 * d13 >= d * d + d2 * d2) {
-                d = d9;
-                d1 = d11;
-                d2 = d13;
-                this.boundingBox.method_96(axisalignedbb1);
-            } else {
-                double d14 = this.boundingBox.minY - (double) ((int) this.boundingBox.minY);
-                if (d14 > 0.0) {
-                    this.field_1640 = (float) ((double) this.field_1640 + (d14 + 0.01));
-                }
-            }
-        }
-        this.x = (this.boundingBox.minX + this.boundingBox.maxX) / 2.0;
-        this.y = this.boundingBox.minY + (double) this.standingEyeHeight - (double) this.field_1640;
-        this.z = (this.boundingBox.minZ + this.boundingBox.maxZ) / 2.0;
-        this.collisionX = Double.compare(d5, d);
+    @Inject(method = "move", locals = LocalCapture.CAPTURE_FAILHARD, at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/entity/Entity;z:D",
+            shift = At.Shift.AFTER,
+            opcode = Opcodes.PUTFIELD,
+            ordinal = 1))
+    private void checkCollisionOnMove(double d, double d1, double d2, CallbackInfo ci, double var11, double var13, double var15) {
+        this.collisionX = Double.compare(var11, d);
         if (this.collisionX != 0) {
             boolean nonClipFound = false;
-            i = 0;
-            while ((double) i < (double) this.height + this.y - (double) this.standingEyeHeight - Math.floor(this.y - (double) this.standingEyeHeight)) {
-                int blockID = this.level.getTileId((int) Math.floor(this.x) + this.collisionX, (int) Math.floor(this.y + (double) i - (double) this.standingEyeHeight), (int) Math.floor(this.z));
+            int i = 0;
+            while (i < this.height + this.y - this.standingEyeHeight - Math.floor(this.y - this.standingEyeHeight)) {
+                int blockID = this.level.getTileId((int) Math.floor(this.x) + this.collisionX, (int) Math.floor(this.y + i - this.standingEyeHeight), (int) Math.floor(this.z));
                 if (blockID != 0 && blockID != Blocks.clipBlock.id) {
                     nonClipFound = true;
                 }
@@ -558,12 +190,12 @@ public abstract class MixinEntity implements AccessEntity {
                 this.collisionX = 0;
             }
         }
-        this.collisionZ = Double.compare(d7, d2);
+        this.collisionZ = Double.compare(var15, d2);
         if (this.collisionZ != 0) {
             boolean nonClipFound = false;
-            i = 0;
-            while ((double) i < (double) this.height + this.y - (double) this.standingEyeHeight - Math.floor(this.y - (double) this.standingEyeHeight)) {
-                int blockID = this.level.getTileId((int) Math.floor(this.x), (int) Math.floor(this.y + (double) i - (double) this.standingEyeHeight), (int) Math.floor(this.z) + this.collisionZ);
+            int i = 0;
+            while (i < this.height + this.y - this.standingEyeHeight - Math.floor(this.y - this.standingEyeHeight)) {
+                int blockID = this.level.getTileId((int) Math.floor(this.x), (int) Math.floor(this.y + i - this.standingEyeHeight), (int) Math.floor(this.z) + this.collisionZ);
                 if (blockID != 0 && blockID != Blocks.clipBlock.id) {
                     nonClipFound = true;
                 }
@@ -573,76 +205,12 @@ public abstract class MixinEntity implements AccessEntity {
                 this.collisionZ = 0;
             }
         }
-        this.field_1624 = d5 != d || d7 != d2;
-        this.field_1625 = d6 != d1;
-        this.onGround = d6 != d1 && d6 < 0.0;
-        this.field_1626 = this.field_1624 || this.field_1625;
-        this.method_1374(d1, this.onGround);
-        if (d5 != d) {
-            this.velocityX = 0.0;
-        }
-        if (d6 != d1) {
-            this.velocityY = 0.0;
-        }
-        if (d7 != d2) {
-            this.velocityZ = 0.0;
-        }
-        double d10 = this.x - d3;
-        double d12 = this.z - d4;
-        if (this.canClimb() && !flag && this.vehicle == null) {
-            this.field_1635 = (float) ((double) this.field_1635 + (double) MathsHelper.sqrt(d10 * d10 + d12 * d12) * 0.6);
-            int l = MathsHelper.floor(this.x);
-            int j1 = MathsHelper.floor(this.y - (double) 0.2f - (double) this.standingEyeHeight);
-            int l1 = MathsHelper.floor(this.z);
-            int j3 = this.level.getTileId(l, j1, l1);
-            if (this.level.getTileId(l, j1 - 1, l1) == Tile.FENCE.id) {
-                j3 = this.level.getTileId(l, j1 - 1, l1);
-            }
-            if (this.field_1635 > (float) this.field_1611 && j3 > 0) {
-                this.field_1611 = (int) ((double) this.field_1611 + Math.ceil(this.field_1635 - (float) this.field_1611));
-                TileSounds stepsound = Tile.BY_ID[j3].sounds;
-                if (this.level.getTileId(l, j1 + 1, l1) == Tile.SNOW.id) {
-                    stepsound = Tile.SNOW.sounds;
-                    this.level.playSound(this, stepsound.getWalkSound(), stepsound.getVolume() * 0.15f, stepsound.getPitch());
-                } else if (!Tile.BY_ID[j3].material.isLiquid()) {
-                    this.level.playSound(this, stepsound.getWalkSound(), stepsound.getVolume() * 0.15f, stepsound.getPitch());
-                }
-                Tile.BY_ID[j3].method_1560(this.level, l, j1, l1, this);
-            }
-        }
-        if (this.level.isRegionLoaded(i1 = MathsHelper.floor(this.boundingBox.minX + 0.001), k1 = MathsHelper.floor(this.boundingBox.minY + 0.001), i2 = MathsHelper.floor(this.boundingBox.minZ + 0.001), k3 = MathsHelper.floor(this.boundingBox.maxX - 0.001), l3 = MathsHelper.floor(this.boundingBox.maxY - 0.001), i4 = MathsHelper.floor(this.boundingBox.maxZ - 0.001))) {
-            for (int j4 = i1; j4 <= k3; ++j4) {
-                for (int k4 = k1; k4 <= l3; ++k4) {
-                    for (int l4 = i2; l4 <= i4; ++l4) {
-                        int i5 = this.level.getTileId(j4, k4, l4);
-                        if (i5 <= 0) continue;
-                        Tile.BY_ID[i5].onEntityCollision(this.level, j4, k4, l4, this);
-                    }
-                }
-            }
-        }
-        boolean flag2 = this.isTouchingWater();
-        if (this.level.method_225(this.boundingBox.method_104(0.001, 0.001, 0.001))) {
-            this.method_1392(1);
-            if (!flag2) {
-                ++this.fire;
-                if (this.fire == 0) {
-                    this.fire = 300;
-                }
-            }
-        } else if (this.fire <= 0) {
-            this.fire = -this.field_1646;
-        }
-        if (flag2 && this.fire > 0) {
-            this.level.playSound(this, "random.fizz", 0.7f, 1.6f + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.4f);
-            this.fire = -this.field_1646;
-        }
     }
 
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     protected void method_1374(double d, boolean flag) {
         if (flag) {
             if (this.velocityY < 0.0) {
@@ -653,38 +221,6 @@ public abstract class MixinEntity implements AccessEntity {
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    protected void method_1392(int i) {
-        if (!this.immuneToFire) {
-            this.damage(null, i);
-        }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean isInFluid(Material material) {
-        int k;
-        int j;
-        double d = this.y + (double) this.getStandingEyeHeight();
-        int i = MathsHelper.floor(this.x);
-        int l = this.level.getTileId(i, j = MathsHelper.floor(MathsHelper.floor(d)), k = MathsHelper.floor(this.z));
-        if (l != 0 && Tile.BY_ID[l].material == material) {
-            float f = FluidTile.method_1218(this.level.getTileMeta(i, j, k)) - 0.1111111f;
-            float f1 = (float) (j + 1) - f;
-            return d < (double) f1;
-        }
-        return false;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public boolean handleFlying() {
         return this.isFlying;
     }
@@ -692,7 +228,7 @@ public abstract class MixinEntity implements AccessEntity {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void movementInputToVelocity(float f, float f1, float f2) {
         float f3 = f * f + f1 * f1;
         if (f3 < 1.0E-4f) {
@@ -704,490 +240,41 @@ public abstract class MixinEntity implements AccessEntity {
         this.velocityZ += f1 * f5 + f * f4;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public float getBrightnessAtEyes(float f) {
-        int i = MathsHelper.floor(this.x);
-        double d = (this.boundingBox.maxY - this.boundingBox.minY) * 0.66;
-        int j = MathsHelper.floor(this.y - (double) this.standingEyeHeight + d);
-        int k = MathsHelper.floor(this.z);
-        if (this.level.isRegionLoaded(MathsHelper.floor(this.boundingBox.minX), MathsHelper.floor(this.boundingBox.minY), MathsHelper.floor(this.boundingBox.minZ), MathsHelper.floor(this.boundingBox.maxX), MathsHelper.floor(this.boundingBox.maxY), MathsHelper.floor(this.boundingBox.maxZ))) {
-            float f1 = this.level.getBrightness(i, j, k);
-            if (f1 < this.field_1617) {
-                f1 = this.field_1617;
-            }
-            return f1;
-        }
-        return this.field_1617;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_1338(double d, double d1, double d2, float f, float f1) {
-        this.prevX = this.x = d;
-        this.prevY = this.y = d1;
-        this.prevZ = this.z = d2;
-        this.prevYaw = this.yaw = f;
-        this.prevPitch = this.pitch = f1;
-        this.field_1640 = 0.0f;
-        double d3 = this.prevYaw - f;
-        if (d3 < -180.0) {
-            this.prevYaw += 360.0f;
-        }
-        if (d3 >= 180.0) {
-            this.prevYaw -= 360.0f;
-        }
-        this.setPosition(this.x, this.y, this.z);
-        this.setRotation(f, f1);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void setPositionAndAngles(double d, double d1, double d2, float f, float f1) {
-        this.prevX = this.x = d;
-        this.prevRenderX = this.x;
-        this.prevY = this.y = d1 + (double) this.standingEyeHeight;
-        this.prevRenderY = this.y;
-        this.prevZ = this.z = d2;
-        this.prevRenderZ = this.z;
-        this.yaw = f;
-        this.pitch = f1;
-        this.setPosition(this.x, this.y, this.z);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public float distanceTo(Entity entity) {
-        float f = (float) (this.x - entity.x);
-        float f1 = (float) (this.y - entity.y);
-        float f2 = (float) (this.z - entity.z);
-        return MathsHelper.sqrt(f * f + f1 * f1 + f2 * f2);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public double squaredDistanceTo(double d, double d1, double d2) {
-        double d3 = this.x - d;
-        double d4 = this.y - d1;
-        double d5 = this.z - d2;
-        return d3 * d3 + d4 * d4 + d5 * d5;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public double method_1350(double d, double d1, double d2) {
-        double d3 = this.x - d;
-        double d4 = this.y - d1;
-        double d5 = this.z - d2;
-        return MathsHelper.sqrt(d3 * d3 + d4 * d4 + d5 * d5);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public double method_1352(Entity entity) {
-        double d = this.x - entity.x;
-        double d1 = this.y - entity.y;
-        double d2 = this.z - entity.z;
-        return d * d + d1 * d1 + d2 * d2;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_1353(Entity entity) {
-        if (entity.passenger == this || entity.vehicle == this) {
-            return;
-        }
-        double d = entity.x - this.x;
-        double d1 = entity.z - this.z;
-        double d2 = MathsHelper.absMax(d, d1);
-        if (d2 >= (double) 0.01f) {
-            d2 = MathsHelper.sqrt(d2);
-            d /= d2;
-            d1 /= d2;
-            double d3 = 1.0 / d2;
-            if (d3 > 1.0) {
-                d3 = 1.0;
-            }
-            d *= d3;
-            d1 *= d3;
-            d *= 0.05f;
-            d1 *= 0.05f;
-            this.method_1322(-(d *= 1.0f - this.field_1643), 0.0, -(d1 *= 1.0f - this.field_1643));
-            if (entity.method_1380()) {
-                entity.method_1322(d, 0.0, d1);
-            } else {
-                this.method_1322(-d, 0.0, -d1);
-            }
+    @Redirect(method = "method_1353", at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/Entity;method_1322(DDD)V",
+            ordinal = 1))
+    public void method_1353(Entity entity, double d, double c, double d1) {
+        if (entity.method_1380()) {
+            entity.method_1322(d, c, d1);
+        } else {
+            this.method_1322(-d, c, -d1);
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_1322(double d, double d1, double d2) {
-        this.velocityX += d;
-        this.velocityY += d1;
-        this.velocityZ += d2;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public boolean attackEntityFromMulti(Entity entity, int i) {
         return this.damage(entity, i);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean shouldRenderFrom(Vec3f vec3d) {
-        double d = this.x - vec3d.x;
-        double d1 = this.y - vec3d.y;
-        double d2 = this.z - vec3d.z;
-        double d3 = d * d + d1 * d1 + d2 * d2;
-        return this.shouldRenderAtDistance(d3);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean shouldRenderAtDistance(double d) {
-        double d1 = this.boundingBox.averageDimension();
-        return d < (d1 *= 64.0 * this.renderDistanceMultiplier) * d1;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean method_1343(CompoundTag nbttagcompound) {
-        String s = this.method_1337();
-        if (this.removed || s == null) {
-            return false;
-        }
-        nbttagcompound.put("id", s);
-        this.toTag(nbttagcompound);
-        return true;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void toTag(CompoundTag nbttagcompound) {
-        nbttagcompound.put("Pos", this.method_1329(new double[]{this.x, this.y + (double) this.field_1640, this.z}));
-        nbttagcompound.put("Motion", this.method_1329(new double[]{this.velocityX, this.velocityY, this.velocityZ}));
-        nbttagcompound.put("Rotation", this.method_1330(new float[]{this.yaw, this.pitch}));
-        nbttagcompound.put("FallDistance", this.fallDistance);
-        nbttagcompound.put("Fire", (short) this.fire);
-        nbttagcompound.put("Air", (short) this.air);
-        nbttagcompound.put("OnGround", this.onGround);
-        this.writeCustomDataToTag(nbttagcompound);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void fromTag(CompoundTag nbttagcompound) {
-        ListTag nbttaglist = nbttagcompound.getListTag("Pos");
-        ListTag nbttaglist1 = nbttagcompound.getListTag("Motion");
-        ListTag nbttaglist2 = nbttagcompound.getListTag("Rotation");
-        this.velocityX = ((DoubleTag) nbttaglist1.get(0)).data;
-        this.velocityY = ((DoubleTag) nbttaglist1.get(1)).data;
-        this.velocityZ = ((DoubleTag) nbttaglist1.get(2)).data;
-        if (Math.abs(this.velocityX) > 10.0) {
-            this.velocityX = 0.0;
-        }
-        if (Math.abs(this.velocityY) > 10.0) {
-            this.velocityY = 0.0;
-        }
-        if (Math.abs(this.velocityZ) > 10.0) {
-            this.velocityZ = 0.0;
-        }
-        this.prevRenderX = this.x = ((DoubleTag) nbttaglist.get(0)).data;
-        this.prevX = this.x;
-        this.prevRenderY = this.y = ((DoubleTag) nbttaglist.get(1)).data;
-        this.prevY = this.y;
-        this.prevRenderZ = this.z = ((DoubleTag) nbttaglist.get(2)).data;
-        this.prevZ = this.z;
-        this.prevYaw = this.yaw = ((FloatTag) nbttaglist2.get(0)).data;
-        this.prevPitch = this.pitch = ((FloatTag) nbttaglist2.get(1)).data;
-        this.fallDistance = nbttagcompound.getFloat("FallDistance");
-        this.fire = nbttagcompound.getShort("Fire");
-        this.air = nbttagcompound.getShort("Air");
-        this.onGround = nbttagcompound.getBoolean("OnGround");
-        this.setPosition(this.x, this.y, this.z);
-        this.setRotation(this.yaw, this.pitch);
-        this.readCustomDataFromTag(nbttagcompound);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    protected ListTag method_1329(double[] ad) {
-        ListTag nbttaglist = new ListTag();
-        for (double d : ad) {
-            nbttaglist.add(new DoubleTag(d));
-        }
-        return nbttaglist;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    protected ListTag method_1330(float[] af) {
-        ListTag nbttaglist = new ListTag();
-        for (float f : af) {
-            nbttaglist.add(new FloatTag(f));
-        }
-        return nbttaglist;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public ItemEntity dropItem(int i, int j) {
-        return this.dropItem(i, j, 0.0f);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public ItemEntity dropItem(int i, int j, float f) {
-        return this.dropItem(new ItemInstance(i, j, 0), f);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public ItemEntity dropItem(ItemInstance itemstack, float f) {
-        ItemEntity entityitem = new ItemEntity(this.level, this.x, this.y + (double) f, this.z, itemstack);
-        entityitem.pickupDelay = 10;
-        this.level.spawnEntity(entityitem);
-        return entityitem;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean isInsideWall() {
-        for (int i = 0; i < 8; ++i) {
-            int l;
-            int k;
-            float f = ((float) ((i >> 0) % 2) - 0.5f) * this.width * 0.9f;
-            float f1 = ((float) ((i >> 1) % 2) - 0.5f) * 0.1f;
-            float f2 = ((float) ((i >> 2) % 2) - 0.5f) * this.width * 0.9f;
-            int j = MathsHelper.floor(this.x + (double) f);
-            if (!this.level.canSuffocate(j, k = MathsHelper.floor(this.y + this.getStandingEyeHeight() + (double) f1), l = MathsHelper.floor(this.z + (double) f2)) || !this.level.isFullOpaque(j, k, l))
-                continue;
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void tickRiding() {
-        if (this.vehicle.removed) {
-            this.vehicle = null;
-            return;
-        }
-        this.velocityX = 0.0;
-        this.velocityY = 0.0;
-        this.velocityZ = 0.0;
-        this.tick();
-        if (this.vehicle == null) {
-            return;
-        }
-        this.vehicle.method_1382();
-        this.field_1651 += this.vehicle.yaw - this.vehicle.prevYaw;
-        this.field_1650 += this.vehicle.pitch - this.vehicle.prevPitch;
-        while (this.field_1651 >= 180.0) {
-            this.field_1651 -= 360.0;
-        }
-        while (this.field_1651 < -180.0) {
-            this.field_1651 += 360.0;
-        }
-        while (this.field_1650 >= 180.0) {
-            this.field_1650 -= 360.0;
-        }
-        while (this.field_1650 < -180.0) {
-            this.field_1650 += 360.0;
-        }
-        double d = this.field_1651 * 0.5;
-        double d1 = this.field_1650 * 0.5;
-        float f = 10.0f;
-        if (d > (double) f) {
-            d = f;
-        }
-        if (d < (double) (-f)) {
-            d = -f;
-        }
-        if (d1 > (double) f) {
-            d1 = f;
-        }
-        if (d1 < (double) (-f)) {
-            d1 = -f;
-        }
-        this.field_1651 -= d;
-        this.field_1650 -= d1;
-        this.yaw = (float) ((double) this.yaw + d);
-        this.pitch = (float) ((double) this.pitch + d1);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_1311(double d, double d1, double d2, float f, float f1, int i) {
-        this.setPosition(d, d1, d2);
-        this.setRotation(f, f1);
-        List list = this.level.method_190(this, this.boundingBox.method_104(0.03125, 0.0, 0.03125));
-        if (list.size() > 0) {
-            double d3 = 0.0;
-            for (Object o : list) {
-                Box axisalignedbb = (Box) o;
-                if (!(axisalignedbb.maxY > d3)) continue;
-                d3 = axisalignedbb.maxY;
-            }
-            this.setPosition(d, d1 += d3 - this.boundingBox.minY, d2);
-        }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void setVelocity(double d, double d1, double d2) {
-        this.velocityX = d;
-        this.velocityY = d1;
-        this.velocityZ = d2;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    protected boolean method_1345(int i) {
-        return (this.dataTracker.getByte(0) & 1 << i) != 0;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    protected void method_1326(int i, boolean flag) {
-        byte byte0 = this.dataTracker.getByte(0);
-        if (flag) {
-            this.dataTracker.setData(0, (byte) (byte0 | 1 << i));
-        } else {
-            this.dataTracker.setData(0, (byte) (byte0 & ~(1 << i)));
-        }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    protected boolean method_1372(double d, double d1, double d2) {
-        int i = MathsHelper.floor(d);
-        int j = MathsHelper.floor(d1);
-        int k = MathsHelper.floor(d2);
-        double d3 = d - (double) i;
-        double d4 = d1 - (double) j;
-        double d5 = d2 - (double) k;
-        if (this.level.canSuffocate(i, j, k)) {
-            boolean flag = !this.level.canSuffocate(i - 1, j, k);
-            boolean flag1 = !this.level.canSuffocate(i + 1, j, k);
-            boolean flag2 = !this.level.canSuffocate(i, j - 1, k);
-            boolean flag3 = !this.level.canSuffocate(i, j + 1, k);
-            boolean flag4 = !this.level.canSuffocate(i, j, k - 1);
-            boolean flag5 = !this.level.canSuffocate(i, j, k + 1);
-            int byte0 = -1;
-            double d6 = 9999.0;
-            if (flag && d3 < d6) {
-                d6 = d3;
-                byte0 = 0;
-            }
-            if (flag1 && 1.0 - d3 < d6) {
-                d6 = 1.0 - d3;
-                byte0 = 1;
-            }
-            if (flag2 && d4 < d6) {
-                d6 = d4;
-                byte0 = 2;
-            }
-            if (flag3 && 1.0 - d4 < d6) {
-                d6 = 1.0 - d4;
-                byte0 = 3;
-            }
-            if (flag4 && d5 < d6) {
-                d6 = d5;
-                byte0 = 4;
-            }
-            if (flag5 && 1.0 - d5 < d6) {
-                double d7 = 1.0 - d5;
-                byte0 = 5;
-            }
-            float f = this.rand.nextFloat() * 0.2f + 0.1f;
-            if (byte0 == 0) {
-                this.velocityX = -f;
-            }
-            if (byte0 == 1) {
-                this.velocityX = f;
-            }
-            if (byte0 == 2) {
-                this.velocityY = -f;
-            }
-            if (byte0 == 3) {
-                this.velocityY = f;
-            }
-            if (byte0 == 4) {
-                this.velocityZ = -f;
-            }
-            if (byte0 == 5) {
-                this.velocityZ = f;
-            }
-        }
-        return false;
+    @Redirect(method = "isInsideWall", at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/level/Level;canSuffocate(III)Z"))
+    public boolean isInsideWallOrOpaque(Level instance, int j, int k, int l) {
+        return this.level.canSuffocate(j, k, l) && this.level.isFullOpaque(j, k, l);
     }
 
     @Override
     public int getCollisionX() {
-        return collisionX;
+        return this.collisionX;
     }
 
     @Override
     public int getCollisionZ() {
-        return collisionZ;
+        return this.collisionZ;
+    }
+
+    @Override
+    public boolean getCollidesWithClipBlocks() {
+        return this.collidesWithClipBlocks;
     }
 }

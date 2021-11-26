@@ -1,9 +1,9 @@
 package io.github.ryuu.adventurecraft.mixin.entity;
 
+import io.github.ryuu.adventurecraft.extensions.entity.ExWalkingEntity;
 import io.github.ryuu.adventurecraft.util.IEntityPather;
 import net.minecraft.class_61;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.WalkingEntity;
 import net.minecraft.level.Level;
 import net.minecraft.util.io.CompoundTag;
@@ -14,38 +14,63 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(WalkingEntity.class)
-public class MixinWalkingEntity extends LivingEntity implements IEntityPather {
+public abstract class MixinWalkingEntity extends MixinLivingEntity implements IEntityPather, ExWalkingEntity {
 
-    public boolean canForgetTargetRandomly = true;
+    public boolean forgetTargetRandomly = true;
+
     public int timeBeforeForget = 0;
-    public boolean canPathRandomly = true;
+
+    public boolean pathRandomly = true;
+
+    @Shadow
     protected Entity entity;
-    protected boolean field_663 = false;
-    @Shadow()
+
+    @Shadow
+    protected boolean field_663;
+
+    @Shadow
     private class_61 field_661;
 
     public MixinWalkingEntity(Level world) {
         super(world);
     }
 
+    @Shadow
+    protected abstract void method_632();
+
+    @Shadow
+    public abstract boolean method_633();
+
+    @Shadow
+    protected abstract void method_637(Entity arg, float f);
+
+    @Shadow
+    protected abstract Entity method_638();
+
+    @Shadow
+    protected abstract void method_639(Entity arg, float f);
+
+    @Shadow
+    protected abstract boolean method_640();
+
     /**
      * @author Ryuu, TechPizza, Phil
      */
     @Override
-    @Overwrite()
+    @Overwrite
     protected void tickHandSwing() {
         this.field_663 = this.method_640();
         float f = 16.0f;
         if (this.entity == null) {
             this.entity = this.method_638();
             if (this.entity != null) {
-                this.field_661 = this.level.method_192(this, this.entity, f);
+                this.field_661 = this.level.method_192((Entity) (Object) this, this.entity, f);
                 this.timeBeforeForget = 40;
             }
         } else if (!this.entity.isAlive()) {
             this.entity = null;
         } else {
-            float f1 = this.entity.distanceTo(this);
+            float f1 = this.entity.distanceTo((Entity) (Object) this);
             if (this.method_928(this.entity)) {
                 this.method_637(this.entity, f1);
             } else {
@@ -57,8 +82,8 @@ public class MixinWalkingEntity extends LivingEntity implements IEntityPather {
             canEntityBeSeen = this.method_928(this.entity);
         }
         if (!this.field_663 && this.entity != null && (this.field_661 == null || this.rand.nextInt(5) == 0 && this.field_661.needNewPath(this.entity)) && canEntityBeSeen) {
-            this.field_661 = this.level.method_192(this, this.entity, f);
-        } else if (this.canPathRandomly && !this.field_663 && (this.field_661 == null && this.rand.nextInt(80) == 0 || this.rand.nextInt(80) == 0)) {
+            this.field_661 = this.level.method_192((Entity) (Object) this, this.entity, f);
+        } else if (this.pathRandomly && !this.field_663 && (this.field_661 == null && this.rand.nextInt(80) == 0 || this.rand.nextInt(80) == 0)) {
             this.method_632();
         }
         if (this.entity != null && this.field_661 == null && !canEntityBeSeen) {
@@ -72,12 +97,12 @@ public class MixinWalkingEntity extends LivingEntity implements IEntityPather {
         boolean flag = this.method_1334();
         boolean flag1 = this.method_1335();
         this.pitch = 0.0f;
-        if (this.field_661 == null || this.canForgetTargetRandomly && this.rand.nextInt(300) == 0) {
+        if (this.field_661 == null || this.forgetTargetRandomly && this.rand.nextInt(300) == 0) {
             super.tickHandSwing();
             this.field_661 = null;
             return;
         }
-        Vec3f vec3d = this.field_661.method_2041(this);
+        Vec3f vec3d = this.field_661.method_2041((Entity) (Object) this);
         double d = this.width * 2.0f;
         while (vec3d != null && vec3d.method_1303(this.x, vec3d.y, this.z) < d * d) {
             this.field_661.method_2040();
@@ -86,17 +111,18 @@ public class MixinWalkingEntity extends LivingEntity implements IEntityPather {
                 this.field_661 = null;
                 continue;
             }
-            vec3d = this.field_661.method_2041(this);
+            vec3d = this.field_661.method_2041((Entity) (Object) this);
         }
         this.jumping = false;
         if (vec3d != null) {
-            float f3;
             double d1 = vec3d.x - this.x;
             double d2 = vec3d.z - this.z;
             double d3 = vec3d.y - (double) i;
             float f2 = (float) (Math.atan2(d2, d1) * 180.0 / 3.1415927410125732) - 90.0f;
             this.parallelMovement = this.movementSpeed;
-            for (f3 = f2 - this.yaw; f3 < -180.0f; f3 += 360.0f) {
+            float f3 = f2 - this.yaw;
+            while (f3 < -180.0f) {
+                f3 += 360.0f;
             }
             while (f3 >= 180.0f) {
                 f3 -= 360.0f;
@@ -131,85 +157,43 @@ public class MixinWalkingEntity extends LivingEntity implements IEntityPather {
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    protected void method_632() {
-        boolean flag = false;
-        int i = -1;
-        int j = -1;
-        int k = -1;
-        float f = -99999.0f;
-        for (int l = 0; l < 10; ++l) {
-            int k1;
-            int j1;
-            int i1 = MathsHelper.floor(this.x + (double) this.rand.nextInt(13) - 6.0);
-            float f1 = this.getPathfindingFavour(i1, j1 = MathsHelper.floor(this.y + (double) this.rand.nextInt(7) - 3.0), k1 = MathsHelper.floor(this.z + (double) this.rand.nextInt(13) - 6.0));
-            if (!(f1 > f)) continue;
-            f = f1;
-            i = i1;
-            j = j1;
-            k = k1;
-            flag = true;
-        }
-        if (flag) {
-            this.field_661 = this.level.method_189(this, i, j, k, 10.0f);
-        }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public boolean canSpawn() {
-        int i = MathsHelper.floor(this.x);
-        int j = MathsHelper.floor(this.boundingBox.minY);
-        int k = MathsHelper.floor(this.z);
-        return super.canSpawn() && this.getPathfindingFavour(i, j, k) >= 0.0f;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void setTarget(class_61 pathentity) {
-        this.field_661 = pathentity;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
     public class_61 getCurrentPath() {
         return this.field_661;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
     @Override
-    @Overwrite()
-    public void writeCustomDataToTag(CompoundTag tag) {
-        super.writeCustomDataToTag(tag);
-        tag.put("canPathRandomly", this.canPathRandomly);
-        tag.put("canForgetTargetRandomly", this.canForgetTargetRandomly);
+    public void writeACDataToTag(CompoundTag tag) {
+        tag.put("canPathRandomly", this.pathRandomly);
+        tag.put("canForgetTargetRandomly", this.forgetTargetRandomly);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
     @Override
-    @Overwrite()
-    public void readCustomDataFromTag(CompoundTag tag) {
-        super.readCustomDataFromTag(tag);
+    protected void readACDataFromTag(CompoundTag tag) {
         if (tag.containsKey("canPathRandomly")) {
-            this.canPathRandomly = tag.getBoolean("canPathRandomly");
+            this.pathRandomly = tag.getBoolean("canPathRandomly");
         }
         if (tag.containsKey("canForgetTargetRandomly")) {
-            this.canPathRandomly = tag.getBoolean("canForgetTargetRandomly");
+            this.pathRandomly = tag.getBoolean("canForgetTargetRandomly");
         }
+    }
+
+    @Override
+    public boolean canForgetTargetRandomly() {
+        return forgetTargetRandomly;
+    }
+
+    @Override
+    public void setForgetTargetRandomly(boolean forgetTargetRandomly){
+        this.forgetTargetRandomly = forgetTargetRandomly;
+    }
+
+    @Override
+    public boolean canPathRandomly() {
+        return pathRandomly;
+    }
+
+    @Override
+    public void setPathRandomly(boolean pathRandomly) {
+        this.pathRandomly = pathRandomly;
     }
 }

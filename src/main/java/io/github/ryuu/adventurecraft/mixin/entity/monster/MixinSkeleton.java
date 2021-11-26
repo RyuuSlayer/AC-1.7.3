@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.entity.monster;
 
+import io.github.ryuu.adventurecraft.extensions.entity.projectile.ExArrow;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.monster.Monster;
@@ -10,6 +11,7 @@ import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.MathsHelper;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -17,7 +19,8 @@ import org.spongepowered.asm.mixin.Shadow;
 @Mixin(Skeleton.class)
 public class MixinSkeleton extends Monster {
 
-    @Shadow()
+    @Final
+    @Shadow
     private static final ItemInstance field_302 = new ItemInstance(ItemType.bow, 1);
 
     public MixinSkeleton(Level world) {
@@ -49,7 +52,8 @@ public class MixinSkeleton extends Monster {
             double d = entity.x - this.x;
             double d1 = entity.z - this.z;
             if (this.attackTime == 0) {
-                Arrow entityarrow = new Arrow(this.level, this, this.attackDamage);
+                Arrow entityarrow = new Arrow(this.level, this);
+                ((ExArrow)entityarrow).setAttackDamage(this.attackDamage);
                 entityarrow.y += 1.4f;
                 double d2 = entity.y + (double) entity.getStandingEyeHeight() - (double) 0.2f - entityarrow.y;
                 float f1 = MathsHelper.sqrt(d * d + d1 * d1) * 0.2f;

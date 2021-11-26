@@ -1,12 +1,13 @@
 package io.github.ryuu.adventurecraft.scripting;
 
+import io.github.ryuu.adventurecraft.extensions.entity.ExWalkingEntity;
 import net.minecraft.entity.WalkingEntity;
 
 public class ScriptEntityCreature extends ScriptEntityLiving {
 
     WalkingEntity entityCreature;
 
-    ScriptEntityCreature(WalkingEntity e) {
+    public ScriptEntityCreature(WalkingEntity e) {
         super(e);
         this.entityCreature = e;
     }
@@ -32,18 +33,18 @@ public class ScriptEntityCreature extends ScriptEntityLiving {
     }
 
     public boolean getCanForgetTargetRandomly() {
-        return this.entityCreature.canForgetTargetRandomly;
+        return ((ExWalkingEntity)this.entityCreature).canForgetTargetRandomly();
     }
 
     public void setCanForgetTargetRandomly(boolean b) {
-        this.entityCreature.canForgetTargetRandomly = b;
+        ((ExWalkingEntity)this.entityCreature).setForgetTargetRandomly(b);
     }
 
     public boolean getCanPathRandomly() {
-        return this.entityCreature.canPathRandomly;
+        return ((ExWalkingEntity)this.entityCreature).canPathRandomly();
     }
 
     public void setCanPathRandomly(boolean b) {
-        this.entityCreature.canPathRandomly = b;
+        ((ExWalkingEntity)this.entityCreature).setPathRandomly(b);
     }
 }

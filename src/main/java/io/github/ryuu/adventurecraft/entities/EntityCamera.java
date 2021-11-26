@@ -1,7 +1,7 @@
 package io.github.ryuu.adventurecraft.entities;
 
+import io.github.ryuu.adventurecraft.extensions.client.ExMinecraft;
 import io.github.ryuu.adventurecraft.gui.GuiCamera;
-import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
@@ -13,7 +13,7 @@ public class EntityCamera extends LivingEntity {
     public int type;
     public int cameraID;
 
-    EntityCamera(Level world, float t, int ty, int id) {
+    public EntityCamera(Level world, float t, int ty, int id) {
         super(world);
         this.time = t;
         this.cameraID = id;
@@ -25,8 +25,8 @@ public class EntityCamera extends LivingEntity {
     }
 
     public void deleteCameraPoint() {
-        AccessMinecraft.getInstance().activeCutsceneCamera.deletePoint(this.cameraID);
-        AccessMinecraft.getInstance().activeCutsceneCamera.loadCameraEntities();
+        ExMinecraft.getInstance().getActiveCutsceneCamera().deletePoint(this.cameraID);
+        ExMinecraft.getInstance().getActiveCutsceneCamera().loadCameraEntities();
     }
 
     @Override

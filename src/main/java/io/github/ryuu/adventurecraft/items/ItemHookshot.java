@@ -5,7 +5,7 @@ import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
 
-class ItemHookshot extends ACItemType {
+public class ItemHookshot extends ACItemType {
 
     public EntityHookshot mainHookshot = null;
 

@@ -1,7 +1,9 @@
 package io.github.ryuu.adventurecraft.entities;
 
 import io.github.ryuu.adventurecraft.blocks.Blocks;
+import io.github.ryuu.adventurecraft.extensions.entity.ExEntity;
 import io.github.ryuu.adventurecraft.items.Items;
+import io.github.ryuu.adventurecraft.mixin.entity.AccessEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
@@ -34,7 +36,7 @@ public class EntityHookshot extends Entity {
         this.setSize(0.5f, 0.5f);
         this.turningAround = true;
         this.timeBeforeTurnAround = 0;
-        this.collidesWithClipBlocks = false;
+        ((ExEntity)this).setCollidesWithClipBlocks(false);
     }
 
     public EntityHookshot(Level world, LivingEntity entity, boolean main, ItemInstance i) {
@@ -92,9 +94,8 @@ public class EntityHookshot extends Entity {
             double prevVelZ = this.velocityZ;
             this.move(this.velocityX, this.velocityY, this.velocityZ);
             if (this.velocityX != prevVelX || this.velocityY != prevVelY || this.velocityZ != prevVelZ) {
-                Vec3f pos2;
                 Vec3f pos1 = Vec3f.method_1293(this.prevX, this.prevY, this.prevZ);
-                HitResult hit = this.level.raycast(pos1, pos2 = Vec3f.method_1293(this.prevX + 10.0 * prevVelX, this.prevY + 10.0 * prevVelY, this.prevZ + 10.0 * prevVelZ));
+                HitResult hit = this.level.raycast(pos1, Vec3f.method_1293(this.prevX + 10.0 * prevVelX, this.prevY + 10.0 * prevVelY, this.prevZ + 10.0 * prevVelZ));
                 if (hit != null && hit.type == HitType.TILE) {
                     int blockID = this.level.getTileId(hit.x, hit.y, hit.z);
                     if (blockID == Tile.LOG.id || blockID == Tile.WOOD.id || blockID == Blocks.woodBlocks.id || blockID == Blocks.halfSteps3.id) {
@@ -124,7 +125,7 @@ public class EntityHookshot extends Entity {
             if (this.attachedToSurface) {
                 if (length > 1.2) {
                     this.returnsTo.method_1322(-0.15 * this.velocityX, -0.15 * this.velocityY, -0.15 * this.velocityZ);
-                    this.returnsTo.fallDistance = 0.0f;
+                    ((AccessEntity)this.returnsTo).setFallDistance(0.0f);
                 } else {
                     this.returnsTo.setVelocity(0.0, 0.0, 0.0);
                 }
@@ -155,7 +156,7 @@ public class EntityHookshot extends Entity {
             }
         }
         if (this.entityGrabbed != null && !this.entityGrabbed.removed) {
-            this.entityGrabbed.fallDistance = 0.0f;
+            ((AccessEntity)this.entityGrabbed).setFallDistance(0.0f);
             this.entityGrabbed.setPosition(this.x, this.y, this.z);
         }
     }

@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.gui;
 
 import io.github.ryuu.adventurecraft.entities.EntityCamera;
+import io.github.ryuu.adventurecraft.extensions.client.ExMinecraft;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
@@ -60,7 +61,7 @@ public class GuiCamera extends Screen {
             AccessMinecraft.getInstance().openScreen(null);
         } else if (button.id == 1) {
             this.cam.type = (this.cam.type + 1) % 3;
-            this.minecraft.activeCutsceneCamera.setPointType(this.cam.cameraID, this.cam.type);
+            ((ExMinecraft)this.minecraft).getActiveCutsceneCamera().setPointType(this.cam.cameraID, this.cam.type);
             for (Object obj : this.minecraft.level.entities) {
                 if (obj instanceof EntityCamera) {
                     EntityCamera c = (EntityCamera) obj;
@@ -80,7 +81,7 @@ public class GuiCamera extends Screen {
         try {
             float value = Float.parseFloat(this.timerText.method_1876());
             this.cam.time = value;
-            this.minecraft.activeCutsceneCamera.setTime(this.cam.cameraID, (float) value);
+            ((ExMinecraft)this.minecraft).getActiveCutsceneCamera().setTime(this.cam.cameraID, (float) value);
         } catch (NumberFormatException e) {
         }
         this.drawTextWithShadow(this.textManager, "Active At:", 4, 49, 0xE0E0E0);

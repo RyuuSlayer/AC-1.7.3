@@ -1,10 +1,11 @@
 package io.github.ryuu.adventurecraft.mixin.entity.player;
 
-import io.github.ryuu.adventurecraft.accessors.entity.AccessLivingEntity;
-import io.github.ryuu.adventurecraft.accessors.entity.player.AccessPlayer;
-import io.github.ryuu.adventurecraft.accessors.items.ItemTypeLightEmitter;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
+import io.github.ryuu.adventurecraft.extensions.entity.ExLivingEntity;
+import io.github.ryuu.adventurecraft.extensions.entity.player.ExPlayer;
+import io.github.ryuu.adventurecraft.extensions.items.ExItemType;
 import io.github.ryuu.adventurecraft.items.Items;
+import io.github.ryuu.adventurecraft.mixin.entity.MixinLivingEntity;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.PlayerTorch;
 import net.fabricmc.api.EnvType;
@@ -37,7 +38,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.List;
 
 @Mixin(Player.class)
-public abstract class MixinPlayer extends LivingEntity implements AccessPlayer {
+public abstract class MixinPlayer extends MixinLivingEntity implements ExPlayer, ExLivingEntity {
 
     @Shadow
     public PlayerInventory inventory;
@@ -73,7 +74,7 @@ public abstract class MixinPlayer extends LivingEntity implements AccessPlayer {
         Vec3i chunkcoordinates = world.getSpawnPosition();
         this.setPositionAndAngles((double) chunkcoordinates.x + 0.5, chunkcoordinates.y + 1, (double) chunkcoordinates.z + 0.5, 0.0f, 0.0f);
         this.health = 12;
-        ((AccessLivingEntity) this).setMaxHealth(12);
+        ((ExLivingEntity) this).setMaxHealth(12);
         this.field_1022 = "humanoid";
         this.field_1021 = 180.0f;
         this.field_1646 = 20;
@@ -182,8 +183,8 @@ public abstract class MixinPlayer extends LivingEntity implements AccessPlayer {
         }
         ItemInstance mainItem = this.inventory.main[this.inventory.selectedHotbarSlot];
         ItemInstance offItem = this.inventory.main[this.inventory.offhandItem];
-        boolean litFromItem = mainItem != null && ((ItemTypeLightEmitter) ItemType.byId[mainItem.itemId]).isLighting(mainItem);
-        if ((litFromItem |= offItem != null && ((ItemTypeLightEmitter) ItemType.byId[offItem.itemId]).isLighting(offItem)) || mainItem != null && (mainItem.itemId == Tile.TORCH.id || mainItem.itemId == Blocks.lights1.id) || offItem != null && (offItem.itemId == Tile.TORCH.id || offItem.itemId == Blocks.lights1.id)) {
+        boolean litFromItem = mainItem != null && ((ExItemType) ItemType.byId[mainItem.itemId]).isLighting(mainItem);
+        if ((litFromItem |= offItem != null && ((ExItemType) ItemType.byId[offItem.itemId]).isLighting(offItem)) || mainItem != null && (mainItem.itemId == Tile.TORCH.id || mainItem.itemId == Blocks.lights1.id) || offItem != null && (offItem.itemId == Tile.TORCH.id || offItem.itemId == Blocks.lights1.id)) {
             PlayerTorch.setTorchState(this.level, true);
             PlayerTorch.setTorchPos(this.level, (float) this.x, (float) this.y, (float) this.z);
         } else {
@@ -315,6 +316,7 @@ public abstract class MixinPlayer extends LivingEntity implements AccessPlayer {
         return this.prevSwingProgressOffhand + f1 * f;
     }
 
+    @Override
     public boolean protectedByShield() {
         ItemInstance curItem = this.inventory.getHeldItem();
         ItemInstance offItem = this.inventory.getOffhandItem();
@@ -324,7 +326,7 @@ public abstract class MixinPlayer extends LivingEntity implements AccessPlayer {
         return false;
     }
 
-
+    @Override
     public double getGravity() {
         if (Items.hookshot.mainHookshot != null && Items.hookshot.mainHookshot.attachedToSurface || Items.hookshot.offHookshot != null && Items.hookshot.offHookshot.attachedToSurface) {
             return 0.0;
@@ -332,6 +334,7 @@ public abstract class MixinPlayer extends LivingEntity implements AccessPlayer {
         return super.getGravity();
     }
 
+    @Override
     public boolean usingUmbrella() {
         return this.inventory.getHeldItem() != null && this.inventory.getHeldItem().itemId == Items.umbrella.id || this.inventory.getOffhandItem() != null && this.inventory.getOffhandItem().itemId == Items.umbrella.id;
     }

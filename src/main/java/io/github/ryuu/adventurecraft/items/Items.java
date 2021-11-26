@@ -9,7 +9,7 @@ public class Items {
 
     public static ItemType doorKey = new ACItemType(201).setTexturePosition(145).setName("key");
 
-    public static ItemType hookshot = new ItemHookshot(202).setName("hookshot").method_466();
+    public static ItemHookshot hookshot = (ItemHookshot)new ItemHookshot(202).setName("hookshot").method_466();
 
     public static ItemType heart = new ACItemType(203).setTexturePosition(146).setName("heart");
 

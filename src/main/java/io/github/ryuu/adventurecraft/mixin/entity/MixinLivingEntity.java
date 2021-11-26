@@ -1,8 +1,10 @@
 package io.github.ryuu.adventurecraft.mixin.entity;
 
-import io.github.ryuu.adventurecraft.accessors.entity.AccessLivingEntity;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
+import io.github.ryuu.adventurecraft.extensions.entity.ExLivingEntity;
 import io.github.ryuu.adventurecraft.items.Items;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
@@ -13,22 +15,21 @@ import net.minecraft.tile.LadderTile;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.TileSounds;
 import net.minecraft.tile.material.Material;
-import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.io.CompoundTag;
-import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.MathsHelper;
 import net.minecraft.util.maths.Vec3f;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-
-import java.util.List;
+import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LivingEntity.class)
-public abstract class MixinLivingEntity extends Entity implements AccessLivingEntity {
+public abstract class MixinLivingEntity extends MixinEntity implements AccessLivingEntity, ExLivingEntity {
 
     @Shadow
-    public int field_1009 = 20;
+    public int field_1009;
 
     @Shadow
     public float field_1010;
@@ -37,16 +38,13 @@ public abstract class MixinLivingEntity extends Entity implements AccessLivingEn
     public float field_1011;
 
     @Shadow
-    public float field_1012 = 0.0f;
+    public float field_1012;
 
     @Shadow
-    public float field_1013 = 0.0f;
+    public float field_1013;
 
     @Shadow
-    protected String texture = "/mob/char.png"; // once was public
-
-    @Shadow
-    public boolean field_1026 = false;
+    protected String texture;
 
     @Shadow
     public float lastHandSwingProgress;
@@ -55,7 +53,7 @@ public abstract class MixinLivingEntity extends Entity implements AccessLivingEn
     public float handSwingProgress;
 
     @Shadow
-    public int health = 10;
+    public int health;
 
     @Shadow
     public int field_1037;
@@ -67,25 +65,19 @@ public abstract class MixinLivingEntity extends Entity implements AccessLivingEn
     public int field_1039;
 
     @Shadow
-    public float field_1040 = 0.0f;
+    public float field_1040;
 
     @Shadow
-    public int deathTime = 0;
+    public int deathTime;
 
     @Shadow
-    public int attackTime = 0;
+    public int attackTime;
 
     @Shadow
     public float field_1043;
 
     @Shadow
     public float field_1044;
-
-    @Shadow
-    public int field_1046 = -1;
-
-    @Shadow
-    public float field_1047 = (float) (Math.random() * (double) 0.9f + (double) 0.1f);
 
     @Shadow
     public float field_1048;
@@ -97,16 +89,16 @@ public abstract class MixinLivingEntity extends Entity implements AccessLivingEn
     public float field_1050;
 
     @Shadow
-    protected int field_1058 = 0; // once was public
+    protected int field_1058;
 
     @Shadow
-    protected boolean jumping = false; // once was public
+    protected boolean jumping;
 
     @Shadow
-    protected float movementSpeed = 0.7f; // once was public
+    protected float movementSpeed;
 
     @Shadow
-    private Entity field_1061; // once was public
+    private Entity field_1061;
 
     @Shadow
     protected float field_1014;
@@ -121,49 +113,13 @@ public abstract class MixinLivingEntity extends Entity implements AccessLivingEn
     protected float field_1017;
 
     @Shadow
-    protected boolean field_1018 = true;
+    protected float field_1021;
 
     @Shadow
-    protected boolean field_1020 = true;
+    protected String field_1022;
 
     @Shadow
-    protected float field_1021 = 0.0f;
-
-    @Shadow
-    protected String field_1022 = null;
-
-    @Shadow
-    protected float field_1023 = 1.0f;
-
-    @Shadow
-    protected int field_1024 = 0;
-
-    @Shadow
-    protected float field_1025 = 0.0f;
-
-    @Shadow
-    protected boolean field_1045 = false;
-
-    @Shadow
-    protected int field_1051;
-
-    @Shadow
-    protected double field_1052;
-
-    @Shadow
-    protected double field_1053;
-
-    @Shadow
-    protected double field_1054;
-
-    @Shadow
-    protected double field_1055;
-
-    @Shadow
-    protected double field_1056;
-
-    @Shadow
-    protected int despawnCounter = 0;
+    protected int despawnCounter;
 
     @Shadow
     protected float perpendicularMovement;
@@ -175,13 +131,10 @@ public abstract class MixinLivingEntity extends Entity implements AccessLivingEn
     protected float field_1030;
 
     @Shadow
-    protected float field_1032 = 0.0f;
+    protected float field_1032;
 
     @Shadow
-    protected int field_1034 = 0;
-
-    @Shadow
-    float field_1057 = 0.0f;
+    protected int field_1034;
 
     @Shadow
     private int field_1028;
@@ -217,14 +170,24 @@ public abstract class MixinLivingEntity extends Entity implements AccessLivingEn
         this.heldItem = null;
     }
 
+    @Shadow
+    public abstract float method_930(float f);
+
+    @Shadow
+    public abstract void playAmbientSound();
+
+    @Shadow
+    public abstract void method_924(Entity arg, float f, float f1);
+
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public boolean method_928(Entity entity) {
-        double diffAngle;
         double angleOffset = -180.0 * Math.atan2(entity.x - this.x, entity.z - this.z) / Math.PI;
-        for (diffAngle = angleOffset - (double) this.yaw; diffAngle < -180.0; diffAngle += 360.0) {
+        double diffAngle = angleOffset - this.yaw;
+        while (diffAngle < -180.0) {
+            diffAngle += 360.0;
         }
         while (diffAngle > 180.0) {
             diffAngle -= 360.0;
@@ -238,19 +201,8 @@ public abstract class MixinLivingEntity extends Entity implements AccessLivingEn
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
-    public void playAmbientSound() {
-        String s = this.getAmbientSound();
-        if (s != null) {
-            this.level.playSound(this, s, this.getSoundVolume(), (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2f + 1.0f);
-        }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
     @Override
-    @Overwrite()
+    @Overwrite
     public void baseTick() {
         this.lastHandSwingProgress = this.handSwingProgress;
         super.baseTick();
@@ -313,35 +265,6 @@ public abstract class MixinLivingEntity extends Entity implements AccessLivingEn
                 this.extraFov = 0.0f;
             }
         }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void onSpawnedFromSpawner() {
-        for (int i = 0; i < 20; ++i) {
-            double d = this.rand.nextGaussian() * 0.02;
-            double d1 = this.rand.nextGaussian() * 0.02;
-            double d2 = this.rand.nextGaussian() * 0.02;
-            double d3 = 10.0;
-            this.level.addParticle("explode", this.x + (double) (this.rand.nextFloat() * this.width * 2.0f) - (double) this.width - d * d3, this.y + (double) (this.rand.nextFloat() * this.height) - d1 * d3, this.z + (double) (this.rand.nextFloat() * this.width * 2.0f) - (double) this.width - d2 * d3, d, d1, d2);
-        }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public void method_1311(double d, double d1, double d2, float f, float f1, int i) {
-        this.standingEyeHeight = 0.0f;
-        this.field_1052 = d;
-        this.field_1053 = d1;
-        this.field_1054 = d2;
-        this.field_1055 = f;
-        this.field_1056 = f1;
-        this.field_1051 = i;
     }
 
     /**
@@ -420,35 +343,15 @@ public abstract class MixinLivingEntity extends Entity implements AccessLivingEn
         this.field_1016 += f2;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    protected void setSize(float width, float height) {
-        super.setSize(width, height);
+    @ModifyConstant(method = "addHealth", constant = @Constant(intValue = 20))
+    public int changeAddHealthMaxHealth(int oldValue) {
+        return this.maxHealth;
     }
 
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
-    public void addHealth(int amount) {
-        if (this.health <= 0) {
-            return;
-        }
-        this.health += amount;
-        if (this.health > this.maxHealth) {
-            this.health = this.maxHealth;
-        }
-        this.field_1613 = this.field_1009 / 2;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
+    @Overwrite
     public boolean damage(Entity target, int amount) {
         if (this.level.isClient) {
             return false;
@@ -504,11 +407,7 @@ public abstract class MixinLivingEntity extends Entity implements AccessLivingEn
         return true;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
     @Override
-    @Overwrite()
     public boolean attackEntityFromMulti(Entity entity, int i) {
         if (this.level.isClient) {
             return false;
@@ -557,7 +456,7 @@ public abstract class MixinLivingEntity extends Entity implements AccessLivingEn
             if (flag) {
                 this.level.playSound(this, this.getDeathSound(), this.getSoundVolume(), (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2f + 1.0f);
             }
-            this.onKilledBy(entity);
+            this.invokeOnKilledBy(entity);
         } else if (flag) {
             this.level.playSound(this, this.getHurtSound(), this.getSoundVolume(), (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2f + 1.0f);
         }
@@ -567,79 +466,29 @@ public abstract class MixinLivingEntity extends Entity implements AccessLivingEn
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
-    protected void applyDamage(int i) {
-        this.health -= i;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_925(Entity entity, int i, double d, double d1) {
-        float f = MathsHelper.sqrt(d * d + d1 * d1);
-        float f1 = 0.4f;
-        this.velocityX /= 2.0;
-        this.velocityY /= 2.0;
-        this.velocityZ /= 2.0;
-        this.velocityX -= d / (double) f * (double) f1;
-        this.velocityY += 0.4f;
-        this.velocityZ -= d1 / (double) f * (double) f1;
-        if (this.velocityY > (double) 0.4f) {
-            this.velocityY = 0.4f;
+    @Inject(method = "onKilledBy", at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/LivingEntity;dropLoot()V"))
+    private void onKilledBy(Entity entity, CallbackInfo ci) {
+        if (entity instanceof LivingEntity && ((LivingEntity) entity).health < ((ExLivingEntity) entity).getMaxHealth() && this.rand.nextInt(3) != 0) {
+            ItemEntity heart = new ItemEntity(this.level, this.x, this.y, this.z, new ItemInstance(Items.heart.id, 1, 0));
+            this.level.spawnEntity(heart);
         }
     }
 
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
-    public void onKilledBy(Entity entity) {
-        if (this.field_1024 >= 0 && entity != null) {
-            entity.onKilledOther(this, this.field_1024);
-        }
-        if (entity != null) {
-            entity.handleKilledEntity(this);
-        }
-        this.field_1045 = true;
-        if (!this.level.isClient) {
-            this.dropLoot();
-            if (entity instanceof LivingEntity && ((LivingEntity) entity).health < ((LivingEntity) entity).maxHealth && this.rand.nextInt(3) != 0) {
-                ItemEntity heart = new ItemEntity(this.level, this.x, this.y, this.z, new ItemInstance(Items.heart.id, 1, 0));
-                this.level.spawnEntity(heart);
-            }
-        }
-        this.level.method_185(this, (byte) 3);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    protected void dropLoot() {
-        int i = this.getMobDrops();
-        if (i > 0) {
-            int j = this.rand.nextInt(3);
-            for (int k = 0; k < j; ++k) {
-                this.dropItem(i, 1);
-            }
-        }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
+    @Overwrite
     protected void handleFallDamage(float f) {
-        float pre;
-        int i;
-        if (!this.handleFlying() && (i = (int) Math.ceil(Math.pow(pre = Math.max(f - 0.8f, 0.0f) / 0.08f, 1.5))) > 0) {
+        float pre = Math.max(f - 0.8f, 0.0f) / 0.08f;
+        int i = (int) Math.ceil(Math.pow(pre, 1.5));
+        if (!this.handleFlying() && i > 0) {
             this.damage(null, i);
             int j = this.level.getTileId(MathsHelper.floor(this.x), MathsHelper.floor(this.y - (double) 0.2f - (double) this.standingEyeHeight), MathsHelper.floor(this.z));
             if (j > 0) {
                 TileSounds stepsound = Tile.BY_ID[j].sounds;
-                this.level.playSound(this, stepsound.getWalkSound(), stepsound.getVolume() * 0.5f, stepsound.getPitch() * 0.75f);
+                this.level.playSound((Entity) (Object) this, stepsound.getWalkSound(), stepsound.getVolume() * 0.5f, stepsound.getPitch() * 0.75f);
             }
         }
     }
@@ -647,7 +496,7 @@ public abstract class MixinLivingEntity extends Entity implements AccessLivingEn
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void travel(float f, float f1) {
         if (this.handleFlying()) {
             double l = Math.sqrt(f * f + f1 * f1);
@@ -764,7 +613,7 @@ public abstract class MixinLivingEntity extends Entity implements AccessLivingEn
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public boolean isOnLadder() {
         int i = MathsHelper.floor(this.x);
         int j = MathsHelper.floor(this.boundingBox.minY);
@@ -776,17 +625,13 @@ public abstract class MixinLivingEntity extends Entity implements AccessLivingEn
         return LadderTile.isLadderID(blockID) || LadderTile.isLadderID(blockIDAbove) || blockID == Blocks.ropes1.id && v || blockIDAbove == Blocks.ropes1.id && vAbove || blockID == Blocks.ropes2.id && v || blockIDAbove == Blocks.ropes2.id && vAbove || blockID == Blocks.chains.id && v || blockIDAbove == Blocks.chains.id && vAbove;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public void writeCustomDataToTag(CompoundTag tag) {
-        tag.put("Health", (short) this.health);
+    protected abstract void writeACDataToTag(CompoundTag tag);
+
+    protected abstract void readACDataFromTag(CompoundTag tag);
+
+    @Inject(method = "writeCustomDataToTag", at = @At("TAIL"))
+    private void writeACDataToTag(CompoundTag tag, CallbackInfo ci) {
         tag.put("MaxHealth", (short) this.maxHealth);
-        tag.put("HurtTime", (short) this.hurtTime);
-        tag.put("DeathTime", (short) this.deathTime);
-        tag.put("AttackTime", (short) this.attackTime);
         tag.put("EntityID", this.id);
         tag.put("timesCanJumpInAir", this.timesCanJumpInAir);
         tag.put("canWallJump", this.canWallJump);
@@ -795,23 +640,13 @@ public abstract class MixinLivingEntity extends Entity implements AccessLivingEn
         tag.put("randomLookVelocity", this.randomLookVelocity);
         tag.put("randomLookRate", this.randomLookRate);
         tag.put("randomLookRateVariation", this.randomLookRateVariation);
+        this.writeACDataToTag(tag);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public void readCustomDataFromTag(CompoundTag tag) {
-        this.health = tag.getShort("Health");
-        if (!tag.containsKey("Health")) {
-            this.health = 10;
-        }
+    @Inject(method = "readCustomDataFromTag", at = @At("TAIL"))
+    private void readACDataFromTag(CompoundTag tag, CallbackInfo ci) {
         this.maxHealth = !tag.containsKey("MaxHealth") ? 10 : (int) tag.getShort("MaxHealth");
-        this.hurtTime = tag.getShort("HurtTime");
-        this.deathTime = tag.getShort("DeathTime");
-        this.attackTime = tag.getShort("AttackTime");
-        if (tag.containsKey("EntityID") && !(this instanceof Player)) {
+        if (tag.containsKey("EntityID")) {
             this.id = tag.getInt("EntityID");
         }
         this.timesCanJumpInAir = tag.getInt("timesCanJumpInAir");
@@ -831,49 +666,14 @@ public abstract class MixinLivingEntity extends Entity implements AccessLivingEn
         if (tag.containsKey("randomLookRateVariation")) {
             this.randomLookRateVariation = tag.getInt("randomLookRateVariation");
         }
+        this.readACDataFromTag(tag);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void updateDespawnCounter() {
-        if (this.field_1051 > 0) {
-            double d3;
-            double d = this.x + (this.field_1052 - this.x) / (double) this.field_1051;
-            double d1 = this.y + (this.field_1053 - this.y) / (double) this.field_1051;
-            double d2 = this.z + (this.field_1054 - this.z) / (double) this.field_1051;
-            for (d3 = this.field_1055 - (double) this.yaw; d3 < -180.0; d3 += 360.0) {
-            }
-            while (d3 >= 180.0) {
-                d3 -= 360.0;
-            }
-            this.yaw = (float) ((double) this.yaw + d3 / (double) this.field_1051);
-            this.pitch = (float) ((double) this.pitch + (this.field_1056 - (double) this.pitch) / (double) this.field_1051);
-            --this.field_1051;
-            this.setPosition(d, d1, d2);
-            this.setRotation(this.yaw, this.pitch);
-            List list1 = this.level.method_190(this, this.boundingBox.method_104(0.03125, 0.0, 0.03125));
-            if (list1.size() > 0) {
-                double d4 = 0.0;
-                for (Object o : list1) {
-                    Box axisalignedbb = (Box) o;
-                    if (!(axisalignedbb.maxY > d4)) continue;
-                    d4 = axisalignedbb.maxY;
-                }
-                this.setPosition(d, d1 += d4 - this.boundingBox.minY, d2);
-            }
-        }
-        if (this.cannotMove()) {
-            this.jumping = false;
-            this.perpendicularMovement = 0.0f;
-            this.parallelMovement = 0.0f;
-            this.field_1030 = 0.0f;
-        } else if (!this.field_1026) {
-            this.tickHandSwing();
-        }
-        boolean flag = this.method_1334();
-        boolean flag1 = this.method_1335();
+    @Inject(method = "updateDespawnCounter", at = @At(
+            value = "INVOKE_ASSIGN",
+            target = "Lnet/minecraft/entity/LivingEntity;method_1335()Z",
+            shift = At.Shift.AFTER))
+    private void changeMoveBehavior(CallbackInfo ci) {
         if (this.onGround) {
             this.jumpsLeft = this.timesCanJumpInAir;
         }
@@ -889,10 +689,18 @@ public abstract class MixinLivingEntity extends Entity implements AccessLivingEn
                 this.moveYawOffset = 0.0f;
             }
         }
-        if (this.jumping) {
-            if (flag) {
+    }
+
+    @Redirect(method = "updateDespawnCounter", at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/entity/LivingEntity;jumping:Z",
+            opcode = Opcodes.GETFIELD
+    ))
+    private boolean changeJumpBehavior(LivingEntity instance) {
+        if (((AccessLivingEntity) instance).isJumping()) {
+            if (this.method_1334()) {
                 this.velocityY += 0.04f;
-            } else if (flag1) {
+            } else if (this.method_1335()) {
                 this.velocityY += 0.04f;
             } else if (this.onGround) {
                 this.jump();
@@ -922,24 +730,13 @@ public abstract class MixinLivingEntity extends Entity implements AccessLivingEn
                 }
             }
         }
-        this.perpendicularMovement *= 0.98f;
-        this.parallelMovement *= 0.98f;
-        this.field_1030 *= 0.9f;
-        this.travel(this.perpendicularMovement, this.parallelMovement);
-        List list = this.level.getEntities(this, this.boundingBox.expand(0.2f, 0.0, 0.2f));
-        if (list != null && list.size() > 0) {
-            for (Object o : list) {
-                Entity entity = (Entity) o;
-                if (!entity.method_1380()) continue;
-                entity.method_1353(this);
-            }
-        }
+        return false;
     }
 
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     protected void jump() {
         this.tickBeforeNextJump = this.level.getLevelTime() + 5L;
         this.velocityY = this.jumpVelocity;
@@ -948,46 +745,24 @@ public abstract class MixinLivingEntity extends Entity implements AccessLivingEn
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
-    protected void method_920() {
-        Player entityplayer = this.level.getClosestPlayerTo(this, -1.0);
-        if (this.method_940() && entityplayer != null) {
-            double d = entityplayer.x - this.x;
-            double d1 = entityplayer.y - this.y;
-            double d2 = entityplayer.z - this.z;
-            double d3 = d * d + d1 * d1 + d2 * d2;
-            if (d3 > 16384.0) {
-                this.remove();
-            }
-            if (this.despawnCounter > 600 && this.rand.nextInt(800) == 0) {
-                if (d3 < 1024.0) {
-                    this.despawnCounter = 0;
-                } else {
-                    this.remove();
-                }
-            }
-        }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
+    @Overwrite
     protected void tickHandSwing() {
-        Player entityplayer1;
         ++this.despawnCounter;
-        Player entityplayer = this.level.getClosestPlayerTo(this, -1.0);
+        this.level.getClosestPlayerTo((Entity) (Object) this, -1.0);
         this.method_920();
         this.perpendicularMovement = 0.0f;
         this.parallelMovement = 0.0f;
         float f = 8.0f;
-        if (this.rand.nextFloat() < 0.02f && (entityplayer1 = this.level.getClosestPlayerTo(this, f)) != null && this.method_928(entityplayer1)) {
-            this.field_1061 = entityplayer1;
-            this.field_1034 = 10 + this.rand.nextInt(20);
+        if (this.rand.nextFloat() < 0.02f) {
+            Player entityplayer1 = this.level.getClosestPlayerTo((Entity) (Object) this, f);
+            if (entityplayer1 != null && this.method_928(entityplayer1)) {
+                this.field_1061 = entityplayer1;
+                this.field_1034 = 10 + this.rand.nextInt(20);
+            }
         }
         if (this.field_1061 != null) {
             this.method_924(this.field_1061, 10.0f, this.getLookPitchSpeed());
-            if (this.field_1034-- <= 0 || this.field_1061.removed || this.field_1061.method_1352(this) > (double) (f * f)) {
+            if (this.field_1034-- <= 0 || this.field_1061.removed || this.field_1061.method_1352((Entity) (Object) this) > (double) (f * f)) {
                 this.field_1061 = null;
             }
         } else if (this.canLookRandomly) {
@@ -1013,154 +788,22 @@ public abstract class MixinLivingEntity extends Entity implements AccessLivingEn
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
-    public void method_924(Entity entity, float f, float f1) {
-        double d1;
-        double d = entity.x - this.x;
-        double d2 = entity.z - this.z;
-        if (entity instanceof LivingEntity) {
-            LivingEntity entityliving = (LivingEntity) entity;
-            d1 = this.y + (double) this.getStandingEyeHeight() - (entityliving.y + (double) entityliving.getStandingEyeHeight());
-        } else {
-            d1 = (entity.boundingBox.minY + entity.boundingBox.maxY) / 2.0 - (this.y + (double) this.getStandingEyeHeight());
-        }
-        double d3 = MathsHelper.sqrt(d * d + d2 * d2);
-        float f2 = (float) (Math.atan2(d2, d) * 180.0 / 3.1415927410125732) - 90.0f;
-        float f3 = (float) (-(Math.atan2(d1, d3) * 180.0 / 3.1415927410125732));
-        this.pitch = -this.method_927(this.pitch, f3, f1);
-        this.yaw = this.method_927(this.yaw, f2, f);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    private float method_927(float f, float f1, float f2) {
-        float f3;
-        for (f3 = f1 - f; f3 < -180.0f; f3 += 360.0f) {
-        }
-        while (f3 >= 180.0f) {
-            f3 -= 360.0f;
-        }
-        if (f3 > f2) {
-            f3 = f2;
-        }
-        if (f3 < -f2) {
-            f3 = -f2;
-        }
-        return f + f3;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public float method_930(float f) {
-        float f1 = this.handSwingProgress - this.lastHandSwingProgress;
-        if (f1 < 0.0f) {
-            f1 += 1.0f;
-        }
-        return this.lastHandSwingProgress + f1 * f;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public Vec3f method_931(float f) {
-        if (f == 1.0f) {
-            return Vec3f.from(this.x, this.y, this.z);
-        }
-        double d = this.prevX + (this.x - this.prevX) * (double) f;
-        double d1 = this.prevY + (this.y - this.prevY) * (double) f;
-        double d2 = this.prevZ + (this.z - this.prevZ) * (double) f;
-        return Vec3f.from(d, d1, d2);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public Vec3f method_926(float f) {
-        if (f == 1.0f) {
-            float f1 = MathsHelper.cos(-this.yaw * 0.01745329f - 3.141593f);
-            float f3 = MathsHelper.sin(-this.yaw * 0.01745329f - 3.141593f);
-            float f5 = -MathsHelper.cos(-this.pitch * 0.01745329f);
-            float f7 = MathsHelper.sin(-this.pitch * 0.01745329f);
-            return Vec3f.from(f3 * f5, f7, f1 * f5);
-        }
-        float f2 = this.prevPitch + (this.pitch - this.prevPitch) * f;
-        float f4 = this.prevYaw + (this.yaw - this.prevYaw) * f;
-        float f6 = MathsHelper.cos(-f4 * 0.01745329f - 3.141593f);
-        float f8 = MathsHelper.sin(-f4 * 0.01745329f - 3.141593f);
-        float f9 = -MathsHelper.cos(-f2 * 0.01745329f);
-        float f10 = MathsHelper.sin(-f2 * 0.01745329f);
-        return Vec3f.from(f8 * f9, f10, f6 * f9);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public HitResult method_929(double d, float f) {
-        Vec3f vec3d = this.method_931(f);
-        Vec3f vec3d1 = this.method_926(f);
-        Vec3f vec3d2 = vec3d.method_1301(vec3d1.x * d, vec3d1.y * d, vec3d1.z * d);
-        return this.level.raycast(vec3d, vec3d2);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
+    @Environment(EnvType.CLIENT)
+    @Overwrite
     public ItemInstance method_909() {
         return this.heldItem;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public void handleStatus(byte byte0) {
-        if (byte0 == 2) {
-            this.limbDistance = 1.5f;
-            this.field_1613 = this.field_1009;
-            this.field_1039 = 10;
-            this.hurtTime = 10;
-            this.field_1040 = 0.0f;
-            this.level.playSound(this, this.getHurtSound(), this.getSoundVolume(), (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2f + 1.0f);
-            this.damage(null, 0);
-        } else if (byte0 == 3) {
-            this.level.playSound(this, this.getDeathSound(), this.getSoundVolume(), (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2f + 1.0f);
-            this.health = 0;
-            this.onKilledBy(null);
-        } else {
-            super.handleStatus(byte0);
-        }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public int getItemTexturePosition(ItemInstance itemstack) {
-        return itemstack.getTexturePosition();
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public boolean protectedByShield(double x, double y, double z) {
-        float diff;
         if (!this.protectedByShield() || this.method_930(1.0f) > 0.0f) {
             return false;
         }
         double diffX = this.x - x;
         double diffZ = this.z - z;
         float angle = -57.29578f * (float) Math.atan2(diffX, diffZ) + 180.0f;
-        for (diff = Math.abs(angle - this.yaw); diff > 180.0f; diff -= 360.0f) {
+        float diff = Math.abs(angle - this.yaw);
+        while (diff > 180.0f) {
+            diff -= 360.0f;
         }
         while (diff < -180.0f) {
             diff += 360.0f;
@@ -1168,10 +811,7 @@ public abstract class MixinLivingEntity extends Entity implements AccessLivingEn
         return diff < 50.0f;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
+    @Override
     public double getGravity() {
         return this.gravity;
     }

@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.entities.EntityAirFX;
+import io.github.ryuu.adventurecraft.extensions.entity.player.ExPlayer;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.entity.Entity;
@@ -112,8 +113,9 @@ public class BlockFan extends Tile {
                 if (e instanceof FallingTile) continue;
                 dist = e.method_1350((double) x + 0.5, (double) y + 0.5, (double) z + 0.5) * (double) Math.abs(xOffset + yOffset + zOffset) / 4.0;
                 e.method_1322(0.07 * (double) xOffset / dist, 0.07 * (double) yOffset / dist, 0.07 * (double) zOffset / dist);
-                if (!(e instanceof Player) || !((Player) e).usingUmbrella()) continue;
-                e.method_1322(0.07 * (double) xOffset / dist, 0.07 * (double) yOffset / dist, 0.07 * (double) zOffset / dist);
+                if (e instanceof Player && ((ExPlayer) e).usingUmbrella()) {
+                    e.method_1322(0.07 * (double) xOffset / dist, 0.07 * (double) yOffset / dist, 0.07 * (double) zOffset / dist);
+                }
             }
             entities = AccessMinecraft.getInstance().particleManager.getEffectsWithinAABB(aabb);
             for (Object obj : entities) {

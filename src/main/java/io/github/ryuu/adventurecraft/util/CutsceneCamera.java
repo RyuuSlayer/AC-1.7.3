@@ -21,11 +21,11 @@ public class CutsceneCamera {
 
     CutsceneCameraPoint prevPoint;
 
-    List<CutsceneCameraPoint> cameraPoints = new LinkedList<>();
+    public List<CutsceneCameraPoint> cameraPoints = new LinkedList<>();
 
     List<Vec3f> lineVecs = new LinkedList<>();
 
-    int startType = 2;
+    public int startType = 2;
 
     public void addCameraPoint(float time, float posX, float posY, float posZ, float yaw, float pitch, int type) {
         int index = 0;

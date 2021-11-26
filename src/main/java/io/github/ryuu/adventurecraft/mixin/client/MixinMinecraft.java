@@ -1,7 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.client;
 
 import io.github.ryuu.adventurecraft.Main;
-import io.github.ryuu.adventurecraft.accessors.items.ClickableItemInstance;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.extensions.client.ExMinecraft;
 import io.github.ryuu.adventurecraft.extensions.client.gui.ExScreen;

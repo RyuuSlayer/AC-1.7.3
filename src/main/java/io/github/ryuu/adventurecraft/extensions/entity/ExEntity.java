@@ -4,4 +4,8 @@ public interface ExEntity {
     int getCollisionX();
 
     int getCollisionZ();
+
+    void setCollidesWithClipBlocks(boolean collidesWithClipBlocks);
+
+    boolean getCollidesWithClipBlocks();
 }
