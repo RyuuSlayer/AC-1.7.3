@@ -1,18 +1,17 @@
 package io.github.ryuu.adventurecraft.items;
 
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
+import io.github.ryuu.adventurecraft.scripting.ScriptItem;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
-import net.minecraft.script.ScriptItem;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
@@ -54,22 +53,22 @@ public class ItemCustom extends ItemType {
                 p.load(new FileInputStream(descFile));
                 int itemID = Integer.parseInt(p.getProperty("itemID", "-1"));
                 if (itemID == -1) {
-                    AccessMinecraft.getInstance().overlay.addChatMessage(String.format("ItemID for %s is unspecified", new Object[]{descFile.getName()}));
+                    AccessMinecraft.getInstance().overlay.addChatMessage(String.format("ItemID for %s is unspecified", descFile.getName()));
                     break block7;
                 }
                 if (itemID <= 0) {
-                    AccessMinecraft.getInstance().overlay.addChatMessage(String.format("ItemID for %s specifies a negative itemID", new Object[]{descFile.getName()}));
+                    AccessMinecraft.getInstance().overlay.addChatMessage(String.format("ItemID for %s specifies a negative itemID", descFile.getName()));
                     break block7;
                 }
                 if (ItemType.byId[itemID] != null) {
-                    AccessMinecraft.getInstance().overlay.addChatMessage(String.format("ItemID (%d) for %s is already in use by %s", new Object[]{itemID, descFile.getName()}));
+                    AccessMinecraft.getInstance().overlay.addChatMessage(String.format("ItemID (%d) for %s is already in use by %s", itemID, descFile.getName()));
                     break block7;
                 }
                 return new ItemCustom(itemID, descFile.getName(), p);
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (NumberFormatException e) {
-                AccessMinecraft.getInstance().overlay.addChatMessage(String.format("ItemID for %s is specified invalidly '%s'", new Object[]{descFile.getName(), p.getProperty("itemID")}));
+                AccessMinecraft.getInstance().overlay.addChatMessage(String.format("ItemID for %s is specified invalidly '%s'", descFile.getName(), p.getProperty("itemID")));
             }
         }
         return null;
@@ -95,7 +94,7 @@ public class ItemCustom extends ItemType {
             Integer i = Integer.parseInt(intString);
             return i;
         } catch (NumberFormatException e) {
-            AccessMinecraft.getInstance().overlay.addChatMessage(String.format("Item File '%s' Property '%s' is specified invalidly '%s'", new Object[]{this.fileName, pName, intString}));
+            AccessMinecraft.getInstance().overlay.addChatMessage(String.format("Item File '%s' Property '%s' is specified invalidly '%s'", this.fileName, pName, intString));
             return null;
         }
     }
@@ -104,7 +103,7 @@ public class ItemCustom extends ItemType {
     public ItemInstance use(ItemInstance item, Level level, Player player) {
         if (!this.onItemUsedScript.equals("")) {
             ScriptItem item2 = new ScriptItem(item);
-            Object wrappedOut = Context.javaToJS((Object) item2, (Scriptable) level.scope);
+            Object wrappedOut = Context.javaToJS(item2, (Scriptable) level.scope);
             ScriptableObject.putProperty((Scriptable) level.scope, "itemUsed", wrappedOut);
             level.scriptHandler.runScript(this.onItemUsedScript, level.scope);
         }

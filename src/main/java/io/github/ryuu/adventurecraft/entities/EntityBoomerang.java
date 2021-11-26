@@ -27,7 +27,7 @@ public class EntityBoomerang extends Entity {
 
     Entity returnsTo;
 
-    List<net.minecraft.src.Entity> itemsPickedUp;
+    List<Entity> itemsPickedUp;
 
     ItemInstance item;
 
@@ -128,7 +128,7 @@ public class EntityBoomerang extends Entity {
         for (Object o : entitiesWithin) {
             Entity e = (Entity) o;
             if (e instanceof ItemEntity) {
-                this.itemsPickedUp.add((Object) e);
+                this.itemsPickedUp.add(e);
                 continue;
             }
             if (!(e instanceof LivingEntity) || e == this.returnsTo) continue;

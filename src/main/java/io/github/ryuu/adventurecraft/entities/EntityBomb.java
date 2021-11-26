@@ -70,7 +70,7 @@ public class EntityBomb extends ItemEntity {
             for (int y = -3; y <= 3; ++y) {
                 for (int z = -3; z <= 3; ++z) {
                     int blockID;
-                    Double distSq = (double) x * (double) x + (double) (y * y) + (double) (z * z);
+                    double distSq = (double) x * (double) x + (double) (y * y) + (double) (z * z);
                     if (!(distSq <= 9.0) || !(Tile.BY_ID[blockID = worldObj.getTileId(coordX + x, coordY + y, coordZ + z)] instanceof BlockBombable))
                         continue;
                     worldObj.setTile(coordX + x, coordY + y, coordZ + z, 0);
@@ -79,15 +79,15 @@ public class EntityBomb extends ItemEntity {
         }
         Random rand = new Random();
         rand.setSeed(worldObj.getLevelTime());
-        for (int x = -3; x <= 3; ++x) {
-            for (int y = -3; y <= 3; ++y) {
-                for (int z = -3; z <= 3; ++z) {
-                    Double distSq = (double) x * (double) x + (double) (y * y) + (double) (z * z);
+        for (double x = -3; x <= 3; ++x) {
+            for (Double y = (double) -3; y <= 3; ++y) {
+                for (Double z = (double) -3; z <= 3; ++z) {
+                    double distSq = x * x + (y * y) + (z * z);
                     if (rand.nextInt(3) != 0 || !(distSq <= 9.0)) continue;
-                    Double velX = x;
-                    Double velY = y;
-                    Double velZ = z;
-                    Double dist = Math.sqrt(distSq) * (0.75 + 0.5 * rand.nextDouble()) * 1.5 / 3.0;
+                    double velX = x;
+                    double velY = y;
+                    double velZ = z;
+                    double dist = Math.sqrt(distSq) * (0.75 + 0.5 * rand.nextDouble()) * 1.5 / 3.0;
                     velX = velX / dist;
                     velY = velY / dist;
                     velZ = velZ / dist;

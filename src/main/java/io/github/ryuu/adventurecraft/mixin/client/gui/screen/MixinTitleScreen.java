@@ -22,15 +22,12 @@ public class MixinTitleScreen extends Screen {
 
 
     @Shadow
-    private float ticksOpened;
-
-    @Shadow
-    private String splashMessage;
-
-    @Shadow
     @Final
     private static Random RANDOM;
-
+    @Shadow
+    private float ticksOpened;
+    @Shadow
+    private String splashMessage;
     @Shadow
     private Button multiplayerButton;
 

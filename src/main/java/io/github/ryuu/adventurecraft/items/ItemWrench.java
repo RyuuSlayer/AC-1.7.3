@@ -18,7 +18,7 @@ public class ItemWrench extends ItemType {
         if (ItemCursor.bothSet) {
             int blockToSwapTo = level.getTileId(x, y, z);
             int metadata = level.getTileMeta(x, y, z);
-            AccessMinecraft.getInstance().overlay.addChatMessage(String.format("Swapping blocks With BlockID %d", new Object[]{blockToSwapTo}));
+            AccessMinecraft.getInstance().overlay.addChatMessage(String.format("Swapping blocks With BlockID %d", blockToSwapTo));
             int minX = Math.min(ItemCursor.oneX, ItemCursor.twoX);
             int maxX = Math.max(ItemCursor.oneX, ItemCursor.twoX);
             int minY = Math.min(ItemCursor.oneY, ItemCursor.twoY);

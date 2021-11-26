@@ -1,7 +1,7 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
-import net.minecraft.script.ScopeTag;
+import io.github.ryuu.adventurecraft.scripting.ScopeTag;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.io.AbstractTag;
 import net.minecraft.util.io.CompoundTag;

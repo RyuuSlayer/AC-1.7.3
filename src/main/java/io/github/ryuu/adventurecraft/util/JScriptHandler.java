@@ -50,7 +50,7 @@ public class JScriptHandler {
             }
         }
         if (verbose) {
-            AccessMinecraft.getInstance().overlay.addChatMessage(String.format("Missing '%s'", new Object[]{fileName}));
+            AccessMinecraft.getInstance().overlay.addChatMessage(String.format("Missing '%s'", fileName));
         }
         return null;
     }

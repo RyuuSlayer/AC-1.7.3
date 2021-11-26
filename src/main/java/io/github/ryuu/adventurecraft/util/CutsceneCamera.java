@@ -40,7 +40,7 @@ public class CutsceneCamera {
     public void loadCameraEntities() {
         for (Object obj : AccessMinecraft.getInstance().level.entities) {
             if (obj instanceof EntityCamera) {
-                ((EntityCamera)obj).remove();
+                ((EntityCamera) obj).remove();
             }
         }
         for (CutsceneCameraPoint p : this.cameraPoints) {

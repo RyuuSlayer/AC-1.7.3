@@ -51,7 +51,7 @@ public class TileEntityStorage extends TileEntityMinMax {
                     if (te != null) {
                         CompoundTag tag = new CompoundTag();
                         te.writeIdentifyingData(tag);
-                        this.tileEntities.add((Object) tag);
+                        this.tileEntities.add(tag);
                     }
                     ++offset;
                 }
@@ -97,7 +97,7 @@ public class TileEntityStorage extends TileEntityMinMax {
             this.tileEntities.clear();
             int numTiles = tag.getInt("numTiles");
             for (int i = 0; i < numTiles; ++i) {
-                this.tileEntities.add((Object) tag.getCompoundTag(String.format("tile%d", i)));
+                this.tileEntities.add(tag.getCompoundTag(String.format("tile%d", i)));
             }
         }
         if (!tag.containsKey("acVersion") && AccessMinecraft.getInstance().level.properties.originallyFromAC) {

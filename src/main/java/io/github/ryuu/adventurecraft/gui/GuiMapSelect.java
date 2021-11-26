@@ -8,7 +8,6 @@ import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.OptionButton;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.resource.language.TranslationStorage;
-import net.minecraft.src.MapInfo;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
@@ -79,7 +78,7 @@ public class GuiMapSelect extends Screen {
                         File saveDir = new File(mcDir, "saves");
                         int i = 1;
                         do {
-                            this.saveName = String.format("%s - Save %d", new Object[]{this.selectedMap.name, i});
+                            this.saveName = String.format("%s - Save %d", this.selectedMap.name, i);
                             worldDir = new File(saveDir, this.saveName);
                             ++i;
                         } while (worldDir.exists());

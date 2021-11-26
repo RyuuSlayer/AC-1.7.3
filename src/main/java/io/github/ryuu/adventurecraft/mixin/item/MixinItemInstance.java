@@ -28,7 +28,7 @@ public abstract class MixinItemInstance implements ClickableItemInstance {
     public abstract ItemType getType();
 
     public boolean useItemLeftClick(Player entityplayer, Level world, int i, int j, int k, int l) {
-        return ((ClickableItemType)this.getType()).onItemUseLeftClick((ItemInstance) (Object) this, entityplayer, world, i, j, k, l);
+        return ((ClickableItemType) this.getType()).onItemUseLeftClick((ItemInstance) (Object) this, entityplayer, world, i, j, k, l);
     }
 
     @Inject(method = "fromTag", at = @At("TAIL"))
