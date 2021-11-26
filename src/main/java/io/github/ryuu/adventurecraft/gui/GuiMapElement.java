@@ -43,7 +43,6 @@ public class GuiMapElement extends ScriptUIContainer {
 
     public GuiMapElement(int xPos, int yPos, ScriptUIContainer p, String mName, String topDescription, String description, String texture, String mURL, int mID, int tRating, int nRatings) {
         super(xPos, yPos, p);
-        String[] labels;
         ArrayList<String> splitLines = new ArrayList<>();
         this.background = new ScriptUISprite(texture, 0.0f, 0.0f, 100.0f, 100.0f, 0.0, 0.0, this);
         this.topBack = new ScriptUIRect(0.0f, 0.0f, 100.0f, 12.0f, 0.0f, 0.0f, 0.0f, 0.5f, this);
@@ -54,7 +53,8 @@ public class GuiMapElement extends ScriptUIContainer {
         this.numRatings = nRatings;
         this.updateRatingBar();
         int i = 0;
-        for (String label : labels = mName.split("\n")) {
+        String[] labels = mName.split("\n");
+        for (String label : labels) {
             splitLines.clear();
             this.getLines(label, splitLines);
             for (String line : splitLines) {
@@ -96,7 +96,7 @@ public class GuiMapElement extends ScriptUIContainer {
         this.mapURL = mURL;
     }
 
-    void updateRatingBar() {
+    public void updateRatingBar() {
         if (this.voted != 0) {
             float rating = 12.8f * (float) this.voted;
             this.ratingBar.width = Math.round(rating);
@@ -108,7 +108,7 @@ public class GuiMapElement extends ScriptUIContainer {
         }
     }
 
-    void mouseMoved(int mouseX, int mouseY) {
+    public void mouseMoved(int mouseX, int mouseY) {
         if (0 <= mouseX && mouseX <= 64 && 85 < mouseY && mouseY < 100) {
             this.ratingBar.width = Math.min((mouseX / 13 + 1) * 13, 64);
             this.hoveringOverRating = true;
@@ -118,7 +118,7 @@ public class GuiMapElement extends ScriptUIContainer {
         }
     }
 
-    void ratingClicked(int mouseX, int mouseY) {
+    public void ratingClicked(int mouseX, int mouseY) {
         if (this.voted != 0) {
             this.totalRating -= this.voted;
             --this.numRatings;
@@ -136,7 +136,7 @@ public class GuiMapElement extends ScriptUIContainer {
         });
     }
 
-    void getLines(String text, List<String> lines) {
+    public void getLines(String text, List<String> lines) {
         String[] parts = text.split(" ");
         String curLine = "";
         for (String part : parts) {
@@ -177,12 +177,12 @@ public class GuiMapElement extends ScriptUIContainer {
         if ((this.fadeIn || this.fadeOut) && (fadeChange = (float) (2L * (fadeDiff = (fadeCurTime = System.nanoTime()) - this.fadeTimePrev)) / 1.0E9f) != 0.0f) {
             this.fadeTimePrev = fadeCurTime;
             for (ScriptUILabel desc : this.descriptions) {
-                desc.alpha = this.fadeIn ? (desc.alpha += fadeChange) : (desc.alpha -= fadeChange);
-                desc.alpha = Math.max(Math.min((float) desc.alpha, 1.0f), 0.0f);
+                desc.alpha = this.fadeIn ? desc.alpha + fadeChange : desc.alpha - fadeChange;
+                desc.alpha = Math.max(Math.min(desc.alpha, 1.0f), 0.0f);
             }
             for (ScriptUILabel desc : this.topFadeText) {
-                desc.alpha = this.fadeIn ? (desc.alpha += fadeChange) : (desc.alpha -= fadeChange);
-                desc.alpha = Math.max(Math.min((float) desc.alpha, 1.0f), 0.0f);
+                desc.alpha = this.fadeIn ? desc.alpha + fadeChange : desc.alpha - fadeChange;
+                desc.alpha = Math.max(Math.min(desc.alpha, 1.0f), 0.0f);
             }
             if (this.fadeIn) {
                 this.botFadeBack.alpha += fadeChange / 2.0f;
@@ -191,8 +191,8 @@ public class GuiMapElement extends ScriptUIContainer {
                 this.botFadeBack.alpha -= fadeChange / 2.0f;
                 this.topFadeBack.alpha -= fadeChange / 2.0f;
             }
-            this.botFadeBack.alpha = Math.max(Math.min((float) this.botFadeBack.alpha, 0.5f), 0.0f);
-            this.topFadeBack.alpha = Math.max(Math.min((float) this.topFadeBack.alpha, 0.5f), 0.0f);
+            this.botFadeBack.alpha = Math.max(Math.min(this.botFadeBack.alpha, 0.5f), 0.0f);
+            this.topFadeBack.alpha = Math.max(Math.min(this.topFadeBack.alpha, 0.5f), 0.0f);
             if (this.botFadeBack.alpha <= 0.0f || this.botFadeBack.alpha >= 0.5f) {
                 this.fadeIn = false;
                 this.fadeOut = false;

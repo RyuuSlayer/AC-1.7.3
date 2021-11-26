@@ -1379,8 +1379,8 @@ public class MixinLevel implements TileView {
                 this.areAllPlayersSleeping();
             }
             this.getChunkFromCache(i, j).addEntity(entity);
-            if (!this.entities.contains((Object) entity)) {
-                this.entities.add((Object) entity);
+            if (!this.entities.contains(entity)) {
+                this.entities.add(entity);
             }
             this.onEntityAdded(entity);
             return true;
@@ -1441,7 +1441,7 @@ public class MixinLevel implements TileView {
         if (entity.shouldTick && this.isChunkLoaded(n, n2)) {
             this.getChunkFromCache(n, n2).removeEntity(entity);
         }
-        this.entities.remove((Object) entity);
+        this.entities.remove(entity);
         this.onEntityRemoved(entity);
     }
 
@@ -1762,7 +1762,7 @@ public class MixinLevel implements TileView {
         }
         this.field_182.clear();
         for (int l = 0; l < this.entities.size(); ++l) {
-            net.minecraft.entity.Entity entity2 = (net.minecraft.entity.Entity) this.entities.get(l);
+            net.minecraft.entity.Entity entity2 = this.entities.get(l);
             if (entity2.vehicle != null) {
                 if (!entity2.vehicle.removed && entity2.vehicle.passenger == entity2) continue;
                 entity2.vehicle.passenger = null;
@@ -2888,8 +2888,8 @@ public class MixinLevel implements TileView {
                 this.getChunkFromCache(k, l);
             }
         }
-        if (!this.entities.contains((Object) entity)) {
-            this.entities.add((Object) entity);
+        if (!this.entities.contains(entity)) {
+            this.entities.add(entity);
         }
     }
 

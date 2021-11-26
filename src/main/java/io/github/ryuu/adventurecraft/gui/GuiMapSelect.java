@@ -79,7 +79,7 @@ public class GuiMapSelect extends Screen {
                         File saveDir = new File(mcDir, "saves");
                         int i = 1;
                         do {
-                            this.saveName = String.format("%s - Save %d", new Object[]{this.selectedMap.name, i});
+                            this.saveName = String.format("%s - Save %d", this.selectedMap.name, i);
                             worldDir = new File(saveDir, this.saveName);
                             ++i;
                         } while (worldDir.exists());

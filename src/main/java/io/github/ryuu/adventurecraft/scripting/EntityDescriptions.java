@@ -40,7 +40,7 @@ public class EntityDescriptions {
             p.load(new FileInputStream(descFile));
             ScriptEntityDescription desc = new ScriptEntityDescription(descFile.getName().split("\\.")[0]);
             try {
-                Integer health = Integer.parseInt(p.getProperty("health", "10"));
+                int health = Integer.parseInt(p.getProperty("health", "10"));
                 desc.health = health;
             } catch (NumberFormatException e) {
             }

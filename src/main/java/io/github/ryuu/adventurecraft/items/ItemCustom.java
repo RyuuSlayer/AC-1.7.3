@@ -54,22 +54,22 @@ public class ItemCustom extends ItemType {
                 p.load(new FileInputStream(descFile));
                 int itemID = Integer.parseInt(p.getProperty("itemID", "-1"));
                 if (itemID == -1) {
-                    AccessMinecraft.getInstance().overlay.addChatMessage(String.format("ItemID for %s is unspecified", new Object[]{descFile.getName()}));
+                    AccessMinecraft.getInstance().overlay.addChatMessage(String.format("ItemID for %s is unspecified", descFile.getName()));
                     break block7;
                 }
                 if (itemID <= 0) {
-                    AccessMinecraft.getInstance().overlay.addChatMessage(String.format("ItemID for %s specifies a negative itemID", new Object[]{descFile.getName()}));
+                    AccessMinecraft.getInstance().overlay.addChatMessage(String.format("ItemID for %s specifies a negative itemID", descFile.getName()));
                     break block7;
                 }
                 if (ItemType.byId[itemID] != null) {
-                    AccessMinecraft.getInstance().overlay.addChatMessage(String.format("ItemID (%d) for %s is already in use by %s", new Object[]{itemID, descFile.getName()}));
+                    AccessMinecraft.getInstance().overlay.addChatMessage(String.format("ItemID (%d) for %s is already in use by %s", itemID, descFile.getName()));
                     break block7;
                 }
                 return new ItemCustom(itemID, descFile.getName(), p);
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (NumberFormatException e) {
-                AccessMinecraft.getInstance().overlay.addChatMessage(String.format("ItemID for %s is specified invalidly '%s'", new Object[]{descFile.getName(), p.getProperty("itemID")}));
+                AccessMinecraft.getInstance().overlay.addChatMessage(String.format("ItemID for %s is specified invalidly '%s'", descFile.getName(), p.getProperty("itemID")));
             }
         }
         return null;
@@ -95,7 +95,7 @@ public class ItemCustom extends ItemType {
             Integer i = Integer.parseInt(intString);
             return i;
         } catch (NumberFormatException e) {
-            AccessMinecraft.getInstance().overlay.addChatMessage(String.format("Item File '%s' Property '%s' is specified invalidly '%s'", new Object[]{this.fileName, pName, intString}));
+            AccessMinecraft.getInstance().overlay.addChatMessage(String.format("Item File '%s' Property '%s' is specified invalidly '%s'", this.fileName, pName, intString));
             return null;
         }
     }

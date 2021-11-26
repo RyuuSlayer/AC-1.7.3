@@ -27,7 +27,7 @@ public class EntityBoomerang extends Entity {
 
     Entity returnsTo;
 
-    List<net.minecraft.src.Entity> itemsPickedUp;
+    List<ItemEntity> itemsPickedUp;
 
     ItemInstance item;
 
@@ -45,7 +45,7 @@ public class EntityBoomerang extends Entity {
         this.boomerangRotation = 0.0f;
         this.turningAround = true;
         this.timeBeforeTurnAround = 0;
-        this.itemsPickedUp = new ArrayList();
+        this.itemsPickedUp = new ArrayList<>();
         this.collidesWithClipBlocks = false;
     }
 
@@ -55,9 +55,9 @@ public class EntityBoomerang extends Entity {
         this.setRotation(entity.yaw, entity.pitch);
         double xHeading = -MathsHelper.sin(entity.yaw * 3.141593f / 180.0f);
         double zHeading = MathsHelper.cos(entity.yaw * 3.141593f / 180.0f);
-        this.velocityX = 0.5 * xHeading * (double) MathsHelper.cos(entity.pitch / 180.0f * 3.141593f);
-        this.velocityY = -0.5 * (double) MathsHelper.sin(entity.pitch / 180.0f * 3.141593f);
-        this.velocityZ = 0.5 * zHeading * (double) MathsHelper.cos(entity.pitch / 180.0f * 3.141593f);
+        this.velocityX = 0.5 * xHeading * MathsHelper.cos(entity.pitch / 180.0f * 3.141593f);
+        this.velocityY = -0.5 * MathsHelper.sin(entity.pitch / 180.0f * 3.141593f);
+        this.velocityZ = 0.5 * zHeading * MathsHelper.cos(entity.pitch / 180.0f * 3.141593f);
         this.setPosition(entity.x, entity.y, entity.z);
         this.prevX = this.x;
         this.prevY = this.y;
@@ -128,7 +128,7 @@ public class EntityBoomerang extends Entity {
         for (Object o : entitiesWithin) {
             Entity e = (Entity) o;
             if (e instanceof ItemEntity) {
-                this.itemsPickedUp.add((Object) e);
+                this.itemsPickedUp.add((ItemEntity)e);
                 continue;
             }
             if (!(e instanceof LivingEntity) || e == this.returnsTo) continue;

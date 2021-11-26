@@ -18,10 +18,10 @@ public class TileEntityStorage extends TileEntityMinMax {
 
     ArrayList<CompoundTag> tileEntities = new ArrayList<>();
 
-    TileEntityStorage() {
+    public TileEntityStorage() {
     }
 
-    void setArea() {
+    public void setArea() {
         this.minX = ItemCursor.minX;
         this.minY = ItemCursor.minY;
         this.minZ = ItemCursor.minZ;
@@ -37,7 +37,7 @@ public class TileEntityStorage extends TileEntityMinMax {
         this.saveCurrentArea();
     }
 
-    void saveCurrentArea() {
+    public void saveCurrentArea() {
         int offset = 0;
         this.tileEntities.clear();
         for (int x = this.minX; x <= this.maxX; ++x) {
@@ -51,7 +51,7 @@ public class TileEntityStorage extends TileEntityMinMax {
                     if (te != null) {
                         CompoundTag tag = new CompoundTag();
                         te.writeIdentifyingData(tag);
-                        this.tileEntities.add((Object) tag);
+                        this.tileEntities.add(tag);
                     }
                     ++offset;
                 }
@@ -60,7 +60,7 @@ public class TileEntityStorage extends TileEntityMinMax {
         this.level.getChunk(this.x, this.z).method_885();
     }
 
-    void loadCurrentArea() {
+    public void loadCurrentArea() {
         if (this.blockIDs == null) {
             return;
         }
@@ -97,7 +97,7 @@ public class TileEntityStorage extends TileEntityMinMax {
             this.tileEntities.clear();
             int numTiles = tag.getInt("numTiles");
             for (int i = 0; i < numTiles; ++i) {
-                this.tileEntities.add((Object) tag.getCompoundTag(String.format("tile%d", i)));
+                this.tileEntities.add(tag.getCompoundTag(String.format("tile%d", i)));
             }
         }
         if (!tag.containsKey("acVersion") && AccessMinecraft.getInstance().level.properties.originallyFromAC) {

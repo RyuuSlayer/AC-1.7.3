@@ -1,7 +1,9 @@
 package io.github.ryuu.adventurecraft.entities;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityNpcPath;
+import io.github.ryuu.adventurecraft.scripting.EntityDescriptions;
 import io.github.ryuu.adventurecraft.scripting.ScriptEntity;
+import io.github.ryuu.adventurecraft.scripting.ScriptEntityDescription;
 import io.github.ryuu.adventurecraft.util.CoordBlock;
 import io.github.ryuu.adventurecraft.util.IEntityPather;
 import net.minecraft.class_61;
@@ -9,10 +11,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
-import net.minecraft.script.EntityDescriptions;
-import net.minecraft.script.ScopeTag;
-import net.minecraft.script.ScriptEntity;
-import net.minecraft.script.ScriptEntityDescription;
 import net.minecraft.util.io.AbstractTag;
 import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.MathsHelper;
@@ -45,7 +43,7 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
     public EntityLivingScript(Level w) {
         super(w);
         this.scope = w.script.getNewScope();
-        Object wrappedOut = Context.javaToJS((Object) ScriptEntity.getEntityClass(this), this.scope);
+        Object wrappedOut = Context.javaToJS(ScriptEntity.getEntityClass(this), this.scope);
         ScriptableObject.putProperty(this.scope, "entity", wrappedOut);
     }
 
@@ -96,7 +94,7 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
 
     @Override
     public boolean damage(Entity target, int amount) {
-        Object wrappedOut = Context.javaToJS((Object) ScriptEntity.getEntityClass(target), this.scope);
+        Object wrappedOut = Context.javaToJS(ScriptEntity.getEntityClass(target), this.scope);
         ScriptableObject.putProperty(this.scope, "attackingEntity", wrappedOut);
         wrappedOut = Context.javaToJS(amount, this.scope);
         ScriptableObject.putProperty(this.scope, "attackingDamage", wrappedOut);
@@ -108,7 +106,7 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
 
     @Override
     public boolean attackEntityFromMulti(Entity entity, int i) {
-        Object wrappedOut = Context.javaToJS((Object) ScriptEntity.getEntityClass(entity), this.scope);
+        Object wrappedOut = Context.javaToJS(ScriptEntity.getEntityClass(entity), this.scope);
         ScriptableObject.putProperty(this.scope, "attackingEntity", wrappedOut);
         wrappedOut = Context.javaToJS(i, this.scope);
         ScriptableObject.putProperty(this.scope, "attackingDamage", wrappedOut);
@@ -192,7 +190,7 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
     private boolean runOnAttackedScript() {
         if (!this.onAttacked.equals("")) {
             Object obj = this.level.scriptHandler.runScript(this.onAttacked, this.scope);
-            if (obj == null || !(obj instanceof Boolean)) {
+            if (!(obj instanceof Boolean)) {
                 return true;
             }
             return (Boolean) obj;
@@ -209,7 +207,7 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
     private boolean runOnInteractionScript() {
         if (!this.onInteraction.equals("")) {
             Object obj = this.level.scriptHandler.runScript(this.onInteraction, this.scope);
-            if (obj == null || !(obj instanceof Boolean)) {
+            if (!(obj instanceof Boolean)) {
                 return true;
             }
             return (Boolean) obj;

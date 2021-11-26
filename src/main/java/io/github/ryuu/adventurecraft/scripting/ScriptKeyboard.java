@@ -108,7 +108,7 @@ public class ScriptKeyboard {
         wrappedOut = Context.javaToJS(keyState, this.scope);
         ScriptableObject.putProperty(this.scope, "keyState", wrappedOut);
         Object result = this.world.scriptHandler.runScript(scriptName, this.scope);
-        if (result == null || !(result instanceof Boolean)) {
+        if (!(result instanceof Boolean)) {
             return true;
         }
         return (Boolean) result;

@@ -24,8 +24,8 @@ public class Script {
     ScriptSound sound;
     ScriptUI ui;
     ScriptScript script;
-    LinkedList<ScriptContinuation> sleepingScripts = new LinkedList();
-    LinkedList<ScriptContinuation> removeMe = new LinkedList();
+    LinkedList<ScriptContinuation> sleepingScripts = new LinkedList<>();
+    LinkedList<ScriptContinuation> removeMe = new LinkedList<>();
 
     public Script(Level w) {
         this.cx = ContextFactory.getGlobal().enterContext();
@@ -60,7 +60,7 @@ public class Script {
         ScriptableObject.putProperty(this.globalScope, "sound", wrappedOut);
         wrappedOut = Context.javaToJS(this.ui, this.globalScope);
         ScriptableObject.putProperty(this.globalScope, "ui", wrappedOut);
-        wrappedOut = Context.javaToJS((Object) AccessMinecraft.getInstance().overlay.scriptUI, this.globalScope);
+        wrappedOut = Context.javaToJS(AccessMinecraft.getInstance().overlay.scriptUI, this.globalScope);
         ScriptableObject.putProperty(this.globalScope, "screen", wrappedOut);
         wrappedOut = Context.javaToJS(this.script, this.globalScope);
         ScriptableObject.putProperty(this.globalScope, "script", wrappedOut);
@@ -142,14 +142,13 @@ public class Script {
             if (c.wakeUp > tick) continue;
             this.removeMe.add(c);
         }
-        Iterator i$ = this.removeMe.iterator();
+        Iterator<ScriptContinuation> i$ = this.removeMe.iterator();
         while (true) {
-            ScriptContinuation c;
             if (!i$.hasNext()) {
                 this.removeMe.clear();
                 return;
             }
-            c = (ScriptContinuation) i$.next();
+            ScriptContinuation c = i$.next();
             this.sleepingScripts.remove(c);
             try {
                 this.curScope = c.scope;

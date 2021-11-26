@@ -4,6 +4,8 @@ import io.github.ryuu.adventurecraft.entities.EntityLivingScript;
 import io.github.ryuu.adventurecraft.entities.EntitySkeletonSword;
 import io.github.ryuu.adventurecraft.items.ItemCursor;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
+import io.github.ryuu.adventurecraft.scripting.ScopeTag;
+import io.github.ryuu.adventurecraft.scripting.ScriptEntity;
 import io.github.ryuu.adventurecraft.util.Coord;
 import io.github.ryuu.adventurecraft.util.TriggerArea;
 import net.minecraft.entity.*;
@@ -12,15 +14,12 @@ import net.minecraft.entity.monster.Skeleton;
 import net.minecraft.entity.monster.Slime;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
-import net.minecraft.script.ScopeTag;
-import net.minecraft.script.ScriptEntity;
 import net.minecraft.tile.Tile;
 import net.minecraft.util.io.AbstractTag;
 import net.minecraft.util.io.CompoundTag;
 import org.mozilla.javascript.Scriptable;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -42,9 +41,9 @@ public class TileEntityMobSpawner extends TileEntityScript {
 
     public boolean spawnOnDetrigger = false;
 
-    public List<net.minecraft.src.Entity> spawnedEntities = new ArrayList();
+    public List<Entity> spawnedEntities = new ArrayList<>();
 
-    public List<net.minecraft.src.Entity> entitiesLeft = new ArrayList();
+    public List<Entity> entitiesLeft = new ArrayList<>();
 
     public int spawnID;
 
@@ -77,8 +76,8 @@ public class TileEntityMobSpawner extends TileEntityScript {
                 ++numAlive;
                 continue;
             }
-            if (!this.entitiesLeft.contains((Object) ent)) continue;
-            this.entitiesLeft.remove((Object) ent);
+            if (!this.entitiesLeft.contains(ent)) continue;
+            this.entitiesLeft.remove(ent);
         }
         return numAlive;
     }
@@ -149,15 +148,15 @@ public class TileEntityMobSpawner extends TileEntityScript {
                 rider.setPositionAndAngles(posX, posY, posZ, rot, 0.0f);
                 this.level.spawnEntity(rider);
                 rider.startRiding(entity);
-                this.spawnedEntities.add((Object) rider);
-                this.entitiesLeft.add((Object) rider);
+                this.spawnedEntities.add(rider);
+                this.entitiesLeft.add(rider);
             } else if (this.entityID.equalsIgnoreCase("Spider Skeleton Sword")) {
                 rider = new EntitySkeletonSword(this.level);
                 rider.setPositionAndAngles(posX, posY, posZ, rot, 0.0f);
                 this.level.spawnEntity(rider);
                 rider.startRiding(entity);
-                this.spawnedEntities.add((Object) rider);
-                this.entitiesLeft.add((Object) rider);
+                this.spawnedEntities.add(rider);
+                this.entitiesLeft.add(rider);
             } else if (this.entityID.equalsIgnoreCase("Wolf (Angry)")) {
                 w = (Wolf) entity;
                 w.setAngry(true);
@@ -177,14 +176,13 @@ public class TileEntityMobSpawner extends TileEntityScript {
             if (entity instanceof LivingEntity) {
                 ((LivingEntity) entity).onSpawnedFromSpawner();
             }
-            this.spawnedEntities.add((Object) entity);
-            this.entitiesLeft.add((Object) entity);
+            this.spawnedEntities.add(entity);
+            this.entitiesLeft.add(entity);
             if (this.spawnedEntities.size() >= this.spawnNumber) break;
         }
         if (this.spawnNumber > 0 && this.spawnedEntities.size() == 0) {
             this.delay = 20;
             this.spawnStill = true;
-            return;
         } else {
             this.activateTriggers();
             this.executeScript(this.onTriggerScriptFile);
@@ -204,9 +202,9 @@ public class TileEntityMobSpawner extends TileEntityScript {
                         Entity obj;
                         Entity e = obj = (Entity) o;
                         if (e.id != entID) continue;
-                        this.spawnedEntities.add((Object) e);
+                        this.spawnedEntities.add(e);
                         if (!e.isAlive()) continue block0;
-                        this.entitiesLeft.add((Object) e);
+                        this.entitiesLeft.add(e);
                         continue block0;
                     }
                 }

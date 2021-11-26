@@ -73,7 +73,7 @@ public class MixinFlowingFluidTile extends FluidTile {
                     j1 = 0;
                 }
             }
-            if (this.material == Material.LAVA && l < 8 && j1 < 8 && j1 > l && rand.nextInt(4) != 0) {
+            if (this.material == Material.LAVA && j1 < 8 && j1 > l && rand.nextInt(4) != 0) {
                 j1 = l;
                 flag = false;
             }

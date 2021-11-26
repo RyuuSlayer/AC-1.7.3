@@ -450,7 +450,7 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft {
         }
         if (itemUsing != null) {
             if (this.lastItemUsed != itemUsing) {
-                Object wrappedOut = Context.javaToJS((Object) new ScriptItem(itemUsing), (Scriptable) this.level.script.globalScope);
+                Object wrappedOut = Context.javaToJS(new ScriptItem(itemUsing), (Scriptable) this.level.script.globalScope);
                 ScriptableObject.putProperty((Scriptable) this.level.script.globalScope, "lastItemUsed", wrappedOut);
                 this.lastItemUsed = itemUsing;
             }
@@ -468,7 +468,7 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft {
             } else if (this.hitResult.type == HitType.ENTITY) {
                 if (this.lastEntityHit != this.hitResult.field_1989) {
                     this.lastEntityHit = this.hitResult.field_1989;
-                    Object wrappedOut = Context.javaToJS((Object) ScriptEntity.getEntityClass(this.hitResult.field_1989), (Scriptable) this.level.script.globalScope);
+                    Object wrappedOut = Context.javaToJS(ScriptEntity.getEntityClass(this.hitResult.field_1989), (Scriptable) this.level.script.globalScope);
                     ScriptableObject.putProperty((Scriptable) this.level.script.globalScope, "hitEntity", wrappedOut);
                 }
                 if (this.lastBlockHit != null) {
@@ -479,7 +479,7 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft {
             } else if (this.hitResult.type == HitType.TILE) {
                 if (this.lastBlockHit == null || this.lastBlockHit.x != (double) this.hitResult.x || this.lastBlockHit.y != (double) this.hitResult.y || this.lastBlockHit.z != (double) this.hitResult.z) {
                     this.lastBlockHit = new ScriptVec3(this.hitResult.x, this.hitResult.y, this.hitResult.z);
-                    Object wrappedOut = Context.javaToJS((Object) this.lastBlockHit, (Scriptable) this.level.script.globalScope);
+                    Object wrappedOut = Context.javaToJS(this.lastBlockHit, (Scriptable) this.level.script.globalScope);
                     ScriptableObject.putProperty((Scriptable) this.level.script.globalScope, "hitBlock", wrappedOut);
                 }
                 if (this.lastEntityHit != null) {

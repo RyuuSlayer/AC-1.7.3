@@ -20,7 +20,7 @@ public class ItemQuill extends ItemType {
             yToUse = (float) y2 + player.standingEyeHeight;
             break;
         }
-        AccessMinecraft.getInstance().overlay.addChatMessage(String.format("Teleporting to (%.1f, %.1f %.1f)", new Object[]{(double) x + 0.5, yToUse, (double) z + 0.5}));
+        AccessMinecraft.getInstance().overlay.addChatMessage(String.format("Teleporting to (%.1f, %.1f %.1f)", (double) x + 0.5, yToUse, (double) z + 0.5));
         player.setPosition((double) x + 0.5, yToUse, (double) z + 0.5);
         return false;
     }

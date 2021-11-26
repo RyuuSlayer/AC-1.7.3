@@ -44,15 +44,15 @@ public class TextureAnimated {
         }
         this.curFrame = 0;
         if (bufferedimage == null) {
-            AccessMinecraft.getInstance().overlay.addChatMessage(String.format("Unable to load texture '%s'", new Object[]{animatedTex}));
+            AccessMinecraft.getInstance().overlay.addChatMessage(String.format("Unable to load texture '%s'", animatedTex));
             return;
         }
         if (this.width != bufferedimage.getWidth()) {
-            AccessMinecraft.getInstance().overlay.addChatMessage(String.format("Animated texture width of %d didn't match the specified width of %d", new Object[]{bufferedimage.getWidth(), this.width}));
+            AccessMinecraft.getInstance().overlay.addChatMessage(String.format("Animated texture width of %d didn't match the specified width of %d", bufferedimage.getWidth(), this.width));
             return;
         }
         if (0 != bufferedimage.getHeight() % this.height) {
-            AccessMinecraft.getInstance().overlay.addChatMessage(String.format("Animated texture height of %d isn't a multiple of the specified height of %d", new Object[]{bufferedimage.getHeight(), this.height}));
+            AccessMinecraft.getInstance().overlay.addChatMessage(String.format("Animated texture height of %d isn't a multiple of the specified height of %d", bufferedimage.getHeight(), this.height));
             return;
         }
         this.numFrames = bufferedimage.getHeight() / this.height;

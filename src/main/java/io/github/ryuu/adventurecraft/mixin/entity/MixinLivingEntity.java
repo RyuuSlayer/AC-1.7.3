@@ -502,7 +502,7 @@ public abstract class MixinLivingEntity extends Entity {
         this.field_1045 = true;
         if (!this.level.isClient) {
             this.dropLoot();
-            if (entity != null && entity instanceof LivingEntity && ((LivingEntity) entity).health < ((LivingEntity) entity).maxHealth && this.rand.nextInt(3) != 0) {
+            if (entity instanceof LivingEntity && ((LivingEntity) entity).health < ((LivingEntity) entity).maxHealth && this.rand.nextInt(3) != 0) {
                 ItemEntity heart = new ItemEntity(this.level, this.x, this.y, this.z, new ItemInstance(Items.heart.id, 1, 0));
                 this.level.spawnEntity(heart);
             }

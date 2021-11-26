@@ -1,11 +1,11 @@
 package io.github.ryuu.adventurecraft.gui;
 
+import io.github.ryuu.adventurecraft.scripting.ScriptUIContainer;
 import net.minecraft.class_520;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.render.Tessellator;
-import net.minecraft.script.ScriptUIContainer;
 import org.lwjgl.opengl.GL11;
 
 import javax.swing.*;
@@ -21,7 +21,7 @@ public class GuiMapDownload extends Screen {
 
     static final String url = "http://www.adventurecraft.org/";
     private final File mapDownloadFolder;
-    private final ArrayList<net.minecraft.src.GuiMapElement> maps = new ArrayList();
+    private final ArrayList<GuiMapElement> maps = new ArrayList<>();
     private final Random rand;
     public ScriptUIContainer ui = new ScriptUIContainer(0.0f, 26.0f, null);
     protected Screen parentScreen;
@@ -242,7 +242,7 @@ public class GuiMapDownload extends Screen {
         if (mapInfo.exists()) {
             try {
                 BufferedReader input = new BufferedReader(new FileReader(mapInfo));
-                ArrayList lines = new ArrayList();
+                ArrayList<String> lines = new ArrayList<>();
                 while (input.ready()) {
                     String line = input.readLine();
                     line = line.replace("\\n", "\n");
