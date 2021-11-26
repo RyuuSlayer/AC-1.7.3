@@ -41,18 +41,6 @@ public abstract class MixinOverlay extends DrawableHelper {
 
     @Shadow
     private Minecraft minecraft;
-    @Shadow
-    private Random rand;
-    @Shadow
-    private int field_2548;
-    @Shadow
-    private int jukeboxMessageTime;
-    @Shadow
-    private boolean field_2551;
-    @Shadow
-    private String jukeboxMessage;
-    @Shadow
-    private List chatMessages;
 
     @Shadow
     protected abstract void method_1945(float f, int i, int j);
@@ -64,7 +52,21 @@ public abstract class MixinOverlay extends DrawableHelper {
     protected abstract void method_1951(float f, int i, int j);
 
     @Shadow
+    private Random rand;
+
+    @Shadow
+    private int field_2548;
+
+    @Shadow
     protected abstract void method_1948(int i, int j, int k, float f);
+
+    @Shadow private int jukeboxMessageTime;
+
+    @Shadow private boolean field_2551;
+
+    @Shadow private String jukeboxMessage;
+
+    @Shadow private List chatMessages;
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void Overlay(Minecraft minecraft, CallbackInfo ci) {
@@ -75,7 +77,7 @@ public abstract class MixinOverlay extends DrawableHelper {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite
-    public void render(float f, boolean flag, int i, int j) {
+    public void render (float f, boolean flag, int i, int j) {
         float f1;
         ScreenScaler scaledresolution = new ScreenScaler(this.minecraft.options, this.minecraft.actualWidth, this.minecraft.actualHeight);
         int scaledWidth = scaledresolution.getScaledWidth();

@@ -10,6 +10,7 @@ import net.minecraft.util.io.CompoundTag;
 public class EntityNPC extends EntityLivingScript {
 
     public String npcName;
+
     public String chatMsg;
     public double spawnX;
     public double spawnY;
@@ -144,7 +145,7 @@ public class EntityNPC extends EntityLivingScript {
     public boolean interact(Player entityplayer) {
         if (super.interact(entityplayer)) {
             if (this.chatMsg != null && !this.chatMsg.equals("")) {
-                AccessMinecraft.getInstance().overlay.addChatMessage(String.format("<%s> %s", this.npcName, this.chatMsg));
+                AccessMinecraft.getInstance().overlay.addChatMessage(String.format("<%s> %s", new Object[]{this.npcName, this.chatMsg}));
             }
             return true;
         }

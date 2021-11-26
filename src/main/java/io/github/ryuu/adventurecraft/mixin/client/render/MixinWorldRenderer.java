@@ -27,6 +27,7 @@ import net.minecraft.item.RecordItem;
 import net.minecraft.level.Level;
 import net.minecraft.level.LevelListener;
 import net.minecraft.level.chunk.ClientChunkCache;
+import net.minecraft.script.ScriptModel;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.hit.HitResult;

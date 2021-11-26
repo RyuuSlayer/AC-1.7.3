@@ -26,7 +26,7 @@ public class ItemPaintBucket extends ItemType {
                 for (int y2 = minY; y2 <= maxY; ++y2) {
                     for (int z2 = minZ; z2 <= maxZ; ++z2) {
                         Tile b = Tile.BY_ID[level.getTileId(x2, y2, z2)];
-                        if (!(b instanceof IBlockColor)) continue;
+                        if (b == null || !(b instanceof IBlockColor)) continue;
                         ((IBlockColor) b).incrementColor(level, x2, y2, z2);
                         level.method_243(x2, y2, z2);
                     }

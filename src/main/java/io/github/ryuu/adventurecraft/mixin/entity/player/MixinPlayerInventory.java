@@ -35,30 +35,6 @@ public abstract class MixinPlayerInventory implements Inventory {
     public int offhandItem;
     public int[] consumeInventory;
 
-    private static void onAddToSlot(ItemType itemType, Player entityPlayer, int slot, int damage) {
-        Scriptable scope = AccessMinecraft.getInstance().level.scope;
-        scope.put("slotID", scope, slot);
-        if (itemType.method_462()) {
-            AccessMinecraft.getInstance().level.scriptHandler.runScript(String.format("item_onAddToSlot_%d_%d.js", new Object[]{itemType.id, damage}), scope, false);
-        } else {
-            AccessMinecraft.getInstance().level.scriptHandler.runScript(String.format("item_onAddToSlot_%d.js", new Object[]{itemType.id}), scope, false);
-        }
-
-        ((ItemTypeSlotChangeNotifier) itemType).onAddToSlot(entityPlayer, slot, damage);
-    }
-
-    private static void onRemovedFromSlot(ItemType itemType, Player entityPlayer, int slot, int damage) {
-        Scriptable scope = AccessMinecraft.getInstance().level.scope;
-        scope.put("slotID", scope, slot);
-        if (itemType.method_462()) {
-            AccessMinecraft.getInstance().level.scriptHandler.runScript(String.format("item_onRemovedFromSlot_%d_%d.js", new Object[]{itemType.id, damage}), scope, false);
-        } else {
-            AccessMinecraft.getInstance().level.scriptHandler.runScript(String.format("item_onRemovedFromSlot_%d.js", new Object[]{itemType.id}), scope, false);
-        }
-
-        ((ItemTypeSlotChangeNotifier) itemType).onRemovedFromSlot(entityPlayer, slot, damage);
-    }
-
     @Inject(method = "<init>", at = @At("TAIL"))
     private void init(Player par1, CallbackInfo ci) {
         this.offhandItem = 1;
@@ -330,5 +306,30 @@ public abstract class MixinPlayerInventory implements Inventory {
             onRemovedFromSlot(ItemType.byId[itemID], this.player, slot, damage);
         }
         return true;
+    }
+
+
+    private static void onAddToSlot(ItemType itemType, Player entityPlayer, int slot, int damage) {
+        Scriptable scope = AccessMinecraft.getInstance().level.scope;
+        scope.put("slotID", scope, slot);
+        if (itemType.method_462()) {
+            AccessMinecraft.getInstance().level.scriptHandler.runScript(String.format("item_onAddToSlot_%d_%d.js", new Object[]{itemType.id, damage}), scope, false);
+        } else {
+            AccessMinecraft.getInstance().level.scriptHandler.runScript(String.format("item_onAddToSlot_%d.js", new Object[]{itemType.id}), scope, false);
+        }
+
+        ((ItemTypeSlotChangeNotifier) itemType).onAddToSlot(entityPlayer, slot, damage);
+    }
+
+    private static void onRemovedFromSlot(ItemType itemType, Player entityPlayer, int slot, int damage) {
+        Scriptable scope = AccessMinecraft.getInstance().level.scope;
+        scope.put("slotID", scope, slot);
+        if (itemType.method_462()) {
+            AccessMinecraft.getInstance().level.scriptHandler.runScript(String.format("item_onRemovedFromSlot_%d_%d.js", new Object[]{itemType.id, damage}), scope, false);
+        } else {
+            AccessMinecraft.getInstance().level.scriptHandler.runScript(String.format("item_onRemovedFromSlot_%d.js", new Object[]{itemType.id}), scope, false);
+        }
+
+        ((ItemTypeSlotChangeNotifier) itemType).onRemovedFromSlot(entityPlayer, slot, damage);
     }
 }

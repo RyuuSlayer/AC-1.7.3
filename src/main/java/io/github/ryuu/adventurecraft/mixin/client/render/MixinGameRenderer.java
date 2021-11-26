@@ -41,6 +41,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 import java.nio.FloatBuffer;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 

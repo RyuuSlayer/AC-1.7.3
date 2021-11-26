@@ -85,7 +85,7 @@ public class UndoStack {
             if (this.redoSelectionStack.size() > 128) {
                 this.redoSelectionStack.removeFirst();
             }
-            AccessMinecraft.getInstance().overlay.addChatMessage(String.format("Undo (Undo Actions Left: %d Redo Actions Left: %d)", this.undoStack.size(), this.redoStack.size()));
+            AccessMinecraft.getInstance().overlay.addChatMessage(String.format("Undo (Undo Actions Left: %d Redo Actions Left: %d)", new Object[]{this.undoStack.size(), this.redoStack.size()}));
         }
     }
 
@@ -103,7 +103,7 @@ public class UndoStack {
             if (this.undoSelectionStack.size() > 128) {
                 this.undoSelectionStack.removeFirst();
             }
-            AccessMinecraft.getInstance().overlay.addChatMessage(String.format("Redo (Undo Actions Left: %d Redo Actions Left: %d)", this.undoStack.size(), this.redoStack.size()));
+            AccessMinecraft.getInstance().overlay.addChatMessage(String.format("Redo (Undo Actions Left: %d Redo Actions Left: %d)", new Object[]{this.undoStack.size(), this.redoStack.size()}));
         }
     }
 }

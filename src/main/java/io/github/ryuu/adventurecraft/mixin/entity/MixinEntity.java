@@ -905,8 +905,8 @@ public abstract class MixinEntity {
             return;
         }
         this.vehicle.method_1382();
-        this.field_1651 += this.vehicle.yaw - this.vehicle.prevYaw;
-        this.field_1650 += this.vehicle.pitch - this.vehicle.prevPitch;
+        this.field_1651 += (double) (this.vehicle.yaw - this.vehicle.prevYaw);
+        this.field_1650 += (double) (this.vehicle.pitch - this.vehicle.prevPitch);
         while (this.field_1651 >= 180.0) {
             this.field_1651 -= 360.0;
         }

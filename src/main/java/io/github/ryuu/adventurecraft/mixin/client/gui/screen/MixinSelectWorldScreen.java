@@ -144,9 +144,9 @@ public abstract class MixinSelectWorldScreen extends Screen implements AccessSel
         @Overwrite
         protected void method_1267(int i, boolean flag) {
             boolean flag1;
-            ((AccessSelectWorldScreen) this.field_2444).setField_2435(i);
-            ((AccessSelectWorldScreen) this.field_2444).getSelectButton().active = flag1 = ((AccessSelectWorldScreen) this.field_2444).getField_2435() >= 0 && ((AccessSelectWorldScreen) this.field_2444).getField_2435() < this.method_1266();
-            ((AccessSelectWorldScreen) this.field_2444).getDeleteButton().active = flag1;
+            ((AccessSelectWorldScreen)this.field_2444).setField_2435(i);
+            ((AccessSelectWorldScreen)this.field_2444).getSelectButton().active = flag1 = ((AccessSelectWorldScreen)this.field_2444).getField_2435() >= 0 && ((AccessSelectWorldScreen)this.field_2444).getField_2435() < this.method_1266();
+            ((AccessSelectWorldScreen)this.field_2444).getDeleteButton().active = flag1;
             if (flag && flag1) {
                 this.field_2444.method_1891(i);
             }

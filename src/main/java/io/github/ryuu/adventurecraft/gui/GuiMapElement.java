@@ -178,11 +178,11 @@ public class GuiMapElement extends ScriptUIContainer {
             this.fadeTimePrev = fadeCurTime;
             for (ScriptUILabel desc : this.descriptions) {
                 desc.alpha = this.fadeIn ? (desc.alpha += fadeChange) : (desc.alpha -= fadeChange);
-                desc.alpha = Math.max(Math.min(desc.alpha, 1.0f), 0.0f);
+                desc.alpha = Math.max(Math.min((float) desc.alpha, 1.0f), 0.0f);
             }
             for (ScriptUILabel desc : this.topFadeText) {
                 desc.alpha = this.fadeIn ? (desc.alpha += fadeChange) : (desc.alpha -= fadeChange);
-                desc.alpha = Math.max(Math.min(desc.alpha, 1.0f), 0.0f);
+                desc.alpha = Math.max(Math.min((float) desc.alpha, 1.0f), 0.0f);
             }
             if (this.fadeIn) {
                 this.botFadeBack.alpha += fadeChange / 2.0f;
@@ -191,8 +191,8 @@ public class GuiMapElement extends ScriptUIContainer {
                 this.botFadeBack.alpha -= fadeChange / 2.0f;
                 this.topFadeBack.alpha -= fadeChange / 2.0f;
             }
-            this.botFadeBack.alpha = Math.max(Math.min(this.botFadeBack.alpha, 0.5f), 0.0f);
-            this.topFadeBack.alpha = Math.max(Math.min(this.topFadeBack.alpha, 0.5f), 0.0f);
+            this.botFadeBack.alpha = Math.max(Math.min((float) this.botFadeBack.alpha, 0.5f), 0.0f);
+            this.topFadeBack.alpha = Math.max(Math.min((float) this.topFadeBack.alpha, 0.5f), 0.0f);
             if (this.botFadeBack.alpha <= 0.0f || this.botFadeBack.alpha >= 0.5f) {
                 this.fadeIn = false;
                 this.fadeOut = false;

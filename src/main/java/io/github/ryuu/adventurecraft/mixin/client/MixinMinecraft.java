@@ -1,11 +1,11 @@
 package io.github.ryuu.adventurecraft.mixin.client;
 
 import io.github.ryuu.adventurecraft.Main;
-import io.github.ryuu.adventurecraft.accessors.client.gui.ScreenInputGrab;
 import io.github.ryuu.adventurecraft.accessors.items.ClickableItemInstance;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.gui.GuiMapSelect;
 import io.github.ryuu.adventurecraft.gui.GuiStore;
+import io.github.ryuu.adventurecraft.accessors.client.gui.ScreenInputGrab;
 import io.github.ryuu.adventurecraft.scripting.ScriptEntity;
 import io.github.ryuu.adventurecraft.scripting.ScriptItem;
 import io.github.ryuu.adventurecraft.scripting.ScriptVec3;
@@ -73,6 +73,9 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft {
 
     @Shadow
     public static int field_2771;
+
+    @Shadow
+    private Timer tickTimer;
     @Shadow
     public ClientInteractionManager interactionManager;
     @Shadow
@@ -102,6 +105,8 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft {
     @Shadow
     public GameRenderer gameRenderer;
     @Shadow
+    private ResourceDownloadThread resourceDownloadThread;
+    @Shadow
     public Overlay overlay;
     @Shadow
     public HitResult hitResult;
@@ -110,11 +115,26 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft {
     @Shadow
     public SoundHelper soundHelper;
     @Shadow
+    private File gameDir;
+    @Shadow
+    private LevelStorage levelStorage;
+    @Shadow
     public StatManager statManager;
     @Shadow
     public volatile boolean running;
     @Shadow
     public boolean field_2778;
+    @Shadow
+    long lastTickTime;
+    @Shadow
+    private int field_2786;
+    @Shadow
+    private int attackCooldown;
+    @Shadow
+    private int field_2798;
+    @Shadow
+    private int field_2799;
+
     public MapList mapList;
     public int nextFrameTime;
     public long prevFrameTimeForAvg;
@@ -125,53 +145,11 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft {
     public boolean cameraPause = true;
     public LivingEntity cutsceneCameraEntity;
     public GuiStore storeGUI;
-    @Shadow
-    long lastTickTime;
-    @Shadow
-    private Timer tickTimer;
-    @Shadow
-    private ResourceDownloadThread resourceDownloadThread;
-    @Shadow
-    private File gameDir;
-    @Shadow
-    private LevelStorage levelStorage;
-    @Shadow
-    private int field_2786;
-    @Shadow
-    private int attackCooldown;
-    @Shadow
-    private int field_2798;
-    @Shadow
-    private int field_2799;
     private ItemInstance lastItemUsed;
     private Entity lastEntityHit;
     private ScriptVec3 lastBlockHit;
     private int gcTime = 0;
     private int rightMouseTicksRan;
-
-    @Redirect(method = "start(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V",
-            at = @At(value = "NEW", target = "Lnet/minecraft/client/util/Session;<init>(Ljava/lang/String;Ljava/lang/String;)V"))
-    private static Session redirectSessionPlayerName(String username, String s) {
-        if (s == null)
-            return new Session("ACPlayer", "");
-        return new Session(username, s);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite
-    public static void main(String[] args) {
-        String s = "ACPlayer";
-        if (args.length > 0) {
-            s = args[0];
-        }
-        String s1 = "-";
-        if (args.length > 1) {
-            s1 = args[1];
-        }
-        Minecraft.start(s, s1);
-    }
 
     @Shadow
     public abstract boolean isConnectedToServer();
@@ -220,6 +198,30 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft {
         this.tFrameTimes = new long[60];
         this.cutsceneCamera = new CutsceneCamera();
         this.storeGUI = new GuiStore();
+    }
+
+    @Redirect(method = "start(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V",
+            at = @At(value = "NEW", target = "Lnet/minecraft/client/util/Session;<init>(Ljava/lang/String;Ljava/lang/String;)V"))
+    private static Session redirectSessionPlayerName(String username, String s) {
+        if (s == null)
+            return new Session("ACPlayer", "");
+        return new Session(username, s);
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite
+    public static void main(String[] args) {
+        String s = "ACPlayer";
+        if (args.length > 0) {
+            s = args[0];
+        }
+        String s1 = "-";
+        if (args.length > 1) {
+            s1 = args[1];
+        }
+        Minecraft.start(s, s1);
     }
 
     @Inject(method = "init", at = @At(
@@ -413,7 +415,7 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft {
                 if (i == 0) {
                     this.interactionManager.method_1707(j, k, l, this.hitResult.field_1987);
                     if (itemUsing != null) {
-                        ((ClickableItemInstance) itemUsing).useItemLeftClick(this.player, this.level, j, k, l, i1);
+                        ((ClickableItemInstance)itemUsing).useItemLeftClick(this.player, this.level, j, k, l, i1);
                     }
                 } else {
                     int j1;
@@ -448,7 +450,7 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft {
         }
         if (itemUsing != null) {
             if (this.lastItemUsed != itemUsing) {
-                Object wrappedOut = Context.javaToJS(new ScriptItem(itemUsing), (Scriptable) this.level.script.globalScope);
+                Object wrappedOut = Context.javaToJS((Object) new ScriptItem(itemUsing), (Scriptable) this.level.script.globalScope);
                 ScriptableObject.putProperty((Scriptable) this.level.script.globalScope, "lastItemUsed", wrappedOut);
                 this.lastItemUsed = itemUsing;
             }
@@ -466,7 +468,7 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft {
             } else if (this.hitResult.type == HitType.ENTITY) {
                 if (this.lastEntityHit != this.hitResult.field_1989) {
                     this.lastEntityHit = this.hitResult.field_1989;
-                    Object wrappedOut = Context.javaToJS(ScriptEntity.getEntityClass(this.hitResult.field_1989), (Scriptable) this.level.script.globalScope);
+                    Object wrappedOut = Context.javaToJS((Object) ScriptEntity.getEntityClass(this.hitResult.field_1989), (Scriptable) this.level.script.globalScope);
                     ScriptableObject.putProperty((Scriptable) this.level.script.globalScope, "hitEntity", wrappedOut);
                 }
                 if (this.lastBlockHit != null) {
@@ -477,7 +479,7 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft {
             } else if (this.hitResult.type == HitType.TILE) {
                 if (this.lastBlockHit == null || this.lastBlockHit.x != (double) this.hitResult.x || this.lastBlockHit.y != (double) this.hitResult.y || this.lastBlockHit.z != (double) this.hitResult.z) {
                     this.lastBlockHit = new ScriptVec3(this.hitResult.x, this.hitResult.y, this.hitResult.z);
-                    Object wrappedOut = Context.javaToJS(this.lastBlockHit, (Scriptable) this.level.script.globalScope);
+                    Object wrappedOut = Context.javaToJS((Object) this.lastBlockHit, (Scriptable) this.level.script.globalScope);
                     ScriptableObject.putProperty((Scriptable) this.level.script.globalScope, "hitBlock", wrappedOut);
                 }
                 if (this.lastEntityHit != null) {

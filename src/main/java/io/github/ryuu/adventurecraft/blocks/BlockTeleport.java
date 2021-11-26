@@ -72,7 +72,7 @@ public class BlockTeleport extends TileWithEntity {
             obj.x = ItemCursor.minX;
             obj.y = ItemCursor.minY;
             obj.z = ItemCursor.minZ;
-            AccessMinecraft.getInstance().overlay.addChatMessage(String.format("Setting Teleport (%d, %d, %d)", obj.x, obj.y, obj.z));
+            AccessMinecraft.getInstance().overlay.addChatMessage(String.format("Setting Teleport (%d, %d, %d)", new Object[]{obj.x, obj.y, obj.z}));
             return true;
         }
         return false;

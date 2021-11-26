@@ -12,11 +12,12 @@ public class Main implements ModInitializer {
 
     public static long[] updateTimes;
     public static long updateRendererTime;
-    private static WritableConfig config;
 
     static {
         updateTimes = new long[512];
     }
+
+    private static WritableConfig config;
 
     @Override
     public void onInitialize() {

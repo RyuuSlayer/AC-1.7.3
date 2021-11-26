@@ -9,19 +9,32 @@ import net.minecraft.level.Level;
 public class ItemCursor extends ItemType {
 
     public static boolean bothSet;
-    public static int oneX;
-    public static int oneY;
-    public static int oneZ;
-    public static int twoX;
-    public static int twoY;
-    public static int twoZ;
-    public static int minX;
-    public static int minY;
-    public static int minZ;
-    public static int maxX;
-    public static int maxY;
-    public static int maxZ;
+
     static boolean firstPosition;
+
+    public static int oneX;
+
+    public static int oneY;
+
+    public static int oneZ;
+
+    public static int twoX;
+
+    public static int twoY;
+
+    public static int twoZ;
+
+    public static int minX;
+
+    public static int minY;
+
+    public static int minZ;
+
+    public static int maxX;
+
+    public static int maxY;
+
+    public static int maxZ;
 
     static {
         firstPosition = true;
