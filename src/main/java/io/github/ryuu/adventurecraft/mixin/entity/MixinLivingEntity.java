@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.entity;
 
+import io.github.ryuu.adventurecraft.accessors.entity.AccessLivingEntity;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.items.Items;
 import net.minecraft.entity.Entity;
@@ -24,41 +25,169 @@ import org.spongepowered.asm.mixin.Shadow;
 import java.util.List;
 
 @Mixin(LivingEntity.class)
-public abstract class MixinLivingEntity extends Entity {
+public abstract class MixinLivingEntity extends Entity implements AccessLivingEntity {
 
-    @Shadow()
+    @Shadow
     public int field_1009 = 20;
 
+    @Shadow
     public float field_1010;
 
+    @Shadow
     public float field_1011;
 
+    @Shadow
     public float field_1012 = 0.0f;
 
+    @Shadow
     public float field_1013 = 0.0f;
-    public String texture = "/mob/char.png";
+
+    @Shadow
+    protected String texture = "/mob/char.png"; // once was public
+
+    @Shadow
     public boolean field_1026 = false;
+
+    @Shadow
     public float lastHandSwingProgress;
+
+    @Shadow
     public float handSwingProgress;
+
+    @Shadow
     public int health = 10;
-    public int maxHealth = 10;
+
+    @Shadow
     public int field_1037;
+
+    @Shadow
     public int hurtTime;
+
+    @Shadow
     public int field_1039;
+
+    @Shadow
     public float field_1040 = 0.0f;
+
+    @Shadow
     public int deathTime = 0;
+
+    @Shadow
     public int attackTime = 0;
+
+    @Shadow
     public float field_1043;
+
+    @Shadow
     public float field_1044;
+
+    @Shadow
     public int field_1046 = -1;
+
+    @Shadow
     public float field_1047 = (float) (Math.random() * (double) 0.9f + (double) 0.1f);
+
+    @Shadow
     public float field_1048;
+
+    @Shadow
     public float limbDistance;
+
+    @Shadow
     public float field_1050;
-    public int field_1058 = 0;
-    public boolean jumping = false;
-    public float movementSpeed = 0.7f;
-    public Entity field_1061;
+
+    @Shadow
+    protected int field_1058 = 0; // once was public
+
+    @Shadow
+    protected boolean jumping = false; // once was public
+
+    @Shadow
+    protected float movementSpeed = 0.7f; // once was public
+
+    @Shadow
+    private Entity field_1061; // once was public
+
+    @Shadow
+    protected float field_1014;
+
+    @Shadow
+    protected float field_1015;
+
+    @Shadow
+    protected float field_1016;
+
+    @Shadow
+    protected float field_1017;
+
+    @Shadow
+    protected boolean field_1018 = true;
+
+    @Shadow
+    protected boolean field_1020 = true;
+
+    @Shadow
+    protected float field_1021 = 0.0f;
+
+    @Shadow
+    protected String field_1022 = null;
+
+    @Shadow
+    protected float field_1023 = 1.0f;
+
+    @Shadow
+    protected int field_1024 = 0;
+
+    @Shadow
+    protected float field_1025 = 0.0f;
+
+    @Shadow
+    protected boolean field_1045 = false;
+
+    @Shadow
+    protected int field_1051;
+
+    @Shadow
+    protected double field_1052;
+
+    @Shadow
+    protected double field_1053;
+
+    @Shadow
+    protected double field_1054;
+
+    @Shadow
+    protected double field_1055;
+
+    @Shadow
+    protected double field_1056;
+
+    @Shadow
+    protected int despawnCounter = 0;
+
+    @Shadow
+    protected float perpendicularMovement;
+
+    @Shadow
+    protected float parallelMovement;
+
+    @Shadow
+    protected float field_1030;
+
+    @Shadow
+    protected float field_1032 = 0.0f;
+
+    @Shadow
+    protected int field_1034 = 0;
+
+    @Shadow
+    float field_1057 = 0.0f;
+
+    @Shadow
+    private int field_1028;
+
+    private long hurtTick;
+    private long tickBeforeNextJump;
     public ItemInstance heldItem;
     public int timesCanJumpInAir = 0;
     public int jumpsLeft = 0;
@@ -75,34 +204,7 @@ public abstract class MixinLivingEntity extends Entity {
     public int randomLookNext = 0;
     public int randomLookRate = 100;
     public int randomLookRateVariation = 40;
-    protected float field_1014;
-    protected float field_1015;
-    protected float field_1016;
-    protected float field_1017;
-    protected boolean field_1018 = true;
-    protected boolean field_1020 = true;
-    protected float field_1021 = 0.0f;
-    protected String field_1022 = null;
-    protected float field_1023 = 1.0f;
-    protected int field_1024 = 0;
-    protected float field_1025 = 0.0f;
-    protected boolean field_1045 = false;
-    protected int field_1051;
-    protected double field_1052;
-    protected double field_1053;
-    protected double field_1054;
-    protected double field_1055;
-    protected double field_1056;
-    protected int despawnCounter = 0;
-    protected float perpendicularMovement;
-    protected float parallelMovement;
-    protected float field_1030;
-    protected float field_1032 = 0.0f;
-    protected int field_1034 = 0;
-    float field_1057 = 0.0f;
-    private int field_1028;
-    private long hurtTick;
-    private long tickBeforeNextJump;
+    public int maxHealth = 10;
 
     public MixinLivingEntity(Level world) {
         super(world);
@@ -1072,5 +1174,15 @@ public abstract class MixinLivingEntity extends Entity {
     @Overwrite()
     public double getGravity() {
         return this.gravity;
+    }
+
+    @Override
+    public int getMaxHealth() {
+        return maxHealth;
+    }
+
+    @Override
+    public void setMaxHealth(int i) {
+        maxHealth = i;
     }
 }

@@ -69,7 +69,7 @@ import java.awt.*;
 import java.io.*;
 
 @Mixin(Minecraft.class)
-public abstract class MixinMinecraft implements Runnable, AccessMinecraft {
+public abstract class MixinMinecraft implements Runnable, AccessMinecraft, io.github.ryuu.adventurecraft.accessors.client.AccessMinecraft {
 
     @Shadow
     public static int field_2771;
@@ -918,5 +918,10 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft {
         int i = scaledresolution.getScaledWidth();
         int j = scaledresolution.getScaledHeight();
         this.storeGUI.init((Minecraft) (Object) this, i, j);
+    }
+
+    @Override
+    public boolean isCameraActive() {
+        return cameraActive;
     }
 }

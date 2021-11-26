@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.mixin.entity.player;
 
-import io.github.ryuu.adventurecraft.accessors.entity.player.PlayerAccessor;
+import io.github.ryuu.adventurecraft.accessors.entity.AccessLivingEntity;
+import io.github.ryuu.adventurecraft.accessors.entity.player.AccessPlayer;
 import io.github.ryuu.adventurecraft.accessors.items.ItemTypeLightEmitter;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.items.Items;
@@ -36,7 +37,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.List;
 
 @Mixin(Player.class)
-public abstract class MixinPlayer extends LivingEntity implements PlayerAccessor {
+public abstract class MixinPlayer extends LivingEntity implements AccessPlayer {
 
     @Shadow
     public PlayerInventory inventory;
@@ -72,7 +73,7 @@ public abstract class MixinPlayer extends LivingEntity implements PlayerAccessor
         Vec3i chunkcoordinates = world.getSpawnPosition();
         this.setPositionAndAngles((double) chunkcoordinates.x + 0.5, chunkcoordinates.y + 1, (double) chunkcoordinates.z + 0.5, 0.0f, 0.0f);
         this.health = 12;
-        this.maxHealth = 12;
+        ((AccessLivingEntity) this).setMaxHealth(12);
         this.field_1022 = "humanoid";
         this.field_1021 = 180.0f;
         this.field_1646 = 20;

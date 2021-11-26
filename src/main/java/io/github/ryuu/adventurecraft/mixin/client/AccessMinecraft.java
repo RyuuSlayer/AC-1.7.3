@@ -11,4 +11,5 @@ public interface AccessMinecraft {
     static Minecraft getInstance() {
         throw new AssertionError();
     }
+
 }

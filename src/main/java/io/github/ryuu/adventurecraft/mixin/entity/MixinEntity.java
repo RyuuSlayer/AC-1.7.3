@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.entity;
 
+import io.github.ryuu.adventurecraft.accessors.entity.AccessEntity;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
@@ -17,6 +18,7 @@ import net.minecraft.util.io.ListTag;
 import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.MathsHelper;
 import net.minecraft.util.maths.Vec3f;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -25,94 +27,216 @@ import java.util.List;
 import java.util.Random;
 
 @Mixin(Entity.class)
-public abstract class MixinEntity {
+public abstract class MixinEntity implements AccessEntity {
 
-    @Shadow()
-    public static int field_1590 = 0;
+    @Shadow
+    private static int field_1590 = 0; // once was public
+
+    @Final
+    @Shadow
     public final Box boundingBox = Box.create(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+
+    @Shadow
     public int id;
+
+    @Shadow
     public double renderDistanceMultiplier = 1.0;
+
+    @Shadow
     public boolean field_1593 = false;
+
+    @Shadow
     public Entity passenger;
+
+    @Shadow
     public Entity vehicle;
+
+    @Shadow
     public Level level;
+
+    @Shadow
     public double prevX;
+
+    @Shadow
     public double prevY;
+
+    @Shadow
     public double prevZ;
+
+    @Shadow
     public double x;
+
+    @Shadow
     public double y;
+
+    @Shadow
     public double z;
+
+    @Shadow
     public double velocityX;
+
+    @Shadow
     public double velocityY;
+
+    @Shadow
     public double velocityZ;
+
+    @Shadow
     public float yaw;
+
+    @Shadow
     public float pitch;
+
+    @Shadow
     public float prevYaw;
+
+    @Shadow
     public float prevPitch;
+
+    @Shadow
     public boolean onGround = false;
 
+    @Shadow
     public boolean field_1624;
 
+    @Shadow
     public boolean field_1625;
 
+    @Shadow
     public boolean field_1626 = false;
 
+    @Shadow
     public boolean shouldSendVelocityUpdate = false;
 
+    @Shadow
     public boolean inCobweb;
 
+    @Shadow
     public boolean field_1629 = true;
 
+    @Shadow
     public boolean removed = false;
 
+    @Shadow
     public float standingEyeHeight = 0.0f;
 
+    @Shadow
     public float width = 0.6f;
 
+    @Shadow
     public float height = 1.8f;
 
+    @Shadow
     public float field_1634 = 0.0f;
 
+    @Shadow
     public float field_1635 = 0.0f;
+
+    @Shadow
     public double prevRenderX;
+
+    @Shadow
     public double prevRenderY;
+
+    @Shadow
     public double prevRenderZ;
+
+    @Shadow
     public float field_1640 = 0.0f;
+
+    @Shadow
     public float field_1641 = 0.0f;
+
+    @Shadow
     public boolean field_1642 = false;
+
+    @Shadow
     public float field_1643 = 0.0f;
+
+    @Shadow
     public int field_1645 = 0;
+
+    @Shadow
     public int field_1646 = 1;
+
+    @Shadow
     public int fire = 0;
-    public int field_1648 = 300;
+
+    @Shadow
+    protected int field_1648 = 300; // once was public
+
+    @Shadow
     public int field_1613 = 0;
+
+    @Shadow
     public int air = 300;
+
+    @Shadow
     public String skinUrl;
+
+    @Shadow
     public String cloakUrl;
-    public boolean immuneToFire = false;
+
+    @Shadow
+    protected boolean immuneToFire = false; // once was public
+
+    @Shadow
     public float field_1617 = 0.0f;
+
+    @Shadow
     public boolean shouldTick = false;
+
+    @Shadow
     public int chunkX;
+
+    @Shadow
     public int chunkIndex;
+
+    @Shadow
     public int chunkZ;
+
+    @Shadow
     public int field_1654;
+
+    @Shadow
     public int field_1655;
+
+    @Shadow
     public int field_1656;
+
+    @Shadow
     public boolean field_1622;
+
+    @Shadow
+    protected float fallDistance = 0.0f;
+
+    @Shadow
+    protected Random rand;
+
+    @Shadow
+    protected boolean field_1612 = false;
+
+    @Shadow
+    protected DataTracker dataTracker;
+
+    @Shadow
+    private int field_1611 = 1;
+
+    @Shadow
+    private boolean field_1649 = true;
+
+    @Shadow
+    private double field_1650;
+
+    @Shadow
+    private double field_1651;
+
     public boolean isFlying;
     public int stunned;
     public boolean collidesWithClipBlocks = true;
     public int collisionX;
     public int collisionZ;
     public float moveYawOffset = 0.0f;
-    protected float fallDistance = 0.0f;
-    protected Random rand;
-    protected boolean field_1612 = false;
-    protected DataTracker dataTracker;
-    private int field_1611 = 1;
-    private boolean field_1649 = true;
-    private double field_1650;
-    private double field_1651;
 
     public MixinEntity(Level world) {
         this.id = field_1590++;
@@ -1055,5 +1179,15 @@ public abstract class MixinEntity {
             }
         }
         return false;
+    }
+
+    @Override
+    public int getCollisionX() {
+        return collisionX;
+    }
+
+    @Override
+    public int getCollisionZ() {
+        return collisionZ;
     }
 }

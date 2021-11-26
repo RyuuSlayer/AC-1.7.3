@@ -1,6 +1,12 @@
 package io.github.ryuu.adventurecraft.mixin.client.gui;
 
 
+import io.github.ryuu.adventurecraft.accessors.client.AccessMinecraft;
+import io.github.ryuu.adventurecraft.accessors.entity.AccessEntity;
+import io.github.ryuu.adventurecraft.accessors.entity.AccessLivingEntity;
+import io.github.ryuu.adventurecraft.accessors.entity.player.AccessPlayerInventory;
+import io.github.ryuu.adventurecraft.accessors.level.AccessLevel;
+import io.github.ryuu.adventurecraft.accessors.level.AccessLevelProperties;
 import io.github.ryuu.adventurecraft.scripting.ScriptUIContainer;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.TerrainImage;
@@ -34,10 +40,12 @@ import java.awt.*;
 import java.util.List;
 import java.util.Random;
 
-@Mixin(Overlay.class) // TODO method_1946 needs alot of casts
+@Mixin(Overlay.class)
 public abstract class MixinOverlay extends DrawableHelper {
 
     public ScriptUIContainer scriptUI;
+
+    public boolean hudEnabled = true;
 
     @Shadow
     private Minecraft minecraft;
@@ -89,25 +97,25 @@ public abstract class MixinOverlay extends DrawableHelper {
             this.method_1945(this.minecraft.player.getBrightnessAtEyes(f), scaledWidth, scaledHeight);
         }
         ItemInstance itemstack = this.minecraft.player.inventory.getArmourItem(3);
-        if (!this.minecraft.options.thirdPerson && !this.minecraft.cameraActive && itemstack != null && itemstack.itemId == Tile.PUMPKIN.id) { // TODO Needs cast
+        if (!this.minecraft.options.thirdPerson && !((AccessMinecraft) this.minecraft).isCameraActive() && itemstack != null && itemstack.itemId == Tile.PUMPKIN.id) {
             this.method_1947(scaledWidth, scaledHeight);
         }
-        if (this.minecraft.level != null && !this.minecraft.level.properties.overlay.isEmpty()) { // TODO Needs cast
-            this.adventurecraft$renderOverlay(scaledWidth, scaledHeight, this.minecraft.level.properties.overlay); // TODO Needs cast
+        if (this.minecraft.level != null && !((AccessLevelProperties) ((AccessLevel) this.minecraft.level).getProperties()).getOverlay().isEmpty()) {
+            this.adventurecraft$renderOverlay(scaledWidth, scaledHeight, ((AccessLevelProperties) ((AccessLevel) this.minecraft.level).getProperties()).getOverlay());
         }
         if ((f1 = this.minecraft.player.field_505 + (this.minecraft.player.field_504 - this.minecraft.player.field_505) * f) > 0.0f) {
             this.method_1951(f1, scaledWidth, scaledHeight);
         }
-        if (this.hudEnabled) { // TODO Needs cast
+        if (this.hudEnabled) {
             boolean flag1;
             GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-            GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId("/gui/gui.png"));
+            GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId("/assets/adventurecraft/gui/gui.png"));
             PlayerInventory inventoryplayer = this.minecraft.player.inventory;
             this.zOffset = -90.0f;
             this.blit(scaledWidth / 2 - 91, scaledHeight - 22, 0, 0, 182, 22);
-            this.blit(scaledWidth / 2 - 91 - 1 + inventoryplayer.offhandItem * 20, scaledHeight - 22 - 1, 24, 22, 48, 22); // TODO Needs cast
+            this.blit(scaledWidth / 2 - 91 - 1 + ((AccessPlayerInventory) inventoryplayer).getOffhandItemID() * 20, scaledHeight - 22 - 1, 24, 22, 48, 22);
             this.blit(scaledWidth / 2 - 91 - 1 + inventoryplayer.selectedHotbarSlot * 20, scaledHeight - 22 - 1, 0, 22, 24, 22);
-            GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId("/gui/icons.png"));
+            GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId("/assets/adventurecraft/gui/icons.png"));
             GL11.glEnable(3042);
             GL11.glBlendFunc(775, 769);
             this.blit(scaledWidth / 2 - 7, scaledHeight / 2 - 7, 0, 0, 16, 16);
@@ -139,8 +147,8 @@ public abstract class MixinOverlay extends DrawableHelper {
                     if (health <= 8) {
                         yPos += this.rand.nextInt(2);
                     }
-                    for (int healthRow = 0; healthRow <= (this.minecraft.player.maxHealth - 1) / 40; ++healthRow) { // TODO Needs cast
-                        if ((index + 1 + healthRow * 10) * 4 <= this.minecraft.player.maxHealth) { // TODO Needs cast
+                    for (int healthRow = 0; healthRow <= (((AccessLivingEntity) this.minecraft.player).getMaxHealth() - 1) / 40; ++healthRow) {
+                        if ((index + 1 + healthRow * 10) * 4 <= ((AccessLivingEntity) this.minecraft.player).getMaxHealth() - 1) {
                             int k5 = 0;
                             if (flag1) {
                                 k5 = 1;
@@ -172,7 +180,7 @@ public abstract class MixinOverlay extends DrawableHelper {
                 }
             }
             if (this.minecraft.player.isInFluid(Material.WATER)) {
-                int yOffset = -9 * ((this.minecraft.player.maxHealth - 1) / 40); // TODO Needs cast
+                int yOffset = -9 * ((((AccessLivingEntity) this.minecraft.player).getMaxHealth() - 1) / 40);
                 int k2 = (int) Math.ceil((double) (this.minecraft.player.air - 2) * 10.0 / 300.0);
                 int l3 = (int) Math.ceil((double) this.minecraft.player.air * 10.0 / 300.0) - k2;
                 for (int l5 = 0; l5 < k2 + l3; ++l5) {
@@ -185,7 +193,7 @@ public abstract class MixinOverlay extends DrawableHelper {
             }
         }
         GL11.glDisable(3042);
-        if (this.hudEnabled) { // TODO Needs cast
+        if (this.hudEnabled) {
             GL11.glEnable(32826);
             GL11.glPushMatrix();
             GL11.glRotatef(120.0f, 1.0f, 0.0f, 0.0f);
@@ -234,9 +242,9 @@ public abstract class MixinOverlay extends DrawableHelper {
             this.drawTextWithShadow(fontrenderer, "y: " + this.minecraft.player.y, 2, 72, 0xE0E0E0);
             this.drawTextWithShadow(fontrenderer, "z: " + this.minecraft.player.z, 2, 80, 0xE0E0E0);
             this.drawTextWithShadow(fontrenderer, "f: " + (MathsHelper.floor((double) (this.minecraft.player.yaw * 4.0f / 360.0f) + 0.5) & 3), 2, 88, 0xE0E0E0);
-            this.drawTextWithShadow(fontrenderer, String.format("Use Terrain Images: %b", new Object[]{this.minecraft.level.properties.useImages}), 2, 96, 0xE0E0E0); // TODO Needs cast
-            this.drawTextWithShadow(fontrenderer, String.format("Collide X: %d Z: %d", new Object[]{this.minecraft.player.collisionX, this.minecraft.player.collisionZ}), 2, 104, 0xE0E0E0); // TODO Needs cast
-            if (this.minecraft.level.properties.useImages) { // TODO Needs cast
+            this.drawTextWithShadow(fontrenderer, String.format("Use Terrain Images: %b", ((AccessLevelProperties) ((AccessLevel) this.minecraft.level).getProperties()).isUsingImages()), 2, 96, 0xE0E0E0);
+            this.drawTextWithShadow(fontrenderer, String.format("Collide X: %d Z: %d", ((AccessEntity) this.minecraft.player).getCollisionX(), ((AccessEntity) this.minecraft.player).getCollisionZ()), 2, 104, 0xE0E0E0);
+            if (((AccessLevelProperties) ((AccessLevel) this.minecraft.level).getProperties()).isUsingImages()) {
                 int x = (int) this.minecraft.player.x;
                 int z = (int) this.minecraft.player.z;
                 int terrainHeight = TerrainImage.getTerrainHeight(x, z);
@@ -341,7 +349,7 @@ public abstract class MixinOverlay extends DrawableHelper {
 
     @Redirect(method = "method_1948", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/ItemRenderer;renderItemInstance(Lnet/minecraft/client/render/TextRenderer;Lnet/minecraft/client/texture/TextureManager;Lnet/minecraft/item/ItemInstance;II)V"))
     private void renderItemInstance(ItemRenderer itemRenderer, TextRenderer arg1, TextureManager arg2, ItemInstance itemstack, int j, int k) {
-        itemRenderer.renderItemInstance(this.minecraft.textRenderer, this.minecraft.textureManager, itemstack, j, k); // TODO cast renderItemInstance
+        itemRenderer.renderItemInstance(this.minecraft.textRenderer, this.minecraft.textureManager, itemstack, j, k);
     }
 
     @Inject(method = "method_1944", at = @At("TAIL"))

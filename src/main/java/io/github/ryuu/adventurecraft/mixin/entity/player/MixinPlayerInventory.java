@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.entity.player;
 
+import io.github.ryuu.adventurecraft.accessors.entity.player.AccessPlayerInventory;
 import io.github.ryuu.adventurecraft.accessors.items.ItemTypeSlotChangeNotifier;
 import io.github.ryuu.adventurecraft.items.IItemReload;
 import io.github.ryuu.adventurecraft.items.Items;
@@ -21,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(PlayerInventory.class)
-public abstract class MixinPlayerInventory implements Inventory {
+public abstract class MixinPlayerInventory implements Inventory, AccessPlayerInventory {
 
     @Shadow
     public ItemInstance[] main;
@@ -31,6 +32,12 @@ public abstract class MixinPlayerInventory implements Inventory {
     public int selectedHotbarSlot;
     @Shadow
     public Player player;
+    @Shadow
+    protected abstract int getSlotWithItem(int i);
+    @Shadow
+    protected abstract int findNextEmptySlot();
+    @Shadow
+    protected abstract int findItem(ItemInstance arg);
 
     public int offhandItem;
     public int[] consumeInventory;
@@ -40,15 +47,6 @@ public abstract class MixinPlayerInventory implements Inventory {
         this.offhandItem = 1;
         this.consumeInventory = new int[36];
     }
-
-    @Shadow
-    protected abstract int getSlotWithItem(int i);
-
-    @Shadow
-    protected abstract int findNextEmptySlot();
-
-    @Shadow
-    protected abstract int findItem(ItemInstance arg);
 
     public ItemInstance getOffhandItem() {
         return this.main[this.offhandItem];
@@ -331,5 +329,10 @@ public abstract class MixinPlayerInventory implements Inventory {
         }
 
         ((ItemTypeSlotChangeNotifier) itemType).onRemovedFromSlot(entityPlayer, slot, damage);
+    }
+
+    @Override
+    public int getOffhandItemID() {
+        return offhandItem;
     }
 }

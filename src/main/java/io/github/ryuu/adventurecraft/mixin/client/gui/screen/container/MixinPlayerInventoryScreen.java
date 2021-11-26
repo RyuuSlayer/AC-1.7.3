@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.client.gui.screen.container;
 
-import io.github.ryuu.adventurecraft.accessors.entity.player.PlayerAccessor;
+import io.github.ryuu.adventurecraft.accessors.entity.player.AccessPlayer;
 import net.minecraft.client.gui.screen.container.ContainerScreen;
 import net.minecraft.client.gui.screen.container.PlayerInventoryScreen;
 import net.minecraft.container.Container;
@@ -32,7 +32,7 @@ public abstract class MixinPlayerInventoryScreen extends ContainerScreen {
         int height = (this.height - this.containerHeight) / 2;
         int heartPiece = this.minecraft.textureManager.getTextureId("/assets/adventurecraft/gui/heartPiece.png");
         this.minecraft.textureManager.bindTexture(heartPiece);
-        this.blit(width + 89, height + 6, ((PlayerAccessor) this.minecraft.player).getHeartPieces() * 32, 0, 32, 32);
+        this.blit(width + 89, height + 6, ((AccessPlayer) this.minecraft.player).getHeartPieces() * 32, 0, 32, 32);
     }
 
     @ModifyArg(method = "renderContainerBackground", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/texture/TextureManager;getTextureId(Ljava/lang/String;)I"))

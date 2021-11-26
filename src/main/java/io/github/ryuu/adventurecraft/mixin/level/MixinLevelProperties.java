@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.level;
 
+import io.github.ryuu.adventurecraft.accessors.level.AccessLevelProperties;
 import io.github.ryuu.adventurecraft.blocks.BlockEffect;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.entity.Entity;
@@ -17,10 +18,8 @@ import java.util.List;
 import java.util.Map;
 
 @Mixin(LevelProperties.class)
-public class MixinLevelProperties {
+public class MixinLevelProperties implements AccessLevelProperties {
 
-    @Shadow()
-    private final long randomSeed;
     public double tempOffset;
     public boolean useImages = true;
     public double mapSize = 250.0;
@@ -60,19 +59,50 @@ public class MixinLevelProperties {
     float timeOfDay;
     float timeRate;
     CompoundTag replacementTag = null;
+
+    @Shadow
+    private final long randomSeed;
+
+    @Shadow
     private int spawnX;
+
+    @Shadow
     private int spawnY;
+
+    @Shadow
     private int spawnZ;
+
+    @Shadow
     private long time;
+
+    @Shadow
     private long lastPlayed;
+
+    @Shadow
     private long sizeOnDisk;
+
+    @Shadow
     private CompoundTag playerData;
+
+    @Shadow
     private int dimensionId;
+
+    @Shadow
     private String levelName;
+
+    @Shadow
     private int version;
+
+    @Shadow
     private boolean raining;
+
+    @Shadow
     private int rainTime;
+
+    @Shadow
     private boolean thundering;
+
+    @Shadow
     private int thunderTime;
 
     public MixinLevelProperties(CompoundTag tag) {
@@ -503,5 +533,15 @@ public class MixinLevelProperties {
                 BlockEffect.replaceTexture(w, key, this.replacementTag.getString(key));
             }
         }
+    }
+
+    @Override
+    public String getOverlay() {
+        return overlay;
+    }
+
+    @Override
+    public boolean isUsingImages() {
+        return useImages;
     }
 }

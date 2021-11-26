@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.level;
 
+import io.github.ryuu.adventurecraft.accessors.level.AccessLevel;
 import io.github.ryuu.adventurecraft.blocks.BlockStairMulti;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityNpcPath;
@@ -58,7 +59,7 @@ import java.io.*;
 import java.util.*;
 
 @Mixin(Level.class)
-public class MixinLevel implements TileView {
+public class MixinLevel implements TileView, AccessLevel {
 
     static int field_179 = 0;
     public final Dimension dimension;
@@ -73,7 +74,7 @@ public class MixinLevel implements TileView {
     private final long field_186;
     private final ArrayList field_189;
     private final List field_196;
-    @Shadow()
+    @Shadow
     public boolean field_197;
     public List<Entity> entities;
     public List tileEntities;
@@ -85,7 +86,10 @@ public class MixinLevel implements TileView {
     public int difficulty;
     public Random rand;
     public boolean generating;
-    public LevelProperties properties;
+
+    @Shadow
+    protected LevelProperties properties;
+
     public boolean forceLoadChunks;
     public LevelData data;
     public boolean isClient;
@@ -3282,5 +3286,10 @@ public class MixinLevel implements TileView {
             return e;
         }
         return null;
+    }
+
+    @Override
+    public LevelProperties getProperties() {
+        return properties;
     }
 }
