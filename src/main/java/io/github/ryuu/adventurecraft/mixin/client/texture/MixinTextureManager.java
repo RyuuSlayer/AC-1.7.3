@@ -200,7 +200,7 @@ public class MixinTextureManager {
                 image = this.method_1101(image);
             }
             this.glLoadImageWithId(image, texID);
-            this.textureResolutions.put((Object) new Integer(texID), (Object) new Vec2(image.getWidth(), image.getHeight()));
+            this.textureResolutions.put((Object) texID, (Object) new Vec2(image.getWidth(), image.getHeight()));
             if (origTexName.startsWith("%clamp%")) {
                 this.clamped = false;
             } else if (origTexName.startsWith("%blur%")) {

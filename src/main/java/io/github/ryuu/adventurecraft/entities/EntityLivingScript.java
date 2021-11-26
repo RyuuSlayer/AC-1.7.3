@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.entities;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityNpcPath;
+import io.github.ryuu.adventurecraft.scripting.ScriptEntity;
 import io.github.ryuu.adventurecraft.util.CoordBlock;
 import io.github.ryuu.adventurecraft.util.IEntityPather;
 import net.minecraft.class_61;
@@ -28,7 +29,7 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
     public String onAttacked = "";
     public String onDeath = "";
     public String onInteraction = "";
-    public Float maxPathDistance = Float.valueOf(64.0f);
+    public Float maxPathDistance = 64.0f;
     protected Scriptable scope;
     String initDescTo;
     String descriptionName;
@@ -97,7 +98,7 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
     public boolean damage(Entity target, int amount) {
         Object wrappedOut = Context.javaToJS((Object) ScriptEntity.getEntityClass(target), this.scope);
         ScriptableObject.putProperty(this.scope, "attackingEntity", wrappedOut);
-        wrappedOut = Context.javaToJS(new Integer(amount), this.scope);
+        wrappedOut = Context.javaToJS(amount, this.scope);
         ScriptableObject.putProperty(this.scope, "attackingDamage", wrappedOut);
         if (this.runOnAttackedScript()) {
             return super.damage(target, amount);
@@ -109,7 +110,7 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
     public boolean attackEntityFromMulti(Entity entity, int i) {
         Object wrappedOut = Context.javaToJS((Object) ScriptEntity.getEntityClass(entity), this.scope);
         ScriptableObject.putProperty(this.scope, "attackingEntity", wrappedOut);
-        wrappedOut = Context.javaToJS(new Integer(i), this.scope);
+        wrappedOut = Context.javaToJS(i, this.scope);
         ScriptableObject.putProperty(this.scope, "attackingDamage", wrappedOut);
         if (this.runOnAttackedScript()) {
             return super.attackEntityFromMulti(entity, i);
@@ -223,7 +224,7 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
     public void pathToEntity(Entity p) {
         this.pathToEntity = p;
         this.pathToVec = null;
-        this.path = this.level.method_192(this, this.pathToEntity, this.maxPathDistance.floatValue());
+        this.path = this.level.method_192(this, this.pathToEntity, this.maxPathDistance);
         this.nextPathIn = this.level.rand.nextInt(40) + 60;
         this.prevDistToPoint = 999999.0;
         this.triggerOnPath = null;
@@ -232,7 +233,7 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
     public void pathToPosition(int x, int y, int z) {
         this.pathToEntity = null;
         this.pathToVec = new CoordBlock(x, y, z);
-        this.path = this.level.method_189(this, x, y, z, this.maxPathDistance.floatValue());
+        this.path = this.level.method_189(this, x, y, z, this.maxPathDistance);
         this.nextPathIn = this.level.rand.nextInt(40) + 60;
         this.prevDistToPoint = 999999.0;
         this.triggerOnPath = null;
@@ -249,9 +250,9 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
         if (this.isPathing()) {
             if (this.path == null || --this.nextPathIn <= 0 && this.pathToEntity != null && this.path.needNewPath(this.pathToEntity)) {
                 if (this.pathToEntity != null) {
-                    this.path = this.level.method_192(this, this.pathToEntity, this.maxPathDistance.floatValue());
+                    this.path = this.level.method_192(this, this.pathToEntity, this.maxPathDistance);
                 } else if (this.pathToVec != null) {
-                    this.path = this.level.method_189(this, this.pathToVec.x, this.pathToVec.y, this.pathToVec.z, this.maxPathDistance.floatValue());
+                    this.path = this.level.method_189(this, this.pathToVec.x, this.pathToVec.y, this.pathToVec.z, this.maxPathDistance);
                 }
                 this.nextPathIn = this.level.rand.nextInt(40) + 10;
                 this.prevDistToPoint = 999999.0;

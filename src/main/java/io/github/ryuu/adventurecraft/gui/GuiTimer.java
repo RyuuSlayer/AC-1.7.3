@@ -58,16 +58,16 @@ public class GuiTimer extends Screen {
         }
         this.buttons.add(b);
         if (!this.useTextFields) {
-            this.delayTime = new GuiSlider2(4, 4, 80, 10, String.format("Delay for: %.2fs", Float.valueOf((float) this.timer.timeDelay / 20.0f)), (float) this.timer.timeDelay / 20.0f / 60.0f);
+            this.delayTime = new GuiSlider2(4, 4, 80, 10, String.format("Delay for: %.2fs", (float) this.timer.timeDelay / 20.0f), (float) this.timer.timeDelay / 20.0f / 60.0f);
             this.buttons.add(this.delayTime);
-            this.activeTime = new GuiSlider2(2, 4, 100, 10, String.format("Active for: %.2fs", Float.valueOf((float) this.timer.timeActive / 20.0f)), (float) this.timer.timeActive / 20.0f / 60.0f);
+            this.activeTime = new GuiSlider2(2, 4, 100, 10, String.format("Active for: %.2fs", (float) this.timer.timeActive / 20.0f), (float) this.timer.timeActive / 20.0f / 60.0f);
             this.buttons.add(this.activeTime);
-            this.deactiveTime = new GuiSlider2(3, 4, 120, 10, String.format("Deactive for: %.2fs", Float.valueOf((float) this.timer.timeDeactive / 20.0f)), (float) this.timer.timeDeactive / 20.0f / 60.0f);
+            this.deactiveTime = new GuiSlider2(3, 4, 120, 10, String.format("Deactive for: %.2fs", (float) this.timer.timeDeactive / 20.0f), (float) this.timer.timeDeactive / 20.0f / 60.0f);
             this.buttons.add(this.deactiveTime);
         } else {
-            this.delayTimeText = new Textbox(this, this.textManager, 80, 81, 70, 16, String.format("%.2f", Float.valueOf((float) this.timer.timeDelay / 20.0f)));
-            this.activeTimeText = new Textbox(this, this.textManager, 80, 101, 70, 16, String.format("%.2f", Float.valueOf((float) this.timer.timeActive / 20.0f)));
-            this.deactiveTimeText = new Textbox(this, this.textManager, 80, 121, 70, 16, String.format("%.2f", Float.valueOf((float) this.timer.timeDeactive / 20.0f)));
+            this.delayTimeText = new Textbox(this, this.textManager, 80, 81, 70, 16, String.format("%.2f", (float) this.timer.timeDelay / 20.0f));
+            this.activeTimeText = new Textbox(this, this.textManager, 80, 101, 70, 16, String.format("%.2f", (float) this.timer.timeActive / 20.0f));
+            this.deactiveTimeText = new Textbox(this, this.textManager, 80, 121, 70, 16, String.format("%.2f", (float) this.timer.timeDeactive / 20.0f));
         }
         this.buttons.add(new OptionButton(5, 4, 140, "Switch Input Mode"));
     }
@@ -104,18 +104,18 @@ public class GuiTimer extends Screen {
                 this.drawTextWithShadow(this.textManager, "State: Deactive", 4, 164, 0xE0E0E0);
             }
             if (this.timer.ticksDelay > 0) {
-                this.drawTextWithShadow(this.textManager, String.format("Delay: %.2f", Float.valueOf((float) this.timer.ticksDelay * 0.05f)), 4, 184, 0xE0E0E0);
+                this.drawTextWithShadow(this.textManager, String.format("Delay: %.2f", (float) this.timer.ticksDelay * 0.05f), 4, 184, 0xE0E0E0);
             } else {
-                this.drawTextWithShadow(this.textManager, String.format("Time: %.2f", Float.valueOf((float) this.timer.ticks * 0.05f)), 4, 184, 0xE0E0E0);
+                this.drawTextWithShadow(this.textManager, String.format("Time: %.2f", (float) this.timer.ticks * 0.05f), 4, 184, 0xE0E0E0);
             }
         }
         if (!this.useTextFields) {
             this.timer.timeActive = (int) (this.activeTime.sliderValue * 60.0f * 20.0f);
             this.timer.timeDeactive = (int) (this.deactiveTime.sliderValue * 60.0f * 20.0f);
             this.timer.timeDelay = (int) (this.delayTime.sliderValue * 60.0f * 20.0f);
-            this.delayTime.text = String.format("Delay for: %.2fs", Float.valueOf((float) this.timer.timeDelay / 20.0f));
-            this.activeTime.text = String.format("Active for: %.2fs", Float.valueOf((float) this.timer.timeActive / 20.0f));
-            this.deactiveTime.text = String.format("Deactive for: %.2fs", Float.valueOf((float) this.timer.timeDeactive / 20.0f));
+            this.delayTime.text = String.format("Delay for: %.2fs", (float) this.timer.timeDelay / 20.0f);
+            this.activeTime.text = String.format("Active for: %.2fs", (float) this.timer.timeActive / 20.0f);
+            this.deactiveTime.text = String.format("Deactive for: %.2fs", (float) this.timer.timeDeactive / 20.0f);
         } else {
             Float value;
             this.drawTextWithShadow(this.textManager, "Delay For:", 4, 84, 0xE0E0E0);
@@ -127,21 +127,21 @@ public class GuiTimer extends Screen {
             try {
                 value = Float.valueOf(this.activeTimeText.method_1876());
                 if (value != null) {
-                    this.timer.timeActive = (int) (value.floatValue() * 20.0f);
+                    this.timer.timeActive = (int) (value * 20.0f);
                 }
             } catch (NumberFormatException e) {
             }
             try {
                 value = Float.valueOf(this.deactiveTimeText.method_1876());
                 if (value != null) {
-                    this.timer.timeDeactive = (int) (value.floatValue() * 20.0f);
+                    this.timer.timeDeactive = (int) (value * 20.0f);
                 }
             } catch (NumberFormatException e) {
             }
             try {
                 value = Float.valueOf(this.delayTimeText.method_1876());
                 if (value != null) {
-                    this.timer.timeDelay = (int) (value.floatValue() * 20.0f);
+                    this.timer.timeDelay = (int) (value * 20.0f);
                 }
             } catch (NumberFormatException e) {
             }

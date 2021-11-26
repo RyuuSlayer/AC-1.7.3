@@ -18,9 +18,7 @@ public class ClipboardHandler {
         if (hasTransferableText) {
             try {
                 result = (String) contents.getTransferData(DataFlavor.stringFlavor);
-            } catch (UnsupportedFlavorException ex) {
-                ex.printStackTrace();
-            } catch (IOException ex) {
+            } catch (UnsupportedFlavorException | IOException ex) {
                 ex.printStackTrace();
             }
         }

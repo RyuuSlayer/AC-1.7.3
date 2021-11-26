@@ -36,7 +36,7 @@ public class ScriptKeyboard {
     }
 
     public void unbindKey(int keyID) {
-        this.keyBinds.remove(new Integer(keyID));
+        this.keyBinds.remove(keyID);
     }
 
     public void bindAllKeyScript(String script) {

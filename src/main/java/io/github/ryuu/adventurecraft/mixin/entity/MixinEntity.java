@@ -419,7 +419,7 @@ public abstract class MixinEntity {
         this.x = (this.boundingBox.minX + this.boundingBox.maxX) / 2.0;
         this.y = this.boundingBox.minY + (double) this.standingEyeHeight - (double) this.field_1640;
         this.z = (this.boundingBox.minZ + this.boundingBox.maxZ) / 2.0;
-        this.collisionX = d5 == d ? 0 : (d5 < d ? -1 : 1);
+        this.collisionX = Double.compare(d5, d);
         if (this.collisionX != 0) {
             boolean nonClipFound = false;
             i = 0;
@@ -434,7 +434,7 @@ public abstract class MixinEntity {
                 this.collisionX = 0;
             }
         }
-        this.collisionZ = d7 == d2 ? 0 : (d7 < d2 ? -1 : 1);
+        this.collisionZ = Double.compare(d7, d2);
         if (this.collisionZ != 0) {
             boolean nonClipFound = false;
             i = 0;

@@ -243,7 +243,7 @@ public abstract class MixinClientPlayer extends Player {
             if (this.minecraft.activeCutsceneCamera != null) {
                 float t;
                 try {
-                    t = Float.valueOf(s.substring(11)).floatValue();
+                    t = Float.valueOf(s.substring(11));
                 } catch (StringIndexOutOfBoundsException e) {
                     this.minecraft.overlay.addChatMessage("/cameraadd must have a time specified for the point");
                     return;

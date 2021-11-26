@@ -90,7 +90,7 @@ public class GuiMobSpawner extends Screen {
                     {
                         this.buttons.clear();
                         this.spawnCountSlider = new GuiSlider2(50, 4, 44, 10, String.format("Spawn Count: %d", this.mobSpawner.spawnNumber), (float) this.mobSpawner.spawnNumber / 15.0f);
-                        this.respawnSlider = new GuiSlider2(51, this.width / 2, 44, 10, String.format("Respawn Delay: %.1f", Float.valueOf((float) this.mobSpawner.respawnDelay / 20.0f)), (float) this.mobSpawner.respawnDelay / 12000.0f);
+                        this.respawnSlider = new GuiSlider2(51, this.width / 2, 44, 10, String.format("Respawn Delay: %.1f", (float) this.mobSpawner.respawnDelay / 20.0f), (float) this.mobSpawner.respawnDelay / 12000.0f);
                         this.spawnCountSlider.width = 200;
                         this.respawnSlider.width = 200;
                         this.buttons.add(this.spawnCountSlider);
@@ -250,7 +250,7 @@ public class GuiMobSpawner extends Screen {
         this.fill(0, 0, this.width, this.height, Integer.MIN_VALUE);
         this.drawTextWithShadow(this.textManager, String.format("Entity Spawn: %s", this.mobSpawner.entityID), 4, 4, 0xE0E0E0);
         this.drawTextWithShadow(this.textManager, String.format("Entities Alive: %d", this.mobSpawner.getNumAlive()), 4, 14, 0xE0E0E0);
-        this.drawTextWithShadow(this.textManager, String.format("Respawn In: %.1fs", Float.valueOf((float) this.mobSpawner.delay / 20.0f)), 4, 24, 0xE0E0E0);
+        this.drawTextWithShadow(this.textManager, String.format("Respawn In: %.1fs", (float) this.mobSpawner.delay / 20.0f), 4, 24, 0xE0E0E0);
         if (this.mobSpawner.hasDroppedItem) {
             this.drawTextWithShadow(this.textManager, "Has Dropped An Item", 4, 34, 0xE0E0E0);
         } else {
@@ -259,7 +259,7 @@ public class GuiMobSpawner extends Screen {
         this.mobSpawner.spawnNumber = (int) (this.spawnCountSlider.sliderValue * 15.0f + 0.5f);
         this.spawnCountSlider.text = String.format("Spawn Count: %d", this.mobSpawner.spawnNumber);
         this.mobSpawner.respawnDelay = (int) (this.respawnSlider.sliderValue * 12000.0f + 0.5f);
-        this.respawnSlider.text = String.format("Respawn Delay: %.1fs", Float.valueOf((float) this.mobSpawner.respawnDelay / 20.0f));
+        this.respawnSlider.text = String.format("Respawn Delay: %.1fs", (float) this.mobSpawner.respawnDelay / 20.0f);
         super.render(mouseX, mouseY, delta);
         this.mobSpawner.level.getChunk(this.mobSpawner.x, this.mobSpawner.z).method_885();
     }

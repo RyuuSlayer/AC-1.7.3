@@ -60,32 +60,32 @@ public class ScopeTag {
             }
             if (type.equals("Boolean")) {
                 boolean value = tag.getBoolean(varKey);
-                scope.put(key, scope, new Boolean(value));
+                scope.put(key, scope, value);
                 continue;
             }
             if (type.equals("Double")) {
                 double value = tag.getDouble(varKey);
-                scope.put(key, scope, new Double(value));
+                scope.put(key, scope, value);
                 continue;
             }
             if (type.equals("Float")) {
                 float value = tag.getFloat(varKey);
-                scope.put(key, scope, new Float(value));
+                scope.put(key, scope, value);
                 continue;
             }
             if (type.equals("Long")) {
                 long value = tag.getLong(varKey);
-                scope.put(key, scope, new Long(value));
+                scope.put(key, scope, value);
                 continue;
             }
             if (type.equals("Integer")) {
                 int value = tag.getInt(varKey);
-                scope.put(key, scope, new Integer(value));
+                scope.put(key, scope, value);
                 continue;
             }
             if (type.equals("Short")) {
                 short value = tag.getShort(varKey);
-                scope.put(key, scope, new Short(value));
+                scope.put(key, scope, value);
                 continue;
             }
             System.out.printf("Unknown type: %s\n", type);

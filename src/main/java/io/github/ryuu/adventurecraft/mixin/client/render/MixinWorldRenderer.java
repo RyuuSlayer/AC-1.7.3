@@ -1380,36 +1380,52 @@ public class MixinWorldRenderer implements LevelListener {
             return null;
         }
         Particle particle = null;
-        if (s.equals("bubble")) {
-            particle = new BubbleParticle(this.level, d, d1, d2, d3, d4, d5);
-        } else if (s.equals("smoke")) {
-            particle = new SmokeParticle(this.level, d, d1, d2, d3, d4, d5);
-        } else if (s.equals("note")) {
-            particle = new NoteParticle(this.level, d, d1, d2, d3, d4, d5);
-        } else if (s.equals("portal")) {
-            particle = new PortalParticle(this.level, d, d1, d2, d3, d4, d5);
-        } else if (s.equals("explode")) {
-            particle = new ExplodeParticle(this.level, d, d1, d2, d3, d4, d5);
-        } else if (s.equals("flame")) {
-            particle = new FlameParticle(this.level, d, d1, d2, d3, d4, d5);
-        } else if (s.equals("lava")) {
-            particle = new LavaParticle(this.level, d, d1, d2);
-        } else if (s.equals("footstep")) {
-            particle = new FootstepParticle(this.textureManager, this.level, d, d1, d2);
-        } else if (s.equals("splash")) {
-            particle = new SplashParticle(this.level, d, d1, d2, d3, d4, d5);
-        } else if (s.equals("largesmoke")) {
-            particle = new SmokeParticle(this.level, d, d1, d2, d3, d4, d5, 2.5f);
-        } else if (s.equals("reddust")) {
-            particle = new RedDustParticle(this.level, d, d1, d2, (float) d3, (float) d4, (float) d5);
-        } else if (s.equals("snowballpoof")) {
-            particle = new PoofParticle(this.level, d, d1, d2, ItemType.snowball);
-        } else if (s.equals("snowshovel")) {
-            particle = new SnowshovelParticle(this.level, d, d1, d2, d3, d4, d5);
-        } else if (s.equals("slime")) {
-            particle = new PoofParticle(this.level, d, d1, d2, ItemType.slimeball);
-        } else if (s.equals("heart")) {
-            particle = new HeartParticle(this.level, d, d1, d2, d3, d4, d5);
+        switch (s) {
+            case "bubble":
+                particle = new BubbleParticle(this.level, d, d1, d2, d3, d4, d5);
+                break;
+            case "smoke":
+                particle = new SmokeParticle(this.level, d, d1, d2, d3, d4, d5);
+                break;
+            case "note":
+                particle = new NoteParticle(this.level, d, d1, d2, d3, d4, d5);
+                break;
+            case "portal":
+                particle = new PortalParticle(this.level, d, d1, d2, d3, d4, d5);
+                break;
+            case "explode":
+                particle = new ExplodeParticle(this.level, d, d1, d2, d3, d4, d5);
+                break;
+            case "flame":
+                particle = new FlameParticle(this.level, d, d1, d2, d3, d4, d5);
+                break;
+            case "lava":
+                particle = new LavaParticle(this.level, d, d1, d2);
+                break;
+            case "footstep":
+                particle = new FootstepParticle(this.textureManager, this.level, d, d1, d2);
+                break;
+            case "splash":
+                particle = new SplashParticle(this.level, d, d1, d2, d3, d4, d5);
+                break;
+            case "largesmoke":
+                particle = new SmokeParticle(this.level, d, d1, d2, d3, d4, d5, 2.5f);
+                break;
+            case "reddust":
+                particle = new RedDustParticle(this.level, d, d1, d2, (float) d3, (float) d4, (float) d5);
+                break;
+            case "snowballpoof":
+                particle = new PoofParticle(this.level, d, d1, d2, ItemType.snowball);
+                break;
+            case "snowshovel":
+                particle = new SnowshovelParticle(this.level, d, d1, d2, d3, d4, d5);
+                break;
+            case "slime":
+                particle = new PoofParticle(this.level, d, d1, d2, ItemType.slimeball);
+                break;
+            case "heart":
+                particle = new HeartParticle(this.level, d, d1, d2, d3, d4, d5);
+                break;
         }
         if (particle != null) {
             this.client.particleManager.addParticle(particle);

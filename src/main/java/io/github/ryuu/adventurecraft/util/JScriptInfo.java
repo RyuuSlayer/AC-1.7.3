@@ -28,12 +28,6 @@ public class JScriptInfo implements Comparable<net.minecraft.src.JScriptInfo> {
     }
 
     public int compareTo(JScriptInfo o) {
-        if (this.totalTime < o.totalTime) {
-            return 1;
-        }
-        if (this.totalTime == o.totalTime) {
-            return 0;
-        }
-        return -1;
+        return Long.compare(o.totalTime, this.totalTime);
     }
 }

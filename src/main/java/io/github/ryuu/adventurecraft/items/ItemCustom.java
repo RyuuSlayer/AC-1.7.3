@@ -66,8 +66,6 @@ public class ItemCustom extends ItemType {
                     break block7;
                 }
                 return new ItemCustom(itemID, descFile.getName(), p);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (NumberFormatException e) {
@@ -79,7 +77,7 @@ public class ItemCustom extends ItemType {
 
     static void loadItems(File itemFolder) {
         for (Integer i : loadedItemIDs) {
-            ItemType.byId[i.intValue()] = null;
+            ItemType.byId[i] = null;
         }
         loadedItemIDs.clear();
         if (!itemFolder.exists()) {

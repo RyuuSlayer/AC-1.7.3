@@ -124,16 +124,14 @@ public class GuiMapElement extends ScriptUIContainer {
             --this.numRatings;
         }
         this.voted = mouseX / 13 + 1;
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    URL url = new URL(String.format("http://www.adventurecraft.org/cgi-bin/vote.py?mapID=%d&rating=%d", GuiMapElement.this.mapID, GuiMapElement.this.voted));
-                    URLConnection urlconnection = url.openConnection();
-                    urlconnection.connect();
-                    urlconnection.getInputStream();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        SwingUtilities.invokeLater(() -> {
+            try {
+                URL url = new URL(String.format("http://www.adventurecraft.org/cgi-bin/vote.py?mapID=%d&rating=%d", GuiMapElement.this.mapID, GuiMapElement.this.voted));
+                URLConnection urlconnection = url.openConnection();
+                urlconnection.connect();
+                urlconnection.getInputStream();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
     }

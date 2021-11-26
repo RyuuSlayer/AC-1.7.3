@@ -16,7 +16,7 @@ public class RenderCamera extends LivingEntityRenderer {
     @Override
     protected void method_821(LivingEntity entityliving, double d, double d1, double d2) {
         EntityCamera e = (EntityCamera) entityliving;
-        this.method_818(entityliving, String.format("%.2f", Float.valueOf(e.time)), d, d1 - 1.5, d2, 64);
+        this.method_818(entityliving, String.format("%.2f", e.time), d, d1 - 1.5, d2, 64);
     }
 
     @Override

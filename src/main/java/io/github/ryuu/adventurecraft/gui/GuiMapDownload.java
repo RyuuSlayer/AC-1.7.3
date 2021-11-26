@@ -48,12 +48,7 @@ public class GuiMapDownload extends Screen {
             this.mapDownloadFolder.mkdirs();
         }
         this.rand = new Random();
-        SwingUtilities.invokeLater(new Runnable() {
-
-            public void run() {
-                GuiMapDownload.this.downloadAndLoadMapInfo();
-            }
-        });
+        SwingUtilities.invokeLater(GuiMapDownload.this::downloadAndLoadMapInfo);
         this.mouseOver = null;
         this.parentScreen = guiscreen;
         this.mapName = null;
@@ -95,12 +90,7 @@ public class GuiMapDownload extends Screen {
                         this.downloading = true;
                         this.downloadingMap = true;
                         this.downloadingMapName = this.mapName;
-                        SwingUtilities.invokeLater(new Runnable() {
-
-                            public void run() {
-                                GuiMapDownload.this.downloadMap();
-                            }
-                        });
+                        SwingUtilities.invokeLater(GuiMapDownload.this::downloadMap);
                     }
                 }
                 if (this.maxOffset < 26 && mouseX >= this.scrollBarX && mouseX <= this.scrollBarX + 8 && mouseY > 26) {
@@ -201,7 +191,7 @@ public class GuiMapDownload extends Screen {
             if (this.downloadSize != 0) {
                 float downloadedAmountMegs = (float) this.downloadedAmount / 1024.0f / 1024.0f;
                 float downloadSizeMegs = (float) this.downloadSize / 1024.0f / 1024.0f;
-                String downloaded = String.format("Downloaded %.2f/%.2f MBs", Float.valueOf(downloadedAmountMegs), Float.valueOf(downloadSizeMegs));
+                String downloaded = String.format("Downloaded %.2f/%.2f MBs", downloadedAmountMegs, downloadSizeMegs);
                 int w = this.textManager.getTextWidth(downloaded);
                 this.textManager.drawTextWithoutShadow(downloaded, this.width / 2 - w / 2, this.height / 2 + 15, 0xFFFFFF);
             }
@@ -291,8 +281,7 @@ public class GuiMapDownload extends Screen {
                     }
                     ++this.mapImagesDownloaded;
                 }
-            } catch (FileNotFoundException e) {
-            } catch (IOException iOException) {
+            } catch (IOException e) {
             }
         }
         this.downloading = false;
@@ -336,8 +325,6 @@ public class GuiMapDownload extends Screen {
                             fileoutputstream.write(buf, 0, n);
                         }
                         fileoutputstream.close();
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -347,8 +334,6 @@ public class GuiMapDownload extends Screen {
                 zipinputstream.closeEntry();
                 zipentry = zipinputstream.getNextEntry();
             }
-        } catch (FileNotFoundException e) {
-            this.mapName = null;
         } catch (IOException e) {
             this.mapName = null;
         }

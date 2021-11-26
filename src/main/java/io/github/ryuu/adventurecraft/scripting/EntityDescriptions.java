@@ -63,8 +63,6 @@ public class EntityDescriptions {
             desc.onPathReached = p.getProperty("onPathReached", "");
             desc.onAttacked = p.getProperty("onAttacked", "");
             desc.onInteraction = p.getProperty("onInteraction", "");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

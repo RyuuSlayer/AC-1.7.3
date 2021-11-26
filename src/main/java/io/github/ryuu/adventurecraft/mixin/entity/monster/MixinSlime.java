@@ -46,7 +46,7 @@ public class MixinSlime extends LivingEntity implements MonsterEntityType {
      */
     @Overwrite()
     public void setSize(int i) {
-        this.dataTracker.setData(16, new Byte((byte) i));
+        this.dataTracker.setData(16, (byte) i);
         this.setSize(0.6f * (float) i, 0.6f * (float) i);
         this.health = i * i;
         this.setPosition(this.x, this.y, this.z);

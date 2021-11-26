@@ -75,7 +75,7 @@ public class GuiWorldConfig extends Screen {
             }
         } else if (this.page == 2) {
             for (int i = 0; i < 16; ++i) {
-                this.lightLevels[i] = new Textbox(this, this.textManager, 80, 22 + 14 * i, 80, 11, String.format("%.7f", Float.valueOf((float) this.minecraft.level.properties.brightness[i])));
+                this.lightLevels[i] = new Textbox(this, this.textManager, 80, 22 + 14 * i, 80, 11, String.format("%.7f", (float) this.minecraft.level.properties.brightness[i]));
             }
         } else if (this.page == 3) {
         }
@@ -195,9 +195,9 @@ public class GuiWorldConfig extends Screen {
                     this.lightLevels[k].method_1883();
                     try {
                         Float value = Float.valueOf(this.lightLevels[k].method_1876());
-                        if (value == null || (double) value.floatValue() == Math.floor((double) (this.minecraft.level.properties.brightness[k] * 1.0E7f)) / 1.0E7)
+                        if (value == null || (double) value == Math.floor((double) (this.minecraft.level.properties.brightness[k] * 1.0E7f)) / 1.0E7)
                             continue;
-                        this.minecraft.level.properties.brightness[k] = value.floatValue();
+                        this.minecraft.level.properties.brightness[k] = value;
                         this.lightChanged = true;
                         continue;
                     } catch (NumberFormatException e) {

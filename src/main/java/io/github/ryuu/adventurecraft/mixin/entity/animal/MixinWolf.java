@@ -52,7 +52,7 @@ public class MixinWolf extends Animal {
         super.initDataTracker();
         this.dataTracker.startTracking(16, (byte) 0);
         this.dataTracker.startTracking(17, "");
-        this.dataTracker.startTracking(18, new Integer(this.health));
+        this.dataTracker.startTracking(18, this.health);
     }
 
     /**

@@ -668,10 +668,9 @@ public class MixinGameRenderer {
                 this.minecraft.activeCutsceneCamera.drawLines(entityliving, f);
             }
             if (DebugMode.active || DebugMode.renderPaths) {
-                Iterator i$ = this.minecraft.level.entities.iterator();
-                while (i$.hasNext()) {
+                for (Object o : this.minecraft.level.entities) {
                     Entity obj;
-                    e = obj = (Entity) i$.next();
+                    e = obj = (Entity) o;
                     renderglobal.drawEntityPath(e, entityliving, f);
                 }
             }

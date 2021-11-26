@@ -55,7 +55,7 @@ public class GuiWeather extends Screen {
         if (this.weather.changeTimeRate) {
             b.text = "Change Time Rate";
         }
-        this.timeRate = new GuiSlider2(6, 4, 132, 10, String.format("Time Rate: %.2f", Float.valueOf(this.weather.timeRate)), (this.weather.timeRate + 16.0f) / 32.0f);
+        this.timeRate = new GuiSlider2(6, 4, 132, 10, String.format("Time Rate: %.2f", this.weather.timeRate), (this.weather.timeRate + 16.0f) / 32.0f);
         this.buttons.add(this.timeRate);
         b = new OptionButton(7, 4, 152, "Don't Change Thundering");
         this.buttons.add(b);
@@ -107,7 +107,7 @@ public class GuiWeather extends Screen {
         this.weather.timeOfDay = (int) (this.timeOfDay.sliderValue * 24000.0f);
         this.timeOfDay.text = String.format("Time: %d", this.weather.timeOfDay);
         this.weather.timeRate = this.timeRate.sliderValue * 32.0f - 16.0f;
-        this.timeRate.text = String.format("Time Rate: %.2f", Float.valueOf(this.weather.timeRate));
+        this.timeRate.text = String.format("Time Rate: %.2f", this.weather.timeRate);
         super.render(mouseX, mouseY, delta);
     }
 

@@ -49,9 +49,7 @@ public class GuiUrlRequest extends Screen {
         if (button.id == 0 && (desktop = Desktop.getDesktop()).isSupported(Desktop.Action.BROWSE)) {
             try {
                 desktop.browse(new URI(this.url));
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (URISyntaxException e) {
+            } catch (IOException | URISyntaxException e) {
                 e.printStackTrace();
             }
         }
