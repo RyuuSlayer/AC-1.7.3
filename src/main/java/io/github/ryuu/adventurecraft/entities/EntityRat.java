@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.entities;
 
+import io.github.ryuu.adventurecraft.extensions.entity.ExLivingEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.Monster;
 import net.minecraft.entity.player.Player;
@@ -14,7 +15,7 @@ public class EntityRat extends Monster {
         this.attackDamage = 1;
         this.setSize(0.6f, 0.6f);
         this.health = 6;
-        this.maxHealth = 6;
+        ((ExLivingEntity)this).setMaxHealth(6);
     }
 
     @Override

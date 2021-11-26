@@ -59,11 +59,12 @@ public class EntityNPC extends EntityLivingScript {
             }
         }
         if (this.entityToTrack != null) {
-            float delta;
             double d4 = this.entityToTrack.x - this.x;
             double d5 = this.entityToTrack.z - this.z;
             float desiredYaw = (float) (Math.atan2(d5, d4) * 180.0 / 3.1415927410125732) - 90.0f;
-            for (delta = desiredYaw - this.yaw; delta < -180.0f; delta += 360.0f) {
+            float delta = desiredYaw - this.yaw;
+            while (delta < -180.0f) {
+                delta += 360.0f;
             }
             while (delta > 180.0f) {
                 delta -= 360.0f;

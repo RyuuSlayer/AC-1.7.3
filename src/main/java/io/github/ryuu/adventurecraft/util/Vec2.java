@@ -1,13 +1,12 @@
 package io.github.ryuu.adventurecraft.util;
 
-class Vec2 {
+public class Vec2 {
 
-    int x;
+    public int x;
+    public int y;
 
-    int y;
-
-    Vec2(int xx, int yy) {
-        this.x = xx;
-        this.y = yy;
+    public Vec2(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 }

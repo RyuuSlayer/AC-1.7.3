@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.items;
 
 import io.github.ryuu.adventurecraft.entities.EntityAirFX;
+import io.github.ryuu.adventurecraft.extensions.items.ExItemType;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.FallingTile;
@@ -13,12 +14,16 @@ import net.minecraft.util.maths.Vec3f;
 
 import java.util.List;
 
-class ItemUmbrella extends ItemType {
+class ItemUmbrella extends ItemType implements ExItemType {
 
     public ItemUmbrella(int id) {
         super(id);
         this.maxStackSize = 1;
-        this.decrementDamage = true;
+    }
+
+    @Override
+    public boolean canDecrementDamage() {
+        return true;
     }
 
     @Override

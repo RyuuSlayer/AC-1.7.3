@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.entity;
 
+import io.github.ryuu.adventurecraft.extensions.entity.ExFallingTile;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.FallingTile;
 import net.minecraft.level.Level;
@@ -9,43 +10,30 @@ import net.minecraft.util.maths.MathsHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(FallingTile.class)
-public class MixinFallingTile extends Entity {
+public abstract class MixinFallingTile extends Entity implements ExFallingTile {
 
-    @Shadow()
+    @Shadow
     public int tile;
 
+    @Shadow
+    public int field_848;
+
     public int metadata;
-
-    public int field_848 = 0;
-
     public double startX;
-
     public double startZ;
 
-    public MixinFallingTile(Level world) {
-        super(world);
-        this.setSize(0.98f, 0.98f);
-        this.height = 0.98f;
-        this.standingEyeHeight = this.height / 2.0f;
+    public MixinFallingTile(Level arg) {
+        super(arg);
     }
 
-    public MixinFallingTile(Level world, double d, double d1, double d2, int i) {
-        super(world);
-        this.tile = i;
-        this.field_1593 = true;
-        this.setSize(0.98f, 0.98f);
-        this.height = 0.98f;
-        this.standingEyeHeight = this.height / 2.0f;
-        this.setPosition(d, d1, d2);
-        this.velocityX = 0.0;
-        this.velocityY = 0.0;
-        this.velocityZ = 0.0;
-        this.prevX = d;
-        this.prevY = d1;
-        this.prevZ = d2;
-        this.startX = d;
+    @Inject(method = "<init>(Lnet/minecraft/level/Level;DDDI)V", at = @At("TAIL"))
+    private void init(Level d, double d1, double d2, double i, int par5, CallbackInfo ci) {
+        this.startX = d1;
         this.startZ = d2;
     }
 
@@ -53,7 +41,7 @@ public class MixinFallingTile extends Entity {
      * @author Ryuu, TechPizza, Phil
      */
     @Override
-    @Overwrite()
+    @Overwrite
     public void tick() {
         if (this.tile == 0) {
             this.remove();
@@ -106,7 +94,7 @@ public class MixinFallingTile extends Entity {
      * @author Ryuu, TechPizza, Phil
      */
     @Override
-    @Overwrite()
+    @Overwrite
     protected void writeCustomDataToTag(CompoundTag tag) {
         tag.put("Tile", (byte) this.tile);
         tag.put("EntityID", this.id);
@@ -116,11 +104,21 @@ public class MixinFallingTile extends Entity {
      * @author Ryuu, TechPizza, Phil
      */
     @Override
-    @Overwrite()
+    @Overwrite
     protected void readCustomDataFromTag(CompoundTag tag) {
         this.tile = tag.getByte("Tile") & 0xFF;
         if (tag.containsKey("EntityID")) {
             this.id = tag.getInt("EntityID");
         }
+    }
+
+    @Override
+    public int getMetadata() {
+        return this.metadata;
+    }
+
+    @Override
+    public void setMetadata(int metadata) {
+        this.metadata = metadata;
     }
 }

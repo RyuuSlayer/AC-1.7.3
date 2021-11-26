@@ -8,14 +8,11 @@ import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.mixin.entity.MixinLivingEntity;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.PlayerTorch;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.container.Container;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.Monster;
 import net.minecraft.entity.player.Player;
-import net.minecraft.entity.player.PlayerContainer;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.projectile.Arrow;
 import net.minecraft.item.ItemInstance;
@@ -24,7 +21,6 @@ import net.minecraft.level.Level;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.Stats;
 import net.minecraft.tile.Tile;
-import net.minecraft.util.Vec3i;
 import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.MathsHelper;
 import org.spongepowered.asm.mixin.Mixin;
@@ -38,7 +34,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.List;
 
 @Mixin(Player.class)
-public abstract class MixinPlayer extends MixinLivingEntity implements ExPlayer, ExLivingEntity {
+public abstract class MixinPlayer extends MixinLivingEntity implements ExPlayer {
 
     @Shadow
     public PlayerInventory inventory;
@@ -47,15 +43,13 @@ public abstract class MixinPlayer extends MixinLivingEntity implements ExPlayer,
     @Shadow
     public Container container;
     @Shadow
-    public int score = 0;
-    @Shadow
     public float field_524;
     @Shadow
     public float field_525;
     @Shadow
-    public boolean handSwinging = false;
+    public boolean handSwinging;
     @Shadow
-    public int handSwingTicks = 0;
+    public int handSwingTicks;
     @Shadow
     public String name;
 
@@ -67,23 +61,14 @@ public abstract class MixinPlayer extends MixinLivingEntity implements ExPlayer,
     public int numHeartPieces;
     public String cloakTexture;
 
-    public MixinPlayer(Level world) {
-        super(world);
-        this.container = this.playerContainer = new PlayerContainer(this.inventory, !world.isClient);
-        this.standingEyeHeight = 1.62f;
-        Vec3i chunkcoordinates = world.getSpawnPosition();
-        this.setPositionAndAngles((double) chunkcoordinates.x + 0.5, chunkcoordinates.y + 1, (double) chunkcoordinates.z + 0.5, 0.0f, 0.0f);
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void init(Level world, CallbackInfo ci) {
         this.health = 12;
         ((ExLivingEntity) this).setMaxHealth(12);
-        this.field_1022 = "humanoid";
-        this.field_1021 = 180.0f;
-        this.field_1646 = 20;
-        this.texture = "/mob/char.png";
-        this.isSwingingOffhand = false;
-        this.swingProgressIntOffhand = 0;
-        this.swappedItems = false;
-        this.numHeartPieces = 0;
     }
+
+    @Shadow
+    public abstract boolean isSleeping();
 
     @Shadow
     public abstract void increaseStat(Stat arg, int i);
@@ -92,47 +77,26 @@ public abstract class MixinPlayer extends MixinLivingEntity implements ExPlayer,
     public abstract void wakeUp(boolean flag, boolean flag1, boolean flag2);
 
     @Shadow
+    public abstract void shadow$updateDespawnCounter();
+
+    @Shadow
     protected abstract void method_520(Entity arg);
 
     @Shadow
     protected abstract void method_510(LivingEntity arg, boolean flag);
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Environment(EnvType.CLIENT)
-    @Override
-    @Overwrite
-    public void afterSpawn() {
-        this.standingEyeHeight = 1.62f;
-        this.setSize(0.6f, 1.8f);
-        super.afterSpawn();
+    @Inject(method = "afterSpawn", at = @At("TAIL"))
+    public void afterPlayerSpawn(CallbackInfo ci) {
         this.health = this.maxHealth;
-        this.deathTime = 0;
         this.removed = false;
         this.fire = -this.field_1646;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite
-    protected void tickHandSwing() {
-        if (this.handSwinging) {
-            ++this.handSwingTicks;
-            if (this.handSwingTicks == 8) {
-                this.handSwingTicks = 0;
-                this.handSwinging = false;
-            }
-        } else {
-            this.handSwingTicks = 0;
-        }
-        this.handSwingProgress = (float) this.handSwingTicks / 8.0f;
-
+    @Inject(method = "tickHandSwing", at = @At("TAIL"))
+    private void afterTickHandSwing(CallbackInfo ci) {
         if (this.isSwingingOffhand) {
             ++this.swingProgressIntOffhand;
-            if (this.swingProgressIntOffhand == 8) {
+            if (this.swingProgressIntOffhand >= 8) {
                 this.swingProgressIntOffhand = 0;
                 this.isSwingingOffhand = false;
             }
@@ -142,24 +106,22 @@ public abstract class MixinPlayer extends MixinLivingEntity implements ExPlayer,
         this.swingProgressOffhand = (float) this.swingProgressIntOffhand / 8.0f;
     }
 
-    public void baseTick() {
+    protected void afterBaseTick() {
         this.prevSwingProgressOffhand = this.swingProgressOffhand;
-        super.baseTick();
+        super.afterBaseTick();
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite
-    public void updateDespawnCounter() {
-        List list;
+    @Inject(method = "updateDespawnCounter", at = @At("HEAD"))
+    private void beforeUpdateDespawnCounter(CallbackInfo ci) {
         if (this.level.difficulty == 0 && this.health < this.maxHealth && this.field_1645 % 20 * 12 == 0) {
             this.addHealth(1);
         }
         this.inventory.inventoryTick();
         this.field_524 = this.field_525;
-        super.updateDespawnCounter();
+    }
+
+    @Inject(method = "updateDespawnCounter", at = @At("TAIL"))
+    private void afterUpdateDespawnCounter(CallbackInfo ci) {
         float f = MathsHelper.sqrt(this.velocityX * this.velocityX + this.velocityZ * this.velocityZ);
         float f1 = (float) Math.atan(-this.velocityY * (double) 0.2f) * 15.0f;
         if (f > 0.1f) {
@@ -173,7 +135,8 @@ public abstract class MixinPlayer extends MixinLivingEntity implements ExPlayer,
         }
         this.field_525 += (f - this.field_525) * 0.4f;
         this.field_1044 += (f1 - this.field_1044) * 0.8f;
-        if (this.health > 0 && (list = this.level.getEntities(this, this.boundingBox.expand(1.0, 0.0, 1.0))) != null) {
+        List list = this.level.getEntities((Entity) (Object) this, this.boundingBox.expand(1.0, 0.0, 1.0));
+        if (this.health > 0 && list != null) {
             for (Object o : list) {
                 Entity entity = (Entity) o;
                 if (!entity.removed) {

@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.entities;
 
+import io.github.ryuu.adventurecraft.extensions.entity.projectile.ExArrow;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.Skeleton;
 import net.minecraft.entity.projectile.Arrow;
@@ -30,7 +31,8 @@ public class EntitySkeletonBoss extends Skeleton {
             double d1 = entity.z - this.z;
             if (this.attackTime == 0) {
                 for (int i = 0; i < 5; ++i) {
-                    Arrow entityarrow = new Arrow(this.level, this, this.attackDamage);
+                    Arrow entityarrow = new Arrow(this.level, this);
+                    ((ExArrow)entityarrow).setAttackDamage(this.attackDamage);
                     entityarrow.y += 1.4f;
                     double d2 = entity.y - (double) 0.2f - entityarrow.y;
                     float f1 = MathsHelper.sqrt(d * d + d1 * d1) * 0.2f;

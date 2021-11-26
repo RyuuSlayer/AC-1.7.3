@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityHealDamage;
+import io.github.ryuu.adventurecraft.extensions.entity.ExLivingEntity;
 import io.github.ryuu.adventurecraft.gui.GuiHealDamage;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.DebugMode;
@@ -52,7 +53,7 @@ public class BlockHealDamage extends TileWithEntity {
                 p.addHealth(tileEnt.healDamage);
                 continue;
             }
-            p.applyDamage(-tileEnt.healDamage);
+            ((ExLivingEntity)p).applyDamage(-tileEnt.healDamage);
         }
     }
 

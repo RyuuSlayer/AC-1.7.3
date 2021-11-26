@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.items;
 
 import io.github.ryuu.adventurecraft.blocks.Blocks;
+import io.github.ryuu.adventurecraft.extensions.entity.ExFallingTile;
 import net.minecraft.entity.FallingTile;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
@@ -45,7 +46,7 @@ public class ItemPowerGlove extends ItemType {
             FallingTile e = new FallingTile(level, (double) x + 0.5, (double) y + 0.5, (double) z + 0.5, blockID);
             e.velocityX = 0.3 * (double) xOffset;
             e.velocityZ = 0.3 * (double) zOffset;
-            e.metadata = metadata;
+            ((ExFallingTile)e).setMetadata(metadata);
             level.spawnEntity(e);
         }
         return true;

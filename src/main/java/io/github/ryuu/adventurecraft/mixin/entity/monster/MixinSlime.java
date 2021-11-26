@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.entity.monster;
 
+import io.github.ryuu.adventurecraft.extensions.entity.monster.ExSlime;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MonsterEntityType;
 import net.minecraft.entity.monster.Slime;
@@ -12,91 +13,21 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(Slime.class)
-public class MixinSlime extends LivingEntity implements MonsterEntityType {
+public abstract class MixinSlime extends LivingEntity implements MonsterEntityType, ExSlime {
 
-    @Shadow()
+    @Shadow
     public float field_1951;
 
+    @Shadow
     public float field_1952;
-    public int attackStrength;
-    private int field_1953 = 0;
 
-    public MixinSlime(Level world) {
-        super(world);
-        this.texture = "/mob/slime.png";
-        int i = 1 << this.rand.nextInt(3);
-        this.standingEyeHeight = 0.0f;
-        this.field_1953 = this.rand.nextInt(20) + 10;
-        this.setSize(i);
-        this.attackStrength = -1;
-    }
+    @Shadow
+    private int field_1953 ;
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    protected void initDataTracker() {
-        super.initDataTracker();
-        this.dataTracker.startTracking(16, new Byte(1));
-    }
+    private int attackStrength = -1;
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void setSize(int i) {
-        this.dataTracker.setData(16, (byte) i);
-        this.setSize(0.6f * (float) i, 0.6f * (float) i);
-        this.health = i * i;
-        this.setPosition(this.x, this.y, this.z);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public void writeCustomDataToTag(CompoundTag tag) {
-        super.writeCustomDataToTag(tag);
-        tag.put("Size", this.getSize() - 1);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public void readCustomDataFromTag(CompoundTag tag) {
-        super.readCustomDataFromTag(tag);
-        this.setSize(tag.getInt("Size") + 1);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public void tick() {
-        this.field_1952 = this.field_1951;
-        boolean flag = this.onGround;
-        super.tick();
-        if (this.onGround && !flag) {
-            int i = this.getSize();
-            for (int j = 0; j < i * 8; ++j) {
-                float f = this.rand.nextFloat() * 3.141593f * 2.0f;
-                float f1 = this.rand.nextFloat() * 0.5f + 0.5f;
-                float f2 = MathsHelper.sin(f) * (float) i * 0.5f * f1;
-                float f3 = MathsHelper.cos(f) * (float) i * 0.5f * f1;
-                this.level.addParticle("slime", this.x + (double) f2, this.boundingBox.minY, this.z + (double) f3, 0.0, 0.0, 0.0);
-            }
-            if (i > 2) {
-                this.level.playSound(this, "mob.slime", this.getSoundVolume(), ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2f + 1.0f) / 0.8f);
-            }
-            this.field_1951 = -0.5f;
-        }
-        this.field_1951 *= 0.6f;
-    }
+    @Shadow
+    public abstract int getSize();
 
     /**
      * @author Ryuu, TechPizza, Phil
@@ -137,7 +68,7 @@ public class MixinSlime extends LivingEntity implements MonsterEntityType {
      * @author Ryuu, TechPizza, Phil
      */
     @Override
-    @Overwrite()
+    @Overwrite
     public void remove() {
         super.remove();
     }
@@ -146,7 +77,7 @@ public class MixinSlime extends LivingEntity implements MonsterEntityType {
      * @author Ryuu, TechPizza, Phil
      */
     @Override
-    @Overwrite()
+    @Overwrite
     public void onPlayerCollision(Player entityplayer) {
         int i;
         int j = i = this.getSize();
@@ -156,5 +87,15 @@ public class MixinSlime extends LivingEntity implements MonsterEntityType {
         if ((i > 1 || this.attackStrength != -1) && this.method_928(entityplayer) && (double) this.distanceTo(entityplayer) < 0.6 * (double) i && entityplayer.damage(this, j)) {
             this.level.playSound(this, "mob.slimeattack", 1.0f, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2f + 1.0f);
         }
+    }
+
+    @Override
+    public int getAttackStrength() {
+        return attackStrength;
+    }
+
+    @Override
+    public void setAttackStrength(int attackStrength) {
+        this.attackStrength = attackStrength;
     }
 }

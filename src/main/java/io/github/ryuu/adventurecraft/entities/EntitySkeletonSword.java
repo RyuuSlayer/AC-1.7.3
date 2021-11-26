@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.entities;
 
+import io.github.ryuu.adventurecraft.extensions.entity.ExLivingEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.Skeleton;
 import net.minecraft.item.ItemInstance;
@@ -11,7 +12,7 @@ public class EntitySkeletonSword extends Skeleton {
     public EntitySkeletonSword(Level world) {
         super(world);
         this.attackDamage = 1;
-        this.heldItem = new ItemInstance(ItemType.swordWood, 1);
+        ((ExLivingEntity) this).setHeldItem(new ItemInstance(ItemType.swordWood, 1));
     }
 
     @Override

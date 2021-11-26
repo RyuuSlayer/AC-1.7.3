@@ -6,6 +6,14 @@ import net.minecraft.level.Level;
 
 public interface ExItemType {
 
+    default boolean canDecrementDamage() {
+        return false;
+    }
+
+    default int getItemUseDelay() {
+        return 5;
+    }
+
     default boolean isLighting(ItemInstance itemStack) {
         return false;
     }

@@ -1,7 +1,9 @@
 package io.github.ryuu.adventurecraft.entities;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityNpcPath;
+import io.github.ryuu.adventurecraft.extensions.entity.ExLivingEntity;
 import io.github.ryuu.adventurecraft.scripting.EntityDescriptions;
+import io.github.ryuu.adventurecraft.scripting.ScopeTag;
 import io.github.ryuu.adventurecraft.scripting.ScriptEntity;
 import io.github.ryuu.adventurecraft.scripting.ScriptEntityDescription;
 import io.github.ryuu.adventurecraft.util.CoordBlock;
@@ -57,7 +59,7 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
         if (description != null) {
             if (setHealth) {
                 this.health = description.health;
-                this.maxHealth = description.health;
+                ((ExLivingEntity)this).setMaxHealth(description.health);
                 this.onCreated = description.onCreated;
                 this.onUpdate = description.onUpdate;
                 this.onPathReached = description.onPathReached;
@@ -288,7 +290,9 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
                 double dY = vec3d.y - (double) MathsHelper.floor(this.boundingBox.minY + 0.5);
                 float yawDir = (float) (Math.atan2(dZ, dX) * 180.0 / 3.1415927410125732) - 90.0f;
                 this.parallelMovement = this.movementSpeed;
-                for (yawDelta = yawDir - this.yaw; yawDelta < -180.0f; yawDelta += 360.0f) {
+                yawDelta = yawDir - this.yaw;
+                while (yawDelta < -180.0f) {
+                    yawDelta += 360.0f;
                 }
                 while (yawDelta >= 180.0f) {
                     yawDelta -= 360.0f;

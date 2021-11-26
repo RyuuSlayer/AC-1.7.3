@@ -1,5 +1,7 @@
 package io.github.ryuu.adventurecraft.entities;
 
+import io.github.ryuu.adventurecraft.extensions.entity.ExLivingEntity;
+import io.github.ryuu.adventurecraft.extensions.items.ExItemInstance;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.UtilBullet;
 import net.minecraft.entity.Entity;
@@ -16,7 +18,7 @@ public class EntitySkeletonShotgun extends Skeleton {
     public EntitySkeletonShotgun(Level world) {
         super(world);
         this.attackDamage = 2;
-        this.heldItem = new ItemInstance(Items.shotgun, 1);
+        ((ExLivingEntity)this).setHeldItem(new ItemInstance(Items.shotgun, 1));
     }
 
     @Override
@@ -43,7 +45,8 @@ public class EntitySkeletonShotgun extends Skeleton {
     @Override
     public void tick() {
         super.tick();
-        this.heldItem.timeLeft = this.health <= 0 ? 0 : this.attackTime;
+        ItemInstance item = ((ExLivingEntity)this).getHeldItem();
+        ((ExItemInstance)item).setTimeLeft(this.health <= 0 ? 0 : this.attackTime);
     }
 
     @Override

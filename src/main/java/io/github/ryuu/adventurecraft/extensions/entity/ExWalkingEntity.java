@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.extensions.entity;
 
-public interface ExWalkingEntity {
+public interface ExWalkingEntity extends ExLivingEntity {
 
     boolean canForgetTargetRandomly();
 

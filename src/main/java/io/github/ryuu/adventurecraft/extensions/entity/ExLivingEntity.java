@@ -1,6 +1,10 @@
 package io.github.ryuu.adventurecraft.extensions.entity;
 
-public interface ExLivingEntity {
+import net.minecraft.item.ItemInstance;
+
+public interface ExLivingEntity extends ExEntity {
+
+    void applyDamage(int damage);
 
     double getGravity();
 
@@ -12,4 +16,7 @@ public interface ExLivingEntity {
 
     boolean protectedByShield(double x, double y, double z);
 
+    ItemInstance getHeldItem();
+
+    void setHeldItem(ItemInstance itemInstance);
 }

@@ -1,5 +1,7 @@
 package io.github.ryuu.adventurecraft.entities;
 
+import io.github.ryuu.adventurecraft.extensions.entity.ExLivingEntity;
+import io.github.ryuu.adventurecraft.extensions.items.ExItemInstance;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.UtilBullet;
 import net.minecraft.entity.Entity;
@@ -15,7 +17,7 @@ public class EntitySkeletonRifle extends Skeleton {
         super(world);
         this.attackDamage = 6;
         this.ammo = 30;
-        this.heldItem = new ItemInstance(Items.rifle, 1);
+        ((ExLivingEntity) this).setHeldItem(new ItemInstance(Items.rifle, 1));
     }
 
     @Override
@@ -45,19 +47,20 @@ public class EntitySkeletonRifle extends Skeleton {
     @Override
     public void tick() {
         super.tick();
+        ExItemInstance heldItem = (ExItemInstance) (((ExLivingEntity) this).getHeldItem());
         if (this.health <= 0) {
-            this.heldItem.timeLeft = 0;
+            heldItem.setTimeLeft(0);
         } else {
             if (this.ammo == 30) {
-                this.heldItem.timeLeft = this.attackTime - 35;
-                if (this.heldItem.timeLeft < 0) {
-                    this.heldItem.timeLeft = 0;
+                heldItem.setTimeLeft(this.attackTime - 35);
+                if (heldItem.getTimeLeft() < 0) {
+                    heldItem.setTimeLeft(0);
                 }
             } else {
-                this.heldItem.timeLeft = this.attackTime;
+                heldItem.setTimeLeft(this.attackTime);
             }
-            if (this.heldItem.timeLeft < 0) {
-                this.heldItem.timeLeft = 0;
+            if (heldItem.getTimeLeft() < 0) {
+                heldItem.setTimeLeft(0);
             }
         }
     }

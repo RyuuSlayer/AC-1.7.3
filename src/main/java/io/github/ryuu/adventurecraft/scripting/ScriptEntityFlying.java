@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.scripting;
 
+import io.github.ryuu.adventurecraft.extensions.entity.ExFlyingEntity;
 import net.minecraft.entity.FlyingEntity;
 
 public class ScriptEntityFlying extends ScriptEntityLiving {
@@ -12,10 +13,10 @@ public class ScriptEntityFlying extends ScriptEntityLiving {
     }
 
     public int getAttackStrength() {
-        return this.entityFlying.attackStrength;
+        return ((ExFlyingEntity)this).getAttackStrength();
     }
 
     public void setAttackStrength(int i) {
-        this.entityFlying.attackStrength = i;
+        ((ExFlyingEntity)this).setAttackStrength(i);
     }
 }

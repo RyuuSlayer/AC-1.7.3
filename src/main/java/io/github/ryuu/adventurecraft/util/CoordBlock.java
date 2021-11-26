@@ -3,10 +3,11 @@ package io.github.ryuu.adventurecraft.util;
 import java.util.ArrayList;
 import java.util.List;
 
-final class CoordBlock {
+public final class CoordBlock {
 
-    private static final List<net.minecraft.src.CoordBlock> blockCoords = new ArrayList();
+    private static final List<CoordBlock> blockCoords = new ArrayList<>();
     public static int numBlockCoordsInUse = 0;
+
     public int x;
     public int y;
     public int z;
@@ -19,7 +20,7 @@ final class CoordBlock {
 
     public static CoordBlock getFromPool(int i, int j, int k) {
         if (numBlockCoordsInUse >= blockCoords.size()) {
-            blockCoords.add((Object) new CoordBlock(i, j, k));
+            blockCoords.add(new CoordBlock(i, j, k));
         }
         return ((CoordBlock) blockCoords.get(numBlockCoordsInUse++)).set(i, j, k);
     }

@@ -4,17 +4,17 @@ import net.minecraft.util.io.CompoundTag;
 
 public class TriggerArea {
 
-    int minX;
+    public int minX;
 
-    int minY;
+    public int minY;
 
-    int minZ;
+    public int minZ;
 
-    int maxX;
+    public int maxX;
 
-    int maxY;
+    public int maxY;
 
-    int maxZ;
+    public int maxZ;
 
     public TriggerArea(int xMin, int yMin, int zMin, int xMax, int yMax, int zMax) {
         this.minX = xMin;
@@ -25,7 +25,7 @@ public class TriggerArea {
         this.maxZ = zMax;
     }
 
-    static TriggerArea getFromTagCompound(CompoundTag tag) {
+    public static TriggerArea getFromTagCompound(CompoundTag tag) {
         int minX = tag.getInt("minX");
         int minY = tag.getInt("minY");
         int minZ = tag.getInt("minZ");
@@ -35,7 +35,7 @@ public class TriggerArea {
         return new TriggerArea(minX, minY, minZ, maxX, maxY, maxZ);
     }
 
-    boolean isPointInside(int x, int y, int z) {
+    public boolean isPointInside(int x, int y, int z) {
         if (x < this.minX || x > this.maxX) {
             return false;
         }
@@ -45,7 +45,7 @@ public class TriggerArea {
         return this.minZ <= z && z <= this.maxZ;
     }
 
-    CompoundTag getTagCompound() {
+    public CompoundTag getTagCompound() {
         CompoundTag t = new CompoundTag();
         t.put("minX", this.minX);
         t.put("minY", this.minY);

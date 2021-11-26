@@ -1,7 +1,10 @@
 package io.github.ryuu.adventurecraft.mixin.entity.player;
 
-import io.github.ryuu.adventurecraft.accessors.entity.player.AccessPlayerInventory;
-import io.github.ryuu.adventurecraft.accessors.items.ItemTypeSlotChangeNotifier;
+import io.github.ryuu.adventurecraft.extensions.entity.ExLivingEntity;
+import io.github.ryuu.adventurecraft.extensions.entity.player.ExPlayer;
+import io.github.ryuu.adventurecraft.extensions.entity.player.ExPlayerInventory;
+import io.github.ryuu.adventurecraft.extensions.items.ExItemInstance;
+import io.github.ryuu.adventurecraft.extensions.items.ExItemType;
 import io.github.ryuu.adventurecraft.items.IItemReload;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
@@ -22,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(PlayerInventory.class)
-public abstract class MixinPlayerInventory implements Inventory, AccessPlayerInventory {
+public abstract class MixinPlayerInventory implements Inventory, ExPlayerInventory {
 
     @Shadow
     public ItemInstance[] main;
@@ -32,6 +35,7 @@ public abstract class MixinPlayerInventory implements Inventory, AccessPlayerInv
     public int selectedHotbarSlot;
     @Shadow
     public Player player;
+
     @Shadow
     protected abstract int getSlotWithItem(int i);
     @Shadow
@@ -124,15 +128,16 @@ public abstract class MixinPlayerInventory implements Inventory, AccessPlayerInv
         for (int i = 0; i < this.main.length; ++i) {
             if (this.main[i] != null) {
                 ItemInstance itemStack = this.main[i];
+                ExItemInstance exStack = (ExItemInstance)itemStack;
                 itemStack.inventoryTick(this.player.level, this.player, i, this.selectedHotbarSlot == i);
-                if (itemStack.timeLeft > 0) {
-                    --itemStack.timeLeft;
+                if (exStack.getTimeLeft() > 0) {
+                    exStack.setTimeLeft(exStack.getTimeLeft() - 1);
                 }
-                if ((i == this.selectedHotbarSlot || i == this.offhandItem) && itemStack.timeLeft == 0 && itemStack.isReloading) {
+                if ((i == this.selectedHotbarSlot || i == this.offhandItem) && exStack.getTimeLeft() == 0 && exStack.isReloading()) {
                     IItemReload item = (IItemReload) ItemType.byId[itemStack.itemId];
                     item.reload(itemStack, this.player.level, this.player);
                 }
-                if (itemStack.getDamage() > 0 && ItemType.byId[itemStack.itemId].decrementDamage) {
+                if (itemStack.getDamage() > 0 && ((ExItemType)ItemType.byId[itemStack.itemId]).canDecrementDamage()) {
                     itemStack.setDamage(itemStack.getDamage() - 1);
                 }
             }
@@ -167,19 +172,20 @@ public abstract class MixinPlayerInventory implements Inventory, AccessPlayerInv
             this.player.addHealth(4);
             return true;
         }
+        ExPlayer exPlayer = (ExPlayer) this.player;
         if (item.itemId == Items.heartContainer.id) {
             item.count = 0;
-            this.player.maxHealth += 4;
-            this.player.addHealth(this.player.maxHealth);
+            exPlayer.setMaxHealth(exPlayer.getMaxHealth() + 4);
+            this.player.addHealth(exPlayer.getMaxHealth());
             return true;
         }
         if (item.itemId == Items.heartPiece.id) {
             item.count = 0;
-            ++this.player.numHeartPieces;
-            if (this.player.numHeartPieces >= 4) {
-                this.player.numHeartPieces = 0;
-                this.player.maxHealth += 4;
-                this.player.addHealth(this.player.maxHealth);
+            exPlayer.setHeartPieces(exPlayer.getHeartPieces() + 1);
+            if (exPlayer.getHeartPieces() >= 4) {
+                exPlayer.setHeartPieces(0);
+                exPlayer.setMaxHealth(exPlayer.getMaxHealth() + 4);
+                this.player.addHealth(exPlayer.getMaxHealth());
             }
             return true;
         }
@@ -316,7 +322,7 @@ public abstract class MixinPlayerInventory implements Inventory, AccessPlayerInv
             AccessMinecraft.getInstance().level.scriptHandler.runScript(String.format("item_onAddToSlot_%d.js", new Object[]{itemType.id}), scope, false);
         }
 
-        ((ItemTypeSlotChangeNotifier) itemType).onAddToSlot(entityPlayer, slot, damage);
+        ((ExItemType) itemType).onAddToSlot(entityPlayer, slot, damage);
     }
 
     private static void onRemovedFromSlot(ItemType itemType, Player entityPlayer, int slot, int damage) {
@@ -328,7 +334,7 @@ public abstract class MixinPlayerInventory implements Inventory, AccessPlayerInv
             AccessMinecraft.getInstance().level.scriptHandler.runScript(String.format("item_onRemovedFromSlot_%d.js", new Object[]{itemType.id}), scope, false);
         }
 
-        ((ItemTypeSlotChangeNotifier) itemType).onRemovedFromSlot(entityPlayer, slot, damage);
+        ((ExItemType) itemType).onRemovedFromSlot(entityPlayer, slot, damage);
     }
 
     @Override

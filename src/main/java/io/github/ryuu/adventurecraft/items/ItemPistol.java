@@ -1,63 +1,73 @@
 package io.github.ryuu.adventurecraft.items;
 
+import io.github.ryuu.adventurecraft.extensions.items.ExItemInstance;
+import io.github.ryuu.adventurecraft.extensions.items.ExItemType;
 import io.github.ryuu.adventurecraft.util.UtilBullet;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 
-class ItemPistol extends ItemType implements IItemReload {
+public class ItemPistol extends ItemType implements IItemReload, ExItemType {
 
     public ItemPistol(int id) {
         super(id);
         this.maxStackSize = 1;
-        this.itemUseDelay = 1;
+    }
+
+    @Override
+    public int getItemUseDelay() {
+        return 1;
     }
 
     @Override
     public ItemInstance use(ItemInstance item, Level level, Player player) {
-        if (item.timeLeft > 0 || item.isReloading) {
+        ExItemInstance exItem = (ExItemInstance) item;
+        if (exItem.getTimeLeft() > 0 || exItem.isReloading()) {
             return item;
         }
         if (item.getDamage() == item.method_723()) {
-            item.isReloading = true;
+            exItem.setReloading(true);
             return item;
         }
-        item.justReloaded = false;
+        exItem.setJustReloaded(false);
         level.playSound(player, "items.pistol.fire", 1.0f, 1.0f);
         UtilBullet.fireBullet(level, player, 0.05f, 9);
         item.setDamage(item.getDamage() + 1);
-        item.timeLeft = 7;
+        exItem.setTimeLeft(7);
         if (item.getDamage() == item.method_723()) {
-            item.isReloading = true;
+            exItem.setReloading(true);
         }
         return item;
     }
 
     @Override
-    public boolean isLighting(ItemInstance itemstack) {
-        return !itemstack.justReloaded && itemstack.timeLeft > 4;
+    public boolean isLighting(ItemInstance item) {
+        ExItemInstance exItem = (ExItemInstance) item;
+        return !exItem.isJustReloaded() && exItem.getTimeLeft() > 4;
     }
 
     @Override
-    public boolean isMuzzleFlash(ItemInstance itemstack) {
-        return !itemstack.justReloaded && itemstack.timeLeft > 4;
+    public boolean isMuzzleFlash(ItemInstance item) {
+        ExItemInstance exItem = (ExItemInstance) item;
+        return !exItem.isJustReloaded() && exItem.getTimeLeft() > 4;
     }
 
     @Override
-    public void reload(ItemInstance itemstack, Level world, Player entityplayer) {
-        if (itemstack.getDamage() > 0 && entityplayer.inventory.decreaseAmountOfItem(Items.pistolAmmo.id)) {
-            itemstack.setDamage(itemstack.getDamage() - 1);
-            while (itemstack.getDamage() > 0 && entityplayer.inventory.decreaseAmountOfItem(Items.pistolAmmo.id)) {
-                itemstack.setDamage(itemstack.getDamage() - 1);
+    public void reload(ItemInstance item, Level world, Player entityplayer) {
+        ExItemInstance exItem = (ExItemInstance) item;
+        if (item.getDamage() > 0 && entityplayer.inventory.decreaseAmountOfItem(Items.pistolAmmo.id)) {
+            item.setDamage(item.getDamage() - 1);
+            while (item.getDamage() > 0 && entityplayer.inventory.decreaseAmountOfItem(Items.pistolAmmo.id)) {
+                item.setDamage(item.getDamage() - 1);
             }
-            itemstack.timeLeft = 32;
+            exItem.setTimeLeft(32);
             world.playSound(entityplayer, "items.clipReload", 1.0f, 1.0f);
         } else {
             world.playSound(entityplayer, "items.dryFire", 1.0f, 1.0f);
-            itemstack.timeLeft = 4;
+            exItem.setTimeLeft(4);
         }
-        itemstack.justReloaded = true;
-        itemstack.isReloading = false;
+        exItem.setJustReloaded(true);
+        exItem.setReloading(false);
     }
 }

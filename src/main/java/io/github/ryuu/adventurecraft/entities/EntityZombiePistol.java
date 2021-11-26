@@ -1,5 +1,7 @@
 package io.github.ryuu.adventurecraft.entities;
 
+import io.github.ryuu.adventurecraft.extensions.entity.ExLivingEntity;
+import io.github.ryuu.adventurecraft.extensions.items.ExItemInstance;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.UtilBullet;
 import net.minecraft.entity.Entity;
@@ -14,7 +16,7 @@ public class EntityZombiePistol extends Zombie {
 
     public EntityZombiePistol(Level world) {
         super(world);
-        this.heldItem = new ItemInstance(Items.pistol, 1);
+        ((ExLivingEntity) this).setHeldItem(new ItemInstance(Items.pistol, 1));
         this.attackDamage = 6;
     }
 
@@ -38,12 +40,13 @@ public class EntityZombiePistol extends Zombie {
     @Override
     public void tick() {
         super.tick();
+        ExItemInstance heldItem = (ExItemInstance) (((ExLivingEntity) this).getHeldItem());
         if (this.health <= 0) {
-            this.heldItem.timeLeft = 0;
+            heldItem.setTimeLeft(0);
         } else {
-            this.heldItem.timeLeft = this.ammo == 15 ? this.attackTime - 43 : this.attackTime - 13;
-            if (this.heldItem.timeLeft < 0) {
-                this.heldItem.timeLeft = 0;
+            heldItem.setTimeLeft(this.ammo == 15 ? this.attackTime - 43 : this.attackTime - 13);
+            if (heldItem.getTimeLeft() < 0) {
+                heldItem.setTimeLeft(0);
             }
         }
     }

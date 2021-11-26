@@ -10,11 +10,9 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
-import net.minecraft.level.Level;
 import net.minecraft.tile.LadderTile;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.TileSounds;
-import net.minecraft.tile.material.Material;
 import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.MathsHelper;
 import net.minecraft.util.maths.Vec3f;
@@ -32,22 +30,7 @@ public abstract class MixinLivingEntity extends MixinEntity implements AccessLiv
     public int field_1009;
 
     @Shadow
-    public float field_1010;
-
-    @Shadow
-    public float field_1011;
-
-    @Shadow
-    public float field_1012;
-
-    @Shadow
-    public float field_1013;
-
-    @Shadow
     protected String texture;
-
-    @Shadow
-    public float lastHandSwingProgress;
 
     @Shadow
     public float handSwingProgress;
@@ -69,12 +52,6 @@ public abstract class MixinLivingEntity extends MixinEntity implements AccessLiv
 
     @Shadow
     public int deathTime;
-
-    @Shadow
-    public int attackTime;
-
-    @Shadow
-    public float field_1043;
 
     @Shadow
     public float field_1044;
@@ -101,18 +78,6 @@ public abstract class MixinLivingEntity extends MixinEntity implements AccessLiv
     private Entity field_1061;
 
     @Shadow
-    protected float field_1014;
-
-    @Shadow
-    protected float field_1015;
-
-    @Shadow
-    protected float field_1016;
-
-    @Shadow
-    protected float field_1017;
-
-    @Shadow
     protected float field_1021;
 
     @Shadow
@@ -136,11 +101,9 @@ public abstract class MixinLivingEntity extends MixinEntity implements AccessLiv
     @Shadow
     protected int field_1034;
 
-    @Shadow
-    private int field_1028;
-
     private long hurtTick;
     private long tickBeforeNextJump;
+
     public ItemInstance heldItem;
     public int timesCanJumpInAir = 0;
     public int jumpsLeft = 0;
@@ -159,25 +122,38 @@ public abstract class MixinLivingEntity extends MixinEntity implements AccessLiv
     public int randomLookRateVariation = 40;
     public int maxHealth = 10;
 
-    public MixinLivingEntity(Level world) {
-        super(world);
-        this.field_1593 = true;
-        this.field_1011 = (float) (Math.random() + 1.0) * 0.01f;
-        this.setPosition(this.x, this.y, this.z);
-        this.field_1010 = (float) Math.random() * 12398.0f;
-        this.yaw = (float) (Math.random() * 3.1415927410125732 * 2.0);
-        this.field_1641 = 0.5f;
-        this.heldItem = null;
-    }
+    @Shadow
+    protected abstract void shadow$applyDamage(int i);
 
     @Shadow
-    public abstract float method_930(float f);
+    public abstract void addHealth(int i);
 
     @Shadow
-    public abstract void playAmbientSound();
+    protected abstract int getLookPitchSpeed();
+
+    @Shadow
+    protected abstract float getSoundVolume();
+
+    @Shadow
+    protected abstract String getHurtSound();
+
+    @Shadow
+    protected abstract String getDeathSound();
+
+    @Shadow
+    public abstract void onKilledBy(Entity arg);
+
+    @Shadow
+    protected abstract void method_920();
 
     @Shadow
     public abstract void method_924(Entity arg, float f, float f1);
+
+    @Shadow
+    public abstract void method_925(Entity arg, int i, double d, double d1);
+
+    @Shadow
+    public abstract float method_930(float f);
 
     /**
      * @author Ryuu, TechPizza, Phil
@@ -198,149 +174,18 @@ public abstract class MixinLivingEntity extends MixinEntity implements AccessLiv
         return this.level.raycast(Vec3f.from(this.x, this.y + (double) this.getStandingEyeHeight(), this.z), Vec3f.from(entity.x, entity.y + (double) entity.getStandingEyeHeight(), entity.z)) == null;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite
-    public void baseTick() {
-        this.lastHandSwingProgress = this.handSwingProgress;
-        super.baseTick();
-        if (this.rand.nextInt(1000) < this.field_1028++) {
-            this.field_1028 = -this.method_936();
-            this.playAmbientSound();
-        }
-        if (this.isAlive() && this.isInsideWall() && !this.field_1642) {
-            this.damage(null, 1);
-        }
-        if (this.immuneToFire || this.level.isClient) {
-            this.fire = 0;
-        }
-        if (this.isAlive() && this.isInFluid(Material.WATER) && !this.method_934()) {
-            --this.air;
-            if (this.air == -20) {
-                this.air = 0;
-                for (int i = 0; i < 8; ++i) {
-                    float f = this.rand.nextFloat() - this.rand.nextFloat();
-                    float f1 = this.rand.nextFloat() - this.rand.nextFloat();
-                    float f2 = this.rand.nextFloat() - this.rand.nextFloat();
-                    this.level.addParticle("bubble", this.x + (double) f, this.y + (double) f1, this.z + (double) f2, this.velocityX, this.velocityY, this.velocityZ);
-                }
-                this.damage(null, 2);
-            }
-            this.fire = 0;
-        } else {
-            this.air = this.field_1648;
-        }
-        this.field_1043 = this.field_1044;
-        if (this.attackTime > 0) {
-            --this.attackTime;
-        }
-        if (this.hurtTime > 0) {
-            --this.hurtTime;
-        }
-        if (this.field_1613 > 0) {
-            --this.field_1613;
-        }
-        if (this.health <= 0) {
-            ++this.deathTime;
-            if (this.deathTime > 20) {
-                this.method_923();
-                this.remove();
-                for (int j = 0; j < 20; ++j) {
-                    double d = this.rand.nextGaussian() * 0.02;
-                    double d1 = this.rand.nextGaussian() * 0.02;
-                    double d2 = this.rand.nextGaussian() * 0.02;
-                    this.level.addParticle("explode", this.x + (double) (this.rand.nextFloat() * this.width * 2.0f) - (double) this.width, this.y + (double) (this.rand.nextFloat() * this.height), this.z + (double) (this.rand.nextFloat() * this.width * 2.0f) - (double) this.width, d, d1, d2);
-                }
-            }
-        }
-        this.field_1017 = this.field_1016;
-        this.field_1013 = this.field_1012;
-        this.prevYaw = this.yaw;
-        this.prevPitch = this.pitch;
+    @Inject(method = "baseTick", at = @At("TAIL"))
+    private void afterBaseTick(CallbackInfo ci) {
+        afterBaseTick();
+    }
+
+    protected void afterBaseTick() {
         if (this.extraFov > 0.0f) {
             this.extraFov -= 5.0f;
             if (this.extraFov < 0.0f) {
                 this.extraFov = 0.0f;
             }
         }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public void tick() {
-        boolean flag;
-        float f5;
-        float f4;
-        super.tick();
-        this.updateDespawnCounter();
-        double d = this.x - this.prevX;
-        double d1 = this.z - this.prevZ;
-        float f = MathsHelper.sqrt(d * d + d1 * d1);
-        float f1 = this.field_1012;
-        float f2 = 0.0f;
-        this.field_1014 = this.field_1015;
-        float f3 = 0.0f;
-        if (f > 0.05f) {
-            f3 = 1.0f;
-            f2 = f * 3.0f;
-            f1 = (float) Math.atan2(d1, d) * 180.0f / 3.141593f - 90.0f;
-        }
-        if (this.handSwingProgress > 0.0f) {
-            f1 = this.yaw;
-        }
-        if (!this.onGround) {
-            f3 = 0.0f;
-        }
-        this.field_1015 += (f3 - this.field_1015) * 0.3f;
-        for (f4 = f1 - this.field_1012; f4 < -180.0f; f4 += 360.0f) {
-        }
-        while (f4 >= 180.0f) {
-            f4 -= 360.0f;
-        }
-        this.field_1012 += f4 * 0.3f;
-        for (f5 = this.yaw - this.field_1012; f5 < -180.0f; f5 += 360.0f) {
-        }
-        while (f5 >= 180.0f) {
-            f5 -= 360.0f;
-        }
-        boolean bl = flag = f5 < -90.0f || f5 >= 90.0f;
-        if (f5 < -75.0f) {
-            f5 = -75.0f;
-        }
-        if (f5 >= 75.0f) {
-            f5 = 75.0f;
-        }
-        this.field_1012 = this.yaw - f5;
-        if (f5 * f5 > 2500.0f) {
-            this.field_1012 += f5 * 0.2f;
-        }
-        if (flag) {
-            f2 *= -1.0f;
-        }
-        while (this.yaw - this.prevYaw < -180.0f) {
-            this.prevYaw -= 360.0f;
-        }
-        while (this.yaw - this.prevYaw >= 180.0f) {
-            this.prevYaw += 360.0f;
-        }
-        while (this.field_1012 - this.field_1013 < -180.0f) {
-            this.field_1013 -= 360.0f;
-        }
-        while (this.field_1012 - this.field_1013 >= 180.0f) {
-            this.field_1013 += 360.0f;
-        }
-        while (this.pitch - this.prevPitch < -180.0f) {
-            this.prevPitch -= 360.0f;
-        }
-        while (this.pitch - this.prevPitch >= 180.0f) {
-            this.prevPitch += 360.0f;
-        }
-        this.field_1016 += f2;
     }
 
     @ModifyConstant(method = "addHealth", constant = @Constant(intValue = 20))
@@ -381,7 +226,7 @@ public abstract class MixinLivingEntity extends MixinEntity implements AccessLiv
         }
         this.field_1040 = 0.0f;
         if (flag) {
-            this.level.method_185(this, (byte) 2);
+            this.level.method_185((Entity) (Object) this, (byte) 2);
             this.method_1336();
             if (target != null) {
                 double d = target.x - this.x;
@@ -398,11 +243,11 @@ public abstract class MixinLivingEntity extends MixinEntity implements AccessLiv
         }
         if (this.health <= 0) {
             if (flag) {
-                this.level.playSound(this, this.getDeathSound(), this.getSoundVolume(), (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2f + 1.0f);
+                this.level.playSound((Entity) (Object) this, this.getDeathSound(), this.getSoundVolume(), (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2f + 1.0f);
             }
             this.onKilledBy(target);
         } else if (flag) {
-            this.level.playSound(this, this.getHurtSound(), this.getSoundVolume(), (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2f + 1.0f);
+            this.level.playSound((Entity) (Object) this, this.getHurtSound(), this.getSoundVolume(), (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2f + 1.0f);
         }
         return true;
     }
@@ -437,7 +282,7 @@ public abstract class MixinLivingEntity extends MixinEntity implements AccessLiv
         }
         this.field_1040 = 0.0f;
         if (flag) {
-            this.level.method_185(this, (byte) 2);
+            this.level.method_185((Entity) (Object) this, (byte) 2);
             this.method_1336();
             if (entity != null) {
                 double d = entity.x - this.x;
@@ -454,11 +299,11 @@ public abstract class MixinLivingEntity extends MixinEntity implements AccessLiv
         }
         if (this.health <= 0) {
             if (flag) {
-                this.level.playSound(this, this.getDeathSound(), this.getSoundVolume(), (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2f + 1.0f);
+                this.level.playSound((Entity) (Object) this, this.getDeathSound(), this.getSoundVolume(), (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2f + 1.0f);
             }
             this.invokeOnKilledBy(entity);
         } else if (flag) {
-            this.level.playSound(this, this.getHurtSound(), this.getSoundVolume(), (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2f + 1.0f);
+            this.level.playSound((Entity) (Object) this, this.getHurtSound(), this.getSoundVolume(), (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2f + 1.0f);
         }
         return true;
     }
@@ -469,7 +314,7 @@ public abstract class MixinLivingEntity extends MixinEntity implements AccessLiv
     @Inject(method = "onKilledBy", at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/entity/LivingEntity;dropLoot()V"))
-    private void onKilledBy(Entity entity, CallbackInfo ci) {
+    private void dropHeartOnKilledBy(Entity entity, CallbackInfo ci) {
         if (entity instanceof LivingEntity && ((LivingEntity) entity).health < ((ExLivingEntity) entity).getMaxHealth() && this.rand.nextInt(3) != 0) {
             ItemEntity heart = new ItemEntity(this.level, this.x, this.y, this.z, new ItemInstance(Items.heart.id, 1, 0));
             this.level.spawnEntity(heart);
@@ -812,6 +657,11 @@ public abstract class MixinLivingEntity extends MixinEntity implements AccessLiv
     }
 
     @Override
+    public void applyDamage(int damage) {
+        shadow$applyDamage(damage);
+    }
+
+    @Override
     public double getGravity() {
         return this.gravity;
     }
@@ -824,5 +674,15 @@ public abstract class MixinLivingEntity extends MixinEntity implements AccessLiv
     @Override
     public void setMaxHealth(int i) {
         maxHealth = i;
+    }
+
+    @Override
+    public ItemInstance getHeldItem() {
+        return heldItem;
+    }
+
+    @Override
+    public void setHeldItem(ItemInstance heldItem) {
+        this.heldItem = heldItem;
     }
 }

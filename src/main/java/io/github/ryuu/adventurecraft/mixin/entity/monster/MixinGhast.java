@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.entity.monster;
 
+import io.github.ryuu.adventurecraft.extensions.entity.ExFlyingEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.FlyingEntity;
 import net.minecraft.entity.MonsterEntityType;
@@ -113,7 +114,7 @@ public class MixinGhast extends FlyingEntity implements MonsterEntityType {
                 ++this.field_1381;
                 if (this.field_1381 == 20) {
                     this.level.playSound(this, "mob.ghast.fireball", this.getSoundVolume(), (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2f + 1.0f);
-                    Snowball entityfireball = new Snowball(this.level, this, d5, d6, d7, this.attackStrength);
+                    Snowball entityfireball = new Snowball(this.level, this, d5, d6, d7, ((ExFlyingEntity)this).getAttackStrength());
                     double d8 = 4.0;
                     Vec3f vec3d = this.method_926(1.0f);
                     entityfireball.x = this.x + vec3d.x * d8;

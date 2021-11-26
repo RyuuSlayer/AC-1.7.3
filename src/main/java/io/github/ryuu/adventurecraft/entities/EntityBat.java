@@ -1,5 +1,7 @@
 package io.github.ryuu.adventurecraft.entities;
 
+import io.github.ryuu.adventurecraft.extensions.entity.ExFlyingEntity;
+import io.github.ryuu.adventurecraft.extensions.entity.ExLivingEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.FlyingEntity;
 import net.minecraft.entity.MonsterEntityType;
@@ -32,7 +34,7 @@ public class EntityBat extends FlyingEntity implements MonsterEntityType {
         this.movingToTarget = false;
         this.setSize(0.5f, 0.5f);
         this.health = 5;
-        this.maxHealth = 5;
+        ((ExLivingEntity) this).setMaxHealth(5);
     }
 
     @Override
@@ -90,7 +92,7 @@ public class EntityBat extends FlyingEntity implements MonsterEntityType {
                 this.velocityZ = 0.0;
                 this.yaw = this.field_1012;
                 if (this.attackCooldown <= 0) {
-                    this.targetedEntity.damage(this, this.attackStrength);
+                    this.targetedEntity.damage(this, ((ExFlyingEntity) this).getAttackStrength());
                     this.attackCooldown = 10;
                     this.targetedEntity = null;
                 }

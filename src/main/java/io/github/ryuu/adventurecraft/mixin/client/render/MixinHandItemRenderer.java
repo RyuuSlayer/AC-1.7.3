@@ -1,5 +1,7 @@
 package io.github.ryuu.adventurecraft.mixin.client.render;
 
+import io.github.ryuu.adventurecraft.extensions.client.ExMinecraft;
+import io.github.ryuu.adventurecraft.extensions.items.ExItemType;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.Vec2;
 import net.minecraft.client.Minecraft;
@@ -54,7 +56,7 @@ public class MixinHandItemRenderer {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void method_1862(LivingEntity entityliving, ItemInstance itemstack) {
         GL11.glPushMatrix();
         if (itemstack.itemId < 256 && TileRenderer.method_42(Tile.BY_ID[itemstack.itemId].method_1621())) {
@@ -158,7 +160,7 @@ public class MixinHandItemRenderer {
                 tessellator.vertex(f4, f20, 0.0f - f8, f, f16);
             }
             tessellator.draw();
-            if (ItemType.byId[itemstack.itemId].isMuzzleFlash(itemstack)) {
+            if (((ExItemType)ItemType.byId[itemstack.itemId]).isMuzzleFlash(itemstack)) {
                 this.renderMuzzleFlash();
             }
             GL11.glDisable(32826);
@@ -166,10 +168,6 @@ public class MixinHandItemRenderer {
         GL11.glPopMatrix();
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void renderMuzzleFlash() {
         RenderHelper.disableLighting();
         Tessellator tessellator = Tessellator.INSTANCE;
@@ -198,7 +196,7 @@ public class MixinHandItemRenderer {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void renderItemInFirstPerson(float f, float swingProgress, float otherHand) {
         float f8;
         float f10;
@@ -377,10 +375,6 @@ public class MixinHandItemRenderer {
         RenderHelper.disableLighting();
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void renderShield(float f, float swingProgress, float otherHand) {
         float f1 = this.field_2404 + (this.field_2403 - this.field_2404) * f;
         ClientPlayer entityplayersp = this.minecraft.player;
@@ -412,10 +406,10 @@ public class MixinHandItemRenderer {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void method_1864(float f) {
         GL11.glDisable(3008);
-        if (!this.minecraft.cameraActive && this.minecraft.player.method_1359()) {
+        if (!((ExMinecraft)this.minecraft).isCameraActive() && this.minecraft.player.method_1359()) {
             int i = this.minecraft.textureManager.getTextureId("/terrain.png");
             GL11.glBindTexture(3553, i);
             this.method_1867(f);
@@ -457,7 +451,7 @@ public class MixinHandItemRenderer {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     private void method_1861(float f, int i) {
         if (this.minecraft.player.field_1642) {
             return;
@@ -490,7 +484,7 @@ public class MixinHandItemRenderer {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     private void method_1866(float f) {
         Tessellator tessellator = Tessellator.INSTANCE;
         float f1 = this.minecraft.field_2807.getBrightnessAtEyes(f);
@@ -520,7 +514,7 @@ public class MixinHandItemRenderer {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     private void method_1867(float f) {
         Tessellator tessellator = Tessellator.INSTANCE;
         GL11.glColor4f(1.0f, 1.0f, 1.0f, 0.9f);
@@ -558,7 +552,7 @@ public class MixinHandItemRenderer {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void method_1859() {
         float f;
         float f1;
@@ -592,7 +586,7 @@ public class MixinHandItemRenderer {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public boolean hasItem() {
         return this.item != null;
     }

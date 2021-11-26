@@ -4,6 +4,7 @@ import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.extensions.entity.ExEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.level.Level;
+import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.MathsHelper;
 import org.objectweb.asm.Opcodes;
@@ -151,6 +152,12 @@ public abstract class MixinEntity implements ExEntity {
     public abstract boolean isAlive();
 
     @Shadow
+    public abstract boolean isInsideWall();
+
+    @Shadow
+    public abstract boolean isInFluid(Material arg);
+
+    @Shadow
     public abstract float getStandingEyeHeight();
 
     @Shadow
@@ -160,6 +167,12 @@ public abstract class MixinEntity implements ExEntity {
     protected abstract void handleFallDamage(float f);
 
     @Shadow
+    public abstract void move(double d, double d1, double d2);
+
+    @Shadow
+    public abstract void remove();
+
+    @Shadow
     public abstract void method_1322(double d, double d1, double d2);
 
     @Shadow
@@ -167,6 +180,15 @@ public abstract class MixinEntity implements ExEntity {
 
     @Shadow
     public abstract boolean method_1335();
+
+    @Shadow
+    protected abstract void method_1336();
+
+    @Shadow
+    public abstract boolean method_1344(double d, double d1, double d2);
+
+    @Shadow
+    public abstract boolean method_1373();
 
     @Inject(method = "move", locals = LocalCapture.CAPTURE_FAILHARD, at = @At(
             value = "FIELD",

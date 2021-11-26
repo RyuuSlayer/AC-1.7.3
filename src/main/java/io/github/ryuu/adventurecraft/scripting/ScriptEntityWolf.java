@@ -1,22 +1,23 @@
 package io.github.ryuu.adventurecraft.scripting;
 
+import io.github.ryuu.adventurecraft.extensions.entity.animal.ExWolf;
 import net.minecraft.entity.animal.Wolf;
 
 public class ScriptEntityWolf extends ScriptEntityCreature {
 
     Wolf entityWolf;
 
-    ScriptEntityWolf(Wolf e) {
+    public ScriptEntityWolf(Wolf e) {
         super(e);
         this.entityWolf = e;
     }
 
     public int getAttackStrength() {
-        return this.entityWolf.attackStrength;
+        return ((ExWolf)this.entityWolf).getAttackStrength();
     }
 
     public void setAttackStrength(int i) {
-        this.entityWolf.attackStrength = i;
+        ((ExWolf)this.entityWolf).setAttackStrength(i);
     }
 
     public boolean isWolfSitting() {
