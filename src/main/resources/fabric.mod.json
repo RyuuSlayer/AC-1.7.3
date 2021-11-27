@@ -19,6 +19,9 @@
   "entrypoints": {
     "init": [
       "io.github.ryuu.adventurecraft.Main"
+    ],
+    "mm:early_risers": [
+      "io.github.ryuu.adventurecraft.earlyrisers.EnumInitializer"
     ]
   },
   "mixins": [

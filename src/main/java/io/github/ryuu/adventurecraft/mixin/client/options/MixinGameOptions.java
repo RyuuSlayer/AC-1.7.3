@@ -1,92 +1,142 @@
 package io.github.ryuu.adventurecraft.mixin.client.options;
 
+import com.chocohead.mm.api.ClassTinkerers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.options.Option;
-import net.minecraft.client.resource.language.I18n;
-import net.minecraft.client.resource.language.TranslationStorage;
-import org.lwjgl.input.Keyboard;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.io.*;
+import java.io.File;
+import java.io.PrintWriter;
+import java.util.Arrays;
 
 @Mixin(GameOptions.class)
-public class MixinGameOptions {
+public abstract class MixinGameOptions {
 
-    @Shadow()
-    private static final String[] renderDistanceTranslationKeys = new String[]{"options.renderDistance.veryFar", "options.renderDistance.far", "options.renderDistance.normal", "options.renderDistance.short", "options.renderDistance.tiny"};
+    @Mutable
+    @Final
+    @Shadow
+    private static String[] renderDistanceTranslationKeys;
 
-    private static final String[] difficultyTranslationKeys = new String[]{"options.difficulty.peaceful", "options.difficulty.easy", "options.difficulty.normal", "options.difficulty.hard"};
+    static {
+        renderDistanceTranslationKeys = Arrays.copyOf(renderDistanceTranslationKeys, renderDistanceTranslationKeys.length + 1);
+        renderDistanceTranslationKeys[renderDistanceTranslationKeys.length - 1] = "options.renderDistance.veryFar";
+    }
 
-    private static final String[] guiScaleTranslationKeys = new String[]{"options.guiScale.auto", "options.guiScale.small", "options.guiScale.normal", "options.guiScale.large"};
-
-    private static final String[] performanceTranslationKeys = new String[]{"performance.max", "performance.balanced", "performance.powersaver"};
-
-    public float music = 1.0f;
-
-    public float sound = 1.0f;
-
-    public float mouseSensitivity = 0.5f;
-
-    public boolean invertYMouse = false;
-
+    @Shadow
     public int viewDistance;
 
+    @Shadow
     public boolean bobView;
 
+    @Shadow
     public boolean anaglyph3d;
 
+    @Shadow
     public boolean advancedOpengl;
 
+    @Shadow
     public int fpsLimit;
 
+    @Shadow
     public boolean fancyGraphics;
 
+    @Shadow
     public boolean ao;
 
+    @Shadow
     public String skin;
 
+    @Shadow
     public KeyBinding forwardKey;
 
+    @Shadow
     public KeyBinding leftKey;
 
+    @Shadow
     public KeyBinding backKey;
 
+    @Shadow
     public KeyBinding rightKey;
 
+    @Shadow
     public KeyBinding jumpKey;
 
+    @Shadow
     public KeyBinding inventoryKey;
 
+    @Shadow
     public KeyBinding dropKey;
 
+    @Shadow
     public KeyBinding chatKey;
 
+    @Shadow
     public KeyBinding fogKey;
 
+    @Shadow
     public KeyBinding sneakKey;
 
+    @Shadow
     public KeyBinding[] keyBindings;
+
+    @Shadow
     public int difficulty;
+
+    @Shadow
     public boolean hideHud;
+
+    @Shadow
     public boolean thirdPerson;
+
+    @Shadow
     public boolean debugHud;
+
+    @Shadow
     public String lastServer;
+
+    @Shadow
     public boolean field_1445;
+
+    @Shadow
     public boolean cinematicMode;
+
+    @Shadow
     public boolean field_1447;
+
+    @Shadow
     public float field_1448;
+
+    @Shadow
     public float field_1449;
+
+    @Shadow
     public int guiScale;
-    public boolean autoFarClip;
-    public boolean grass3d;
+
+    @Shadow
     protected Minecraft minecraft;
+
+    @Shadow
     private File optionsFile;
 
-    public MixinGameOptions(Minecraft minecraft, File file) {
+    @Shadow
+    public abstract float getFloatValue(Option arg);
+
+    public boolean autoFarClip;
+    public boolean grass3d;
+
+    @Inject(method = "<init>(Lnet/minecraft/client/Minecraft;Ljava/io/File;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/options/GameOptions;load()V"))
+    private void GameOptions(Minecraft file, File par2, CallbackInfo ci) {
         this.viewDistance = 1;
         this.bobView = true;
         this.anaglyph3d = false;
@@ -105,26 +155,19 @@ public class MixinGameOptions {
         this.chatKey = new KeyBinding("key.chat", 20);
         this.fogKey = new KeyBinding("key.fog", 33);
         this.sneakKey = new KeyBinding("key.sneak", 42);
-        this.keyBindings = new KeyBinding[]{this.forwardKey, this.leftKey, this.backKey, this.rightKey, this.jumpKey, this.sneakKey, this.dropKey, this.inventoryKey, this.chatKey, this.fogKey};
-        this.difficulty = 2;
         this.hideHud = false;
-        this.thirdPerson = false;
-        this.debugHud = false;
-        this.lastServer = "";
         this.field_1445 = false;
         this.cinematicMode = false;
         this.field_1447 = false;
         this.field_1448 = 1.0f;
         this.field_1449 = 1.0f;
         this.guiScale = 0;
-        this.minecraft = minecraft;
-        this.optionsFile = new File(file, "options.txt");
         this.autoFarClip = true;
         this.grass3d = true;
-        this.load();
     }
 
-    public MixinGameOptions() {
+    @Inject(method = "<init>()V", at = @At("TAIL"))
+    private void GameOptions(CallbackInfo ci) {
         this.viewDistance = 0;
         this.bobView = true;
         this.anaglyph3d = false;
@@ -143,346 +186,96 @@ public class MixinGameOptions {
         this.chatKey = new KeyBinding("key.chat", 20);
         this.fogKey = new KeyBinding("key.fog", 33);
         this.sneakKey = new KeyBinding("key.sneak", 42);
-        this.keyBindings = new KeyBinding[]{this.forwardKey, this.leftKey, this.backKey, this.rightKey, this.jumpKey, this.sneakKey, this.dropKey, this.inventoryKey, this.chatKey, this.fogKey};
-        this.difficulty = 2;
-        this.hideHud = false;
-        this.thirdPerson = false;
-        this.debugHud = false;
-        this.lastServer = "";
-        this.field_1445 = false;
-        this.cinematicMode = false;
-        this.field_1447 = false;
-        this.field_1448 = 1.0f;
-        this.field_1449 = 1.0f;
-        this.guiScale = 0;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public String getKeybindName(int index) {
-        TranslationStorage stringtranslate = TranslationStorage.getInstance();
-        return stringtranslate.translate(this.keyBindings[index].name);
+    /* PROBABLY COMPLETELY UNNECESSARY
+    @Redirect(method = "<init>()V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/options/GameOptions;hideHud:Z"))
+    private void removeFieldInitialization(GameOptions instance, boolean value) {
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public String getKeybindKey(int index) {
-        return Keyboard.getKeyName(this.keyBindings[index].key);
+    @Redirect(method = "<init>()V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/options/GameOptions;cinematicMode:Z"))
+    private void removeFieldInitialization1(GameOptions instance, boolean value) {
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_1226(int i, int j) {
-        this.keyBindings[i].key = j;
-        this.saveOptions();
+    @Redirect(method = "<init>()V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/options/GameOptions;field_1447:Z"))
+    private void removeFieldInitialization2(GameOptions instance, boolean value) {
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_1228(Option enumoptions, float f) {
-        if (enumoptions == Option.MUSIC) {
-            this.music = f;
-            this.minecraft.soundHelper.method_2008();
-        }
-        if (enumoptions == Option.SOUND) {
-            this.sound = f;
-            this.minecraft.soundHelper.method_2008();
-        }
-        if (enumoptions == Option.SENSITIVITY) {
-            this.mouseSensitivity = f;
+    @Redirect(method = "<init>()V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/options/GameOptions;field_1448:F"))
+    private void removeFieldInitialization3(GameOptions instance, float value) {
+    }
+
+    @Redirect(method = "<init>()V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/options/GameOptions;field_1449:F"))
+    private void removeFieldInitialization4(GameOptions instance, float value) {
+    }
+
+    @Redirect(method = "<init>()V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/options/GameOptions;guiScale:I"))
+    private void removeFieldInitialization5(GameOptions instance, int value) {
+    }*/
+
+
+    @Redirect(method = "changeOption", at = @At(value = "FIELD", target = "Lnet/minecraft/client/options/GameOptions;viewDistance:I", ordinal = 1))
+    private void changeMaxViewDistance(GameOptions instance, int value) {
+        this.viewDistance = (this.viewDistance - 1) % 5;
+        if (this.viewDistance < 0) {
+            this.viewDistance = 4;
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void changeOption(Option option, int i) {
-        if (option == Option.INVERT_MOUSE) {
-            boolean bl = this.invertYMouse = !this.invertYMouse;
-        }
-        if (option == Option.RENDER_DISTANCE) {
-            this.viewDistance = (this.viewDistance + i) % 5;
-            if (this.viewDistance < 0) {
-                this.viewDistance = 4;
-            }
-        }
-        if (option == Option.GUI_SCALE) {
-            this.guiScale = this.guiScale + i & 3;
-        }
-        if (option == Option.VIEW_BOBBING) {
-            boolean bl = this.bobView = !this.bobView;
-        }
-        if (option == Option.ADVANCED_OPENGL) {
-            this.advancedOpengl = !this.advancedOpengl;
-            this.minecraft.worldRenderer.method_1537();
-        }
-        if (option == Option.ANAGLYPH) {
-            this.anaglyph3d = !this.anaglyph3d;
-            this.minecraft.textureManager.reload();
-        }
-        if (option == Option.FRAMERATE_LIMIT) {
-            this.fpsLimit = (this.fpsLimit + i + 3) % 3;
-        }
-        if (option == Option.DIFFICULTY) {
-            this.difficulty = this.difficulty + i & 3;
-        }
-        if (option == Option.GRAPHICS) {
-            this.fancyGraphics = !this.fancyGraphics;
-            this.minecraft.worldRenderer.method_1537();
-        }
-        if (option == Option.AMBIENT_OCCLUSION) {
-            this.ao = !this.ao;
-            this.minecraft.worldRenderer.method_1537();
-        }
-        if (option == Option.AUTO_FAR_CLIP) {
+    @Inject(method = "changeOption", at = @At(value = "FIELD", target = "Lnet/minecraft/client/options/GameOptions;bobView:Z", ordinal = 0, shift = At.Shift.AFTER))
+    private void changeViewBobbing(Option option, int i, CallbackInfo ci) {
+        boolean bl = this.bobView;
+    }
+
+    @Inject(method = "changeOption", at = @At("HEAD"))
+    private void initNewSettings(Option option, int i, CallbackInfo ci) {
+        if (option == ClassTinkerers.getEnum(Option.class, "AUTO_FAR_CLIP")) {
             boolean bl = this.autoFarClip = !this.autoFarClip;
-        }
-        if (option == Option.GRASS_3D) {
+        } else if (option == ClassTinkerers.getEnum(Option.class, "GRASS_3D")) {
             this.grass3d = !this.grass3d;
             this.minecraft.worldRenderer.method_1537();
         }
-        this.saveOptions();
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public float getFloatValue(Option enumoptions) {
-        if (enumoptions == Option.MUSIC) {
-            return this.music;
-        }
-        if (enumoptions == Option.SOUND) {
-            return this.sound;
-        }
-        if (enumoptions == Option.SENSITIVITY) {
-            return this.mouseSensitivity;
-        }
-        return 0.0f;
-    }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean getBooleanValue(Option enumoptions) {
-        switch (enumoptions) {
-            case INVERT_MOUSE: {
-                return this.invertYMouse;
-            }
-            case VIEW_BOBBING: {
-                return this.bobView;
-            }
-            case ANAGLYPH: {
-                return this.anaglyph3d;
-            }
-            case ADVANCED_OPENGL: {
-                return this.advancedOpengl;
-            }
-            case AMBIENT_OCCLUSION: {
-                return this.ao;
-            }
-            case AUTO_FAR_CLIP: {
-                return this.autoFarClip;
-            }
-            case GRASS_3D: {
-                return this.grass3d;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public String getTranslatedValue(Option enumoptions) {
-        TranslationStorage stringtranslate = TranslationStorage.getInstance();
-        String s = stringtranslate.translate(enumoptions.getTranslationKey()) + ": ";
-        if (enumoptions.isSlider()) {
-            float f = this.getFloatValue(enumoptions);
-            if (enumoptions == Option.SENSITIVITY) {
-                if (f == 0.0f) {
-                    return s + stringtranslate.translate("options.sensitivity.min");
-                }
-                if (f == 1.0f) {
-                    return s + stringtranslate.translate("options.sensitivity.max");
-                }
-                return s + (int) (f * 200.0f) + "%";
-            }
-            if (f == 0.0f) {
-                return s + stringtranslate.translate("options.off");
-            }
-            return s + (int) (f * 100.0f) + "%";
-        }
-        if (enumoptions.isToggle()) {
-            boolean flag = this.getBooleanValue(enumoptions);
-            if (flag) {
-                return s + stringtranslate.translate("options.on");
-            }
-            return s + stringtranslate.translate("options.off");
-        }
-        if (enumoptions == Option.RENDER_DISTANCE) {
-            return s + stringtranslate.translate(renderDistanceTranslationKeys[this.viewDistance]);
-        }
-        if (enumoptions == Option.DIFFICULTY) {
-            return s + stringtranslate.translate(difficultyTranslationKeys[this.difficulty]);
-        }
-        if (enumoptions == Option.GUI_SCALE) {
-            return s + stringtranslate.translate(guiScaleTranslationKeys[this.guiScale]);
-        }
-        if (enumoptions == Option.FRAMERATE_LIMIT) {
-            return s + I18n.translate(performanceTranslationKeys[this.fpsLimit]);
-        }
-        if (enumoptions == Option.GRAPHICS) {
-            if (this.fancyGraphics) {
-                return s + stringtranslate.translate("options.graphics.fancy");
-            }
-            return s + stringtranslate.translate("options.graphics.fast");
-        }
-        if (enumoptions == Option.AUTO_FAR_CLIP) {
-            return "Auto Far Clip: " + (this.autoFarClip ? "ON" : "OFF");
-        }
-        if (enumoptions == Option.GRASS_3D) {
-            return "Grass 3D: " + (this.grass3d ? "ON" : "OFF");
-        }
-        return s;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void load() {
-        try {
-            if (!this.optionsFile.exists()) {
-                return;
-            }
-            BufferedReader bufferedreader = new BufferedReader(new FileReader(this.optionsFile));
-            String s = "";
-            while ((s = bufferedreader.readLine()) != null) {
-                try {
-                    String[] as = s.split(":");
-                    if (as[0].equals("music")) {
-                        this.music = this.parseFloat(as[1]);
-                    }
-                    if (as[0].equals("sound")) {
-                        this.sound = this.parseFloat(as[1]);
-                    }
-                    if (as[0].equals("mouseSensitivity")) {
-                        this.mouseSensitivity = this.parseFloat(as[1]);
-                    }
-                    if (as[0].equals("invertYMouse")) {
-                        this.invertYMouse = as[1].equals("true");
-                    }
-                    if (as[0].equals("viewDistance")) {
-                        this.viewDistance = Integer.parseInt(as[1]);
-                    }
-                    if (as[0].equals("guiScale")) {
-                        this.guiScale = Integer.parseInt(as[1]);
-                    }
-                    if (as[0].equals("bobView")) {
-                        this.bobView = as[1].equals("true");
-                    }
-                    if (as[0].equals("anaglyph3d")) {
-                        this.anaglyph3d = as[1].equals("true");
-                    }
-                    if (as[0].equals("advancedOpengl")) {
-                        this.advancedOpengl = as[1].equals("true");
-                    }
-                    if (as[0].equals("fpsLimit")) {
-                        this.fpsLimit = Integer.parseInt(as[1]);
-                    }
-                    if (as[0].equals("difficulty")) {
-                        this.difficulty = Integer.parseInt(as[1]);
-                    }
-                    if (as[0].equals("fancyGraphics")) {
-                        this.fancyGraphics = as[1].equals("true");
-                    }
-                    if (as[0].equals("ao")) {
-                        this.ao = as[1].equals("true");
-                    }
-                    if (as[0].equals("skin")) {
-                        this.skin = as[1];
-                    }
-                    if (as[0].equals("lastServer") && as.length >= 2) {
-                        this.lastServer = as[1];
-                    }
-                    if (as[0].equals("autoFarClip")) {
-                        this.autoFarClip = as[1].equals("true");
-                    }
-                    if (as[0].equals("grass3d")) {
-                        this.grass3d = as[1].equals("true");
-                    }
-                    for (KeyBinding keyBinding : this.keyBindings) {
-                        if (!as[0].equals("key_" + keyBinding.name)) continue;
-                        keyBinding.key = Integer.parseInt(as[1]);
-                    }
-                } catch (Exception exception1) {
-                    System.out.println("Skipping bad option: " + s);
-                }
-            }
-            bufferedreader.close();
-        } catch (Exception exception) {
-            System.out.println("Failed to load options");
-            exception.printStackTrace();
+    @Inject(method = "getBooleanValue", at = @At("HEAD"), cancellable = true)
+    private void getBooleanValue(Option option, CallbackInfoReturnable<Boolean> cir) {
+        if (option == ClassTinkerers.getEnum(Option.class, "AUTO_FAR_CLIP")) {
+            cir.setReturnValue(this.autoFarClip);
+        } else if (option == ClassTinkerers.getEnum(Option.class, "GRASS_3D")) {
+            cir.setReturnValue(this.grass3d);
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    private float parseFloat(String str) {
-        if (str.equals("true")) {
-            return 1.0f;
+    @Inject(method = "getTranslatedValue", at = @At("HEAD"), cancellable = true)
+    private void getTranslatedValue(Option enumoptions, CallbackInfoReturnable<String> cir) {
+        if (enumoptions == ClassTinkerers.getEnum(Option.class, "AUTO_FAR_CLIP")) {
+            cir.setReturnValue("Auto Far Clip: " + (this.autoFarClip ? "ON" : "OFF"));
+        } else if (enumoptions == ClassTinkerers.getEnum(Option.class, "GRASS_3D")) {
+            cir.setReturnValue("Grass 3D: " + (this.grass3d ? "ON" : "OFF"));
         }
-        if (str.equals("false")) {
-            return 0.0f;
-        }
-        return Float.parseFloat(str);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void saveOptions() {
-        try {
-            PrintWriter printwriter = new PrintWriter(new FileWriter(this.optionsFile));
-            printwriter.println("music:" + this.music);
-            printwriter.println("sound:" + this.sound);
-            printwriter.println("invertYMouse:" + this.invertYMouse);
-            printwriter.println("mouseSensitivity:" + this.mouseSensitivity);
-            printwriter.println("viewDistance:" + this.viewDistance);
-            printwriter.println("guiScale:" + this.guiScale);
-            printwriter.println("bobView:" + this.bobView);
-            printwriter.println("anaglyph3d:" + this.anaglyph3d);
-            printwriter.println("advancedOpengl:" + this.advancedOpengl);
-            printwriter.println("fpsLimit:" + this.fpsLimit);
-            printwriter.println("difficulty:" + this.difficulty);
-            printwriter.println("fancyGraphics:" + this.fancyGraphics);
-            printwriter.println("ao:" + this.ao);
-            printwriter.println("skin:" + this.skin);
-            printwriter.println("lastServer:" + this.lastServer);
-            printwriter.println("autoFarClip:" + this.autoFarClip);
-            printwriter.println("grass3d:" + this.grass3d);
-            for (KeyBinding keyBinding : this.keyBindings) {
-                printwriter.println("key_" + keyBinding.name + ":" + keyBinding.key);
-            }
-            printwriter.close();
-        } catch (Exception exception) {
-            System.out.println("Failed to save options");
-            exception.printStackTrace();
+    @ModifyVariable(method = "load", at = @At(value = "STORE"))
+    private String[] load(String[] var3) {
+        if (var3[0].equals("autoFarClip")) {
+            this.autoFarClip = var3[1].equals("true");
         }
+        if (var3[0].equals("grass3d")) {
+            this.grass3d = var3[1].equals("true");
+        }
+        return var3;
+    }
+
+
+
+    @ModifyVariable(method = "saveOptions", at = @At("STORE"))
+    private PrintWriter saveOptions(PrintWriter printWriter) {
+        printWriter.println("ao:" + this.ao);
+        printWriter.println("skin:" + this.skin);
+        printWriter.println("lastServer:" + this.lastServer);
+        printWriter.println("autoFarClip:" + this.autoFarClip);
+        printWriter.println("grass3d:" + this.grass3d);
+        return printWriter;
     }
 }

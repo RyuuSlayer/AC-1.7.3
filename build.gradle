@@ -55,6 +55,9 @@ dependencies {
 
     // PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
     // You may need to force-disable transitiveness on them.
+
+    implementation 'com.github.Chocohead:Fabric-ASM:v2.3'
+    implementation 'org.apache.commons:commons-lang3:3.0'
 }
 
 processResources {

@@ -3,12 +3,14 @@ package io.github.ryuu.adventurecraft.mixin.client.gui.screen.container;
 import io.github.ryuu.adventurecraft.extensions.entity.player.ExPlayer;
 import net.minecraft.client.gui.screen.container.ContainerScreen;
 import net.minecraft.client.gui.screen.container.PlayerInventoryScreen;
+import net.minecraft.client.render.TextRenderer;
 import net.minecraft.container.Container;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerInventoryScreen.class)
@@ -17,12 +19,9 @@ public abstract class MixinPlayerInventoryScreen extends ContainerScreen {
         super(arg);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite
-    public void renderForeground() {
+    @Redirect(method = "renderForeground", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/TextRenderer;drawTextWithoutShadow(Ljava/lang/String;III)V"))
+    public void renderForeground(TextRenderer instance, String i, int j, int k, int l) {
+        // literally do nothing
     }
 
 

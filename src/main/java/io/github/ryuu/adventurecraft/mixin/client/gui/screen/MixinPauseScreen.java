@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PauseScreen.class) // TODO scriptUI, cameraActive and stopMusic is missing
 public class MixinPauseScreen extends Screen {
-    @Inject(method = "buttonClicked", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;setLevel(Lnet/minecraft/level/Level;)V"))
+    @Inject(method = "buttonClicked", at = @At(value = "HEAD", target = "Lnet/minecraft/client/Minecraft;setLevel(Lnet/minecraft/level/Level;)V"))
     private void buttonClicked(Button button, CallbackInfo ci) {
         this.minecraft.overlay.scriptUI.clear(); // TODO Needs cast
         this.minecraft.cameraActive = false; // TODO Needs cast

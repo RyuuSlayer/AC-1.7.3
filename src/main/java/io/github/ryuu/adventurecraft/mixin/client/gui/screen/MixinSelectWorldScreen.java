@@ -5,7 +5,6 @@ import net.minecraft.class_520;
 import net.minecraft.class_97;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Screen;
-import net.minecraft.client.gui.screen.DeleteConfirmationScreen;
 import net.minecraft.client.gui.screen.EditLevelScreen;
 import net.minecraft.client.gui.screen.SelectWorldScreen;
 import net.minecraft.client.gui.widgets.Button;
@@ -14,8 +13,8 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(SelectWorldScreen.class)
 public abstract class MixinSelectWorldScreen extends Screen implements AccessSelectWorldScreen {
@@ -69,56 +68,14 @@ public abstract class MixinSelectWorldScreen extends Screen implements AccessSel
         this.deleteButton.active = false;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite
-    protected void buttonClicked(Button button) {
-        if (!button.active) {
-            return;
-        }
-        if (button.id == 2) {
-            String s = this.method_1889(this.field_2435);
-            if (s != null) {
-                this.field_2440 = true;
-                TranslationStorage stringtranslate = TranslationStorage.getInstance();
-                String s1 = stringtranslate.translate("selectWorld.deleteQuestion");
-                String s2 = "'" + s + "' " + stringtranslate.translate("selectWorld.deleteWarning");
-                String s3 = stringtranslate.translate("selectWorld.deleteButton");
-                String s4 = stringtranslate.translate("gui.cancel");
-                DeleteConfirmationScreen guiyesno = new DeleteConfirmationScreen(this, s1, s2, s3, s4, this.field_2435);
-                this.minecraft.openScreen(guiyesno);
-            }
-        } else if (button.id == 1) {
-            this.method_1891(this.field_2435);
-        } else if (button.id == 3) {
-            this.minecraft.openScreen(new GuiMapSelect(this, ""));
-        } else if (button.id == 6) {
-            this.minecraft.openScreen(new EditLevelScreen(this, this.method_1887(this.field_2435)));
-        } else if (button.id == 0) {
-            this.minecraft.openScreen(this.parent);
-        } else {
-            this.field_2437.method_1259(button);
-        }
+    @ModifyArgs(method = "buttonClicked", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;openScreen(Lnet/minecraft/client/gui/Screen;)V", ordinal = 1))
+    private void buttonClicked(Args args) {
+        args.set(0, new GuiMapSelect(this, ""));
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite
-    public void method_1891(int i) {
-        this.minecraft.openScreen(null);
-        if (this.field_2434) {
-            return;
-        }
-        this.field_2434 = true;
-        this.minecraft.interactionManager = new class_520(this.minecraft);
-        String s = this.method_1887(i);
-        if (s == null) {
-            s = "World" + i;
-        }
-        this.minecraft.createOrLoadWorld(s, this.method_1889(i), 0L);
+    @Redirect(method = "method_1891", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;openScreen(Lnet/minecraft/client/gui/Screen;)V", ordinal = 1))
+    private void dontOpenScreenNull(Minecraft instance, Screen screen) {
+
     }
 
     @Mixin(SelectWorldScreen.class_569.class)
