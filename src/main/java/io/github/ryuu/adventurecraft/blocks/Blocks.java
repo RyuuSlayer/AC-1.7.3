@@ -1,10 +1,10 @@
 package io.github.ryuu.adventurecraft.blocks;
 
+import io.github.ryuu.adventurecraft.extensions.level.chunk.ExChunk;
 import io.github.ryuu.adventurecraft.items.ItemSubtypes;
 import io.github.ryuu.adventurecraft.items.Items;
 import net.minecraft.item.ItemType;
 import net.minecraft.item.PlaceableTileItem;
-import net.minecraft.level.chunk.Chunk;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 
@@ -265,16 +265,16 @@ public class Blocks {
     private Blocks() {
     }
 
-    static void convertACVersion(byte[] data) {
+    public static void convertACVersion(byte[] data) {
         if (data != null) {
             for (int i = 0; i < data.length; ++i) {
-                int blockID = Chunk.translate256(data[i]);
+                int blockID = ExChunk.translate256(data[i]);
                 if (blockID >= 100 && blockID <= 122) {
-                    data[i] = (byte) Chunk.translate128(blockID + 50);
+                    data[i] = (byte) ExChunk.translate128(blockID + 50);
                     continue;
                 }
                 if (blockID < 152 || blockID > 155) continue;
-                data[i] = (byte) Chunk.translate128(blockID + 21);
+                data[i] = (byte) ExChunk.translate128(blockID + 21);
             }
         }
     }

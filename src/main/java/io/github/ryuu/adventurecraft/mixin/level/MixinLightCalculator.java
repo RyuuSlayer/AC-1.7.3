@@ -87,7 +87,7 @@ public class MixinLightCalculator {
                         k3 = 1;
                     }
                     int l3 = 0;
-                    if (this.type == LightType.Sky) {
+                    if (this.type == LightType.SKY) {
                         if (world.isAboveGround(k1, k2, l1)) {
                             l3 = 15;
                         }

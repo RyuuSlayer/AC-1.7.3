@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.util;
 
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.items.ItemCursor;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.Minecraft;
@@ -175,9 +176,9 @@ public class MapEditing {
         if (block != null) {
             int prevBlockID = this.world.getTileId(x, y, z);
             int prevMetadata = this.world.getTileMeta(x, y, z);
-            this.world.setBlockAndMetadataTemp(x, y, z, blockID, metadata);
+            ((ExLevel)this.world).setBlockAndMetadataTemp(x, y, z, blockID, metadata);
             this.renderBlocks.method_57(block, x, y, z);
-            this.world.setBlockAndMetadataTemp(x, y, z, prevBlockID, prevMetadata);
+            ((ExLevel)this.world).setBlockAndMetadataTemp(x, y, z, prevBlockID, prevMetadata);
         }
     }
 

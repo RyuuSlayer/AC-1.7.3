@@ -1,9 +1,11 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
 import io.github.ryuu.adventurecraft.blocks.Blocks;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevelProperties;
+import io.github.ryuu.adventurecraft.extensions.level.chunk.ExChunk;
 import io.github.ryuu.adventurecraft.items.ItemCursor;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
-import net.minecraft.level.chunk.Chunk;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.io.AbstractTag;
 import net.minecraft.util.io.CompoundTag;
@@ -45,7 +47,7 @@ public class TileEntityStorage extends TileEntityMinMax {
                 for (int y = this.minY; y <= this.maxY; ++y) {
                     int blockID = this.level.getTileId(x, y, z);
                     int metadata = this.level.getTileMeta(x, y, z);
-                    this.blockIDs[offset] = (byte) Chunk.translate128(blockID);
+                    this.blockIDs[offset] = (byte) ExChunk.translate128(blockID);
                     this.metadatas[offset] = (byte) metadata;
                     TileEntity te = this.level.getTileEntity(x, y, z);
                     if (te != null) {
@@ -69,8 +71,8 @@ public class TileEntityStorage extends TileEntityMinMax {
             for (int z = this.minZ; z <= this.maxZ; ++z) {
                 for (int y = this.minY; y <= this.maxY; ++y) {
                     int prevBlockID = this.level.getTileId(x, y, z);
-                    this.level.cancelBlockUpdate(x, y, z, prevBlockID);
-                    int blockID = Chunk.translate256(this.blockIDs[offset]);
+                    ((ExLevel)this.level).cancelBlockUpdate(x, y, z, prevBlockID);
+                    int blockID = ExChunk.translate256(this.blockIDs[offset]);
                     byte metadata = this.metadatas[offset];
                     this.level.method_201(x, y, z, blockID, metadata);
                     this.level.removeTileEntity(x, y, z);
@@ -100,7 +102,7 @@ public class TileEntityStorage extends TileEntityMinMax {
                 this.tileEntities.add(tag.getCompoundTag(String.format("tile%d", i)));
             }
         }
-        if (!tag.containsKey("acVersion") && AccessMinecraft.getInstance().level.properties.originallyFromAC) {
+        if (!tag.containsKey("acVersion") && ((ExLevelProperties)AccessMinecraft.getInstance().level.getProperties()).isOriginallyFromAC()) {
             Blocks.convertACVersion(this.blockIDs);
         }
     }

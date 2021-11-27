@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.gui;
 
 import io.github.ryuu.adventurecraft.entities.EntityNPC;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityNpcPath;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
@@ -80,7 +81,8 @@ public class GuiNPC extends Screen {
                 if (!this.npc.isAttackable) {
                     b.text = "Can't be attacked";
                 }
-                File npcSkins = new File(AccessMinecraft.getInstance().level.levelDir, "npc");
+                // TODO: use this.minecraft.level?
+                File npcSkins = new File(((ExLevel)AccessMinecraft.getInstance().level).getLevelDir(), "npc");
                 int i = 1;
                 buttonWidth = (this.width - 16) / 3;
                 b = new Button(0, 4, 124, buttonWidth, 18, "Player Skin");
@@ -125,7 +127,7 @@ public class GuiNPC extends Screen {
     }
 
     private String[] getScriptFiles() {
-        File scriptDir = new File(this.minecraft.level.levelDir, "scripts");
+        File scriptDir = new File(((ExLevel)this.minecraft.level).getLevelDir(), "scripts");
         if (scriptDir.exists() && scriptDir.isDirectory()) {
             File[] scriptFiles = scriptDir.listFiles();
             String[] fileNames = new String[scriptFiles.length];
@@ -171,7 +173,8 @@ public class GuiNPC extends Screen {
                 button.text = this.npc.isAttackable ? "Can be attacked" : "Can't be attacked";
             } else if (button.id == 0) {
                 this.npc.texture = "/mob/char.png";
-            } else if (button.id > 0 && button.id - 1 < (skins = (npcSkins = new File(AccessMinecraft.getInstance().level.levelDir, "npc")).listFiles()).length) {
+                // TODO: use this.minecraft.level?
+            } else if (button.id > 0 && button.id - 1 < (skins = (npcSkins = new File(((ExLevel)AccessMinecraft.getInstance().level).getLevelDir(), "npc")).listFiles()).length) {
                 this.npc.texture = "/npc/" + skins[button.id - 1].getName();
             }
         } else if (this.page == 1) {

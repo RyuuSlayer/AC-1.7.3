@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.gui;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityScript;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
@@ -52,7 +53,7 @@ public class GuiScript extends Screen {
     }
 
     private String[] getScriptFiles() {
-        File scriptDir = new File(this.minecraft.level.levelDir, "scripts");
+        File scriptDir = new File(((ExLevel)this.minecraft.level).getLevelDir(), "scripts");
         if (scriptDir.exists() && scriptDir.isDirectory()) {
             File[] scriptFiles = scriptDir.listFiles();
             String[] fileNames = new String[scriptFiles.length];

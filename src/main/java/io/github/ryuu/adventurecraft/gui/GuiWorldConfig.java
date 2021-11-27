@@ -1,5 +1,8 @@
 package io.github.ryuu.adventurecraft.gui;
 
+import io.github.ryuu.adventurecraft.extensions.client.render.ExWorldRenderer;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevelProperties;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.Textbox;
@@ -75,14 +78,14 @@ public class GuiWorldConfig extends Screen {
             }
         } else if (this.page == 2) {
             for (int i = 0; i < 16; ++i) {
-                this.lightLevels[i] = new Textbox(this, this.textManager, 80, 22 + 14 * i, 80, 11, String.format("%.7f", (float) this.minecraft.level.properties.brightness[i]));
+                this.lightLevels[i] = new Textbox(this, this.textManager, 80, 22 + 14 * i, 80, 11, String.format("%.7f", ((ExLevelProperties)this.minecraft.level.getProperties()).getBrightness()[i]));
             }
         } else if (this.page == 3) {
         }
     }
 
     private String[] getScriptFiles() {
-        File scriptDir = new File(this.minecraft.level.levelDir, "scripts");
+        File scriptDir = new File(((ExLevel)this.minecraft.level).getLevelDir(), "scripts");
         if (scriptDir.exists() && scriptDir.isDirectory()) {
             File[] scriptFiles = scriptDir.listFiles();
             String[] fileNames = new String[scriptFiles.length];
@@ -105,9 +108,9 @@ public class GuiWorldConfig extends Screen {
         }
         if (this.page == 0) {
             if (button.id == 0) {
-                this.minecraft.level.properties.allowsInventoryCrafting = !this.minecraft.level.properties.allowsInventoryCrafting;
+                this.minecraft.level.getProperties().allowsInventoryCrafting = !this.minecraft.level.getProperties().allowsInventoryCrafting;
                 button.text = "Crafting: Enabled";
-                if (!this.minecraft.level.properties.allowsInventoryCrafting) {
+                if (!this.minecraft.level.getProperties().allowsInventoryCrafting) {
                     button.text = "Crafting: Disabled";
                 }
             }
@@ -115,7 +118,7 @@ public class GuiWorldConfig extends Screen {
             if (button.id < 3) {
                 this.selectedID = button.id;
             } else if (button.id == 3) {
-                this.world.scriptHandler.loadScripts();
+                ((ExLevel)this.world).getScriptHandler().loadScripts();
             } else if (button.id == 4) {
                 this.updateScriptFile("");
             } else {
@@ -128,24 +131,24 @@ public class GuiWorldConfig extends Screen {
 
     private void updateScriptFile(String file) {
         if (this.selectedID == 0) {
-            this.world.properties.onNewSaveScript = file;
+            this.world.getProperties().onNewSaveScript = file;
         } else if (this.selectedID == 1) {
-            this.world.properties.onLoadScript = file;
+            this.world.getProperties().onLoadScript = file;
         } else if (this.selectedID == 2) {
-            this.world.properties.onUpdateScript = file;
+            this.world.getProperties().onUpdateScript = file;
         }
     }
 
     private void resetScriptNames() {
-        this.setOnNewSave.text = "OnNewSave: " + this.world.properties.onNewSaveScript;
-        this.setOnLoad.text = "OnLoad: " + this.world.properties.onLoadScript;
-        this.setOnUpdate.text = "OnUpdate: " + this.world.properties.onUpdateScript;
+        this.setOnNewSave.text = "OnNewSave: " + this.world.getProperties().onNewSaveScript;
+        this.setOnLoad.text = "OnLoad: " + this.world.getProperties().onLoadScript;
+        this.setOnUpdate.text = "OnUpdate: " + this.world.getProperties().onUpdateScript;
         if (this.selectedID == 0) {
-            this.setOnNewSave.text = "OnNewSave (selected): " + this.world.properties.onNewSaveScript;
+            this.setOnNewSave.text = "OnNewSave (selected): " + this.world.getProperties().onNewSaveScript;
         } else if (this.selectedID == 1) {
-            this.setOnLoad.text = "OnLoad (selected): " + this.world.properties.onLoadScript;
+            this.setOnLoad.text = "OnLoad (selected): " + this.world.getProperties().onLoadScript;
         } else if (this.selectedID == 2) {
-            this.setOnUpdate.text = "OnUpdate (selected): " + this.world.properties.onUpdateScript;
+            this.setOnUpdate.text = "OnUpdate (selected): " + this.world.getProperties().onUpdateScript;
         }
     }
 
@@ -164,7 +167,7 @@ public class GuiWorldConfig extends Screen {
         }
         super.keyPressed(character, key);
         if (key == 1 && this.lightChanged) {
-            this.minecraft.worldRenderer.updateAllTheRenderers();
+            ((ExWorldRenderer)this.minecraft.worldRenderer).updateAllTheRenderers();
         }
     }
 
@@ -186,7 +189,7 @@ public class GuiWorldConfig extends Screen {
         if (this.page == 0) {
             this.drawTextWithShadow(this.textManager, "Player Name:", 4, 30, 0xA0A0A0);
             this.playerName.method_1883();
-            this.world.properties.playerName = this.playerName.method_1876();
+            ((ExLevelProperties)this.world.getProperties()).setPlayerName(this.playerName.method_1876());
             this.minecraft.player.name = this.playerName.method_1876();
         } else if (this.page != 1) {
             if (this.page == 2) {
@@ -194,16 +197,16 @@ public class GuiWorldConfig extends Screen {
                     this.drawTextWithShadow(this.textManager, String.format("Light Level %d", k), 4, 24 + 14 * k, 0xA0A0A0);
                     this.lightLevels[k].method_1883();
                     try {
-                        Float value = Float.valueOf(this.lightLevels[k].method_1876());
-                        if (value == null || (double) value == Math.floor((double) (this.minecraft.level.properties.brightness[k] * 1.0E7f)) / 1.0E7)
+                        float value = Float.parseFloat(this.lightLevels[k].method_1876());
+                        if ((double) value == Math.floor(((ExLevelProperties)this.minecraft.level.getProperties()).getBrightness()[k] * 1.0E7f) / 1.0E7)
                             continue;
-                        this.minecraft.level.properties.brightness[k] = value;
+                        ((ExLevelProperties)this.minecraft.level.getProperties()).getBrightness()[k] = value;
                         this.lightChanged = true;
                         continue;
                     } catch (NumberFormatException e) {
                     }
                 }
-                this.minecraft.level.loadBrightness();
+                ((ExLevel)this.minecraft.level).loadBrightness();
             } else if (this.page == 3) {
             }
         }

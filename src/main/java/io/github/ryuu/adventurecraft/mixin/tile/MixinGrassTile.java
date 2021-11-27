@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.tile;
 
+import io.github.ryuu.adventurecraft.Main;
 import io.github.ryuu.adventurecraft.blocks.IBlockColor;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.colour.GrassColour;
@@ -80,18 +81,18 @@ public class MixinGrassTile extends Tile implements IBlockColor {
             if (rand.nextInt(4) != 0) {
                 return;
             }
-            Chunk.isNotPopulating = false;
+            Main.chunkIsNotPopulating = false;
             level.setTile(x, y, z, Tile.DIRT.id);
-            Chunk.isNotPopulating = true;
+            Main.chunkIsNotPopulating = true;
         } else if (level.getLightLevel(x, y + 1, z) >= 9) {
             int l = x + rand.nextInt(3) - 1;
             int i1 = y + rand.nextInt(5) - 3;
             int j1 = z + rand.nextInt(3) - 1;
             int k1 = level.getTileId(l, i1 + 1, j1);
             if (level.getTileId(l, i1, j1) == Tile.DIRT.id && level.getLightLevel(l, i1 + 1, j1) >= 4 && Tile.field_1941[k1] <= 2) {
-                Chunk.isNotPopulating = false;
+                Main.chunkIsNotPopulating = false;
                 level.setTile(l, i1, j1, Tile.GRASS.id);
-                Chunk.isNotPopulating = true;
+                Main.chunkIsNotPopulating = true;
             }
         }
     }

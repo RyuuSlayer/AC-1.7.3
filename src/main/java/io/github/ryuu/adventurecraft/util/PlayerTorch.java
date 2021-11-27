@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.util;
 
+import io.github.ryuu.adventurecraft.extensions.client.ExMinecraft;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
@@ -44,7 +45,7 @@ public class PlayerTorch {
     }
 
     public static void setTorchPos(Level world, float x, float y, float z) {
-        long avgTime = AccessMinecraft.getInstance().getAvgFrameTime();
+        long avgTime = ExMinecraft.getInstance().getAvgFrameTime();
         int updateRate = 1;
         if (avgTime > 33333333L) {
             updateRate = 3;

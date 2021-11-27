@@ -6,6 +6,14 @@ public interface ExLivingEntity extends ExEntity {
 
     void applyDamage(int damage);
 
+    float getFov();
+
+    float getExtraFov();
+
+    int getStunned();
+
+    void setStunned(int stunned);
+
     double getGravity();
 
     int getMaxHealth();

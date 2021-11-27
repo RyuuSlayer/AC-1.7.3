@@ -2,6 +2,9 @@ package io.github.ryuu.adventurecraft.mixin.client.render;
 
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityStore;
+import io.github.ryuu.adventurecraft.extensions.client.ExMinecraft;
+import io.github.ryuu.adventurecraft.extensions.entity.ExLivingEntity;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.CutsceneCameraPoint;
 import io.github.ryuu.adventurecraft.util.DebugMode;
@@ -225,7 +228,9 @@ public class MixinGameRenderer {
      */
     @Overwrite()
     private void method_1850(float f) {
-        if (!(this.minecraft.field_2807 instanceof Player) || this.minecraft.cameraActive || this.minecraft.field_2807.stunned != 0) {
+        if (!(this.minecraft.field_2807 instanceof Player) ||
+                ((ExMinecraft) this.minecraft).isCameraActive() ||
+                ((ExLivingEntity) this.minecraft.field_2807).getStunned() != 0) {
             return;
         }
         Player entityplayer = (Player) this.minecraft.field_2807;
@@ -329,7 +334,7 @@ public class MixinGameRenderer {
         if (!this.minecraft.options.autoFarClip) {
             return 512 >> this.minecraft.options.viewDistance;
         }
-        long avgTime = this.minecraft.getAvgFrameTime();
+        long avgTime = ((ExMinecraft)this.minecraft).getAvgFrameTime();
         if (avgTime > 33333333L) {
             this.farClipAdjustment *= 0.99f;
         } else if (avgTime < 20000000L) {
@@ -520,12 +525,12 @@ public class MixinGameRenderer {
     public void method_1841(float f, long l) {
         GL11.glEnable(2884);
         GL11.glEnable(2929);
-        if (this.minecraft.cameraActive && this.minecraft.cutsceneCamera.isEmpty()) {
-            this.minecraft.cameraActive = false;
+        if (((ExMinecraft)this.minecraft).isCameraActive() && ((ExMinecraft)this.minecraft).getCutsceneCamera().isEmpty()) {
+            ((ExMinecraft)this.minecraft).setCameraActive(false);
         }
-        if (this.minecraft.cameraActive) {
-            CutsceneCameraPoint p = this.minecraft.cutsceneCamera.getCurrentPoint(f);
-            this.minecraft.field_2807 = this.minecraft.cutsceneCameraEntity;
+        if (((ExMinecraft)this.minecraft).isCameraActive()) {
+            CutsceneCameraPoint p = ((ExMinecraft)this.minecraft).getCutsceneCamera().getCurrentPoint(f);
+            this.minecraft.field_2807 = ((ExMinecraft)this.minecraft).getCutsceneCameraEntity();
             this.minecraft.field_2807.prevRenderX = this.minecraft.field_2807.prevX = p.posX;
             this.minecraft.field_2807.x = this.minecraft.field_2807.prevX;
             this.minecraft.field_2807.prevRenderY = this.minecraft.field_2807.prevY = p.posY;
@@ -536,7 +541,7 @@ public class MixinGameRenderer {
             this.minecraft.field_2807.pitch = this.minecraft.field_2807.prevPitch = p.rotPitch;
         } else {
             this.minecraft.field_2807 = this.minecraft.player;
-            if (this.minecraft.player.stunned != 0) {
+            if (((ExLivingEntity)this.minecraft.player).getStunned() != 0) {
                 this.minecraft.player.prevRenderX = this.minecraft.player.prevX = this.minecraft.player.x;
                 this.minecraft.player.prevRenderY = this.minecraft.player.prevY = this.minecraft.player.y;
                 this.minecraft.player.prevRenderZ = this.minecraft.player.prevZ = this.minecraft.player.z;
@@ -558,7 +563,6 @@ public class MixinGameRenderer {
             chunkproviderloadorgenerate.setSpawnChunk(j, k);
         }
         for (int i = 0; i < 2; ++i) {
-            Entity e;
             ItemInstance curItem;
             if (this.minecraft.options.anaglyph3d) {
                 field_2341 = i;
@@ -664,19 +668,18 @@ public class MixinGameRenderer {
             }
             GL11.glDisable(3008);
             renderglobal.drawCursorSelection(entityliving, ((Player) entityliving).inventory.getHeldItem(), f);
-            if (DebugMode.active && this.minecraft.activeCutsceneCamera != null) {
-                this.minecraft.activeCutsceneCamera.drawLines(entityliving, f);
+            if (DebugMode.active && ((ExMinecraft) this.minecraft).getActiveCutsceneCamera() != null) {
+                ((ExMinecraft) this.minecraft).getActiveCutsceneCamera().drawLines(entityliving, f);
             }
             if (DebugMode.active || DebugMode.renderPaths) {
                 for (Object o : this.minecraft.level.entities) {
-                    Entity obj;
-                    e = obj = (Entity) o;
+                    Entity e = (Entity) o;
                     renderglobal.drawEntityPath(e, entityliving, f);
                 }
             }
             if (DebugMode.active || DebugMode.renderFov) {
-                for (Entity obj : this.minecraft.level.entities) {
-                    e = obj;
+                for (Object obj : this.minecraft.level.entities) {
+                    Entity e = (Entity) obj;
                     if (!(e instanceof LivingEntity)) continue;
                     renderglobal.drawEntityFOV((LivingEntity) e, entityliving, f);
                 }
@@ -730,7 +733,7 @@ public class MixinGameRenderer {
             int k1 = k + this.random.nextInt(byte0) - this.random.nextInt(byte0);
             int l1 = world.getOceanFloorHeight(j1, k1);
             int i2 = world.getTileId(j1, l1 - 1, k1);
-            if (l1 > j + byte0 || l1 < j - byte0 || world.getTemperatureValue(j1, k1) < 0.5) continue;
+            if (l1 > j + byte0 || l1 < j - byte0 || ((ExLevel) world).getTemperatureValue(j1, k1) < 0.5) continue;
             float f1 = this.random.nextFloat();
             float f2 = this.random.nextFloat();
             if (i2 <= 0) continue;
@@ -788,7 +791,7 @@ public class MixinGameRenderer {
         for (int k1 = i - i1; k1 <= i + i1; ++k1) {
             for (int i2 = k - i1; i2 <= k + i1; ++i2) {
                 int i3;
-                if (world.getTemperatureValue(k1, i2) >= 0.5) continue;
+                if (((ExLevel) world).getTemperatureValue(k1, i2) >= 0.5) continue;
                 int k2 = world.getOceanFloorHeight(k1, i2);
                 if (k2 < 0) {
                     k2 = 0;
@@ -837,7 +840,7 @@ public class MixinGameRenderer {
         j1 = false;
         for (int l1 = i - i1; l1 <= i + i1; ++l1) {
             for (int j2 = k - i1; j2 <= k + i1; ++j2) {
-                if (world.getTemperatureValue(l1, j2) < 0.5) continue;
+                if (((ExLevel) world).getTemperatureValue(l1, j2) < 0.5) continue;
                 int l2 = world.getOceanFloorHeight(l1, j2);
                 int j3 = j - i1;
                 int l3 = j + i1;
@@ -1007,17 +1010,17 @@ public class MixinGameRenderer {
         } else {
             Level world = this.minecraft.level;
             GL11.glFogi(2917, 9729);
-            GL11.glFogf(2915, (float) world.getFogStart(this.field_2350 * 0.25f, f));
-            GL11.glFogf(2916, (float) world.getFogEnd(this.field_2350, f));
+            GL11.glFogf(2915, ((ExLevel)world).getFogStart(this.field_2350 * 0.25f, f));
+            GL11.glFogf(2916, ((ExLevel)world).getFogEnd(this.field_2350, f));
             if (i < 0) {
-                GL11.glFogf(2915, (float) world.getFogStart(0.0f, f));
-                GL11.glFogf(2916, (float) world.getFogEnd(0.8f * this.field_2350, f));
+                GL11.glFogf(2915, ((ExLevel)world).getFogStart(0.0f, f));
+                GL11.glFogf(2916, ((ExLevel)world).getFogEnd(0.8f * this.field_2350, f));
             }
             if (GLContext.getCapabilities().GL_NV_fog_distance) {
                 GL11.glFogi(34138, 34139);
             }
             if (this.minecraft.level.dimension.hasFog) {
-                GL11.glFogf(2915, (float) world.getFogStart(0.0f, f));
+                GL11.glFogf(2915, ((ExLevel)world).getFogStart(0.0f, f));
             }
         }
         GL11.glEnable(2903);

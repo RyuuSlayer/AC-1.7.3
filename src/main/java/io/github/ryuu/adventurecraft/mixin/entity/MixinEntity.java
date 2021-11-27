@@ -4,7 +4,6 @@ import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.extensions.entity.ExEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.level.Level;
-import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.MathsHelper;
 import org.objectweb.asm.Opcodes;
@@ -29,9 +28,6 @@ public abstract class MixinEntity implements ExEntity {
 
     @Shadow
     public int id;
-
-    @Shadow
-    public boolean field_1593 = false;
 
     @Shadow
     public Entity passenger;
@@ -100,21 +96,6 @@ public abstract class MixinEntity implements ExEntity {
     public float height;
 
     @Shadow
-    public double prevRenderX;
-
-    @Shadow
-    public double prevRenderY;
-
-    @Shadow
-    public double prevRenderZ;
-
-    @Shadow
-    public float field_1641;
-
-    @Shadow
-    public boolean field_1642;
-
-    @Shadow
     public int field_1645;
 
     @Shadow
@@ -124,16 +105,10 @@ public abstract class MixinEntity implements ExEntity {
     public int fire;
 
     @Shadow
-    protected int field_1648;
-
-    @Shadow
     public int field_1613;
 
     @Shadow
     public int air;
-
-    @Shadow
-    protected boolean immuneToFire;
 
     @Shadow
     protected float fallDistance;
@@ -147,15 +122,6 @@ public abstract class MixinEntity implements ExEntity {
     public int collisionX;
     public int collisionZ;
     public float moveYawOffset = 0.0f;
-
-    @Shadow
-    public abstract boolean isAlive();
-
-    @Shadow
-    public abstract boolean isInsideWall();
-
-    @Shadow
-    public abstract boolean isInFluid(Material arg);
 
     @Shadow
     public abstract float getStandingEyeHeight();
@@ -243,10 +209,6 @@ public abstract class MixinEntity implements ExEntity {
         }
     }
 
-    public boolean handleFlying() {
-        return this.isFlying;
-    }
-
     /**
      * @author Ryuu, TechPizza, Phil
      */
@@ -274,6 +236,7 @@ public abstract class MixinEntity implements ExEntity {
         }
     }
 
+    @Override
     public boolean attackEntityFromMulti(Entity entity, int i) {
         return this.damage(entity, i);
     }
@@ -283,6 +246,16 @@ public abstract class MixinEntity implements ExEntity {
             target = "Lnet/minecraft/level/Level;canSuffocate(III)Z"))
     public boolean isInsideWallOrOpaque(Level instance, int j, int k, int l) {
         return this.level.canSuffocate(j, k, l) && this.level.isFullOpaque(j, k, l);
+    }
+
+    @Override
+    public boolean isFlying() {
+        return this.isFlying;
+    }
+
+    @Override
+    public void setFlying(boolean flying) {
+        this.isFlying = flying;
     }
 
     @Override
@@ -298,5 +271,10 @@ public abstract class MixinEntity implements ExEntity {
     @Override
     public boolean getCollidesWithClipBlocks() {
         return this.collidesWithClipBlocks;
+    }
+
+    @Override
+    public void setCollidesWithClipBlocks(boolean collidesWithClipBlocks) {
+        this.collidesWithClipBlocks = collidesWithClipBlocks;
     }
 }

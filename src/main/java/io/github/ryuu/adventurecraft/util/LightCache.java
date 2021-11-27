@@ -1,13 +1,15 @@
 package io.github.ryuu.adventurecraft.util;
 
-class LightCache {
+public class LightCache {
 
     static final int cacheSize = 16384;
 
     static final int cacheSizeThird = 5461;
 
     static final int cacheSizeTwoThird = 10922;
-    static LightCache cache = new LightCache();
+
+    public static LightCache cache = new LightCache();
+
     CoordBlock[] coords = new CoordBlock[16384];
     float[] lightValues = new float[16384];
 

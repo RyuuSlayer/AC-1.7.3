@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.scripting;
 
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.util.TriggerArea;
 import io.github.ryuu.adventurecraft.util.UtilBullet;
 import net.minecraft.entity.Entity;
@@ -11,34 +12,34 @@ import net.minecraft.util.maths.Vec3f;
 
 public class ScriptWorld {
 
-    Level worldObj;
+    Level world;
 
     ScriptWorld(Level w) {
-        this.worldObj = w;
+        this.world = w;
     }
 
     public int getBlockID(int x, int y, int z) {
-        return this.worldObj.getTileId(x, y, z);
+        return this.world.getTileId(x, y, z);
     }
 
     public void setBlockID(int x, int y, int z, int id) {
-        this.worldObj.setTile(x, y, z, id);
+        this.world.setTile(x, y, z, id);
     }
 
     public int getMetadata(int x, int y, int z) {
-        return this.worldObj.getTileMeta(x, y, z);
+        return this.world.getTileMeta(x, y, z);
     }
 
     public void setMetadata(int x, int y, int z, int m) {
-        this.worldObj.setTileMeta(x, y, z, m);
+        this.world.setTileMeta(x, y, z, m);
     }
 
     public void setBlockIDAndMetadata(int x, int y, int z, int id, int m) {
-        this.worldObj.method_201(x, y, z, id, m);
+        this.world.method_201(x, y, z, id, m);
     }
 
     public float getLightValue(int x, int y, int z) {
-        return this.worldObj.getLightValue(x, y, z);
+        return ((ExLevel)this.world).getLightValue(x, y, z);
     }
 
     public void triggerBlock(int blockX, int blockY, int blockZ) {
@@ -46,37 +47,37 @@ public class ScriptWorld {
     }
 
     public void triggerArea(int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
-        this.worldObj.triggerManager.addArea(0, -1, 0, new TriggerArea(minX, minY, minZ, maxX, maxY, maxZ));
-        this.worldObj.triggerManager.removeArea(0, -1, 0);
+        ((ExLevel)this.world).getTriggerManager().addArea(0, -1, 0, new TriggerArea(minX, minY, minZ, maxX, maxY, maxZ));
+        ((ExLevel)this.world).getTriggerManager().removeArea(0, -1, 0);
     }
 
     public void setTriggerArea(int blockX, int blockY, int blockZ, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
-        this.worldObj.triggerManager.addArea(blockX, blockY, blockZ, new TriggerArea(minX, minY, minZ, maxX, maxY, maxZ));
+        ((ExLevel)this.world).getTriggerManager().addArea(blockX, blockY, blockZ, new TriggerArea(minX, minY, minZ, maxX, maxY, maxZ));
     }
 
     public void setTriggerArea(int blockX, int blockY, int blockZ, int areaID, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
-        this.worldObj.triggerManager.addArea(blockX, blockY, blockZ, areaID, new TriggerArea(minX, minY, minZ, maxX, maxY, maxZ));
+        ((ExLevel)this.world).getTriggerManager().addArea(blockX, blockY, blockZ, areaID, new TriggerArea(minX, minY, minZ, maxX, maxY, maxZ));
     }
 
     public void removeTriggerArea(int blockX, int blockY, int blockZ, int areaID) {
-        this.worldObj.triggerManager.removeArea(blockX, blockY, blockZ, areaID);
+        ((ExLevel)this.world).getTriggerManager().removeArea(blockX, blockY, blockZ, areaID);
     }
 
     public void removeTriggerAreas(int blockX, int blockY, int blockZ) {
-        this.worldObj.triggerManager.removeArea(blockX, blockY, blockZ);
+        ((ExLevel)this.world).getTriggerManager().removeArea(blockX, blockY, blockZ);
     }
 
     public ScriptEntity spawnEntity(String entityType, double x, double y, double z) {
-        Entity e = EntityRegistry.create(entityType, this.worldObj);
+        Entity e = EntityRegistry.create(entityType, this.world);
         if (e != null) {
             e.setPosition(x, y, z);
-            this.worldObj.method_287(e);
+            this.world.method_287(e);
         }
         return ScriptEntity.getEntityClass(e);
     }
 
     public ScriptEntity getEntityByID(int entityID) {
-        return ScriptEntity.getEntityClass(this.worldObj.getEntityByID(entityID));
+        return ScriptEntity.getEntityClass(((ExLevel)this.world).getEntityByID(entityID));
     }
 
     public Object[] rayTraceBlocks(ScriptVec3 start, ScriptVec3 end) {
@@ -85,7 +86,7 @@ public class ScriptWorld {
 
     public Object[] rayTraceBlocks(double startX, double startY, double startZ, double endX, double endY, double endZ) {
         Object[] results = new Object[2];
-        HitResult hit = UtilBullet.rayTraceBlocks(this.worldObj, Vec3f.from(startX, startY, startZ), Vec3f.from(endX, endY, endZ));
+        HitResult hit = UtilBullet.rayTraceBlocks(this.world, Vec3f.from(startX, startY, startZ), Vec3f.from(endX, endY, endZ));
         if (hit != null) {
             results[0] = new ScriptVec3(hit.field_1988.x, hit.field_1988.y, hit.field_1988.z);
             results[1] = new ScriptVec3(hit.x, hit.y, hit.z);
@@ -99,7 +100,7 @@ public class ScriptWorld {
 
     public Object[] rayTrace(double startX, double startY, double startZ, double endX, double endY, double endZ) {
         Object[] results = new Object[3];
-        HitResult hit = UtilBullet.rayTrace(this.worldObj, null, Vec3f.from(startX, startY, startZ), Vec3f.from(endX, endY, endZ));
+        HitResult hit = UtilBullet.rayTrace(this.world, null, Vec3f.from(startX, startY, startZ), Vec3f.from(endX, endY, endZ));
         if (hit != null) {
             results[0] = new ScriptVec3(hit.field_1988.x, hit.field_1988.y, hit.field_1988.z);
             if (hit.type == HitType.TILE) {

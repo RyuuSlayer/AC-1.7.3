@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.blocks;
 
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.Player;
@@ -50,8 +51,8 @@ public class BlockSpawn extends Tile {
     @Override
     public void onEntityCollision(Level world, int i, int j, int k, Entity entity) {
         if (entity instanceof Player) {
-            world.properties.setSpawnPosition(i, j, k);
-            world.setSpawnYaw(entity.yaw);
+            world.getProperties().setSpawnPosition(i, j, k);
+            ((ExLevel)world).setSpawnYaw(entity.yaw);
         }
     }
 

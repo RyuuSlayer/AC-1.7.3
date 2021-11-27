@@ -100,8 +100,8 @@ public abstract class MixinOverlay extends DrawableHelper {
         if (!this.minecraft.options.thirdPerson && !((ExMinecraft) this.minecraft).isCameraActive() && itemstack != null && itemstack.itemId == Tile.PUMPKIN.id) {
             this.method_1947(scaledWidth, scaledHeight);
         }
-        if (this.minecraft.level != null && !((ExLevelProperties) ((ExLevel) this.minecraft.level).getProperties()).getOverlay().isEmpty()) {
-            this.adventurecraft$renderOverlay(scaledWidth, scaledHeight, ((ExLevelProperties) ((ExLevel) this.minecraft.level).getProperties()).getOverlay());
+        if (this.minecraft.level != null && !((ExLevelProperties) this.minecraft.level.getProperties()).getOverlay().isEmpty()) {
+            this.adventurecraft$renderOverlay(scaledWidth, scaledHeight, ((ExLevelProperties) this.minecraft.level.getProperties()).getOverlay());
         }
         if ((f1 = this.minecraft.player.field_505 + (this.minecraft.player.field_504 - this.minecraft.player.field_505) * f) > 0.0f) {
             this.method_1951(f1, scaledWidth, scaledHeight);
@@ -242,9 +242,9 @@ public abstract class MixinOverlay extends DrawableHelper {
             this.drawTextWithShadow(fontrenderer, "y: " + this.minecraft.player.y, 2, 72, 0xE0E0E0);
             this.drawTextWithShadow(fontrenderer, "z: " + this.minecraft.player.z, 2, 80, 0xE0E0E0);
             this.drawTextWithShadow(fontrenderer, "f: " + (MathsHelper.floor((double) (this.minecraft.player.yaw * 4.0f / 360.0f) + 0.5) & 3), 2, 88, 0xE0E0E0);
-            this.drawTextWithShadow(fontrenderer, String.format("Use Terrain Images: %b", ((ExLevelProperties) ((ExLevel) this.minecraft.level).getProperties()).isUsingImages()), 2, 96, 0xE0E0E0);
+            this.drawTextWithShadow(fontrenderer, String.format("Use Terrain Images: %b", ((ExLevelProperties) this.minecraft.level.getProperties()).isUsingImages()), 2, 96, 0xE0E0E0);
             this.drawTextWithShadow(fontrenderer, String.format("Collide X: %d Z: %d", ((ExEntity) this.minecraft.player).getCollisionX(), ((ExEntity) this.minecraft.player).getCollisionZ()), 2, 104, 0xE0E0E0);
-            if (((ExLevelProperties) ((ExLevel) this.minecraft.level).getProperties()).isUsingImages()) {
+            if (((ExLevelProperties) this.minecraft.level.getProperties()).isUsingImages()) {
                 int x = (int) this.minecraft.player.x;
                 int z = (int) this.minecraft.player.z;
                 int terrainHeight = TerrainImage.getTerrainHeight(x, z);

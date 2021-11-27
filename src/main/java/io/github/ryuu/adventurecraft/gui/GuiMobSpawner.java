@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.gui;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityMobSpawner;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.scripting.EntityDescriptions;
@@ -293,7 +294,7 @@ public class GuiMobSpawner extends Screen {
     }
 
     private String[] getScriptFiles() {
-        File scriptDir = new File(this.minecraft.level.levelDir, "scripts");
+        File scriptDir = new File(((ExLevel)this.minecraft.level).getLevelDir(), "scripts");
         if (scriptDir.exists() && scriptDir.isDirectory()) {
             File[] scriptFiles = scriptDir.listFiles();
             String[] fileNames = new String[scriptFiles.length];

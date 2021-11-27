@@ -1,6 +1,8 @@
 package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityWeather;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevelProperties;
 import io.github.ryuu.adventurecraft.gui.GuiWeather;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.DebugMode;
@@ -47,18 +49,18 @@ public class BlockWeather extends TileWithEntity {
     public void onTriggerActivated(Level world, int i, int j, int k) {
         TileEntityWeather obj = (TileEntityWeather) world.getTileEntity(i, j, k);
         if (obj.changePrecipitate) {
-            world.properties.setRaining(obj.precipitate);
-            world.resetCoordOrder();
+            world.getProperties().setRaining(obj.precipitate);
+            ((ExLevel)world).resetCoordOrder();
         }
         if (obj.changeTempOffset) {
-            world.properties.tempOffset = obj.tempOffset;
-            world.resetCoordOrder();
+            ((ExLevelProperties)world.getProperties()).setTempOffset(obj.tempOffset);
+            ((ExLevel)world).resetCoordOrder();
         }
         if (obj.changeTimeOfDay) {
-            world.setTimeOfDay(obj.timeOfDay);
+            ((ExLevel)world).setTimeOfDay(obj.timeOfDay);
         }
         if (obj.changeTimeRate) {
-            world.properties.setTimeRate(obj.timeRate);
+            ((ExLevelProperties)world.getProperties()).setTimeRate(obj.timeRate);
         }
     }
 

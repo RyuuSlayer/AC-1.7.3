@@ -1,6 +1,10 @@
 package io.github.ryuu.adventurecraft.scripting;
 
 import io.github.ryuu.adventurecraft.blocks.BlockEffect;
+import io.github.ryuu.adventurecraft.extensions.client.ExMinecraft;
+import io.github.ryuu.adventurecraft.extensions.client.render.ExWorldRenderer;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevelProperties;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.util.TextureAnimated;
 import net.minecraft.client.render.WorldRenderer;
@@ -8,25 +12,25 @@ import net.minecraft.level.Level;
 
 public class ScriptEffect {
 
-    Level worldObj;
+    Level world;
 
     WorldRenderer renderGlobal;
 
     ScriptEffect(Level w, WorldRenderer rg) {
-        this.worldObj = w;
+        this.world = w;
         this.renderGlobal = rg;
     }
 
     public ScriptEntity spawnParticle(String particleType, double x, double y, double z, double arg1, double arg2, double arg3) {
-        return ScriptEntity.getEntityClass(this.renderGlobal.spawnParticleR(particleType, x, y, z, arg1, arg2, arg3));
+        return ScriptEntity.getEntityClass(((ExWorldRenderer)this.renderGlobal).spawnParticleR(particleType, x, y, z, arg1, arg2, arg3));
     }
 
     public boolean replaceTexture(String textureToReplace, String replacement) {
-        return BlockEffect.replaceTexture(this.worldObj, textureToReplace, replacement);
+        return BlockEffect.replaceTexture(this.world, textureToReplace, replacement);
     }
 
     public String getReplaceTexture(String textureToReplace) {
-        String replacement = (String) this.worldObj.properties.replacementTextures.get((Object) textureToReplace);
+        String replacement = (String) this.world.getProperties().replacementTextures.get((Object) textureToReplace);
         if (replacement == null) {
             return textureToReplace;
         }
@@ -34,60 +38,60 @@ public class ScriptEffect {
     }
 
     public void revertTextures() {
-        BlockEffect.revertTextures(this.worldObj);
+        BlockEffect.revertTextures(this.world);
     }
 
     public String getOverlay() {
-        return this.worldObj.properties.overlay;
+        return ((ExLevelProperties)this.world.getProperties()).getOverlay();
     }
 
     public void setOverlay(String overlay) {
-        this.worldObj.properties.overlay = overlay;
+        ((ExLevelProperties)this.world.getProperties()).setOverlay(overlay);
     }
 
     public void clearOverlay() {
-        this.worldObj.properties.overlay = "";
+        setOverlay("");
     }
 
     public void setFogColor(float r, float g, float b) {
-        this.worldObj.properties.fogR = r;
-        this.worldObj.properties.fogG = g;
-        this.worldObj.properties.fogB = b;
-        this.worldObj.properties.overrideFogColor = true;
+        this.world.getProperties().fogR = r;
+        this.world.getProperties().fogG = g;
+        this.world.getProperties().fogB = b;
+        this.world.getProperties().overrideFogColor = true;
     }
 
     public void revertFogColor() {
-        this.worldObj.properties.overrideFogColor = false;
+        this.world.getProperties().overrideFogColor = false;
     }
 
     public void setFogDensity(float start, float end) {
-        this.worldObj.properties.fogStart = start;
-        this.worldObj.properties.fogEnd = end;
-        this.worldObj.properties.overrideFogDensity = true;
+        this.world.getProperties().fogStart = start;
+        this.world.getProperties().fogEnd = end;
+        this.world.getProperties().overrideFogDensity = true;
     }
 
     public void revertFogDensity() {
-        this.worldObj.properties.overrideFogDensity = false;
+        this.world.getProperties().overrideFogDensity = false;
     }
 
     public float getLightRampValue(int i) {
-        return this.worldObj.properties.brightness[i];
+        return ((ExLevelProperties)this.world.getProperties()).getBrightness()[i];
     }
 
     public void setLightRampValue(int i, float f) {
-        this.worldObj.properties.brightness[i] = f;
-        this.worldObj.loadBrightness();
-        AccessMinecraft.getInstance().worldRenderer.updateAllTheRenderers();
+        ((ExLevelProperties)this.world.getProperties()).getBrightness()[i] = f;
+        ((ExLevel)this.world).loadBrightness();
+        ((ExWorldRenderer)AccessMinecraft.getInstance().worldRenderer).updateAllTheRenderers();
     }
 
     public void resetLightRampValues() {
         float f = 0.05f;
         for (int i = 0; i < 16; ++i) {
             float f1 = 1.0f - (float) i / 15.0f;
-            this.worldObj.properties.brightness[i] = (1.0f - f1) / (f1 * 3.0f + 1.0f) * (1.0f - f) + f;
+            ((ExLevelProperties)this.world.getProperties()).getBrightness()[i] = (1.0f - f1) / (f1 * 3.0f + 1.0f) * (1.0f - f) + f;
         }
-        this.worldObj.loadBrightness();
-        AccessMinecraft.getInstance().worldRenderer.updateAllTheRenderers();
+        ((ExLevel)this.world).loadBrightness();
+        ((ExWorldRenderer)AccessMinecraft.getInstance().worldRenderer).updateAllTheRenderers();
     }
 
     public void registerTextureAnimation(String animName, String texName, String animatedTex, int x, int y, int width, int height) {
@@ -99,7 +103,7 @@ public class ScriptEffect {
     }
 
     public void explode(ScriptEntity owner, double x, double y, double z, float strength, boolean flaming) {
-        this.worldObj.createExplosion(owner.entity, x, y, z, strength, flaming);
+        this.world.createExplosion(owner.entity, x, y, z, strength, flaming);
     }
 
     public float getFovModifier() {
@@ -111,6 +115,6 @@ public class ScriptEffect {
     }
 
     public void cancelCutscene() {
-        AccessMinecraft.getInstance().cameraActive = false;
+        ExMinecraft.getInstance().setCameraActive(false);
     }
 }

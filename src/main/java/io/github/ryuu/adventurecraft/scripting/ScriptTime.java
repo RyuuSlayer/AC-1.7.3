@@ -1,45 +1,48 @@
 package io.github.ryuu.adventurecraft.scripting;
 
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevelProperties;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.level.Level;
 
 public class ScriptTime {
 
-    Level worldObj;
+    Level world;
 
     ScriptTime(Level w) {
-        this.worldObj = w;
+        this.world = w;
     }
 
     public float get() {
-        return this.worldObj.getTimeOfDay();
+        return ((ExLevel) this.world).getTimeOfDay();
     }
 
     public void set(long time) {
-        this.worldObj.setTimeOfDay(time);
+        ((ExLevel) this.world).setTimeOfDay(time);
     }
 
     public float getTime() {
-        return this.worldObj.getTimeOfDay();
+        return ((ExLevel) this.world).getTimeOfDay();
     }
 
     public void setTime(long time) {
-        this.worldObj.setTimeOfDay(time);
+        ((ExLevel) this.world).setTimeOfDay(time);
     }
 
     public float getRate() {
-        return this.worldObj.properties.getTimeRate();
+        return ((ExLevelProperties) this.world.getProperties()).getTimeRate();
     }
 
     public void setRate(float timeRate) {
-        this.worldObj.properties.setTimeRate(timeRate);
+        ((ExLevelProperties) this.world.getProperties()).setTimeRate(timeRate);
     }
 
     public long getTickCount() {
-        return this.worldObj.getLevelTime();
+        return this.world.getLevelTime();
     }
 
     public void sleep(float t) {
-        AccessMinecraft.getInstance().level.script.sleep(t);
+        // TODO: use this.world instead?
+        ((ExLevel) AccessMinecraft.getInstance().level).getScript().sleep(t);
     }
 }

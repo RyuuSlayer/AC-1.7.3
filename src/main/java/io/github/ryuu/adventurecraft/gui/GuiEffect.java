@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.gui;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityEffect;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
@@ -166,7 +167,7 @@ public class GuiEffect extends Screen {
                 this.buttons.add(b);
                 this.buttons.add(new Button(1, 4, 40, buttonWidth, 18, "Remove Overlay"));
                 int i = 1;
-                File overlays = new File(this.effect.level.levelDir, "overlays");
+                File overlays = new File(((ExLevel)this.effect.level).getLevelDir(), "overlays");
                 if (!overlays.exists() || !overlays.isDirectory()) break block16;
                 for (File overlayFile : overlays.listFiles()) {
                     this.buttons.add(new Button(1 + i, 4 + i % 3 * (4 + buttonWidth), 40 + i / 3 * 20, buttonWidth, 18, overlayFile.getName()));
@@ -183,7 +184,7 @@ public class GuiEffect extends Screen {
                 }
                 this.buttons.add(b);
                 int i = 0;
-                File replacements = new File(this.effect.level.levelDir, "textureReplacement");
+                File replacements = new File(((ExLevel)this.effect.level).getLevelDir(), "textureReplacement");
                 if (replacements.exists() && replacements.isDirectory()) {
                     for (File replacementFile : replacements.listFiles()) {
                         this.buttons.add(new Button(1 + i, 4 + i % 3 * (4 + buttonWidth), 40 + i / 3 * 20, buttonWidth, 18, replacementFile.getName()));

@@ -1,6 +1,8 @@
 package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityEffect;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevelProperties;
 import io.github.ryuu.adventurecraft.gui.GuiEffect;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
@@ -32,26 +34,26 @@ public class BlockEffect extends TileWithEntity {
         if (needsReloadForRevert) {
             GrassColour.loadGrass("/misc/grasscolor.png");
             FoliageColour.loadFoliage("/misc/foliagecolor.png");
-            TerrainImage.loadWaterMap(new File(world.levelDir, "watermap.png"));
-            TerrainImage.loadBiomeMap(new File(world.levelDir, "biomemap.png"));
+            TerrainImage.loadWaterMap(new File(((ExLevel)world).getLevelDir(), "watermap.png"));
+            TerrainImage.loadBiomeMap(new File(((ExLevel)world).getLevelDir(), "biomemap.png"));
             AccessMinecraft.getInstance().worldRenderer.method_1148();
             needsReloadForRevert = false;
         }
-        world.properties.revertTextures();
+        ((ExLevelProperties)world.getProperties()).revertTextures();
     }
 
     public static boolean replaceTexture(Level world, String textureToReplace, String replacementTexture) {
         String lTextureToReplace = textureToReplace.toLowerCase();
-        if (!world.properties.addReplacementTexture(textureToReplace, replacementTexture)) {
+        if (!((ExLevelProperties)world.getProperties()).addReplacementTexture(textureToReplace, replacementTexture)) {
             return false;
         }
         if (lTextureToReplace.equals("/watermap.png")) {
-            TerrainImage.loadWaterMap(new File(world.levelDir, replacementTexture));
+            TerrainImage.loadWaterMap(new File(((ExLevel)world).getLevelDir(), replacementTexture));
             needsReloadForRevert = true;
             return true;
         }
         if (lTextureToReplace.equals("/biomemap.png")) {
-            TerrainImage.loadBiomeMap(new File(world.levelDir, replacementTexture));
+            TerrainImage.loadBiomeMap(new File(((ExLevel)world).getLevelDir(), replacementTexture));
             needsReloadForRevert = true;
             return true;
         }
@@ -125,26 +127,27 @@ public class BlockEffect extends TileWithEntity {
 
     @Override
     public void onTriggerActivated(Level world, int i, int j, int k) {
+        ExLevelProperties properties = (ExLevelProperties) world.getProperties();
         TileEntityEffect obj = (TileEntityEffect) world.getTileEntity(i, j, k);
         obj.isActivated = true;
         obj.ticksBeforeParticle = 0;
         if (obj.changeFogColor == 1) {
-            world.properties.overrideFogColor = true;
-            world.properties.fogR = obj.fogR;
-            world.properties.fogG = obj.fogG;
-            world.properties.fogB = obj.fogB;
+            properties.setOverrideFogColor(true);
+            properties.setFogR(obj.fogR);
+            properties.setFogG(obj.fogG);
+            properties.setFogB(obj.fogB);
         } else if (obj.changeFogColor == 2) {
-            world.properties.overrideFogColor = false;
+            properties.setOverrideFogColor(false);
         }
         if (obj.changeFogDensity == 1) {
-            world.properties.overrideFogDensity = true;
-            world.properties.fogStart = obj.fogStart;
-            world.properties.fogEnd = obj.fogEnd;
+            properties.setOverrideFogDensity(true);
+            properties.setFogStart(obj.fogStart);
+            properties.setFogEnd(obj.fogEnd);
         } else if (obj.changeFogDensity == 2) {
-            world.properties.overrideFogDensity = false;
+            properties.setOverrideFogDensity(false);
         }
         if (obj.setOverlay) {
-            world.properties.overlay = obj.overlay;
+            properties.setOverlay(obj.overlay);
         }
         if (obj.replaceTextures) {
             this.replaceTextures(world, obj.textureReplacement);
@@ -155,7 +158,7 @@ public class BlockEffect extends TileWithEntity {
 
     public void replaceTextures(Level world, String replacement) {
         boolean needsReload = false;
-        File replacementFile = new File(world.levelDir, "textureReplacement/" + replacement);
+        File replacementFile = new File(((ExLevel)world).getLevelDir(), "textureReplacement/" + replacement);
         if (replacementFile.exists()) {
             try {
                 BufferedReader reader = new BufferedReader(new FileReader(replacementFile));

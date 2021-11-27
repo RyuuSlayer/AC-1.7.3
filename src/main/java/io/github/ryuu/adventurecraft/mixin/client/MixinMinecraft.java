@@ -4,10 +4,14 @@ import io.github.ryuu.adventurecraft.Main;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.extensions.client.ExMinecraft;
 import io.github.ryuu.adventurecraft.extensions.client.gui.ExScreen;
+import io.github.ryuu.adventurecraft.extensions.client.render.ExWorldRenderer;
+import io.github.ryuu.adventurecraft.extensions.entity.player.ExClientPlayer;
 import io.github.ryuu.adventurecraft.extensions.items.ExItemInstance;
 import io.github.ryuu.adventurecraft.extensions.items.ExItemType;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.gui.GuiMapSelect;
 import io.github.ryuu.adventurecraft.gui.GuiStore;
+import io.github.ryuu.adventurecraft.scripting.Script;
 import io.github.ryuu.adventurecraft.scripting.ScriptEntity;
 import io.github.ryuu.adventurecraft.scripting.ScriptItem;
 import io.github.ryuu.adventurecraft.scripting.ScriptVec3;
@@ -55,7 +59,6 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
-import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -95,8 +98,6 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
     @Shadow
     public ParticleManager particleManager;
     @Shadow
-    public Session session;
-    @Shadow
     public volatile boolean paused;
     @Shadow
     public TextureManager textureManager;
@@ -122,8 +123,6 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
     private LevelStorage levelStorage;
     @Shadow
     public StatManager statManager;
-    @Shadow
-    public volatile boolean running;
     @Shadow
     public boolean field_2778;
     @Shadow
@@ -358,7 +357,7 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
             return;
         }
         if (DebugMode.active) {
-            this.level.undoStack.startRecording();
+            ((ExLevel)this.level).getUndoStack().startRecording();
         }
         boolean swapItemBack = false;
         ItemInstance itemUsing = this.player.inventory.getHeldItem();
@@ -373,14 +372,14 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
             }
             int itemUseDelay = 5;
             if (itemUsing != null) {
-                itemUseDelay = ItemType.byId[itemUsing.itemId].itemUseDelay;
+                itemUseDelay = ((ExItemType)ItemType.byId[itemUsing.itemId]).getItemUseDelay();
             }
             if (i == 0) {
                 this.field_2798 = this.field_2786 + itemUseDelay;
             } else {
                 this.rightMouseTicksRan = this.field_2786 + itemUseDelay;
             }
-            i = itemUsing != null && ((ExItemType)ItemType.byId[itemUsing.itemId]).mainActionLeftClick() ? 0 : 1;
+            i = itemUsing != null && ((ExItemType) ItemType.byId[itemUsing.itemId]).mainActionLeftClick() ? 0 : 1;
         } else {
             this.field_2798 = this.field_2786 + 5;
             this.rightMouseTicksRan = this.field_2786 + 5;
@@ -417,7 +416,7 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
                 if (i == 0) {
                     this.interactionManager.method_1707(j, k, l, this.hitResult.field_1987);
                     if (itemUsing != null) {
-                        ((ExItemInstance)itemUsing).useItemLeftClick(this.player, this.level, j, k, l, i1);
+                        ((ExItemInstance) itemUsing).useItemLeftClick(this.player, this.level, j, k, l, i1);
                     }
                 } else {
                     int j1;
@@ -432,7 +431,7 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
                             this.player.swappedItems = false;
                         }
                         if (DebugMode.active) {
-                            this.level.undoStack.stopRecording();
+                            ((ExLevel) this.level).getUndoStack().stopRecording();
                         }
                         return;
                     }
@@ -445,66 +444,67 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
             }
         }
         if (flag && i == 0 && itemUsing != null && ItemType.byId[itemUsing.itemId] != null) {
-            ((ExItemType)ItemType.byId[itemUsing.itemId]).onItemLeftClick(itemUsing, this.level, this.player);
+            ((ExItemType) ItemType.byId[itemUsing.itemId]).onItemLeftClick(itemUsing, this.level, this.player);
         }
         if (flag && i == 1 && itemUsing != null && this.interactionManager.useItem(this.player, this.level, itemUsing)) {
             this.gameRenderer.handItemRenderer.method_1865();
         }
         if (itemUsing != null) {
+            Script script = ((ExLevel) this.level).getScript();
             if (this.lastItemUsed != itemUsing) {
-                Object wrappedOut = Context.javaToJS(new ScriptItem(itemUsing), (Scriptable) this.level.script.globalScope);
-                ScriptableObject.putProperty((Scriptable) this.level.script.globalScope, "lastItemUsed", wrappedOut);
+                Object wrappedOut = Context.javaToJS(new ScriptItem(itemUsing), script.globalScope);
+                ScriptableObject.putProperty(script.globalScope, "lastItemUsed", wrappedOut);
                 this.lastItemUsed = itemUsing;
             }
             if (this.hitResult == null) {
                 if (this.lastEntityHit != null) {
                     this.lastEntityHit = null;
-                    Object wrappedOut = Context.javaToJS(null, (Scriptable) this.level.script.globalScope);
-                    ScriptableObject.putProperty((Scriptable) this.level.script.globalScope, "hitEntity", wrappedOut);
+                    Object wrappedOut = Context.javaToJS(null, script.globalScope);
+                    ScriptableObject.putProperty(script.globalScope, "hitEntity", wrappedOut);
                 }
                 if (this.lastBlockHit != null) {
                     this.lastBlockHit = null;
-                    Object wrappedOut = Context.javaToJS(null, (Scriptable) this.level.script.globalScope);
-                    ScriptableObject.putProperty((Scriptable) this.level.script.globalScope, "hitBlock", wrappedOut);
+                    Object wrappedOut = Context.javaToJS(null, script.globalScope);
+                    ScriptableObject.putProperty(script.globalScope, "hitBlock", wrappedOut);
                 }
             } else if (this.hitResult.type == HitType.ENTITY) {
                 if (this.lastEntityHit != this.hitResult.field_1989) {
                     this.lastEntityHit = this.hitResult.field_1989;
-                    Object wrappedOut = Context.javaToJS(ScriptEntity.getEntityClass(this.hitResult.field_1989), (Scriptable) this.level.script.globalScope);
-                    ScriptableObject.putProperty((Scriptable) this.level.script.globalScope, "hitEntity", wrappedOut);
+                    Object wrappedOut = Context.javaToJS(ScriptEntity.getEntityClass(this.hitResult.field_1989), script.globalScope);
+                    ScriptableObject.putProperty(script.globalScope, "hitEntity", wrappedOut);
                 }
                 if (this.lastBlockHit != null) {
                     this.lastBlockHit = null;
-                    Object wrappedOut = Context.javaToJS(null, (Scriptable) this.level.script.globalScope);
-                    ScriptableObject.putProperty((Scriptable) this.level.script.globalScope, "hitBlock", wrappedOut);
+                    Object wrappedOut = Context.javaToJS(null, script.globalScope);
+                    ScriptableObject.putProperty(script.globalScope, "hitBlock", wrappedOut);
                 }
             } else if (this.hitResult.type == HitType.TILE) {
                 if (this.lastBlockHit == null || this.lastBlockHit.x != (double) this.hitResult.x || this.lastBlockHit.y != (double) this.hitResult.y || this.lastBlockHit.z != (double) this.hitResult.z) {
                     this.lastBlockHit = new ScriptVec3(this.hitResult.x, this.hitResult.y, this.hitResult.z);
-                    Object wrappedOut = Context.javaToJS(this.lastBlockHit, (Scriptable) this.level.script.globalScope);
-                    ScriptableObject.putProperty((Scriptable) this.level.script.globalScope, "hitBlock", wrappedOut);
+                    Object wrappedOut = Context.javaToJS(this.lastBlockHit, script.globalScope);
+                    ScriptableObject.putProperty(script.globalScope, "hitBlock", wrappedOut);
                 }
                 if (this.lastEntityHit != null) {
                     this.lastEntityHit = null;
-                    Object wrappedOut = Context.javaToJS(null, (Scriptable) this.level.script.globalScope);
-                    ScriptableObject.putProperty((Scriptable) this.level.script.globalScope, "hitEntity", wrappedOut);
+                    Object wrappedOut = Context.javaToJS(null, script.globalScope);
+                    ScriptableObject.putProperty(script.globalScope, "hitEntity", wrappedOut);
                 }
             } else {
                 if (this.lastEntityHit != null) {
                     this.lastEntityHit = null;
-                    Object wrappedOut = Context.javaToJS(null, (Scriptable) this.level.script.globalScope);
-                    ScriptableObject.putProperty((Scriptable) this.level.script.globalScope, "hitEntity", wrappedOut);
+                    Object wrappedOut = Context.javaToJS(null, script.globalScope);
+                    ScriptableObject.putProperty(script.globalScope, "hitEntity", wrappedOut);
                 }
                 if (this.lastBlockHit != null) {
                     this.lastBlockHit = null;
-                    Object wrappedOut = Context.javaToJS(null, (Scriptable) this.level.script.globalScope);
-                    ScriptableObject.putProperty((Scriptable) this.level.script.globalScope, "hitBlock", wrappedOut);
+                    Object wrappedOut = Context.javaToJS(null, script.globalScope);
+                    ScriptableObject.putProperty(script.globalScope, "hitBlock", wrappedOut);
                 }
             }
             if (itemUsing.method_719()) {
-                this.level.scriptHandler.runScript(String.format("item_%d_%d.js", new Object[]{itemUsing.itemId, itemUsing.getDamage()}), this.level.scope, false);
+                ((ExLevel) this.level).getScriptHandler().runScript(String.format("item_%d_%d.js", itemUsing.itemId, itemUsing.getDamage()), ((ExLevel) this.level).getScope(), false);
             } else {
-                this.level.scriptHandler.runScript(String.format("item_%d.js", new Object[]{itemUsing.itemId}), this.level.scope, false);
+                ((ExLevel) this.level).getScriptHandler().runScript(String.format("item_%d.js", itemUsing.itemId), ((ExLevel) this.level).getScope(), false);
             }
         }
         if (swapItemBack) {
@@ -512,7 +512,7 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
             this.player.swappedItems = false;
         }
         if (DebugMode.active) {
-            this.level.undoStack.stopRecording();
+            ((ExLevel) this.level).getUndoStack().stopRecording();
         }
     }
 
@@ -657,19 +657,19 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
                                 this.overlay.addChatMessage("Debug Mode Active");
                             } else {
                                 this.overlay.addChatMessage("Debug Mode Deactivated");
-                                this.level.loadBrightness();
+                                ((ExLevel)this.level).loadBrightness();
                             }
-                            this.worldRenderer.updateAllTheRenderers();
+                            ((ExWorldRenderer)this.worldRenderer).updateAllTheRenderers();
                         }
                         if (Keyboard.getEventKey() == 63) {
-                            boolean bl = this.options.thirdPerson = !this.options.thirdPerson;
+                            this.options.thirdPerson = !this.options.thirdPerson;
                         }
                         if (Keyboard.getEventKey() == 64) {
-                            this.worldRenderer.resetAll();
+                            ((ExWorldRenderer)this.worldRenderer).resetAll();
                             this.overlay.addChatMessage("Resetting all blocks in loaded chunks");
                         }
                         if (Keyboard.getEventKey() == 65) {
-                            this.player.displayGUIPalette();
+                            ((ExClientPlayer) this.player).displayGUIPalette();
                         }
                         if (Keyboard.getEventKey() == this.options.inventoryKey.key) {
                             this.openScreen(new PlayerInventoryScreen(this.player));
@@ -682,9 +682,9 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
                         }
                         if (DebugMode.active && (Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157))) {
                             if (Keyboard.getEventKey() == 44) {
-                                this.level.undo();
+                                ((ExLevel) this.level).undo();
                             } else if (Keyboard.getEventKey() == 21) {
-                                this.level.redo();
+                                ((ExLevel) this.level).redo();
                             }
                         }
                     }
@@ -707,7 +707,7 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
                     }
                 }
                 if (this.level == null) continue;
-                this.level.script.keyboard.processKeyPress(Keyboard.getEventKey());
+                ((ExLevel) this.level).getScript().keyboard.processKeyPress(Keyboard.getEventKey());
             }
             if (this.currentScreen == null || ((ExScreen) this.currentScreen).getDisableInputGrabbing()) {
                 if (Mouse.isButtonDown(0) && (float) (this.field_2786 - this.field_2798) >= 0.0f && this.field_2778) {
@@ -851,7 +851,7 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
             target = "Lnet/minecraft/client/ClientInteractionManager;method_1710(Lnet/minecraft/level/Level;)V",
             shift = At.Shift.AFTER))
     private void loadLevelTextures(Level world, String s, Player entityplayer, CallbackInfo ci) {
-        world.loadMapTextures();
+        ((ExLevel) world).loadMapTextures();
     }
 
     @Inject(method = "method_2115", at = @At(
@@ -860,7 +860,7 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
             shift = At.Shift.AFTER))
     private void initPlayer(Level world, String s, Player entityplayer, CallbackInfo ci) {
         this.cutsceneCameraEntity = this.interactionManager.createPlayer(world);
-        world.script.initPlayer();
+        ((ExLevel)world).getScript().initPlayer();
     }
 
     /**
@@ -886,9 +886,9 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
             this.level.removeEntity(this.player);
         } else {
             this.player = (ClientPlayer) this.interactionManager.createPlayer(this.level);
-            this.level.script.initPlayer();
+            ((ExLevel) this.level).getScript().initPlayer();
         }
-        this.worldRenderer.resetForDeath();
+        ((ExWorldRenderer)this.worldRenderer).resetForDeath();
         Vec3i spawnCoords = this.level.getSpawnPosition();
         this.player.afterSpawn();
         this.player.setPositionAndAngles((double) spawnCoords.x + 0.5, spawnCoords.y, (double) spawnCoords.z + 0.5, 0.0f, 0.0f);
@@ -900,7 +900,7 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
         this.player.keypressManager = new MovementManager(this.options);
         this.player.id = entID;
         this.player.method_494();
-        this.player.setRotation(this.level.getSpawnYaw(), 0.0f);
+        this.player.setRotation(((ExLevel) this.level).getSpawnYaw(), 0.0f);
         this.interactionManager.method_1718(this.player);
         this.method_2130("Respawning");
         if (this.currentScreen instanceof DeathScreen) {
@@ -908,6 +908,7 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
         }
     }
 
+    @Override
     public long getAvgFrameTime() {
         if (this.tFrameTimes[this.nextFrameTime] != 0L) {
             return (this.prevFrameTimeForAvg - this.tFrameTimes[this.nextFrameTime]) / 60L;
@@ -924,6 +925,46 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
 
     @Override
     public boolean isCameraActive() {
-        return cameraActive;
+        return this.cameraActive;
+    }
+
+    @Override
+    public CutsceneCamera getCutsceneCamera() {
+        return this.cutsceneCamera;
+    }
+
+    @Override
+    public CutsceneCamera getActiveCutsceneCamera() {
+        return this.activeCutsceneCamera;
+    }
+
+    @Override
+    public LivingEntity getCutsceneCameraEntity() {
+        return this.cutsceneCameraEntity;
+    }
+
+    @Override
+    public void setActiveCutsceneCamera(CutsceneCamera cutsceneCamera) {
+        this.activeCutsceneCamera = cutsceneCamera;
+    }
+
+    @Override
+    public void setCameraActive(boolean cameraActive) {
+        this.cameraActive = cameraActive;
+    }
+
+    @Override
+    public boolean isCameraPause() {
+        return this.cameraPause;
+    }
+
+    @Override
+    public void setCameraPause(boolean cameraPause) {
+        this.cameraPause = cameraPause;
+    }
+
+    @Override
+    public MapList getMapList() {
+        return this.mapList;
     }
 }

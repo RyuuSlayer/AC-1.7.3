@@ -13,8 +13,11 @@ public class Main implements ModInitializer {
     public static long[] updateTimes;
     public static long updateRendererTime;
 
+    public static boolean chunkIsNotPopulating;
+
     static {
         updateTimes = new long[512];
+        chunkIsNotPopulating = true;
     }
 
     private static WritableConfig config;

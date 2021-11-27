@@ -1,5 +1,7 @@
 package io.github.ryuu.adventurecraft.util;
 
+import io.github.ryuu.adventurecraft.extensions.entity.ExEntity;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -23,13 +25,13 @@ public class UtilBullet {
             AccessMinecraft.getInstance().worldRenderer.addParticle("smoke", hitLoc.x, hitLoc.y, hitLoc.z, 0.0, 0.0, 0.0);
             if (hit.type == HitType.ENTITY) {
                 Entity attacking = hit.field_1989;
-                attacking.attackEntityFromMulti(e, damage);
+                ((ExEntity)attacking).attackEntityFromMulti(e, damage);
             }
         }
     }
 
-    public static HitResult rayTraceBlocks(Level worldObj, Vec3f start, Vec3f end) {
-        return worldObj.rayTraceBlocks2(start, end, false, false, false);
+    public static HitResult rayTraceBlocks(Level world, Vec3f start, Vec3f end) {
+        return ((ExLevel)world).rayTraceBlocks2(start, end, false, false, false);
     }
 
     static HitResult findHit(Level worldObj, LivingEntity e, float spread) {

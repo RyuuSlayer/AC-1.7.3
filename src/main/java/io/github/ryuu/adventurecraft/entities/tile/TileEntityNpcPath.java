@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
 import io.github.ryuu.adventurecraft.entities.EntityNPC;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.util.TriggerArea;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.io.CompoundTag;
@@ -25,10 +26,12 @@ public class TileEntityNpcPath extends TileEntityMinMax {
 
     public EntityNPC getNPC() {
         if (this.npc == null || this.npc.id != this.entityID) {
-            Entity e;
-            if (this.level != null && (e = this.level.getEntityByID(this.entityID)) instanceof EntityNPC) {
-                this.npc = (EntityNPC) e;
-                return this.npc;
+            if(this.level != null) {
+                Entity e = ((ExLevel)this.level).getEntityByID(this.entityID);
+                if (e instanceof EntityNPC) {
+                    this.npc = (EntityNPC) e;
+                    return this.npc;
+                }
             }
         } else {
             return this.npc;

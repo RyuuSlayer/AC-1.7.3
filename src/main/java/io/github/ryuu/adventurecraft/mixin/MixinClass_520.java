@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin;
 
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.class_520;
@@ -50,7 +51,7 @@ public class MixinClass_520 extends ClientInteractionManager {
     @Override
     @Overwrite()
     public boolean method_1716(int i, int j, int k, int side) {
-        this.minecraft.level.undoStack.startRecording();
+        ((ExLevel)this.minecraft.level).getUndoStack().startRecording();
         boolean flag = false;
         for (int x = -this.destroyExtraWidth; x <= this.destroyExtraWidth; ++x) {
             for (int y = -this.destroyExtraWidth; y <= this.destroyExtraWidth; ++y) {
@@ -80,7 +81,7 @@ public class MixinClass_520 extends ClientInteractionManager {
                 }
             }
         }
-        this.minecraft.level.undoStack.stopRecording();
+        ((ExLevel)this.minecraft.level).getUndoStack().stopRecording();
         return flag;
     }
 

@@ -2,6 +2,9 @@ package io.github.ryuu.adventurecraft.scripting;
 
 import io.github.ryuu.adventurecraft.entities.EntityLivingScript;
 import io.github.ryuu.adventurecraft.entities.EntityNPC;
+import io.github.ryuu.adventurecraft.extensions.entity.ExEntity;
+import io.github.ryuu.adventurecraft.extensions.entity.ExEntityRegistry;
+import io.github.ryuu.adventurecraft.extensions.entity.ExLivingEntity;
 import io.github.ryuu.adventurecraft.util.UtilBullet;
 import net.minecraft.entity.*;
 import net.minecraft.entity.animal.Wolf;
@@ -152,7 +155,7 @@ public class ScriptEntity {
     public ScriptEntity[] getEntitiesWithinRange(double dist) {
         Box bb = Box.getOrCreate(this.entity.x - dist, this.entity.y - dist, this.entity.z - dist, this.entity.x + dist, this.entity.y + dist, this.entity.z + dist);
         List entities = this.entity.level.getEntities(this.entity, bb);
-        ArrayList scriptEntities = new ArrayList();
+        ArrayList<ScriptEntity> scriptEntities = new ArrayList<>();
         double sqDist = dist * dist;
         for (Object ent : entities) {
             Entity e = (Entity) ent;
@@ -220,11 +223,11 @@ public class ScriptEntity {
     }
 
     public int getStunned() {
-        return this.entity.stunned;
+        return ((ExLivingEntity)this.entity).getStunned();
     }
 
     public void setStunned(int i) {
-        this.entity.stunned = i;
+        ((ExLivingEntity)this.entity).setStunned(i);
     }
 
     public boolean attackEntityFrom(ScriptEntity e, int i) {
@@ -235,15 +238,15 @@ public class ScriptEntity {
         if (this.entity instanceof Player) {
             return "Player";
         }
-        return EntityRegistry.getEntityStringClimbing(this.entity);
+        return ExEntityRegistry.getEntityStringClimbing(this.entity);
     }
 
     public boolean getCollidesWithClipBlocks() {
-        return this.entity.collidesWithClipBlocks;
+        return ((ExLivingEntity)this.entity).getCollidesWithClipBlocks();
     }
 
     public void setCollidesWithClipBlocks(boolean b) {
-        this.entity.collidesWithClipBlocks = b;
+        ((ExLivingEntity)this.entity).setCollidesWithClipBlocks(b);
     }
 
     public float getHeight() {
@@ -265,11 +268,11 @@ public class ScriptEntity {
     }
 
     public boolean getIsFlying() {
-        return this.entity.isFlying;
+        return ((ExEntity)this.entity).isFlying();
     }
 
     public void setIsFlying(boolean b) {
-        this.entity.isFlying = b;
+        ((ExEntity)this.entity).setFlying(b);
     }
 
     public boolean getOnGround() {

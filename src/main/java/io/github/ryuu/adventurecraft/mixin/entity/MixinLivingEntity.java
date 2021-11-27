@@ -33,9 +33,6 @@ public abstract class MixinLivingEntity extends MixinEntity implements AccessLiv
     protected String texture;
 
     @Shadow
-    public float handSwingProgress;
-
-    @Shadow
     public int health;
 
     @Shadow
@@ -49,9 +46,6 @@ public abstract class MixinLivingEntity extends MixinEntity implements AccessLiv
 
     @Shadow
     public float field_1040;
-
-    @Shadow
-    public int deathTime;
 
     @Shadow
     public float field_1044;
@@ -76,12 +70,6 @@ public abstract class MixinLivingEntity extends MixinEntity implements AccessLiv
 
     @Shadow
     private Entity field_1061;
-
-    @Shadow
-    protected float field_1021;
-
-    @Shadow
-    protected String field_1022;
 
     @Shadow
     protected int despawnCounter;
@@ -154,6 +142,9 @@ public abstract class MixinLivingEntity extends MixinEntity implements AccessLiv
 
     @Shadow
     public abstract float method_930(float f);
+
+    @Shadow
+    public abstract void tick();
 
     /**
      * @author Ryuu, TechPizza, Phil
@@ -328,7 +319,7 @@ public abstract class MixinLivingEntity extends MixinEntity implements AccessLiv
     protected void handleFallDamage(float f) {
         float pre = Math.max(f - 0.8f, 0.0f) / 0.08f;
         int i = (int) Math.ceil(Math.pow(pre, 1.5));
-        if (!this.handleFlying() && i > 0) {
+        if (!this.isFlying() && i > 0) {
             this.damage(null, i);
             int j = this.level.getTileId(MathsHelper.floor(this.x), MathsHelper.floor(this.y - (double) 0.2f - (double) this.standingEyeHeight), MathsHelper.floor(this.z));
             if (j > 0) {
@@ -343,7 +334,7 @@ public abstract class MixinLivingEntity extends MixinEntity implements AccessLiv
      */
     @Overwrite
     public void travel(float f, float f1) {
-        if (this.handleFlying()) {
+        if (this.isFlying()) {
             double l = Math.sqrt(f * f + f1 * f1);
             double ySpeed = (double) (-0.1f * f1) * Math.sin(this.pitch * 3.141593f / 180.0f);
             if (l < 1.0) {
@@ -659,6 +650,26 @@ public abstract class MixinLivingEntity extends MixinEntity implements AccessLiv
     @Override
     public void applyDamage(int damage) {
         shadow$applyDamage(damage);
+    }
+
+    @Override
+    public float getFov() {
+        return this.fov;
+    }
+
+    @Override
+    public float getExtraFov() {
+        return this.extraFov;
+    }
+
+    @Override
+    public int getStunned() {
+        return this.stunned;
+    }
+
+    @Override
+    public void setStunned(int stunned) {
+        this.stunned = stunned;
     }
 
     @Override
