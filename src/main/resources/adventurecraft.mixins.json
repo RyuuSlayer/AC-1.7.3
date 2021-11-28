@@ -6,7 +6,12 @@
     "client.AccessMinecraft",
     "client.gui.AccessScreen",
     "client.gui.screen.AccessSelectWorldScreen",
-    "client.gui.screen.MixinSelectWorldScreen$class_569"
+    "client.gui.screen.MixinSelectWorldScreen$class_569",
+    "entity.AccessLivingEntity",
+    "tile.AccessFlowingFluidTile",
+    "tile.AccessGrassTile",
+    "tile.AccessStillFluidTile",
+    "tile.GrassTile"
   ],
   "client": [
     "MixinClass_108",

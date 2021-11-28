@@ -1,6 +1,8 @@
 package io.github.ryuu.adventurecraft.mixin.tile;
 
 import io.github.ryuu.adventurecraft.blocks.BlockColor;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
+import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import io.github.ryuu.adventurecraft.items.ItemSubtypes;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.*;
@@ -11,164 +13,133 @@ import net.minecraft.tile.*;
 import net.minecraft.tile.entity.Sign;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.Vec3f;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
-
-import java.util.ArrayList;
+import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Tile.class)
-public class MixinTile {
+public abstract class MixinTile implements ExTile {
 
-    public static final TileSounds STONE_SOUNDS;
-    public static final TileSounds WOOD_SOUNDS;
-    public static final TileSounds GRAVEL_SOUNDS;
-    public static final TileSounds GRASS_SOUNDS;
-    public static final TileSounds PISTON_SOUNDS;
-    public static final TileSounds METAL_SOUNDS;
-    public static final TileSounds GLASS_SOUNDS;
-    public static final TileSounds WOOL_SOUNDS;
-    public static final TileSounds SAND_SOUNDS;
-    public static final Tile[] BY_ID;
-    public static final boolean[] TICKS_RANDOMLY;
-    public static final boolean[] FULL_OPAQUE;
-    public static final boolean[] HAS_TILE_ENTITY;
-    public static final int[] field_1941;
-    public static final int[] subTypes;
-    public static final boolean[] IS_AIR;
-    public static final int[] LUMINANCES;
-    public static final boolean[] MULTIPLE_STATES;
-    public static final Tile STONE;
-    public static final GrassTile GRASS;
-    public static final Tile DIRT;
-    public static final Tile COBBLESTONE;
-    public static final Tile WOOD;
-    public static final Tile SAPLING;
-    public static final Tile BEDROCK;
-    public static final Tile FLOWING_WATER;
-    public static final Tile STILL_WATER;
-    public static final Tile FLOWING_LAVA;
-    public static final Tile STILL_LAVA;
-    public static final Tile SAND;
-    public static final Tile GRAVEL;
-    public static final Tile GOLD_ORE;
-    public static final Tile IRON_ORE;
-    public static final Tile COAL_ORE;
-    public static final Tile LOG;
-    public static final LeavesTile LEAVES;
-    public static final Tile SPONGE;
-    public static final Tile GLASS;
-    public static final Tile LAPIS_LAZULI_ORE;
-    public static final Tile LAPIS_LAZULI_BLOCK;
-    public static final Tile DISPENSER;
-    public static final Tile SANDSTONE;
-    public static final Tile NOTEBLOCK;
-    public static final Tile BED;
-    public static final Tile GOLDEN_RAIL;
-    public static final Tile DETECTOR_RAIL;
-    public static final Tile STICKY_PISTON;
-    public static final Tile WEB;
-    public static final TallGrassTile TALLGRASS;
-    public static final DeadBushTile DEADBUSH;
-    public static final Tile PISTON;
-    public static final PistonHead PISTON_HEAD;
-    public static final Tile WOOL;
-    public static final MovingPistonTile MOVING_PISTON;
-    public static final PlantTile DANDELION;
-    public static final PlantTile ROSE;
-    public static final PlantTile BROWN_MUSHROOM;
-    public static final PlantTile RED_MUSHROOM;
-    public static final Tile BLOCK_GOLD;
-    public static final Tile BLOCK_IRON;
-    public static final Tile DOUBLE_STONE_SLAB;
-    public static final Tile STONE_SLAB;
-    public static final Tile BRICK;
-    public static final Tile TNT;
-    public static final Tile BOOKSHELF;
-    public static final Tile MOSSY_COBBLESTONE;
-    public static final Tile OBSIDIAN;
-    public static final Tile TORCH;
-    public static final FireTile FIRE;
-    public static final Tile MOB_SPAWNER;
-    public static final Tile STAIRS_WOOD;
-    public static final Tile CHEST;
-    public static final Tile REDSTONE_DUST;
-    public static final Tile DIAMOND_ORE;
-    public static final Tile BLOCK_DIAMOND;
-    public static final Tile WORKBENCH;
-    public static final Tile CROPS;
-    public static final Tile FARMLAND;
-    public static final Tile FURNACE;
-    public static final Tile FURNACE_LIT;
-    public static final Tile STANDING_SIGN;
-    public static final Tile DOOR_WOOD;
-    public static final Tile LADDER;
-    public static final Tile RAIL;
-    public static final Tile STAIRS_STONE;
-    public static final Tile WALL_SIGN;
-    public static final Tile LEVER;
-    public static final Tile WOODEN_PRESSURE_PLATE;
-    public static final Tile DOOR_IRON;
-    public static final Tile STONE_PRESSURE_PLATE;
-    public static final Tile REDSTONE_ORE;
-    public static final Tile REDSTONE_ORE_LIT;
-    public static final Tile REDSTONE_TORCH;
-    public static final Tile REDSTONE_TORCH_LIT;
-    public static final Tile BUTTON;
-    public static final Tile SNOW;
-    public static final Tile ICE;
-    public static final Tile SNOW_BLOCK;
-    public static final Tile CACTUS;
-    public static final Tile CLAY;
-    public static final Tile REEDS;
-    public static final Tile JUKEBOX;
-    public static final Tile FENCE;
-    public static final Tile PUMPKIN;
-    public static final Tile NETHERRACK;
-    public static final Tile SOUL_SAND;
-    public static final Tile GLOWSTONE;
-    public static final PortalTile PORTAL;
-    public static final Tile LIT_PUMPKIN;
-    public static final Tile CAKE;
-    public static final Tile REDSTONE_REPEATER;
-    public static final Tile REDSTONE_REPEATER_LIT;
-    public static final Tile LOCKED_CHEST;
-    public static final Tile TRAPDOOR;
-    @Shadow()
-    public static boolean resetActive;
+    @Mutable
+    @Shadow @Final public static Tile STONE;
+
+    @Shadow protected abstract Tile hardness(float f);
+
+    @Shadow protected abstract Tile setUnbreakable();
+
+    @Shadow protected abstract Tile blastResistance(float f);
+
+    @Shadow @Final public static TileSounds PISTON_SOUNDS;
+
+    @Mutable
+    @Shadow @Final public static GrassTile GRASS;
+
+    @Shadow @Final public static TileSounds GRASS_SOUNDS;
+
+    @Final
+    @Shadow
+    public int id;
+
+    @Final
+    @Shadow
+    public Material material;
+
+    @Shadow
+    public int tex;
+
+    @Shadow
+    public double minX;
+
+    @Shadow
+    public double minY;
+
+    @Shadow
+    public double minZ;
+
+    @Shadow
+    public double maxX;
+
+    @Shadow
+    public double maxY;
+
+    @Shadow
+    public double maxZ;
+
+    @Shadow
+    public TileSounds sounds;
+
+    @Shadow
+    public float field_1927;
+
+    @Shadow
+    public float field_1901;
+
+    @Shadow
+    protected float hardness;
+
+    @Shadow
+    protected float resistance;
+
+    @Shadow
+    protected boolean field_1918;
+
+    @Shadow
+    protected boolean opaque;
+
+    @Shadow
+    private String name;
+
+    @Shadow @Final public static Tile[] BY_ID;
+
+    @Shadow protected abstract void afterTileItemCreated();
+
+    @Shadow protected abstract Tile sounds(TileSounds arg);
+
+    @Mutable
+    @Shadow @Final public static Tile COBBLESTONE;
+
+    @Shadow protected abstract Tile method_1590(int i);
+
+    @Shadow protected abstract Tile nonOpaque();
+
+    @Shadow protected abstract Tile multipleStates();
+
+    @Mutable
+    @Shadow @Final public static Tile FLOWING_WATER;
+
+    @Mutable
+    @Shadow @Final public static Tile STILL_WATER;
+
+    @Mutable
+    @Shadow @Final public static Tile FLOWING_LAVA;
+
+    @Shadow protected abstract Tile luminance(float f);
+
+    @Mutable
+    @Shadow @Final public static Tile STILL_LAVA;
+    private static final int[] subTypes;
+    public int textureNum = 0;
 
     static {
-        TICKS_RANDOMLY = new boolean[256];
-        FULL_OPAQUE = new boolean[256];
-        HAS_TILE_ENTITY = new boolean[256];
-        field_1941 = new int[256];
         subTypes = new int[256];
-        LUMINANCES = new int[256];
-        MULTIPLE_STATES = new boolean[256];
-        STONE_SOUNDS = new TileSounds("stone", 1.0f, 1.0f);
-        WOOD_SOUNDS = new TileSounds("wood", 1.0f, 1.0f);
-        GRAVEL_SOUNDS = new TileSounds("gravel", 1.0f, 1.0f);
-        GRASS_SOUNDS = new TileSounds("grass", 1.0f, 1.0f);
-        PISTON_SOUNDS = new TileSounds("stone", 1.0f, 1.0f);
-        METAL_SOUNDS = new TileSounds("stone", 1.0f, 1.5f);
-        GLASS_SOUNDS = new GlassTileSounds("stone", 1.0f, 1.0f);
-        WOOL_SOUNDS = new TileSounds("cloth", 1.0f, 1.0f);
-        SAND_SOUNDS = new SandTileSounds("sand", 1.0f, 1.0f);
-        BY_ID = new Tile[256];
-        IS_AIR = new boolean[256];
-        STONE = new StoneTile(1, 215).hardness(1.5f).blastResistance(10.0f).sounds(PISTON_SOUNDS).name("stone");
-        GRASS = (GrassTile) new GrassTile(2).hardness(0.6f).sounds(GRASS_SOUNDS).name("grass").setSubTypes(5);
-        DIRT = new DirtTile(3, 2).hardness(0.5f).sounds(GRAVEL_SOUNDS).name("dirt");
-        COBBLESTONE = new BlockColor(4, 214, Material.STONE).hardness(2.0f).blastResistance(10.0f).sounds(PISTON_SOUNDS).name("stonebrick");
-        WOOD = new Tile(5, 4, Material.WOOD).hardness(2.0f).blastResistance(5.0f).sounds(WOOD_SOUNDS).name("wood").multipleStates();
-        SAPLING = new SaplingTile(6, 15).hardness(0.0f).sounds(GRASS_SOUNDS).name("sapling").multipleStates();
-        BEDROCK = new Tile(7, 17, Material.STONE).setUnbreakable().blastResistance(6000000.0f).sounds(PISTON_SOUNDS).name("bedrock").nonOpaque();
-        FLOWING_WATER = new FlowingFluidTile(8, Material.WATER).hardness(0.5f).method_1590(3).name("water").nonOpaque().multipleStates();
-        STILL_WATER = new StillFluidTile(9, Material.WATER).hardness(0.5f).method_1590(3).name("water").nonOpaque().multipleStates();
-        FLOWING_LAVA = new FlowingFluidTile(10, Material.LAVA).hardness(0.5f).luminance(1.0f).method_1590(255).name("lava").nonOpaque().multipleStates();
-        STILL_LAVA = new StillFluidTile(11, Material.LAVA).hardness(0.5f).luminance(1.0f).method_1590(255).name("lava").nonOpaque().multipleStates();
+        BY_ID[1] = null;
+        STONE = ((MixinTile) (Object) ((MixinTile) (Object) ((MixinTile) (Object) new StoneTile(1, 1)).hardness(1.5f)).blastResistance(10.0f)).sounds(PISTON_SOUNDS).name("stone");
+        BY_ID[2] = null;
+        GRASS = (GrassTile) ((ExTile) ((MixinTile) (Object) ((MixinTile) (Object) AccessGrassTile.newGrassTile(2)).hardness(0.6f)).sounds(GRASS_SOUNDS).name("grass")).adventurecraft$setSubTypes(5);
+        BY_ID[4] = null;
+        COBBLESTONE = ((MixinTile) (Object) ((MixinTile) (Object) ((MixinTile) (Object) new BlockColor(4, 214, Material.STONE)).hardness(2.0f)).blastResistance(10.0f)).sounds(PISTON_SOUNDS).name("stonebrick");
+        BY_ID[8] = null;
+        FLOWING_WATER = ((MixinTile) (Object) ((MixinTile) (Object) ((MixinTile) (Object) ((MixinTile) (Object) AccessFlowingFluidTile.newFlowingFluidTile(8, Material.WATER)).hardness(0.5f)).method_1590(3).name("water")).nonOpaque()).multipleStates();
+        BY_ID[9] = null;
+        STILL_WATER = ((MixinTile) (Object) ((MixinTile) (Object) ((MixinTile) (Object) ((MixinTile) (Object) AccessStillFluidTile.newStillFluidTile(9, Material.WATER)).hardness(0.5f)).method_1590(3).name("water")).nonOpaque()).multipleStates();
+        BY_ID[10] = null;
+        FLOWING_LAVA = ((MixinTile) (Object) ((MixinTile) (Object) ((MixinTile) (Object) ((MixinTile) (Object) ((MixinTile) (Object) AccessFlowingFluidTile.newFlowingFluidTile(10, Material.LAVA)).hardness(0.5f)).luminance(1.0f)).method_1590(255).name("lava")).nonOpaque()).multipleStates();
+        BY_ID[11] = null;
+        STILL_LAVA = ((MixinTile) (Object) ((MixinTile) (Object) ((MixinTile) (Object) ((MixinTile) (Object) ((MixinTile) (Object) AccessStillFluidTile.newStillFluidTile(11, Material.LAVA)).hardness(0.5f)).luminance(1.0f)).method_1590(255).name("lava")).nonOpaque()).multipleStates();
+
         SAND = new SandTile(12, 18).hardness(0.5f).sounds(SAND_SOUNDS).name("sand").setSubTypes(4);
         GRAVEL = new GravelTile(13, 19).hardness(0.6f).sounds(GRAVEL_SOUNDS).name("gravel");
         GOLD_ORE = new OreTile(14, 32).hardness(3.0f).blastResistance(5.0f).sounds(PISTON_SOUNDS).name("oreGold");
@@ -267,506 +238,57 @@ public class MixinTile {
         for (int i = 0; i < 256; ++i) {
             if (BY_ID[i] == null || ItemType.byId[i] != null) continue;
             ItemType.byId[i] = new PlaceableTileItem(i - 256);
-            BY_ID[i].afterTileItemCreated();
+            ((MixinTile) (Object) BY_ID[i]).afterTileItemCreated();
         }
         Tile.IS_AIR[0] = true;
         Stats.method_753();
     }
 
-    public final int id;
-    public final Material material;
-    public int tex;
-    public double minX;
-    public double minY;
-    public double minZ;
-    public double maxX;
-    public double maxY;
-    public double maxZ;
-    public TileSounds sounds = STONE_SOUNDS;
-    public float field_1927 = 1.0f;
-    public float field_1901 = 0.6f;
-    public int textureNum = 0;
-    protected float hardness;
-    protected float resistance;
-    protected boolean field_1918 = true;
-    protected boolean opaque = true;
-    private String name;
 
-    protected MixinTile(int id, Material material) {
-        if (BY_ID[id] != null) {
-            throw new IllegalArgumentException("Slot " + id + " is already occupied by " + BY_ID[id] + " when adding " + this);
-        }
-        this.material = material;
-        Tile.BY_ID[id] = this;
-        this.id = id;
-        this.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
-        Tile.FULL_OPAQUE[id] = this.isFullOpaque();
-        Tile.field_1941[id] = this.isFullOpaque() ? 255 : 0;
-        Tile.IS_AIR[id] = !material.method_906();
-        Tile.HAS_TILE_ENTITY[id] = false;
+
+    // TODO Remove all uses of resetArea because it's unnecessary
+
+
+    @Inject(method = "onTileRemoved", at = @At("HEAD"))
+    private void onTileRemoved(Level level, int x, int y, int z, CallbackInfo ci) {
+        ((ExLevel) level).getTriggerManager().removeArea(x, y, z);
     }
 
-    protected MixinTile(int id, int tex, Material material) {
-        this(id, material);
-        this.tex = tex;
+
+    @Redirect(method = "beforeDestroyedByExplosion", at = @At(value = "FIELD", target = "Lnet/minecraft/level/Level;isClient:Z"))
+    private boolean beforeDestroyedByExplosion(Level level) {
+        return false;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public static void resetArea(Level world, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
-        boolean oldResetActive = resetActive;
-        resetActive = true;
-        for (int x = minX; x <= maxX; ++x) {
-            for (int y = minY; y <= maxY; ++y) {
-                for (int z = minZ; z <= maxZ; ++z) {
-                    int blockID = world.getTileId(x, y, z);
-                    if (blockID == 0) continue;
-                    BY_ID[blockID].reset(world, x, y, z, false);
-                }
-            }
-        }
-        resetActive = oldResetActive;
+    @Redirect(method = "dropItem", at = @At(value = "FIELD", target = "Lnet/minecraft/level/Level;isClient:Z"))
+    private boolean dropItem(Level level) {
+        return false;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    static Class _mthclass$(String s) {
-        try {
-            return Class.forName(s);
-        } catch (ClassNotFoundException classnotfoundexception) {
-            throw new NoClassDefFoundError(classnotfoundexception.getMessage());
-        }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    protected Tile sounds(TileSounds sounds) {
-        this.sounds = sounds;
-        return this;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    protected Tile method_1590(int i) {
-        Tile.field_1941[this.id] = i;
-        return this;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    protected Tile setSubTypes(int i) {
-        Tile.subTypes[this.id] = i;
-        return this;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    protected Tile luminance(float luminance) {
-        Tile.LUMINANCES[this.id] = (int) (15.0f * luminance);
-        return this;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    protected Tile blastResistance(float resistance) {
-        this.resistance = resistance * 3.0f;
-        return this;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean shouldRender(TileView blockAccess, int i, int j, int k) {
-        return true;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    protected Tile hardness(float hardness) {
-        this.hardness = hardness;
-        if (this.resistance < hardness * 5.0f) {
-            this.resistance = hardness * 5.0f;
-        }
-        return this;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    protected Tile setTicksRandomly(boolean ticksRandomly) {
-        Tile.TICKS_RANDOMLY[this.id] = ticksRandomly;
-        return this;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void setBoundingBox(float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
-        this.minX = minX;
-        this.minY = minY;
-        this.minZ = minZ;
-        this.maxX = maxX;
-        this.maxY = maxY;
-        this.maxZ = maxZ;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public float method_1604(TileView iblockaccess, int i, int j, int k) {
-        return iblockaccess.method_1784(i, j, k, this.getBlockLightValue(iblockaccess, i, j, k));
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public int getBlockLightValue(TileView iblockaccess, int i, int j, int k) {
-        return LUMINANCES[this.id];
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean method_1618(TileView iblockaccess, int i, int j, int k, int l) {
-        if (l == 0 && this.minY > 0.0) {
-            return true;
-        }
-        if (l == 1 && this.maxY < 1.0) {
-            return true;
-        }
-        if (l == 2 && this.minZ > 0.0) {
-            return true;
-        }
-        if (l == 3 && this.maxZ < 1.0) {
-            return true;
-        }
-        if (l == 4 && this.minX > 0.0) {
-            return true;
-        }
-        if (l == 5 && this.maxX < 1.0) {
-            return true;
-        }
-        return !iblockaccess.isFullOpaque(i, j, k);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean method_1573(TileView iblockaccess, int i, int j, int k, int l) {
-        return iblockaccess.getMaterial(i, j, k).isSolid();
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public int method_1626(TileView iblockaccess, int i, int j, int k, int l) {
-        return this.getTextureForSide(l, iblockaccess.getTileMeta(i, j, k));
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public int getTextureForSide(int side, int meta) {
-        return this.getTextureForSide(side);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public Box getOutlineShape(Level level, int x, int y, int z) {
-        return Box.getOrCreate((double) x + this.minX, (double) y + this.minY, (double) z + this.minZ, (double) x + this.maxX, (double) y + this.maxY, (double) z + this.maxZ);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void intersectsInLevel(Level world, int i, int j, int k, Box axisalignedbb, ArrayList intersections) {
-        Box axisalignedbb1 = this.getCollisionShape(world, i, j, k);
-        if (axisalignedbb1 != null && axisalignedbb.intersects(axisalignedbb1)) {
-            intersections.add(axisalignedbb1);
-        }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public Box getCollisionShape(Level level, int x, int y, int z) {
-        return Box.getOrCreate((double) x + this.minX, (double) y + this.minY, (double) z + this.minZ, (double) x + this.maxX, (double) y + this.maxY, (double) z + this.maxZ);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void onTileRemoved(Level level, int x, int y, int z) {
-        level.triggerManager.removeArea(x, y, z);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public float method_1582(Player entityplayer) {
-        if (this.hardness < 0.0f) {
-            return 0.0f;
-        }
-        if (!entityplayer.method_514(this)) {
-            return 1.0f / this.hardness / 100.0f;
-        }
-        return entityplayer.method_511(this) / this.hardness / 30.0f;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void drop(Level level, int x, int y, int z, int meta) {
-        this.beforeDestroyedByExplosion(level, x, y, z, meta, 1.0f);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void beforeDestroyedByExplosion(Level level, int x, int y, int z, int meta, float dropChance) {
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    protected void dropItem(Level level, int x, int y, int z, ItemInstance itemstack) {
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public HitResult raycast(Level world, int x, int y, int z, Vec3f vec3d, Vec3f vec3d1) {
-        this.method_1616(world, x, y, z);
-        vec3d = vec3d.method_1301(-x, -y, -z);
-        vec3d1 = vec3d1.method_1301(-x, -y, -z);
-        Vec3f vec3d2 = vec3d.method_1295(vec3d1, this.minX);
-        Vec3f vec3d3 = vec3d.method_1295(vec3d1, this.maxX);
-        Vec3f vec3d4 = vec3d.method_1299(vec3d1, this.minY);
-        Vec3f vec3d5 = vec3d.method_1299(vec3d1, this.maxY);
-        Vec3f vec3d6 = vec3d.method_1302(vec3d1, this.minZ);
-        Vec3f vec3d7 = vec3d.method_1302(vec3d1, this.maxZ);
-        if (!this.method_1579(vec3d2)) {
-            vec3d2 = null;
-        }
-        if (!this.method_1579(vec3d3)) {
-            vec3d3 = null;
-        }
-        if (!this.method_1586(vec3d4)) {
-            vec3d4 = null;
-        }
-        if (!this.method_1586(vec3d5)) {
-            vec3d5 = null;
-        }
-        if (!this.method_1588(vec3d6)) {
-            vec3d6 = null;
-        }
-        if (!this.method_1588(vec3d7)) {
-            vec3d7 = null;
-        }
-        Vec3f vec3d8 = null;
-        if (vec3d2 != null && (vec3d8 == null || vec3d.method_1294(vec3d2) < vec3d.method_1294(vec3d8))) {
-            vec3d8 = vec3d2;
-        }
-        if (vec3d3 != null && (vec3d8 == null || vec3d.method_1294(vec3d3) < vec3d.method_1294(vec3d8))) {
-            vec3d8 = vec3d3;
-        }
-        if (vec3d4 != null && (vec3d8 == null || vec3d.method_1294(vec3d4) < vec3d.method_1294(vec3d8))) {
-            vec3d8 = vec3d4;
-        }
-        if (vec3d5 != null && (vec3d8 == null || vec3d.method_1294(vec3d5) < vec3d.method_1294(vec3d8))) {
-            vec3d8 = vec3d5;
-        }
-        if (vec3d6 != null && (vec3d8 == null || vec3d.method_1294(vec3d6) < vec3d.method_1294(vec3d8))) {
-            vec3d8 = vec3d6;
-        }
-        if (vec3d7 != null && (vec3d8 == null || vec3d.method_1294(vec3d7) < vec3d.method_1294(vec3d8))) {
-            vec3d8 = vec3d7;
-        }
-        if (vec3d8 == null) {
-            return null;
-        }
-        int byte0 = -1;
-        if (vec3d8 == vec3d2) {
-            byte0 = 4;
-        }
-        if (vec3d8 == vec3d3) {
-            byte0 = 5;
-        }
-        if (vec3d8 == vec3d4) {
-            byte0 = 0;
-        }
-        if (vec3d8 == vec3d5) {
-            byte0 = 1;
-        }
-        if (vec3d8 == vec3d6) {
-            byte0 = 2;
-        }
-        if (vec3d8 == vec3d7) {
-            byte0 = 3;
-        }
-        return new HitResult(x, y, z, byte0, vec3d8.method_1301(x, y, z));
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    protected boolean method_1579(Vec3f vec3d) {
-        if (vec3d == null) {
-            return false;
-        }
-        return vec3d.y >= this.minY && vec3d.y <= this.maxY && vec3d.z >= this.minZ && vec3d.z <= this.maxZ;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    protected boolean method_1586(Vec3f vec3d) {
-        if (vec3d == null) {
-            return false;
-        }
-        return vec3d.x >= this.minX && vec3d.x <= this.maxX && vec3d.z >= this.minZ && vec3d.z <= this.maxZ;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    protected boolean method_1588(Vec3f vec3d) {
-        if (vec3d == null) {
-            return false;
-        }
-        return vec3d.x >= this.minX && vec3d.x <= this.maxX && vec3d.y >= this.minY && vec3d.y <= this.maxY;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean canPlaceAt(Level level, int x, int y, int z, int meta) {
-        return this.canPlaceAt(level, x, y, z);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public boolean canPlaceAt(Level level, int x, int y, int z) {
-        int l = level.getTileId(x, y, z);
-        return l == 0 || Tile.BY_ID[l].material.isReplaceable();
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void afterBreak(Level world, Player entityplayer, int i, int j, int k, int l) {
-        entityplayer.increaseStat(Stats.mineBlock[this.id], 1);
-        this.drop(world, i, j, k, l);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public Tile name(String s) {
-        this.name = "tile." + s;
-        return this;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void addTriggerActivation(Level world, int i, int j, int k) {
-        if (this.canBeTriggered()) {
-            int metadata = Math.min(world.getTileMeta(i, j, k) + 1, 15);
-            world.method_223(i, j, k, metadata);
-            if (metadata == 1) {
-                this.onTriggerActivated(world, i, j, k);
-            }
-        }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void removeTriggerActivation(Level world, int i, int j, int k) {
-        if (this.canBeTriggered()) {
-            int metadata = world.getTileMeta(i, j, k) - 1;
-            world.method_223(i, j, k, Math.max(metadata, 0));
-            if (metadata == 0) {
-                this.onTriggerDeactivated(world, i, j, k);
-            }
-        }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void reset(Level world, int i, int j, int k, boolean death) {
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public int alwaysUseClick(Level world, int i, int j, int k) {
+    @Override
+    public int adventurecraft$alwaysUseClick(Level world, int i, int j, int k) {
         return -1;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public int getTextureNum() {
+    @Override
+    public int adventurecraft$getTextureNum() {
         return this.textureNum;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public Tile setTextureNum(int t) {
+    @Override
+    public Tile adventurecraft$setTextureNum(int t) {
         this.textureNum = t;
-        return this;
+        return ((Tile) (Object) this);
+    }
+
+    @Override
+    public boolean adventurecraft$shouldRender(TileView blockAccess, int i, int j, int k) {
+        return true;
+    }
+
+    @Override
+    public Tile adventurecraft$setSubTypes(int i) {
+        subTypes[this.id] = i;
+        return ((Tile) (Object) this);
     }
 }

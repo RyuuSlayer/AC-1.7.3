@@ -5,13 +5,13 @@ import net.minecraft.level.TileView;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 
-class BlockColor extends Tile implements IBlockColor {
+public class BlockColor extends Tile implements IBlockColor {
 
     static final int numColors = 7;
 
     protected int defaultColor = 0xCCCCCC;
 
-    protected BlockColor(int id, int tex, Material material) {
+    public BlockColor(int id, int tex, Material material) {
         super(id, tex, material);
     }
 
