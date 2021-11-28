@@ -1,32 +1,27 @@
 package io.github.ryuu.adventurecraft.mixin;
 
+import io.github.ryuu.adventurecraft.extensions.ExClass_552;
 import net.minecraft.class_290;
 import net.minecraft.class_552;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.util.maths.Vec3f;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(class_552.class)
-public class MixinClass_552 {
+public class MixinClass_552 implements ExClass_552 {
 
-    private final boolean field_2520 = false;
-    @Shadow()
+    @Shadow
+    private boolean field_2520;
+
+    @Shadow
     public class_290[] field_2518;
-    public int field_2519 = 0;
 
-    public MixinClass_552(class_290[] apositiontexturevertex) {
-        this.field_2518 = apositiontexturevertex;
-        this.field_2519 = apositiontexturevertex.length;
-    }
+    @Shadow
+    public int field_2519;
 
-    public MixinClass_552(class_290[] apositiontexturevertex, int i, int j, int k, int l) {
-        this(apositiontexturevertex, i, j, k, l, 64, 32);
-    }
-
-    public MixinClass_552(class_290[] apositiontexturevertex, int i, int j, int k, int l, int tw, int th) {
-        this(apositiontexturevertex);
+    @ModifyArgs(method = "<init>([Lnet/minecraft/class_290;IIII)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/class_290;method_983(FF)Lnet/minecraft/class_290;", ordinal = 0))
+    private void Class_552(Args args, class_290[] args1, int i, int j, int k, int l) {
         float f = 0.0015625f;
         float f1 = 0.003125f;
         if (k < i) {
@@ -35,42 +30,65 @@ public class MixinClass_552 {
         if (l < j) {
             f1 = -f1;
         }
-        apositiontexturevertex[0] = apositiontexturevertex[0].method_983((float) k / (float) tw - f, (float) j / (float) th + f1);
-        apositiontexturevertex[1] = apositiontexturevertex[1].method_983((float) i / (float) tw + f, (float) j / (float) th + f1);
-        apositiontexturevertex[2] = apositiontexturevertex[2].method_983((float) i / (float) tw + f, (float) l / (float) th - f1);
-        apositiontexturevertex[3] = apositiontexturevertex[3].method_983((float) k / (float) tw - f, (float) l / (float) th - f1);
+        args.set(0, (float) k / (float) 64 - f);
+        args.set(1, (float) j / (float) 32 + f1);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_1925() {
-        class_290[] apositiontexturevertex = new class_290[this.field_2518.length];
-        for (int i = 0; i < this.field_2518.length; ++i) {
-            apositiontexturevertex[i] = this.field_2518[this.field_2518.length - i - 1];
+    @ModifyArgs(method = "<init>([Lnet/minecraft/class_290;IIII)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/class_290;method_983(FF)Lnet/minecraft/class_290;", ordinal = 1))
+    private void Class_552_1(Args args, class_290[] args1, int i, int j, int k, int l) {
+        float f = 0.0015625f;
+        float f1 = 0.003125f;
+        if (k < i) {
+            f = -f;
         }
-        this.field_2518 = apositiontexturevertex;
+        if (l < j) {
+            f1 = -f1;
+        }
+        args.set(0, (float) i / (float) 64 - f);
+        args.set(1, (float) j / (float) 32 + f1);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_1926(Tessellator tessellator, float f) {
-        Vec3f vec3d = this.field_2518[1].field_1146.method_1307(this.field_2518[0].field_1146);
-        Vec3f vec3d1 = this.field_2518[1].field_1146.method_1307(this.field_2518[2].field_1146);
-        Vec3f vec3d2 = vec3d1.method_1309(vec3d).method_1296();
-        tessellator.start();
-        if (this.field_2520) {
-            tessellator.method_1697(-((float) vec3d2.x), -((float) vec3d2.y), -((float) vec3d2.z));
-        } else {
-            tessellator.method_1697((float) vec3d2.x, (float) vec3d2.y, (float) vec3d2.z);
+    @ModifyArgs(method = "<init>([Lnet/minecraft/class_290;IIII)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/class_290;method_983(FF)Lnet/minecraft/class_290;", ordinal = 2))
+    private void Class_552_2(Args args, class_290[] args1, int i, int j, int k, int l) {
+        float f = 0.0015625f;
+        float f1 = 0.003125f;
+        if (k < i) {
+            f = -f;
         }
-        for (int i = 0; i < 4; ++i) {
-            class_290 positiontexturevertex = this.field_2518[i];
-            tessellator.vertex((float) positiontexturevertex.field_1146.x * f, (float) positiontexturevertex.field_1146.y * f, (float) positiontexturevertex.field_1146.z * f, positiontexturevertex.field_1147, positiontexturevertex.field_1148);
+        if (l < j) {
+            f1 = -f1;
         }
-        tessellator.draw();
+        args.set(0, (float) i / (float) 64 - f);
+        args.set(1, (float) l / (float) 32 + f1);
+    }
+
+    @ModifyArgs(method = "<init>([Lnet/minecraft/class_290;IIII)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/class_290;method_983(FF)Lnet/minecraft/class_290;", ordinal = 3))
+    private void Class_552_3(Args args, class_290[] args1, int i, int j, int k, int l) {
+        float f = 0.0015625f;
+        float f1 = 0.003125f;
+        if (k < i) {
+            f = -f;
+        }
+        if (l < j) {
+            f1 = -f1;
+        }
+        args.set(0, (float) k / (float) 64 - f);
+        args.set(1, (float) l / (float) 32 + f1);
+    }
+
+    @Override
+    public void adventurecraft$setVertexes(int i, int j, int k, int l, int tw, int th) {
+        float f = 0.0015625f;
+        float f1 = 0.003125f;
+        if (k < i) {
+            f = -f;
+        }
+        if (l < j) {
+            f1 = -f1;
+        }
+        field_2518[0] = field_2518[0].method_983((float) k / (float) tw - f, (float) j / (float) th + f1);
+        field_2518[1] = field_2518[1].method_983((float) i / (float) tw + f, (float) j / (float) th + f1);
+        field_2518[2] = field_2518[2].method_983((float) i / (float) tw + f, (float) l / (float) th - f1);
+        field_2518[3] = field_2518[3].method_983((float) k / (float) tw - f, (float) l / (float) th - f1);
     }
 }

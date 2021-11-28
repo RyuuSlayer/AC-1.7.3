@@ -1,10 +1,10 @@
 package io.github.ryuu.adventurecraft.scripting;
 
+import io.github.ryuu.adventurecraft.extensions.client.ExModel;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.level.Level;
-import net.minecraft.src.ModelRenderer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
@@ -38,7 +38,7 @@ public class ScriptModel {
     public float yaw;
     public float pitch;
     public float roll;
-    HashMap<String, ModelRenderer> boxes = new HashMap();
+    HashMap<String, ModelPart> boxes = new HashMap<>();
 
     public ScriptModel() {
         this(64, 32);
@@ -76,9 +76,10 @@ public class ScriptModel {
     }
 
     public void addBoxExpanded(String boxName, float offsetX, float offsetY, float offsetZ, int width, int height, int depth, int u, int v, float expand) {
-        ModelPart r = new ModelPart(u, v, this.textureWidth, this.textureHeight);
-        r.addBoxInverted(offsetX, offsetY, offsetZ, width, height, depth, expand);
-        this.boxes.put((Object) boxName, (Object) r);
+        ModelPart modelPart = new ModelPart(u, v);
+        ((ExModel) modelPart).setDimensions(this.textureWidth, this.textureHeight);
+        ((ExModel) modelPart).addBoxInverted(offsetX, offsetY, offsetZ, width, height, depth, expand);
+        this.boxes.put(boxName, modelPart);
     }
 
     public void setPosition(double newX, double newY, double newZ) {
