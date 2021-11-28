@@ -10,6 +10,7 @@
     "entity.AccessLivingEntity",
     "tile.AccessFlowingFluidTile",
     "tile.AccessGrassTile",
+    "tile.AccessSandTile",
     "tile.AccessStillFluidTile",
     "tile.GrassTile"
   ],
