@@ -123,7 +123,9 @@ public abstract class MixinTile implements ExTile {
 
     @Mutable
     @Shadow @Final public static Tile SAND;
+
     @Shadow @Final public static TileSounds SAND_SOUNDS;
+
     private static final int[] subTypes;
     public int textureNum = 0;
 

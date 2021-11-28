@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.client.render;
 
+import io.github.ryuu.adventurecraft.extensions.client.render.ExTextureBinder;
 import io.github.ryuu.adventurecraft.util.Vec2;
 import net.minecraft.client.render.TextureBinder;
 import net.minecraft.client.texture.TextureManager;
@@ -9,51 +10,34 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(TextureBinder.class)
-public class MixinTextureBinder {
+public class MixinTextureBinder implements ExTextureBinder {
 
-    @Shadow()
+    @Shadow
     public byte[] grid = new byte[262144];
 
+    @Shadow
     public int field_1412;
 
+    @Shadow
     public boolean render3d = false;
 
+    @Shadow
     public int textureId = 0;
 
+    @Shadow
     public int field_1415 = 1;
 
+    @Shadow
     public int renderMode = 0;
 
-    public MixinTextureBinder(int i) {
-        this.field_1412 = i;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void onTick(Vec2 texRes) {
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void bindTexture(TextureManager manager) {
-        GL11.glBindTexture(3553, manager.getTextureId(this.getTexture()));
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public String getTexture() {
+    @Override
+    public String adventurecraft$getTexture() {
         if (this.renderMode == 0) {
-            return "/terrain.png";
+            return "/assets/adventurecraft/terrain.png";
         }
         if (this.renderMode == 1) {
-            return "/gui/items.png";
+            return "/assets/adventurecraft/gui/items.png";
         }
-        return "/gui/items.png";
+        return "/assets/adventurecraft/gui/items.png";
     }
 }

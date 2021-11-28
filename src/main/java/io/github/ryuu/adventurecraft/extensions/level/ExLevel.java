@@ -9,6 +9,7 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.maths.Vec3f;
 import org.mozilla.javascript.Scriptable;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 
 public interface ExLevel {
@@ -60,4 +61,6 @@ public interface ExLevel {
     boolean setBlockAndMetadataTemp(int i, int j, int k, int l, int i1);
 
     HitResult rayTraceBlocks2(Vec3f vec3d, Vec3f vec3d1, boolean flag, boolean flag1, boolean collideWithClip);
+
+    BufferedImage loadMapTexture(String texName);
 }

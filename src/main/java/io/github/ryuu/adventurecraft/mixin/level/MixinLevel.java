@@ -517,6 +517,7 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
         }
     }
 
+    @Override
     public BufferedImage loadMapTexture(String texName) {
         File terrainTexture = new File(this.levelDir, texName);
         if (terrainTexture.exists()) {
