@@ -5,6 +5,7 @@ import io.github.ryuu.adventurecraft.util.JScriptHandler;
 import io.github.ryuu.adventurecraft.util.TriggerManager;
 import io.github.ryuu.adventurecraft.util.UndoStack;
 import net.minecraft.entity.Entity;
+import net.minecraft.level.LevelProperties;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.maths.Vec3f;
 import org.mozilla.javascript.Scriptable;
@@ -63,4 +64,6 @@ public interface ExLevel {
     HitResult rayTraceBlocks2(Vec3f vec3d, Vec3f vec3d1, boolean flag, boolean flag1, boolean collideWithClip);
 
     BufferedImage loadMapTexture(String texName);
+
+    LevelProperties getLevelProperties();
 }

@@ -18,9 +18,13 @@ import java.net.URL;
 @Mixin(ResourceDownloadThread.class)
 public class MixinResourceDownloadThread extends Thread {
 
-    private final Minecraft field_138;
-    private final boolean field_139 = false;
-    @Shadow()
+    @Shadow
+    private Minecraft field_138;
+
+    @Shadow
+    private boolean field_139;
+
+    @Shadow
     public File workingDirectory;
 
     public MixinResourceDownloadThread(File file, Minecraft minecraft) {

@@ -65,4 +65,8 @@ public interface ExLevelProperties {
     void revertTextures();
 
     boolean addReplacementTexture(String replace, String newTexture);
+
+    String getPlayingMusic();
+
+    void setPlayingMusic(String music);
 }

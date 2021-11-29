@@ -493,4 +493,14 @@ public class MixinLevelProperties implements ExLevelProperties {
     public void setFogEnd(float fogEnd) {
         this.fogEnd = fogEnd;
     }
+
+    @Override
+    public String getPlayingMusic() {
+        return playingMusic;
+    }
+
+    @Override
+    public void setPlayingMusic(String music) {
+        playingMusic = music;
+    }
 }

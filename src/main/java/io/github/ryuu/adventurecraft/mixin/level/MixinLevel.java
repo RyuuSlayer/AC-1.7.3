@@ -1525,4 +1525,9 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
     public UndoStack getUndoStack() {
         return this.undoStack;
     }
+
+    @Override
+    public LevelProperties getLevelProperties() {
+        return properties;
+    }
 }
