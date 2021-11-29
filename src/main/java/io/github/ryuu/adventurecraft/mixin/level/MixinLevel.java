@@ -1356,7 +1356,7 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
     private void initCoordOrder() {
         int i;
         Random r = new Random();
-        r.setSeed((this.getLevelTime());
+        r.setSeed((this.getLevelTime()));
         this.coordOrder = new int[256];
         for (i = 0; i < 256; ++i) {
             this.coordOrder[i] = i;

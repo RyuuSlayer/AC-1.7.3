@@ -11,8 +11,7 @@
     "tile.AccessFlowingFluidTile",
     "tile.AccessGrassTile",
     "tile.AccessSandTile",
-    "tile.AccessStillFluidTile",
-    "tile.GrassTile"
+    "tile.AccessStillFluidTile"
   ],
   "client": [
     "MixinClass_108",
@@ -33,12 +32,9 @@
     "client.gui.screen.MixinPauseScreen",
     "client.gui.screen.MixinSelectWorldScreen",
     "client.gui.screen.MixinTitleScreen",
-    "client.gui.screen.MixinVideoSettingsScreen",
     "client.gui.screen.container.MixinPlayerInventoryScreen",
     "client.model.MixinModelPart",
     "client.options.MixinGameOptions",
-    "client.particle.MixinEntityCollisionParticle",
-    "client.particle.MixinFootstepParticle",
     "client.particle.MixinParticleManager",
     "client.particle.MixinTileParticle",
     "client.render.MixinClockTextureBinder",
@@ -72,7 +68,6 @@
     "entity.MixinFlyingEntity",
     "entity.MixinItemEntity",
     "entity.MixinLivingEntity",
-    "entity.MixinPainting",
     "entity.MixinWalkingEntity",
     "entity.animal.MixinWolf",
     "entity.monster.MixinCreeper",
