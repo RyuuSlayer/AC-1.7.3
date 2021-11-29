@@ -17,7 +17,6 @@ public class MixinFoliageColour {
     private static int[] map;
 
 
-
     static void adventurecraft$loadFoliage(String foliageName) {
         BufferedImage bufferedimage = ((ExLevel) AccessMinecraft.getInstance().level).loadMapTexture(foliageName);
         if (bufferedimage == null) {

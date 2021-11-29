@@ -503,4 +503,5 @@ public class MixinLevelProperties implements ExLevelProperties {
     public void setPlayingMusic(String music) {
         playingMusic = music;
     }
+
 }

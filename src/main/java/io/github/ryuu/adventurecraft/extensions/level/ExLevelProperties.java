@@ -69,4 +69,5 @@ public interface ExLevelProperties {
     String getPlayingMusic();
 
     void setPlayingMusic(String music);
+
 }

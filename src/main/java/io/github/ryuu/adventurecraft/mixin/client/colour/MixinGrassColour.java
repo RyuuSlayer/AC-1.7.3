@@ -30,4 +30,5 @@ public class MixinGrassColour {
             bufferedimage.getRGB(0, 0, 256, 256, map, 0, 256);
         }
     }
+
 }

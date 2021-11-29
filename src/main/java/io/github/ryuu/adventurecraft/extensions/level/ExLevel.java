@@ -66,4 +66,5 @@ public interface ExLevel {
     BufferedImage loadMapTexture(String texName);
 
     LevelProperties getLevelProperties();
+
 }

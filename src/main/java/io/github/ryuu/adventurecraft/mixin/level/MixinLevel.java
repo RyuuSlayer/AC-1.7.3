@@ -1530,4 +1530,5 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
     public LevelProperties getLevelProperties() {
         return properties;
     }
+
 }
