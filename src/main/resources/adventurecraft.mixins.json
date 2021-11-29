@@ -33,7 +33,6 @@
     "client.gui.screen.MixinPauseScreen",
     "client.gui.screen.MixinSelectWorldScreen",
     "client.gui.screen.MixinTitleScreen",
-    "client.gui.screen.MixinVideoSettingsScreen",
     "client.gui.screen.container.MixinPlayerInventoryScreen",
     "client.model.MixinModelPart",
     "client.options.MixinGameOptions",
