@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.client.render.entity;
 
+import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import io.github.ryuu.adventurecraft.items.IItemReload;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.TextRenderer;
@@ -7,7 +8,6 @@ import net.minecraft.client.render.TileRenderer;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.ItemRenderer;
 import net.minecraft.client.texture.TextureManager;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
@@ -17,28 +17,33 @@ import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.Random;
 
 @Mixin(ItemRenderer.class)
-public class MixinItemRenderer extends EntityRenderer {
+public abstract class MixinItemRenderer extends EntityRenderer {
 
-    @Shadow()
+    @Shadow
     private final TileRenderer field_1708 = new TileRenderer();
+
+    @Shadow
     private final Random rand = new Random();
+
+    @Shadow
     public boolean field_1707 = true;
+
     public float scale = 1.0f;
 
-    public MixinItemRenderer() {
-        this.field_2678 = 0.15f;
-        this.field_2679 = 0.75f;
-    }
+    @Shadow
+    public abstract void method_1483(int i, int j, int k, int i1, int i2, int i3);
 
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
-    public void method_1484(ItemEntity entityitem, double d, double d1, double d2, float f, float f1) {
+    @Overwrite // missing target method???
+    public void render(ItemEntity entityitem, double d, double d1, double d2, float f, float f1) {
         this.rand.setSeed(187L);
         ItemInstance itemstack = entityitem.item;
         GL11.glPushMatrix();
@@ -58,7 +63,7 @@ public class MixinItemRenderer extends EntityRenderer {
         GL11.glEnable(32826);
         if (itemstack.itemId < 256 && TileRenderer.method_42(Tile.BY_ID[itemstack.itemId].method_1621())) {
             GL11.glRotatef(f3, 0.0f, 1.0f, 0.0f);
-            int textureNum = Tile.BY_ID[itemstack.itemId].getTextureNum();
+            int textureNum = ((ExTile) Tile.BY_ID[itemstack.itemId]).getTextureNum();
             if (textureNum == 0) {
                 this.bindTexture("/terrain.png");
             } else {
@@ -84,7 +89,7 @@ public class MixinItemRenderer extends EntityRenderer {
             GL11.glScalef(this.scale * 0.5f, this.scale * 0.5f, this.scale * 0.5f);
             int i = itemstack.getTexturePosition();
             if (itemstack.itemId < 256) {
-                int textureNum = Tile.BY_ID[itemstack.itemId].getTextureNum();
+                int textureNum = ((ExTile) Tile.BY_ID[itemstack.itemId]).getTextureNum();
                 if (textureNum == 0) {
                     this.bindTexture("/terrain.png");
                 } else {
@@ -94,9 +99,9 @@ public class MixinItemRenderer extends EntityRenderer {
                 this.bindTexture("/gui/items.png");
             }
             Tessellator tessellator = Tessellator.INSTANCE;
-            float f6 = (float) (i % 16 * 16 + 0) / 256.0f;
+            float f6 = (float) (i % 16 * 16) / 256.0f;
             float f8 = (float) (i % 16 * 16 + 16) / 256.0f;
-            float f10 = (float) (i / 16 * 16 + 0) / 256.0f;
+            float f10 = (float) (i / 16 * 16) / 256.0f;
             float f11 = (float) (i / 16 * 16 + 16) / 256.0f;
             float f12 = 1.0f;
             float f13 = 0.5f;
@@ -135,10 +140,10 @@ public class MixinItemRenderer extends EntityRenderer {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void renderItemInstance(TextRenderer textRenderer, TextureManager textureManager, int itemId, int damage, int texturePosition, int x, int y) {
         if (itemId < 256 && TileRenderer.method_42(Tile.BY_ID[itemId].method_1621())) {
-            int textureNum = Tile.BY_ID[itemId].getTextureNum();
+            int textureNum = ((ExTile) Tile.BY_ID[itemId]).getTextureNum();
             if (textureNum == 0) {
                 textureManager.bindTexture(textureManager.getTextureId("/terrain.png"));
             } else {
@@ -167,7 +172,7 @@ public class MixinItemRenderer extends EntityRenderer {
         } else if (texturePosition >= 0) {
             GL11.glDisable(2896);
             if (itemId < 256) {
-                int textureNum = Tile.BY_ID[itemId].getTextureNum();
+                int textureNum = ((ExTile) Tile.BY_ID[itemId]).getTextureNum();
                 if (textureNum == 0) {
                     textureManager.bindTexture(textureManager.getTextureId("/terrain.png"));
                 } else {
@@ -189,97 +194,10 @@ public class MixinItemRenderer extends EntityRenderer {
         GL11.glEnable(2884);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void renderItemInstance(TextRenderer textRenderer, TextureManager textureManager, ItemInstance itemInstance, int x, int y) {
-        if (itemInstance == null || ItemType.byId[itemInstance.itemId] == null) {
-            return;
-        }
-        this.renderItemInstance(textRenderer, textureManager, itemInstance.itemId, itemInstance.getDamage(), itemInstance.getTexturePosition(), x, y);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_1488(TextRenderer fontrenderer, TextureManager renderengine, ItemInstance item, int x, int y) {
-        String s;
-        if (item == null || ItemType.byId[item.itemId] == null) {
-            return;
-        }
-        if (item.count > 1) {
-            s = "" + item.count;
-            GL11.glDisable(2896);
-            GL11.glDisable(2929);
-            fontrenderer.drawTextWithShadow(s, x + 19 - 2 - fontrenderer.getTextWidth(s), y + 6 + 3, 0xFFFFFF);
-            GL11.glEnable(2896);
-            GL11.glEnable(2929);
-        } else if (item.count < 0) {
-            s = "\u00ec";
-            GL11.glDisable(2896);
-            GL11.glDisable(2929);
-            fontrenderer.drawTextWithShadow(s, x + 19 - 2 - fontrenderer.getTextWidth(s), y + 6 + 3, 0xFFFFFF);
-            GL11.glEnable(2896);
-            GL11.glEnable(2929);
-        }
-        if (item.method_720() || ItemType.byId[item.itemId] instanceof IItemReload) {
-            int k = (int) Math.round(13.0 - (double) item.method_721() * 13.0 / (double) item.method_723());
-            int l = (int) Math.round(255.0 - (double) item.method_721() * 255.0 / (double) item.method_723());
-            GL11.glDisable(2896);
-            GL11.glDisable(2929);
-            GL11.glDisable(3553);
-            Tessellator tessellator = Tessellator.INSTANCE;
-            int i1 = 255 - l << 16 | l << 8;
-            int j1 = (255 - l) / 4 << 16 | 0x3F00;
-            this.fillTessellator(tessellator, x + 2, y + 13, 13, 2, 0);
-            this.fillTessellator(tessellator, x + 2, y + 13, 12, 1, j1);
-            this.fillTessellator(tessellator, x + 2, y + 13, k, 1, i1);
-            GL11.glEnable(3553);
-            GL11.glEnable(2896);
-            GL11.glEnable(2929);
-            GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-        }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    private void fillTessellator(Tessellator tessellator, int x, int y, int width, int height, int colour) {
-        tessellator.start();
-        tessellator.colour(colour);
-        tessellator.pos(x + 0, y + 0, 0.0);
-        tessellator.pos(x + 0, y + height, 0.0);
-        tessellator.pos(x + width, y + height, 0.0);
-        tessellator.pos(x + width, y + 0, 0.0);
-        tessellator.draw();
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public void method_1483(int x, int y, int k, int l, int i1, int j1) {
-        float f = 0.0f;
-        float f1 = 0.00390625f;
-        float f2 = 0.00390625f;
-        Tessellator tessellator = Tessellator.INSTANCE;
-        tessellator.start();
-        tessellator.vertex(x + 0, y + j1, f, (float) (k + 0) * f1, (float) (l + j1) * f2);
-        tessellator.vertex(x + i1, y + j1, f, (float) (k + i1) * f1, (float) (l + j1) * f2);
-        tessellator.vertex(x + i1, y + 0, f, (float) (k + i1) * f1, (float) (l + 0) * f2);
-        tessellator.vertex(x + 0, y + 0, f, (float) (k + 0) * f1, (float) (l + 0) * f2);
-        tessellator.draw();
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public void render(Entity entity, double x, double y, double z, float f, float f1) {
-        this.method_1484((ItemEntity) entity, x, y, z, f, f1);
+    @Redirect(method = "method_1488", at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemInstance;method_720()Z"))
+    private boolean drawExtraIfItemReload(ItemInstance instance) {
+        return instance.method_720() || ItemType.byId[instance.itemId] instanceof IItemReload;
     }
 }

@@ -5,9 +5,10 @@ import net.minecraft.level.TileView;
 import net.minecraft.tile.Tile;
 
 public interface ExTile {
+
     int adventurecraft$alwaysUseClick(Level world, int i, int j, int k);
 
-    int adventurecraft$getTextureNum();
+    int getTextureNum();
 
     Tile adventurecraft$setTextureNum(int t);
 

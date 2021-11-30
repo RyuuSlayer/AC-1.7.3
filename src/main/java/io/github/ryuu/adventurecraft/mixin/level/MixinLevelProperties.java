@@ -1,25 +1,31 @@
 package io.github.ryuu.adventurecraft.mixin.level;
 
 import io.github.ryuu.adventurecraft.blocks.BlockEffect;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevelProperties;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
+import io.github.ryuu.adventurecraft.mixin.entity.AccessEntity;
+import io.github.ryuu.adventurecraft.mixin.util.io.ExCompoundTag;
 import net.minecraft.entity.Entity;
 import net.minecraft.level.Level;
 import net.minecraft.level.LevelProperties;
 import net.minecraft.util.io.AbstractTag;
 import net.minecraft.util.io.CompoundTag;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Mixin(LevelProperties.class)
-public class MixinLevelProperties implements ExLevelProperties {
+public abstract class MixinLevelProperties implements ExLevelProperties {
 
     public double tempOffset;
-    public boolean useImages = true;
+    public boolean useBiomeImages = true;
+
     public double mapSize = 250.0;
     public int waterLevel = 64;
     public double fractureHorizontal = 1.0;
@@ -30,6 +36,7 @@ public class MixinLevelProperties implements ExLevelProperties {
     public double volatility2 = 1.0;
     public double volatilityWeight1 = 0.0;
     public double volatilityWeight2 = 1.0;
+
     public boolean iceMelts = true;
     public CompoundTag triggerData = null;
     public String playingMusic = "";
@@ -59,76 +66,22 @@ public class MixinLevelProperties implements ExLevelProperties {
     CompoundTag replacementTag = null;
 
     @Shadow
-    private final long randomSeed;
-
-    @Shadow
-    private int spawnX;
-
-    @Shadow
-    private int spawnY;
-
-    @Shadow
-    private int spawnZ;
-
-    @Shadow
     private long time;
-
-    @Shadow
-    private long lastPlayed;
-
-    @Shadow
-    private long sizeOnDisk;
-
-    @Shadow
-    private CompoundTag playerData;
-
-    @Shadow
-    private int dimensionId;
-
-    @Shadow
-    private String levelName;
-
-    @Shadow
-    private int version;
 
     @Shadow
     private boolean raining;
 
-    @Shadow
-    private int rainTime;
-
-    @Shadow
-    private boolean thundering;
-
-    @Shadow
-    private int thunderTime;
-
-    public MixinLevelProperties(CompoundTag tag) {
+    @Inject(method = "<init>(Lnet/minecraft/util/io/CompoundTag;)V", at = @At("TAIL"))
+    private void init(CompoundTag tag, CallbackInfo ci) {
         this.brightness = new float[16];
-        this.randomSeed = tag.getLong("RandomSeed");
-        this.spawnX = tag.getInt("SpawnX");
-        this.spawnY = tag.getInt("SpawnY");
-        this.spawnZ = tag.getInt("SpawnZ");
-        this.time = tag.getLong("Time");
-        this.lastPlayed = tag.getLong("LastPlayed");
-        this.sizeOnDisk = tag.getLong("SizeOnDisk");
-        this.levelName = tag.getString("LevelName");
-        this.version = tag.getInt("version");
-        this.rainTime = tag.getInt("rainTime");
-        this.raining = tag.getBoolean("raining");
-        this.thunderTime = tag.getInt("thunderTime");
-        this.thundering = tag.getBoolean("thundering");
-        if (tag.containsKey("Player")) {
-            this.playerData = tag.getCompoundTag("Player");
-            this.dimensionId = this.playerData.getInt("Dimension");
-        }
+
         this.tempOffset = tag.getDouble("TemperatureOffset");
         if (tag.containsKey("IsPrecipitating")) {
             this.raining = tag.getBoolean("IsPrecipitating");
         }
-        Entity.field_1590 = tag.getInt("nextEntityID");
+        AccessEntity.setField_1590(tag.getInt("nextEntityID"));
         if (tag.containsKey("useImages")) {
-            this.useImages = tag.getBoolean("useImages");
+            this.useBiomeImages = tag.getBoolean("useImages");
             this.mapSize = tag.getDouble("mapSize");
             this.waterLevel = tag.getShort("waterLevel");
             this.fractureHorizontal = tag.getDouble("fractureHorizontal");
@@ -153,7 +106,7 @@ public class MixinLevelProperties implements ExLevelProperties {
             this.mobsBurn = tag.getBoolean("mobsBurn");
         }
         this.overlay = tag.getString("overlay");
-        this.replacementTextures = new HashMap();
+        this.replacementTextures = new HashMap<>();
         if (tag.containsKey("textureReplacements")) {
             this.replacementTag = tag.getCompoundTag("textureReplacements");
         }
@@ -186,12 +139,12 @@ public class MixinLevelProperties implements ExLevelProperties {
         this.allowsInventoryCrafting = !tag.containsKey("allowsInventoryCrafting") || tag.getBoolean("allowsInventoryCrafting");
     }
 
-    public MixinLevelProperties(long seed, String levelName) {
+    @Inject(method = "<init>(JLjava/lang/String;)V", at = @At("TAIL"))
+    private void init(long seed, String levelName, CallbackInfo ci) {
+        this.replacementTextures = new HashMap<>();
         this.brightness = new float[16];
-        this.randomSeed = seed;
-        this.levelName = levelName;
         this.timeRate = 1.0f;
-        this.replacementTextures = new HashMap();
+
         float f = 0.05f;
         for (int i = 0; i < 16; ++i) {
             float f1 = 1.0f - (float) i / 15.0f;
@@ -199,53 +152,22 @@ public class MixinLevelProperties implements ExLevelProperties {
         }
     }
 
-    public MixinLevelProperties(LevelProperties properties) {
-        this.randomSeed = properties.randomSeed;
-        this.spawnX = properties.spawnX;
-        this.spawnY = properties.spawnY;
-        this.spawnZ = properties.spawnZ;
-        this.time = properties.time;
-        this.lastPlayed = properties.lastPlayed;
-        this.sizeOnDisk = properties.sizeOnDisk;
-        this.playerData = properties.playerData;
-        this.dimensionId = properties.dimensionId;
-        this.levelName = properties.levelName;
-        this.version = properties.version;
-        this.rainTime = properties.rainTime;
-        this.raining = properties.raining;
-        this.thunderTime = properties.thunderTime;
-        this.thundering = properties.thundering;
-        this.replacementTextures = new HashMap();
+    @Inject(method = "<init>(Lnet/minecraft/level/LevelProperties;)V", at = @At("TAIL"))
+    private void init(LevelProperties properties, CallbackInfo ci) {
+        this.replacementTextures = new HashMap<>();
         this.brightness = new float[16];
+
+        ExLevelProperties exProps = (ExLevelProperties)properties;
         for (int i = 0; i < 16; ++i) {
-            this.brightness[i] = properties.brightness[i];
+            this.brightness[i] = exProps.getBrightness()[i];
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    private void updateProperties(CompoundTag tag, CompoundTag playerData) {
-        tag.put("RandomSeed", this.randomSeed);
-        tag.put("SpawnX", this.spawnX);
-        tag.put("SpawnY", this.spawnY);
-        tag.put("SpawnZ", this.spawnZ);
-        tag.put("Time", this.time);
-        tag.put("SizeOnDisk", this.sizeOnDisk);
-        tag.put("LastPlayed", System.currentTimeMillis());
-        tag.put("LevelName", this.levelName);
-        tag.put("version", this.version);
-        tag.put("rainTime", this.rainTime);
-        tag.put("raining", this.raining);
-        tag.put("thunderTime", this.thunderTime);
-        tag.put("thundering", this.thundering);
-        if (playerData != null) {
-            tag.put("Player", playerData);
-        }
+    @Inject(method = "updateProperties", at = @At("TAIL"))
+    private void writeAcUpdateProperties(CompoundTag tag, CompoundTag playerData, CallbackInfo ci) {
         tag.put("TemperatureOffset", this.tempOffset);
-        tag.put("nextEntityID", Entity.field_1590);
-        tag.put("useImages", this.useImages);
+        tag.put("nextEntityID", AccessEntity.getField_1590());
+        tag.put("useImages", this.useBiomeImages);
         tag.put("mapSize", this.mapSize);
         tag.put("waterLevel", (short) this.waterLevel);
         tag.put("fractureHorizontal", this.fractureHorizontal);
@@ -257,8 +179,9 @@ public class MixinLevelProperties implements ExLevelProperties {
         tag.put("volatilityWeight1", this.volatilityWeight1);
         tag.put("volatilityWeight2", this.volatilityWeight2);
         tag.put("iceMelts", this.iceMelts);
-        if (AccessMinecraft.getInstance().level != null && AccessMinecraft.getInstance().level.triggerManager != null) {
-            tag.put("triggerAreas", (AbstractTag) AccessMinecraft.getInstance().level.triggerManager.getTagCompound());
+        ExLevel level = (ExLevel)AccessMinecraft.getInstance().level;
+        if (level != null && level.getTriggerManager() != null) {
+            tag.put("triggerAreas", (AbstractTag) level.getTriggerManager().getTagCompound());
         }
         tag.put("timeOfDay", this.timeOfDay);
         tag.put("timeRate", this.timeRate);
@@ -363,7 +286,7 @@ public class MixinLevelProperties implements ExLevelProperties {
     public void loadTextureReplacements(Level w) {
         if (this.replacementTag != null) {
             this.replacementTextures.clear();
-            for (String key : this.replacementTag.getKeys()) {
+            for (String key : ((ExCompoundTag)this.replacementTag).getKeys()) {
                 BlockEffect.replaceTexture(w, key, this.replacementTag.getString(key));
             }
         }
@@ -385,8 +308,112 @@ public class MixinLevelProperties implements ExLevelProperties {
     }
 
     @Override
-    public boolean isUsingImages() {
-        return this.useImages;
+    public boolean isUsingBiomeImages() {
+        return this.useBiomeImages;
+    }
+
+    public void setUseBiomeImages(boolean useBiomeImages) {
+        this.useBiomeImages = useBiomeImages;
+    }
+
+    @Override
+    public double getMapSize() {
+        return mapSize;
+    }
+
+    @Override
+    public void setMapSize(double mapSize) {
+        this.mapSize = mapSize;
+    }
+
+    @Override
+    public int getWaterLevel() {
+        return waterLevel;
+    }
+
+    @Override
+    public void setWaterLevel(int waterLevel) {
+        this.waterLevel = waterLevel;
+    }
+
+    @Override
+    public double getFractureHorizontal() {
+        return fractureHorizontal;
+    }
+
+    @Override
+    public void setFractureHorizontal(double fractureHorizontal) {
+        this.fractureHorizontal = fractureHorizontal;
+    }
+
+    @Override
+    public double getFractureVertical() {
+        return fractureVertical;
+    }
+
+    @Override
+    public void setFractureVertical(double fractureVertical) {
+        this.fractureVertical = fractureVertical;
+    }
+
+    @Override
+    public double getMaxAvgDepth() {
+        return maxAvgDepth;
+    }
+
+    @Override
+    public void setMaxAvgDepth(double maxAvgDepth) {
+        this.maxAvgDepth = maxAvgDepth;
+    }
+
+    @Override
+    public double getMaxAvgHeight() {
+        return maxAvgHeight;
+    }
+
+    @Override
+    public void setMaxAvgHeight(double maxAvgHeight) {
+        this.maxAvgHeight = maxAvgHeight;
+    }
+
+    @Override
+    public double getVolatility1() {
+        return volatility1;
+    }
+
+    @Override
+    public void setVolatility1(double volatility1) {
+        this.volatility1 = volatility1;
+    }
+
+    @Override
+    public double getVolatility2() {
+        return volatility2;
+    }
+
+    @Override
+    public void setVolatility2(double volatility2) {
+        this.volatility2 = volatility2;
+    }
+
+    @Override
+    public double getVolatilityWeight1() {
+        return volatilityWeight1;
+    }
+
+    @Override
+    public void setVolatilityWeight1(double volatilityWeight1) {
+        this.volatilityWeight1 = volatilityWeight1;
+    }
+
+    @Override
+    public double getVolatilityWeight2() {
+        return volatilityWeight2;
+    }
+
+    @Override
+    public void setVolatilityWeight2(double volatilityWeight2) {
+        this.volatilityWeight2 = volatilityWeight2;
     }
 
     @Override

@@ -5,7 +5,6 @@ import io.github.ryuu.adventurecraft.extensions.client.ExMinecraft;
 import io.github.ryuu.adventurecraft.extensions.entity.ExEntity;
 import io.github.ryuu.adventurecraft.extensions.entity.ExLivingEntity;
 import io.github.ryuu.adventurecraft.extensions.entity.player.ExPlayerInventory;
-import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevelProperties;
 import io.github.ryuu.adventurecraft.scripting.ScriptUIContainer;
 import io.github.ryuu.adventurecraft.util.DebugMode;
@@ -242,9 +241,9 @@ public abstract class MixinOverlay extends DrawableHelper {
             this.drawTextWithShadow(fontrenderer, "y: " + this.minecraft.player.y, 2, 72, 0xE0E0E0);
             this.drawTextWithShadow(fontrenderer, "z: " + this.minecraft.player.z, 2, 80, 0xE0E0E0);
             this.drawTextWithShadow(fontrenderer, "f: " + (MathsHelper.floor((double) (this.minecraft.player.yaw * 4.0f / 360.0f) + 0.5) & 3), 2, 88, 0xE0E0E0);
-            this.drawTextWithShadow(fontrenderer, String.format("Use Terrain Images: %b", ((ExLevelProperties) this.minecraft.level.getProperties()).isUsingImages()), 2, 96, 0xE0E0E0);
+            this.drawTextWithShadow(fontrenderer, String.format("Use Terrain Images: %b", ((ExLevelProperties) this.minecraft.level.getProperties()).isUsingBiomeImages()), 2, 96, 0xE0E0E0);
             this.drawTextWithShadow(fontrenderer, String.format("Collide X: %d Z: %d", ((ExEntity) this.minecraft.player).getCollisionX(), ((ExEntity) this.minecraft.player).getCollisionZ()), 2, 104, 0xE0E0E0);
-            if (((ExLevelProperties) this.minecraft.level.getProperties()).isUsingImages()) {
+            if (((ExLevelProperties) this.minecraft.level.getProperties()).isUsingBiomeImages()) {
                 int x = (int) this.minecraft.player.x;
                 int z = (int) this.minecraft.player.z;
                 int terrainHeight = TerrainImage.getTerrainHeight(x, z);

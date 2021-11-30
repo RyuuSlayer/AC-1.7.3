@@ -84,10 +84,10 @@ public class GuiMapSelect extends Screen {
                             ++i;
                         } while (worldDir.exists());
                     }
-                    this.minecraft.saveMapUsed(this.saveName, this.selectedMap.name);
+                    ((ExMinecraft)this.minecraft).saveMapUsed(this.saveName, this.selectedMap.name);
                 }
                 this.minecraft.interactionManager = new class_520(this.minecraft);
-                this.minecraft.startWorld(this.saveName, this.saveName, 0L, this.selectedMap.name);
+                ((ExMinecraft)this.minecraft).startWorld(this.saveName, this.saveName, 0L, this.selectedMap.name);
             }
         } else if (button.id == 7) {
             this.minecraft.openScreen(new GuiCreateNewMap(this));

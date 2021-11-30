@@ -11,6 +11,7 @@ import io.github.ryuu.adventurecraft.extensions.items.ExItemType;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.gui.GuiMapSelect;
 import io.github.ryuu.adventurecraft.gui.GuiStore;
+import io.github.ryuu.adventurecraft.mixin.entity.AccessEntity;
 import io.github.ryuu.adventurecraft.scripting.Script;
 import io.github.ryuu.adventurecraft.scripting.ScriptEntity;
 import io.github.ryuu.adventurecraft.scripting.ScriptItem;
@@ -778,6 +779,7 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
         return null;
     }
 
+    @Override
     public void saveMapUsed(String s, String mapName) {
         File mcDir = Minecraft.getGameDirectory();
         File saveDir = new File(mcDir, "saves");
@@ -838,6 +840,7 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
         this.openScreen(null);
     }
 
+    @Override
     public Level getWorld(String saveName, long l, String mapName) {
         this.setLevel(null);
         System.gc();
@@ -900,7 +903,7 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
         this.player.keypressManager = new MovementManager(this.options);
         this.player.id = entID;
         this.player.method_494();
-        this.player.setRotation(((ExLevel) this.level).getSpawnYaw(), 0.0f);
+        ((AccessEntity)this.player).invokeSetRotation(((ExLevel) this.level).getSpawnYaw(), 0.0f);
         this.interactionManager.method_1718(this.player);
         this.method_2130("Respawning");
         if (this.currentScreen instanceof DeathScreen) {

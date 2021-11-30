@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.level.source;
 
+import io.github.ryuu.adventurecraft.extensions.level.source.ExOverworldLevelSource;
 import net.minecraft.level.Level;
 import net.minecraft.level.biome.Biome;
 import net.minecraft.level.chunk.Chunk;
@@ -19,20 +20,41 @@ import org.spongepowered.asm.mixin.Shadow;
 import java.util.Random;
 
 @Mixin(OverworldLevelSource.class)
-public class MixinOverworldLevelSource implements LevelSource {
+public abstract class MixinOverworldLevelSource implements LevelSource, ExOverworldLevelSource {
 
-    @Shadow()
-    private final Random rand;
-    private final PerlinOctaveNoise upperInterpolationNoise;
-    private final PerlinOctaveNoise lowerInterpolationNoise;
-    private final PerlinOctaveNoise interpolationNoise;
-    private final PerlinOctaveNoise beachNoise;
-    private final PerlinOctaveNoise surfaceDepthNoise;
-    private final Level level;
-    private final Cave cave = new OverworldCave();
+    @Shadow
+    private Random rand;
+
+    @Shadow
+    private PerlinOctaveNoise upperInterpolationNoise;
+
+    @Shadow
+    private PerlinOctaveNoise lowerInterpolationNoise;
+
+    @Shadow
+    private PerlinOctaveNoise interpolationNoise;
+
+    @Shadow
+    private PerlinOctaveNoise beachNoise;
+
+    @Shadow
+    private PerlinOctaveNoise surfaceDepthNoise;
+
+    @Shadow
+    private Level level;
+
+    @Shadow
+    private Cave cave;
+
+    @Shadow
     public PerlinOctaveNoise biomeNoise;
+
+    @Shadow
     public PerlinOctaveNoise depthNoise;
+
+    @Shadow
     public PerlinOctaveNoise treeNoise;
+
     public double mapSize = 250.0;
     public int waterLevel = 64;
     public double fractureHorizontal = 1.0;
@@ -43,17 +65,41 @@ public class MixinOverworldLevelSource implements LevelSource {
     public double volatility2 = 1.0;
     public double volatilityWeight1 = 0.0;
     public double volatilityWeight2 = 1.0;
+
+    @Shadow
     double[] interpolationNoises;
+
+    @Shadow
     double[] upperInterpolationNoises;
+
+    @Shadow
     double[] lowerInterpolationNoises;
+
+    @Shadow
     double[] biomeNoises;
+
+    @Shadow
     double[] depthNoises;
-    int[][] unusedVals = new int[32][32];
+
+    @Shadow
+    int[][] unusedVals;
+
+    @Shadow
     private double[] noises;
-    private double[] sandNoises = new double[256];
-    private double[] gravelNoises = new double[256];
-    private double[] surfaceDepthNoises = new double[256];
+
+    @Shadow
+    private double[] sandNoises;
+
+    @Shadow
+    private double[] gravelNoises;
+
+    @Shadow
+    private double[] surfaceDepthNoises;
+
+    @Shadow
     private Biome[] biomes;
+
+    @Shadow
     private double[] temperatureNoises;
 
     public MixinOverworldLevelSource(Level level, long seed) {
@@ -324,7 +370,6 @@ public class MixinOverworldLevelSource implements LevelSource {
         long l1 = this.rand.nextLong() / 2L * 2L + 1L;
         long l2 = this.rand.nextLong() / 2L * 2L + 1L;
         this.rand.setSeed((long) chunkX * l1 + (long) chunkZ * l2 ^ this.level.getSeed());
-        double d = 0.25;
         if (this.rand.nextInt(4) == 0) {
             int i1 = k + this.rand.nextInt(16) + 8;
             int l4 = this.rand.nextInt(128);
@@ -399,6 +444,7 @@ public class MixinOverworldLevelSource implements LevelSource {
             int k13 = l + this.rand.nextInt(16);
             new Ore(Tile.LAPIS_LAZULI_ORE.id, 6).generate(this.level, this.rand, k7, l10, k13);
         }
+        double d = 0.25;
         d = 0.5;
         int k4 = (int) ((this.treeNoise.sample((double) k * d, (double) l * d) / 8.0 + this.rand.nextDouble() * 4.0 + 4.0) / 3.0);
         int l7 = 0;
@@ -553,5 +599,105 @@ public class MixinOverworldLevelSource implements LevelSource {
             }
         }
         SandTile.fallInstantly = false;
+    }
+
+    @Override
+    public double getMapSize() {
+        return mapSize;
+    }
+
+    @Override
+    public void setMapSize(double mapSize) {
+        this.mapSize = mapSize;
+    }
+
+    @Override
+    public int getWaterLevel() {
+        return waterLevel;
+    }
+
+    @Override
+    public void setWaterLevel(int waterLevel) {
+        this.waterLevel = waterLevel;
+    }
+
+    @Override
+    public double getFractureHorizontal() {
+        return fractureHorizontal;
+    }
+
+    @Override
+    public void setFractureHorizontal(double fractureHorizontal) {
+        this.fractureHorizontal = fractureHorizontal;
+    }
+
+    @Override
+    public double getFractureVertical() {
+        return fractureVertical;
+    }
+
+    @Override
+    public void setFractureVertical(double fractureVertical) {
+        this.fractureVertical = fractureVertical;
+    }
+
+    @Override
+    public double getMaxAvgDepth() {
+        return maxAvgDepth;
+    }
+
+    @Override
+    public void setMaxAvgDepth(double maxAvgDepth) {
+        this.maxAvgDepth = maxAvgDepth;
+    }
+
+    @Override
+    public double getMaxAvgHeight() {
+        return maxAvgHeight;
+    }
+
+    @Override
+    public void setMaxAvgHeight(double maxAvgHeight) {
+        this.maxAvgHeight = maxAvgHeight;
+    }
+
+    @Override
+    public double getVolatility1() {
+        return volatility1;
+    }
+
+    @Override
+    public void setVolatility1(double volatility1) {
+        this.volatility1 = volatility1;
+    }
+
+    @Override
+    public double getVolatility2() {
+        return volatility2;
+    }
+
+    @Override
+    public void setVolatility2(double volatility2) {
+        this.volatility2 = volatility2;
+    }
+
+    @Override
+    public double getVolatilityWeight1() {
+        return volatilityWeight1;
+    }
+
+    @Override
+    public void setVolatilityWeight1(double volatilityWeight1) {
+        this.volatilityWeight1 = volatilityWeight1;
+    }
+
+    @Override
+    public double getVolatilityWeight2() {
+        return volatilityWeight2;
+    }
+
+    @Override
+    public void setVolatilityWeight2(double volatilityWeight2) {
+        this.volatilityWeight2 = volatilityWeight2;
     }
 }

@@ -1,5 +1,8 @@
 package io.github.ryuu.adventurecraft.gui;
 
+import io.github.ryuu.adventurecraft.extensions.client.ExMinecraft;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevelProperties;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.class_520;
 import net.minecraft.client.gui.Screen;
@@ -15,6 +18,7 @@ import java.util.Random;
 public class GuiCreateNewMap extends Screen {
 
     private final Screen parent;
+
     public double mapSize = 250.0;
     public int waterLevel = 64;
     public double fractureHorizontal = 1.0;
@@ -25,6 +29,7 @@ public class GuiCreateNewMap extends Screen {
     public double volatility2 = 1.0;
     public double volatilityWeight1 = 0.0;
     public double volatilityWeight2 = 1.0;
+
     GuiSlider2 sliderMapSize;
     GuiSlider2 sliderWaterLevel;
     GuiSlider2 sliderFracHorizontal;
@@ -142,20 +147,22 @@ public class GuiCreateNewMap extends Screen {
             this.minecraft.interactionManager = new class_520(this.minecraft);
             DebugMode.levelEditing = true;
             String mapName = this.textboxMapName.method_1876().trim();
-            this.minecraft.saveMapUsed(mapName, mapName);
-            Level w = this.minecraft.getWorld(mapName, l, mapName);
-            w.properties.useImages = false;
-            w.properties.mapSize = this.mapSize;
-            w.properties.waterLevel = this.waterLevel;
-            w.properties.fractureHorizontal = this.fractureHorizontal;
-            w.properties.fractureVertical = this.fractureVertical;
-            w.properties.maxAvgDepth = this.maxAvgDepth;
-            w.properties.maxAvgHeight = this.maxAvgHeight;
-            w.properties.volatility1 = this.volatility1;
-            w.properties.volatility2 = this.volatility2;
-            w.properties.volatilityWeight1 = this.volatilityWeight1;
-            w.properties.volatilityWeight2 = this.volatilityWeight2;
-            w.updateChunkProvider();
+            ExMinecraft mc = (ExMinecraft) this.minecraft;
+            mc.saveMapUsed(mapName, mapName);
+            Level w = mc.getWorld(mapName, l, mapName);
+            ExLevelProperties properties = (ExLevelProperties) w.getProperties();
+            properties.setUseBiomeImages(false);
+            properties.setMapSize(this.mapSize);
+            properties.setWaterLevel(this.waterLevel);
+            properties.setFractureHorizontal(this.fractureHorizontal);
+            properties.setFractureVertical(this.fractureVertical);
+            properties.setMaxAvgDepth(this.maxAvgDepth);
+            properties.setMaxAvgHeight(this.maxAvgHeight);
+            properties.setVolatility1(this.volatility1);
+            properties.setVolatility2(this.volatility2);
+            properties.setVolatilityWeight1(this.volatilityWeight1);
+            properties.setVolatilityWeight2(this.volatilityWeight2);
+            ((ExLevel) w).updateChunkProvider();
             this.minecraft.notifyStatus(w, "Generating level");
             this.minecraft.openScreen(null);
         }

@@ -1,90 +1,65 @@
 package io.github.ryuu.adventurecraft.mixin.level.gen;
 
+import io.github.ryuu.adventurecraft.extensions.level.ExLevelProperties;
 import io.github.ryuu.adventurecraft.util.TerrainImage;
 import net.minecraft.level.Level;
 import net.minecraft.level.biome.Biome;
 import net.minecraft.level.gen.BiomeSource;
-import net.minecraft.util.maths.Vec2i;
 import net.minecraft.util.noise.SimplexOctaveNoise;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-
-import java.util.Random;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BiomeSource.class)
-public class MixinBiomeSource {
+public abstract class MixinBiomeSource {
 
+    @Shadow
     public double[] temperatureNoises;
+
+    @Shadow
     public double[] rainfallNoises;
+
+    @Shadow
     public double[] detailNoises;
-    public Biome[] biomes;
-    @Shadow()
+
+    @Shadow
     private SimplexOctaveNoise temperatureNoise;
+
+    @Shadow
     private SimplexOctaveNoise rainfallNoise;
+
+    @Shadow
     private SimplexOctaveNoise detailNoise;
-    private Level worldObj;
 
-    protected MixinBiomeSource() {
-    }
+    @Unique
+    private Level world;
 
-    public MixinBiomeSource(Level level) {
-        this.temperatureNoise = new SimplexOctaveNoise(new Random(level.getSeed() * 9871L), 4);
-        this.rainfallNoise = new SimplexOctaveNoise(new Random(level.getSeed() * 39811L), 4);
-        this.detailNoise = new SimplexOctaveNoise(new Random(level.getSeed() * 543321L), 2);
-        this.worldObj = level;
+    @Inject(method = "<init>(Lnet/minecraft/level/Level;)V", at = @At("TAIL"))
+    public void init(Level level, CallbackInfo ci) {
+        this.world = level;
     }
 
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
-    public Biome getBiomeInChunk(Vec2i pos) {
-        return this.getBiome(pos.x << 4, pos.z << 4);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public Biome getBiome(int x, int z) {
-        return this.getBiomes(x, z, 1, 1)[0];
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public double getTemperature(int x, int z) {
-        this.temperatureNoises = this.temperatureNoise.sample(this.temperatureNoises, x, z, 1, 1, 0.025f, 0.025f, 0.5);
-        return this.temperatureNoises[0];
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public Biome[] getBiomes(int x, int z, int xSize, int zSize) {
-        this.biomes = this.getBiomes(this.biomes, x, z, xSize, zSize);
-        return this.biomes;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
+    @Overwrite
     public double[] getTemperatures(double[] temperatures, int x, int z, int xSize, int zSize) {
         if (temperatures == null || temperatures.length < xSize * zSize) {
             temperatures = new double[xSize * zSize];
         }
-        if (!this.worldObj.properties.useImages) {
+        boolean useImages = ((ExLevelProperties) this.world.getProperties()).isUsingBiomeImages();
+        if (!useImages) {
             temperatures = this.temperatureNoise.sample(temperatures, x, z, xSize, zSize, 0.025f, 0.025f, 0.25);
             this.detailNoises = this.detailNoise.sample(this.detailNoises, x, z, xSize, zSize, 0.25, 0.25, 0.5882352941176471);
         }
         int i1 = 0;
         for (int j1 = 0; j1 < xSize; ++j1) {
             for (int k1 = 0; k1 < zSize; ++k1) {
-                if (this.worldObj.properties.useImages) {
+                if (useImages) {
                     int x2 = x + j1;
                     int y = z + k1;
                     temperatures[i1] = TerrainImage.getTerrainTemperature(x2, y);
@@ -110,7 +85,7 @@ public class MixinBiomeSource {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public Biome[] getBiomes(Biome[] biomes, int x, int z, int xSize, int zSize) {
         if (biomes == null || biomes.length < xSize * zSize) {
             biomes = new Biome[xSize * zSize];
@@ -119,11 +94,12 @@ public class MixinBiomeSource {
         this.rainfallNoises = this.rainfallNoise.sample(this.rainfallNoises, x, z, xSize, xSize, 0.05f, 0.05f, 0.3333333333333333);
         this.detailNoises = this.detailNoise.sample(this.detailNoises, x, z, xSize, xSize, 0.25, 0.25, 0.5882352941176471);
         int i1 = 0;
-        double d3 = 0.0;
-        double d4 = 0.0;
+        double d3;
+        double d4;
+        boolean useImages = ((ExLevelProperties) this.world.getProperties()).isUsingBiomeImages();
         for (int j1 = 0; j1 < xSize; ++j1) {
             for (int k1 = 0; k1 < zSize; ++k1) {
-                if (this.worldObj.properties.useImages) {
+                if (useImages) {
                     int x2 = x + j1;
                     int y = z + k1;
                     d3 = TerrainImage.getTerrainTemperature(x2, y);

@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.gui;
 
+import io.github.ryuu.adventurecraft.extensions.client.ExMinecraft;
 import io.github.ryuu.adventurecraft.scripting.ScriptUIContainer;
 import net.minecraft.class_520;
 import net.minecraft.client.Minecraft;
@@ -222,7 +223,7 @@ public class GuiMapDownload extends Screen {
     private GuiMapElement addMap(String title, String topDescription, String description, String texture, String mURL, int mapID, int totalRating, int numRatings) {
         int i = this.maps.size();
         GuiMapElement r = new GuiMapElement(102 * (i % 3), 102 * (i / 3), this.ui, title, topDescription, description, texture, mURL, mapID, totalRating, numRatings);
-        this.maps.add((Object) r);
+        this.maps.add(r);
         this.maxOffset = Math.min(this.height - 32 - 102 * (this.maps.size() + 2) / 3, 26);
         return r;
     }
@@ -354,9 +355,10 @@ public class GuiMapDownload extends Screen {
             worldDir = new File(saveDir, saveName);
             ++i;
         } while (worldDir.exists());
-        this.minecraft.saveMapUsed(saveName, this.mapName);
+        ExMinecraft mc = (ExMinecraft) this.minecraft;
+        mc.saveMapUsed(saveName, this.mapName);
         this.minecraft.interactionManager = new class_520(this.minecraft);
-        this.minecraft.startWorld(saveName, saveName, 0L, this.mapName);
+        mc.startWorld(saveName, saveName, 0L, this.mapName);
     }
 
     private boolean downloadFile(String downloadSite, String outputFileName) {

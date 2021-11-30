@@ -67,4 +67,5 @@ public interface ExLevel {
 
     LevelProperties getLevelProperties();
 
+    void updateChunkProvider();
 }
