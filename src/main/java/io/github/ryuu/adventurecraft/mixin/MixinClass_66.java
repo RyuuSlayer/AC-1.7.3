@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin;
 
+import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.util.CoordBlock;
 import io.github.ryuu.adventurecraft.util.LightCache;
@@ -149,7 +150,7 @@ public class MixinClass_66 {
                             int j3;
                             TileEntity tileentity;
                             int i3 = chunkcache.getTileId(l2, j2, k2);
-                            if (i3 <= 0 || texNum != Tile.BY_ID[i3].getTextureNum()) continue;
+                            if (i3 <= 0 || texNum != ((ExTile)Tile.BY_ID[i3]).getTextureNum()) continue;
                             if (!flag2) {
                                 flag2 = true;
                                 GL11.glNewList(this.field_225 + i2, 4864);

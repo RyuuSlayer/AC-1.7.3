@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.mixin.client.render.entity;
 
 import io.github.ryuu.adventurecraft.extensions.entity.ExFallingTile;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
+import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import net.minecraft.client.render.TileRenderer;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.FallingTileRenderer;
@@ -31,10 +32,10 @@ public class MixinFallingTileRenderer extends EntityRenderer {
         GL11.glPushMatrix();
         GL11.glTranslatef((float) d, (float) d1, (float) d2);
         Tile block = Tile.BY_ID[entityfallingsand.tile];
-        if (block.getTextureNum() == 0) {
+        if (((ExTile)block).getTextureNum() == 0) {
             this.bindTexture("/terrain.png");
         } else {
-            this.bindTexture(String.format("/terrain%d.png", block.getTextureNum()));
+            this.bindTexture(String.format("/terrain%d.png", ((ExTile)block).getTextureNum()));
         }
         Level world = entityfallingsand.getFallingLevel();
         GL11.glDisable(2896);

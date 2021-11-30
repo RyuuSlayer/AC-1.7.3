@@ -6,7 +6,6 @@ import io.github.ryuu.adventurecraft.extensions.level.ExLevelProperties;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.mixin.entity.AccessEntity;
 import io.github.ryuu.adventurecraft.mixin.util.io.ExCompoundTag;
-import net.minecraft.entity.Entity;
 import net.minecraft.level.Level;
 import net.minecraft.level.LevelProperties;
 import net.minecraft.util.io.AbstractTag;
@@ -51,6 +50,7 @@ public abstract class MixinLevelProperties implements ExLevelProperties {
     public String overlay = "";
     public HashMap<String, String> replacementTextures;
     public String onNewSaveScript = "";
+
     public String onLoadScript = "";
     public String onUpdateScript = "";
     public String playerName = "ACPlayer";
@@ -283,6 +283,7 @@ public abstract class MixinLevelProperties implements ExLevelProperties {
         return t;
     }
 
+    @Override
     public void loadTextureReplacements(Level w) {
         if (this.replacementTag != null) {
             this.replacementTextures.clear();
@@ -531,4 +532,53 @@ public abstract class MixinLevelProperties implements ExLevelProperties {
         playingMusic = music;
     }
 
+    @Override
+    public String getOnNewSaveScript() {
+        return onNewSaveScript;
+    }
+
+    @Override
+    public String getOnLoadScript() {
+        return onLoadScript;
+    }
+
+    @Override
+    public String getOnUpdateScript() {
+        return onUpdateScript;
+    }
+
+    @Override
+    public CompoundTag getGlobalScope() {
+        return globalScope;
+    }
+
+    @Override
+    public void setGlobalScope(CompoundTag globalScope) {
+        this.globalScope = globalScope;
+    }
+
+    @Override
+    public CompoundTag getWorldScope() {
+        return worldScope;
+    }
+
+    @Override
+    public void setWorldScope(CompoundTag worldScope) {
+        this.worldScope = worldScope;
+    }
+
+    @Override
+    public CompoundTag getMusicScope() {
+        return musicScope;
+    }
+
+    @Override
+    public void setMusicScope(CompoundTag musicScope) {
+        this.musicScope = musicScope;
+    }
+
+    @Override
+    public CompoundTag getTriggerData() {
+        return triggerData;
+    }
 }

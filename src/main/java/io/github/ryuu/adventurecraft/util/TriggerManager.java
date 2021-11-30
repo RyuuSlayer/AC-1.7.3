@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.util;
 
+import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
@@ -11,6 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TriggerManager {
+
+    boolean resetActive;
 
     Level world;
 
@@ -118,8 +121,8 @@ public class TriggerManager {
     private void activateBlocks(ArrayList<CoordBlock> blocksToActivate) {
         for (CoordBlock c : blocksToActivate) {
             int blockID = this.world.getTileId(c.x, c.y, c.z);
-            if (blockID != 0 && Tile.BY_ID[blockID].canBeTriggered()) {
-                Tile.BY_ID[blockID].onTriggerActivated(this.world, c.x, c.y, c.z);
+            if (blockID != 0 && ((ExTile) Tile.BY_ID[blockID]).canBeTriggered()) {
+                ((ExTile) Tile.BY_ID[blockID]).onTriggerActivated(this.world, c.x, c.y, c.z);
             }
         }
     }
@@ -129,8 +132,8 @@ public class TriggerManager {
             for (int y = area.minY; y <= area.maxY; ++y) {
                 for (int z = area.minZ; z <= area.maxZ; ++z) {
                     int blockID;
-                    if (this.getTriggerAmount(x, y, z) == 0 && (blockID = this.world.getTileId(x, y, z)) != 0 && Tile.BY_ID[blockID].canBeTriggered()) {
-                        Tile.BY_ID[blockID].onTriggerDeactivated(this.world, x, y, z);
+                    if (this.getTriggerAmount(x, y, z) == 0 && (blockID = this.world.getTileId(x, y, z)) != 0 && ((ExTile) Tile.BY_ID[blockID]).canBeTriggered()) {
+                        ((ExTile) Tile.BY_ID[blockID]).onTriggerDeactivated(this.world, x, y, z);
                     }
                 }
             }
@@ -174,5 +177,20 @@ public class TriggerManager {
                 areas.put(coordTag.getInt("areaID"), area);
             }
         }
+    }
+
+    public void resetArea(int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
+        boolean oldResetActive = resetActive;
+        resetActive = true;
+        for (int x = minX; x <= maxX; ++x) {
+            for (int y = minY; y <= maxY; ++y) {
+                for (int z = minZ; z <= maxZ; ++z) {
+                    int blockID = world.getTileId(x, y, z);
+                    if (blockID == 0) continue;
+                    ((ExTile) Tile.BY_ID[blockID]).reset(world, x, y, z, false);
+                }
+            }
+        }
+        resetActive = oldResetActive;
     }
 }

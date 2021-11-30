@@ -25,4 +25,8 @@ public interface ExChunk {
     TileEntity getChunkBlockTileEntityDontCreate(int i, int j, int k);
 
     boolean setBlockIDWithMetadataTemp(int i, int j, int k, int l, int i1);
+
+    long getLastUpdated();
+
+    void setLastUpdated(long lastUpdated);
 }

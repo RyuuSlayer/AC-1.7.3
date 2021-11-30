@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.mixin.client.render;
 
 import io.github.ryuu.adventurecraft.extensions.client.ExMinecraft;
 import io.github.ryuu.adventurecraft.extensions.items.ExItemType;
+import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.Vec2;
 import net.minecraft.client.Minecraft;
@@ -60,7 +61,7 @@ public class MixinHandItemRenderer {
     public void method_1862(LivingEntity entityliving, ItemInstance itemstack) {
         GL11.glPushMatrix();
         if (itemstack.itemId < 256 && TileRenderer.method_42(Tile.BY_ID[itemstack.itemId].method_1621())) {
-            int textureNum = Tile.BY_ID[itemstack.itemId].getTextureNum();
+            int textureNum = ((ExTile) Tile.BY_ID[itemstack.itemId]).getTextureNum();
             if (textureNum == 0) {
                 GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId("/terrain.png"));
             } else {
@@ -70,7 +71,7 @@ public class MixinHandItemRenderer {
         } else {
             String textureName = "/gui/items.png";
             if (itemstack.itemId < 256) {
-                int textureNum = Tile.BY_ID[itemstack.itemId].getTextureNum();
+                int textureNum = ((ExTile)Tile.BY_ID[itemstack.itemId]).getTextureNum();
                 textureName = textureNum == 0 ? "/terrain.png" : String.format("/terrain%d.png", textureNum);
             }
             GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId(textureName));

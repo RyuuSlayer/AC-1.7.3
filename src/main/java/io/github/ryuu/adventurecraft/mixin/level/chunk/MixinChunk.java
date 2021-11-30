@@ -71,6 +71,8 @@ public abstract class MixinChunk implements ExChunk {
 
     public double[] temperatures;
 
+    public long lastUpdated;
+
     @Shadow
     protected abstract void method_887(int i, int j);
 
@@ -386,5 +388,15 @@ public abstract class MixinChunk implements ExChunk {
     @Override
     public void setTemperatureValue(int x, int z, double temp) {
         this.temperatures[z << 4 | x] = temp;
+    }
+
+    @Override
+    public long getLastUpdated() {
+        return lastUpdated;
+    }
+
+    @Override
+    public void setLastUpdated(long lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

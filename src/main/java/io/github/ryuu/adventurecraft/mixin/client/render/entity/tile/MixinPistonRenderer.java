@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.client.render.entity.tile;
 
+import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.RenderHelper;
 import net.minecraft.client.render.Tessellator;
@@ -30,7 +31,7 @@ public class MixinPistonRenderer extends TileEntityRenderer {
         Tile block = Tile.BY_ID[tileentitypiston.method_1518()];
         if (block != null && tileentitypiston.method_1519(f) < 1.0f) {
             Tessellator tessellator = Tessellator.INSTANCE;
-            int textureNum = block.getTextureNum();
+            int textureNum = ((ExTile)block).getTextureNum();
             String textureName = textureNum == 0 ? "/terrain.png" : String.format("/terrain%d.png", textureNum);
             this.bindTexture(textureName);
             RenderHelper.disableLighting();

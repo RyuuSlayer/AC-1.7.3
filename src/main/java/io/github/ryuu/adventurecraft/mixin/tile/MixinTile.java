@@ -4,17 +4,18 @@ import io.github.ryuu.adventurecraft.blocks.BlockColor;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import io.github.ryuu.adventurecraft.items.ItemSubtypes;
-import net.minecraft.entity.player.Player;
-import net.minecraft.item.*;
+import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
-import net.minecraft.stat.Stats;
-import net.minecraft.tile.*;
-import net.minecraft.tile.entity.Sign;
+import net.minecraft.tile.GrassTile;
+import net.minecraft.tile.StoneTile;
+import net.minecraft.tile.Tile;
+import net.minecraft.tile.TileSounds;
 import net.minecraft.tile.material.Material;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.maths.Vec3f;
-import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -27,8 +28,6 @@ public abstract class MixinTile implements ExTile {
     @Shadow @Final public static Tile STONE;
 
     @Shadow protected abstract Tile hardness(float f);
-
-    @Shadow protected abstract Tile setUnbreakable();
 
     @Shadow protected abstract Tile blastResistance(float f);
 
@@ -71,27 +70,6 @@ public abstract class MixinTile implements ExTile {
     @Shadow
     public TileSounds sounds;
 
-    @Shadow
-    public float field_1927;
-
-    @Shadow
-    public float field_1901;
-
-    @Shadow
-    protected float hardness;
-
-    @Shadow
-    protected float resistance;
-
-    @Shadow
-    protected boolean field_1918;
-
-    @Shadow
-    protected boolean opaque;
-
-    @Shadow
-    private String name;
-
     @Shadow @Final public static Tile[] BY_ID;
 
     @Shadow protected abstract void afterTileItemCreated();
@@ -126,7 +104,7 @@ public abstract class MixinTile implements ExTile {
 
     @Shadow @Final public static TileSounds SAND_SOUNDS;
 
-    private static final int[] subTypes;
+    protected static final int[] subTypes;
     public int textureNum = 0;
 
     static {
@@ -152,11 +130,6 @@ public abstract class MixinTile implements ExTile {
         ItemType.byId[Tile.TALLGRASS.id] = new ItemSubtypes(Tile.TALLGRASS.id - 256).setName("tallgrass");
     }
 
-
-
-    // TODO Remove all uses of resetArea because it's unnecessary
-
-
     @Inject(method = "onTileRemoved", at = @At("HEAD"))
     private void onTileRemoved(Level level, int x, int y, int z, CallbackInfo ci) {
         ((ExLevel) level).getTriggerManager().removeArea(x, y, z);
@@ -179,7 +152,7 @@ public abstract class MixinTile implements ExTile {
     }
 
     @Override
-    public int adventurecraft$getTextureNum() {
+    public int getTextureNum() {
         return this.textureNum;
     }
 

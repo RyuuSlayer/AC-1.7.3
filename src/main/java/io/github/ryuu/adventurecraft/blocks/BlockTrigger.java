@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityMinMax;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityTrigger;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.gui.GuiTrigger;
 import io.github.ryuu.adventurecraft.items.ItemCursor;
 import io.github.ryuu.adventurecraft.items.Items;
@@ -131,17 +132,17 @@ public class BlockTrigger extends TileWithEntity {
     }
 
     @Override
-    public void onEntityCollision(Level world, int i, int j, int k, Entity entity) {
+    public void onEntityCollision(Level level, int i, int j, int k, Entity entity) {
         if (DebugMode.active) {
             return;
         }
-        TileEntityTrigger obj = (TileEntityTrigger) world.getTileEntity(i, j, k);
+        TileEntityTrigger obj = (TileEntityTrigger) level.getTileEntity(i, j, k);
         if (entity instanceof Player) {
-            if (!this.isAlreadyActivated(world, i, j, k)) {
+            if (!this.isAlreadyActivated(level, i, j, k)) {
                 if (!obj.resetOnTrigger) {
-                    world.triggerManager.addArea(i, j, k, new TriggerArea(obj.minX, obj.minY, obj.minZ, obj.maxX, obj.maxY, obj.maxZ));
+                    ((ExLevel)level).getTriggerManager().addArea(i, j, k, new TriggerArea(obj.minX, obj.minY, obj.minZ, obj.maxX, obj.maxY, obj.maxZ));
                 } else {
-                    Tile.resetArea(world, obj.minX, obj.minY, obj.minZ, obj.maxX, obj.maxY, obj.maxZ);
+                    ((ExLevel)level).getTriggerManager().resetArea(obj.minX, obj.minY, obj.minZ, obj.maxX, obj.maxY, obj.maxZ);
                 }
             }
             obj.activated = 2;

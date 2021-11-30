@@ -1,5 +1,8 @@
 package io.github.ryuu.adventurecraft.extensions.level;
 
+import net.minecraft.level.Level;
+import net.minecraft.util.io.CompoundTag;
+
 public interface ExLevelProperties {
 
     double getMapSize();
@@ -112,4 +115,25 @@ public interface ExLevelProperties {
 
     void setPlayingMusic(String music);
 
+    String getOnNewSaveScript();
+
+    String getOnLoadScript();
+
+    String getOnUpdateScript();
+
+    CompoundTag getGlobalScope();
+
+    void setGlobalScope(CompoundTag globalScope);
+
+    CompoundTag getWorldScope();
+
+    void setWorldScope(CompoundTag worldScope);
+
+    CompoundTag getMusicScope();
+
+    void setMusicScope(CompoundTag musicScope);
+
+    CompoundTag getTriggerData();
+
+    void loadTextureReplacements(Level w);
 }

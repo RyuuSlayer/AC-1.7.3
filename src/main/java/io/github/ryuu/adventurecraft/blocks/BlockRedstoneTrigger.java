@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityRedstoneTrigger;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.gui.GuiRedstoneTrigger;
 import io.github.ryuu.adventurecraft.items.ItemCursor;
 import io.github.ryuu.adventurecraft.items.Items;
@@ -38,20 +39,20 @@ public class BlockRedstoneTrigger extends TileWithEntity {
         return this.tex + 1;
     }
 
-    private void updateBlock(Level world, int i, int j, int k, int l) {
-        boolean flag = world.hasRedstonePower(i, j, k);
-        TileEntityRedstoneTrigger obj = (TileEntityRedstoneTrigger) world.getTileEntity(i, j, k);
+    private void updateBlock(Level level, int i, int j, int k, int l) {
+        boolean flag = level.hasRedstonePower(i, j, k);
+        TileEntityRedstoneTrigger obj = (TileEntityRedstoneTrigger) level.getTileEntity(i, j, k);
         if (obj != null && obj.isActivated != flag) {
             obj.isActivated = flag;
-            world.method_243(i, j, k);
+            level.method_243(i, j, k);
             if (flag) {
                 if (!obj.resetOnTrigger) {
-                    world.triggerManager.addArea(i, j, k, new TriggerArea(obj.minX, obj.minY, obj.minZ, obj.maxX, obj.maxY, obj.maxZ));
+                    ((ExLevel)level).getTriggerManager().addArea(i, j, k, new TriggerArea(obj.minX, obj.minY, obj.minZ, obj.maxX, obj.maxY, obj.maxZ));
                 } else {
-                    BlockRedstoneTrigger.resetArea(world, obj.minX, obj.minY, obj.minZ, obj.maxX, obj.maxY, obj.maxZ);
+                    ((ExLevel)level).getTriggerManager().resetArea(obj.minX, obj.minY, obj.minZ, obj.maxX, obj.maxY, obj.maxZ);
                 }
             } else {
-                world.triggerManager.removeArea(i, j, k);
+                ((ExLevel)level).getTriggerManager().removeArea(i, j, k);
             }
         }
     }

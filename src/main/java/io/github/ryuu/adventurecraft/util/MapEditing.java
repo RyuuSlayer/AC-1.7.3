@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.util;
 
 import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
+import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import io.github.ryuu.adventurecraft.items.ItemCursor;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.Minecraft;
@@ -158,7 +159,7 @@ public class MapEditing {
                     for (int j = ItemCursor.minY; j <= ItemCursor.maxY; ++j) {
                         for (int k = ItemCursor.minZ; k <= ItemCursor.maxZ; ++k) {
                             int blockID = this.mc.level.getTileId(i, j, k);
-                            if (Tile.BY_ID[blockID] == null || Tile.BY_ID[blockID].getTextureNum() != texNum) continue;
+                            if (Tile.BY_ID[blockID] == null || ((ExTile)Tile.BY_ID[blockID]).getTextureNum() != texNum) continue;
                             int metadata = this.mc.level.getTileMeta(i, j, k);
                             this.drawBlock(i + xOffset, j + yOffset, k + zOffset, blockID, metadata);
                         }

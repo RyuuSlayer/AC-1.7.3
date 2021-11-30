@@ -1,7 +1,7 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.util.TriggerArea;
-import net.minecraft.tile.Tile;
 import net.minecraft.util.io.CompoundTag;
 
 public class TileEntityTimer extends TileEntityMinMax {
@@ -34,9 +34,9 @@ public class TileEntityTimer extends TileEntityMinMax {
             --this.ticksDelay;
             if (this.ticksDelay == 0) {
                 if (!this.resetOnTrigger) {
-                    this.level.triggerManager.addArea(this.x, this.y, this.z, new TriggerArea(this.minX, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ));
+                    ((ExLevel)this.level).getTriggerManager().addArea(this.x, this.y, this.z, new TriggerArea(this.minX, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ));
                 } else {
-                    Tile.resetArea(this.level, this.minX, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ);
+                    ((ExLevel)this.level).getTriggerManager().resetArea(this.minX, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ);
                 }
             } else {
                 return;
@@ -48,7 +48,7 @@ public class TileEntityTimer extends TileEntityMinMax {
                 this.canActivate = false;
                 this.ticks = this.timeDeactive;
                 if (!this.resetOnTrigger) {
-                    this.level.triggerManager.removeArea(this.x, this.y, this.z);
+                    ((ExLevel)this.level).getTriggerManager().removeArea(this.x, this.y, this.z);
                 }
             } else {
                 this.canActivate = true;

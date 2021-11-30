@@ -15,4 +15,16 @@ public interface ExTile {
     boolean adventurecraft$shouldRender(TileView blockAccess, int i, int j, int k);
 
     Tile adventurecraft$setSubTypes(int i);
+
+    boolean canBeTriggered();
+
+    void addTriggerActivation(Level world, int i, int j, int k);
+
+    void removeTriggerActivation(Level world, int i, int j, int k);
+
+    void onTriggerActivated(Level world, int i, int j, int k);
+
+    void onTriggerDeactivated(Level world, int i, int j, int k);
+
+    void reset(Level world, int i, int j, int k, boolean death);
 }
