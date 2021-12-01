@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.io.CompoundTag;
 
@@ -110,7 +111,7 @@ public class TileEntityEffect extends TileEntity {
     @Override
     public void tick() {
         if (this.checkTrigger) {
-            this.isActivated = this.level.triggerManager.isActivated(this.x, this.y, this.z);
+            this.isActivated = ((ExLevel)this.level).getTriggerManager().isActivated(this.x, this.y, this.z);
             this.checkTrigger = false;
         }
         if (this.isActivated) {

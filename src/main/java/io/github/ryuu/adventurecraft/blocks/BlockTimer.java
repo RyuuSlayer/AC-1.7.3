@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityMinMax;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityTimer;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.gui.GuiTimer;
 import io.github.ryuu.adventurecraft.items.ItemCursor;
 import io.github.ryuu.adventurecraft.util.DebugMode;
@@ -80,11 +81,11 @@ public class BlockTimer extends TileWithEntity {
     }
 
     @Override
-    public void reset(Level world, int i, int j, int k, boolean death) {
-        TileEntityTimer obj = (TileEntityTimer) world.getTileEntity(i, j, k);
+    public void reset(Level level, int i, int j, int k, boolean death) {
+        TileEntityTimer obj = (TileEntityTimer) level.getTileEntity(i, j, k);
         obj.active = false;
         obj.canActivate = true;
         obj.ticks = 0;
-        world.triggerManager.removeArea(i, j, k);
+        ((ExLevel)level).getTriggerManager().removeArea(i, j, k);
     }
 }

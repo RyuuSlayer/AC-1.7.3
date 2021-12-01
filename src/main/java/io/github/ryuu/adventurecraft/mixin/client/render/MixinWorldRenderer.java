@@ -4,9 +4,12 @@ import io.github.ryuu.adventurecraft.extensions.client.ExMinecraft;
 import io.github.ryuu.adventurecraft.extensions.client.render.ExWorldRenderer;
 import io.github.ryuu.adventurecraft.extensions.entity.ExLivingEntity;
 import io.github.ryuu.adventurecraft.extensions.entity.player.ExPlayer;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.extensions.level.chunk.ExClientChunkCache;
+import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import io.github.ryuu.adventurecraft.items.ItemCursor;
 import io.github.ryuu.adventurecraft.items.Items;
+import io.github.ryuu.adventurecraft.mixin.AccessClass_61;
 import io.github.ryuu.adventurecraft.mixin.level.AccessLevel;
 import io.github.ryuu.adventurecraft.scripting.ScriptModel;
 import io.github.ryuu.adventurecraft.util.CutsceneCameraPoint;
@@ -18,7 +21,6 @@ import net.minecraft.client.GLAllocator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.*;
 import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.TileRenderer;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.texture.TextureManager;
@@ -420,35 +422,35 @@ public abstract class MixinWorldRenderer implements LevelListener, ExWorldRender
             int maxY = Math.max(ItemCursor.oneY, ItemCursor.twoY) + 1;
             int minZ = Math.min(ItemCursor.oneZ, ItemCursor.twoZ);
             int maxZ = Math.max(ItemCursor.oneZ, ItemCursor.twoZ) + 1;
-            double offX = entityplayer.prevRenderX + (entityplayer.x - entityplayer.prevRenderX) * (double) f;
-            double offY = entityplayer.prevRenderY + (entityplayer.y - entityplayer.prevRenderY) * (double) f;
-            double offZ = entityplayer.prevRenderZ + (entityplayer.z - entityplayer.prevRenderZ) * (double) f;
+            double offX = entityplayer.prevRenderX + (entityplayer.x - entityplayer.prevRenderX) * f;
+            double offY = entityplayer.prevRenderY + (entityplayer.y - entityplayer.prevRenderY) * f;
+            double offZ = entityplayer.prevRenderZ + (entityplayer.z - entityplayer.prevRenderZ) * f;
             Tessellator tessellator = Tessellator.INSTANCE;
             for (int x = minX; x <= maxX; ++x) {
                 tessellator.start(3);
-                tessellator.pos((double) x - offX, (double) minY - offY, (double) minZ - offZ);
-                tessellator.pos((double) x - offX, (double) maxY - offY, (double) minZ - offZ);
-                tessellator.pos((double) x - offX, (double) maxY - offY, (double) maxZ - offZ);
-                tessellator.pos((double) x - offX, (double) minY - offY, (double) maxZ - offZ);
-                tessellator.pos((double) x - offX, (double) minY - offY, (double) minZ - offZ);
+                tessellator.pos(x - offX, minY - offY, minZ - offZ);
+                tessellator.pos(x - offX, maxY - offY, minZ - offZ);
+                tessellator.pos(x - offX, maxY - offY, maxZ - offZ);
+                tessellator.pos(x - offX, minY - offY, maxZ - offZ);
+                tessellator.pos(x - offX, minY - offY, minZ - offZ);
                 tessellator.draw();
             }
             for (int y = minY; y <= maxY; ++y) {
                 tessellator.start(3);
-                tessellator.pos((double) minX - offX, (double) y - offY, (double) minZ - offZ);
-                tessellator.pos((double) maxX - offX, (double) y - offY, (double) minZ - offZ);
-                tessellator.pos((double) maxX - offX, (double) y - offY, (double) maxZ - offZ);
-                tessellator.pos((double) minX - offX, (double) y - offY, (double) maxZ - offZ);
-                tessellator.pos((double) minX - offX, (double) y - offY, (double) minZ - offZ);
+                tessellator.pos(minX - offX, y - offY, minZ - offZ);
+                tessellator.pos(maxX - offX, y - offY, minZ - offZ);
+                tessellator.pos(maxX - offX, y - offY, maxZ - offZ);
+                tessellator.pos(minX - offX, y - offY, maxZ - offZ);
+                tessellator.pos(minX - offX, y - offY, minZ - offZ);
                 tessellator.draw();
             }
             for (int z = minZ; z <= maxZ; ++z) {
                 tessellator.start(3);
-                tessellator.pos((double) minX - offX, (double) minY - offY, (double) z - offZ);
-                tessellator.pos((double) maxX - offX, (double) minY - offY, (double) z - offZ);
-                tessellator.pos((double) maxX - offX, (double) maxY - offY, (double) z - offZ);
-                tessellator.pos((double) minX - offX, (double) maxY - offY, (double) z - offZ);
-                tessellator.pos((double) minX - offX, (double) minY - offY, (double) z - offZ);
+                tessellator.pos(minX - offX, minY - offY, z - offZ);
+                tessellator.pos(maxX - offX, minY - offY, z - offZ);
+                tessellator.pos(maxX - offX, maxY - offY, z - offZ);
+                tessellator.pos(minX - offX, maxY - offY, z - offZ);
+                tessellator.pos(minX - offX, minY - offY, z - offZ);
                 tessellator.draw();
             }
             GL11.glLineWidth(1.0f);
@@ -462,9 +464,9 @@ public abstract class MixinWorldRenderer implements LevelListener, ExWorldRender
         if (e instanceof IEntityPather) {
             IEntityPather ent = (IEntityPather) e;
             class_61 path = ent.getCurrentPath();
-            double offX = entityplayer.prevRenderX + (entityplayer.x - entityplayer.prevRenderX) * (double) f;
-            double offY = entityplayer.prevRenderY + (entityplayer.y - entityplayer.prevRenderY) * (double) f;
-            double offZ = entityplayer.prevRenderZ + (entityplayer.z - entityplayer.prevRenderZ) * (double) f;
+            double offX = entityplayer.prevRenderX + (entityplayer.x - entityplayer.prevRenderX) * f;
+            double offY = entityplayer.prevRenderY + (entityplayer.y - entityplayer.prevRenderY) * f;
+            double offZ = entityplayer.prevRenderZ + (entityplayer.z - entityplayer.prevRenderZ) * f;
             if (path != null) {
                 Tessellator tessellator = Tessellator.INSTANCE;
                 tessellator.start(3);
@@ -478,9 +480,9 @@ public abstract class MixinWorldRenderer implements LevelListener, ExWorldRender
                 GL11.glLineWidth(5.0f);
                 GL11.glDisable(3553);
                 tessellator.pos(e.x - offX, e.y - offY, e.z - offZ);
-                for (int i = path.field_2692; i < path.field_2690; ++i) {
-                    Vec3i p = path.field_2691[i];
-                    tessellator.pos((double) p.x - offX + 0.5, (double) p.y - offY + 0.5, (double) p.z - offZ + 0.5);
+                for (int i = ((AccessClass_61) path).getField_2692(); i < path.field_2690; ++i) {
+                    Vec3i p = ((AccessClass_61) path).getField_2691()[i];
+                    tessellator.pos(p.x - offX + 0.5, p.y - offY + 0.5, p.z - offZ + 0.5);
                 }
                 tessellator.draw();
                 GL11.glLineWidth(1.0f);
@@ -495,28 +497,28 @@ public abstract class MixinWorldRenderer implements LevelListener, ExWorldRender
         if (e == entityplayer) {
             return;
         }
-        double offX = entityplayer.prevRenderX + (entityplayer.x - entityplayer.prevRenderX) * (double) f;
-        double offY = entityplayer.prevRenderY + (entityplayer.y - entityplayer.prevRenderY) * (double) f;
-        double offZ = entityplayer.prevRenderZ + (entityplayer.z - entityplayer.prevRenderZ) * (double) f;
+        double offX = entityplayer.prevRenderX + (entityplayer.x - entityplayer.prevRenderX) * f;
+        double offY = entityplayer.prevRenderY + (entityplayer.y - entityplayer.prevRenderY) * f;
+        double offZ = entityplayer.prevRenderZ + (entityplayer.z - entityplayer.prevRenderZ) * f;
         Tessellator tessellator = Tessellator.INSTANCE;
         tessellator.start(3);
         GL11.glEnable(3042);
         GL11.glBlendFunc(770, 771);
-        if (((ExLivingEntity)e).getExtraFov() > 0.0f) {
+        if (((ExLivingEntity) e).getExtraFov() > 0.0f) {
             GL11.glColor4f(1.0f, 0.5f, 0.0f, 0.4f);
         } else {
             GL11.glColor4f(0.0f, 1.0f, 0.0f, 0.4f);
         }
         GL11.glLineWidth(5.0f);
         GL11.glDisable(3553);
-        float fov = Math.min((float) (((ExLivingEntity)e).getFov() / 2.0f + ((ExLivingEntity)e).getExtraFov()), 180.0f);
-        double xFov = 5.0 * Math.sin(-Math.PI * (double) (e.yaw - fov) / 180.0) + e.x;
-        double zFov = 5.0 * Math.cos(-Math.PI * (double) (e.yaw - fov) / 180.0) + e.z;
-        tessellator.pos(xFov - offX, e.y - offY + (double) e.getStandingEyeHeight(), zFov - offZ);
-        tessellator.pos(e.x - offX, e.y - offY + (double) e.getStandingEyeHeight(), e.z - offZ);
-        xFov = 5.0 * Math.sin(-Math.PI * (double) (e.yaw + fov) / 180.0) + e.x;
-        zFov = 5.0 * Math.cos(-Math.PI * (double) (e.yaw + fov) / 180.0) + e.z;
-        tessellator.pos(xFov - offX, e.y - offY + (double) e.getStandingEyeHeight(), zFov - offZ);
+        float fov = Math.min(((ExLivingEntity) e).getFov() / 2.0f + ((ExLivingEntity) e).getExtraFov(), 180.0f);
+        double xFov = 5.0 * Math.sin(-Math.PI * (e.yaw - fov) / 180.0) + e.x;
+        double zFov = 5.0 * Math.cos(-Math.PI * (e.yaw - fov) / 180.0) + e.z;
+        tessellator.pos(xFov - offX, e.y - offY + e.getStandingEyeHeight(), zFov - offZ);
+        tessellator.pos(e.x - offX, e.y - offY + e.getStandingEyeHeight(), e.z - offZ);
+        xFov = 5.0 * Math.sin(-Math.PI * (e.yaw + fov) / 180.0) + e.x;
+        zFov = 5.0 * Math.cos(-Math.PI * (e.yaw + fov) / 180.0) + e.z;
+        tessellator.pos(xFov - offX, e.y - offY + e.getStandingEyeHeight(), zFov - offZ);
         tessellator.draw();
         GL11.glLineWidth(1.0f);
         GL11.glEnable(3553);
@@ -619,7 +621,7 @@ public abstract class MixinWorldRenderer implements LevelListener, ExWorldRender
     }
 
     private void doReset(boolean forDeath) {
-        Tile.resetActive = true;
+        ((ExLevel)level).getTriggerManager().resetActive = true;
         for (net.minecraft.class_66 class_66 : this.field_1809) {
             int xOffset = class_66.field_231;
             int yOffset = class_66.field_232;
@@ -631,11 +633,11 @@ public abstract class MixinWorldRenderer implements LevelListener, ExWorldRender
                     for (int z = 0; z < 16; ++z) {
                         int blockID = this.level.getTileId(xOffset + x, yOffset + y, zOffset + z);
                         if (blockID <= 0) continue;
-                        Tile.BY_ID[blockID].reset(this.level, xOffset + x, yOffset + y, zOffset + z, forDeath);
+                        ((ExTile)Tile.BY_ID[blockID]).reset(this.level, xOffset + x, yOffset + y, zOffset + z, forDeath);
                     }
                 }
             }
         }
-        Tile.resetActive = false;
+        ((ExLevel)level).getTriggerManager().resetActive = false;
     }
 }

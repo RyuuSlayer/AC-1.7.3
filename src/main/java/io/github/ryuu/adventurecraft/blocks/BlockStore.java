@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityStore;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.gui.GuiStoreDebug;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.util.DebugMode;
@@ -46,8 +47,8 @@ public class BlockStore extends TileWithEntity {
                 }
                 --store.buySupplyLeft;
                 if (store.tradeTrigger != null) {
-                    level.triggerManager.addArea(x, y, z, store.tradeTrigger);
-                    level.triggerManager.removeArea(x, y, z);
+                    ((ExLevel)level).getTriggerManager().addArea(x, y, z, store.tradeTrigger);
+                    ((ExLevel)level).getTriggerManager().removeArea(x, y, z);
                 }
             } else {
                 AccessMinecraft.getInstance().overlay.addChatMessage("Don't have enough to trade.");

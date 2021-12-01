@@ -115,16 +115,16 @@ public class BlockTrigger extends TileWithEntity {
         this.setNotVisited(world, i, j, k);
     }
 
-    private void _removeArea(Level world, int i, int j, int k) {
-        TileEntityTrigger obj = (TileEntityTrigger) world.getTileEntity(i, j, k);
+    private void _removeArea(Level level, int i, int j, int k) {
+        TileEntityTrigger obj = (TileEntityTrigger) level.getTileEntity(i, j, k);
         if (!obj.visited) {
             obj.visited = true;
-            world.triggerManager.removeArea(i, j, k);
+            ((ExLevel)level).getTriggerManager().removeArea(i, j, k);
             for (int x = i - 1; x <= i + 1; ++x) {
                 for (int y = j - 1; y <= j + 1; ++y) {
                     for (int z = k - 1; z <= k + 1; ++z) {
-                        if (world.getTileId(x, y, z) != this.id) continue;
-                        this._removeArea(world, x, y, z);
+                        if (level.getTileId(x, y, z) != this.id) continue;
+                        this._removeArea(level, x, y, z);
                     }
                 }
             }

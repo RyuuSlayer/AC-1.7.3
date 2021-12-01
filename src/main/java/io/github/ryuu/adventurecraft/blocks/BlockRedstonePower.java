@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.blocks;
 
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
@@ -24,7 +25,7 @@ public class BlockRedstonePower extends Tile {
     @Override
     public int method_1626(TileView iblockaccess, int i, int j, int k, int l) {
         if (l <= 1) {
-            if (AccessMinecraft.getInstance().level.triggerManager.isActivated(i, j, k)) {
+            if (((ExLevel) AccessMinecraft.getInstance().level).getTriggerManager().isActivated(i, j, k)) {
                 return 185;
             }
             return 186;
@@ -82,28 +83,28 @@ public class BlockRedstonePower extends Tile {
 
     @Override
     public boolean method_1568(TileView iblockaccess, int i, int j, int k, int l) {
-        return AccessMinecraft.getInstance().level.triggerManager.isActivated(i, j, k);
+        return ((ExLevel) AccessMinecraft.getInstance().level).getTriggerManager().isActivated(i, j, k);
     }
 
     @Override
-    public boolean method_1570(Level world, int i, int j, int k, int l) {
-        return world.triggerManager.isActivated(i, j, k);
+    public boolean method_1570(Level level, int i, int j, int k, int l) {
+        return ((ExLevel) level).getTriggerManager().isActivated(i, j, k);
     }
 
     @Override
     public void randomDisplayTick(Level level, int x, int y, int z, Random rand) {
-        boolean activated = level.triggerManager.isActivated(x, y, z);
+        boolean activated = ((ExLevel) level).getTriggerManager().isActivated(x, y, z);
         if (activated) {
-            double d = (double) ((float) x + 0.5f) + (double) (rand.nextFloat() - 0.5f) * 0.2;
-            double d1 = (double) ((float) y + 0.95f) + (double) (rand.nextFloat() - 0.5f) * 0.2;
-            double d2 = (double) ((float) z + 0.5f) + (double) (rand.nextFloat() - 0.5f) * 0.2;
+            double d = (x + 0.5f) + (rand.nextFloat() - 0.5f) * 0.2;
+            double d1 = (y + 0.95f) + (rand.nextFloat() - 0.5f) * 0.2;
+            double d2 = (z + 0.5f) + (rand.nextFloat() - 0.5f) * 0.2;
             level.addParticle("reddust", d, d1, d2, 0.0, 0.0, 0.0);
         }
     }
 
     @Override
     public int getBlockLightValue(TileView iblockaccess, int i, int j, int k) {
-        if (AccessMinecraft.getInstance().level.triggerManager.isActivated(i, j, k)) {
+        if (((ExLevel) AccessMinecraft.getInstance().level).getTriggerManager().isActivated(i, j, k)) {
             return 14;
         }
         return 0;

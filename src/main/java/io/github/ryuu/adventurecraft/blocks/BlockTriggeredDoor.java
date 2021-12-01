@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.blocks;
 
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.level.Level;
@@ -27,12 +28,12 @@ public class BlockTriggeredDoor extends Tile {
 
     @Override
     public boolean shouldRender(TileView blockAccess, int i, int j, int k) {
-        return DebugMode.active || AccessMinecraft.getInstance().level.triggerManager.isActivated(i, j, k);
+        return DebugMode.active || ((ExLevel)AccessMinecraft.getInstance().level).getTriggerManager().isActivated(i, j, k);
     }
 
     @Override
     public Box getCollisionShape(Level level, int x, int y, int z) {
-        if (!level.triggerManager.isActivated(x, y, z) || DebugMode.active) {
+        if (!((ExLevel)level).getTriggerManager().isActivated(x, y, z) || DebugMode.active) {
             return null;
         }
         return super.getCollisionShape(level, x, y, z);
@@ -44,14 +45,14 @@ public class BlockTriggeredDoor extends Tile {
     }
 
     @Override
-    public void onTriggerActivated(Level world, int i, int j, int k) {
-        world.playSound((double) i + 0.5, (double) j + 0.5, (double) k + 0.5, "random.door_open", 1.0f, world.rand.nextFloat() * 0.1f + 0.9f);
-        world.method_243(i, j, k);
+    public void onTriggerActivated(Level level, int i, int j, int k) {
+        level.playSound((double) i + 0.5, (double) j + 0.5, (double) k + 0.5, "random.door_open", 1.0f, level.rand.nextFloat() * 0.1f + 0.9f);
+        level.method_243(i, j, k);
     }
 
     @Override
-    public void onTriggerDeactivated(Level world, int i, int j, int k) {
-        world.playSound((double) i + 0.5, (double) j + 0.5, (double) k + 0.5, "random.door_close", 1.0f, world.rand.nextFloat() * 0.1f + 0.9f);
-        world.method_243(i, j, k);
+    public void onTriggerDeactivated(Level level, int i, int j, int k) {
+        level.playSound((double) i + 0.5, (double) j + 0.5, (double) k + 0.5, "random.door_close", 1.0f, level.rand.nextFloat() * 0.1f + 0.9f);
+        level.method_243(i, j, k);
     }
 }

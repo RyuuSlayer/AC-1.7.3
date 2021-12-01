@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(Wolf.class)
-public abstract class MixinWolf extends Animal implements ExWolf {
+public abstract class MixinWolf extends Animal implements AccessWolf, ExWolf {
 
     private int attackStrength = -1;
 

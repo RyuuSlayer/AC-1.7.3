@@ -1,11 +1,11 @@
 package io.github.ryuu.adventurecraft.mixin.entity;
 
+import io.github.ryuu.adventurecraft.extensions.ExClass_61;
 import io.github.ryuu.adventurecraft.extensions.entity.ExWalkingEntity;
 import io.github.ryuu.adventurecraft.util.IEntityPather;
 import net.minecraft.class_61;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.WalkingEntity;
-import net.minecraft.level.Level;
 import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.MathsHelper;
 import net.minecraft.util.maths.Vec3f;
@@ -30,10 +30,6 @@ public abstract class MixinWalkingEntity extends MixinLivingEntity implements IE
 
     @Shadow
     private class_61 field_661;
-
-    public MixinWalkingEntity(Level world) {
-        super(world);
-    }
 
     @Shadow
     protected abstract void method_632();
@@ -81,7 +77,7 @@ public abstract class MixinWalkingEntity extends MixinLivingEntity implements IE
         if (this.entity != null) {
             canEntityBeSeen = this.method_928(this.entity);
         }
-        if (!this.field_663 && this.entity != null && (this.field_661 == null || this.rand.nextInt(5) == 0 && this.field_661.needNewPath(this.entity)) && canEntityBeSeen) {
+        if (!this.field_663 && this.entity != null && (this.field_661 == null || this.rand.nextInt(5) == 0 && ((ExClass_61)this.field_661).needNewPath(this.entity)) && canEntityBeSeen) {
             this.field_661 = this.level.method_192((Entity) (Object) this, this.entity, f);
         } else if (this.pathRandomly && !this.field_663 && (this.field_661 == null && this.rand.nextInt(80) == 0 || this.rand.nextInt(80) == 0)) {
             this.method_632();
@@ -117,7 +113,7 @@ public abstract class MixinWalkingEntity extends MixinLivingEntity implements IE
         if (vec3d != null) {
             double d1 = vec3d.x - this.x;
             double d2 = vec3d.z - this.z;
-            double d3 = vec3d.y - (double) i;
+            double d3 = vec3d.y - i;
             float f2 = (float) (Math.atan2(d2, d1) * 180.0 / 3.1415927410125732) - 90.0f;
             this.parallelMovement = this.movementSpeed;
             float f3 = f2 - this.yaw;

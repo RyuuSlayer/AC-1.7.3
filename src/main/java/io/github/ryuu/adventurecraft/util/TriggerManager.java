@@ -13,14 +13,14 @@ import java.util.Map;
 
 public class TriggerManager {
 
-    boolean resetActive;
+    public boolean resetActive;
 
-    Level world;
+    Level level;
 
     HashMap<CoordBlock, HashMap<Integer, TriggerArea>> triggerAreas;
 
-    public TriggerManager(Level w) {
-        this.world = w;
+    public TriggerManager(Level level) {
+        this.level = level;
         this.triggerAreas = new HashMap<>();
     }
 
@@ -120,9 +120,9 @@ public class TriggerManager {
 
     private void activateBlocks(ArrayList<CoordBlock> blocksToActivate) {
         for (CoordBlock c : blocksToActivate) {
-            int blockID = this.world.getTileId(c.x, c.y, c.z);
+            int blockID = this.level.getTileId(c.x, c.y, c.z);
             if (blockID != 0 && ((ExTile) Tile.BY_ID[blockID]).canBeTriggered()) {
-                ((ExTile) Tile.BY_ID[blockID]).onTriggerActivated(this.world, c.x, c.y, c.z);
+                ((ExTile) Tile.BY_ID[blockID]).onTriggerActivated(this.level, c.x, c.y, c.z);
             }
         }
     }
@@ -132,8 +132,8 @@ public class TriggerManager {
             for (int y = area.minY; y <= area.maxY; ++y) {
                 for (int z = area.minZ; z <= area.maxZ; ++z) {
                     int blockID;
-                    if (this.getTriggerAmount(x, y, z) == 0 && (blockID = this.world.getTileId(x, y, z)) != 0 && ((ExTile) Tile.BY_ID[blockID]).canBeTriggered()) {
-                        ((ExTile) Tile.BY_ID[blockID]).onTriggerDeactivated(this.world, x, y, z);
+                    if (this.getTriggerAmount(x, y, z) == 0 && (blockID = this.level.getTileId(x, y, z)) != 0 && ((ExTile) Tile.BY_ID[blockID]).canBeTriggered()) {
+                        ((ExTile) Tile.BY_ID[blockID]).onTriggerDeactivated(this.level, x, y, z);
                     }
                 }
             }
@@ -185,9 +185,9 @@ public class TriggerManager {
         for (int x = minX; x <= maxX; ++x) {
             for (int y = minY; y <= maxY; ++y) {
                 for (int z = minZ; z <= maxZ; ++z) {
-                    int blockID = world.getTileId(x, y, z);
+                    int blockID = level.getTileId(x, y, z);
                     if (blockID == 0) continue;
-                    ((ExTile) Tile.BY_ID[blockID]).reset(world, x, y, z, false);
+                    ((ExTile) Tile.BY_ID[blockID]).reset(level, x, y, z, false);
                 }
             }
         }

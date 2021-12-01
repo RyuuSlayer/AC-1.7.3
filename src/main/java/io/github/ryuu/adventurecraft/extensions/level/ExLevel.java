@@ -35,6 +35,12 @@ public interface ExLevel {
 
     File getLevelDir();
 
+    void setLevelDir(File levelDir);
+
+    DimensionData getMapHandler();
+
+    void setMapHandler(DimensionData mapHandler);
+
     TriggerManager getTriggerManager();
 
     Script getScript();
@@ -109,35 +115,35 @@ public interface ExLevel {
         exLevel.setMapHandler(new McRegionDimensionFile(mapDir, acLevelName, false));
         exLevel.setLevelDir(levelFile);
 
-        level.field_197 = false;
-        level.field_181 = new ArrayList<>();
-        level.entities = new ArrayList<>();
-        level.field_182 = new ArrayList<>();
-        level.field_183 = new TreeSet<>();
-        level.field_184 = new HashSet<>();
-        level.tileEntities = new ArrayList<>();
-        level.field_185 = new ArrayList<>();
-        level.players = new ArrayList<>();
-        level.field_201 = new ArrayList<>();
-        level.field_186 = 0xFFFFFFL;
-        level.field_202 = 0;
-        level.field_203 = new Random().nextInt();
-        level.unusedIncrement = 1013904223;
-        level.field_209 = 0;
-        level.field_210 = 0;
-        level.field_211 = false;
-        level.time = System.currentTimeMillis();
-        level.field_212 = 40;
-        level.rand = new Random();
-        level.generating = false;
-        level.listeners = new ArrayList<>();
-        level.field_189 = new ArrayList<>();
-        level.field_191 = 0;
-        level.field_192 = true;
-        level.field_193 = true;
-        level.field_195 = level.rand.nextInt(12000);
-        level.field_196 = new ArrayList<>();
-        level.isClient = false;
+        aLevel.field_197 = false;
+        aLevel.field_181 = new ArrayList<>();
+        aLevel.entities = new ArrayList<>();
+        aLevel.field_182 = new ArrayList<>();
+        aLevel.field_183 = new TreeSet<>();
+        aLevel.field_184 = new HashSet<>();
+        aLevel.tileEntities = new ArrayList<>();
+        aLevel.field_185 = new ArrayList<>();
+        aLevel.players = new ArrayList<>();
+        aLevel.field_201 = new ArrayList<>();
+        aLevel.field_186 = 0xFFFFFFL;
+        aLevel.field_202 = 0;
+        aLevel.field_203 = new Random().nextInt();
+        aLevel.unusedIncrement = 1013904223;
+        aLevel.field_209 = 0;
+        aLevel.field_210 = 0;
+        aLevel.field_211 = false;
+        aLevel.time = System.currentTimeMillis();
+        aLevel.field_212 = 40;
+        aLevel.rand = new Random();
+        aLevel.generating = false;
+        aLevel.listeners = new ArrayList<>();
+        aLevel.field_189 = new ArrayList<>();
+        aLevel.field_191 = 0;
+        aLevel.field_192 = true;
+        aLevel.field_193 = true;
+        aLevel.field_195 = level.rand.nextInt(12000);
+        aLevel.field_196 = new ArrayList<>();
+        aLevel.isClient = false;
         aLevel.setDimensionData(isavehandler);
         if (isavehandler != null) {
             level.data = new LevelData(isavehandler);

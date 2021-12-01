@@ -2,8 +2,11 @@ package io.github.ryuu.adventurecraft.entities.tile;
 
 import io.github.ryuu.adventurecraft.entities.EntityLivingScript;
 import io.github.ryuu.adventurecraft.entities.EntitySkeletonSword;
+import io.github.ryuu.adventurecraft.extensions.entity.ExFallingTile;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.items.ItemCursor;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
+import io.github.ryuu.adventurecraft.mixin.entity.animal.AccessWolf;
 import io.github.ryuu.adventurecraft.scripting.ScopeTag;
 import io.github.ryuu.adventurecraft.scripting.ScriptEntity;
 import io.github.ryuu.adventurecraft.util.Coord;
@@ -66,7 +69,7 @@ public class TileEntityMobSpawner extends TileEntityScript {
         this.minSpawnVec = new Coord();
         this.maxSpawnVec = new Coord();
         this.delayLoadData = null;
-        this.scope = AccessMinecraft.getInstance().level.script.getNewScope();
+        this.scope = ((ExLevel)AccessMinecraft.getInstance().level).getScript().getNewScope();
     }
 
     public int getNumAlive() {
@@ -124,7 +127,7 @@ public class TileEntityMobSpawner extends TileEntityScript {
             if (spawnEntityID.equalsIgnoreCase("FallingSand")) {
                 if (this.spawnID >= 256 || Tile.BY_ID[this.spawnID] == null) return;
                 ((FallingTile) entity).tile = this.spawnID;
-                ((FallingTile) entity).metadata = this.spawnMeta;
+                ((ExFallingTile) entity).setMetadata(this.spawnMeta);
             } else if (spawnEntityID.equalsIgnoreCase("Item")) {
                 if (ItemType.byId[this.spawnID] == null) return;
                 ((ItemEntity) entity).item = new ItemInstance(this.spawnID, 1, this.spawnMeta);
@@ -136,9 +139,9 @@ public class TileEntityMobSpawner extends TileEntityScript {
             } else if (this.entityID.equalsIgnoreCase("Minecart Furnace")) {
                 ((Minecart) entity).type = 2;
             }
-            double posY = this.maxSpawnVec.y == this.minSpawnVec.y ? (double) (this.y + this.maxSpawnVec.y) : (double) (this.y + this.minSpawnVec.y + this.level.rand.nextInt(this.maxSpawnVec.y - this.minSpawnVec.y));
-            double posX = (double) (this.x + this.minSpawnVec.x) + this.level.rand.nextDouble() * (double) (this.maxSpawnVec.x - this.minSpawnVec.x) + 0.5;
-            double posZ = (double) (this.z + this.minSpawnVec.z) + this.level.rand.nextDouble() * (double) (this.maxSpawnVec.z - this.minSpawnVec.z) + 0.5;
+            double posY = this.maxSpawnVec.y == this.minSpawnVec.y ? (this.y + this.maxSpawnVec.y) : (this.y + this.minSpawnVec.y + this.level.rand.nextInt(this.maxSpawnVec.y - this.minSpawnVec.y));
+            double posX = (this.x + this.minSpawnVec.x) + this.level.rand.nextDouble() * (this.maxSpawnVec.x - this.minSpawnVec.x) + 0.5;
+            double posZ = (this.z + this.minSpawnVec.z) + this.level.rand.nextDouble() * (this.maxSpawnVec.z - this.minSpawnVec.z) + 0.5;
             float rot = !spawnEntityID.equalsIgnoreCase("FallingSand") ? this.level.rand.nextFloat() * 360.0f : 0.0f;
             entity.setPositionAndAngles(posX, posY, posZ, rot, 0.0f);
             if (!this.canSpawn(entity)) continue;
@@ -166,7 +169,7 @@ public class TileEntityMobSpawner extends TileEntityScript {
                 w.setTarget(null);
                 w.health = 20;
                 w.setOwner(AccessMinecraft.getInstance().player.name);
-                w.spawnBoneParticles(true);
+                ((AccessWolf) w).invokeSpawnBoneParticles(true);
                 this.level.method_185(w, (byte) 7);
             }
             if (this.entityID.endsWith("(Scripted)")) {
@@ -199,8 +202,7 @@ public class TileEntityMobSpawner extends TileEntityScript {
                 for (int i = 0; i < num; ++i) {
                     int entID = this.delayLoadData.getInt(String.format("entID_%d", i));
                     for (Object o : this.level.entities) {
-                        Entity obj;
-                        Entity e = obj = (Entity) o;
+                        Entity e = (Entity) o;
                         if (e.id != entID) continue;
                         this.spawnedEntities.add(e);
                         if (!e.isAlive()) continue block0;
@@ -304,11 +306,11 @@ public class TileEntityMobSpawner extends TileEntityScript {
         if (minVec.x == 0 && minVec.y == 0 && minVec.z == 0 && maxVec.x == 0 && maxVec.y == 0 && maxVec.z == 0) {
             return;
         }
-        this.level.triggerManager.addArea(this.x, this.y, this.z, i, new TriggerArea(minVec.x, minVec.y, minVec.z, maxVec.x, maxVec.y, maxVec.z));
+        ((ExLevel) this.level).getTriggerManager().addArea(this.x, this.y, this.z, i, new TriggerArea(minVec.x, minVec.y, minVec.z, maxVec.x, maxVec.y, maxVec.z));
     }
 
     private void deactivateTriggers() {
-        this.level.triggerManager.removeArea(this.x, this.y, this.z);
+        ((ExLevel) this.level).getTriggerManager().removeArea(this.x, this.y, this.z);
     }
 
     @Override
@@ -389,8 +391,8 @@ public class TileEntityMobSpawner extends TileEntityScript {
             for (Entity e : this.entitiesLeft) {
                 scriptSpawnedEntities[i++] = ScriptEntity.getEntityClass(e);
             }
-            this.level.script.addObject("spawnedEntities", scriptSpawnedEntities);
-            this.level.scriptHandler.runScript(scriptName, this.scope);
+            ((ExLevel) this.level).getScript().addObject("spawnedEntities", scriptSpawnedEntities);
+            ((ExLevel) this.level).getScriptHandler().runScript(scriptName, this.scope);
         }
     }
 }

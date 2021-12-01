@@ -1298,8 +1298,23 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
     }
 
     @Override
+    public DimensionData getMapHandler() {
+        return mapHandler;
+    }
+
+    @Override
+    public void setMapHandler(DimensionData mapHandler) {
+        this.mapHandler = mapHandler;
+    }
+
+    @Override
     public File getLevelDir() {
         return this.levelDir;
+    }
+
+    @Override
+    public void setLevelDir(File levelDir) {
+        this.levelDir = levelDir;
     }
 
     @Override

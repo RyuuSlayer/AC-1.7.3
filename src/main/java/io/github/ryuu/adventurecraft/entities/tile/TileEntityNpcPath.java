@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.entities.tile;
 import io.github.ryuu.adventurecraft.entities.EntityNPC;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.util.TriggerArea;
+import io.github.ryuu.adventurecraft.util.TriggerManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.io.CompoundTag;
 
@@ -46,7 +47,7 @@ public class TileEntityNpcPath extends TileEntityMinMax {
         }
     }
 
-    void pathEntity() {
+    public void pathEntity() {
         EntityNPC ent = this.getNPC();
         if (ent != null) {
             this.npc.pathToPosition(this.x, this.y, this.z);
@@ -56,10 +57,11 @@ public class TileEntityNpcPath extends TileEntityMinMax {
         }
     }
 
-    void pathFinished() {
+    public void pathFinished() {
         if (this.isSet()) {
-            this.level.triggerManager.addArea(this.x, this.y, this.z, new TriggerArea(this.minX, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ));
-            this.level.triggerManager.removeArea(this.x, this.y, this.z);
+            TriggerManager triggerManager = ((ExLevel)this.level).getTriggerManager();
+            triggerManager.addArea(this.x, this.y, this.z, new TriggerArea(this.minX, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ));
+            triggerManager.removeArea(this.x, this.y, this.z);
         }
     }
 }

@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.entities;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityNpcPath;
+import io.github.ryuu.adventurecraft.extensions.ExClass_61;
 import io.github.ryuu.adventurecraft.extensions.entity.ExLivingEntity;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.scripting.EntityDescriptions;
@@ -36,7 +37,7 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
     String descriptionName;
     float prevWidth = 0.6f;
     float prevHeight = 1.8f;
-    TileEntityNpcPath triggerOnPath = null;
+    public TileEntityNpcPath triggerOnPath = null;
     private class_61 path;
     private Entity pathToEntity;
     private CoordBlock pathToVec;
@@ -248,7 +249,7 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
 
     private void continuePathing() {
         if (this.isPathing()) {
-            if (this.path == null || --this.nextPathIn <= 0 && this.pathToEntity != null && this.path.needNewPath(this.pathToEntity)) {
+            if (this.path == null || --this.nextPathIn <= 0 && this.pathToEntity != null && ((ExClass_61)this.path).needNewPath(this.pathToEntity)) {
                 if (this.pathToEntity != null) {
                     this.path = this.level.method_192(this, this.pathToEntity, this.maxPathDistance);
                 } else if (this.pathToVec != null) {

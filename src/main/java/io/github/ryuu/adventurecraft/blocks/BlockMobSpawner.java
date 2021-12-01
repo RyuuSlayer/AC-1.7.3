@@ -1,12 +1,12 @@
 package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityMobSpawner;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.gui.GuiMobSpawner;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
-import net.minecraft.tile.Tile;
 import net.minecraft.tile.TileWithEntity;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
@@ -66,17 +66,17 @@ public class BlockMobSpawner extends TileWithEntity {
     }
 
     @Override
-    public void onTriggerActivated(Level world, int i, int j, int k) {
-        TileEntityMobSpawner obj = (TileEntityMobSpawner) world.getTileEntity(i, j, k);
-        if (obj.spawnOnTrigger && !Tile.resetActive) {
+    public void onTriggerActivated(Level level, int i, int j, int k) {
+        TileEntityMobSpawner obj = (TileEntityMobSpawner) level.getTileEntity(i, j, k);
+        if (obj.spawnOnTrigger && !((ExLevel)level).getTriggerManager().resetActive) {
             obj.spawnMobs();
         }
     }
 
     @Override
-    public void onTriggerDeactivated(Level world, int i, int j, int k) {
-        TileEntityMobSpawner obj = (TileEntityMobSpawner) world.getTileEntity(i, j, k);
-        if (obj.spawnOnDetrigger && !Tile.resetActive) {
+    public void onTriggerDeactivated(Level level, int i, int j, int k) {
+        TileEntityMobSpawner obj = (TileEntityMobSpawner) level.getTileEntity(i, j, k);
+        if (obj.spawnOnDetrigger && !((ExLevel)level).getTriggerManager().resetActive) {
             obj.spawnMobs();
         }
     }
@@ -87,8 +87,8 @@ public class BlockMobSpawner extends TileWithEntity {
     }
 
     @Override
-    public void reset(Level world, int i, int j, int k, boolean death) {
-        TileEntityMobSpawner obj = (TileEntityMobSpawner) world.getTileEntity(i, j, k);
+    public void reset(Level level, int i, int j, int k, boolean death) {
+        TileEntityMobSpawner obj = (TileEntityMobSpawner) level.getTileEntity(i, j, k);
         if (!death) {
             obj.hasDroppedItem = false;
         }

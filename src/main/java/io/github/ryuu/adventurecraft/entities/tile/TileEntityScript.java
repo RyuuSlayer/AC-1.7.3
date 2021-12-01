@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.scripting.ScopeTag;
 import net.minecraft.tile.entity.TileEntity;
@@ -26,7 +27,7 @@ public class TileEntityScript extends TileEntity {
     boolean loaded = false;
 
     public TileEntityScript() {
-        this.scope = AccessMinecraft.getInstance().level.script.getNewScope();
+        this.scope = ((ExLevel)AccessMinecraft.getInstance().level).getScript().getNewScope();
     }
 
     @Override
@@ -41,11 +42,11 @@ public class TileEntityScript extends TileEntity {
             ScriptableObject.putProperty(this.scope, "zCoord", wrappedOut);
         }
         if (this.checkTrigger) {
-            this.isActivated = this.level.triggerManager.isActivated(this.x, this.y, this.z);
+            this.isActivated = ((ExLevel)this.level).getTriggerManager().isActivated(this.x, this.y, this.z);
             this.checkTrigger = false;
         }
         if (this.isActivated && !this.onUpdateScriptFile.equals("")) {
-            this.level.scriptHandler.runScript(this.onUpdateScriptFile, this.scope);
+            ((ExLevel)this.level).getScriptHandler().runScript(this.onUpdateScriptFile, this.scope);
         }
     }
 

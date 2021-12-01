@@ -3,6 +3,7 @@
   "package": "io.github.ryuu.adventurecraft.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "AccessClass_61",
     "client.AccessMinecraft",
     "client.gui.AccessScreen",
     "client.gui.screen.AccessSelectWorldScreen",
