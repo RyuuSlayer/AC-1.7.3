@@ -1,10 +1,10 @@
 package io.github.ryuu.adventurecraft.mixin.entity.player;
 
-import io.github.ryuu.adventurecraft.extensions.entity.ExLivingEntity;
 import io.github.ryuu.adventurecraft.extensions.entity.player.ExPlayer;
 import io.github.ryuu.adventurecraft.extensions.entity.player.ExPlayerInventory;
 import io.github.ryuu.adventurecraft.extensions.items.ExItemInstance;
 import io.github.ryuu.adventurecraft.extensions.items.ExItemType;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.items.IItemReload;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
@@ -25,21 +25,26 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(PlayerInventory.class)
-public abstract class MixinPlayerInventory implements Inventory, ExPlayerInventory {
+public abstract class MixinPlayerInventory implements Inventory, AccessPlayerInventory, ExPlayerInventory {
 
     @Shadow
     public ItemInstance[] main;
+
     @Shadow
     public ItemInstance[] armour;
+
     @Shadow
     public int selectedHotbarSlot;
+
     @Shadow
     public Player player;
 
     @Shadow
     protected abstract int getSlotWithItem(int i);
+
     @Shadow
     protected abstract int findNextEmptySlot();
+
     @Shadow
     protected abstract int findItem(ItemInstance arg);
 
@@ -52,10 +57,12 @@ public abstract class MixinPlayerInventory implements Inventory, ExPlayerInvento
         this.consumeInventory = new int[36];
     }
 
+    @Override
     public ItemInstance getOffhandItem() {
         return this.main[this.offhandItem];
     }
 
+    @Override
     public void swapOffhandWithMain() {
         int t = this.selectedHotbarSlot;
         this.selectedHotbarSlot = this.offhandItem;
@@ -117,7 +124,7 @@ public abstract class MixinPlayerInventory implements Inventory, ExPlayerInvento
         }
         this.main[k].count += l;
         this.main[k].cooldown = 5;
-        return j -= l;
+        return j - l;
     }
 
     /**
@@ -285,6 +292,7 @@ public abstract class MixinPlayerInventory implements Inventory, ExPlayerInvento
         onRemovedFromSlot(ItemType.byId[item.itemId], this.player, var1 + this.main.length, item.getDamage());
     }
 
+    @Override
     public boolean consumeItemAmount(int itemID, int damage, int amount) {
         int i;
         int slotsToUse = 0;
@@ -312,33 +320,39 @@ public abstract class MixinPlayerInventory implements Inventory, ExPlayerInvento
         return true;
     }
 
-
     private static void onAddToSlot(ItemType itemType, Player entityPlayer, int slot, int damage) {
-        Scriptable scope = AccessMinecraft.getInstance().level.scope;
+        ExLevel exLevel = (ExLevel)AccessMinecraft.getInstance().level;
+        Scriptable scope = exLevel.getScope();
         scope.put("slotID", scope, slot);
         if (itemType.method_462()) {
-            AccessMinecraft.getInstance().level.scriptHandler.runScript(String.format("item_onAddToSlot_%d_%d.js", new Object[]{itemType.id, damage}), scope, false);
+            exLevel.getScriptHandler().runScript(String.format("item_onAddToSlot_%d_%d.js", itemType.id, damage), scope, false);
         } else {
-            AccessMinecraft.getInstance().level.scriptHandler.runScript(String.format("item_onAddToSlot_%d.js", new Object[]{itemType.id}), scope, false);
+            exLevel.getScriptHandler().runScript(String.format("item_onAddToSlot_%d.js", itemType.id), scope, false);
         }
 
         ((ExItemType) itemType).onAddToSlot(entityPlayer, slot, damage);
     }
 
     private static void onRemovedFromSlot(ItemType itemType, Player entityPlayer, int slot, int damage) {
-        Scriptable scope = AccessMinecraft.getInstance().level.scope;
+        ExLevel exLevel = (ExLevel)AccessMinecraft.getInstance().level;
+        Scriptable scope = exLevel.getScope();
         scope.put("slotID", scope, slot);
         if (itemType.method_462()) {
-            AccessMinecraft.getInstance().level.scriptHandler.runScript(String.format("item_onRemovedFromSlot_%d_%d.js", new Object[]{itemType.id, damage}), scope, false);
+            exLevel.getScriptHandler().runScript(String.format("item_onRemovedFromSlot_%d_%d.js", itemType.id, damage), scope, false);
         } else {
-            AccessMinecraft.getInstance().level.scriptHandler.runScript(String.format("item_onRemovedFromSlot_%d.js", new Object[]{itemType.id}), scope, false);
+            exLevel.getScriptHandler().runScript(String.format("item_onRemovedFromSlot_%d.js", itemType.id), scope, false);
         }
 
         ((ExItemType) itemType).onRemovedFromSlot(entityPlayer, slot, damage);
     }
 
     @Override
-    public int getOffhandItemID() {
+    public int getOffhandSlot() {
         return offhandItem;
+    }
+
+    @Override
+    public void setOffhandSlot(int offhandSlot) {
+        this.offhandItem = offhandSlot;
     }
 }

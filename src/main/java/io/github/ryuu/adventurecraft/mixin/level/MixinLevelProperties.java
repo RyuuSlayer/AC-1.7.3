@@ -157,7 +157,7 @@ public abstract class MixinLevelProperties implements ExLevelProperties {
         this.replacementTextures = new HashMap<>();
         this.brightness = new float[16];
 
-        ExLevelProperties exProps = (ExLevelProperties)properties;
+        ExLevelProperties exProps = (ExLevelProperties) properties;
         for (int i = 0; i < 16; ++i) {
             this.brightness[i] = exProps.getBrightness()[i];
         }
@@ -179,7 +179,7 @@ public abstract class MixinLevelProperties implements ExLevelProperties {
         tag.put("volatilityWeight1", this.volatilityWeight1);
         tag.put("volatilityWeight2", this.volatilityWeight2);
         tag.put("iceMelts", this.iceMelts);
-        ExLevel level = (ExLevel)AccessMinecraft.getInstance().level;
+        ExLevel level = (ExLevel) AccessMinecraft.getInstance().level;
         if (level != null && level.getTriggerManager() != null) {
             tag.put("triggerAreas", (AbstractTag) level.getTriggerManager().getTagCompound());
         }
@@ -275,7 +275,6 @@ public abstract class MixinLevelProperties implements ExLevelProperties {
     }
 
     public CompoundTag getTextureReplacementTags() {
-        boolean i = false;
         CompoundTag t = new CompoundTag();
         for (Map.Entry<String, String> e : this.replacementTextures.entrySet()) {
             t.put(e.getKey(), e.getValue());
@@ -287,7 +286,7 @@ public abstract class MixinLevelProperties implements ExLevelProperties {
     public void loadTextureReplacements(Level w) {
         if (this.replacementTag != null) {
             this.replacementTextures.clear();
-            for (String key : ((ExCompoundTag)this.replacementTag).getKeys()) {
+            for (String key : ((ExCompoundTag) this.replacementTag).getKeys()) {
                 BlockEffect.replaceTexture(w, key, this.replacementTag.getString(key));
             }
         }
@@ -296,6 +295,16 @@ public abstract class MixinLevelProperties implements ExLevelProperties {
     @Override
     public boolean isOriginallyFromAC() {
         return this.originallyFromAC;
+    }
+
+    @Override
+    public boolean getAllowsInventoryCrafting() {
+        return this.allowsInventoryCrafting;
+    }
+
+    @Override
+    public void setAllowsInventoryCrafting(boolean allowsInventoryCrafting) {
+        this.allowsInventoryCrafting = allowsInventoryCrafting;
     }
 
     @Override
@@ -315,6 +324,11 @@ public abstract class MixinLevelProperties implements ExLevelProperties {
 
     public void setUseBiomeImages(boolean useBiomeImages) {
         this.useBiomeImages = useBiomeImages;
+    }
+
+    @Override
+    public Map<String, String> getReplacementTextures() {
+        return this.replacementTextures;
     }
 
     @Override
@@ -538,13 +552,28 @@ public abstract class MixinLevelProperties implements ExLevelProperties {
     }
 
     @Override
+    public void setOnNewSaveScript(String onNewSaveScript) {
+        this.onNewSaveScript = onNewSaveScript;
+    }
+
+    @Override
     public String getOnLoadScript() {
         return onLoadScript;
     }
 
     @Override
+    public void setOnLoadScript(String onLoadScript) {
+        this.onLoadScript = onLoadScript;
+    }
+
+    @Override
     public String getOnUpdateScript() {
         return onUpdateScript;
+    }
+
+    @Override
+    public void setOnUpdateScript(String onUpdateScript) {
+        this.onUpdateScript = onUpdateScript;
     }
 
     @Override

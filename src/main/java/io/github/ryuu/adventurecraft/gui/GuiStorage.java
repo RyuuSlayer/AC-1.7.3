@@ -6,6 +6,8 @@ import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.OptionButton;
 
+import java.util.List;
+
 public class GuiStorage extends Screen {
 
     private final TileEntityStorage storage;
@@ -24,9 +26,10 @@ public class GuiStorage extends Screen {
 
     @Override
     public void init() {
-        this.buttons.add(new OptionButton(0, 4, 40, "Use Current Selection"));
-        this.buttons.add(new OptionButton(1, 4, 60, "Resave Set Selection"));
-        this.buttons.add(new OptionButton(2, 4, 80, "Load Saved Data"));
+        List<Button> buttons = (List<Button>)this.buttons;
+        buttons.add(new OptionButton(0, 4, 40, "Use Current Selection"));
+        buttons.add(new OptionButton(1, 4, 60, "Resave Set Selection"));
+        buttons.add(new OptionButton(2, 4, 80, "Load Saved Data"));
     }
 
     @Override

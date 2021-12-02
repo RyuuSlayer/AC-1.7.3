@@ -12,7 +12,7 @@ public class ScriptSound {
     }
 
     public void playSoundUI(String soundName) {
-        this.playSoundUI(soundName.toLowerCase(), 1.0f, 1.0f);
+        this.soundMgr.playSound(soundName.toLowerCase(), 1.0f, 1.0f);
     }
 
     public void playSoundUI(String soundName, float volume, float pitch) {
@@ -20,7 +20,7 @@ public class ScriptSound {
     }
 
     public void playSound3D(String soundName, float x, float y, float z) {
-        this.playSound3D(soundName, x, y, z, 1.0f, 1.0f);
+        this.soundMgr.playSound(soundName.toLowerCase(), x, y, z, 1.0f, 1.0f);
     }
 
     public void playSound3D(String soundName, float x, float y, float z, float volume, float pitch) {
@@ -28,14 +28,14 @@ public class ScriptSound {
     }
 
     public void playMusic(String musicName) {
-        this.playMusic(musicName.toLowerCase(), 0, 0);
+        ((ExSoundHelper)this.soundMgr).playMusicFromStreaming(musicName.toLowerCase(), 0, 0);
     }
 
     public void playMusic(String musicName, int fadeOut, int fadeIn) {
-        ((ExSoundHelper) this.soundMgr).playMusicFromStreaming(musicName.toLowerCase(), fadeOut, fadeIn);
+        ((ExSoundHelper)this.soundMgr).playMusicFromStreaming(musicName.toLowerCase(), fadeOut, fadeIn);
     }
 
     public void stopMusic() {
-        ((ExSoundHelper) this.soundMgr).stopMusic();
+        ((ExSoundHelper)this.soundMgr).stopMusic();
     }
 }

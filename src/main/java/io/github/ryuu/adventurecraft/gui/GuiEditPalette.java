@@ -8,37 +8,32 @@ import net.minecraft.client.render.RenderHelper;
 import net.minecraft.client.render.TextRenderer;
 import net.minecraft.client.render.entity.ItemRenderer;
 import net.minecraft.item.ItemInstance;
-import net.minecraft.src.Block;
-import net.minecraft.src.GuiButton;
 import net.minecraft.tile.Tile;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
-import java.util.List;
 
-class GuiEditPalette extends DrawableHelper {
+public class GuiEditPalette extends DrawableHelper {
 
     private static final ItemRenderer itemRenderer = new ItemRenderer();
     static int rows = 8;
     static int columns = 4;
     static int scrollHeight = 8;
     int numRows;
-    List<GuiButton> controlList = new ArrayList();
-    ArrayList<Block> blocks;
+    ArrayList<Tile> blocks = new ArrayList<>();
     Button selectedButton;
     ItemInstance item = new ItemInstance(0, 0, 0);
     float scrollPosition = 0.0f;
 
-    GuiEditPalette() {
-        this.blocks = new ArrayList();
-        this.filterBlocks(0);
+    public GuiEditPalette() {
+        this.filterBlocks();
     }
 
-    void filterBlocks(int f) {
+    void filterBlocks() {
         this.blocks.clear();
         for (int i = 0; i < 255; ++i) {
             if (Tile.BY_ID[i] == null) continue;
-            this.blocks.add((Object) Tile.BY_ID[i]);
+            this.blocks.add(Tile.BY_ID[i]);
         }
         this.numRows = (this.blocks.size() + columns - 1) / columns;
     }
@@ -54,7 +49,7 @@ class GuiEditPalette extends DrawableHelper {
                     mc.soundHelper.playSound("random.click", 1.0f, 1.0f);
                     int i = columnClicked + rowClicked * columns;
                     if (i + this.getOffset() < this.blocks.size()) {
-                        DebugMode.mapEditing.setBlock(((Tile) this.blocks.get(i + this.getOffset())).id, 0);
+                        DebugMode.mapEditing.setBlock(this.blocks.get(i + this.getOffset()).id, 0);
                         return true;
                     }
                 } else if (columnClicked == columns && x % 16 < 4 && this.needScrollbar()) {
@@ -88,7 +83,7 @@ class GuiEditPalette extends DrawableHelper {
         GL11.glEnable(32826);
         int offset = this.getOffset();
         for (int i = 0; i < rows * columns && i + offset < this.blocks.size(); ++i) {
-            this.item.itemId = ((Tile) this.blocks.get(i + offset)).id;
+            this.item.itemId = this.blocks.get(i + offset).id;
             itemRenderer.renderItemInstance(fontRenderer, mc.textureManager, this.item, i % columns * 16, height / 2 - rows * 8 + 16 * (i / columns));
         }
         GL11.glDisable(32826);

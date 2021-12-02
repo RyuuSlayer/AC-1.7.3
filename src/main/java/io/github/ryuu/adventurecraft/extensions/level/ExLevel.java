@@ -38,6 +38,10 @@ public interface ExLevel {
 
     void setLevelDir(File levelDir);
 
+    String[] getMusicList();
+
+    String[] getSoundList();
+
     DimensionData getMapHandler();
 
     void setMapHandler(DimensionData mapHandler);
@@ -95,7 +99,6 @@ public interface ExLevel {
     void setNewSave(boolean newSave);
 
     void updateChunkProvider();
-
 
     static Level createLevel(
             String acLevelName, DimensionData isavehandler, String levelName, long randomSeed, Dimension dimension)

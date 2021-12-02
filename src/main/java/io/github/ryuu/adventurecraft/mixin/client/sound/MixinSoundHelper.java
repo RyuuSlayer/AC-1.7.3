@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.mixin.client.sound;
 
 import io.github.ryuu.adventurecraft.extensions.client.sound.ExSoundHelper;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevelProperties;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.class_266;
@@ -33,13 +34,17 @@ public abstract class MixinSoundHelper implements ExSoundHelper {
 
     private String currentSoundName;
 
-    @Redirect(method = "playBackgroundMusic", at = @At(value = "FIELD", target = "Lnet/minecraft/client/sound/SoundHelper;field_2673:Z"))
+    @Redirect(method = "playBackgroundMusic", at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/client/sound/SoundHelper;field_2673:Z"))
     public boolean removeBackgroundMusic() {
         return false;
     }
 
-
-    @Inject(method = "setSoundPosition", at = @At(value = "INVOKE", target = "Lpaulscode/sound/SoundSystem;setListenerOrientation(FFFFFF)V", shift = At.Shift.AFTER))
+    @Inject(method = "setSoundPosition", at = @At(
+            value = "INVOKE",
+            target = "Lpaulscode/sound/SoundSystem;setListenerOrientation(FFFFFF)V",
+            shift = At.Shift.AFTER))
     public void setSoundPosition(LivingEntity entity, float f, CallbackInfo ci) {
         double d = entity.prevX + (entity.x - entity.prevX) * (double) f;
         double d1 = entity.prevY + (entity.y - entity.prevY) * (double) f;

@@ -1,7 +1,7 @@
 package io.github.ryuu.adventurecraft.mixin.client.gui;
 
-
 import io.github.ryuu.adventurecraft.extensions.client.ExMinecraft;
+import io.github.ryuu.adventurecraft.extensions.client.gui.ExOverlay;
 import io.github.ryuu.adventurecraft.extensions.entity.ExEntity;
 import io.github.ryuu.adventurecraft.extensions.entity.ExLivingEntity;
 import io.github.ryuu.adventurecraft.extensions.entity.player.ExPlayerInventory;
@@ -40,7 +40,7 @@ import java.util.List;
 import java.util.Random;
 
 @Mixin(Overlay.class)
-public abstract class MixinOverlay extends DrawableHelper {
+public abstract class MixinOverlay extends DrawableHelper implements ExOverlay {
 
     public ScriptUIContainer scriptUI;
 
@@ -50,35 +50,39 @@ public abstract class MixinOverlay extends DrawableHelper {
     private Minecraft minecraft;
 
     @Shadow
-    protected abstract void method_1945(float f, int i, int j);
-
-    @Shadow
-    protected abstract void method_1947(int i, int j);
-
-    @Shadow
-    protected abstract void method_1951(float f, int i, int j);
-
-    @Shadow
     private Random rand;
 
     @Shadow
     private int field_2548;
 
     @Shadow
-    protected abstract void method_1948(int i, int j, int k, float f);
+    private int jukeboxMessageTime;
 
-    @Shadow private int jukeboxMessageTime;
+    @Shadow
+    private boolean field_2551;
 
-    @Shadow private boolean field_2551;
+    @Shadow
+    private String jukeboxMessage;
 
-    @Shadow private String jukeboxMessage;
-
-    @Shadow private List chatMessages;
+    @Shadow
+    private List<ChatMessage> chatMessages;
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void Overlay(Minecraft minecraft, CallbackInfo ci) {
         this.scriptUI = new ScriptUIContainer(0.0f, 0.0f, null);
     }
+
+    @Shadow
+    protected abstract void method_1945(float f, int i, int j);
+
+    @Shadow
+    protected abstract void method_1947(int i, int j);
+
+    @Shadow
+    protected abstract void method_1948(int i, int j, int k, float f);
+
+    @Shadow
+    protected abstract void method_1951(float f, int i, int j);
 
     /**
      * @author Ryuu, TechPizza, Phil
@@ -112,20 +116,20 @@ public abstract class MixinOverlay extends DrawableHelper {
             PlayerInventory inventoryplayer = this.minecraft.player.inventory;
             this.zOffset = -90.0f;
             this.blit(scaledWidth / 2 - 91, scaledHeight - 22, 0, 0, 182, 22);
-            this.blit(scaledWidth / 2 - 91 - 1 + ((ExPlayerInventory) inventoryplayer).getOffhandItemID() * 20, scaledHeight - 22 - 1, 24, 22, 48, 22);
+            this.blit(scaledWidth / 2 - 91 - 1 + ((ExPlayerInventory) inventoryplayer).getOffhandSlot() * 20, scaledHeight - 22 - 1, 24, 22, 48, 22);
             this.blit(scaledWidth / 2 - 91 - 1 + inventoryplayer.selectedHotbarSlot * 20, scaledHeight - 22 - 1, 0, 22, 24, 22);
             GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId("/assets/adventurecraft/gui/icons.png"));
             GL11.glEnable(3042);
             GL11.glBlendFunc(775, 769);
             this.blit(scaledWidth / 2 - 7, scaledHeight / 2 - 7, 0, 0, 16, 16);
             GL11.glDisable(3042);
-            boolean bl = flag1 = this.minecraft.player.field_1613 / 3 % 2 == 1;
+            flag1 = this.minecraft.player.field_1613 / 3 % 2 == 1;
             if (this.minecraft.player.field_1613 < 10) {
                 flag1 = false;
             }
             int health = this.minecraft.player.health;
             int prevHealth = this.minecraft.player.field_1037;
-            this.rand.setSeed(this.field_2548 * 312871);
+            this.rand.setSeed(this.field_2548 * 312871L);
             if (this.minecraft.interactionManager.method_1722()) {
                 int armorValue = this.minecraft.player.method_141();
                 for (int index = 0; index < 10; ++index) {
@@ -299,8 +303,8 @@ public abstract class MixinOverlay extends DrawableHelper {
         GL11.glPushMatrix();
         GL11.glTranslatef(0.0f, (float) (scaledHeight - 48), 0.0f);
         for (int i5 = 0; i5 < this.chatMessages.size() && i5 < byte0; ++i5) {
-            if (((ChatMessage) this.chatMessages.get(i5)).field_2470 >= 200 && !flag2) continue;
-            double d = (double) ((ChatMessage) this.chatMessages.get(i5)).field_2470 / 200.0;
+            if (this.chatMessages.get(i5).field_2470 >= 200 && !flag2) continue;
+            double d = (double) this.chatMessages.get(i5).field_2470 / 200.0;
             d = 1.0 - d;
             if ((d *= 10.0) < 0.0) {
                 d = 0.0;
@@ -316,7 +320,7 @@ public abstract class MixinOverlay extends DrawableHelper {
             if (j6 <= 0) continue;
             int byte1 = 2;
             int k6 = -i5 * 9;
-            String s1 = ((ChatMessage) this.chatMessages.get(i5)).field_2469;
+            String s1 = this.chatMessages.get(i5).field_2469;
             this.fill(byte1, k6 - 1, byte1 + 320, k6 + 8, j6 / 2 << 24);
             GL11.glEnable(3042);
             fontrenderer.drawTextWithShadow(s1, byte1, k6, 0xFFFFFF + (j6 << 24));
@@ -354,5 +358,10 @@ public abstract class MixinOverlay extends DrawableHelper {
     @Inject(method = "method_1944", at = @At("TAIL"))
     public void method_1944(CallbackInfo ci) {
         this.scriptUI.onUpdate();
+    }
+
+    @Override
+    public ScriptUIContainer getScriptUI() {
+        return scriptUI;
     }
 }

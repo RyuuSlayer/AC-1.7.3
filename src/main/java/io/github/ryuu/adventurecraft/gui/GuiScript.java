@@ -7,6 +7,7 @@ import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 
 import java.io.File;
+import java.util.List;
 
 public class GuiScript extends Screen {
 
@@ -30,23 +31,24 @@ public class GuiScript extends Screen {
 
     @Override
     public void init() {
+        List<Button> buttons = (List<Button>)this.buttons;
         this.selectedID = 0;
         this.setOnTrigger = new Button(0, 4, 4, "OnTrigger (selected): " + this.script.onTriggerScriptFile);
         this.setOnDetrigger = new Button(1, 4, 26, "OnDetrigger: " + this.script.onDetriggerScriptFile);
         this.setOnUpdate = new Button(2, 4, 48, "OnUpdate: " + this.script.onUpdateScriptFile);
-        this.buttons.add(this.setOnTrigger);
-        this.buttons.add(this.setOnDetrigger);
-        this.buttons.add(this.setOnUpdate);
+        buttons.add(this.setOnTrigger);
+        buttons.add(this.setOnDetrigger);
+        buttons.add(this.setOnUpdate);
         Button b = new Button(3, 4, 70, 200, 20, "Reload Scripts");
-        this.buttons.add(b);
+        buttons.add(b);
         b = new Button(4, 4, 92, 160, 18, "None");
-        this.buttons.add(b);
+        buttons.add(b);
         String[] scripts = this.getScriptFiles();
         if (scripts != null) {
             int i = 1;
             for (String scriptFile : scripts) {
                 b = new Button(4 + i, 4 + i % 3 * this.width / 3, 92 + i / 3 * 20, 160, 18, scriptFile);
-                this.buttons.add(b);
+                buttons.add(b);
                 ++i;
             }
         }
@@ -84,7 +86,7 @@ public class GuiScript extends Screen {
         if (button.id < 3) {
             this.selectedID = button.id;
         } else if (button.id == 3) {
-            this.script.level.scriptHandler.loadScripts();
+            ((ExLevel)this.script.level).getScriptHandler().loadScripts();
         } else if (button.id == 4) {
             this.updateScriptFile("");
         } else {

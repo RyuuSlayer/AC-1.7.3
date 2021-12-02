@@ -187,7 +187,6 @@ public class GuiCreateNewMap extends Screen {
 
     @Override
     public void render(int mouseX, int mouseY, float delta) {
-        TranslationStorage stringtranslate = TranslationStorage.getInstance();
         this.renderBackground();
         this.drawTextWithShadowCentred(this.textManager, "Create Random Map", this.width / 2, 20, 0xFFFFFF);
         String enterName = "Map Name:";

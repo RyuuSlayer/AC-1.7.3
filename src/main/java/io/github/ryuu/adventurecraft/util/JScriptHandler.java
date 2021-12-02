@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.util;
 
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.level.Level;
 import org.mozilla.javascript.Scriptable;
@@ -10,13 +11,13 @@ import java.util.HashMap;
 public class JScriptHandler {
 
     public HashMap<String, JScriptInfo> scripts;
-    Level world;
+    Level level;
     File scriptDir;
 
     public JScriptHandler(Level w, File mapDir) {
-        this.world = w;
+        this.level = w;
         this.scriptDir = new File(mapDir, "scripts");
-        this.scripts = new HashMap();
+        this.scripts = new HashMap<>();
         this.loadScripts();
     }
 
@@ -28,7 +29,7 @@ public class JScriptHandler {
                 if (!fileName.endsWith(".js")) continue;
                 System.out.printf("Compiling %s\n", fileName);
                 String script = this.readFile(f);
-                this.scripts.put((Object) fileName, (Object) new JScriptInfo(f.getName(), this.world.script.compileString(script, f.getName())));
+                this.scripts.put(fileName, new JScriptInfo(f.getName(), ((ExLevel)this.level).getScript().compileString(script, f.getName())));
             }
         }
     }
@@ -43,7 +44,7 @@ public class JScriptHandler {
             fileName = fileName.toLowerCase();
             long startTime = System.nanoTime();
             try {
-                Object object = this.world.script.runScript(scriptInfo.compiledScript, scope);
+                Object object = ((ExLevel)this.level).getScript().runScript(scriptInfo.compiledScript, scope);
                 return object;
             } finally {
                 scriptInfo.addStat(System.nanoTime() - startTime);
@@ -58,15 +59,15 @@ public class JScriptHandler {
     private String readFile(File f) {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(f));
-            String buffer = "";
+            StringBuilder buffer = new StringBuilder();
             try {
                 while (reader.ready()) {
-                    buffer = buffer + reader.readLine() + "\n";
+                    buffer.append(reader.readLine()).append("\n");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return buffer;
+            return buffer.toString();
         } catch (FileNotFoundException e1) {
             e1.printStackTrace();
             return "";

@@ -9,6 +9,8 @@ import net.minecraft.client.gui.widgets.OptionButton;
 import net.minecraft.client.gui.widgets.Textbox;
 import net.minecraft.level.Level;
 
+import java.util.List;
+
 public class GuiTimer extends Screen {
 
     private final TileEntityTimer timer;
@@ -50,26 +52,27 @@ public class GuiTimer extends Screen {
 
     @Override
     public void init() {
-        this.buttons.clear();
-        this.buttons.add(new OptionButton(0, 4, 40, "Use Current Selection"));
+        List<Button> buttons = (List<Button>)this.buttons;
+        buttons.clear();
+        buttons.add(new OptionButton(0, 4, 40, "Use Current Selection"));
         OptionButton b = new OptionButton(1, 4, 60, "Trigger Target");
         if (this.timer.resetOnTrigger) {
             b.text = "Reset Target";
         }
-        this.buttons.add(b);
+        buttons.add(b);
         if (!this.useTextFields) {
-            this.delayTime = new GuiSlider2(4, 4, 80, 10, String.format("Delay for: %.2fs", (float) this.timer.timeDelay / 20.0f), (float) this.timer.timeDelay / 20.0f / 60.0f);
-            this.buttons.add(this.delayTime);
-            this.activeTime = new GuiSlider2(2, 4, 100, 10, String.format("Active for: %.2fs", (float) this.timer.timeActive / 20.0f), (float) this.timer.timeActive / 20.0f / 60.0f);
-            this.buttons.add(this.activeTime);
-            this.deactiveTime = new GuiSlider2(3, 4, 120, 10, String.format("Deactive for: %.2fs", (float) this.timer.timeDeactive / 20.0f), (float) this.timer.timeDeactive / 20.0f / 60.0f);
-            this.buttons.add(this.deactiveTime);
+            this.delayTime = new GuiSlider2(4, 4, 80, 10, String.format("Delay for: %.2fs", this.timer.timeDelay / 20.0f), (float) this.timer.timeDelay / 20.0f / 60.0f);
+            buttons.add(this.delayTime);
+            this.activeTime = new GuiSlider2(2, 4, 100, 10, String.format("Active for: %.2fs", this.timer.timeActive / 20.0f), (float) this.timer.timeActive / 20.0f / 60.0f);
+            buttons.add(this.activeTime);
+            this.deactiveTime = new GuiSlider2(3, 4, 120, 10, String.format("Deactive for: %.2fs", this.timer.timeDeactive / 20.0f), (float) this.timer.timeDeactive / 20.0f / 60.0f);
+            buttons.add(this.deactiveTime);
         } else {
             this.delayTimeText = new Textbox(this, this.textManager, 80, 81, 70, 16, String.format("%.2f", (float) this.timer.timeDelay / 20.0f));
             this.activeTimeText = new Textbox(this, this.textManager, 80, 101, 70, 16, String.format("%.2f", (float) this.timer.timeActive / 20.0f));
             this.deactiveTimeText = new Textbox(this, this.textManager, 80, 121, 70, 16, String.format("%.2f", (float) this.timer.timeDeactive / 20.0f));
         }
-        this.buttons.add(new OptionButton(5, 4, 140, "Switch Input Mode"));
+        buttons.add(new OptionButton(5, 4, 140, "Switch Input Mode"));
     }
 
     @Override
@@ -80,7 +83,7 @@ public class GuiTimer extends Screen {
                 Blocks.timer.setTriggerToSelection(this.world, this.blockX, this.blockY, this.blockZ);
             }
         } else if (button.id == 1) {
-            boolean bl = this.timer.resetOnTrigger = !this.timer.resetOnTrigger;
+            this.timer.resetOnTrigger = !this.timer.resetOnTrigger;
             button.text = this.timer.resetOnTrigger ? "Reset Target" : "Trigger Target";
         } else if (button.id == 5 && !this.ignoreNext) {
             this.useTextFields = !this.useTextFields;
@@ -100,13 +103,13 @@ public class GuiTimer extends Screen {
         } else {
             if (this.timer.active) {
                 this.drawTextWithShadow(this.textManager, "State: Active", 4, 164, 0xE0E0E0);
-            } else if (!this.timer.canActivate) {
+            } else {
                 this.drawTextWithShadow(this.textManager, "State: Deactive", 4, 164, 0xE0E0E0);
             }
             if (this.timer.ticksDelay > 0) {
-                this.drawTextWithShadow(this.textManager, String.format("Delay: %.2f", (float) this.timer.ticksDelay * 0.05f), 4, 184, 0xE0E0E0);
+                this.drawTextWithShadow(this.textManager, String.format("Delay: %.2f", this.timer.ticksDelay * 0.05f), 4, 184, 0xE0E0E0);
             } else {
-                this.drawTextWithShadow(this.textManager, String.format("Time: %.2f", (float) this.timer.ticks * 0.05f), 4, 184, 0xE0E0E0);
+                this.drawTextWithShadow(this.textManager, String.format("Time: %.2f", this.timer.ticks * 0.05f), 4, 184, 0xE0E0E0);
             }
         }
         if (!this.useTextFields) {

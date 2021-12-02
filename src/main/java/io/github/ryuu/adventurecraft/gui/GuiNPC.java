@@ -4,11 +4,13 @@ import io.github.ryuu.adventurecraft.entities.EntityNPC;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityNpcPath;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
+import io.github.ryuu.adventurecraft.mixin.entity.AccessLivingEntity;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.Textbox;
 
 import java.io.File;
+import java.util.List;
 
 public class GuiNPC extends Screen {
 
@@ -49,85 +51,82 @@ public class GuiNPC extends Screen {
 
     @Override
     public void init() {
-        block8:
-        {
-            block7:
-            {
-                this.buttons.clear();
-                int buttonWidth = (this.width - 16) / 4;
-                this.buttons.add(new Button(-20, 4, 0, buttonWidth, 18, "Misc"));
-                this.buttons.add(new Button(-21, 4 + (4 + buttonWidth), 0, buttonWidth, 18, "Script"));
-                if (this.page != 0) break block7;
-                this.npcName = new Textbox(this, this.textManager, 4, 40, 160, 20, this.npc.npcName);
-                this.npcName.field_2420 = true;
-                this.npcName.method_1878(32);
-                this.chatMsg = new Textbox(this, this.textManager, 4, 80, 160, 20, this.npc.chatMsg);
-                this.chatMsg.field_2420 = false;
-                this.chatMsg.method_1878(32);
-                Button b = new Button(-1, 4, 104, 160, 18, "Delete NPC");
-                this.buttons.add(b);
-                b = new Button(-2, 170, 24, 160, 18, "Path To Home");
-                this.buttons.add(b);
-                if (!this.npc.pathToHome) {
-                    b.text = "Don't Path Home";
-                }
-                b = new Button(-3, 170, 42, 160, 18, "Track Player");
-                this.buttons.add(b);
-                if (!this.npc.trackPlayer) {
-                    b.text = "Don't Track Player";
-                }
-                b = new Button(-4, 170, 64, 160, 18, "Can be attacked");
-                this.buttons.add(b);
-                if (!this.npc.isAttackable) {
-                    b.text = "Can't be attacked";
-                }
-                // TODO: use this.minecraft.level?
-                File npcSkins = new File(((ExLevel)AccessMinecraft.getInstance().level).getLevelDir(), "npc");
-                int i = 1;
-                buttonWidth = (this.width - 16) / 3;
-                b = new Button(0, 4, 124, buttonWidth, 18, "Player Skin");
-                this.buttons.add(b);
-                if (!npcSkins.isDirectory()) break block8;
+        List<Button> buttons = (List<Button>) this.buttons;
+
+        buttons.clear();
+        int buttonWidth = (this.width - 16) / 4;
+        buttons.add(new Button(-20, 4, 0, buttonWidth, 18, "Misc"));
+        buttons.add(new Button(-21, 4 + (4 + buttonWidth), 0, buttonWidth, 18, "Script"));
+
+        if (this.page == 0) {
+            this.npcName = new Textbox(this, this.textManager, 4, 40, 160, 20, this.npc.npcName);
+            this.npcName.field_2420 = true;
+            this.npcName.method_1878(32);
+            this.chatMsg = new Textbox(this, this.textManager, 4, 80, 160, 20, this.npc.chatMsg);
+            this.chatMsg.field_2420 = false;
+            this.chatMsg.method_1878(32);
+            Button b = new Button(-1, 4, 104, 160, 18, "Delete NPC");
+            buttons.add(b);
+            b = new Button(-2, 170, 24, 160, 18, "Path To Home");
+            buttons.add(b);
+            if (!this.npc.pathToHome) {
+                b.text = "Don't Path Home";
+            }
+            b = new Button(-3, 170, 42, 160, 18, "Track Player");
+            buttons.add(b);
+            if (!this.npc.trackPlayer) {
+                b.text = "Don't Track Player";
+            }
+            b = new Button(-4, 170, 64, 160, 18, "Can be attacked");
+            buttons.add(b);
+            if (!this.npc.isAttackable) {
+                b.text = "Can't be attacked";
+            }
+            // TODO: use this.minecraft.level?
+            File npcSkins = new File(((ExLevel) AccessMinecraft.getInstance().level).getLevelDir(), "npc");
+            int i = 1;
+            buttonWidth = (this.width - 16) / 3;
+            b = new Button(0, 4, 124, buttonWidth, 18, "Player Skin");
+            buttons.add(b);
+            if (npcSkins.isDirectory()) {
                 for (File f : npcSkins.listFiles()) {
                     b = new Button(i, 4 + (buttonWidth + 4) * (i % 3), 124 + i / 3 * 20, buttonWidth, 18, f.getName().split("\\.")[0]);
-                    this.buttons.add(b);
+                    buttons.add(b);
                     ++i;
                 }
-                break block8;
             }
-            if (this.page == 1) {
-                this.selectedID = 0;
-                this.setOnCreated = new Button(0, 4, 24, "OnCreated (selected): " + this.npc.onCreated);
-                this.setOnUpdate = new Button(1, this.width / 2, 24, "OnUpdate: " + this.npc.onUpdate);
-                this.setOnPathReached = new Button(2, 4, 46, "OnPathReached: " + this.npc.onPathReached);
-                this.setOnAttacked = new Button(3, this.width / 2, 46, "OnAttacked: " + this.npc.onAttacked);
-                this.setOnDeath = new Button(4, 4, 68, "OnDeath: " + this.npc.onDeath);
-                this.setOnInteraction = new Button(5, this.width / 2, 68, "OnInteraction: " + this.npc.onInteraction);
-                this.buttons.add(this.setOnCreated);
-                this.buttons.add(this.setOnUpdate);
-                this.buttons.add(this.setOnPathReached);
-                this.buttons.add(this.setOnAttacked);
-                this.buttons.add(this.setOnDeath);
-                this.buttons.add(this.setOnInteraction);
-                Button b = new Button(6, 4, 90, 200, 20, "Reload Scripts");
-                this.buttons.add(b);
-                b = new Button(7, 4, 112, 160, 18, "None");
-                this.buttons.add(b);
-                String[] scripts = this.getScriptFiles();
-                if (scripts != null) {
-                    int i = 1;
-                    for (String scriptFile : scripts) {
-                        b = new Button(7 + i, 6 + i % 3 * this.width / 3, 112 + i / 3 * 20, 160, 18, scriptFile);
-                        this.buttons.add(b);
-                        ++i;
-                    }
+        } else if (this.page == 1) {
+            this.selectedID = 0;
+            this.setOnCreated = new Button(0, 4, 24, "OnCreated (selected): " + this.npc.onCreated);
+            this.setOnUpdate = new Button(1, this.width / 2, 24, "OnUpdate: " + this.npc.onUpdate);
+            this.setOnPathReached = new Button(2, 4, 46, "OnPathReached: " + this.npc.onPathReached);
+            this.setOnAttacked = new Button(3, this.width / 2, 46, "OnAttacked: " + this.npc.onAttacked);
+            this.setOnDeath = new Button(4, 4, 68, "OnDeath: " + this.npc.onDeath);
+            this.setOnInteraction = new Button(5, this.width / 2, 68, "OnInteraction: " + this.npc.onInteraction);
+            buttons.add(this.setOnCreated);
+            buttons.add(this.setOnUpdate);
+            buttons.add(this.setOnPathReached);
+            buttons.add(this.setOnAttacked);
+            buttons.add(this.setOnDeath);
+            buttons.add(this.setOnInteraction);
+            Button b = new Button(6, 4, 90, 200, 20, "Reload Scripts");
+            buttons.add(b);
+            b = new Button(7, 4, 112, 160, 18, "None");
+            buttons.add(b);
+            String[] scripts = this.getScriptFiles();
+            if (scripts != null) {
+                int i = 1;
+                for (String scriptFile : scripts) {
+                    b = new Button(7 + i, 6 + i % 3 * this.width / 3, 112 + i / 3 * 20, 160, 18, scriptFile);
+                    buttons.add(b);
+                    ++i;
                 }
             }
         }
     }
 
     private String[] getScriptFiles() {
-        File scriptDir = new File(((ExLevel)this.minecraft.level).getLevelDir(), "scripts");
+        File scriptDir = new File(((ExLevel) this.minecraft.level).getLevelDir(), "scripts");
         if (scriptDir.exists() && scriptDir.isDirectory()) {
             File[] scriptFiles = scriptDir.listFiles();
             String[] fileNames = new String[scriptFiles.length];
@@ -157,7 +156,6 @@ public class GuiNPC extends Screen {
             return;
         }
         if (this.page == 0) {
-            File npcSkins;
             File[] skins;
             if (button.id == -1) {
                 this.npc.remove();
@@ -172,16 +170,16 @@ public class GuiNPC extends Screen {
                 boolean bl = this.npc.isAttackable = !this.npc.isAttackable;
                 button.text = this.npc.isAttackable ? "Can be attacked" : "Can't be attacked";
             } else if (button.id == 0) {
-                this.npc.texture = "/mob/char.png";
+                ((AccessLivingEntity)this.npc).setTexture("/mob/char.png");
                 // TODO: use this.minecraft.level?
-            } else if (button.id > 0 && button.id - 1 < (skins = (npcSkins = new File(((ExLevel)AccessMinecraft.getInstance().level).getLevelDir(), "npc")).listFiles()).length) {
-                this.npc.texture = "/npc/" + skins[button.id - 1].getName();
+            } else if (button.id > 0 && button.id - 1 < (skins = new File(((ExLevel) AccessMinecraft.getInstance().level).getLevelDir(), "npc").listFiles()).length) {
+                ((AccessLivingEntity)this.npc).setTexture("/npc/" + skins[button.id - 1].getName());
             }
         } else if (this.page == 1) {
             if (button.id < 6) {
                 this.selectedID = button.id;
             } else if (button.id == 6) {
-                this.minecraft.level.scriptHandler.loadScripts();
+                ((ExLevel)this.minecraft.level).getScriptHandler().loadScripts();
             } else if (button.id == 7) {
                 this.updateScriptFile("");
             } else {

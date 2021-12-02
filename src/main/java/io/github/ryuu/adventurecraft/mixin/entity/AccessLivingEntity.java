@@ -10,6 +10,9 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 public interface AccessLivingEntity {
 
     @Accessor
+    void setTexture(String texture);
+
+    @Accessor
     boolean isJumping();
 
     @Invoker

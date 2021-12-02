@@ -17,19 +17,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 @Mixin(ParticleManager.class)
-public class MixinParticleManager {
+public abstract class MixinParticleManager implements ExParticleManager {
 
     @Shadow
-    private List[] particles;
+    private List<Entity>[] particles;
 
     @Shadow
     private TextureManager textureManager;
-
-    @Shadow
-    private Random rand;
 
     @Shadow
     protected Level level;
@@ -37,19 +33,18 @@ public class MixinParticleManager {
     @Inject(method = "<init>", at = @At("TAIL"))
     private void changeArraySize(Level arg1, TextureManager par2, CallbackInfo ci) {
         particles = Arrays.copyOf(particles, particles.length + 2);
-        particles[particles.length - 2] = new ArrayList();
-        particles[particles.length - 1] = new ArrayList();
+        particles[particles.length - 2] = new ArrayList<>();
+        particles[particles.length - 1] = new ArrayList<>();
     }
 
-
-    public List adventurecraft$getEffectsWithinAABB(Box axisalignedbb) {
-        ArrayList arraylist = new ArrayList();
+    @Override
+    public List<Entity> getEffectsWithinAABB(Box axisalignedbb) {
+        ArrayList<Entity> arraylist = new ArrayList<>();
         for (int i = 0; i < 6; ++i) {
-            for (Object obj : this.particles[i]) {
-                Entity p = (Entity) obj;
-                if (!(axisalignedbb.minX <= p.x) || !(axisalignedbb.maxX >= p.x) || !(axisalignedbb.minY <= p.y) || !(axisalignedbb.maxY >= p.y) || !(axisalignedbb.minZ <= p.z) || !(axisalignedbb.maxZ >= p.z))
-                    continue;
-                arraylist.add(p);
+            for (Entity p : this.particles[i]) {
+                if (axisalignedbb.minX <= p.x && axisalignedbb.maxX >= p.x && axisalignedbb.minY <= p.y && axisalignedbb.maxY >= p.y && axisalignedbb.minZ <= p.z && axisalignedbb.maxZ >= p.z) {
+                    arraylist.add(p);
+                }
             }
         }
         return arraylist;
@@ -96,7 +91,6 @@ public class MixinParticleManager {
             tessellator.draw();
         }
     }
-
 
     @ModifyConstant(method = "method_327", constant = @Constant(intValue = 3))
     private int changeByteValueToTextureAmount(int i) {

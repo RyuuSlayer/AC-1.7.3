@@ -2,7 +2,6 @@ package io.github.ryuu.adventurecraft.scripting;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Properties;
@@ -10,14 +9,14 @@ import java.util.Set;
 
 public class EntityDescriptions {
 
-    static final HashMap<String, ScriptEntityDescription> descriptions = new HashMap();
+    static final HashMap<String, ScriptEntityDescription> descriptions = new HashMap<>();
 
     public static ScriptEntityDescription getDescription(String descName) {
         return descriptions.get(descName);
     }
 
     static void addDescription(String descName, ScriptEntityDescription desc) {
-        descriptions.put((Object) descName, (Object) desc);
+        descriptions.put(descName, desc);
     }
 
     public static void clearDescriptions() {

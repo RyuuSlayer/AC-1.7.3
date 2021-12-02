@@ -59,4 +59,12 @@ public class GuiSlider2 extends Button {
     public void mouseReleased(int mouseX, int mouseY) {
         this.dragging = false;
     }
+
+    public int getWidth() {
+        return this.width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
 }

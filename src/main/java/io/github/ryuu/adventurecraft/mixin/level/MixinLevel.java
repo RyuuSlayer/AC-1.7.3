@@ -4,14 +4,17 @@ import io.github.ryuu.adventurecraft.blocks.BlockStairMulti;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.extensions.client.ExMinecraft;
 import io.github.ryuu.adventurecraft.extensions.client.sound.ExSoundHelper;
+import io.github.ryuu.adventurecraft.extensions.client.texture.ExTextureManager;
 import io.github.ryuu.adventurecraft.extensions.entity.ExEntity;
 import io.github.ryuu.adventurecraft.extensions.entity.ExLivingEntity;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevelProperties;
 import io.github.ryuu.adventurecraft.extensions.level.chunk.ExChunk;
 import io.github.ryuu.adventurecraft.extensions.tile.ExLadderTile;
+import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import io.github.ryuu.adventurecraft.extensions.tile.entity.ExTileEntity;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
+import io.github.ryuu.adventurecraft.mixin.client.texture.AccessTextureManager;
 import io.github.ryuu.adventurecraft.mixin.util.AccessResourceDownloadThread;
 import io.github.ryuu.adventurecraft.scripting.ScopeTag;
 import io.github.ryuu.adventurecraft.scripting.Script;
@@ -23,6 +26,7 @@ import net.minecraft.class_366;
 import net.minecraft.client.colour.FoliageColour;
 import net.minecraft.client.colour.GrassColour;
 import net.minecraft.client.render.*;
+import net.minecraft.client.texture.TextureManager;
 import net.minecraft.client.util.ResourceDownloadThread;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.Lightning;
@@ -36,6 +40,7 @@ import net.minecraft.level.dimension.DimensionData;
 import net.minecraft.level.source.LevelSource;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.entity.TileEntity;
+import net.minecraft.util.ProgressListener;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.MathsHelper;
@@ -214,7 +219,13 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
     public abstract boolean method_184(Entity arg);
 
     @Shadow
+    public abstract int placeTile(int i, int j, int k, boolean flag);
+
+    @Shadow
     public abstract boolean setTile(int i, int j, int k, int i1);
+
+    @Shadow
+    public abstract void saveLevel(boolean flag, ProgressListener arg);
 
     @Shadow
     public abstract int getOceanFloorHeight(int i, int j);
@@ -254,13 +265,14 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
 
     @Override
     public void loadMapTextures() {
-        AccessMinecraft.getInstance().textureManager.reload();
-        for (Object obj : AccessMinecraft.getInstance().textureManager.TEXTURE_ID_MAP.entrySet()) {
+        TextureManager textureManager = AccessMinecraft.getInstance().textureManager;
+        textureManager.reload();
+        for (Object obj : AccessTextureManager.getTextureIdMap().entrySet()) {
             Map.Entry<String, Integer> entry = (Map.Entry<String, Integer>) obj;
             String texName = entry.getKey();
             int texID = entry.getValue();
             try {
-                AccessMinecraft.getInstance().textureManager.loadTexture(texID, texName);
+                ((ExTextureManager) textureManager).loadTexture(texID, texName);
             } catch (IllegalArgumentException ignoreNulls) {
             }
         }
@@ -278,7 +290,7 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
     }
 
     private void loadTextureAnimations() {
-        AccessMinecraft.getInstance().textureManager.clearTextureAnimations();
+        ((ExTextureManager) AccessMinecraft.getInstance().textureManager).clearTextureAnimations();
         File animationFile = new File(this.levelDir, "animations.txt");
         if (!animationFile.exists()) return;
         try {
@@ -296,7 +308,7 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
                         int w = Integer.parseInt(parts[5].trim());
                         int h = Integer.parseInt(parts[6].trim());
                         TextureAnimated t = new TextureAnimated(texName, animTex, x, y, w, h);
-                        AccessMinecraft.getInstance().textureManager.registerTextureAnimation(parts[0].trim(), t);
+                        ((ExTextureManager) AccessMinecraft.getInstance().textureManager).registerTextureAnimation(parts[0].trim(), t);
                     } catch (Exception e) {
                     }
                 }
@@ -450,8 +462,8 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
                     }
                 } else if (tpe == LightType.BLOCK) {
                     int i1 = this.getTileId(i, j, k);
-                    if (Tile.BY_ID[i1] != null && Tile.BY_ID[i1].getBlockLightValue(this, i, j, k) < l) {
-                        l = Tile.BY_ID[i1].getBlockLightValue(this, i, j, k);
+                    if (Tile.BY_ID[i1] != null && ((ExTile)Tile.BY_ID[i1]).getBlockLightValue(this, i, j, k) < l) {
+                        l = ((ExTile)Tile.BY_ID[i1]).getBlockLightValue(this, i, j, k);
                     }
                 }
                 if (this.getLightLevel(tpe, i, j, k) != l) {
@@ -1234,8 +1246,7 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
             this.musicList = new String[0];
         }
         if (!((ExLevelProperties) this.properties).getPlayingMusic().equals("")) {
-            ExSoundHelper soundHelper = (ExSoundHelper) AccessMinecraft.getInstance().soundHelper;
-            soundHelper.playMusicFromStreaming(((ExLevelProperties) this.properties).getPlayingMusic(), 0, 0);
+            ((ExSoundHelper) AccessMinecraft.getInstance().soundHelper).playMusicFromStreaming(((ExLevelProperties) this.properties).getPlayingMusic(), 0, 0);
         }
     }
 
@@ -1317,6 +1328,16 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
     @Override
     public void setLevelDir(File levelDir) {
         this.levelDir = levelDir;
+    }
+
+    @Override
+    public String[] getMusicList() {
+        return musicList;
+    }
+
+    @Override
+    public String[] getSoundList() {
+        return soundList;
     }
 
     @Override

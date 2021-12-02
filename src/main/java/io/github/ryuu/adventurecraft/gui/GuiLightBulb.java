@@ -3,7 +3,6 @@ package io.github.ryuu.adventurecraft.gui;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.gui.Screen;
-import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.level.Level;
 
 public class GuiLightBulb extends Screen {
@@ -28,17 +27,9 @@ public class GuiLightBulb extends Screen {
     }
 
     @Override
-    public void tick() {
-    }
-
-    @Override
     public void init() {
         this.lightSlider = new GuiSlider2(4, 4, 4, 10, String.format("Light Value: %d", this.lightValue), (float) this.lightValue / 15.0f);
         this.buttons.add(this.lightSlider);
-    }
-
-    @Override
-    protected void buttonClicked(Button button) {
     }
 
     @Override

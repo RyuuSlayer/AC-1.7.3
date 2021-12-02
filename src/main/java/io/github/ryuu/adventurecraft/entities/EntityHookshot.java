@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.entities;
 
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.extensions.entity.ExEntity;
+import io.github.ryuu.adventurecraft.extensions.entity.player.ExPlayerInventory;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.mixin.entity.AccessEntity;
 import net.minecraft.entity.Entity;
@@ -36,7 +37,7 @@ public class EntityHookshot extends Entity {
         this.setSize(0.5f, 0.5f);
         this.turningAround = true;
         this.timeBeforeTurnAround = 0;
-        ((ExEntity)this).setCollidesWithClipBlocks(false);
+        ((ExEntity) this).setCollidesWithClipBlocks(false);
     }
 
     public EntityHookshot(Level world, LivingEntity entity, boolean main, ItemInstance i) {
@@ -79,7 +80,7 @@ public class EntityHookshot extends Entity {
             if (this.mainHand && this.item != player.inventory.getHeldItem()) {
                 Items.hookshot.releaseHookshot(this);
             }
-            if (!this.mainHand && this.item != player.inventory.getOffhandItem()) {
+            if (!this.mainHand && this.item != ((ExPlayerInventory) player.inventory).getOffhandItem()) {
                 Items.hookshot.releaseHookshot(this);
             }
         }
@@ -125,7 +126,7 @@ public class EntityHookshot extends Entity {
             if (this.attachedToSurface) {
                 if (length > 1.2) {
                     this.returnsTo.method_1322(-0.15 * this.velocityX, -0.15 * this.velocityY, -0.15 * this.velocityZ);
-                    ((AccessEntity)this.returnsTo).setFallDistance(0.0f);
+                    ((AccessEntity) this.returnsTo).setFallDistance(0.0f);
                 } else {
                     this.returnsTo.setVelocity(0.0, 0.0, 0.0);
                 }
@@ -156,7 +157,7 @@ public class EntityHookshot extends Entity {
             }
         }
         if (this.entityGrabbed != null && !this.entityGrabbed.removed) {
-            ((AccessEntity)this.entityGrabbed).setFallDistance(0.0f);
+            ((AccessEntity) this.entityGrabbed).setFallDistance(0.0f);
             this.entityGrabbed.setPosition(this.x, this.y, this.z);
         }
     }

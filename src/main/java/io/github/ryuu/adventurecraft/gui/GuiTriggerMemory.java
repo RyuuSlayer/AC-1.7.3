@@ -8,6 +8,8 @@ import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.OptionButton;
 import net.minecraft.level.Level;
 
+import java.util.List;
+
 public class GuiTriggerMemory extends Screen {
 
     private final TileEntityTriggerMemory trigger;
@@ -38,17 +40,18 @@ public class GuiTriggerMemory extends Screen {
 
     @Override
     public void init() {
-        this.buttons.add(new OptionButton(0, 4, 40, "Use Current Selection"));
+        List<Button> buttons = (List<Button>)this.buttons;
+        buttons.add(new OptionButton(0, 4, 40, "Use Current Selection"));
         OptionButton b = new OptionButton(1, 4, 60, "Activate on Trigger");
         if (this.trigger.activateOnDetrigger) {
             b.text = "Activate on Detrigger";
         }
-        this.buttons.add(b);
+        buttons.add(b);
         b = new OptionButton(2, 4, 80, "Reset on Death");
         if (!this.trigger.resetOnDeath) {
             b.text = "Don't Reset on Death";
         }
-        this.buttons.add(b);
+        buttons.add(b);
     }
 
     @Override
@@ -59,7 +62,7 @@ public class GuiTriggerMemory extends Screen {
                 Blocks.triggerMemory.setTriggerToSelection(this.world, this.blockX, this.blockY, this.blockZ);
             }
         } else if (button.id == 1) {
-            boolean bl = this.trigger.activateOnDetrigger = !this.trigger.activateOnDetrigger;
+            this.trigger.activateOnDetrigger = !this.trigger.activateOnDetrigger;
             button.text = this.trigger.activateOnDetrigger ? "Activate on Detrigger" : "Activate on Trigger";
         } else if (button.id == 2) {
             this.trigger.resetOnDeath = !this.trigger.resetOnDeath;

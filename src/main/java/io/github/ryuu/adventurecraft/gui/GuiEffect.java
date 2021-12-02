@@ -8,10 +8,11 @@ import net.minecraft.client.gui.widgets.Button;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 public class GuiEffect extends Screen {
 
-    private static final ArrayList<String> particleTypes = new ArrayList();
+    private static final ArrayList<String> particleTypes = new ArrayList<>();
 
     static {
         particleTypes.add("bubble");
@@ -61,135 +62,123 @@ public class GuiEffect extends Screen {
 
     @Override
     public void init() {
-        block16:
-        {
-            int buttonWidth;
-            block18:
-            {
-                block17:
-                {
-                    block15:
-                    {
-                        buttonWidth = (this.width - 16) / 4;
-                        this.buttons.add(new Button(-1, 4, 0, buttonWidth, 18, "Particles"));
-                        this.buttons.add(new Button(-2, 4 + (4 + buttonWidth), 0, buttonWidth, 18, "Fog"));
-                        this.buttons.add(new Button(-3, 4 + (4 + buttonWidth) * 2, 0, buttonWidth, 18, "Overlay"));
-                        this.buttons.add(new Button(-4, 4 + (4 + buttonWidth) * 3, 0, buttonWidth, 18, "Replacements"));
-                        buttonWidth = (this.width - 16) / 3;
-                        if (this.page != 0) break block15;
-                        this.particlesPerSpawn = new GuiSlider2(200, 4, 20, 10, String.format("Particles Per Spawn: %d", this.effect.particlesPerSpawn), (float) (this.effect.particlesPerSpawn - 1) / 49.0f);
-                        this.particlesPerSpawn.width = buttonWidth;
-                        this.buttons.add(this.particlesPerSpawn);
-                        this.ticksBetweenParticles = new GuiSlider2(200, 4 + (4 + buttonWidth), 20, 10, String.format("Ticks Between: %d", this.effect.ticksBetweenParticles), (float) this.effect.ticksBetweenParticles / 100.0f);
-                        this.ticksBetweenParticles.width = buttonWidth;
-                        this.buttons.add(this.ticksBetweenParticles);
-                        this.offsetX = new GuiSlider2(201, 4, 40, 10, String.format("offset X: %.2f", this.effect.offsetX), this.effect.offsetX / 8.0f);
-                        this.offsetX.width = buttonWidth;
-                        this.buttons.add(this.offsetX);
-                        this.offsetY = new GuiSlider2(202, 4 + (4 + buttonWidth), 40, 10, String.format("offset Y: %.2f", this.effect.offsetY), this.effect.offsetY / 8.0f);
-                        this.offsetY.width = buttonWidth;
-                        this.buttons.add(this.offsetY);
-                        this.offsetZ = new GuiSlider2(203, 4 + 2 * (4 + buttonWidth), 40, 10, String.format("offset Z: %.2f", this.effect.offsetZ), this.effect.offsetZ / 8.0f);
-                        this.offsetZ.width = buttonWidth;
-                        this.buttons.add(this.offsetZ);
-                        this.randX = new GuiSlider2(201, 4, 60, 10, String.format("Rand X: %.2f", this.effect.randX), this.effect.randX / 8.0f);
-                        this.randX.width = buttonWidth;
-                        this.buttons.add(this.randX);
-                        this.randY = new GuiSlider2(202, 4 + (4 + buttonWidth), 60, 10, String.format("Rand Y: %.2f", this.effect.randY), this.effect.randY / 8.0f);
-                        this.randY.width = buttonWidth;
-                        this.buttons.add(this.randY);
-                        this.randZ = new GuiSlider2(203, 4 + 2 * (4 + buttonWidth), 60, 10, String.format("Rand Z: %.2f", this.effect.randZ), this.effect.randZ / 8.0f);
-                        this.randZ.width = buttonWidth;
-                        this.buttons.add(this.randZ);
-                        this.floatArg1 = new GuiSlider2(201, 4, 80, 10, String.format("Arg 1: %.2f", this.effect.floatArg1), (this.effect.floatArg1 + 1.0f) / 2.0f);
-                        this.floatArg1.width = buttonWidth;
-                        this.buttons.add(this.floatArg1);
-                        this.floatArg2 = new GuiSlider2(202, 4 + (4 + buttonWidth), 80, 10, String.format("Arg 2: %.2f", this.effect.floatArg2), (this.effect.floatArg2 + 1.0f) / 2.0f);
-                        this.floatArg2.width = buttonWidth;
-                        this.buttons.add(this.floatArg2);
-                        this.floatArg3 = new GuiSlider2(203, 4 + 2 * (4 + buttonWidth), 80, 10, String.format("Arg 3: %.2f", this.effect.floatArg3), (this.effect.floatArg3 + 1.0f) / 2.0f);
-                        this.floatArg3.width = buttonWidth;
-                        this.buttons.add(this.floatArg3);
-                        this.floatRand1 = new GuiSlider2(201, 4, 100, 10, String.format("Rand Arg 1: %.2f", this.effect.floatRand1), this.effect.floatRand1);
-                        this.floatRand1.width = buttonWidth;
-                        this.buttons.add(this.floatRand1);
-                        this.floatRand2 = new GuiSlider2(202, 4 + (4 + buttonWidth), 100, 10, String.format("Rand Arg 2: %.2f", this.effect.floatRand2), this.effect.floatRand2);
-                        this.floatRand2.width = buttonWidth;
-                        this.buttons.add(this.floatRand2);
-                        this.floatRand3 = new GuiSlider2(203, 4 + 2 * (4 + buttonWidth), 100, 10, String.format("Rand Arg 3: %.2f", this.effect.floatRand3), this.effect.floatRand3);
-                        this.floatRand3.width = buttonWidth;
-                        this.buttons.add(this.floatRand3);
-                        this.buttons.add(new Button(0, 4, 120, buttonWidth, 18, "No Particles"));
-                        int i = 1;
-                        for (String particleType : particleTypes) {
-                            this.buttons.add(new Button(i, 4 + i % 3 * (4 + buttonWidth), 120 + i / 3 * 20, buttonWidth, 18, particleType));
-                            ++i;
-                        }
-                        break block16;
-                    }
-                    if (this.page != 1) break block17;
-                    Button b = new Button(0, 4, 20, buttonWidth, 18, "Don't Change Fog Color");
-                    if (this.effect.changeFogColor == 1) {
-                        b.text = "Change Fog Color";
-                    } else if (this.effect.changeFogColor == 2) {
-                        b.text = "Revert Fog Color To Normal";
-                    }
-                    this.buttons.add(b);
-                    this.fogR = new GuiSlider2(201, 4, 40, 10, String.format("Red: %.2f", this.effect.fogR), this.effect.fogR);
-                    this.fogR.width = buttonWidth;
-                    this.buttons.add(this.fogR);
-                    this.fogG = new GuiSlider2(202, 4 + (4 + buttonWidth), 40, 10, String.format("Green: %.2f", this.effect.fogG), this.effect.fogG);
-                    this.fogG.width = buttonWidth;
-                    this.buttons.add(this.fogG);
-                    this.fogB = new GuiSlider2(203, 4 + 2 * (4 + buttonWidth), 40, 10, String.format("Blue: %.2f", this.effect.fogB), this.effect.fogB);
-                    this.fogB.width = buttonWidth;
-                    this.buttons.add(this.fogB);
-                    b = new Button(1, 4, 60, buttonWidth, 18, "Don't Change Fog Density");
-                    if (this.effect.changeFogDensity == 1) {
-                        b.text = "Change Fog Density";
-                    } else if (this.effect.changeFogDensity == 2) {
-                        b.text = "Revert Fog Density To Normal";
-                    }
-                    this.buttons.add(b);
-                    this.fogStart = new GuiSlider2(201, 4, 80, 10, String.format("Start: %.1f", this.effect.fogStart), this.effect.fogStart / 512.0f);
-                    this.fogStart.width = buttonWidth;
-                    this.buttons.add(this.fogStart);
-                    this.fogEnd = new GuiSlider2(202, 4 + (4 + buttonWidth), 80, 10, String.format("End: %.1f", this.effect.fogEnd), this.effect.fogEnd / 512.0f);
-                    this.fogEnd.width = buttonWidth;
-                    this.buttons.add(this.fogEnd);
-                    break block16;
-                }
-                if (this.page != 2) break block18;
-                Button b = new Button(0, 4, 20, buttonWidth, 18, "Change Overlay");
-                if (!this.effect.setOverlay) {
-                    b.text = "Don't Change Overlay";
-                }
-                this.buttons.add(b);
-                this.buttons.add(new Button(1, 4, 40, buttonWidth, 18, "Remove Overlay"));
-                int i = 1;
-                File overlays = new File(((ExLevel)this.effect.level).getLevelDir(), "overlays");
-                if (!overlays.exists() || !overlays.isDirectory()) break block16;
+        List<Button> buttons = (List<Button>) this.buttons;
+
+        int buttonWidth = (this.width - 16) / 4;
+        buttons.add(new Button(-1, 4, 0, buttonWidth, 18, "Particles"));
+        buttons.add(new Button(-2, 4 + 4 + buttonWidth, 0, buttonWidth, 18, "Fog"));
+        buttons.add(new Button(-3, 4 + (4 + buttonWidth) * 2, 0, buttonWidth, 18, "Overlay"));
+        buttons.add(new Button(-4, 4 + (4 + buttonWidth) * 3, 0, buttonWidth, 18, "Replacements"));
+        buttonWidth = (this.width - 16) / 3;
+
+        if (this.page == 0) {
+            this.particlesPerSpawn = new GuiSlider2(200, 4, 20, 10, String.format("Particles Per Spawn: %d", this.effect.particlesPerSpawn), (float) (this.effect.particlesPerSpawn - 1) / 49.0f);
+            this.particlesPerSpawn.setWidth(buttonWidth);
+            buttons.add(this.particlesPerSpawn);
+            this.ticksBetweenParticles = new GuiSlider2(200, 4 + 4 + buttonWidth, 20, 10, String.format("Ticks Between: %d", this.effect.ticksBetweenParticles), (float) this.effect.ticksBetweenParticles / 100.0f);
+            this.ticksBetweenParticles.setWidth(buttonWidth);
+            buttons.add(this.ticksBetweenParticles);
+            this.offsetX = new GuiSlider2(201, 4, 40, 10, String.format("offset X: %.2f", this.effect.offsetX), this.effect.offsetX / 8.0f);
+            this.offsetX.setWidth(buttonWidth);
+            buttons.add(this.offsetX);
+            this.offsetY = new GuiSlider2(202, 4 + 4 + buttonWidth, 40, 10, String.format("offset Y: %.2f", this.effect.offsetY), this.effect.offsetY / 8.0f);
+            this.offsetY.setWidth(buttonWidth);
+            buttons.add(this.offsetY);
+            this.offsetZ = new GuiSlider2(203, 4 + 2 * (4 + buttonWidth), 40, 10, String.format("offset Z: %.2f", this.effect.offsetZ), this.effect.offsetZ / 8.0f);
+            this.offsetZ.setWidth(buttonWidth);
+            buttons.add(this.offsetZ);
+            this.randX = new GuiSlider2(201, 4, 60, 10, String.format("Rand X: %.2f", this.effect.randX), this.effect.randX / 8.0f);
+            this.randX.setWidth(buttonWidth);
+            buttons.add(this.randX);
+            this.randY = new GuiSlider2(202, 4 + 4 + buttonWidth, 60, 10, String.format("Rand Y: %.2f", this.effect.randY), this.effect.randY / 8.0f);
+            this.randY.setWidth(buttonWidth);
+            buttons.add(this.randY);
+            this.randZ = new GuiSlider2(203, 4 + 2 * (4 + buttonWidth), 60, 10, String.format("Rand Z: %.2f", this.effect.randZ), this.effect.randZ / 8.0f);
+            this.randZ.setWidth(buttonWidth);
+            buttons.add(this.randZ);
+            this.floatArg1 = new GuiSlider2(201, 4, 80, 10, String.format("Arg 1: %.2f", this.effect.floatArg1), (this.effect.floatArg1 + 1.0f) / 2.0f);
+            this.floatArg1.setWidth(buttonWidth);
+            buttons.add(this.floatArg1);
+            this.floatArg2 = new GuiSlider2(202, 4 + 4 + buttonWidth, 80, 10, String.format("Arg 2: %.2f", this.effect.floatArg2), (this.effect.floatArg2 + 1.0f) / 2.0f);
+            this.floatArg2.setWidth(buttonWidth);
+            buttons.add(this.floatArg2);
+            this.floatArg3 = new GuiSlider2(203, 4 + 2 * (4 + buttonWidth), 80, 10, String.format("Arg 3: %.2f", this.effect.floatArg3), (this.effect.floatArg3 + 1.0f) / 2.0f);
+            this.floatArg3.setWidth(buttonWidth);
+            buttons.add(this.floatArg3);
+            this.floatRand1 = new GuiSlider2(201, 4, 100, 10, String.format("Rand Arg 1: %.2f", this.effect.floatRand1), this.effect.floatRand1);
+            this.floatRand1.setWidth(buttonWidth);
+            buttons.add(this.floatRand1);
+            this.floatRand2 = new GuiSlider2(202, 4 + 4 + buttonWidth, 100, 10, String.format("Rand Arg 2: %.2f", this.effect.floatRand2), this.effect.floatRand2);
+            this.floatRand2.setWidth(buttonWidth);
+            buttons.add(this.floatRand2);
+            this.floatRand3 = new GuiSlider2(203, 4 + 2 * (4 + buttonWidth), 100, 10, String.format("Rand Arg 3: %.2f", this.effect.floatRand3), this.effect.floatRand3);
+            this.floatRand3.setWidth(buttonWidth);
+            buttons.add(this.floatRand3);
+            buttons.add(new Button(0, 4, 120, buttonWidth, 18, "No Particles"));
+            int i = 1;
+            for (String particleType : particleTypes) {
+                buttons.add(new Button(i, 4 + i % 3 * (4 + buttonWidth), 120 + i / 3 * 20, buttonWidth, 18, particleType));
+                ++i;
+            }
+        } else if (this.page == 1) {
+            Button b = new Button(0, 4, 20, buttonWidth, 18, "Don't Change Fog Color");
+            if (this.effect.changeFogColor == 1) {
+                b.text = "Change Fog Color";
+            } else if (this.effect.changeFogColor == 2) {
+                b.text = "Revert Fog Color To Normal";
+            }
+            buttons.add(b);
+            this.fogR = new GuiSlider2(201, 4, 40, 10, String.format("Red: %.2f", this.effect.fogR), this.effect.fogR);
+            this.fogR.setWidth(buttonWidth);
+            buttons.add(this.fogR);
+            this.fogG = new GuiSlider2(202, 4 + 4 + buttonWidth, 40, 10, String.format("Green: %.2f", this.effect.fogG), this.effect.fogG);
+            this.fogG.setWidth(buttonWidth);
+            buttons.add(this.fogG);
+            this.fogB = new GuiSlider2(203, 4 + 2 * (4 + buttonWidth), 40, 10, String.format("Blue: %.2f", this.effect.fogB), this.effect.fogB);
+            this.fogB.setWidth(buttonWidth);
+            buttons.add(this.fogB);
+            b = new Button(1, 4, 60, buttonWidth, 18, "Don't Change Fog Density");
+            if (this.effect.changeFogDensity == 1) {
+                b.text = "Change Fog Density";
+            } else if (this.effect.changeFogDensity == 2) {
+                b.text = "Revert Fog Density To Normal";
+            }
+            buttons.add(b);
+            this.fogStart = new GuiSlider2(201, 4, 80, 10, String.format("Start: %.1f", this.effect.fogStart), this.effect.fogStart / 512.0f);
+            this.fogStart.setWidth(buttonWidth);
+            buttons.add(this.fogStart);
+            this.fogEnd = new GuiSlider2(202, 4 + 4 + buttonWidth, 80, 10, String.format("End: %.1f", this.effect.fogEnd), this.effect.fogEnd / 512.0f);
+            this.fogEnd.setWidth(buttonWidth);
+            buttons.add(this.fogEnd);
+        } else if (this.page == 2) {
+            Button b = new Button(0, 4, 20, buttonWidth, 18, "Change Overlay");
+            if (!this.effect.setOverlay) {
+                b.text = "Don't Change Overlay";
+            }
+            buttons.add(b);
+            buttons.add(new Button(1, 4, 40, buttonWidth, 18, "Remove Overlay"));
+            int i = 1;
+            File overlays = new File(((ExLevel) this.effect.level).getLevelDir(), "overlays");
+            if (overlays.exists() && overlays.isDirectory()) {
                 for (File overlayFile : overlays.listFiles()) {
-                    this.buttons.add(new Button(1 + i, 4 + i % 3 * (4 + buttonWidth), 40 + i / 3 * 20, buttonWidth, 18, overlayFile.getName()));
+                    buttons.add(new Button(1 + i, 4 + i % 3 * (4 + buttonWidth), 40 + i / 3 * 20, buttonWidth, 18, overlayFile.getName()));
                     ++i;
                 }
-                break block16;
             }
-            if (this.page == 3) {
-                Button b = new Button(0, 4, 20, buttonWidth, 18, "Replace Textures");
-                if (!this.effect.replaceTextures && this.effect.revertTextures) {
-                    b.text = "Revert Replacements";
-                } else if (!this.effect.replaceTextures) {
-                    b.text = "Do Nothing";
-                }
-                this.buttons.add(b);
-                int i = 0;
-                File replacements = new File(((ExLevel)this.effect.level).getLevelDir(), "textureReplacement");
-                if (replacements.exists() && replacements.isDirectory()) {
-                    for (File replacementFile : replacements.listFiles()) {
-                        this.buttons.add(new Button(1 + i, 4 + i % 3 * (4 + buttonWidth), 40 + i / 3 * 20, buttonWidth, 18, replacementFile.getName()));
-                        ++i;
-                    }
+        } else if (this.page == 3) {
+            Button b = new Button(0, 4, 20, buttonWidth, 18, "Replace Textures");
+            if (!this.effect.replaceTextures && this.effect.revertTextures) {
+                b.text = "Revert Replacements";
+            } else if (!this.effect.replaceTextures) {
+                b.text = "Do Nothing";
+            }
+            buttons.add(b);
+            int i = 0;
+            File replacements = new File(((ExLevel) this.effect.level).getLevelDir(), "textureReplacement");
+            if (replacements.exists() && replacements.isDirectory()) {
+                for (File replacementFile : replacements.listFiles()) {
+                    buttons.add(new Button(1 + i, 4 + i % 3 * (4 + buttonWidth), 40 + i / 3 * 20, buttonWidth, 18, replacementFile.getName()));
+                    ++i;
                 }
             }
         }
@@ -212,10 +201,10 @@ public class GuiEffect extends Screen {
         } else if (this.page == 1) {
             if (button.id == 0) {
                 this.effect.changeFogColor = (this.effect.changeFogColor + 1) % 3;
-                button.text = this.effect.changeFogColor == 1 ? "Change Fog Color" : (this.effect.changeFogColor == 2 ? "Revert Fog Color To Normal" : "Don't Change Fog Color");
+                button.text = this.effect.changeFogColor == 1 ? "Change Fog Color" : this.effect.changeFogColor == 2 ? "Revert Fog Color To Normal" : "Don't Change Fog Color";
             } else if (button.id == 1) {
                 this.effect.changeFogDensity = (this.effect.changeFogDensity + 1) % 3;
-                button.text = this.effect.changeFogDensity == 1 ? "Change Fog Density" : (this.effect.changeFogDensity == 2 ? "Revert Fog Density To Normal" : "Don't Change Fog Density");
+                button.text = this.effect.changeFogDensity == 1 ? "Change Fog Density" : this.effect.changeFogDensity == 2 ? "Revert Fog Density To Normal" : "Don't Change Fog Density";
             }
         } else if (this.page == 2) {
             if (button.id == 0) {
@@ -231,12 +220,10 @@ public class GuiEffect extends Screen {
                     this.effect.revertTextures = true;
                     button.text = "Revert Replacements";
                 } else if (this.effect.revertTextures) {
-                    this.effect.replaceTextures = false;
                     this.effect.revertTextures = false;
                     button.text = "Do Nothing";
                 } else {
                     this.effect.replaceTextures = true;
-                    this.effect.revertTextures = false;
                     button.text = "Replace Textures";
                 }
             } else {

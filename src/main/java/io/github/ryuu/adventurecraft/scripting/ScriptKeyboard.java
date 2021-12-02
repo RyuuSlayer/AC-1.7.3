@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.scripting;
 
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import net.minecraft.client.options.GameOptions;
 import net.minecraft.level.Level;
 import org.lwjgl.input.Keyboard;
@@ -19,13 +20,13 @@ public class ScriptKeyboard {
     public String keyJumpScript = "";
     public String keySneakScript = "";
     String allKeys;
-    HashMap<Object, Object> keyBinds;
-    Level world;
+    HashMap<Integer, String> keyBinds;
+    Level level;
     Scriptable scope;
 
     ScriptKeyboard(Level w, GameOptions g, Scriptable s) {
-        this.world = w;
-        this.keyBinds = new HashMap();
+        this.level = w;
+        this.keyBinds = new HashMap<>();
         this.allKeys = null;
         this.scope = s;
         this.gameSettings = g;
@@ -48,21 +49,21 @@ public class ScriptKeyboard {
     }
 
     public void processKeyPress(int keyID) {
-        Object wrappedOut;
+        ExLevel level = (ExLevel) this.level;
         boolean keyIDSet = false;
-        Object script = this.keyBinds.get(keyID);
+        String script = this.keyBinds.get(keyID);
         if (script != null) {
             keyIDSet = true;
-            wrappedOut = Context.javaToJS(keyID, (Scriptable) this.world.scope);
-            ScriptableObject.putProperty((Scriptable) this.world.scope, "keyID", wrappedOut);
-            this.world.scriptHandler.runScript(script, this.world.scope);
+            Object wrappedOut = Context.javaToJS(keyID, level.getScope());
+            ScriptableObject.putProperty(level.getScope(), "keyID", wrappedOut);
+            level.getScriptHandler().runScript(script, level.getScope());
         }
         if (this.allKeys != null) {
             if (!keyIDSet) {
-                wrappedOut = Context.javaToJS(keyID, (Scriptable) this.world.scope);
-                ScriptableObject.putProperty((Scriptable) this.world.scope, "keyID", wrappedOut);
+                Object wrappedOut = Context.javaToJS(keyID, level.getScope());
+                ScriptableObject.putProperty(level.getScope(), "keyID", wrappedOut);
             }
-            this.world.scriptHandler.runScript(this.allKeys, this.world.scope);
+            level.getScriptHandler().runScript(this.allKeys, level.getScope());
         }
     }
 
@@ -103,11 +104,12 @@ public class ScriptKeyboard {
     }
 
     private boolean runScript(String scriptName, int keyID, boolean keyState) {
-        Object wrappedOut = Context.javaToJS(keyID, (Scriptable) this.world.scope);
-        ScriptableObject.putProperty((Scriptable) this.world.scope, "keyID", wrappedOut);
+        ExLevel level = (ExLevel) this.level;
+        Object wrappedOut = Context.javaToJS(keyID, level.getScope());
+        ScriptableObject.putProperty(level.getScope(), "keyID", wrappedOut);
         wrappedOut = Context.javaToJS(keyState, this.scope);
         ScriptableObject.putProperty(this.scope, "keyState", wrappedOut);
-        Object result = this.world.scriptHandler.runScript(scriptName, this.scope);
+        Object result = level.getScriptHandler().runScript(scriptName, this.scope);
         if (!(result instanceof Boolean)) {
             return true;
         }

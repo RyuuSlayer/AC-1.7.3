@@ -14,12 +14,8 @@ public class GuiHealDamage extends Screen {
         this.tileEnt = t;
     }
 
-    public static void showUI(Level worldArg, TileEntityHealDamage w) {
+    public static void showUI(Level level, TileEntityHealDamage w) {
         AccessMinecraft.getInstance().openScreen(new GuiHealDamage(w));
-    }
-
-    @Override
-    public void tick() {
     }
 
     @Override

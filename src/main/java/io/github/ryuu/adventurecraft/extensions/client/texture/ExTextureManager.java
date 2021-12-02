@@ -2,28 +2,27 @@ package io.github.ryuu.adventurecraft.extensions.client.texture;
 
 import io.github.ryuu.adventurecraft.util.TextureAnimated;
 import io.github.ryuu.adventurecraft.util.Vec2;
-import net.minecraft.client.render.TextureBinder;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 
 public interface ExTextureManager {
-    void adventurecraft$replaceTexture(String texToReplace, String replacement);
 
-    void adventurecraft$revertTextures();
+    void replaceTexture(String texToReplace, String replacement);
 
-    void adventurecraft$loadTexture(int texID, String texName);
+    void revertTextures();
 
-    BufferedImage adventurecraft$getTextureImage(String texName);
+    void loadTexture(int texID, String texName);
 
-    Vec2 adventurecraft$getTextureResolution(String texName);
+    BufferedImage getTextureImage(String texName);
 
-    void adventurecraft$clearTextureAnimations();
+    Vec2 getTextureResolution(String texName);
 
-    void adventurecraft$registerTextureAnimation(String name, TextureAnimated animTex);
+    void clearTextureAnimations();
 
-    void adventurecraft$unregisterTextureAnimation(String name);
+    void registerTextureAnimation(String name, TextureAnimated animTex);
 
-    void adventurecraft$updateTextureAnimations();
+    void unregisterTextureAnimation(String name);
+
+    void updateTextureAnimations();
 }

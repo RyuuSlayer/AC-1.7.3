@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.blocks;
 import io.github.ryuu.adventurecraft.entities.EntityAirFX;
 import io.github.ryuu.adventurecraft.extensions.entity.player.ExPlayer;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
+import io.github.ryuu.adventurecraft.mixin.client.particle.ExParticleManager;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.FallingTile;
@@ -56,8 +57,6 @@ public class BlockFan extends Tile {
         }
         level.method_216(x, y, z, this.id, this.getTickrate());
         if (!DebugMode.active) {
-            double dist;
-            Entity e;
             int blockID;
             int direction = level.getTileMeta(x, y, z);
             int xOffset = 0;
@@ -107,24 +106,25 @@ public class BlockFan extends Tile {
                 }
             }
             Box aabb = this.getCollisionShape(level, x, y, z).add(xOffset, yOffset, zOffset);
-            List entities = level.getEntities(Entity.class, aabb);
-            for (Object obj : entities) {
-                e = (Entity) obj;
-                if (e instanceof FallingTile) continue;
-                dist = e.method_1350((double) x + 0.5, (double) y + 0.5, (double) z + 0.5) * (double) Math.abs(xOffset + yOffset + zOffset) / 4.0;
-                e.method_1322(0.07 * (double) xOffset / dist, 0.07 * (double) yOffset / dist, 0.07 * (double) zOffset / dist);
-                if (e instanceof Player && ((ExPlayer) e).usingUmbrella()) {
-                    e.method_1322(0.07 * (double) xOffset / dist, 0.07 * (double) yOffset / dist, 0.07 * (double) zOffset / dist);
+            List<Entity> entities = (List<Entity>) level.getEntities(Entity.class, aabb);
+            for (Entity e : entities) {
+                if (!(e instanceof FallingTile)) {
+                    double dist = e.method_1350(x + 0.5, y + 0.5, z + 0.5) * Math.abs(xOffset + yOffset + zOffset) / 4.0;
+                    e.method_1322(0.07 * xOffset / dist, 0.07 * yOffset / dist, 0.07 * zOffset / dist);
+                    if (e instanceof Player && ((ExPlayer) e).usingUmbrella()) {
+                        e.method_1322(0.07 * xOffset / dist, 0.07 * yOffset / dist, 0.07 * zOffset / dist);
+                    }
                 }
             }
-            entities = AccessMinecraft.getInstance().particleManager.getEffectsWithinAABB(aabb);
-            for (Object obj : entities) {
-                e = (Entity) obj;
-                if (e instanceof FallingTile) continue;
-                dist = e.method_1350((double) x + 0.5, (double) y + 0.5, (double) z + 0.5) * (double) Math.abs(xOffset + yOffset + zOffset) / 4.0;
-                e.method_1322(0.03 * (double) xOffset / dist, 0.03 * (double) yOffset / dist, 0.03 * (double) zOffset / dist);
+            entities = ((ExParticleManager) AccessMinecraft.getInstance().particleManager).getEffectsWithinAABB(aabb);
+            for (Entity e : entities) {
+                if (e instanceof FallingTile) {
+                    continue;
+                }
+                double dist = e.method_1350(x + 0.5, y + 0.5, z + 0.5) * Math.abs(xOffset + yOffset + zOffset) / 4.0;
+                e.method_1322(0.03 * xOffset / dist, 0.03 * yOffset / dist, 0.03 * zOffset / dist);
             }
-            AccessMinecraft.getInstance().particleManager.addParticle(new EntityAirFX(level, (double) x + rand.nextDouble(), (double) y + rand.nextDouble(), (double) z + rand.nextDouble()));
+            AccessMinecraft.getInstance().particleManager.addParticle(new EntityAirFX(level, x + rand.nextDouble(), y + rand.nextDouble(), z + rand.nextDouble()));
         }
     }
 

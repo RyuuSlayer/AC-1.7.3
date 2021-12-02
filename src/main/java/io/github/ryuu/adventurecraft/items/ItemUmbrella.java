@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.items;
 import io.github.ryuu.adventurecraft.entities.EntityAirFX;
 import io.github.ryuu.adventurecraft.extensions.items.ExItemType;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
+import io.github.ryuu.adventurecraft.mixin.client.particle.ExParticleManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.FallingTile;
 import net.minecraft.entity.player.Player;
@@ -14,7 +15,7 @@ import net.minecraft.util.maths.Vec3f;
 
 import java.util.List;
 
-class ItemUmbrella extends ItemType implements ExItemType {
+public class ItemUmbrella extends ItemType implements ExItemType {
 
     public ItemUmbrella(int id) {
         super(id);
@@ -36,42 +37,38 @@ class ItemUmbrella extends ItemType implements ExItemType {
 
     @Override
     public ItemInstance use(ItemInstance item, Level level, Player player) {
-        double dotProduct;
-        double dZ;
-        double dY;
-        double dX;
-        double dist;
-        Entity e;
         if (!player.onGround || item.getDamage() > 0) {
             return item;
         }
         Vec3f lookVec = player.method_1320();
         lookVec.method_1296();
         Box aabb = Box.getOrCreate(player.x, player.y, player.z, player.x, player.y, player.z).expand(6.0, 6.0, 6.0);
-        List entities = level.getEntities(player, aabb);
-        for (Object obj : entities) {
-            e = (Entity) obj;
-            dist = e.method_1352(player);
-            if (!(dist < 36.0) || e instanceof FallingTile) continue;
-            dX = e.x - player.x;
-            dY = e.y - player.y;
-            dZ = e.z - player.z;
-            dotProduct = (dX /= (dist = Math.sqrt(dist))) * lookVec.x + (dY /= dist) * lookVec.y + (dZ /= dist) * lookVec.z;
-            if (!(dotProduct > 0.0) || !(Math.acos(dotProduct) < 1.5707963267948966)) continue;
-            dist = Math.max(dist, 3.0);
-            e.method_1322(3.0 * dX / dist, 3.0 * dY / dist, 3.0 * dZ / dist);
+        List<Entity> entities = (List<Entity>)level.getEntities(player, aabb);
+        for (Entity e : entities) {
+            double dist = e.method_1352(player);
+            if (dist < 36.0 && !(e instanceof FallingTile)) {
+                double dX = e.x - player.x;
+                double dY = e.y - player.y;
+                double dZ = e.z - player.z;
+                double dot = (dX /= (dist = Math.sqrt(dist))) * lookVec.x + (dY /= dist) * lookVec.y + (dZ /= dist) * lookVec.z;
+                if (dot > 0.0 && Math.acos(dot) < 1.5707963267948966) {
+                    dist = Math.max(dist, 3.0);
+                    e.method_1322(3.0 * dX / dist, 3.0 * dY / dist, 3.0 * dZ / dist);
+                }
+            }
         }
-        entities = AccessMinecraft.getInstance().particleManager.getEffectsWithinAABB(aabb);
-        for (Object obj : entities) {
-            e = (Entity) obj;
-            dist = e.method_1352(player);
-            if (!(dist < 36.0)) continue;
-            dX = e.x - player.x;
-            dY = e.y - player.y;
-            dZ = e.z - player.z;
-            dotProduct = (dX /= (dist = Math.sqrt(dist))) * lookVec.x + (dY /= dist) * lookVec.y + (dZ /= dist) * lookVec.z;
-            if (!(dotProduct > 0.0) || !(Math.acos(dotProduct) < 1.5707963267948966)) continue;
-            e.method_1322(6.0 * dX / dist, 6.0 * dY / dist, 6.0 * dZ / dist);
+        entities = ((ExParticleManager)AccessMinecraft.getInstance().particleManager).getEffectsWithinAABB(aabb);
+        for (Entity e : entities) {
+            double dist = e.method_1352(player);
+            if (dist < 36.0) {
+                double dX = e.x - player.x;
+                double dY = e.y - player.y;
+                double dZ = e.z - player.z;
+                double dot = (dX /= (dist = Math.sqrt(dist))) * lookVec.x + (dY /= dist) * lookVec.y + (dZ /= dist) * lookVec.z;
+                if (dot > 0.0 && Math.acos(dot) < 1.5707963267948966) {
+                    e.method_1322(6.0 * dX / dist, 6.0 * dY / dist, 6.0 * dZ / dist);
+                }
+            }
         }
         for (int i = 0; i < 25; ++i) {
             EntityAirFX fx = new EntityAirFX(level, player.x, player.y, player.z);

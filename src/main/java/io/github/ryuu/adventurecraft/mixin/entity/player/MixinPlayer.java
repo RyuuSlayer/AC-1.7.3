@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.mixin.entity.player;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.extensions.entity.ExLivingEntity;
 import io.github.ryuu.adventurecraft.extensions.entity.player.ExPlayer;
+import io.github.ryuu.adventurecraft.extensions.entity.player.ExPlayerInventory;
 import io.github.ryuu.adventurecraft.extensions.items.ExItemType;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.mixin.entity.MixinLivingEntity;
@@ -40,14 +41,19 @@ public abstract class MixinPlayer extends MixinLivingEntity implements ExPlayer 
     public PlayerInventory inventory;
     @Shadow
     public Container container;
+
     @Shadow
     public float field_524;
+
     @Shadow
     public float field_525;
+
     @Shadow
     public boolean handSwinging;
+
     @Shadow
     public int handSwingTicks;
+
     @Shadow
     public String name;
 
@@ -140,9 +146,9 @@ public abstract class MixinPlayer extends MixinLivingEntity implements ExPlayer 
             }
         }
         ItemInstance mainItem = this.inventory.main[this.inventory.selectedHotbarSlot];
-        ItemInstance offItem = this.inventory.main[this.inventory.offhandItem];
+        ItemInstance offItem = this.inventory.main[((ExPlayerInventory) this.inventory).getOffhandSlot()];
         boolean litFromItem = mainItem != null && ((ExItemType) ItemType.byId[mainItem.itemId]).isLighting(mainItem);
-        if ((litFromItem |= offItem != null && ((ExItemType) ItemType.byId[offItem.itemId]).isLighting(offItem)) || mainItem != null && (mainItem.itemId == Tile.TORCH.id || mainItem.itemId == Blocks.lights1.id) || offItem != null && (offItem.itemId == Tile.TORCH.id || offItem.itemId == Blocks.lights1.id)) {
+        if ((litFromItem || offItem != null && ((ExItemType) ItemType.byId[offItem.itemId]).isLighting(offItem)) || mainItem != null && (mainItem.itemId == Tile.TORCH.id || mainItem.itemId == Blocks.lights1.id) || offItem != null && (offItem.itemId == Tile.TORCH.id || offItem.itemId == Blocks.lights1.id)) {
             PlayerTorch.setTorchState(this.level, true);
             PlayerTorch.setTorchPos(this.level, (float) this.x, (float) this.y, (float) this.z);
         } else {
@@ -155,8 +161,8 @@ public abstract class MixinPlayer extends MixinLivingEntity implements ExPlayer 
             if (this.inventory.getHeldItem() != null && this.inventory.getHeldItem().itemId == Items.umbrella.id) {
                 this.inventory.getHeldItem().setDamage(1);
             }
-            if (this.inventory.getOffhandItem() != null && this.inventory.getOffhandItem().itemId == Items.umbrella.id) {
-                this.inventory.getOffhandItem().setDamage(1);
+            if (((ExPlayerInventory) this.inventory).getOffhandItem() != null && ((ExPlayerInventory) this.inventory).getOffhandItem().itemId == Items.umbrella.id) {
+                ((ExPlayerInventory) this.inventory).getOffhandItem().setDamage(1);
             }
         }
     }
@@ -261,11 +267,13 @@ public abstract class MixinPlayer extends MixinLivingEntity implements ExPlayer 
         this.handSwinging = true;
     }
 
+    @Override
     public void swingOffhandItem() {
         this.swingProgressIntOffhand = -1;
         this.isSwingingOffhand = true;
     }
 
+    @Override
     public float getSwingOffhandProgress(float f) {
         float f1 = this.swingProgressOffhand - this.prevSwingProgressOffhand;
         if (f1 < 0.0f) {
@@ -277,7 +285,7 @@ public abstract class MixinPlayer extends MixinLivingEntity implements ExPlayer 
     @Override
     public boolean protectedByShield() {
         ItemInstance curItem = this.inventory.getHeldItem();
-        ItemInstance offItem = this.inventory.getOffhandItem();
+        ItemInstance offItem = ((ExPlayerInventory) this.inventory).getOffhandItem();
         if (curItem != null && curItem.itemId == Items.woodenShield.id || offItem != null && offItem.itemId == Items.woodenShield.id) {
             return this.getSwingOffhandProgress(1.0f) == 0.0f;
         }
@@ -294,7 +302,7 @@ public abstract class MixinPlayer extends MixinLivingEntity implements ExPlayer 
 
     @Override
     public boolean usingUmbrella() {
-        return this.inventory.getHeldItem() != null && this.inventory.getHeldItem().itemId == Items.umbrella.id || this.inventory.getOffhandItem() != null && this.inventory.getOffhandItem().itemId == Items.umbrella.id;
+        return this.inventory.getHeldItem() != null && this.inventory.getHeldItem().itemId == Items.umbrella.id || ((ExPlayerInventory) this.inventory).getOffhandItem() != null && ((ExPlayerInventory) this.inventory).getOffhandItem().itemId == Items.umbrella.id;
     }
 
     @Override
@@ -310,5 +318,45 @@ public abstract class MixinPlayer extends MixinLivingEntity implements ExPlayer 
     @Override
     public String getCloakTexture() {
         return this.cloakTexture;
+    }
+
+    @Override
+    public void setHeartPieces(int heartPieces) {
+        this.numHeartPieces = heartPieces;
+    }
+
+    @Override
+    public void setSwappedItems(boolean swappedItems) {
+        this.swappedItems = swappedItems;
+    }
+
+    @Override
+    public String getCloakTexture() {
+        return cloakTexture;
+    }
+
+    @Override
+    public void setCloakTexture(String cloakTexture) {
+        this.cloakTexture = cloakTexture;
+    }
+
+    @Override
+    public void setHeartPieces(int heartPieces) {
+        this.numHeartPieces = heartPieces;
+    }
+
+    @Override
+    public void setSwappedItems(boolean swappedItems) {
+        this.swappedItems = swappedItems;
+    }
+
+    @Override
+    public String getCloakTexture() {
+        return cloakTexture;
+    }
+
+    @Override
+    public void setCloakTexture(String cloakTexture) {
+        this.cloakTexture = cloakTexture;
     }
 }

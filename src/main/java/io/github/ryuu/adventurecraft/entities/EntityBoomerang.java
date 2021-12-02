@@ -1,5 +1,7 @@
 package io.github.ryuu.adventurecraft.entities;
 
+import io.github.ryuu.adventurecraft.extensions.entity.ExEntity;
+import io.github.ryuu.adventurecraft.extensions.entity.ExLivingEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
@@ -17,9 +19,9 @@ public class EntityBoomerang extends Entity {
 
     double bounceFactor;
 
-    float prevBoomerangRotation;
+    public float prevBoomerangRotation;
 
-    float boomerangRotation;
+    public float boomerangRotation;
 
     int timeBeforeTurnAround;
 
@@ -46,7 +48,7 @@ public class EntityBoomerang extends Entity {
         this.turningAround = true;
         this.timeBeforeTurnAround = 0;
         this.itemsPickedUp = new ArrayList<>();
-        this.collidesWithClipBlocks = false;
+        ((ExEntity) this).setCollidesWithClipBlocks(false);
     }
 
     public EntityBoomerang(Level world, Entity entity, ItemInstance b) {
@@ -128,11 +130,11 @@ public class EntityBoomerang extends Entity {
         for (Object o : entitiesWithin) {
             Entity e = (Entity) o;
             if (e instanceof ItemEntity) {
-                this.itemsPickedUp.add((ItemEntity)e);
+                this.itemsPickedUp.add((ItemEntity) e);
                 continue;
             }
             if (!(e instanceof LivingEntity) || e == this.returnsTo) continue;
-            e.stunned = 20;
+            ((ExLivingEntity) e).setStunned(20);
             e.prevX = e.x;
             e.prevY = e.y;
             e.prevZ = e.z;

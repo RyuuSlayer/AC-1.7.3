@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.gui;
 
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
+import io.github.ryuu.adventurecraft.mixin.client.gui.AccessScreen;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.MapEditing;
 import net.minecraft.client.gui.Screen;
@@ -72,9 +73,9 @@ public class GuiMapEditHUD extends Screen {
 
     @Override
     protected void mouseReleased(int mouseX, int mouseY, int button) {
-        if (this.lastClickedButton != null && button == 0) {
-            this.lastClickedButton.mouseReleased(mouseX, mouseY);
-            this.lastClickedButton = null;
+        if (((AccessScreen)this).getLastClickedButton() != null && button == 0) {
+            ((AccessScreen)this).getLastClickedButton().mouseReleased(mouseX, mouseY);
+            ((AccessScreen)this).setLastClickedButton(null);
         } else if (button == 1) {
             this.minecraft.field_2778 = false;
             this.minecraft.field_2767.method_1971();

@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.client.gui.screen;
 
+import io.github.ryuu.adventurecraft.extensions.client.sound.ExSoundHelper;
 import io.github.ryuu.adventurecraft.gui.GuiMapDownload;
 import io.github.ryuu.adventurecraft.gui.GuiMapSelect;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
@@ -8,28 +9,19 @@ import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.resource.language.TranslationStorage;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
-import java.util.Random;
+import java.util.List;
 
 @Mixin(TitleScreen.class) // TODO minecraftInstance is missing
 public class MixinTitleScreen extends Screen {
 
-
-    @Shadow
-    private float ticksOpened;
-
     @Shadow
     private String splashMessage;
-
-    @Shadow
-    @Final
-    private static Random RANDOM;
 
     @Shadow
     private Button multiplayerButton;
@@ -37,7 +29,7 @@ public class MixinTitleScreen extends Screen {
     @Inject(method = "<init>", at = @At("TAIL"))
     private void TitleScreen(CallbackInfo ci) {
         ScriptModel.clearAll();
-        AccessMinecraft.getInstance().soundHelper.stopMusic();
+        ((ExSoundHelper)AccessMinecraft.getInstance().soundHelper).stopMusic();
     }
 
     @Inject(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/resource/language/TranslationStorage;getInstance()Lnet/minecraft/client/resource/language/TranslationStorage;", shift = At.Shift.BEFORE))
@@ -47,17 +39,18 @@ public class MixinTitleScreen extends Screen {
 
     @Inject(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/resource/language/TranslationStorage;getInstance()Lnet/minecraft/client/resource/language/TranslationStorage;"), cancellable = true)
     private void init1(CallbackInfo ci) {
+        List<Button> buttons = (List<Button>)this.buttons;
         TranslationStorage stringtranslate = TranslationStorage.getInstance();
         int i = this.height / 4 + 48;
-        this.buttons.add(new Button(6, this.width / 2 - 100, i, "New Save"));
-        this.buttons.add(new Button(1, this.width / 2 - 100, i + 22, "Load Save"));
-        this.buttons.add(new Button(7, this.width / 2 - 100, i + 44, "Craft a Map"));
-        this.buttons.add(new Button(5, this.width / 2 - 100, i + 66, "Download a Map"));
+        buttons.add(new Button(6, this.width / 2 - 100, i, "New Save"));
+        buttons.add(new Button(1, this.width / 2 - 100, i + 22, "Load Save"));
+        buttons.add(new Button(7, this.width / 2 - 100, i + 44, "Craft a Map"));
+        buttons.add(new Button(5, this.width / 2 - 100, i + 66, "Download a Map"));
         if (this.minecraft.isApplet) {
-            this.buttons.add(new Button(0, this.width / 2 - 100, i + 88, stringtranslate.translate("menu.options")));
+            buttons.add(new Button(0, this.width / 2 - 100, i + 88, stringtranslate.translate("menu.options")));
         } else {
-            this.buttons.add(new Button(0, this.width / 2 - 100, i + 88 + 11, 98, 20, stringtranslate.translate("menu.options")));
-            this.buttons.add(new Button(4, this.width / 2 + 2, i + 88 + 11, 98, 20, stringtranslate.translate("menu.quit")));
+            buttons.add(new Button(0, this.width / 2 - 100, i + 88 + 11, 98, 20, stringtranslate.translate("menu.options")));
+            buttons.add(new Button(4, this.width / 2 + 2, i + 88 + 11, 98, 20, stringtranslate.translate("menu.quit")));
         }
         if (this.minecraft.session == null) {
             this.multiplayerButton.active = false;

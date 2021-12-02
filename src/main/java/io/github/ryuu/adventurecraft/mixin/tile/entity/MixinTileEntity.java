@@ -13,7 +13,7 @@ import java.util.Map;
 public abstract class MixinTileEntity implements ExTileEntity {
 
     @Shadow
-    private static Map CLASS_TO_ID;
+    private static Map<Class<?>, String> CLASS_TO_ID;
 
     static {
         register(FurnaceEntity.class, "Furnace");
@@ -46,17 +46,16 @@ public abstract class MixinTileEntity implements ExTileEntity {
         register(TileEntityNpcPath.class, "NpcPath");
     }
 
-    public boolean killedFromSaving = false;
-    protected boolean invalid;
+    public boolean killedFromSaving;
 
     @Shadow
-    private static void register(Class class1, String s) {
+    private static void register(Class<?> class1, String s) {
         throw new AssertionError();
     }
 
     @Override
     public String getClassName() {
-        return (String) CLASS_TO_ID.get(this.getClass());
+        return CLASS_TO_ID.get(this.getClass());
     }
 
     @Override

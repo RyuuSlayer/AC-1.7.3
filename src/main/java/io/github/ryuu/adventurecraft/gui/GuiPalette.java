@@ -22,7 +22,7 @@ public class GuiPalette extends DoubleChestScreen {
     public void init() {
         super.init();
         this.extraDepth = new GuiSlider2(50, this.width / 2 + 2, 3, 10, String.format("Extra Depth: %d", new Object[]{this.minecraft.interactionManager.destroyExtraDepth}), (float) this.minecraft.interactionManager.destroyExtraDepth / 16.0f);
-        this.extraWidth = new GuiSlider2(50, this.width / 2 - 2 - this.extraDepth.width, 3, 10, String.format("Extra Width: %d", new Object[]{this.minecraft.interactionManager.destroyExtraWidth}), (float) this.minecraft.interactionManager.destroyExtraWidth / 5.0f);
+        this.extraWidth = new GuiSlider2(50, this.width / 2 - 2 - this.extraDepth.getWidth(), 3, 10, String.format("Extra Width: %d", new Object[]{this.minecraft.interactionManager.destroyExtraWidth}), (float) this.minecraft.interactionManager.destroyExtraWidth / 5.0f);
         this.buttons.add(this.extraDepth);
         this.buttons.add(this.extraWidth);
     }

@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.mixin.item.tool;
 
 import io.github.ryuu.adventurecraft.entities.EntityArrowBomb;
+import io.github.ryuu.adventurecraft.extensions.entity.player.ExPlayerInventory;
 import io.github.ryuu.adventurecraft.items.Items;
 import net.minecraft.entity.player.Player;
 import net.minecraft.entity.projectile.Arrow;
@@ -12,21 +13,20 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
 @Mixin(BowItem.class)
-public class MixinBowItem extends ItemType {
+public abstract class MixinBowItem extends ItemType {
 
     public MixinBowItem(int id) {
         super(id);
-        this.maxStackSize = 1;
     }
 
     /**
      * @author Ryuu, TechPizza, Phil
      */
     @Override
-    @Overwrite()
+    @Overwrite
     public ItemInstance use(ItemInstance item, Level level, Player player) {
         ItemInstance curItem = player.inventory.getHeldItem();
-        ItemInstance offItem = player.inventory.getOffhandItem();
+        ItemInstance offItem = ((ExPlayerInventory)player.inventory).getOffhandItem();
         if (curItem != null && curItem.itemId == Items.bombArow.id || offItem != null && offItem.itemId == Items.bombArow.id) {
             if (player.inventory.decreaseAmountOfItem(Items.bombArow.id)) {
                 level.playSound(player, "random.bow", 1.0f, 1.0f / (rand.nextFloat() * 0.4f + 0.8f));

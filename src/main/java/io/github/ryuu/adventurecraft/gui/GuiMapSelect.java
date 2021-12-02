@@ -33,8 +33,6 @@ public class GuiMapSelect extends Screen {
 
     private int field_6454_o = -1;
 
-    private String fileLocation = "";
-
     private String saveName;
 
     private MapInfo selectedMap;
@@ -55,8 +53,7 @@ public class GuiMapSelect extends Screen {
             this.buttons.add(new OptionButton(6, this.width / 2 - 75, this.height - 48, stringtranslate.translate("gui.done")));
         }
         this.minecraft.texturePackManager.findTexturePacks();
-        GuiMapSelect GuiMapSelect = this;
-        this.fileLocation = new File(Minecraft.getGameDirectory(), "texturepacks").getAbsolutePath();
+        String fileLocation = new File(Minecraft.getGameDirectory(), "texturepacks").getAbsolutePath();
         this.field_6459_i = 32;
         this.field_6458_j = this.height - 58 + 4;
         this.field_6457_l = 0;
@@ -230,7 +227,6 @@ public class GuiMapSelect extends Screen {
 
     @Override
     public void tick() {
-        super.tick();
         --this.field_6454_o;
     }
 

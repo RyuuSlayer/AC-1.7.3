@@ -3,6 +3,8 @@ package io.github.ryuu.adventurecraft.extensions.level;
 import net.minecraft.level.Level;
 import net.minecraft.util.io.CompoundTag;
 
+import java.util.Map;
+
 public interface ExLevelProperties {
 
     double getMapSize();
@@ -47,6 +49,10 @@ public interface ExLevelProperties {
 
     boolean isOriginallyFromAC();
 
+    boolean getAllowsInventoryCrafting();
+
+    void setAllowsInventoryCrafting(boolean allowsInventoryCrafting);
+
     String getOverlay();
 
     void setOverlay(String overlay);
@@ -54,6 +60,8 @@ public interface ExLevelProperties {
     boolean isUsingBiomeImages();
 
     void setUseBiomeImages(boolean useBiomeImages);
+
+    Map<String, String> getReplacementTextures();
 
     String getPlayerName();
 
@@ -117,9 +125,15 @@ public interface ExLevelProperties {
 
     String getOnNewSaveScript();
 
+    void setOnNewSaveScript(String onNewSaveScript);
+
     String getOnLoadScript();
 
+    void setOnLoadScript(String onLoadScript);
+
     String getOnUpdateScript();
+
+    void setOnUpdateScript(String onUpdateScript);
 
     CompoundTag getGlobalScope();
 

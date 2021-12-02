@@ -32,37 +32,22 @@ import java.util.List;
 import java.util.*;
 
 @Mixin(TextureManager.class)
-public abstract class MixinTextureManager implements ExTextureManager {
+public abstract class MixinTextureManager implements AccessTextureManager, ExTextureManager {
 
     @Shadow
-    public static boolean field_1245 = false;
+    private IntBuffer atlasBuffer;
 
     @Shadow
-    private final HashMap IMAGE_GRID_CACHE = new HashMap();
-
-    @Shadow
-    private final HashMap INT_TO_IMAGE = new HashMap();
-
-    @Shadow
-    private final IntBuffer atlasBuffer = GLAllocator.createIntBuffer(1);
-
-    @Shadow
-    private final List textureBinders = new ArrayList();
-
-    @Shadow
-    private final Map ID_TO_DOWNLOADER = new HashMap();
-
-    @Shadow
-    private GameOptions gameOptions;
+    private List<TextureBinder> textureBinders;
 
     @Shadow
     private TexturePackManager texturePackManager;
 
     @Shadow
-    private final BufferedImage defaultImage = new BufferedImage(64, 64, 2);
+    private BufferedImage defaultImage;
 
     @Shadow
-    private HashMap TEXTURE_ID_MAP = new HashMap();
+    private HashMap<String, Integer> TEXTURE_ID_MAP;
 
     @Shadow
     private ByteBuffer textureGridBuffer = GLAllocator.createByteBuffer(0x100000);
@@ -73,13 +58,17 @@ public abstract class MixinTextureManager implements ExTextureManager {
     @Shadow
     private boolean blurred = false;
 
-    @Shadow public abstract int getTextureId(String string);
+    @Shadow
+    public abstract int getTextureId(String string);
 
-    @Shadow protected abstract BufferedImage readStream(InputStream inputStream);
+    @Shadow
+    protected abstract BufferedImage readStream(InputStream inputStream);
 
-    @Shadow public abstract void glLoadImageWithId(BufferedImage bufferedImage, int i);
+    @Shadow
+    public abstract void glLoadImageWithId(BufferedImage bufferedImage, int i);
 
-    @Shadow protected abstract BufferedImage method_1101(BufferedImage bufferedImage);
+    @Shadow
+    protected abstract BufferedImage method_1101(BufferedImage bufferedImage);
 
     private HashMap<Integer, Vec2> textureResolutions;
     private HashMap<String, TextureAnimated> textureAnimations;
@@ -88,45 +77,40 @@ public abstract class MixinTextureManager implements ExTextureManager {
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void TextureManager(TexturePackManager arg1, GameOptions par2, CallbackInfo ci) {
-        this.replacedTextures = new ArrayList();
-        this.textureResolutions = new HashMap();
-        this.textureAnimations = new HashMap();
+        this.replacedTextures = new ArrayList<>();
+        this.textureResolutions = new HashMap<>();
+        this.textureAnimations = new HashMap<>();
     }
-
 
     @Inject(method = "getTextureId(Ljava/lang/String;)I", at = @At(value = "INVOKE", target = "Ljava/nio/IntBuffer;get(I)I", ordinal = 0), cancellable = true)
     public void getTextureId(String stringId, CallbackInfoReturnable<Integer> cir) {
         int i = this.atlasBuffer.get(0);
-        this.adventurecraft$loadTexture(i, stringId);
+        this.loadTexture(i, stringId);
         this.TEXTURE_ID_MAP.put(stringId, i);
         cir.setReturnValue(i);
     }
 
-
-
     @Override
-    public void adventurecraft$replaceTexture(String texToReplace, String replacement) {
+    public void replaceTexture(String texToReplace, String replacement) {
         int texID = this.getTextureId(texToReplace);
-        this.adventurecraft$loadTexture(texID, replacement);
+        this.loadTexture(texID, replacement);
         if (!this.replacedTextures.contains(texToReplace)) {
             this.replacedTextures.add(texToReplace);
         }
     }
 
-
     @Override
-    public void adventurecraft$revertTextures() {
+    public void revertTextures() {
         for (String replacement : this.replacedTextures) {
-            Integer integer = (Integer) this.TEXTURE_ID_MAP.get(replacement);
-            if (integer == null) continue;
-            this.adventurecraft$loadTexture(integer, replacement);
+            Integer integer = this.TEXTURE_ID_MAP.get(replacement);
+            if (integer != null) {
+                this.loadTexture(integer, replacement);
+            }
         }
     }
 
-
-
     @Override
-    public void adventurecraft$loadTexture(int texID, String texName) {
+    public void loadTexture(int texID, String texName) {
         String origTexName = texName;
         try {
             TexturePack texturepackbase = this.texturePackManager.texturePack;
@@ -173,14 +157,11 @@ public abstract class MixinTextureManager implements ExTextureManager {
         }
     }
 
-
     @Override
-    public BufferedImage adventurecraft$getTextureImage(String texName) {
+    public BufferedImage getTextureImage(String texName) {
         TexturePack texturepackbase = this.texturePackManager.texturePack;
         return this.readStream(texturepackbase.getResource(texName));
     }
-
-
 
     @Inject(method = "glLoadImageWithId", at = @At(value = "INVOKE", target = "Ljava/nio/ByteBuffer;clear()Ljava/nio/Buffer;"))
     private void glLoadImageWithId(BufferedImage image, int par2, CallbackInfo ci) {
@@ -193,18 +174,16 @@ public abstract class MixinTextureManager implements ExTextureManager {
 
     @Redirect(method = "add", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/TextureBinder;setup()V"))
     private void removeArgSetupCall(TextureBinder instance) {
-
     }
 
     @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL11;glTexSubImage2D(IIIIIIIILjava/nio/ByteBuffer;)V", ordinal = 0))
     private void glTexSubImage2DRedirectNothing(int target, int level, int xoffset, int yoffset, int width, int height, int format, int type, ByteBuffer pixels) {
-
     }
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL11;glTexSubImage2D(IIIIIIIILjava/nio/ByteBuffer;)V", ordinal = 0), locals = LocalCapture.CAPTURE_FAILSOFT)
     private void fixSize(CallbackInfo ci, int var1, int var3, int var4) {
         TextureBinder texturefx = (TextureBinder) textureBinders.get(var1);
-        Vec2 texRes = this.adventurecraft$getTextureResolution(((ExTextureBinder) texturefx).adventurecraft$getTexture());
+        Vec2 texRes = this.getTextureResolution(((ExTextureBinder) texturefx).adventurecraft$getTexture());
         int w = texRes.x / 16;
         int h = texRes.y / 16;
         GL11.glTexSubImage2D(3553, 0, texturefx.field_1412 % 16 * w + var3 * w, texturefx.field_1412 / 16 * h + var4 * h, w, h, 6408, 5121, this.textureGridBuffer);
@@ -212,12 +191,12 @@ public abstract class MixinTextureManager implements ExTextureManager {
 
     @Inject(method = "tick", at = @At("TAIL"))
     public void tick(CallbackInfo ci) {
-        this.adventurecraft$updateTextureAnimations();
+        this.updateTextureAnimations();
     }
 
     @Override
-    public Vec2 adventurecraft$getTextureResolution(String texName) {
-        Integer i = (Integer) this.TEXTURE_ID_MAP.get(texName);
+    public Vec2 getTextureResolution(String texName) {
+        Integer i = this.TEXTURE_ID_MAP.get(texName);
         if (i != null) {
             return this.textureResolutions.get(i);
         }
@@ -225,24 +204,22 @@ public abstract class MixinTextureManager implements ExTextureManager {
     }
 
     @Override
-    public void adventurecraft$clearTextureAnimations() {
+    public void clearTextureAnimations() {
         this.textureAnimations.clear();
     }
 
-
     @Override
-    public void adventurecraft$registerTextureAnimation(String name, TextureAnimated animTex) {
+    public void registerTextureAnimation(String name, TextureAnimated animTex) {
         this.textureAnimations.put(name, animTex);
     }
 
     @Override
-    public void adventurecraft$unregisterTextureAnimation(String name) {
+    public void unregisterTextureAnimation(String name) {
         this.textureAnimations.remove(name);
     }
 
-
     @Override
-    public void adventurecraft$updateTextureAnimations() {
+    public void updateTextureAnimations() {
         for (TextureAnimated animTex : this.textureAnimations.values()) {
             animTex.onTick();
             this.textureGridBuffer.clear();

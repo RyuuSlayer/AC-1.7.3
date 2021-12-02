@@ -8,6 +8,8 @@ import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.OptionButton;
 
+import java.util.List;
+
 public class GuiNpcPath extends Screen {
 
     private final TileEntityNpcPath path;
@@ -26,14 +28,15 @@ public class GuiNpcPath extends Screen {
 
     @Override
     public void init() {
+        List<Button> buttons = (List<Button>)this.buttons;
         String entityName = "<Unselected>";
         EntityNPC e = TileEntityNpcPath.lastEntity;
         if (e != null) {
             entityName = e.npcName;
         }
-        this.buttons.add(new OptionButton(0, 4, 20, String.format("Set Path NPC: %s", entityName)));
-        this.buttons.add(new OptionButton(1, 4, 80, "Use Current Selection"));
-        this.buttons.add(new OptionButton(2, 4, 100, "Reset Target"));
+        buttons.add(new OptionButton(0, 4, 20, String.format("Set Path NPC: %s", entityName)));
+        buttons.add(new OptionButton(1, 4, 80, "Use Current Selection"));
+        buttons.add(new OptionButton(2, 4, 100, "Reset Target"));
     }
 
     @Override

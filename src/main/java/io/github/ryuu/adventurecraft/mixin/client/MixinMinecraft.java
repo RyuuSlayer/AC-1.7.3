@@ -4,8 +4,11 @@ import io.github.ryuu.adventurecraft.Main;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.extensions.client.ExMinecraft;
 import io.github.ryuu.adventurecraft.extensions.client.gui.ExScreen;
+import io.github.ryuu.adventurecraft.extensions.client.render.ExGameRenderer;
 import io.github.ryuu.adventurecraft.extensions.client.render.ExWorldRenderer;
 import io.github.ryuu.adventurecraft.extensions.entity.player.ExClientPlayer;
+import io.github.ryuu.adventurecraft.extensions.entity.player.ExPlayer;
+import io.github.ryuu.adventurecraft.extensions.entity.player.ExPlayerInventory;
 import io.github.ryuu.adventurecraft.extensions.items.ExItemInstance;
 import io.github.ryuu.adventurecraft.extensions.items.ExItemType;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
@@ -358,22 +361,22 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
             return;
         }
         if (DebugMode.active) {
-            ((ExLevel)this.level).getUndoStack().startRecording();
+            ((ExLevel) this.level).getUndoStack().startRecording();
         }
         boolean swapItemBack = false;
         ItemInstance itemUsing = this.player.inventory.getHeldItem();
         HandItemRenderer itemRenderer = this.gameRenderer.handItemRenderer;
         if (!DebugMode.active) {
             if (i == 0) {
-                itemUsing = this.player.inventory.getOffhandItem();
-                itemRenderer = this.gameRenderer.offHandItemRenderer;
-                this.player.inventory.swapOffhandWithMain();
+                itemUsing = ((ExPlayerInventory) this.player.inventory).getOffhandItem();
+                itemRenderer = ((ExGameRenderer) this.gameRenderer).getOffHandItemRenderer();
+                ((ExPlayerInventory) this.player.inventory).swapOffhandWithMain();
                 swapItemBack = true;
-                this.player.swappedItems = true;
+                ((ExPlayer) this.player).setSwappedItems(true);
             }
             int itemUseDelay = 5;
             if (itemUsing != null) {
-                itemUseDelay = ((ExItemType)ItemType.byId[itemUsing.itemId]).getItemUseDelay();
+                itemUseDelay = ((ExItemType) ItemType.byId[itemUsing.itemId]).getItemUseDelay();
             }
             if (i == 0) {
                 this.field_2798 = this.field_2786 + itemUseDelay;
@@ -420,16 +423,15 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
                         ((ExItemInstance) itemUsing).useItemLeftClick(this.player, this.level, j, k, l, i1);
                     }
                 } else {
-                    int j1;
-                    int n = j1 = itemUsing == null ? 0 : itemUsing.count;
+                    int j1 = itemUsing == null ? 0 : itemUsing.count;
                     if (this.interactionManager.activateTile(this.player, this.level, itemUsing, j, k, l, i1)) {
                         flag = false;
                         this.player.swingHand();
                     }
                     if (itemUsing == null) {
                         if (swapItemBack) {
-                            this.player.inventory.swapOffhandWithMain();
-                            this.player.swappedItems = false;
+                            ((ExPlayerInventory) this.player.inventory).swapOffhandWithMain();
+                            ((ExPlayer) this.player).setSwappedItems(false);
                         }
                         if (DebugMode.active) {
                             ((ExLevel) this.level).getUndoStack().stopRecording();
@@ -509,8 +511,8 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
             }
         }
         if (swapItemBack) {
-            this.player.inventory.swapOffhandWithMain();
-            this.player.swappedItems = false;
+            ((ExPlayerInventory) this.player.inventory).swapOffhandWithMain();
+            ((ExPlayer) this.player).setSwappedItems(false);
         }
         if (DebugMode.active) {
             ((ExLevel) this.level).getUndoStack().stopRecording();
@@ -579,9 +581,8 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
                 if (l > 200L) continue;
                 int k = Mouse.getEventDWheel();
                 if (k != 0) {
-                    boolean altDown;
                     boolean ctrlDown = Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157);
-                    boolean bl = altDown = Keyboard.isKeyDown(56) || Keyboard.isKeyDown(184);
+                    boolean altDown = Keyboard.isKeyDown(56) || Keyboard.isKeyDown(184);
                     if (k > 0) {
                         k = 1;
                     }
@@ -593,17 +594,17 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
                         DebugMode.reachDistance = Math.min(Math.max(DebugMode.reachDistance, 2), 100);
                         this.overlay.addChatMessage(String.format("Reach Changed to %d", DebugMode.reachDistance));
                     } else {
-                        int t;
+                        ExPlayerInventory inv = (ExPlayerInventory) this.player.inventory;
                         if (ctrlDown) {
-                            t = this.player.inventory.selectedHotbarSlot;
-                            this.player.inventory.selectedHotbarSlot = this.player.inventory.offhandItem;
-                            this.player.inventory.offhandItem = t;
+                            int t = this.player.inventory.selectedHotbarSlot;
+                            this.player.inventory.selectedHotbarSlot = inv.getOffhandSlot();
+                            inv.setOffhandSlot(t);
                         }
                         this.player.inventory.scrollInHotbar(k);
                         if (ctrlDown) {
-                            t = this.player.inventory.selectedHotbarSlot;
-                            this.player.inventory.selectedHotbarSlot = this.player.inventory.offhandItem;
-                            this.player.inventory.offhandItem = t;
+                            int t = this.player.inventory.selectedHotbarSlot;
+                            this.player.inventory.selectedHotbarSlot = inv.getOffhandSlot();
+                            inv.setOffhandSlot(t);
                         }
                         if (this.options.field_1445) {
                             this.options.field_1448 += (float) k * 0.25f;
@@ -647,26 +648,26 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
                             this.method_2105();
                         }
                         if (Keyboard.getEventKey() == 59) {
-                            boolean bl = this.options.hideHud = !this.options.hideHud;
+                            this.options.hideHud = !this.options.hideHud;
                         }
                         if (Keyboard.getEventKey() == 61) {
-                            boolean bl = this.options.debugHud = !this.options.debugHud;
+                            this.options.debugHud = !this.options.debugHud;
                         }
                         if (Keyboard.getEventKey() == 62) {
-                            boolean bl = DebugMode.active = !DebugMode.active;
+                            DebugMode.active = !DebugMode.active;
                             if (DebugMode.active) {
                                 this.overlay.addChatMessage("Debug Mode Active");
                             } else {
                                 this.overlay.addChatMessage("Debug Mode Deactivated");
-                                ((ExLevel)this.level).loadBrightness();
+                                ((ExLevel) this.level).loadBrightness();
                             }
-                            ((ExWorldRenderer)this.worldRenderer).updateAllTheRenderers();
+                            ((ExWorldRenderer) this.worldRenderer).updateAllTheRenderers();
                         }
                         if (Keyboard.getEventKey() == 63) {
                             this.options.thirdPerson = !this.options.thirdPerson;
                         }
                         if (Keyboard.getEventKey() == 64) {
-                            ((ExWorldRenderer)this.worldRenderer).resetAll();
+                            ((ExWorldRenderer) this.worldRenderer).resetAll();
                             this.overlay.addChatMessage("Resetting all blocks in loaded chunks");
                         }
                         if (Keyboard.getEventKey() == 65) {
@@ -691,15 +692,16 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
                     }
                     for (int i = 0; i < 9; ++i) {
                         if (Keyboard.getEventKey() != 2 + i) continue;
+                        ExPlayerInventory inv = (ExPlayerInventory) this.player.inventory;
                         if (Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157)) {
                             if (i == this.player.inventory.selectedHotbarSlot) {
-                                this.player.inventory.selectedHotbarSlot = this.player.inventory.offhandItem;
+                                this.player.inventory.selectedHotbarSlot = inv.getOffhandSlot();
                             }
-                            this.player.inventory.offhandItem = i;
+                            inv.setOffhandSlot(i);
                             continue;
                         }
-                        if (i == this.player.inventory.offhandItem) {
-                            this.player.inventory.offhandItem = this.player.inventory.selectedHotbarSlot;
+                        if (i == inv.getOffhandSlot()) {
+                            inv.setOffhandSlot(this.player.inventory.selectedHotbarSlot);
                         }
                         this.player.inventory.selectedHotbarSlot = i;
                     }
@@ -863,7 +865,7 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
             shift = At.Shift.AFTER))
     private void initPlayer(Level world, String s, Player entityplayer, CallbackInfo ci) {
         this.cutsceneCameraEntity = this.interactionManager.createPlayer(world);
-        ((ExLevel)world).getScript().initPlayer();
+        ((ExLevel) world).getScript().initPlayer();
     }
 
     /**
@@ -891,7 +893,7 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
             this.player = (ClientPlayer) this.interactionManager.createPlayer(this.level);
             ((ExLevel) this.level).getScript().initPlayer();
         }
-        ((ExWorldRenderer)this.worldRenderer).resetForDeath();
+        ((ExWorldRenderer) this.worldRenderer).resetForDeath();
         Vec3i spawnCoords = this.level.getSpawnPosition();
         this.player.afterSpawn();
         this.player.setPositionAndAngles((double) spawnCoords.x + 0.5, spawnCoords.y, (double) spawnCoords.z + 0.5, 0.0f, 0.0f);
@@ -903,7 +905,7 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
         this.player.keypressManager = new MovementManager(this.options);
         this.player.id = entID;
         this.player.method_494();
-        ((AccessEntity)this.player).invokeSetRotation(((ExLevel) this.level).getSpawnYaw(), 0.0f);
+        ((AccessEntity) this.player).invokeSetRotation(((ExLevel) this.level).getSpawnYaw(), 0.0f);
         this.interactionManager.method_1718(this.player);
         this.method_2130("Respawning");
         if (this.currentScreen instanceof DeathScreen) {
@@ -919,11 +921,17 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
         return 23333333L;
     }
 
+    @Override
     public void updateStoreGUI() {
         ScreenScaler scaledresolution = new ScreenScaler(this.options, this.actualWidth, this.actualHeight);
         int i = scaledresolution.getScaledWidth();
         int j = scaledresolution.getScaledHeight();
         this.storeGUI.init((Minecraft) (Object) this, i, j);
+    }
+
+    @Override
+    public GuiStore getStoreGUI() {
+        return this.storeGUI;
     }
 
     @Override

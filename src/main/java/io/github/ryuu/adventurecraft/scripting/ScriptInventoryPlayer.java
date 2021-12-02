@@ -1,5 +1,7 @@
 package io.github.ryuu.adventurecraft.scripting;
 
+import io.github.ryuu.adventurecraft.extensions.entity.player.ExPlayerInventory;
+import io.github.ryuu.adventurecraft.mixin.entity.player.AccessPlayerInventory;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemInstance;
 
@@ -7,13 +9,13 @@ public class ScriptInventoryPlayer extends ScriptInventory {
 
     PlayerInventory invPlayer;
 
-    ScriptInventoryPlayer(PlayerInventory i) {
+    public ScriptInventoryPlayer(PlayerInventory i) {
         super(i);
         this.invPlayer = i;
     }
 
     public int getSlotContainingItem(int itemID) {
-        int i = this.invPlayer.getSlotWithItem(itemID);
+        int i = ((AccessPlayerInventory)this.invPlayer).invokeGetSlotWithItem(itemID);
         if (i == -1) {
             for (int j = 36; j < 40; ++j) {
                 ItemInstance k = this.invPlayer.getInvItem(j);
@@ -42,7 +44,7 @@ public class ScriptInventoryPlayer extends ScriptInventory {
     }
 
     public boolean consumeItemAmount(int itemID, int damage, int amount) {
-        return this.invPlayer.consumeItemAmount(itemID, damage, amount);
+        return ((ExPlayerInventory)this.invPlayer).consumeItemAmount(itemID, damage, amount);
     }
 
     public int getArmorValue() {
@@ -66,7 +68,7 @@ public class ScriptInventoryPlayer extends ScriptInventory {
     }
 
     public ScriptItem getOffhandItem() {
-        ItemInstance i = this.invPlayer.getOffhandItem();
+        ItemInstance i = ((ExPlayerInventory)this.invPlayer).getOffhandItem();
         if (i == null || i.itemId == 0) {
             return null;
         }
@@ -74,7 +76,7 @@ public class ScriptInventoryPlayer extends ScriptInventory {
     }
 
     public void swapOffhandWithMain() {
-        this.invPlayer.swapOffhandWithMain();
+        ((ExPlayerInventory)this.invPlayer).swapOffhandWithMain();
     }
 
     public boolean addItem(ScriptItem item) {

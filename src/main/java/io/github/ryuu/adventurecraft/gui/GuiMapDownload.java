@@ -31,7 +31,6 @@ public class GuiMapDownload extends Screen {
     private int mapImagesDownloaded = 0;
     private int totalMaps = 0;
     private boolean downloadingMap = false;
-    private String downloadingMapName;
     private int downloadedAmount;
     private int downloadSize;
     private String mapUrl;
@@ -90,7 +89,7 @@ public class GuiMapDownload extends Screen {
                         this.downloadSize = 0;
                         this.downloading = true;
                         this.downloadingMap = true;
-                        this.downloadingMapName = this.mapName;
+                        String downloadingMapName = this.mapName;
                         SwingUtilities.invokeLater(GuiMapDownload.this::downloadMap);
                     }
                 }

@@ -156,6 +156,8 @@ public abstract class MixinEntity implements ExEntity {
     @Shadow
     public abstract boolean method_1373();
 
+    @Shadow public abstract int hashCode();
+
     @Inject(method = "move", locals = LocalCapture.CAPTURE_FAILHARD, at = @At(
             value = "FIELD",
             target = "Lnet/minecraft/entity/Entity;z:D",

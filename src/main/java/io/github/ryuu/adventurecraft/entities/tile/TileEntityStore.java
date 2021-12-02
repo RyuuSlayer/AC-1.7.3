@@ -25,7 +25,7 @@ public class TileEntityStore extends TileEntity {
 
     public TriggerArea tradeTrigger;
 
-    TileEntityStore() {
+    public TileEntityStore() {
         this.buyItemID = Items.bomb.id;
         this.buyItemAmount = 3;
         this.buySupplyLeft = 1;

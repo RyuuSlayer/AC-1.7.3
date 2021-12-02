@@ -22,4 +22,7 @@ public interface AccessScreen {
 
     @Accessor
     Button getLastClickedButton();
+
+    @Accessor
+    void setLastClickedButton(Button lastClickedButton);
 }

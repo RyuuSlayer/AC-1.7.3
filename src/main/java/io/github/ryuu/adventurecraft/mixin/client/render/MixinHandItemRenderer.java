@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.mixin.client.render;
 
 import io.github.ryuu.adventurecraft.extensions.client.ExMinecraft;
+import io.github.ryuu.adventurecraft.extensions.client.texture.ExTextureManager;
 import io.github.ryuu.adventurecraft.extensions.items.ExItemType;
 import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import io.github.ryuu.adventurecraft.items.Items;
@@ -24,26 +25,38 @@ import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(HandItemRenderer.class)
-public class MixinHandItemRenderer {
+public abstract class MixinHandItemRenderer implements ExHandItemRenderer {
 
-    @Shadow()
-    private final Minecraft minecraft;
-    private final TileRenderer tileRenderer = new TileRenderer();
-    private final MapRenderer mapRenderer;
-    private final BipedModel refBiped;
+    @Shadow
+    private Minecraft minecraft;
+
+    @Shadow
+    private TileRenderer tileRenderer;
+
+    @Shadow
+    private MapRenderer mapRenderer;
+
+    @Shadow
+    private ItemInstance item;
+
+    @Shadow
+    private float field_2403;
+
+    @Shadow
+    private float field_2404;
+
+    private BipedModel refBiped;
     public ModelPart powerGlove;
     public ModelPart powerGloveRuby;
-    private ItemInstance item = null;
-    private float field_2403 = 0.0f;
-    private float field_2404 = 0.0f;
-    private int field_2407 = -1;
     private boolean itemRotate;
 
-    public MixinHandItemRenderer(Minecraft minecraft) {
-        this.minecraft = minecraft;
-        this.mapRenderer = new MapRenderer(minecraft.textRenderer, minecraft.options, minecraft.textureManager);
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void init(Minecraft minecraft, CallbackInfo ci) {
         this.itemRotate = true;
         this.powerGlove = new ModelPart(0, 0);
         this.powerGlove.addCuboid(-3.5f, 4.5f, -2.5f, 5, 7, 5, 0.0f);
@@ -53,6 +66,15 @@ public class MixinHandItemRenderer {
         this.powerGloveRuby.setPivot(-5.0f, 2.0f, 0.0f);
         this.refBiped = new BipedModel(0.0f);
     }
+
+    @Shadow
+    protected abstract void method_1861(float f, int i);
+
+    @Shadow
+    protected abstract void method_1866(float f);
+
+    @Shadow
+    protected abstract void method_1867(float f);
 
     /**
      * @author Ryuu, TechPizza, Phil
@@ -71,11 +93,11 @@ public class MixinHandItemRenderer {
         } else {
             String textureName = "/gui/items.png";
             if (itemstack.itemId < 256) {
-                int textureNum = ((ExTile)Tile.BY_ID[itemstack.itemId]).getTextureNum();
+                int textureNum = ((ExTile) Tile.BY_ID[itemstack.itemId]).getTextureNum();
                 textureName = textureNum == 0 ? "/terrain.png" : String.format("/terrain%d.png", textureNum);
             }
             GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId(textureName));
-            Vec2 texResolution = this.minecraft.textureManager.getTextureResolution(textureName);
+            Vec2 texResolution = ((ExTextureManager) this.minecraft.textureManager).getTextureResolution(textureName);
             int width = texResolution.x / 16;
             int height = texResolution.y / 16;
             float halfPixelW = 0.5f / (float) texResolution.x;
@@ -161,7 +183,7 @@ public class MixinHandItemRenderer {
                 tessellator.vertex(f4, f20, 0.0f - f8, f, f16);
             }
             tessellator.draw();
-            if (((ExItemType)ItemType.byId[itemstack.itemId]).isMuzzleFlash(itemstack)) {
+            if (((ExItemType) ItemType.byId[itemstack.itemId]).isMuzzleFlash(itemstack)) {
                 this.renderMuzzleFlash();
             }
             GL11.glDisable(32826);
@@ -194,10 +216,7 @@ public class MixinHandItemRenderer {
         tessellator.draw();
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite
+    @Override
     public void renderItemInFirstPerson(float f, float swingProgress, float otherHand) {
         float f8;
         float f10;
@@ -274,10 +293,10 @@ public class MixinHandItemRenderer {
             GL11.glNormal3f(0.0f, 0.0f, -1.0f);
             tessellator.start();
             int byte0 = 7;
-            tessellator.vertex(0 - byte0, 128 + byte0, 0.0, 0.0, 1.0);
+            tessellator.vertex(-byte0, 128 + byte0, 0.0, 0.0, 1.0);
             tessellator.vertex(128 + byte0, 128 + byte0, 0.0, 1.0, 1.0);
-            tessellator.vertex(128 + byte0, 0 - byte0, 0.0, 1.0, 0.0);
-            tessellator.vertex(0 - byte0, 0 - byte0, 0.0, 0.0, 0.0);
+            tessellator.vertex(128 + byte0, -byte0, 0.0, 1.0, 0.0);
+            tessellator.vertex(-byte0, -byte0, 0.0, 0.0, 0.0);
             tessellator.draw();
             MapStorage mapdata = ItemType.map.method_1730(itemstack, this.minecraft.level);
             this.mapRenderer.renderMap(this.minecraft.player, this.minecraft.textureManager, mapdata);
@@ -410,7 +429,7 @@ public class MixinHandItemRenderer {
     @Overwrite
     public void method_1864(float f) {
         GL11.glDisable(3008);
-        if (!((ExMinecraft)this.minecraft).isCameraActive() && this.minecraft.player.method_1359()) {
+        if (!((ExMinecraft) this.minecraft).isCameraActive() && this.minecraft.player.method_1359()) {
             int i = this.minecraft.textureManager.getTextureId("/terrain.png");
             GL11.glBindTexture(3553, i);
             this.method_1867(f);
@@ -426,13 +445,13 @@ public class MixinHandItemRenderer {
                 this.method_1861(f, Tile.BY_ID[k1].getTextureForSide(2));
             } else {
                 for (int l1 = 0; l1 < 8; ++l1) {
-                    int k2;
-                    int j2;
-                    float f1 = ((float) ((l1 >> 0) % 2) - 0.5f) * this.minecraft.player.width * 0.9f;
+                    float f1 = ((float) (l1 % 2) - 0.5f) * this.minecraft.player.width * 0.9f;
                     float f2 = ((float) ((l1 >> 1) % 2) - 0.5f) * this.minecraft.player.height * 0.2f;
                     float f3 = ((float) ((l1 >> 2) % 2) - 0.5f) * this.minecraft.player.width * 0.9f;
                     int i2 = MathsHelper.floor((float) j + f1);
-                    if (!this.minecraft.level.canSuffocate(i2, j2 = MathsHelper.floor((float) l + f2), k2 = MathsHelper.floor((float) i1 + f3)))
+                    int j2 = MathsHelper.floor((float) l + f2);
+                    int k2 = MathsHelper.floor((float) i1 + f3);
+                    if (!this.minecraft.level.canSuffocate(i2, j2, k2))
                         continue;
                     k1 = this.minecraft.level.getTileId(i2, j2, k2);
                 }
@@ -449,145 +468,14 @@ public class MixinHandItemRenderer {
         GL11.glEnable(3008);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite
-    private void method_1861(float f, int i) {
+    @Inject(method = "method_1861", at = @At("HEAD"), cancellable = true)
+    private void cancelWhenField_1642(float f, int i, CallbackInfo ci) {
         if (this.minecraft.player.field_1642) {
-            return;
-        }
-        Tessellator tessellator = Tessellator.INSTANCE;
-        float f1 = this.minecraft.field_2807.getBrightnessAtEyes(f);
-        f1 = 0.1f;
-        GL11.glColor4f(f1, f1, f1, 0.5f);
-        GL11.glPushMatrix();
-        float f2 = -1.0f;
-        float f3 = 1.0f;
-        float f4 = -1.0f;
-        float f5 = 1.0f;
-        float f6 = -0.5f;
-        float f7 = 0.0078125f;
-        float f8 = (float) (i % 16) / 256.0f - f7;
-        float f9 = ((float) (i % 16) + 15.99f) / 256.0f + f7;
-        float f10 = (float) (i / 16) / 256.0f - f7;
-        float f11 = ((float) (i / 16) + 15.99f) / 256.0f + f7;
-        tessellator.start();
-        tessellator.vertex(f2, f4, f6, f9, f11);
-        tessellator.vertex(f3, f4, f6, f8, f11);
-        tessellator.vertex(f3, f5, f6, f8, f10);
-        tessellator.vertex(f2, f5, f6, f9, f10);
-        tessellator.draw();
-        GL11.glPopMatrix();
-        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite
-    private void method_1866(float f) {
-        Tessellator tessellator = Tessellator.INSTANCE;
-        float f1 = this.minecraft.field_2807.getBrightnessAtEyes(f);
-        GL11.glColor4f(f1, f1, f1, 0.5f);
-        GL11.glEnable(3042);
-        GL11.glBlendFunc(770, 771);
-        GL11.glPushMatrix();
-        float f2 = 4.0f;
-        float f3 = -1.0f;
-        float f4 = 1.0f;
-        float f5 = -1.0f;
-        float f6 = 1.0f;
-        float f7 = -0.5f;
-        float f8 = -this.minecraft.field_2807.yaw / 64.0f;
-        float f9 = this.minecraft.field_2807.pitch / 64.0f;
-        tessellator.start();
-        tessellator.vertex(f3, f5, f7, f2 + f8, f2 + f9);
-        tessellator.vertex(f4, f5, f7, 0.0f + f8, f2 + f9);
-        tessellator.vertex(f4, f6, f7, 0.0f + f8, 0.0f + f9);
-        tessellator.vertex(f3, f6, f7, f2 + f8, 0.0f + f9);
-        tessellator.draw();
-        GL11.glPopMatrix();
-        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-        GL11.glDisable(3042);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite
-    private void method_1867(float f) {
-        Tessellator tessellator = Tessellator.INSTANCE;
-        GL11.glColor4f(1.0f, 1.0f, 1.0f, 0.9f);
-        GL11.glEnable(3042);
-        GL11.glBlendFunc(770, 771);
-        float f1 = 1.0f;
-        for (int i = 0; i < 2; ++i) {
-            GL11.glPushMatrix();
-            int j = Tile.FIRE.tex + i * 16;
-            int k = (j & 0xF) << 4;
-            int l = j & 0xF0;
-            float f2 = (float) k / 256.0f;
-            float f3 = ((float) k + 15.99f) / 256.0f;
-            float f4 = (float) l / 256.0f;
-            float f5 = ((float) l + 15.99f) / 256.0f;
-            float f6 = (0.0f - f1) / 2.0f;
-            float f7 = f6 + f1;
-            float f8 = 0.0f - f1 / 2.0f;
-            float f9 = f8 + f1;
-            float f10 = -0.5f;
-            GL11.glTranslatef((float) (-(i * 2 - 1)) * 0.24f, -0.3f, 0.0f);
-            GL11.glRotatef((float) (i * 2 - 1) * 10.0f, 0.0f, 1.0f, 0.0f);
-            tessellator.start();
-            tessellator.vertex(f6, f8, f10, f3, f5);
-            tessellator.vertex(f7, f8, f10, f2, f5);
-            tessellator.vertex(f7, f9, f10, f2, f4);
-            tessellator.vertex(f6, f9, f10, f3, f4);
-            tessellator.draw();
-            GL11.glPopMatrix();
-        }
-        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-        GL11.glDisable(3042);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite
-    public void method_1859() {
-        float f;
-        float f1;
-        float f2;
-        boolean flag;
-        ItemInstance itemstack;
-        this.field_2404 = this.field_2403;
-        ClientPlayer entityplayersp = this.minecraft.player;
-        ItemInstance itemstack1 = itemstack = entityplayersp.inventory.getHeldItem();
-        boolean bl = flag = this.field_2407 == entityplayersp.inventory.selectedHotbarSlot && itemstack1 == this.item;
-        if (this.item == null && itemstack1 == null) {
-            flag = true;
-        }
-        if (itemstack1 != null && this.item != null && itemstack1 != this.item && itemstack1.itemId == this.item.itemId && itemstack1.getDamage() == this.item.getDamage()) {
-            this.item = itemstack1;
-            flag = true;
-        }
-        if ((f2 = (f1 = flag ? 1.0f : 0.0f) - this.field_2403) < -(f = 0.4f)) {
-            f2 = -f;
-        }
-        if (f2 > f) {
-            f2 = f;
-        }
-        this.field_2403 += f2;
-        if (this.field_2403 < 0.1f) {
-            this.item = itemstack1;
-            this.field_2407 = entityplayersp.inventory.selectedHotbarSlot;
+            ci.cancel();
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite
+    @Override
     public boolean hasItem() {
         return this.item != null;
     }

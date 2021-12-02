@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.mixin.client.render;
 
 import io.github.ryuu.adventurecraft.extensions.client.ExMinecraft;
+import io.github.ryuu.adventurecraft.extensions.client.render.ExGameRenderer;
 import io.github.ryuu.adventurecraft.extensions.client.render.ExWorldRenderer;
 import io.github.ryuu.adventurecraft.extensions.entity.ExLivingEntity;
 import io.github.ryuu.adventurecraft.extensions.entity.player.ExPlayer;
@@ -17,7 +18,6 @@ import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.IEntityPather;
 import io.github.ryuu.adventurecraft.util.PlayerTorch;
 import net.minecraft.*;
-import net.minecraft.client.GLAllocator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.*;
 import net.minecraft.client.render.Tessellator;
@@ -33,11 +33,9 @@ import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 import net.minecraft.level.LevelListener;
 import net.minecraft.tile.Tile;
-import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.maths.MathsHelper;
 import net.minecraft.util.maths.Vec3f;
 import net.minecraft.util.maths.Vec3i;
-import org.lwjgl.opengl.ARBOcclusionQuery;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -50,7 +48,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -65,37 +62,10 @@ public abstract class MixinWorldRenderer implements LevelListener, ExWorldRender
     private List<class_66> field_1807;
 
     @Shadow
-    private int field_1813;
-
-    @Shadow
     private Minecraft client;
 
     @Shadow
     private int field_1818;
-
-    @Shadow
-    private int field_1819;
-
-    @Shadow
-    private int field_1820;
-
-    @Shadow
-    private int field_1775;
-
-    @Shadow
-    private List<class_66> field_1793;
-
-    @Shadow
-    public List<TileEntity> field_1795;
-
-    @Shadow
-    int[] field_1796;
-
-    @Shadow
-    IntBuffer field_1797;
-
-    @Shadow
-    int field_1799;
 
     @Shadow
     private Level level;
@@ -107,72 +77,7 @@ public abstract class MixinWorldRenderer implements LevelListener, ExWorldRender
     private class_66[] field_1809;
 
     @Shadow
-    private IntBuffer field_1816;
-
-    @Shadow
-    private boolean field_1817;
-
-    @Shadow
     private int field_1782;
-
-    public MixinWorldRenderer(Minecraft minecraft, TextureManager renderengine) {
-        this.field_1795 = new ArrayList();
-        this.field_1807 = new ArrayList();
-        this.field_1796 = new int[50000];
-        this.field_1797 = GLAllocator.createIntBuffer(64);
-        this.field_1793 = new ArrayList();
-        this.field_1799 = GLAllocator.add(1);
-        this.client = minecraft;
-        this.textureManager = renderengine;
-        int byte0 = 64;
-        this.field_1813 = GLAllocator.add(byte0 * byte0 * byte0 * 3);
-        this.field_1817 = minecraft.getOcclusionQueryTester().isEnabled();
-        if (this.field_1817) {
-            this.field_1797.clear();
-            this.field_1816 = GLAllocator.createIntBuffer(byte0 * byte0 * byte0);
-            this.field_1816.clear();
-            this.field_1816.position(0);
-            this.field_1816.limit(byte0 * byte0 * byte0);
-            ARBOcclusionQuery.glGenQueriesARB(this.field_1816);
-        }
-        this.field_1819 = GLAllocator.add(3);
-        GL11.glPushMatrix();
-        GL11.glNewList(this.field_1819, 4864);
-        this.renderStars();
-        GL11.glEndList();
-        GL11.glPopMatrix();
-        Tessellator tessellator = Tessellator.INSTANCE;
-        this.field_1820 = this.field_1819 + 1;
-        GL11.glNewList(this.field_1820, 4864);
-        int byte1 = 64;
-        int i = 256 / byte1 + 2;
-        float f = 16.0f;
-        for (int j = -byte1 * i; j <= byte1 * i; j += byte1) {
-            for (int l = -byte1 * i; l <= byte1 * i; l += byte1) {
-                tessellator.start();
-                tessellator.pos(j + 0, f, l + 0);
-                tessellator.pos(j + byte1, f, l + 0);
-                tessellator.pos(j + byte1, f, l + byte1);
-                tessellator.pos(j + 0, f, l + byte1);
-                tessellator.draw();
-            }
-        }
-        GL11.glEndList();
-        this.field_1775 = this.field_1819 + 2;
-        GL11.glNewList(this.field_1775, 4864);
-        f = -16.0f;
-        tessellator.start();
-        for (int k = -byte1 * i; k <= byte1 * i; k += byte1) {
-            for (int i1 = -byte1 * i; i1 <= byte1 * i; i1 += byte1) {
-                tessellator.pos(k + byte1, f, i1 + 0);
-                tessellator.pos(k + 0, f, i1 + 0);
-                tessellator.pos(k + 0, f, i1 + byte1);
-                tessellator.pos(k + byte1, f, i1 + byte1);
-            }
-        }
-        tessellator.draw();
-        GL11.glEndList();
-    }
 
     @Shadow
     public abstract void renderClouds(float f);
@@ -232,7 +137,7 @@ public abstract class MixinWorldRenderer implements LevelListener, ExWorldRender
             ordinal = 8))
     private void updateField1808BasedOnFarplane(LivingEntity entityliving, int i, double d, CallbackInfoReturnable<Integer> cir, int var23) {
         if (this.field_1808[var23].field_252) {
-            float farPlane = this.client.gameRenderer.getFarPlane() * 1.25f;
+            float farPlane = ((ExGameRenderer) this.client.gameRenderer).getFarPlane() * 1.25f;
             this.field_1808[var23].field_252 = this.field_1808[var23].method_299(entityliving) > farPlane;
         }
     }
@@ -247,7 +152,7 @@ public abstract class MixinWorldRenderer implements LevelListener, ExWorldRender
                 this.renderClouds(f);
             } else {
                 GL11.glDisable(2884);
-                float f1 = (float) (this.client.field_2807.prevRenderY + (this.client.field_2807.y - this.client.field_2807.prevRenderY) * (double) f);
+                float f1 = (float) (this.client.field_2807.prevRenderY + (this.client.field_2807.y - this.client.field_2807.prevRenderY) * f);
                 int byte0 = 32;
                 int i = 256 / byte0;
                 Tessellator tessellator = Tessellator.INSTANCE;
@@ -268,30 +173,30 @@ public abstract class MixinWorldRenderer implements LevelListener, ExWorldRender
                 }
 
                 float f6 = 4.882813E-4f;
-                double d = this.client.field_2807.prevX + (this.client.field_2807.x - this.client.field_2807.prevX) * (double) f + (double) (((float) this.field_1818 + f) * 0.03f);
-                double d1 = this.client.field_2807.prevZ + (this.client.field_2807.z - this.client.field_2807.prevZ) * (double) f;
+                double d = this.client.field_2807.prevX + (this.client.field_2807.x - this.client.field_2807.prevX) * f + (this.field_1818 + f * 0.03f);
+                double d1 = this.client.field_2807.prevZ + (this.client.field_2807.z - this.client.field_2807.prevZ) * f;
 
                 if (((ExMinecraft) this.client).isCameraActive()) {
                     CutsceneCameraPoint p = ((ExMinecraft) this.client).getCutsceneCamera().getCurrentPoint(f);
                     f1 = p.posY;
-                    d = (double) p.posX + (double) (((float) this.field_1818 + f) * 0.03f);
+                    d = p.posX + ((this.field_1818 + f) * 0.03f);
                     d1 = p.posZ;
                 }
 
                 int j = MathsHelper.floor(d / 2048.0);
                 int k = MathsHelper.floor(d1 / 2048.0);
                 float f9 = this.level.dimension.getCloudHeight() - f1 + 0.33f;
-                float f10 = (float) ((d -= j * 2048) * (double) f6);
-                float f11 = (float) ((d1 -= k * 2048) * (double) f6);
+                float f10 = (float) ((d - (j * 2048)) * f6);
+                float f11 = (float) ((d1 - (k * 2048)) * f6);
                 tessellator.start();
                 tessellator.colour(f2, f3, f4, 0.8f);
 
                 for (int l = -byte0 * i; l < byte0 * i; l += byte0) {
                     for (int i1 = -byte0 * i; i1 < byte0 * i; i1 += byte0) {
-                        tessellator.vertex(l + 0, f9, i1 + byte0, (float) (l + 0) * f6 + f10, (float) (i1 + byte0) * f6 + f11);
-                        tessellator.vertex(l + byte0, f9, i1 + byte0, (float) (l + byte0) * f6 + f10, (float) (i1 + byte0) * f6 + f11);
-                        tessellator.vertex(l + byte0, f9, i1 + 0, (float) (l + byte0) * f6 + f10, (float) (i1 + 0) * f6 + f11);
-                        tessellator.vertex(l + 0, f9, i1 + 0, (float) (l + 0) * f6 + f10, (float) (i1 + 0) * f6 + f11);
+                        tessellator.vertex(l, f9, i1 + byte0, l * f6 + f10, (i1 + byte0) * f6 + f11);
+                        tessellator.vertex(l + byte0, f9, i1 + byte0, (l + byte0) * f6 + f10, (i1 + byte0) * f6 + f11);
+                        tessellator.vertex(l + byte0, f9, i1, (l + byte0) * f6 + f10, (i1) * f6 + f11);
+                        tessellator.vertex(l, f9, i1, l * f6 + f10, i1 * f6 + f11);
                     }
                 }
 
@@ -308,25 +213,24 @@ public abstract class MixinWorldRenderer implements LevelListener, ExWorldRender
      */
     @Overwrite
     public boolean method_1549(LivingEntity entityliving, boolean flag) {
-        int j2;
-        boolean flag1 = false;
-        if (flag1) {
-            Collections.sort(this.field_1807, new class_430(entityliving));
-            int i = this.field_1807.size() - 1;
-            int j = this.field_1807.size();
-            for (int k = 0; k < j; ++k) {
-                class_66 worldrenderer = (class_66) this.field_1807.get(i - k);
-                if (!flag) {
-                    if (worldrenderer.method_299(entityliving) > 256.0f && (worldrenderer.field_243 ? k >= 3 : k >= 1)) {
-                        return false;
-                    }
-                } else if (!worldrenderer.field_243) continue;
-                worldrenderer.method_296();
-                this.field_1807.remove(worldrenderer);
-                worldrenderer.field_249 = false;
-            }
-            return this.field_1807.size() == 0;
-        }
+        //boolean flag1 = false;
+        //if (flag1) {
+        //    Collections.sort(this.field_1807, new class_430(entityliving));
+        //    int i = this.field_1807.size() - 1;
+        //    int j = this.field_1807.size();
+        //    for (int k = 0; k < j; ++k) {
+        //        class_66 worldrenderer = (class_66) this.field_1807.get(i - k);
+        //        if (!flag) {
+        //            if (worldrenderer.method_299(entityliving) > 256.0f && (worldrenderer.field_243 ? k >= 3 : k >= 1)) {
+        //                return false;
+        //            }
+        //        } else if (!worldrenderer.field_243) continue;
+        //        worldrenderer.method_296();
+        //        this.field_1807.remove(worldrenderer);
+        //        worldrenderer.field_249 = false;
+        //    }
+        //    return this.field_1807.size() == 0;
+        //}
         int byte0 = 2;
         class_430 rendersorter = new class_430(entityliving);
         class_66[] aworldrenderer = new class_66[byte0];
@@ -340,7 +244,7 @@ public abstract class MixinWorldRenderer implements LevelListener, ExWorldRender
         }
 
         for (int j1 = 0; j1 < l; ++j1) {
-            class_66 worldrenderer1 = (class_66) this.field_1807.get(j1);
+            class_66 worldrenderer1 = this.field_1807.get(j1);
             if (!flag) {
                 if (worldrenderer1.method_299(entityliving) > 256.0f) {
                     int k2;
@@ -368,7 +272,7 @@ public abstract class MixinWorldRenderer implements LevelListener, ExWorldRender
                 Collections.sort(arraylist, rendersorter);
             }
             for (int k1 = arraylist.size() - 1; k1 >= 0; --k1) {
-                class_66 worldrenderer2 = (class_66) arraylist.get(k1);
+                class_66 worldrenderer2 = arraylist.get(k1);
                 worldrenderer2.method_296();
                 worldrenderer2.field_249 = false;
             }
@@ -386,21 +290,26 @@ public abstract class MixinWorldRenderer implements LevelListener, ExWorldRender
             aworldrenderer[i2].field_249 = false;
             ++l1;
         }
+
+        int j2;
         int l2 = 0;
         int j3 = this.field_1807.size();
         for (j2 = 0; j2 != j3; ++j2) {
-            class_66 worldrenderer4 = (class_66) this.field_1807.get(j2);
+            class_66 worldrenderer4 = this.field_1807.get(j2);
             if (worldrenderer4 == null) continue;
             boolean flag2 = false;
-            for (int k3 = 0; k3 < byte0 && !flag2; ++k3) {
-                if (worldrenderer4 != aworldrenderer[k3]) continue;
-                flag2 = true;
+            for (int k3 = 0; k3 < byte0; ++k3) {
+                if (worldrenderer4 == aworldrenderer[k3]) {
+                    flag2 = true;
+                    break;
+                }
             }
-            if (flag2) continue;
-            if (l2 != j2) {
-                this.field_1807.set(l2, worldrenderer4);
+            if (!flag2) {
+                if (l2 != j2) {
+                    this.field_1807.set(l2, worldrenderer4);
+                }
+                ++l2;
             }
-            ++l2;
         }
         while (--j2 >= l2) {
             this.field_1807.remove(j2);
@@ -621,7 +530,7 @@ public abstract class MixinWorldRenderer implements LevelListener, ExWorldRender
     }
 
     private void doReset(boolean forDeath) {
-        ((ExLevel)level).getTriggerManager().resetActive = true;
+        ((ExLevel) level).getTriggerManager().resetActive = true;
         for (net.minecraft.class_66 class_66 : this.field_1809) {
             int xOffset = class_66.field_231;
             int yOffset = class_66.field_232;
@@ -633,11 +542,11 @@ public abstract class MixinWorldRenderer implements LevelListener, ExWorldRender
                     for (int z = 0; z < 16; ++z) {
                         int blockID = this.level.getTileId(xOffset + x, yOffset + y, zOffset + z);
                         if (blockID <= 0) continue;
-                        ((ExTile)Tile.BY_ID[blockID]).reset(this.level, xOffset + x, yOffset + y, zOffset + z, forDeath);
+                        ((ExTile) Tile.BY_ID[blockID]).reset(this.level, xOffset + x, yOffset + y, zOffset + z, forDeath);
                     }
                 }
             }
         }
-        ((ExLevel)level).getTriggerManager().resetActive = false;
+        ((ExLevel) level).getTriggerManager().resetActive = false;
     }
 }

@@ -1,6 +1,8 @@
 package io.github.ryuu.adventurecraft.gui;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityStore;
+import io.github.ryuu.adventurecraft.extensions.client.ExMinecraft;
+import io.github.ryuu.adventurecraft.extensions.entity.player.ExPlayerInventory;
 import io.github.ryuu.adventurecraft.items.ItemCursor;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.util.TriggerArea;
@@ -8,6 +10,8 @@ import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.gui.widgets.OptionButton;
 import net.minecraft.item.ItemInstance;
+
+import java.util.List;
 
 public class GuiStoreDebug extends Screen {
 
@@ -25,19 +29,20 @@ public class GuiStoreDebug extends Screen {
 
     @Override
     public void init() {
+        List<Button> buttons = (List<Button>)this.buttons;
         OptionButton b = new OptionButton(0, 4, 0, "Set Items");
-        this.buttons.add(b);
+        buttons.add(b);
         this.supply = new GuiSlider2(6, 4, 26, 10, String.format("Supply: %d", this.store.buySupply), (float) this.store.buySupply / 9.0f);
         if (this.store.buySupply == -1) {
             this.supply.text = "Supply: Infinite";
             this.supply.sliderValue = 0.0f;
         }
-        this.buttons.add(this.supply);
+        buttons.add(this.supply);
         b = new OptionButton(1, 4, 48, "Set Trade Trigger");
         if (this.store.tradeTrigger != null) {
             b.text = "Clear Trade Trigger";
         }
-        this.buttons.add(b);
+        buttons.add(b);
     }
 
     @Override
@@ -51,7 +56,7 @@ public class GuiStoreDebug extends Screen {
             } else {
                 this.store.buyItemID = 0;
             }
-            item = this.minecraft.player.inventory.getOffhandItem();
+            item = ((ExPlayerInventory)this.minecraft.player.inventory).getOffhandItem();
             if (item != null) {
                 this.store.sellItemID = item.itemId;
                 this.store.sellItemDamage = item.getDamage();
@@ -82,11 +87,12 @@ public class GuiStoreDebug extends Screen {
         }
         this.store.buySupplyLeft = this.store.buySupply;
         super.render(mouseX, mouseY, delta);
-        this.minecraft.storeGUI.setBuyItem(this.store.buyItemID, this.store.buyItemAmount, this.store.buyItemDamage);
-        this.minecraft.storeGUI.setSellItem(this.store.sellItemID, this.store.sellItemAmount, this.store.sellItemDamage);
-        this.minecraft.storeGUI.setSupplyLeft(this.store.buySupply);
-        this.minecraft.updateStoreGUI();
-        this.minecraft.storeGUI.render(mouseX, mouseY, delta);
+        GuiStore storeGUI = ((ExMinecraft)this.minecraft).getStoreGUI();
+        storeGUI.setBuyItem(this.store.buyItemID, this.store.buyItemAmount, this.store.buyItemDamage);
+        storeGUI.setSellItem(this.store.sellItemID, this.store.sellItemAmount, this.store.sellItemDamage);
+        storeGUI.setSupplyLeft(this.store.buySupply);
+        ((ExMinecraft)this.minecraft).updateStoreGUI();
+        storeGUI.render(mouseX, mouseY, delta);
         this.store.level.getChunk(this.store.x, this.store.z).method_885();
     }
 

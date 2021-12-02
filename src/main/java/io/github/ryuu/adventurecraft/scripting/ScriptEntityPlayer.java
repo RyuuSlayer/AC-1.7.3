@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.scripting;
 
+import io.github.ryuu.adventurecraft.extensions.entity.player.ExPlayer;
 import net.minecraft.entity.player.Player;
 
 public class ScriptEntityPlayer extends ScriptEntityLiving {
@@ -16,15 +17,15 @@ public class ScriptEntityPlayer extends ScriptEntityLiving {
     }
 
     public String getCloak() {
-        return this.entityPlayer.cloakTexture;
+        return ((ExPlayer)this.entityPlayer).getCloakTexture();
     }
 
     public void setCloak(String cloak) {
-        this.entityPlayer.cloakTexture = cloak;
+        ((ExPlayer)this.entityPlayer).setCloakTexture(cloak);
     }
 
     public void removeCloak() {
-        this.entityPlayer.cloakTexture = null;
+        ((ExPlayer)this.entityPlayer).setCloakTexture(null);
     }
 
     public void swingMainHand() {
@@ -32,6 +33,6 @@ public class ScriptEntityPlayer extends ScriptEntityLiving {
     }
 
     public void swingOffHand() {
-        this.entityPlayer.swingOffhandItem();
+        ((ExPlayer)this.entityPlayer).swingOffhandItem();
     }
 }

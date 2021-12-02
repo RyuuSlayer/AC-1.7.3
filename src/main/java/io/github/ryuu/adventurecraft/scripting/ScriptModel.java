@@ -20,7 +20,7 @@ public class ScriptModel {
     private static final Matrix4f transform = new Matrix4f();
     private static final Vector4f v = new Vector4f();
     private static final Vector4f vr = new Vector4f();
-    static LinkedList<ScriptModel> activeModels = new LinkedList();
+    static LinkedList<ScriptModel> activeModels = new LinkedList<>();
     private final int textureWidth;
     private final int textureHeight;
     public ScriptEntity attachedTo;

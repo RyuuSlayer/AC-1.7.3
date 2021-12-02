@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityStore;
+import io.github.ryuu.adventurecraft.extensions.entity.player.ExPlayerInventory;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.gui.GuiStoreDebug;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
@@ -41,7 +42,7 @@ public class BlockStore extends TileWithEntity {
             return true;
         }
         if (store.buySupplyLeft != 0) {
-            if (store.sellItemID == 0 || player.inventory.consumeItemAmount(store.sellItemID, store.sellItemDamage, store.sellItemAmount)) {
+            if (store.sellItemID == 0 || ((ExPlayerInventory)player.inventory).consumeItemAmount(store.sellItemID, store.sellItemDamage, store.sellItemAmount)) {
                 if (store.buyItemID != 0) {
                     player.inventory.pickupItem(new ItemInstance(store.buyItemID, store.buyItemAmount, store.buyItemDamage));
                 }
