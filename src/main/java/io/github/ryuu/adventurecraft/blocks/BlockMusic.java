@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityMusic;
+import io.github.ryuu.adventurecraft.extensions.client.sound.ExSoundHelper;
 import io.github.ryuu.adventurecraft.gui.GuiMusic;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
@@ -47,10 +48,11 @@ public class BlockMusic extends TileWithEntity {
     @Override
     public void onTriggerActivated(Level world, int i, int j, int k) {
         TileEntityMusic obj = (TileEntityMusic) world.getTileEntity(i, j, k);
+        ExSoundHelper soundHelper = (ExSoundHelper) AccessMinecraft.getInstance().soundHelper;
         if (!obj.musicName.equals("")) {
-            AccessMinecraft.getInstance().soundHelper.playMusicFromStreaming(obj.musicName, obj.fadeOut, obj.fadeIn);
+            soundHelper.playMusicFromStreaming(obj.musicName, obj.fadeOut, obj.fadeIn);
         } else {
-            AccessMinecraft.getInstance().soundHelper.stopMusic();
+            soundHelper.stopMusic();
         }
     }
 

@@ -13,7 +13,8 @@
     "tile.AccessFlowingFluidTile",
     "tile.AccessGrassTile",
     "tile.AccessSandTile",
-    "tile.AccessStillFluidTile"
+    "tile.AccessStillFluidTile",
+    "tile.AccessTile"
   ],
   "client": [
     "MixinClass_108",

@@ -3,11 +3,13 @@ package io.github.ryuu.adventurecraft.mixin.level;
 import io.github.ryuu.adventurecraft.blocks.BlockStairMulti;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.extensions.client.ExMinecraft;
+import io.github.ryuu.adventurecraft.extensions.client.sound.ExSoundHelper;
 import io.github.ryuu.adventurecraft.extensions.entity.ExEntity;
 import io.github.ryuu.adventurecraft.extensions.entity.ExLivingEntity;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevelProperties;
 import io.github.ryuu.adventurecraft.extensions.level.chunk.ExChunk;
+import io.github.ryuu.adventurecraft.extensions.tile.ExLadderTile;
 import io.github.ryuu.adventurecraft.extensions.tile.entity.ExTileEntity;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.mixin.util.AccessResourceDownloadThread;
@@ -32,7 +34,6 @@ import net.minecraft.level.chunk.ClientChunkCache;
 import net.minecraft.level.dimension.Dimension;
 import net.minecraft.level.dimension.DimensionData;
 import net.minecraft.level.source.LevelSource;
-import net.minecraft.tile.LadderTile;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.hit.HitResult;
@@ -535,7 +536,7 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
         int i2 = this.getTileMeta(l, i1, j1);
         Tile block = Tile.BY_ID[k1];
         if ((!flag1 || block == null || block.getCollisionShape((Level) (Object) this, l, i1, j1) != null) && k1 > 0 && block != null && block.method_1571(i2, flag)) {
-            if ((collideWithClip || k1 != Blocks.clipBlock.id && !LadderTile.isLadderID(k1))) {
+            if ((collideWithClip || k1 != Blocks.clipBlock.id && !ExLadderTile.isLadderID(k1))) {
                 HitResult movingobjectposition = block.raycast((Level) (Object) this, l, i1, j1, vec3d, vec3d1);
                 if (movingobjectposition != null) {
                     return movingobjectposition;
@@ -638,7 +639,7 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
                 continue;
             }
             HitResult movingobjectposition1 = block1.raycast((Level) (Object) this, l, i1, j1, vec3d, vec3d1);
-            if (movingobjectposition1 != null && (collideWithClip || block1.id != Blocks.clipBlock.id && !LadderTile.isLadderID(block1.id))) {
+            if (movingobjectposition1 != null && (collideWithClip || block1.id != Blocks.clipBlock.id && !ExLadderTile.isLadderID(block1.id))) {
                 return movingobjectposition1;
             }
         }
@@ -665,7 +666,7 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
 
         for (int i2 = var5 - 1; i2 < var6; ++i2) {
             Tile block = Tile.BY_ID[this.getTileId(var9, i2, var10)];
-            if (block == null || !((ExEntity) entity).getCollidesWithClipBlocks() && (block.id == Blocks.clipBlock.id || LadderTile.isLadderID(block.id)))
+            if (block == null || !((ExEntity) entity).getCollidesWithClipBlocks() && (block.id == Blocks.clipBlock.id || ExLadderTile.isLadderID(block.id)))
                 continue;
             block.intersectsInLevel((Level) (Object) this, var9, i2, var10, axisalignedbb, this.field_189);
         }
@@ -1233,7 +1234,8 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
             this.musicList = new String[0];
         }
         if (!((ExLevelProperties) this.properties).getPlayingMusic().equals("")) {
-            AccessMinecraft.getInstance().soundHelper.playMusicFromStreaming(((ExLevelProperties) this.properties).getPlayingMusic(), 0, 0);
+            ExSoundHelper soundHelper = (ExSoundHelper) AccessMinecraft.getInstance().soundHelper;
+            soundHelper.playMusicFromStreaming(((ExLevelProperties) this.properties).getPlayingMusic(), 0, 0);
         }
     }
 
@@ -1340,11 +1342,6 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
     @Override
     public UndoStack getUndoStack() {
         return this.undoStack;
-    }
-
-    @Override
-    public LevelProperties getLevelProperties() {
-        return properties;
     }
 
     @Override

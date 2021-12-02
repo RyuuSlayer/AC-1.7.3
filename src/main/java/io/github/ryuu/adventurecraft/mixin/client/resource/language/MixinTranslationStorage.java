@@ -13,7 +13,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 @Mixin(TranslationStorage.class)
-public class MixinTranslationStorage {
+public abstract class MixinTranslationStorage implements ExTranslationStorage {
 
     @Shadow private Properties translations;
 
@@ -27,8 +27,8 @@ public class MixinTranslationStorage {
         return instance.getResourceAsStream("/assets/adventurecraft/lang/stats_US.lang");
     }
 
-
-    public void adventurecraft$loadMapTranslation(File levelDir) {
+    @Override
+    public void loadMapTranslation(File levelDir) {
         try {
             this.translations.load(TranslationStorage.class.getResourceAsStream("/assets/adventurecraft/lang/en_US.lang"));
         } catch (IOException ignored) {

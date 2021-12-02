@@ -7,7 +7,7 @@ import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
-public class BlockOverlay extends Tile implements IBlockColor {
+public class BlockOverlay extends BlockColor {
 
     protected BlockOverlay(int i, int j) {
         super(i, j, Material.PLANT);

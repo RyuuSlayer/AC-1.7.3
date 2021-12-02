@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.mixin.client.options;
 
 import com.chocohead.mm.api.ClassTinkerers;
+import io.github.ryuu.adventurecraft.extensions.client.options.ExGameOptions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.options.KeyBinding;
@@ -21,7 +22,7 @@ import java.io.PrintWriter;
 import java.util.Arrays;
 
 @Mixin(GameOptions.class)
-public abstract class MixinGameOptions {
+public abstract class MixinGameOptions implements ExGameOptions {
 
     @Mutable
     @Final
@@ -88,19 +89,7 @@ public abstract class MixinGameOptions {
     public KeyBinding sneakKey;
 
     @Shadow
-    public KeyBinding[] keyBindings;
-
-    @Shadow
-    public int difficulty;
-
-    @Shadow
     public boolean hideHud;
-
-    @Shadow
-    public boolean thirdPerson;
-
-    @Shadow
-    public boolean debugHud;
 
     @Shadow
     public String lastServer;
@@ -125,12 +114,6 @@ public abstract class MixinGameOptions {
 
     @Shadow
     protected Minecraft minecraft;
-
-    @Shadow
-    private File optionsFile;
-
-    @Shadow
-    public abstract float getFloatValue(Option arg);
 
     public boolean autoFarClip;
     public boolean grass3d;
@@ -213,7 +196,6 @@ public abstract class MixinGameOptions {
     private void removeFieldInitialization5(GameOptions instance, int value) {
     }*/
 
-
     @Redirect(method = "changeOption", at = @At(value = "FIELD", target = "Lnet/minecraft/client/options/GameOptions;viewDistance:I", ordinal = 1))
     private void changeMaxViewDistance(GameOptions instance, int value) {
         this.viewDistance = (this.viewDistance - 1) % 5;
@@ -222,15 +204,10 @@ public abstract class MixinGameOptions {
         }
     }
 
-    @Inject(method = "changeOption", at = @At(value = "FIELD", target = "Lnet/minecraft/client/options/GameOptions;bobView:Z", ordinal = 0, shift = At.Shift.AFTER))
-    private void changeViewBobbing(Option option, int i, CallbackInfo ci) {
-        boolean bl = this.bobView;
-    }
-
     @Inject(method = "changeOption", at = @At("HEAD"))
     private void initNewSettings(Option option, int i, CallbackInfo ci) {
         if (option == ClassTinkerers.getEnum(Option.class, "AUTO_FAR_CLIP")) {
-            boolean bl = this.autoFarClip = !this.autoFarClip;
+            this.autoFarClip = !this.autoFarClip;
         } else if (option == ClassTinkerers.getEnum(Option.class, "GRASS_3D")) {
             this.grass3d = !this.grass3d;
             this.minecraft.worldRenderer.method_1537();
@@ -267,8 +244,6 @@ public abstract class MixinGameOptions {
         return var3;
     }
 
-
-
     @ModifyVariable(method = "saveOptions", at = @At("STORE"))
     private PrintWriter saveOptions(PrintWriter printWriter) {
         printWriter.println("ao:" + this.ao);
@@ -277,5 +252,15 @@ public abstract class MixinGameOptions {
         printWriter.println("autoFarClip:" + this.autoFarClip);
         printWriter.println("grass3d:" + this.grass3d);
         return printWriter;
+    }
+
+    @Override
+    public boolean isAutoFarClip() {
+        return this.autoFarClip;
+    }
+
+    @Override
+    public boolean isGrass3d() {
+        return this.grass3d;
     }
 }

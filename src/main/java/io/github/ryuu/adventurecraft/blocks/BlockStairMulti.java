@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.blocks;
 
+import io.github.ryuu.adventurecraft.mixin.tile.AccessTile;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
@@ -13,15 +14,15 @@ import net.minecraft.util.maths.Vec3f;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class BlockStairMulti extends Tile implements IBlockColor {
+public class BlockStairMulti extends BlockColor {
 
     private final Tile modelBlock;
 
     protected BlockStairMulti(int i, Tile block, int textureID) {
         super(i, textureID, block.material);
         this.modelBlock = block;
-        this.hardness(block.hardness);
-        this.blastResistance(block.resistance / 3.0f);
+        this.hardness(((AccessTile)block).getHardness());
+        this.blastResistance(((AccessTile)block).getResistance() / 3.0f);
         this.sounds(block.sounds);
         this.method_1590(255);
     }
@@ -62,10 +63,9 @@ public class BlockStairMulti extends Tile implements IBlockColor {
         this.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 0.5f, 1.0f);
         super.intersectsInLevel(world, i, j, k, axisalignedbb, intersections);
         if (l == 0) {
-            int m;
             Tile b = Tile.BY_ID[world.getTileId(i - 1, j, k)];
             if (b != null && b.method_1621() == this.method_1621()) {
-                m = world.getTileMeta(i - 1, j, k) & 3;
+                int m = world.getTileMeta(i - 1, j, k) & 3;
                 if (m == 2) {
                     this.setBoundingBox(0.0f, 0.5f, 0.5f, 0.5f, 1.0f, 1.0f);
                     super.intersectsInLevel(world, i, j, k, axisalignedbb, intersections);
@@ -74,35 +74,31 @@ public class BlockStairMulti extends Tile implements IBlockColor {
                     super.intersectsInLevel(world, i, j, k, axisalignedbb, intersections);
                 }
             }
-            m = world.getTileMeta(i + 1, j, k) & 3;
+            int m = world.getTileMeta(i + 1, j, k) & 3;
             b = Tile.BY_ID[world.getTileId(i + 1, j, k)];
             if (b != null && b.method_1621() == this.method_1621() && (m == 2 || m == 3)) {
                 if (m == 2) {
                     this.setBoundingBox(0.5f, 0.5f, 0.5f, 1.0f, 1.0f, 1.0f);
-                    super.intersectsInLevel(world, i, j, k, axisalignedbb, intersections);
-                } else if (m == 3) {
+                } else {
                     this.setBoundingBox(0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.5f);
-                    super.intersectsInLevel(world, i, j, k, axisalignedbb, intersections);
                 }
             } else {
                 this.setBoundingBox(0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 1.0f);
-                super.intersectsInLevel(world, i, j, k, axisalignedbb, intersections);
             }
+            super.intersectsInLevel(world, i, j, k, axisalignedbb, intersections);
         } else if (l == 1) {
             int m = world.getTileMeta(i - 1, j, k) & 3;
             Tile b = Tile.BY_ID[world.getTileId(i - 1, j, k)];
             if (b != null && b.method_1621() == this.method_1621() && (m == 2 || m == 3)) {
                 if (m == 3) {
                     this.setBoundingBox(0.0f, 0.5f, 0.0f, 0.5f, 1.0f, 0.5f);
-                    super.intersectsInLevel(world, i, j, k, axisalignedbb, intersections);
                 } else {
                     this.setBoundingBox(0.0f, 0.5f, 0.5f, 0.5f, 1.0f, 1.0f);
-                    super.intersectsInLevel(world, i, j, k, axisalignedbb, intersections);
                 }
             } else {
                 this.setBoundingBox(0.0f, 0.5f, 0.0f, 0.5f, 1.0f, 1.0f);
-                super.intersectsInLevel(world, i, j, k, axisalignedbb, intersections);
             }
+            super.intersectsInLevel(world, i, j, k, axisalignedbb, intersections);
             b = Tile.BY_ID[world.getTileId(i + 1, j, k)];
             if (b != null && b.method_1621() == this.method_1621()) {
                 m = world.getTileMeta(i + 1, j, k) & 3;
@@ -115,10 +111,9 @@ public class BlockStairMulti extends Tile implements IBlockColor {
                 }
             }
         } else if (l == 2) {
-            int m;
             Tile b = Tile.BY_ID[world.getTileId(i, j, k - 1)];
             if (b != null && b.method_1621() == this.method_1621()) {
-                m = world.getTileMeta(i, j, k - 1) & 3;
+                int m = world.getTileMeta(i, j, k - 1) & 3;
                 if (m == 1) {
                     this.setBoundingBox(0.0f, 0.5f, 0.0f, 0.5f, 1.0f, 0.5f);
                     super.intersectsInLevel(world, i, j, k, axisalignedbb, intersections);
@@ -127,25 +122,22 @@ public class BlockStairMulti extends Tile implements IBlockColor {
                     super.intersectsInLevel(world, i, j, k, axisalignedbb, intersections);
                 }
             }
-            m = world.getTileMeta(i, j, k + 1) & 3;
+            int m = world.getTileMeta(i, j, k + 1) & 3;
             b = Tile.BY_ID[world.getTileId(i, j, k + 1)];
             if (b != null && b.method_1621() == this.method_1621() && (m == 0 || m == 1)) {
                 if (m == 0) {
                     this.setBoundingBox(0.5f, 0.5f, 0.5f, 1.0f, 1.0f, 1.0f);
-                    super.intersectsInLevel(world, i, j, k, axisalignedbb, intersections);
                 } else {
                     this.setBoundingBox(0.0f, 0.5f, 0.5f, 0.5f, 1.0f, 1.0f);
-                    super.intersectsInLevel(world, i, j, k, axisalignedbb, intersections);
                 }
             } else {
                 this.setBoundingBox(0.0f, 0.5f, 0.5f, 1.0f, 1.0f, 1.0f);
-                super.intersectsInLevel(world, i, j, k, axisalignedbb, intersections);
             }
-        } else if (l == 3) {
-            int m;
+            super.intersectsInLevel(world, i, j, k, axisalignedbb, intersections);
+        } else {
             Tile b = Tile.BY_ID[world.getTileId(i, j, k + 1)];
             if (b != null && b.method_1621() == this.method_1621()) {
-                m = world.getTileMeta(i, j, k + 1) & 3;
+                int m = world.getTileMeta(i, j, k + 1) & 3;
                 if (m == 1) {
                     this.setBoundingBox(0.0f, 0.5f, 0.5f, 0.5f, 1.0f, 1.0f);
                     super.intersectsInLevel(world, i, j, k, axisalignedbb, intersections);
@@ -154,20 +146,18 @@ public class BlockStairMulti extends Tile implements IBlockColor {
                     super.intersectsInLevel(world, i, j, k, axisalignedbb, intersections);
                 }
             }
-            m = world.getTileMeta(i, j, k - 1) & 3;
+            int m = world.getTileMeta(i, j, k - 1) & 3;
             b = Tile.BY_ID[world.getTileId(i, j, k - 1)];
             if (b != null && b.method_1621() == this.method_1621() && (m == 0 || m == 1)) {
                 if (m == 0) {
                     this.setBoundingBox(0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.5f);
-                    super.intersectsInLevel(world, i, j, k, axisalignedbb, intersections);
                 } else {
                     this.setBoundingBox(0.0f, 0.5f, 0.0f, 0.5f, 1.0f, 0.5f);
-                    super.intersectsInLevel(world, i, j, k, axisalignedbb, intersections);
                 }
             } else {
                 this.setBoundingBox(0.0f, 0.5f, 0.0f, 1.0f, 1.0f, 0.5f);
-                super.intersectsInLevel(world, i, j, k, axisalignedbb, intersections);
             }
+            super.intersectsInLevel(world, i, j, k, axisalignedbb, intersections);
         }
         this.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
     }
@@ -302,15 +292,17 @@ public class BlockStairMulti extends Tile implements IBlockColor {
             world.setTileMeta(i, j, k, 3 + m);
         }
         if (l == 3) {
-            world.setTileMeta(i, j, k, 0 + m);
+            world.setTileMeta(i, j, k, m);
         }
     }
 
-    protected int getColorMetaData(TileView iblockaccess, int i, int j, int k) {
+    @Override
+    public int getColorMetaData(TileView iblockaccess, int i, int j, int k) {
         return iblockaccess.getTileMeta(i, j, k) >> 2;
     }
 
-    protected void setColorMetaData(Level world, int i, int j, int k, int color) {
+    @Override
+    public void setColorMetaData(Level world, int i, int j, int k, int color) {
         world.setTileMeta(i, j, k, world.getTileMeta(i, j, k) & 3 | color << 2);
     }
 

@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.client.render.entity;
 
+import io.github.ryuu.adventurecraft.extensions.entity.player.ExPlayer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.TextRenderer;
@@ -7,6 +8,7 @@ import net.minecraft.client.render.TileRenderer;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.PlayerRenderer;
 import net.minecraft.client.render.entity.model.BipedModel;
+import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ClientPlayer;
@@ -17,30 +19,30 @@ import net.minecraft.item.armour.ArmourItem;
 import net.minecraft.tile.Tile;
 import net.minecraft.util.maths.MathsHelper;
 import org.lwjgl.opengl.GL11;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(PlayerRenderer.class)
-public class MixinPlayerRenderer extends LivingEntityRenderer {
+public abstract class MixinPlayerRenderer extends LivingEntityRenderer {
 
-    private static final String[] field_297 = new String[]{"cloth", "chain", "iron", "diamond", "gold"};
-    @Shadow()
-    private final BipedModel headRenderer;
-    private final BipedModel field_295;
-    private final BipedModel field_296;
+    @Final
+    @Shadow
+    private static String[] field_297;
 
-    public MixinPlayerRenderer() {
-        super(new BipedModel(0.0f), 0.5f);
-        this.headRenderer = (BipedModel) this.field_909;
-        this.field_295 = new BipedModel(1.0f);
-        this.field_296 = new BipedModel(0.5f);
+    @Shadow
+    private BipedModel headRenderer;
+
+    @Shadow
+    private BipedModel field_295;
+
+    @Shadow
+    private BipedModel field_296;
+
+    public MixinPlayerRenderer(EntityModel arg, float f) {
+        super(arg, f);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     protected boolean method_344(Player entityplayer, int i, float f) {
         ItemType item;
         ItemInstance itemstack = entityplayer.inventory.getArmourItem(3 - i);
@@ -61,10 +63,6 @@ public class MixinPlayerRenderer extends LivingEntityRenderer {
         return false;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void method_341(Player entityplayer, double d, double d1, double d2, float f, float f1) {
         ItemInstance itemstack = entityplayer.inventory.getHeldItem();
         this.headRenderer.sneaking = itemstack != null;
@@ -85,17 +83,12 @@ public class MixinPlayerRenderer extends LivingEntityRenderer {
         this.field_295.sneaking = false;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     protected void method_340(Player entityplayer, double d, double d1, double d2) {
         if (Minecraft.isHudHidden() && entityplayer != this.dispatcher.entity) {
-            float f3;
             float f = 1.6f;
             float f1 = 0.01666667f * f;
             float f2 = entityplayer.distanceTo(this.dispatcher.entity);
-            float f4 = f3 = entityplayer.method_1373() ? 32.0f : 64.0f;
+            float f3 = entityplayer.method_1373() ? 32.0f : 64.0f;
             if (f2 < f3) {
                 String s = entityplayer.name;
                 if (!entityplayer.method_1373()) {
@@ -139,10 +132,6 @@ public class MixinPlayerRenderer extends LivingEntityRenderer {
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     protected void method_342(Player entityplayer, float f) {
         ItemInstance itemstack1;
         ItemInstance itemstack = entityplayer.inventory.getArmourItem(3);
@@ -175,9 +164,9 @@ public class MixinPlayerRenderer extends LivingEntityRenderer {
                 GL11.glPopMatrix();
             }
         }
-        if (entityplayer.cloakTexture != null || this.method_2027(entityplayer.playerCloakUrl, null)) {
-            if (entityplayer.cloakTexture != null) {
-                this.bindTexture(entityplayer.cloakTexture);
+        if (((ExPlayer)entityplayer).getCloakTexture() != null || this.method_2027(entityplayer.playerCloakUrl, null)) {
+            if (((ExPlayer)entityplayer).getCloakTexture() != null) {
+                this.bindTexture(((ExPlayer)entityplayer).getCloakTexture());
             }
             GL11.glPushMatrix();
             GL11.glTranslatef(0.0f, 0.0f, 0.125f);
@@ -247,19 +236,11 @@ public class MixinPlayerRenderer extends LivingEntityRenderer {
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     protected void method_347(Player entityplayer, float f) {
         float f1 = 0.9375f;
         GL11.glScalef(f1, f1, f1);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     protected void method_346(Player entityplayer, double d, double d1, double d2) {
         if (entityplayer.isAlive() && entityplayer.isSleeping()) {
             super.method_826(entityplayer, d + (double) entityplayer.field_509, d1 + (double) entityplayer.field_507, d2 + (double) entityplayer.field_510);
@@ -268,10 +249,6 @@ public class MixinPlayerRenderer extends LivingEntityRenderer {
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     protected void method_343(Player entityplayer, float f, float f1, float f2) {
         if (entityplayer.isAlive() && entityplayer.isSleeping()) {
             GL11.glRotatef(entityplayer.method_482(), 0.0f, 1.0f, 0.0f);
@@ -282,74 +259,42 @@ public class MixinPlayerRenderer extends LivingEntityRenderer {
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
     @Override
-    @Overwrite()
     protected void method_821(LivingEntity entityliving, double d, double d1, double d2) {
         this.method_340((Player) entityliving, d, d1, d2);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
     @Override
-    @Overwrite()
     protected void method_823(LivingEntity entityliving, float f) {
         this.method_347((Player) entityliving, f);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
     @Override
-    @Overwrite()
     protected boolean render(LivingEntity entityliving, int i, float f) {
         return this.method_344((Player) entityliving, i, f);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
     @Override
-    @Overwrite()
     protected void method_827(LivingEntity entityliving, float f) {
         this.method_342((Player) entityliving, f);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
     @Override
-    @Overwrite()
     protected void method_824(LivingEntity entityliving, float f, float f1, float f2) {
         this.method_343((Player) entityliving, f, f1, f2);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
     @Override
-    @Overwrite()
     protected void method_826(LivingEntity entityliving, double d, double d1, double d2) {
         this.method_346((Player) entityliving, d, d1, d2);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
     @Override
-    @Overwrite()
     public void render(LivingEntity entity, double x, double y, double z, float f, float f1) {
         this.method_341((Player) entity, x, y, z, f, f1);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
     @Override
-    @Overwrite()
     public void render(Entity entity, double x, double y, double z, float f, float f1) {
         this.method_341((Player) entity, x, y, z, f, f1);
     }

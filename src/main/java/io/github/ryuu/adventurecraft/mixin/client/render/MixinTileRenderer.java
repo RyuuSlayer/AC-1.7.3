@@ -4,6 +4,7 @@ import io.github.ryuu.adventurecraft.blocks.BlockOverlay;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityTree;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
+import io.github.ryuu.adventurecraft.extensions.tile.ExGrassTile;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.GameRenderer;
@@ -25,7 +26,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import java.util.Random;
 
 @Mixin(TileRenderer.class)
-public class MixinTileRenderer {
+public abstract class MixinTileRenderer {
 
     public static boolean field_67 = true;
     private final int field_55 = 1;
@@ -4404,7 +4405,7 @@ public class MixinTileRenderer {
         float g = (float) (l >> 8 & 0xFF) / 255.0f;
         float b = (float) (l & 0xFF) / 255.0f;
         int metadata = this.field_82.getTileMeta(i, j, k);
-        float multiplier = Tile.GRASS.grassMultiplier(metadata);
+        float multiplier = ((ExGrassTile)Tile.GRASS).grassMultiplier(metadata);
         if (multiplier < 0.0f) {
             return false;
         }

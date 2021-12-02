@@ -39,8 +39,6 @@ public abstract class MixinPlayer extends MixinLivingEntity implements ExPlayer 
     @Shadow
     public PlayerInventory inventory;
     @Shadow
-    public Container playerContainer;
-    @Shadow
     public Container container;
     @Shadow
     public float field_524;
@@ -75,9 +73,6 @@ public abstract class MixinPlayer extends MixinLivingEntity implements ExPlayer 
 
     @Shadow
     public abstract void wakeUp(boolean flag, boolean flag1, boolean flag2);
-
-    @Shadow
-    public abstract void shadow$updateDespawnCounter();
 
     @Shadow
     protected abstract void method_520(Entity arg);
@@ -304,6 +299,16 @@ public abstract class MixinPlayer extends MixinLivingEntity implements ExPlayer 
 
     @Override
     public int getHeartPieces() {
-        return numHeartPieces;
+        return this.numHeartPieces;
+    }
+
+    @Override
+    public void setHeartPieces(int heartPieces) {
+        this.numHeartPieces = heartPieces;
+    }
+
+    @Override
+    public String getCloakTexture() {
+        return this.cloakTexture;
     }
 }

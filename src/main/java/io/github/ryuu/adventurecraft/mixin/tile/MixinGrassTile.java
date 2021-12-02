@@ -2,21 +2,25 @@ package io.github.ryuu.adventurecraft.mixin.tile;
 
 import io.github.ryuu.adventurecraft.Main;
 import io.github.ryuu.adventurecraft.blocks.IBlockColor;
+import io.github.ryuu.adventurecraft.extensions.client.options.ExGameOptions;
+import io.github.ryuu.adventurecraft.extensions.tile.ExGrassTile;
+import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
-import net.minecraft.client.colour.GrassColour;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
-import net.minecraft.level.chunk.Chunk;
 import net.minecraft.tile.GrassTile;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Random;
 
 @Mixin(GrassTile.class)
-public class MixinGrassTile extends Tile implements IBlockColor {
+public abstract class MixinGrassTile extends Tile implements IBlockColor, ExGrassTile {
 
     protected MixinGrassTile(int id) {
         super(id, Material.ORGANIC);
@@ -24,31 +28,19 @@ public class MixinGrassTile extends Tile implements IBlockColor {
         this.setTicksRandomly(true);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public int method_1626(TileView iblockaccess, int i, int j, int k, int l) {
-        if (l == 1) {
-            int metadata = iblockaccess.getTileMeta(i, j, k);
-            if (metadata == 0) {
-                return 0;
-            }
-            return 232 + metadata - 1;
+    @Inject(method = "method_1626", at = @At(
+            value = "RETURN",
+            ordinal = 0))
+    private void returnMetadataInstead(TileView iblockaccess, int i, int j, int k, int l, CallbackInfoReturnable<Integer> cir) {
+        int metadata = iblockaccess.getTileMeta(i, j, k);
+        if (metadata == 0) {
+            cir.setReturnValue(0);
+        } else {
+            cir.setReturnValue(232 + metadata - 1);
         }
-        if (l == 0) {
-            return 2;
-        }
-        Material material = iblockaccess.getMaterial(i, j + 1, k);
-        return material != Material.SNOW && material != Material.SNOW_BLOCK ? 3 : 68;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
     @Override
-    @Overwrite()
     public int getTextureForSide(int side, int meta) {
         if (meta == 0) {
             return 0;
@@ -56,82 +48,37 @@ public class MixinGrassTile extends Tile implements IBlockColor {
         return 232 + meta - 1;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public int getTint(TileView iblockaccess, int i, int j, int k) {
-        iblockaccess.getBiomeSource().getBiomes(i, k, 1, 1);
-        double d = iblockaccess.getBiomeSource().temperatureNoises[0];
-        double d1 = iblockaccess.getBiomeSource().rainfallNoises[0];
-        return GrassColour.getColour(d, d1);
+    @Inject(method = "onScheduledTick", at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/level/Level;setTile(IIII)Z",
+            shift = At.Shift.BEFORE))
+    private void beforeSetTile(Level level, int x, int y, int z, Random rand, CallbackInfo ci) {
+        Main.chunkIsNotPopulating = false;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public void onScheduledTick(Level level, int x, int y, int z, Random rand) {
-        if (level.isClient) {
-            return;
-        }
-        if (level.getLightLevel(x, y + 1, z) < 4 && Tile.field_1941[level.getTileId(x, y + 1, z)] > 2) {
-            if (rand.nextInt(4) != 0) {
-                return;
-            }
-            Main.chunkIsNotPopulating = false;
-            level.setTile(x, y, z, Tile.DIRT.id);
-            Main.chunkIsNotPopulating = true;
-        } else if (level.getLightLevel(x, y + 1, z) >= 9) {
-            int l = x + rand.nextInt(3) - 1;
-            int i1 = y + rand.nextInt(5) - 3;
-            int j1 = z + rand.nextInt(3) - 1;
-            int k1 = level.getTileId(l, i1 + 1, j1);
-            if (level.getTileId(l, i1, j1) == Tile.DIRT.id && level.getLightLevel(l, i1 + 1, j1) >= 4 && Tile.field_1941[k1] <= 2) {
-                Main.chunkIsNotPopulating = false;
-                level.setTile(l, i1, j1, Tile.GRASS.id);
-                Main.chunkIsNotPopulating = true;
-            }
-        }
+    @Inject(method = "onScheduledTick", at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/level/Level;setTile(IIII)Z",
+            shift = At.Shift.AFTER))
+    private void afterSetTile(Level level, int x, int y, int z, Random rand, CallbackInfo ci) {
+        Main.chunkIsNotPopulating = true;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
     @Override
-    @Overwrite()
-    public int getDropId(int meta, Random rand) {
-        return Tile.DIRT.getDropId(0, rand);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
     public int method_1621() {
-        if (AccessMinecraft.getInstance().options.grass3d) {
+        if (((ExGameOptions)AccessMinecraft.getInstance().options).isGrass3d()) {
             return 30;
         }
         return super.method_1621();
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
     @Override
-    @Overwrite()
     public void incrementColor(Level world, int i, int j, int k) {
         int metadata = world.getTileMeta(i, j, k);
-        world.setTileMeta(i, j, k, (metadata + 1) % subTypes[this.id]);
+        world.setTileMeta(i, j, k, (metadata + 1) % ExTile.subTypes[this.id]);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
+    @Override
     public float grassMultiplier(int metadata) {
         switch (metadata) {
             case 2: {

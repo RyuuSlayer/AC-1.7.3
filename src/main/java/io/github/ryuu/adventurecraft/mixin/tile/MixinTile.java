@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Tile.class)
-public abstract class MixinTile implements ExTile {
+public abstract class MixinTile implements AccessTile, ExTile {
 
     @Mutable
     @Shadow @Final public static Tile STONE;
@@ -67,9 +67,6 @@ public abstract class MixinTile implements ExTile {
     @Shadow
     public double maxZ;
 
-    @Shadow
-    public TileSounds sounds;
-
     @Shadow @Final public static Tile[] BY_ID;
 
     @Shadow protected abstract void afterTileItemCreated();
@@ -104,11 +101,9 @@ public abstract class MixinTile implements ExTile {
 
     @Shadow @Final public static TileSounds SAND_SOUNDS;
 
-    protected static final int[] subTypes;
     public int textureNum = 0;
 
     static {
-        subTypes = new int[256];
         BY_ID[1] = null;
         STONE = ((MixinTile) (Object) ((MixinTile) (Object) ((MixinTile) (Object) new StoneTile(1, 1)).hardness(1.5f)).blastResistance(10.0f)).sounds(PISTON_SOUNDS).name("stone");
         BY_ID[2] = null;
@@ -147,7 +142,7 @@ public abstract class MixinTile implements ExTile {
     }
 
     @Override
-    public int adventurecraft$alwaysUseClick(Level world, int i, int j, int k) {
+    public int alwaysUseClick(Level world, int i, int j, int k) {
         return -1;
     }
 
@@ -157,13 +152,13 @@ public abstract class MixinTile implements ExTile {
     }
 
     @Override
-    public Tile adventurecraft$setTextureNum(int t) {
+    public Tile setTextureNum(int t) {
         this.textureNum = t;
         return ((Tile) (Object) this);
     }
 
     @Override
-    public boolean adventurecraft$shouldRender(TileView blockAccess, int i, int j, int k) {
+    public boolean shouldRender(TileView blockAccess, int i, int j, int k) {
         return true;
     }
 

@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.client.sound;
 
-import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
+import io.github.ryuu.adventurecraft.extensions.client.sound.ExSoundHelper;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevelProperties;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.class_266;
@@ -16,10 +16,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import paulscode.sound.SoundSystem;
 
-import java.util.Random;
-
 @Mixin(SoundHelper.class)
-public class MixinSoundHelper {
+public abstract class MixinSoundHelper implements ExSoundHelper {
 
     @Shadow
     private static SoundSystem soundSystem;
@@ -28,35 +26,17 @@ public class MixinSoundHelper {
     private static boolean field_2673;
 
     @Shadow
-    private class_266 field_2668;
-
-    @Shadow
     private class_266 field_2669;
-
-    @Shadow
-    private class_266 field_2670;
-
-    @Shadow
-    private Random rand;
-
-    @Shadow
-    private int field_2675;
-
-    @Shadow
-    private int field_2671;
 
     @Shadow
     private GameOptions gameOptions;
 
-
     private String currentSoundName;
-
 
     @Redirect(method = "playBackgroundMusic", at = @At(value = "FIELD", target = "Lnet/minecraft/client/sound/SoundHelper;field_2673:Z"))
     public boolean removeBackgroundMusic() {
         return false;
     }
-
 
 
     @Inject(method = "setSoundPosition", at = @At(value = "INVOKE", target = "Lpaulscode/sound/SoundSystem;setListenerOrientation(FFFFFF)V", shift = At.Shift.AFTER))
@@ -67,14 +47,14 @@ public class MixinSoundHelper {
         soundSystem.setPosition("BgMusic", (float) d, (float) d1, (float) d2);
     }
 
-
-    public void adventurecraft$playMusicFromStreaming(String s, int fadeOut, int fadeIn) {
+    @Override
+    public void playMusicFromStreaming(String s, int fadeOut, int fadeIn) {
         class_267 soundpoolentry;
         if (!field_2673) {
             return;
         }
         if (s.equals("")) {
-            this.adventurecraft$stopMusic();
+            this.stopMusic();
         }
         if ((soundpoolentry = this.field_2669.method_958(s)) != null) {
             if (soundSystem.playing("BgMusic")) {
@@ -89,19 +69,18 @@ public class MixinSoundHelper {
             soundSystem.play("BgMusic");
             this.currentSoundName = soundpoolentry.field_2126;
             if (AccessMinecraft.getInstance().level != null) {
-                ((ExLevelProperties) ((ExLevel) AccessMinecraft.getInstance().level).getLevelProperties()).setPlayingMusic(s);
+                ((ExLevelProperties) AccessMinecraft.getInstance().level.getProperties()).setPlayingMusic(s);
             }
         }
     }
 
-
-    public void adventurecraft$stopMusic() {
+    @Override
+    public void stopMusic() {
         if (field_2673 && soundSystem != null && soundSystem.playing("BgMusic")) {
             soundSystem.stop("BgMusic");
             if (AccessMinecraft.getInstance().level != null) {
-                ((ExLevelProperties) ((ExLevel) AccessMinecraft.getInstance().level).getLevelProperties()).setPlayingMusic("");
+                ((ExLevelProperties) AccessMinecraft.getInstance().level.getProperties()).setPlayingMusic("");
             }
         }
     }
-
 }

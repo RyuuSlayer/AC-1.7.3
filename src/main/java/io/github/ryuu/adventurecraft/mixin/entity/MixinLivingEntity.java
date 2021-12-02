@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.mixin.entity;
 
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.extensions.entity.ExLivingEntity;
+import io.github.ryuu.adventurecraft.extensions.tile.ExLadderTile;
 import io.github.ryuu.adventurecraft.items.Items;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -458,7 +459,7 @@ public abstract class MixinLivingEntity extends MixinEntity implements AccessLiv
         int blockIDAbove = this.level.getTileId(i, j + 1, k);
         boolean v = this.level.getTileMeta(i, j, k) % 3 == 0;
         boolean vAbove = this.level.getTileMeta(i, j + 1, k) % 3 == 0;
-        return LadderTile.isLadderID(blockID) || LadderTile.isLadderID(blockIDAbove) || blockID == Blocks.ropes1.id && v || blockIDAbove == Blocks.ropes1.id && vAbove || blockID == Blocks.ropes2.id && v || blockIDAbove == Blocks.ropes2.id && vAbove || blockID == Blocks.chains.id && v || blockIDAbove == Blocks.chains.id && vAbove;
+        return ExLadderTile.isLadderID(blockID) || ExLadderTile.isLadderID(blockIDAbove) || blockID == Blocks.ropes1.id && v || blockIDAbove == Blocks.ropes1.id && vAbove || blockID == Blocks.ropes2.id && v || blockIDAbove == Blocks.ropes2.id && vAbove || blockID == Blocks.chains.id && v || blockIDAbove == Blocks.chains.id && vAbove;
     }
 
     protected abstract void writeACDataToTag(CompoundTag tag);

@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.extensions.level;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityNpcPath;
 import io.github.ryuu.adventurecraft.items.ItemCustom;
+import io.github.ryuu.adventurecraft.mixin.client.resource.language.ExTranslationStorage;
 import io.github.ryuu.adventurecraft.mixin.level.AccessLevel;
 import io.github.ryuu.adventurecraft.scripting.EntityDescriptions;
 import io.github.ryuu.adventurecraft.scripting.ScopeTag;
@@ -89,8 +90,6 @@ public interface ExLevel {
 
     BufferedImage loadMapTexture(String texName);
 
-    LevelProperties getLevelProperties();
-
     boolean isNewSave();
 
     void setNewSave(boolean newSave);
@@ -111,7 +110,7 @@ public interface ExLevel {
         File mcDir = Minecraft.getGameDirectory();
         File mapDir = new File(mcDir, "../maps");
         File levelFile = new File(mapDir, acLevelName);
-        TranslationStorage.getInstance().loadMapTranslation(levelFile);
+        ((ExTranslationStorage)TranslationStorage.getInstance()).loadMapTranslation(levelFile);
         exLevel.setMapHandler(new McRegionDimensionFile(mapDir, acLevelName, false));
         exLevel.setLevelDir(levelFile);
 
@@ -162,7 +161,7 @@ public interface ExLevel {
 
         if (dimension != null) {
             aLevel.setDimension(dimension);
-        } else if (this.properties != null && this.properties.getDimensionId() == -1) {
+        } else if (level.getProperties() != null && level.getProperties().getDimensionId() == -1) {
             aLevel.setDimension(Dimension.getByID(-1));
         } else {
             aLevel.setDimension(Dimension.getByID(0));

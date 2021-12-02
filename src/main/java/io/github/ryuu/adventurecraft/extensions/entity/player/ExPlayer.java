@@ -9,4 +9,6 @@ public interface ExPlayer extends ExWalkingEntity {
     int getHeartPieces();
 
     void setHeartPieces(int heartPieces);
+
+    String getCloakTexture();
 }

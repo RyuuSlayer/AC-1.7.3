@@ -1,105 +1,36 @@
 package io.github.ryuu.adventurecraft.mixin.tile;
 
 import io.github.ryuu.adventurecraft.blocks.IBlockColor;
+import io.github.ryuu.adventurecraft.extensions.entity.ExFallingTile;
+import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import net.minecraft.entity.FallingTile;
 import net.minecraft.level.Level;
 import net.minecraft.tile.SandTile;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
-
-import java.util.Random;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(SandTile.class)
-public class MixinSandTile extends Tile implements IBlockColor {
+public abstract class MixinSandTile extends Tile implements IBlockColor {
 
-    @Shadow()
-    public static boolean fallInstantly = false;
-
-    public MixinSandTile(int id, int j) {
-        super(id, j, Material.SAND);
+    protected MixinSandTile(int i, Material arg) {
+        super(i, arg);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public static boolean method_435(Level world, int i, int j, int k) {
-        int l = world.getTileId(i, j, k);
-        if (l == 0) {
-            return true;
-        }
-        if (l == Tile.FIRE.id) {
-            return true;
-        }
-        Material material = Tile.BY_ID[l].material;
-        if (material == Material.WATER) {
-            return true;
-        }
-        return material == Material.LAVA;
+    @Inject(method = "method_436", locals = LocalCapture.CAPTURE_FAILHARD, at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/level/Level;spawnEntity(Lnet/minecraft/entity/Entity;)Z",
+            shift = At.Shift.BEFORE))
+    private void setMetadataBeforeSpawn(Level world, int i, int j, int k, CallbackInfo ci, FallingTile var9) {
+        int metadata = world.getTileMeta(i, j, k);
+        ((ExFallingTile) var9).setMetadata(metadata);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
     @Override
-    @Overwrite()
-    public void method_1611(Level level, int x, int y, int z) {
-        level.method_216(x, y, z, this.id, this.getTickrate());
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public void method_1609(Level level, int x, int y, int z, int id) {
-        level.method_216(x, y, z, this.id, this.getTickrate());
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public void onScheduledTick(Level level, int x, int y, int z, Random rand) {
-        this.method_436(level, x, y, z);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    private void method_436(Level world, int i, int j, int k) {
-        int l = i;
-        int i1 = j;
-        int j1 = k;
-        if (SandTile.method_435(world, l, i1 - 1, j1) && i1 >= 0) {
-            int byte0 = 32;
-            if (fallInstantly || !world.isRegionLoaded(i - byte0, j - byte0, k - byte0, i + byte0, j + byte0, k + byte0)) {
-                world.setTile(i, j, k, 0);
-                while (SandTile.method_435(world, i, j - 1, k) && j > 0) {
-                    --j;
-                }
-                if (j > 0) {
-                    world.setTile(i, j, k, this.id);
-                }
-            } else {
-                int metadata = world.getTileMeta(i, j, k);
-                FallingTile entityfallingsand = new FallingTile(world, (float) i + 0.5f, (float) j + 0.5f, (float) k + 0.5f, this.id);
-                entityfallingsand.metadata = metadata;
-                world.spawnEntity(entityfallingsand);
-            }
-        }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
     public int getTextureForSide(int side, int meta) {
         if (meta == 0) {
             return this.tex;
@@ -107,15 +38,11 @@ public class MixinSandTile extends Tile implements IBlockColor {
         return 228 + meta - 1;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
     @Override
-    @Overwrite()
     public void incrementColor(Level world, int i, int j, int k) {
-        if (subTypes[this.id] > 0) {
+        if (ExTile.subTypes[this.id] > 0) {
             int metadata = world.getTileMeta(i, j, k);
-            world.setTileMeta(i, j, k, (metadata + 1) % subTypes[this.id]);
+            world.setTileMeta(i, j, k, (metadata + 1) % ExTile.subTypes[this.id]);
         }
     }
 }

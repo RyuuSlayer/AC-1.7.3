@@ -1,109 +1,62 @@
 package io.github.ryuu.adventurecraft.mixin.tile;
 
-import io.github.ryuu.adventurecraft.blocks.Blocks;
+import io.github.ryuu.adventurecraft.extensions.tile.ExLadderTile;
 import net.minecraft.level.Level;
 import net.minecraft.tile.LadderTile;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
-import net.minecraft.util.maths.Box;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LadderTile.class)
-public class MixinLadderTile extends Tile {
+public class MixinLadderTile extends Tile implements ExLadderTile {
 
     protected MixinLadderTile(int id, int texUVStart) {
         super(id, texUVStart, Material.DOODADS);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public static boolean isLadderID(int bID) {
-        return bID == Tile.LADDER.id || bID == Blocks.ladders1.id || bID == Blocks.ladders2.id || bID == Blocks.ladders3.id || bID == Blocks.ladders4.id;
+    private static int repeatGetTileMeta(int tileMeta) {
+        return tileMeta % 4 + 2;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public Box getCollisionShape(Level level, int x, int y, int z) {
-        int l = level.getTileMeta(x, y, z) % 4 + 2;
-        float f = 0.125f;
-        if (l == 2) {
-            this.setBoundingBox(0.0f, 0.0f, 1.0f - f, 1.0f, 1.0f, 1.0f);
-        }
-        if (l == 3) {
-            this.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, f);
-        }
-        if (l == 4) {
-            this.setBoundingBox(1.0f - f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
-        }
-        if (l == 5) {
-            this.setBoundingBox(0.0f, 0.0f, 0.0f, f, 1.0f, 1.0f);
-        }
-        return super.getCollisionShape(level, x, y, z);
+    @ModifyVariable(method = "getCollisionShape", at = @At(value = "STORE"))
+    private int fixGetCollisionShapeTileMeta(int tileMeta) {
+        return repeatGetTileMeta(tileMeta);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public Box getOutlineShape(Level level, int x, int y, int z) {
-        int l = level.getTileMeta(x, y, z) % 4 + 2;
-        float f = 0.125f;
-        if (l == 2) {
-            this.setBoundingBox(0.0f, 0.0f, 1.0f - f, 1.0f, 1.0f, 1.0f);
-        }
-        if (l == 3) {
-            this.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, f);
-        }
-        if (l == 4) {
-            this.setBoundingBox(1.0f - f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
-        }
-        if (l == 5) {
-            this.setBoundingBox(0.0f, 0.0f, 0.0f, f, 1.0f, 1.0f);
-        }
-        return super.getOutlineShape(level, x, y, z);
+    @ModifyVariable(method = "getOutlineShape", at = @At(value = "STORE"))
+    private int fixGetOutlineShapeTileMeta(int tileMeta) {
+        return repeatGetTileMeta(tileMeta);
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public boolean canPlaceAt(Level level, int x, int y, int z) {
-        if (level.canSuffocate(x - 1, y, z)) {
-            return true;
-        }
-        if (level.canSuffocate(x + 1, y, z)) {
-            return true;
-        }
-        if (level.canSuffocate(x, y, z - 1)) {
-            return true;
-        }
+    @Inject(method = "canPlaceAt", at = @At(
+            value = "RETURN",
+            ordinal = 3),
+            cancellable = true)
+    private void ladderCheckToCanPlaceAt(Level level, int x, int y, int z, CallbackInfoReturnable<Boolean> cir) {
         int bID = level.getTileId(x, y - 1, z);
-        if (LadderTile.isLadderID(bID)) {
-            return true;
+        if (ExLadderTile.isLadderID(bID)) {
+            cir.setReturnValue(true);
+            cir.cancel();
         }
-        return level.canSuffocate(x, y, z + 1);
     }
 
     /**
      * @author Ryuu, TechPizza, Phil
      */
     @Override
-    @Overwrite()
+    @Overwrite
     public void onPlaced(Level level, int x, int y, int z, int facing) {
         int i1 = level.getTileMeta(x, y, z);
-        if (i1 == 0 && LadderTile.isLadderID(level.getTileId(x, y - 1, z))) {
-            i1 = level.getTileMeta(x, y - 1, z) % 4 + 2;
+        if (i1 == 0 && ExLadderTile.isLadderID(level.getTileId(x, y - 1, z))) {
+            i1 = repeatGetTileMeta(level.getTileMeta(x, y - 1, z));
         }
-        if (i1 == 0 && LadderTile.isLadderID(level.getTileId(x, y + 1, z))) {
-            i1 = level.getTileMeta(x, y + 1, z) % 4 + 2;
+        if (i1 == 0 && ExLadderTile.isLadderID(level.getTileId(x, y + 1, z))) {
+            i1 = repeatGetTileMeta(level.getTileMeta(x, y + 1, z));
         }
         if ((i1 == 0 || facing == 2) && level.isFullOpaque(x, y, z + 1)) {
             i1 = 2;

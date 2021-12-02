@@ -23,7 +23,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ClientPlayer;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
-import net.minecraft.tile.FluidTile;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -182,7 +181,7 @@ public abstract class MixinClientPlayer extends Player implements ExClientPlayer
         } else if (s.equals("/redo")) {
             ((ExLevel) this.level).redo();
         } else if (s.equals("/fluidcollision")) {
-            FluidTile.isHittable = !FluidTile.isHittable;
+            DebugMode.isFluidHittable = !DebugMode.isFluidHittable;
         } else if (s.startsWith("/scriptstats")) {
             GuiScriptStats.showUI();
         } else if (s.startsWith("/scriptstatreset")) {

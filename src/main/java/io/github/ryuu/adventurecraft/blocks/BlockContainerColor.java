@@ -26,11 +26,13 @@ public abstract class BlockContainerColor extends TileWithEntity implements IBlo
         return color;
     }
 
-    protected int getColorMetaData(TileView iblockaccess, int i, int j, int k) {
+    @Override
+    public int getColorMetaData(TileView iblockaccess, int i, int j, int k) {
         return iblockaccess.getTileMeta(i, j, k);
     }
 
-    protected void setColorMetaData(Level world, int i, int j, int k, int color) {
+    @Override
+    public void setColorMetaData(Level world, int i, int j, int k, int color) {
         world.setTileMeta(i, j, k, color);
     }
 

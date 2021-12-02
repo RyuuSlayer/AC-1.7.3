@@ -6,13 +6,15 @@ import net.minecraft.tile.Tile;
 
 public interface ExTile {
 
-    int adventurecraft$alwaysUseClick(Level world, int i, int j, int k);
+    int[] subTypes = new int[256];
+
+    int alwaysUseClick(Level world, int i, int j, int k);
 
     int getTextureNum();
 
-    Tile adventurecraft$setTextureNum(int t);
+    Tile setTextureNum(int t);
 
-    boolean adventurecraft$shouldRender(TileView blockAccess, int i, int j, int k);
+    boolean shouldRender(TileView blockAccess, int i, int j, int k);
 
     Tile adventurecraft$setSubTypes(int i);
 

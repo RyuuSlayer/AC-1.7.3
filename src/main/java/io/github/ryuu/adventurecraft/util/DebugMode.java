@@ -4,6 +4,8 @@ public class DebugMode {
 
     public static boolean active = false;
 
+    public static boolean isFluidHittable = true;
+
     public static boolean levelEditing = false;
 
     public static boolean editMode = false;

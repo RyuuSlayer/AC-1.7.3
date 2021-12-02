@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.mixin.client.render;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityStore;
 import io.github.ryuu.adventurecraft.extensions.client.ExMinecraft;
+import io.github.ryuu.adventurecraft.extensions.client.options.ExGameOptions;
 import io.github.ryuu.adventurecraft.extensions.entity.ExLivingEntity;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.items.Items;
@@ -326,12 +327,8 @@ public class MixinGameRenderer {
         this.field_2331 = 1.0;
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public float getFarPlane() {
-        if (!this.minecraft.options.autoFarClip) {
+        if (!((ExGameOptions)this.minecraft.options).isAutoFarClip()) {
             return 512 >> this.minecraft.options.viewDistance;
         }
         long avgTime = ((ExMinecraft)this.minecraft).getAvgFrameTime();

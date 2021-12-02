@@ -4,7 +4,7 @@ import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 
-public class BlockPillar extends Tile implements IBlockColor {
+public class BlockPillar extends BlockColor {
 
     public BlockPillar(int i, int j) {
         super(i, j, Material.STONE);
