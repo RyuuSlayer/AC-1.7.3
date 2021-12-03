@@ -6,7 +6,7 @@ public class ScriptVecRot {
 
     public final double pitch;
 
-    ScriptVecRot(float setYaw, float setPitch) {
+    public ScriptVecRot(float setYaw, float setPitch) {
         this.yaw = setYaw;
         this.pitch = setPitch;
     }

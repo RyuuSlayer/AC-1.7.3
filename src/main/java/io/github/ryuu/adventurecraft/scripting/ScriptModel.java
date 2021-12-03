@@ -14,6 +14,7 @@ import java.nio.FloatBuffer;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+@SuppressWarnings("unused")
 public class ScriptModel {
 
     private static final FloatBuffer modelview = BufferUtils.createFloatBuffer(16);

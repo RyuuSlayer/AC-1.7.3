@@ -10,6 +10,7 @@ import org.mozilla.javascript.ScriptableObject;
 
 import java.util.HashMap;
 
+@SuppressWarnings("unused")
 public class ScriptKeyboard {
 
     private final GameOptions gameSettings;
@@ -24,12 +25,12 @@ public class ScriptKeyboard {
     Level level;
     Scriptable scope;
 
-    ScriptKeyboard(Level w, GameOptions g, Scriptable s) {
-        this.level = w;
+    public ScriptKeyboard(Level level, GameOptions options, Scriptable scope) {
+        this.level = level;
         this.keyBinds = new HashMap<>();
         this.allKeys = null;
-        this.scope = s;
-        this.gameSettings = g;
+        this.scope = scope;
+        this.gameSettings = options;
     }
 
     public void bindKey(int keyID, String script) {

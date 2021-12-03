@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.scripting;
 import io.github.ryuu.adventurecraft.extensions.client.sound.ExSoundHelper;
 import net.minecraft.client.sound.SoundHelper;
 
+@SuppressWarnings("unused")
 public class ScriptSound {
 
     SoundHelper soundMgr;
@@ -28,14 +29,14 @@ public class ScriptSound {
     }
 
     public void playMusic(String musicName) {
-        ((ExSoundHelper)this.soundMgr).playMusicFromStreaming(musicName.toLowerCase(), 0, 0);
+        ((ExSoundHelper) this.soundMgr).playMusicFromStreaming(musicName.toLowerCase(), 0, 0);
     }
 
     public void playMusic(String musicName, int fadeOut, int fadeIn) {
-        ((ExSoundHelper)this.soundMgr).playMusicFromStreaming(musicName.toLowerCase(), fadeOut, fadeIn);
+        ((ExSoundHelper) this.soundMgr).playMusicFromStreaming(musicName.toLowerCase(), fadeOut, fadeIn);
     }
 
     public void stopMusic() {
-        ((ExSoundHelper)this.soundMgr).stopMusic();
+        ((ExSoundHelper) this.soundMgr).stopMusic();
     }
 }

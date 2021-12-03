@@ -126,12 +126,13 @@ public abstract class MixinClientPlayer extends Player implements ExClientPlayer
         } else if (s.equals("/noclip")) {
             this.field_1642 = !this.field_1642;
             if (this.field_1642) {
-                ((ExEntity)this).setFlying(true);
+                ((ExEntity) this).setFlying(true);
             }
             this.minecraft.overlay.addChatMessage(String.format("NoClip: %b", this.field_1642));
         } else if (s.equals("/togglemelting")) {
-            this.level.getProperties().iceMelts = !this.level.getProperties().iceMelts;
-            this.minecraft.overlay.addChatMessage(String.format("Ice Melts: %b", this.level.getProperties().iceMelts));
+            ExLevelProperties exProps = (ExLevelProperties) this.level.getProperties();
+            exProps.setIceMelts(!exProps.getIceMelts());
+            this.minecraft.overlay.addChatMessage(String.format("Ice Melts: %b", exProps.getIceMelts()));
         } else if (s.startsWith("/cameraadd")) {
             if (exMinecraft.getActiveCutsceneCamera() != null) {
                 float t;
@@ -159,8 +160,9 @@ public abstract class MixinClientPlayer extends Player implements ExClientPlayer
                 this.minecraft.overlay.addChatMessage("Need to be editing a camera block");
             }
         } else if (s.equals("/mobsburn")) {
-            this.level.getProperties().mobsBurn = !this.level.getProperties().mobsBurn;
-            this.minecraft.overlay.addChatMessage(String.format("Mobs Burn in Daylight: %b", this.level.getProperties().mobsBurn));
+            ExLevelProperties exProps = (ExLevelProperties) this.level.getProperties();
+            exProps.setMobsBurn(!exProps.getMobsBurn());
+            this.minecraft.overlay.addChatMessage(String.format("Mobs Burn in Daylight: %b", exProps.getMobsBurn()));
         } else if (s.equals("/config")) {
             this.minecraft.openScreen(new GuiWorldConfig(this.level));
         } else if (s.equals("/test")) {

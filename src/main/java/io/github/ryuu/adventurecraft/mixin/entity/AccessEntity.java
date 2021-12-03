@@ -9,7 +9,19 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 public interface AccessEntity {
 
     @Accessor
+    boolean isImmuneToFire();
+
+    @Accessor
+    void setImmuneToFire(boolean immuneToFire);
+
+    @Accessor
     void setFallDistance(float fallDistance);
+
+    @Accessor
+    int getField_1648();
+
+    @Accessor
+    void setField_1648(int value);
 
     @Accessor
     static int getField_1590() {

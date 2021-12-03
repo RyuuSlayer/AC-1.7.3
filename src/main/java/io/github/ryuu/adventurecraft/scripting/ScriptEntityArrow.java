@@ -1,25 +1,28 @@
 package io.github.ryuu.adventurecraft.scripting;
 
+import io.github.ryuu.adventurecraft.mixin.entity.projectile.AccessArrow;
 import net.minecraft.entity.projectile.Arrow;
 
+@SuppressWarnings("unused")
 public class ScriptEntityArrow extends ScriptEntity {
 
     Arrow entityArrow;
 
-    ScriptEntityArrow(Arrow e) {
-        super(e);
-        this.entityArrow = e;
+    ScriptEntityArrow(Arrow entity) {
+        super(entity);
+        this.entityArrow = entity;
     }
 
     public int getInBlockID() {
-        return this.entityArrow.inTile;
+        return ((AccessArrow)this.entityArrow).getInTile();
     }
 
     public ScriptVec3 getInBlockCoords() {
-        if (this.entityArrow.inTile == 0) {
+        AccessArrow arrow = (AccessArrow) this.entityArrow;
+        if (arrow.getInTile() == 0) {
             return null;
         }
-        return new ScriptVec3(this.entityArrow.xTile, this.entityArrow.yTile, this.entityArrow.zTile);
+        return new ScriptVec3(arrow.getXTile(), arrow.getYTile(), arrow.getZTile());
     }
 
     public boolean getIsPlayersArrow() {

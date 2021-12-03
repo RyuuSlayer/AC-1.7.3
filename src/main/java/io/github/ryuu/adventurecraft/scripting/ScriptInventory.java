@@ -3,11 +3,12 @@ package io.github.ryuu.adventurecraft.scripting;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemInstance;
 
+@SuppressWarnings("unused")
 public class ScriptInventory {
 
     Inventory inv;
 
-    ScriptInventory(Inventory i) {
+    public ScriptInventory(Inventory i) {
         this.inv = i;
     }
 

@@ -5,6 +5,7 @@ import io.github.ryuu.adventurecraft.mixin.entity.player.AccessPlayerInventory;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemInstance;
 
+@SuppressWarnings("unused")
 public class ScriptInventoryPlayer extends ScriptInventory {
 
     PlayerInventory invPlayer;

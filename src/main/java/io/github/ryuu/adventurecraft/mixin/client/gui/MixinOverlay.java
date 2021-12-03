@@ -88,7 +88,7 @@ public abstract class MixinOverlay extends DrawableHelper implements ExOverlay {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite // TODO USE INJECTS AND NOT OVERWRITE
-    public void render (float f, boolean flag, int i, int j) {
+    public void render(float f, boolean flag, int i, int j) {
         float f1;
         ScreenScaler scaledresolution = new ScreenScaler(this.minecraft.options, this.minecraft.actualWidth, this.minecraft.actualHeight);
         int scaledWidth = scaledresolution.getScaledWidth();
@@ -362,6 +362,16 @@ public abstract class MixinOverlay extends DrawableHelper implements ExOverlay {
 
     @Override
     public ScriptUIContainer getScriptUI() {
-        return scriptUI;
+        return this.scriptUI;
+    }
+
+    @Override
+    public boolean isHudEnabled() {
+        return this.hudEnabled;
+    }
+
+    @Override
+    public void setHudEnabled(boolean hudEnabled) {
+        this.hudEnabled = hudEnabled;
     }
 }

@@ -3,13 +3,14 @@ package io.github.ryuu.adventurecraft.scripting;
 import io.github.ryuu.adventurecraft.extensions.entity.animal.ExWolf;
 import net.minecraft.entity.animal.Wolf;
 
+@SuppressWarnings("unused")
 public class ScriptEntityWolf extends ScriptEntityCreature {
 
     Wolf entityWolf;
 
-    public ScriptEntityWolf(Wolf e) {
-        super(e);
-        this.entityWolf = e;
+    public ScriptEntityWolf(Wolf entity) {
+        super(entity);
+        this.entityWolf = entity;
     }
 
     public int getAttackStrength() {

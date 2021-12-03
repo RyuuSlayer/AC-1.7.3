@@ -5,6 +5,7 @@ import io.github.ryuu.adventurecraft.entities.EntityNPC;
 import io.github.ryuu.adventurecraft.extensions.entity.ExEntity;
 import io.github.ryuu.adventurecraft.extensions.entity.ExEntityRegistry;
 import io.github.ryuu.adventurecraft.extensions.entity.ExLivingEntity;
+import io.github.ryuu.adventurecraft.mixin.entity.AccessEntity;
 import io.github.ryuu.adventurecraft.util.UtilBullet;
 import net.minecraft.entity.*;
 import net.minecraft.entity.animal.Wolf;
@@ -21,12 +22,13 @@ import net.minecraft.util.maths.Vec3f;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class ScriptEntity {
 
     Entity entity;
 
-    ScriptEntity(Entity e) {
-        this.entity = e;
+    ScriptEntity(Entity entity) {
+        this.entity = entity;
     }
 
     public static ScriptEntity getEntityClass(Entity e) {
@@ -97,7 +99,7 @@ public class ScriptEntity {
     }
 
     public void setRotation(float yaw, float pitch) {
-        this.entity.setRotation(yaw, pitch);
+        ((AccessEntity) this.entity).invokeSetRotation(yaw, pitch);
     }
 
     public ScriptVec3 getVelocity() {
@@ -183,11 +185,11 @@ public class ScriptEntity {
     }
 
     public boolean getImmuneToFire() {
-        return this.entity.immuneToFire;
+        return ((AccessEntity) this.entity).isImmuneToFire();
     }
 
     public void setImmuneToFire(boolean i) {
-        this.entity.immuneToFire = i;
+        ((AccessEntity) this.entity).setImmuneToFire(i);
     }
 
     public int getFireLevel() {
@@ -215,19 +217,19 @@ public class ScriptEntity {
     }
 
     public int getMaxAir() {
-        return this.entity.field_1648;
+        return ((AccessEntity) this.entity).getField_1648();
     }
 
     public void setMaxAir(int i) {
-        this.entity.field_1648 = i;
+        ((AccessEntity) this.entity).setField_1648(i);
     }
 
     public int getStunned() {
-        return ((ExLivingEntity)this.entity).getStunned();
+        return ((ExLivingEntity) this.entity).getStunned();
     }
 
     public void setStunned(int i) {
-        ((ExLivingEntity)this.entity).setStunned(i);
+        ((ExLivingEntity) this.entity).setStunned(i);
     }
 
     public boolean attackEntityFrom(ScriptEntity e, int i) {
@@ -242,11 +244,11 @@ public class ScriptEntity {
     }
 
     public boolean getCollidesWithClipBlocks() {
-        return ((ExLivingEntity)this.entity).getCollidesWithClipBlocks();
+        return ((ExLivingEntity) this.entity).getCollidesWithClipBlocks();
     }
 
     public void setCollidesWithClipBlocks(boolean b) {
-        ((ExLivingEntity)this.entity).setCollidesWithClipBlocks(b);
+        ((ExLivingEntity) this.entity).setCollidesWithClipBlocks(b);
     }
 
     public float getHeight() {
@@ -268,11 +270,11 @@ public class ScriptEntity {
     }
 
     public boolean getIsFlying() {
-        return ((ExEntity)this.entity).isFlying();
+        return ((ExEntity) this.entity).isFlying();
     }
 
     public void setIsFlying(boolean b) {
-        ((ExEntity)this.entity).setFlying(b);
+        ((ExEntity) this.entity).setFlying(b);
     }
 
     public boolean getOnGround() {

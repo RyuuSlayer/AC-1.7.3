@@ -1,21 +1,23 @@
 package io.github.ryuu.adventurecraft.scripting;
 
+import io.github.ryuu.adventurecraft.mixin.entity.monster.AccessMonster;
 import net.minecraft.entity.monster.Monster;
 
+@SuppressWarnings("unused")
 public class ScriptEntityMob extends ScriptEntityCreature {
 
     Monster entityMob;
 
-    ScriptEntityMob(Monster e) {
-        super(e);
-        this.entityMob = e;
+    public ScriptEntityMob(Monster entity) {
+        super(entity);
+        this.entityMob = entity;
     }
 
     public int getAttackStrength() {
-        return this.entityMob.attackDamage;
+        return ((AccessMonster)this.entityMob).getAttackDamage();
     }
 
     public void setAttackStrength(int i) {
-        this.entityMob.attackDamage = i;
+        ((AccessMonster)this.entityMob).setAttackDamage(i);
     }
 }

@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.scripting;
 
+import io.github.ryuu.adventurecraft.extensions.client.gui.ExOverlay;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.level.Level;
 import org.mozilla.javascript.*;
@@ -7,6 +8,7 @@ import org.mozilla.javascript.*;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+@SuppressWarnings("unused")
 public class Script {
 
     static boolean shutterSet = false;
@@ -60,7 +62,7 @@ public class Script {
         ScriptableObject.putProperty(this.globalScope, "sound", wrappedOut);
         wrappedOut = Context.javaToJS(this.ui, this.globalScope);
         ScriptableObject.putProperty(this.globalScope, "ui", wrappedOut);
-        wrappedOut = Context.javaToJS(AccessMinecraft.getInstance().overlay.scriptUI, this.globalScope);
+        wrappedOut = Context.javaToJS(((ExOverlay) AccessMinecraft.getInstance().overlay).getScriptUI(), this.globalScope);
         ScriptableObject.putProperty(this.globalScope, "screen", wrappedOut);
         wrappedOut = Context.javaToJS(this.script, this.globalScope);
         ScriptableObject.putProperty(this.globalScope, "script", wrappedOut);

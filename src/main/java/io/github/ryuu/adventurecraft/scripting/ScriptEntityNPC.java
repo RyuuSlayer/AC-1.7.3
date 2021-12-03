@@ -2,13 +2,14 @@ package io.github.ryuu.adventurecraft.scripting;
 
 import io.github.ryuu.adventurecraft.entities.EntityNPC;
 
+@SuppressWarnings("unused")
 public class ScriptEntityNPC extends ScriptEntityLivingScript {
 
     EntityNPC npc;
 
-    ScriptEntityNPC(EntityNPC e) {
-        super(e);
-        this.npc = e;
+    public ScriptEntityNPC(EntityNPC entity) {
+        super(entity);
+        this.npc = entity;
     }
 
     public String getName() {
@@ -39,8 +40,8 @@ public class ScriptEntityNPC extends ScriptEntityLivingScript {
         return this.npc.spawnY;
     }
 
-    public void setSpawnY(double x) {
-        this.npc.spawnY = x;
+    public void setSpawnY(double y) {
+        this.npc.spawnY = y;
     }
 
     public double getSpawnZ() {

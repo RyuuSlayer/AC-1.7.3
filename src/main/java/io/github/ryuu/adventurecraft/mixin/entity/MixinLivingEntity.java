@@ -658,6 +658,11 @@ public abstract class MixinLivingEntity extends MixinEntity implements AccessLiv
     }
 
     @Override
+    public void setFov(float fov) {
+        this.fov = fov;
+    }
+
+    @Override
     public float getExtraFov() {
         return this.extraFov;
     }
@@ -695,5 +700,130 @@ public abstract class MixinLivingEntity extends MixinEntity implements AccessLiv
     @Override
     public void setHeldItem(ItemInstance heldItem) {
         this.heldItem = heldItem;
+    }
+
+    @Override
+    public int getTimesCanJumpInAir() {
+        return timesCanJumpInAir;
+    }
+
+    @Override
+    public void setTimesCanJumpInAir(int timesCanJumpInAir) {
+        this.timesCanJumpInAir = timesCanJumpInAir;
+    }
+
+    @Override
+    public boolean getCanWallJump() {
+        return canWallJump;
+    }
+
+    @Override
+    public void setCanWallJump(boolean canWallJump) {
+        this.canWallJump = canWallJump;
+    }
+
+    @Override
+    public int getJumpsLeft() {
+        return jumpsLeft;
+    }
+
+    @Override
+    public void setJumpsLeft(int jumpsLeft) {
+        this.jumpsLeft = jumpsLeft;
+    }
+
+    @Override
+    public double getJumpVelocity() {
+        return jumpVelocity;
+    }
+
+    @Override
+    public void setJumpVelocity(double jumpVelocity) {
+        this.jumpVelocity = jumpVelocity;
+    }
+
+    @Override
+    public void setGravity(double gravity) {
+        this.gravity = gravity;
+    }
+
+    @Override
+    public double getJumpWallMultiplier() {
+        return jumpWallMultiplier;
+    }
+
+    @Override
+    public void setJumpWallMultiplier(double jumpWallMultiplier) {
+        this.jumpWallMultiplier = jumpWallMultiplier;
+    }
+
+    @Override
+    public double getJumpInAirMultiplier() {
+        return jumpInAirMultiplier;
+    }
+
+    @Override
+    public void setJumpInAirMultiplier(double jumpInAirMultiplier) {
+        this.jumpInAirMultiplier = jumpInAirMultiplier;
+    }
+
+    @Override
+    public float getAirControl() {
+        return airControl;
+    }
+
+    @Override
+    public void setAirControl(float airControl) {
+        this.airControl = airControl;
+    }
+
+    @Override
+    public boolean getCanLookRandomly() {
+        return canLookRandomly;
+    }
+
+    @Override
+    public void setCanLookRandomly(boolean canLookRandomly) {
+        this.canLookRandomly = canLookRandomly;
+    }
+
+    @Override
+    public float getRandomLookVelocity() {
+        return randomLookVelocity;
+    }
+
+    @Override
+    public void setRandomLookVelocity(float randomLookVelocity) {
+        this.randomLookVelocity = randomLookVelocity;
+    }
+
+    @Override
+    public int getRandomLookNext() {
+        return randomLookNext;
+    }
+
+    @Override
+    public void setRandomLookNext(int randomLookNext) {
+        this.randomLookNext = randomLookNext;
+    }
+
+    @Override
+    public int getRandomLookRate() {
+        return randomLookRate;
+    }
+
+    @Override
+    public void setRandomLookRate(int randomLookRate) {
+        this.randomLookRate = randomLookRate;
+    }
+
+    @Override
+    public int getRandomLookRateVariation() {
+        return randomLookRateVariation;
+    }
+
+    @Override
+    public void setRandomLookRateVariation(int randomLookRateVariation) {
+        this.randomLookRateVariation = randomLookRateVariation;
     }
 }

@@ -1,18 +1,20 @@
 package io.github.ryuu.adventurecraft.scripting;
 
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.gui.GuiUrlRequest;
 import net.minecraft.level.Level;
 
+@SuppressWarnings("unused")
 public class ScriptScript {
 
-    Level world;
+    Level level;
 
-    ScriptScript(Level w) {
-        this.world = w;
+    public ScriptScript(Level level) {
+        this.level = level;
     }
 
     public Object runScript(String scriptName) {
-        return this.world.scriptHandler.runScript(scriptName, null);
+        return ((ExLevel) this.level).getScriptHandler().runScript(scriptName, null);
     }
 
     public void openUrl(String url) {

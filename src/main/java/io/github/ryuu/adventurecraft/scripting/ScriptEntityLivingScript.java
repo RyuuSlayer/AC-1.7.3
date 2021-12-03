@@ -2,13 +2,14 @@ package io.github.ryuu.adventurecraft.scripting;
 
 import io.github.ryuu.adventurecraft.entities.EntityLivingScript;
 
+@SuppressWarnings("unused")
 public class ScriptEntityLivingScript extends ScriptEntityLiving {
 
     EntityLivingScript entityLivingScript;
 
-    ScriptEntityLivingScript(EntityLivingScript e) {
-        super(e);
-        this.entityLivingScript = e;
+    public ScriptEntityLivingScript(EntityLivingScript entity) {
+        super(entity);
+        this.entityLivingScript = entity;
     }
 
     public boolean isPathing() {

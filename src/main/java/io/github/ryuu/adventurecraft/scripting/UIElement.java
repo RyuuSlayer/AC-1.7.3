@@ -1,9 +1,11 @@
 package io.github.ryuu.adventurecraft.scripting;
 
+import io.github.ryuu.adventurecraft.extensions.client.gui.ExOverlay;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.render.TextRenderer;
 import net.minecraft.client.texture.TextureManager;
 
+@SuppressWarnings("unused")
 public class UIElement {
 
     public float curX = 0.0f;
@@ -18,7 +20,7 @@ public class UIElement {
 
     public void addToScreen() {
         if (AccessMinecraft.getInstance().overlay != null) {
-            AccessMinecraft.getInstance().overlay.scriptUI.add(this);
+            ((ExOverlay) AccessMinecraft.getInstance().overlay).getScriptUI().add(this);
         }
     }
 
@@ -53,15 +55,17 @@ public class UIElement {
     }
 
     public void setX(float x) {
-        this.curX = this.prevX = x;
+        this.curX = x;
+        this.prevX = x;
     }
 
     public float getY() {
         return this.curY;
     }
 
-    public void setY(float x) {
-        this.curY = this.prevY = x;
+    public void setY(float y) {
+        this.curY = y;
+        this.prevY = y;
     }
 
     protected float getXAtTime(float partialTickTime) {

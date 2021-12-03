@@ -1,17 +1,20 @@
 package io.github.ryuu.adventurecraft.scripting;
 
+import io.github.ryuu.adventurecraft.extensions.entity.ExLivingEntity;
+import io.github.ryuu.adventurecraft.mixin.entity.AccessLivingEntity;
 import io.github.ryuu.adventurecraft.util.UtilBullet;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.maths.Vec3f;
 
+@SuppressWarnings("unused")
 public class ScriptEntityLiving extends ScriptEntity {
 
     LivingEntity entityLiving;
 
-    ScriptEntityLiving(LivingEntity e) {
-        super(e);
-        this.entityLiving = e;
+    ScriptEntityLiving(LivingEntity entity) {
+        super(entity);
+        this.entityLiving = entity;
     }
 
     public void playLivingSound() {
@@ -36,7 +39,7 @@ public class ScriptEntityLiving extends ScriptEntity {
     }
 
     public void setLookTarget(ScriptEntity e) {
-        this.entityLiving.field_1061 = e.entity;
+        ((AccessLivingEntity) this.entityLiving).setField_1061(e.entity);
     }
 
     public ScriptVec3 getLookVec() {
@@ -53,11 +56,11 @@ public class ScriptEntityLiving extends ScriptEntity {
     }
 
     public int getMaxHealth() {
-        return this.entityLiving.maxHealth;
+        return ((ExLivingEntity) this.entityLiving).getMaxHealth();
     }
 
     public void setMaxHealth(int i) {
-        this.entityLiving.maxHealth = i;
+        ((ExLivingEntity) this.entityLiving).setMaxHealth(i);
     }
 
     public String getTexture() {
@@ -65,7 +68,7 @@ public class ScriptEntityLiving extends ScriptEntity {
     }
 
     public void setTexture(String s) {
-        this.entityLiving.texture = s;
+        ((AccessLivingEntity) this.entityLiving).setTexture(s);
     }
 
     public int getHurtTime() {
@@ -77,99 +80,99 @@ public class ScriptEntityLiving extends ScriptEntity {
     }
 
     public int getHurtTimeResistance() {
-        return this.entityLiving.field_1058;
+        return ((AccessLivingEntity) this.entityLiving).getField_1058();
     }
 
     public void setHurtTimeResistance(int i) {
-        this.entityLiving.field_1058 = i;
+        ((AccessLivingEntity) this.entityLiving).setField_1058(i);
     }
 
     public ScriptItem getHeldItem() {
-        return new ScriptItem(this.entityLiving.heldItem);
+        return new ScriptItem(((ExLivingEntity) this.entityLiving).getHeldItem());
     }
 
     public void setHeldItem(ScriptItem itemstack) {
-        this.entityLiving.heldItem = itemstack.item;
+        ((ExLivingEntity) this.entityLiving).setHeldItem(itemstack.item);
     }
 
     public float getMoveSpeed() {
-        return this.entityLiving.movementSpeed;
+        return ((AccessLivingEntity) this.entityLiving).getMovementSpeed();
     }
 
     public void setMoveSpeed(float moveSpeed) {
-        this.entityLiving.movementSpeed = moveSpeed;
+        ((AccessLivingEntity) this.entityLiving).setMovementSpeed(moveSpeed);
     }
 
     public int getTimesCanJumpInAir() {
-        return this.entityLiving.timesCanJumpInAir;
+        return ((ExLivingEntity) this.entityLiving).getTimesCanJumpInAir();
     }
 
     public void setTimesCanJumpInAir(int i) {
-        this.entityLiving.timesCanJumpInAir = i;
+        ((ExLivingEntity) this.entityLiving).setTimesCanJumpInAir(i);
     }
 
     public boolean getCanWallJump() {
-        return this.entityLiving.canWallJump;
+        return ((ExLivingEntity) this.entityLiving).getCanWallJump();
     }
 
     public void setCanWallJump(boolean b) {
-        this.entityLiving.canWallJump = b;
+        ((ExLivingEntity) this.entityLiving).setCanWallJump(b);
     }
 
     public int getJumpsInAirLeft() {
-        return this.entityLiving.jumpsLeft;
+        return ((ExLivingEntity) this.entityLiving).getJumpsLeft();
     }
 
     public void setJumpsInAirLeft(int i) {
-        this.entityLiving.jumpsLeft = i;
+        ((ExLivingEntity) this.entityLiving).setJumpsLeft(i);
     }
 
     public double getGravity() {
-        return this.entityLiving.gravity;
+        return ((ExLivingEntity) this.entityLiving).getGravity();
     }
 
     public void setGravity(double g) {
-        this.entityLiving.gravity = g;
+        ((ExLivingEntity) this.entityLiving).setGravity(g);
     }
 
     public double getJumpVelocity() {
-        return this.entityLiving.jumpVelocity;
+        return ((ExLivingEntity) this.entityLiving).getJumpVelocity();
     }
 
     public void setJumpVelocity(double v) {
-        this.entityLiving.jumpVelocity = v;
+        ((ExLivingEntity) this.entityLiving).setJumpVelocity(v);
     }
 
     public double getJumpWallMultiplier() {
-        return this.entityLiving.jumpWallMultiplier;
+        return ((ExLivingEntity) this.entityLiving).getJumpWallMultiplier();
     }
 
     public void setJumpWallMultiplier(double m) {
-        this.entityLiving.jumpWallMultiplier = m;
+        ((ExLivingEntity) this.entityLiving).setJumpWallMultiplier(m);
     }
 
     public double getJumpInAirMultiplier() {
-        return this.entityLiving.jumpInAirMultiplier;
+        return ((ExLivingEntity) this.entityLiving).getJumpInAirMultiplier();
     }
 
     public void setJumpInAirMultiplier(double m) {
-        this.entityLiving.jumpInAirMultiplier = m;
+        ((ExLivingEntity) this.entityLiving).setJumpInAirMultiplier(m);
     }
 
     public boolean getShouldJump() {
-        return this.entityLiving.jumping;
+        return ((AccessLivingEntity) this.entityLiving).isJumping();
     }
 
     public void setShouldJump(boolean j) {
-        this.entityLiving.jumping = j;
+        ((AccessLivingEntity) this.entityLiving).setJumping(j);
     }
 
     public float getAirControl() {
-        return this.entityLiving.airControl;
+        return ((ExLivingEntity) this.entityLiving).getAirControl();
     }
 
     public void setAirControl(float j) {
-        this.entityLiving.airControl = j;
+        ((ExLivingEntity) this.entityLiving).setAirControl(j);
     }
 
     public void fireBullet(float spread, int damage) {
@@ -177,50 +180,50 @@ public class ScriptEntityLiving extends ScriptEntity {
     }
 
     public float getFov() {
-        return this.entityLiving.fov;
+        return ((ExLivingEntity) this.entityLiving).getFov();
     }
 
     public void setFov(float f) {
-        this.entityLiving.fov = f;
+        ((ExLivingEntity) this.entityLiving).setFov(f);
     }
 
     public boolean getCanLookRandomly() {
-        return this.entityLiving.canLookRandomly;
+        return ((ExLivingEntity) this.entityLiving).getCanLookRandomly();
     }
 
     public void setCanLookRandomly(boolean b) {
-        this.entityLiving.canLookRandomly = b;
+        ((ExLivingEntity) this.entityLiving).setCanLookRandomly(b);
     }
 
     public float getRandomLookVelocity() {
-        return this.entityLiving.randomLookVelocity;
+        return ((ExLivingEntity) this.entityLiving).getRandomLookVelocity();
     }
 
     public void setRandomLookVelocity(float f) {
-        this.entityLiving.randomLookVelocity = f;
+        ((ExLivingEntity) this.entityLiving).setRandomLookVelocity(f);
     }
 
     public int getRandomLookNext() {
-        return this.entityLiving.randomLookNext;
+        return ((ExLivingEntity) this.entityLiving).getRandomLookNext();
     }
 
     public void setRandomLookNext(int i) {
-        this.entityLiving.randomLookNext = i;
+        ((ExLivingEntity) this.entityLiving).setRandomLookNext(i);
     }
 
     public int getRandomLookRate() {
-        return this.entityLiving.randomLookRate;
+        return ((ExLivingEntity) this.entityLiving).getRandomLookRate();
     }
 
     public void setRandomLookRate(int i) {
-        this.entityLiving.randomLookRate = i;
+        ((ExLivingEntity) this.entityLiving).setRandomLookRate(i);
     }
 
     public int getRandomLookRateVariation() {
-        return this.entityLiving.randomLookRateVariation;
+        return ((ExLivingEntity) this.entityLiving).getRandomLookRateVariation();
     }
 
     public void setRandomLookRateVariation(int i) {
-        this.entityLiving.randomLookRateVariation = i;
+        ((ExLivingEntity) this.entityLiving).setRandomLookRateVariation(i);
     }
 }

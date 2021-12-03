@@ -12,13 +12,14 @@ import io.github.ryuu.adventurecraft.util.TextureAnimated;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.level.Level;
 
+@SuppressWarnings("unused")
 public class ScriptEffect {
 
     Level level;
 
     WorldRenderer renderGlobal;
 
-    ScriptEffect(Level level, WorldRenderer worldRenderer) {
+    public ScriptEffect(Level level, WorldRenderer worldRenderer) {
         this.level = level;
         this.renderGlobal = worldRenderer;
     }

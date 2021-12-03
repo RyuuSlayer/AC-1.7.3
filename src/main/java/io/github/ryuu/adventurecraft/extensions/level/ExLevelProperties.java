@@ -87,6 +87,14 @@ public interface ExLevelProperties {
 
     void setTempOffset(double tempOffset);
 
+    boolean getIceMelts();
+
+    void setIceMelts(boolean iceMelts);
+
+    boolean getMobsBurn();
+
+    void setMobsBurn(boolean mobsBurn);
+
     boolean getOverrideFogColor();
 
     void setOverrideFogColor(boolean overrideFogColor);

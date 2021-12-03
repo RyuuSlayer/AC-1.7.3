@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.client.render;
 
+import io.github.ryuu.adventurecraft.extensions.client.render.ExTextRenderer;
 import net.minecraft.client.GLAllocator;
 import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.render.Tessellator;
@@ -17,7 +18,7 @@ import java.io.IOException;
 import java.nio.IntBuffer;
 
 @Mixin(TextRenderer.class)
-public abstract class MixinTextRenderer {
+public abstract class MixinTextRenderer implements ExTextRenderer {
 
     @Shadow
     private int[] widths;
@@ -110,11 +111,13 @@ public abstract class MixinTextRenderer {
         }
     }
 
+    @Override
     public void drawStringWithShadow(String s, float i, float j, int k) {
         this.renderString(s, i + 1.0f, j + 1.0f, k, true);
         this.drawString(s, i, j, k);
     }
 
+    @Override
     public void drawString(String s, float i, float j, int k) {
         this.renderString(s, i, j, k, false);
     }

@@ -467,6 +467,26 @@ public abstract class MixinLevelProperties implements ExLevelProperties {
     }
 
     @Override
+    public boolean getIceMelts() {
+        return this.iceMelts;
+    }
+
+    @Override
+    public void setIceMelts(boolean iceMelts) {
+        this.iceMelts = iceMelts;
+    }
+
+    @Override
+    public boolean getMobsBurn() {
+        return this.mobsBurn;
+    }
+
+    @Override
+    public void setMobsBurn(boolean mobsBurn) {
+        this.mobsBurn = mobsBurn;
+    }
+
+    @Override
     public boolean getOverrideFogColor() {
         return this.overrideFogColor;
     }

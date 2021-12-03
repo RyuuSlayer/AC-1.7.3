@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.scripting;
 
+import io.github.ryuu.adventurecraft.extensions.client.gui.ExOverlay;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.render.TextRenderer;
 import net.minecraft.client.texture.TextureManager;
@@ -8,13 +9,14 @@ import org.lwjgl.opengl.GL11;
 import java.util.LinkedList;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class ScriptUIContainer extends UIElement {
 
     private final List<UIElement> uiElements;
     public String text = "";
 
     public ScriptUIContainer(float xPos, float yPos) {
-        this(xPos, yPos, AccessMinecraft.getInstance().overlay.scriptUI);
+        this(xPos, yPos, ((ExOverlay) AccessMinecraft.getInstance().overlay).getScriptUI());
     }
 
     public ScriptUIContainer(float xPos, float yPos, ScriptUIContainer p) {

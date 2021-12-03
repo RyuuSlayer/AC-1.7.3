@@ -313,10 +313,8 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
                     } catch (Exception e) {
                     }
                 }
-                return;
             } catch (IOException e) {
                 e.printStackTrace();
-                return;
             }
         } catch (FileNotFoundException e1) {
             e1.printStackTrace();

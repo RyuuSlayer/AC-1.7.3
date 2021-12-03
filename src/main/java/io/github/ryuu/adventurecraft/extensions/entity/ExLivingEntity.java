@@ -6,7 +6,13 @@ public interface ExLivingEntity extends ExEntity {
 
     void applyDamage(int damage);
 
+    boolean protectedByShield();
+
+    boolean protectedByShield(double x, double y, double z);
+
     float getFov();
+
+    void setFov(float fov);
 
     float getExtraFov();
 
@@ -14,17 +20,63 @@ public interface ExLivingEntity extends ExEntity {
 
     void setStunned(int stunned);
 
-    double getGravity();
-
     int getMaxHealth();
 
     void setMaxHealth(int i);
 
-    boolean protectedByShield();
-
-    boolean protectedByShield(double x, double y, double z);
-
     ItemInstance getHeldItem();
 
     void setHeldItem(ItemInstance itemInstance);
+
+    int getTimesCanJumpInAir();
+
+    void setTimesCanJumpInAir(int timesCanJumpInAir);
+
+    boolean getCanWallJump();
+
+    void setCanWallJump(boolean canWallJump);
+
+    int getJumpsLeft();
+
+    void setJumpsLeft(int jumpsLeft);
+
+    double getJumpVelocity();
+
+    void setJumpVelocity(double jumpVelocity);
+
+    double getGravity();
+
+    void setGravity(double gravity);
+
+    double getJumpWallMultiplier();
+
+    void setJumpWallMultiplier(double jumpWallMultiplier);
+
+    double getJumpInAirMultiplier();
+
+    void setJumpInAirMultiplier(double jumpInAirMultiplier);
+
+    float getAirControl();
+
+    void setAirControl(float airControl);
+
+    boolean getCanLookRandomly();
+
+    void setCanLookRandomly(boolean canLookRandomly);
+
+    float getRandomLookVelocity();
+
+    void setRandomLookVelocity(float randomLookVelocity);
+
+    int getRandomLookNext();
+
+    void setRandomLookNext(int randomLookNext);
+
+    int getRandomLookRate();
+
+    void setRandomLookRate(int randomLookRate);
+
+    int getRandomLookRateVariation();
+
+    void setRandomLookRateVariation(int randomLookRateVariation);
 }

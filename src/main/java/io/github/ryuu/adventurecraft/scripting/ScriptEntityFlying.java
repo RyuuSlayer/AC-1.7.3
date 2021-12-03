@@ -3,13 +3,14 @@ package io.github.ryuu.adventurecraft.scripting;
 import io.github.ryuu.adventurecraft.extensions.entity.ExFlyingEntity;
 import net.minecraft.entity.FlyingEntity;
 
+@SuppressWarnings("unused")
 public class ScriptEntityFlying extends ScriptEntityLiving {
 
     FlyingEntity entityFlying;
 
-    ScriptEntityFlying(FlyingEntity e) {
-        super(e);
-        this.entityFlying = e;
+    public ScriptEntityFlying(FlyingEntity entity) {
+        super(entity);
+        this.entityFlying = entity;
     }
 
     public int getAttackStrength() {

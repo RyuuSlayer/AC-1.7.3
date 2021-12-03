@@ -2,12 +2,13 @@ package io.github.ryuu.adventurecraft.scripting;
 
 import net.minecraft.item.ItemInstance;
 
+@SuppressWarnings("unused")
 public class ScriptItem {
 
     public ItemInstance item;
 
-    public ScriptItem(ItemInstance i) {
-        this.item = i;
+    public ScriptItem(ItemInstance item) {
+        this.item = item;
     }
 
     public ScriptItem(int itemID) {

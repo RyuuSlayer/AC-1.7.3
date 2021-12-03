@@ -3,13 +3,14 @@ package io.github.ryuu.adventurecraft.scripting;
 import io.github.ryuu.adventurecraft.extensions.entity.ExWalkingEntity;
 import net.minecraft.entity.WalkingEntity;
 
+@SuppressWarnings("unused")
 public class ScriptEntityCreature extends ScriptEntityLiving {
 
     WalkingEntity entityCreature;
 
-    public ScriptEntityCreature(WalkingEntity e) {
-        super(e);
-        this.entityCreature = e;
+    public ScriptEntityCreature(WalkingEntity entity) {
+        super(entity);
+        this.entityCreature = entity;
     }
 
     public ScriptEntity getTarget() {

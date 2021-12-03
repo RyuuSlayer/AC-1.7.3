@@ -1,9 +1,12 @@
 package io.github.ryuu.adventurecraft.scripting;
 
+import io.github.ryuu.adventurecraft.extensions.client.gui.ExOverlay;
+import io.github.ryuu.adventurecraft.extensions.client.render.ExTextRenderer;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.render.TextRenderer;
 import net.minecraft.client.texture.TextureManager;
 
+@SuppressWarnings("unused")
 public class ScriptUILabel extends UIElement {
 
     public boolean shadow = true;
@@ -16,7 +19,7 @@ public class ScriptUILabel extends UIElement {
     private String[] textLines;
 
     public ScriptUILabel(String label, float xPos, float yPos) {
-        this(label, xPos, yPos, AccessMinecraft.getInstance().overlay.scriptUI);
+        this(label, xPos, yPos, ((ExOverlay) AccessMinecraft.getInstance().overlay).getScriptUI());
     }
 
     public ScriptUILabel(String label, float xPos, float yPos, ScriptUIContainer parent) {
@@ -46,9 +49,9 @@ public class ScriptUILabel extends UIElement {
                 newXPos -= (float) (fontRenderer.getTextWidth(line) / 2);
             }
             if (this.shadow) {
-                fontRenderer.drawStringWithShadow(line, newXPos, yPos, color);
+                ((ExTextRenderer) fontRenderer).drawStringWithShadow(line, newXPos, yPos, color);
             } else {
-                fontRenderer.drawString(line, newXPos, yPos, color);
+                ((ExTextRenderer) fontRenderer).drawString(line, newXPos, yPos, color);
             }
             yPos += 9.0f;
         }

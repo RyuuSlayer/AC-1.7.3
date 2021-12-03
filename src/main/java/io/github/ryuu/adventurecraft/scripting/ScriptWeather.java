@@ -1,36 +1,38 @@
 package io.github.ryuu.adventurecraft.scripting;
 
+import io.github.ryuu.adventurecraft.extensions.level.ExLevelProperties;
 import net.minecraft.level.Level;
 
+@SuppressWarnings("unused")
 public class ScriptWeather {
 
-    Level world;
+    public Level level;
 
-    ScriptWeather(Level w) {
-        this.world = w;
+    public ScriptWeather(Level level) {
+        this.level = level;
     }
 
     public boolean getPrecipitating() {
-        return this.world.properties.isRaining();
+        return this.level.getProperties().isRaining();
     }
 
     public void setPrecipitating(boolean precipate) {
-        this.world.properties.setRaining(precipate);
+        this.level.getProperties().setRaining(precipate);
     }
 
     public double getTemperatureOffset() {
-        return this.world.properties.tempOffset;
+        return ((ExLevelProperties) this.level.getProperties()).getTempOffset();
     }
 
     public void setTemperatureOffset(double tempOffset) {
-        this.world.properties.tempOffset = tempOffset;
+        ((ExLevelProperties) this.level.getProperties()).setTempOffset(tempOffset);
     }
 
     public boolean getThundering() {
-        return this.world.properties.isThundering();
+        return this.level.getProperties().isThundering();
     }
 
     public void setThundering(boolean precipate) {
-        this.world.properties.setThundering(precipate);
+        this.level.getProperties().setThundering(precipate);
     }
 }

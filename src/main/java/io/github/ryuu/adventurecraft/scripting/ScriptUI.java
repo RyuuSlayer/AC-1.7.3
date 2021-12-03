@@ -1,14 +1,16 @@
 package io.github.ryuu.adventurecraft.scripting;
 
+import io.github.ryuu.adventurecraft.extensions.client.gui.ExOverlay;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ScreenScaler;
 
+@SuppressWarnings("unused")
 public class ScriptUI {
 
     Minecraft mc = AccessMinecraft.getInstance();
 
-    ScriptUI() {
+    public ScriptUI() {
     }
 
     public int getWidth() {
@@ -50,10 +52,10 @@ public class ScriptUI {
     }
 
     public boolean getHudEnabled() {
-        return this.mc.overlay.hudEnabled;
+        return ((ExOverlay) this.mc.overlay).isHudEnabled();
     }
 
     public void setHudEnabled(boolean b) {
-        this.mc.overlay.hudEnabled = b;
+        ((ExOverlay) this.mc.overlay).setHudEnabled(b);
     }
 }

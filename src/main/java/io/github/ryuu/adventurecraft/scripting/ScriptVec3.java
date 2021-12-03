@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.scripting;
 
+@SuppressWarnings("unused")
 public class ScriptVec3 {
 
     public double x;
