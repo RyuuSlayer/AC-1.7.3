@@ -7,7 +7,6 @@ import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.screen.SelectWorldScreen;
 import net.minecraft.client.gui.widgets.Button;
 import net.minecraft.client.resource.language.TranslationStorage;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
