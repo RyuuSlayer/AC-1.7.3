@@ -1,13 +1,19 @@
 package io.github.ryuu.adventurecraft.blocks;
 
+import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
+import net.minecraft.tile.TileSounds;
 import net.minecraft.util.maths.Box;
 
 public class BlockHalfStep extends BlockSolid {
 
-    protected BlockHalfStep(int i, int j) {
+    protected BlockHalfStep(int i, int j, TileSounds sounds, int textureNum) {
         super(i, j);
+        this.hardness(5.0f);
+        this.sounds(sounds);
+        ((ExTile) this).setSubTypes(16);
+        ((ExTile) this).setTextureNum(textureNum);
     }
 
     @Override

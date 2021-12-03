@@ -7,7 +7,7 @@ public class TileEntityUrl extends TileEntity {
 
     public String url = "";
 
-    TileEntityUrl() {
+    public TileEntityUrl() {
     }
 
     @Override

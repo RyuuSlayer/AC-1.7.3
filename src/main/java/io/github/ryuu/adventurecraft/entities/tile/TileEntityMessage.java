@@ -9,7 +9,7 @@ public class TileEntityMessage extends TileEntity {
 
     public String sound = "";
 
-    TileEntityMessage() {
+    public TileEntityMessage() {
     }
 
     @Override

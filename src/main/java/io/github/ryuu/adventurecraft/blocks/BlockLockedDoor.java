@@ -1,10 +1,12 @@
 package io.github.ryuu.adventurecraft.blocks;
 
+import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
 import net.minecraft.tile.Tile;
+import net.minecraft.tile.TileSounds;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.maths.Box;
@@ -14,10 +16,13 @@ public class BlockLockedDoor extends Tile {
 
     int doorKeyToUse;
 
-    protected BlockLockedDoor(int i, int j, int keyToUse) {
+    protected BlockLockedDoor(int i, int j, int keyToUse, TileSounds sounds) {
         super(i, Material.METAL);
         this.tex = j;
         this.doorKeyToUse = keyToUse;
+        this.hardness(5.0f);
+        this.sounds(sounds);
+        ((ExTile) this).setTextureNum(3);
     }
 
     @Override

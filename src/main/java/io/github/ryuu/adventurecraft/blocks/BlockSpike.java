@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.blocks;
 
+import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import net.minecraft.entity.Entity;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
@@ -10,6 +11,9 @@ public class BlockSpike extends Tile {
 
     protected BlockSpike(int i) {
         super(i, 246, Material.METAL);
+        this.hardness(5.0f);
+        this.sounds(Tile.METAL_SOUNDS);
+        ((ExTile) this).setTextureNum(3);
     }
 
     @Override

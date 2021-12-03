@@ -2,15 +2,21 @@ package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import net.minecraft.level.Level;
+import net.minecraft.tile.TileSounds;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
 public class BlockPlant extends BlockColor {
 
-    protected BlockPlant(int i, int j) {
+    protected BlockPlant(int i, int j, TileSounds sounds, float luminance, int subTypes, int textureNum) {
         super(i, j, Material.PLANT);
         float f = 0.2f;
         this.setBoundingBox(0.5f - f, 0.0f, 0.5f - f, 0.5f + f, f * 3.0f, 0.5f + f);
+        this.hardness(5.0f);
+        this.sounds(sounds);
+        this.luminance(luminance);
+        ((ExTile) this).setSubTypes(subTypes);
+        ((ExTile) this).setTextureNum(textureNum);
     }
 
     @Override

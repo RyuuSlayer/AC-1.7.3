@@ -17,6 +17,9 @@ public class BlockSpawn extends Tile {
 
     protected BlockSpawn(int i, int j) {
         super(i, j, Material.AIR);
+        this.hardness(5.0f);
+        this.sounds(Tile.METAL_SOUNDS);
+        ((ExTile)this).setTextureNum(2);
     }
 
     @Override

@@ -1,36 +1,25 @@
 package io.github.ryuu.adventurecraft.mixin.item.armour;
 
-import net.minecraft.item.ItemType;
 import net.minecraft.item.armour.ArmourItem;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ArmourItem.class)
-public class MixinArmourItem extends ItemType {
+public abstract class MixinArmourItem {
 
-    @Shadow()
-    private static final int[] field_2086 = new int[]{3, 8, 6, 3};
+    @Final
+    @Shadow
+    private static int[] field_2086;
 
-    private static final int[] BASE_DURABILITY = new int[]{11, 16, 15, 13};
+    public float bl;
 
-    public final int field_2082;
-
-    public final int armourSlot;
-
-    public final float bl;
-
-    public final int field_2084;
-
-    public final int field_2085;
-
-    public MixinArmourItem(int id, int j, int k, int slot) {
-        super(id);
-        this.field_2082 = j;
-        this.armourSlot = slot;
-        this.field_2085 = k;
-        float reduction = ((float) j + 1.0f) / 4.0f;
-        this.bl = reduction * (float) field_2086[slot];
-        this.setDurability(BASE_DURABILITY[slot] * 3 << j);
-        this.maxStackSize = 1;
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void init(int id, int j, int k, int slot, CallbackInfo ci) {
+        float reduction = (j + 1.0f) / 4.0f;
+        this.bl = reduction * field_2086[slot];
     }
 }

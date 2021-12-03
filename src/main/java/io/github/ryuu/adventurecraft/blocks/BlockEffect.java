@@ -7,6 +7,7 @@ import io.github.ryuu.adventurecraft.extensions.client.render.*;
 import io.github.ryuu.adventurecraft.extensions.client.texture.ExTextureManager;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevelProperties;
+import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import io.github.ryuu.adventurecraft.gui.GuiEffect;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
@@ -15,6 +16,7 @@ import io.github.ryuu.adventurecraft.util.TerrainImage;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
+import net.minecraft.tile.Tile;
 import net.minecraft.tile.TileWithEntity;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
@@ -28,6 +30,9 @@ public class BlockEffect extends TileWithEntity {
 
     protected BlockEffect(int i, int j) {
         super(i, j, Material.AIR);
+        this.hardness(5.0f);
+        this.sounds(Tile.METAL_SOUNDS);
+        ((ExTile) this).setTextureNum(3);
     }
 
     public static void revertTextures(Level world) {
@@ -92,7 +97,7 @@ public class BlockEffect extends TileWithEntity {
             ExFlowingWaterTextureBinder2.loadImage(replacementTexture);
             return true;
         }
-        ((ExTextureManager)AccessMinecraft.getInstance().textureManager).replaceTexture(textureToReplace, replacementTexture);
+        ((ExTextureManager) AccessMinecraft.getInstance().textureManager).replaceTexture(textureToReplace, replacementTexture);
         return false;
     }
 

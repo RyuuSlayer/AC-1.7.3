@@ -5,6 +5,7 @@ import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityTree;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.extensions.tile.ExGrassTile;
+import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.GameRenderer;
@@ -219,7 +220,7 @@ public abstract class MixinTileRenderer {
         }
         if (l == 31) {
             boolean rendered = this.method_76(block, i, j, k);
-            if (((ExLevel)AccessMinecraft.getInstance().level).getTriggerManager().isActivated(i, j, k)) {
+            if (((ExLevel) AccessMinecraft.getInstance().level).getTriggerManager().isActivated(i, j, k)) {
                 Tessellator.INSTANCE.colour(1.0f, 1.0f, 1.0f);
                 this.field_83 = 99;
             } else {
@@ -408,7 +409,7 @@ public abstract class MixinTileRenderer {
         int l = this.field_82.getTileMeta(i, j, k);
         Tessellator tessellator = Tessellator.INSTANCE;
         float f = block.method_1604(this.field_82, i, j, k);
-        if (block.getBlockLightValue(this.field_82, i, j, k) > 0) {
+        if (((ExTile) block).getBlockLightValue(this.field_82, i, j, k) > 0) {
             f = 1.0f;
         }
         tessellator.colour(f, f, f);
@@ -440,7 +441,7 @@ public abstract class MixinTileRenderer {
         this.method_76(block, i, j, k);
         Tessellator tessellator = Tessellator.INSTANCE;
         float f = block.method_1604(this.field_82, i, j, k);
-        if (block.getBlockLightValue(this.field_82, i, j, k) > 0) {
+        if (((ExTile) block).getBlockLightValue(this.field_82, i, j, k) > 0) {
             f = (f + 1.0f) * 0.5f;
         }
         tessellator.colour(f, f, f);
@@ -835,7 +836,7 @@ public abstract class MixinTileRenderer {
             this.field_83 = -1;
         }
         float f3 = block.method_1604(this.field_82, i, j, k);
-        if (block.getBlockLightValue(this.field_82, i, j, k) > 0) {
+        if (((ExTile) block).getBlockLightValue(this.field_82, i, j, k) > 0) {
             f3 = 1.0f;
         }
         tessellator.colour(f3, f3, f3);
@@ -3601,7 +3602,7 @@ public abstract class MixinTileRenderer {
         if (blockdoor.minY > 0.0) {
             f5 = f4;
         }
-        if (block.getBlockLightValue(this.field_82, i, j, k) > 0) {
+        if (((ExTile) block).getBlockLightValue(this.field_82, i, j, k) > 0) {
             f5 = 1.0f;
         }
         tessellator.colour(f * f5, f * f5, f * f5);
@@ -3611,7 +3612,7 @@ public abstract class MixinTileRenderer {
         if (blockdoor.maxY < 1.0) {
             f5 = f4;
         }
-        if (block.getBlockLightValue(this.field_82, i, j, k) > 0) {
+        if (((ExTile) block).getBlockLightValue(this.field_82, i, j, k) > 0) {
             f5 = 1.0f;
         }
         tessellator.colour(f1 * f5, f1 * f5, f1 * f5);
@@ -3621,7 +3622,7 @@ public abstract class MixinTileRenderer {
         if (blockdoor.minZ > 0.0) {
             f5 = f4;
         }
-        if (block.getBlockLightValue(this.field_82, i, j, k) > 0) {
+        if (((ExTile) block).getBlockLightValue(this.field_82, i, j, k) > 0) {
             f5 = 1.0f;
         }
         tessellator.colour(f2 * f5, f2 * f5, f2 * f5);
@@ -3637,7 +3638,7 @@ public abstract class MixinTileRenderer {
         if (blockdoor.maxZ < 1.0) {
             f5 = f4;
         }
-        if (block.getBlockLightValue(this.field_82, i, j, k) > 0) {
+        if (((ExTile) block).getBlockLightValue(this.field_82, i, j, k) > 0) {
             f5 = 1.0f;
         }
         tessellator.colour(f2 * f5, f2 * f5, f2 * f5);
@@ -3653,7 +3654,7 @@ public abstract class MixinTileRenderer {
         if (blockdoor.minX > 0.0) {
             f5 = f4;
         }
-        if (block.getBlockLightValue(this.field_82, i, j, k) > 0) {
+        if (((ExTile) block).getBlockLightValue(this.field_82, i, j, k) > 0) {
             f5 = 1.0f;
         }
         tessellator.colour(f3 * f5, f3 * f5, f3 * f5);
@@ -3669,7 +3670,7 @@ public abstract class MixinTileRenderer {
         if (blockdoor.maxX < 1.0) {
             f5 = f4;
         }
-        if (block.getBlockLightValue(this.field_82, i, j, k) > 0) {
+        if (((ExTile) block).getBlockLightValue(this.field_82, i, j, k) > 0) {
             f5 = 1.0f;
         }
         tessellator.colour(f3 * f5, f3 * f5, f3 * f5);
@@ -4405,7 +4406,7 @@ public abstract class MixinTileRenderer {
         float g = (float) (l >> 8 & 0xFF) / 255.0f;
         float b = (float) (l & 0xFF) / 255.0f;
         int metadata = this.field_82.getTileMeta(i, j, k);
-        float multiplier = ((ExGrassTile)Tile.GRASS).grassMultiplier(metadata);
+        float multiplier = ((ExGrassTile) Tile.GRASS).grassMultiplier(metadata);
         if (multiplier < 0.0f) {
             return false;
         }

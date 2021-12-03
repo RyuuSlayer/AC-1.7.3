@@ -1,14 +1,21 @@
 package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.extensions.tile.ExLadderTile;
+import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
 import net.minecraft.tile.LadderTile;
+import net.minecraft.tile.Tile;
 
 public class BlockLadderSubtypes extends LadderTile implements IBlockColor {
 
     protected BlockLadderSubtypes(int id, int texUVStart) {
         super(id, texUVStart);
+        this.hardness(5.0f);
+        this.sounds(Tile.WOOD_SOUNDS);
+        this.name("ladder");
+        ((ExTile) this).setSubTypes(16);
+        ((ExTile) this).setTextureNum(3);
     }
 
     @Override

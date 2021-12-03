@@ -1,6 +1,8 @@
 package io.github.ryuu.adventurecraft.blocks;
 
+import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import net.minecraft.level.Level;
+import net.minecraft.tile.Tile;
 import net.minecraft.util.maths.Box;
 
 public class BlockRope extends BlockPlant {
@@ -9,6 +11,10 @@ public class BlockRope extends BlockPlant {
         super(i, j);
         float f = 0.2f;
         this.setBoundingBox(0.5f - f, 0.0f, 0.5f - f, 0.5f + f, 1.0f, 0.5f + f);
+        this.hardness(5.0f);
+        this.sounds(Tile.METAL_SOUNDS);
+        ((ExTile) this).setSubTypes(15);
+        ((ExTile) this).setTextureNum(3);
     }
 
     @Override

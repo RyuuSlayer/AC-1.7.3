@@ -23,6 +23,8 @@ public class BlockFan extends Tile {
     public BlockFan(int i, int j, boolean f) {
         super(i, j, Material.STONE);
         this.fanOn = f;
+        this.hardness(5.0f);
+        this.sounds(Tile.METAL_SOUNDS);
     }
 
     @Override

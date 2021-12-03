@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
+import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import io.github.ryuu.adventurecraft.gui.GuiLightBulb;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.util.DebugMode;
@@ -15,6 +16,9 @@ public class BlockLightBulb extends Tile {
 
     protected BlockLightBulb(int i, int j) {
         super(i, j, Material.AIR);
+        this.hardness(5.0f);
+        this.sounds(Tile.METAL_SOUNDS);
+        ((ExTile) this).setTextureNum(2);
     }
 
     @Override
@@ -53,7 +57,7 @@ public class BlockLightBulb extends Tile {
 
     @Override
     public int getBlockLightValue(TileView iblockaccess, int i, int j, int k) {
-        if (!((ExLevel)AccessMinecraft.getInstance().level).getTriggerManager().isActivated(i, j, k)) {
+        if (!((ExLevel) AccessMinecraft.getInstance().level).getTriggerManager().isActivated(i, j, k)) {
             return iblockaccess.getTileMeta(i, j, k);
         }
         return 0;

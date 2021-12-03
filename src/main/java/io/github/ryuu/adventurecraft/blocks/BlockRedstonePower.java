@@ -15,6 +15,8 @@ public class BlockRedstonePower extends Tile {
         super(i, j, Material.STONE);
         this.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 0.25f, 1.0f);
         this.luminance(0.07f);
+        this.hardness(5.0f);
+        this.sounds(Tile.METAL_SOUNDS);
     }
 
     @Override

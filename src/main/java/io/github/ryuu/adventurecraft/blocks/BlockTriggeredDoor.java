@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
+import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.level.Level;
@@ -14,6 +15,9 @@ public class BlockTriggeredDoor extends Tile {
     protected BlockTriggeredDoor(int i) {
         super(i, Material.WOOD);
         this.tex = 208;
+        this.hardness(5.0f);
+        this.sounds(Tile.WOOD_SOUNDS);
+        ((ExTile) this).setTextureNum(3);
     }
 
     @Override
@@ -28,12 +32,12 @@ public class BlockTriggeredDoor extends Tile {
 
     @Override
     public boolean shouldRender(TileView blockAccess, int i, int j, int k) {
-        return DebugMode.active || ((ExLevel)AccessMinecraft.getInstance().level).getTriggerManager().isActivated(i, j, k);
+        return DebugMode.active || ((ExLevel) AccessMinecraft.getInstance().level).getTriggerManager().isActivated(i, j, k);
     }
 
     @Override
     public Box getCollisionShape(Level level, int x, int y, int z) {
-        if (!((ExLevel)level).getTriggerManager().isActivated(x, y, z) || DebugMode.active) {
+        if (!((ExLevel) level).getTriggerManager().isActivated(x, y, z) || DebugMode.active) {
             return null;
         }
         return super.getCollisionShape(level, x, y, z);

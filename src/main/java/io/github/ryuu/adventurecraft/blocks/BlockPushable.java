@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.blocks;
 
+import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import net.minecraft.entity.FallingTile;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
@@ -11,6 +12,10 @@ public class BlockPushable extends BlockColor {
 
     public BlockPushable(int id, int tex, Material material) {
         super(id, tex, material);
+        this.hardness(2.0f);
+        this.blastResistance(10.0f);
+        this.sounds(Tile.PISTON_SOUNDS);
+        ((ExTile) this).setTextureNum(3);
     }
 
     public static boolean canFallBelow(Level world, int i, int j, int k) {

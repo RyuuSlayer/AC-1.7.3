@@ -10,8 +10,10 @@ import org.spongepowered.asm.mixin.Shadow;
 import java.util.Arrays;
 
 @Mixin(VideoSettingsScreen.class)
-public class MixinVideoSettingsScreen extends Screen {
-    @Shadow private static Option[] OPTIONS;
+public abstract class MixinVideoSettingsScreen extends Screen {
+
+    @Shadow
+    private static Option[] OPTIONS;
 
     static {
         OPTIONS = Arrays.copyOf(OPTIONS, OPTIONS.length + 2);

@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityRedstoneTrigger;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
+import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import io.github.ryuu.adventurecraft.gui.GuiRedstoneTrigger;
 import io.github.ryuu.adventurecraft.items.ItemCursor;
 import io.github.ryuu.adventurecraft.items.Items;
@@ -10,6 +11,7 @@ import io.github.ryuu.adventurecraft.util.TriggerArea;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
+import net.minecraft.tile.Tile;
 import net.minecraft.tile.TileWithEntity;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
@@ -18,6 +20,9 @@ public class BlockRedstoneTrigger extends TileWithEntity {
 
     protected BlockRedstoneTrigger(int i, int j) {
         super(i, j, Material.STONE);
+        this.hardness(5.0f);
+        this.sounds(Tile.METAL_SOUNDS);
+        ((ExTile) this).setTextureNum(3);
     }
 
     @Override
@@ -47,12 +52,12 @@ public class BlockRedstoneTrigger extends TileWithEntity {
             level.method_243(i, j, k);
             if (flag) {
                 if (!obj.resetOnTrigger) {
-                    ((ExLevel)level).getTriggerManager().addArea(i, j, k, new TriggerArea(obj.minX, obj.minY, obj.minZ, obj.maxX, obj.maxY, obj.maxZ));
+                    ((ExLevel) level).getTriggerManager().addArea(i, j, k, new TriggerArea(obj.minX, obj.minY, obj.minZ, obj.maxX, obj.maxY, obj.maxZ));
                 } else {
-                    ((ExLevel)level).getTriggerManager().resetArea(obj.minX, obj.minY, obj.minZ, obj.maxX, obj.maxY, obj.maxZ);
+                    ((ExLevel) level).getTriggerManager().resetArea(obj.minX, obj.minY, obj.minZ, obj.maxX, obj.maxY, obj.maxZ);
                 }
             } else {
-                ((ExLevel)level).getTriggerManager().removeArea(i, j, k);
+                ((ExLevel) level).getTriggerManager().removeArea(i, j, k);
             }
         }
     }

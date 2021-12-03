@@ -3,12 +3,14 @@ package io.github.ryuu.adventurecraft.blocks;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityWeather;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevelProperties;
+import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import io.github.ryuu.adventurecraft.gui.GuiWeather;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
+import net.minecraft.tile.Tile;
 import net.minecraft.tile.TileWithEntity;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
@@ -18,6 +20,10 @@ public class BlockWeather extends TileWithEntity {
 
     protected BlockWeather(int i, int j) {
         super(i, j, Material.AIR);
+        this.hardness(1.5f);
+        this.blastResistance(10.0f);
+        this.sounds(Tile.PISTON_SOUNDS);
+        ((ExTile) this).setTextureNum(2);
     }
 
     @Override
@@ -50,17 +56,17 @@ public class BlockWeather extends TileWithEntity {
         TileEntityWeather obj = (TileEntityWeather) world.getTileEntity(i, j, k);
         if (obj.changePrecipitate) {
             world.getProperties().setRaining(obj.precipitate);
-            ((ExLevel)world).resetCoordOrder();
+            ((ExLevel) world).resetCoordOrder();
         }
         if (obj.changeTempOffset) {
-            ((ExLevelProperties)world.getProperties()).setTempOffset(obj.tempOffset);
-            ((ExLevel)world).resetCoordOrder();
+            ((ExLevelProperties) world.getProperties()).setTempOffset(obj.tempOffset);
+            ((ExLevel) world).resetCoordOrder();
         }
         if (obj.changeTimeOfDay) {
-            ((ExLevel)world).setTimeOfDay(obj.timeOfDay);
+            ((ExLevel) world).setTimeOfDay(obj.timeOfDay);
         }
         if (obj.changeTimeRate) {
-            ((ExLevelProperties)world.getProperties()).setTimeRate(obj.timeRate);
+            ((ExLevelProperties) world.getProperties()).setTimeRate(obj.timeRate);
         }
     }
 

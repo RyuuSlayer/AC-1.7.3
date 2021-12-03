@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.blocks;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityMinMax;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityTrigger;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
+import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import io.github.ryuu.adventurecraft.gui.GuiTrigger;
 import io.github.ryuu.adventurecraft.items.ItemCursor;
 import io.github.ryuu.adventurecraft.items.Items;
@@ -24,6 +25,9 @@ public class BlockTrigger extends TileWithEntity {
 
     protected BlockTrigger(int i, int j) {
         super(i, j, Material.AIR);
+        this.hardness(5.0f);
+        this.sounds(Tile.METAL_SOUNDS);
+        ((ExTile) this).setTextureNum(2);
     }
 
     @Override
@@ -119,7 +123,7 @@ public class BlockTrigger extends TileWithEntity {
         TileEntityTrigger obj = (TileEntityTrigger) level.getTileEntity(i, j, k);
         if (!obj.visited) {
             obj.visited = true;
-            ((ExLevel)level).getTriggerManager().removeArea(i, j, k);
+            ((ExLevel) level).getTriggerManager().removeArea(i, j, k);
             for (int x = i - 1; x <= i + 1; ++x) {
                 for (int y = j - 1; y <= j + 1; ++y) {
                     for (int z = k - 1; z <= k + 1; ++z) {
@@ -140,9 +144,9 @@ public class BlockTrigger extends TileWithEntity {
         if (entity instanceof Player) {
             if (!this.isAlreadyActivated(level, i, j, k)) {
                 if (!obj.resetOnTrigger) {
-                    ((ExLevel)level).getTriggerManager().addArea(i, j, k, new TriggerArea(obj.minX, obj.minY, obj.minZ, obj.maxX, obj.maxY, obj.maxZ));
+                    ((ExLevel) level).getTriggerManager().addArea(i, j, k, new TriggerArea(obj.minX, obj.minY, obj.minZ, obj.maxX, obj.maxY, obj.maxZ));
                 } else {
-                    ((ExLevel)level).getTriggerManager().resetArea(obj.minX, obj.minY, obj.minZ, obj.maxX, obj.maxY, obj.maxZ);
+                    ((ExLevel) level).getTriggerManager().resetArea(obj.minX, obj.minY, obj.minZ, obj.maxX, obj.maxY, obj.maxZ);
                 }
             }
             obj.activated = 2;

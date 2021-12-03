@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.blocks;
 
+import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import io.github.ryuu.adventurecraft.mixin.tile.AccessTile;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -21,10 +22,12 @@ public class BlockStairMulti extends BlockColor {
     protected BlockStairMulti(int i, Tile block, int textureID) {
         super(i, textureID, block.material);
         this.modelBlock = block;
-        this.hardness(((AccessTile)block).getHardness());
-        this.blastResistance(((AccessTile)block).getResistance() / 3.0f);
+        this.hardness(((AccessTile) block).getHardness());
+        this.blastResistance(((AccessTile) block).getResistance() / 3.0f);
         this.sounds(block.sounds);
         this.method_1590(255);
+        ((ExTile) this).setTextureNum(3);
+        ((ExTile) this).setSubTypes(4);
     }
 
     @Override

@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityTriggerInverter;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
+import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import io.github.ryuu.adventurecraft.gui.GuiTriggerInverter;
 import io.github.ryuu.adventurecraft.items.ItemCursor;
 import io.github.ryuu.adventurecraft.items.Items;
@@ -10,6 +11,7 @@ import io.github.ryuu.adventurecraft.util.TriggerArea;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
+import net.minecraft.tile.Tile;
 import net.minecraft.tile.TileWithEntity;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
@@ -21,6 +23,9 @@ public class BlockTriggerInverter extends TileWithEntity {
 
     protected BlockTriggerInverter(int i, int j) {
         super(i, j, Material.AIR);
+        this.hardness(5.0f);
+        this.sounds(Tile.METAL_SOUNDS);
+        ((ExTile) this).setTextureNum(2);
     }
 
     @Override
@@ -70,13 +75,13 @@ public class BlockTriggerInverter extends TileWithEntity {
 
     @Override
     public void onTriggerActivated(Level level, int i, int j, int k) {
-        ((ExLevel)level).getTriggerManager().removeArea(i, j, k);
+        ((ExLevel) level).getTriggerManager().removeArea(i, j, k);
     }
 
     @Override
     public void onTriggerDeactivated(Level level, int i, int j, int k) {
         TileEntityTriggerInverter obj = (TileEntityTriggerInverter) level.getTileEntity(i, j, k);
-        ((ExLevel)level).getTriggerManager().addArea(i, j, k, new TriggerArea(obj.minX, obj.minY, obj.minZ, obj.maxX, obj.maxY, obj.maxZ));
+        ((ExLevel) level).getTriggerManager().addArea(i, j, k, new TriggerArea(obj.minX, obj.minY, obj.minZ, obj.maxX, obj.maxY, obj.maxZ));
     }
 
     public void setTriggerToSelection(Level level, int i, int j, int k) {
@@ -99,7 +104,7 @@ public class BlockTriggerInverter extends TileWithEntity {
 
     @Override
     public void reset(Level level, int i, int j, int k, boolean death) {
-        if (!((ExLevel)level).getTriggerManager().isActivated(i, j, k)) {
+        if (!((ExLevel) level).getTriggerManager().isActivated(i, j, k)) {
             this.onTriggerDeactivated(level, i, j, k);
         }
     }

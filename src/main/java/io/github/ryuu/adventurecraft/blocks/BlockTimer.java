@@ -3,12 +3,14 @@ package io.github.ryuu.adventurecraft.blocks;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityMinMax;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityTimer;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
+import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import io.github.ryuu.adventurecraft.gui.GuiTimer;
 import io.github.ryuu.adventurecraft.items.ItemCursor;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
+import net.minecraft.tile.Tile;
 import net.minecraft.tile.TileWithEntity;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
@@ -18,6 +20,9 @@ public class BlockTimer extends TileWithEntity {
 
     protected BlockTimer(int i, int j) {
         super(i, j, Material.AIR);
+        this.hardness(5.0f);
+        this.sounds(Tile.METAL_SOUNDS);
+        ((ExTile) this).setTextureNum(2);
     }
 
     @Override
@@ -86,6 +91,6 @@ public class BlockTimer extends TileWithEntity {
         obj.active = false;
         obj.canActivate = true;
         obj.ticks = 0;
-        ((ExLevel)level).getTriggerManager().removeArea(i, j, k);
+        ((ExLevel) level).getTriggerManager().removeArea(i, j, k);
     }
 }

@@ -25,18 +25,28 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MixinTile implements AccessTile, ExTile {
 
     @Mutable
-    @Shadow @Final public static Tile STONE;
+    @Shadow
+    @Final
+    public static Tile STONE;
 
-    @Shadow protected abstract Tile hardness(float f);
+    @Shadow
+    protected abstract Tile hardness(float f);
 
-    @Shadow protected abstract Tile blastResistance(float f);
+    @Shadow
+    protected abstract Tile blastResistance(float f);
 
-    @Shadow @Final public static TileSounds PISTON_SOUNDS;
+    @Shadow
+    @Final
+    public static TileSounds PISTON_SOUNDS;
 
     @Mutable
-    @Shadow @Final public static GrassTile GRASS;
+    @Shadow
+    @Final
+    public static GrassTile GRASS;
 
-    @Shadow @Final public static TileSounds GRASS_SOUNDS;
+    @Shadow
+    @Final
+    public static TileSounds GRASS_SOUNDS;
 
     @Final
     @Shadow
@@ -67,39 +77,58 @@ public abstract class MixinTile implements AccessTile, ExTile {
     @Shadow
     public double maxZ;
 
-    @Shadow @Final public static Tile[] BY_ID;
+    @Shadow
+    @Final
+    public static Tile[] BY_ID;
 
-    @Shadow protected abstract void afterTileItemCreated();
-
-    @Shadow protected abstract Tile sounds(TileSounds arg);
-
-    @Mutable
-    @Shadow @Final public static Tile COBBLESTONE;
-
-    @Shadow protected abstract Tile method_1590(int i);
-
-    @Shadow protected abstract Tile nonOpaque();
-
-    @Shadow protected abstract Tile multipleStates();
+    @Shadow
+    protected abstract Tile sounds(TileSounds arg);
 
     @Mutable
-    @Shadow @Final public static Tile FLOWING_WATER;
+    @Shadow
+    @Final
+    public static Tile COBBLESTONE;
+
+    @Shadow
+    protected abstract Tile method_1590(int i);
+
+    @Shadow
+    protected abstract Tile nonOpaque();
+
+    @Shadow
+    protected abstract Tile multipleStates();
 
     @Mutable
-    @Shadow @Final public static Tile STILL_WATER;
+    @Shadow
+    @Final
+    public static Tile FLOWING_WATER;
 
     @Mutable
-    @Shadow @Final public static Tile FLOWING_LAVA;
-
-    @Shadow protected abstract Tile luminance(float f);
-
-    @Mutable
-    @Shadow @Final public static Tile STILL_LAVA;
+    @Shadow
+    @Final
+    public static Tile STILL_WATER;
 
     @Mutable
-    @Shadow @Final public static Tile SAND;
+    @Shadow
+    @Final
+    public static Tile FLOWING_LAVA;
 
-    @Shadow @Final public static TileSounds SAND_SOUNDS;
+    @Shadow
+    protected abstract Tile luminance(float f);
+
+    @Mutable
+    @Shadow
+    @Final
+    public static Tile STILL_LAVA;
+
+    @Mutable
+    @Shadow
+    @Final
+    public static Tile SAND;
+
+    @Shadow
+    @Final
+    public static TileSounds SAND_SOUNDS;
 
     public int textureNum = 0;
 
@@ -107,7 +136,7 @@ public abstract class MixinTile implements AccessTile, ExTile {
         BY_ID[1] = null;
         STONE = ((MixinTile) (Object) ((MixinTile) (Object) ((MixinTile) (Object) new StoneTile(1, 1)).hardness(1.5f)).blastResistance(10.0f)).sounds(PISTON_SOUNDS).name("stone");
         BY_ID[2] = null;
-        GRASS = (GrassTile) ((ExTile) ((MixinTile) (Object) ((MixinTile) (Object) AccessGrassTile.newGrassTile(2)).hardness(0.6f)).sounds(GRASS_SOUNDS).name("grass")).adventurecraft$setSubTypes(5);
+        GRASS = (GrassTile) ((ExTile) ((MixinTile) (Object) ((MixinTile) (Object) AccessGrassTile.newGrassTile(2)).hardness(0.6f)).sounds(GRASS_SOUNDS).name("grass")).setSubTypes(5);
         BY_ID[4] = null;
         COBBLESTONE = ((MixinTile) (Object) ((MixinTile) (Object) ((MixinTile) (Object) new BlockColor(4, 214, Material.STONE)).hardness(2.0f)).blastResistance(10.0f)).sounds(PISTON_SOUNDS).name("stonebrick");
         BY_ID[8] = null;
@@ -119,7 +148,7 @@ public abstract class MixinTile implements AccessTile, ExTile {
         BY_ID[11] = null;
         STILL_LAVA = ((MixinTile) (Object) ((MixinTile) (Object) ((MixinTile) (Object) ((MixinTile) (Object) ((MixinTile) (Object) AccessStillFluidTile.newStillFluidTile(11, Material.LAVA)).hardness(0.5f)).luminance(1.0f)).method_1590(255).name("lava")).nonOpaque()).multipleStates();
         BY_ID[12] = null;
-        SAND = ((MixinTile) (Object) ((MixinTile) (Object) ((MixinTile) (Object) AccessSandTile.newSandTile(12, 18)).hardness(0.5f)).sounds(SAND_SOUNDS).name("sand")).adventurecraft$setSubTypes(4);
+        SAND = ((MixinTile) (Object) ((MixinTile) (Object) ((MixinTile) (Object) AccessSandTile.newSandTile(12, 18)).hardness(0.5f)).sounds(SAND_SOUNDS).name("sand")).setSubTypes(4);
         ItemType.byId[Tile.GRASS.id] = new ItemSubtypes(Tile.GRASS.id - 256).setName("grass");
         ItemType.byId[Tile.SAND.id] = new ItemSubtypes(Tile.SAND.id - 256).setName("sand");
         ItemType.byId[Tile.TALLGRASS.id] = new ItemSubtypes(Tile.TALLGRASS.id - 256).setName("tallgrass");
@@ -163,7 +192,7 @@ public abstract class MixinTile implements AccessTile, ExTile {
     }
 
     @Override
-    public Tile adventurecraft$setSubTypes(int i) {
+    public Tile setSubTypes(int i) {
         subTypes[this.id] = i;
         return ((Tile) (Object) this);
     }

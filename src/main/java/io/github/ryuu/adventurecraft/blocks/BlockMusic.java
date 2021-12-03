@@ -2,6 +2,7 @@ package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityMusic;
 import io.github.ryuu.adventurecraft.extensions.client.sound.ExSoundHelper;
+import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import io.github.ryuu.adventurecraft.gui.GuiMusic;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
@@ -9,6 +10,7 @@ import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
+import net.minecraft.tile.Tile;
 import net.minecraft.tile.TileWithEntity;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
@@ -18,6 +20,10 @@ public class BlockMusic extends TileWithEntity {
 
     protected BlockMusic(int i, int j) {
         super(i, j, Material.AIR);
+        this.hardness(1.5f);
+        this.blastResistance(10.0f);
+        this.sounds(Tile.PISTON_SOUNDS);
+        ((ExTile) this).setTextureNum(2);
     }
 
     @Override

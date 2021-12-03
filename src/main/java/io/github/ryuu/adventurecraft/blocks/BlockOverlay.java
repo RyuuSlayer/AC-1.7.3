@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.blocks;
 
+import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
@@ -12,6 +13,10 @@ public class BlockOverlay extends BlockColor {
     protected BlockOverlay(int i, int j) {
         super(i, j, Material.PLANT);
         this.setBoundingBox(0.0f, 0.0f, 0.0f, 1.0f, 0.1f, 1.0f);
+        this.hardness(5.0f);
+        this.sounds(Tile.GRASS_SOUNDS);
+        ((ExTile) this).setSubTypes(7);
+        ((ExTile) this).setTextureNum(3);
     }
 
     @Override

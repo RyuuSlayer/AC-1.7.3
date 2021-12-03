@@ -16,7 +16,7 @@ public interface ExTile {
 
     boolean shouldRender(TileView blockAccess, int i, int j, int k);
 
-    Tile adventurecraft$setSubTypes(int i);
+    Tile setSubTypes(int i);
 
     boolean canBeTriggered();
 
@@ -29,4 +29,6 @@ public interface ExTile {
     void onTriggerDeactivated(Level world, int i, int j, int k);
 
     void reset(Level world, int i, int j, int k, boolean death);
+
+    int getBlockLightValue(TileView iblockaccess, int i, int j, int k);
 }

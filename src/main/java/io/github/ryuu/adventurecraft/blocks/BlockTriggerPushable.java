@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.blocks;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityMinMax;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityTriggerPushable;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
+import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import io.github.ryuu.adventurecraft.gui.GuiTriggerPushable;
 import io.github.ryuu.adventurecraft.items.ItemCursor;
 import io.github.ryuu.adventurecraft.items.Items;
@@ -10,6 +11,7 @@ import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.TriggerArea;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
+import net.minecraft.tile.Tile;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
 
@@ -17,6 +19,10 @@ public class BlockTriggerPushable extends BlockContainerColor {
 
     protected BlockTriggerPushable(int i, int j) {
         super(i, j, Material.STONE);
+        this.hardness(2.0f);
+        this.blastResistance(10.0f);
+        this.sounds(Tile.PISTON_SOUNDS);
+        ((ExTile) this).setTextureNum(3);
     }
 
     @Override
@@ -41,14 +47,14 @@ public class BlockTriggerPushable extends BlockContainerColor {
         if (obj.activated) {
             if (!hasNeighbor) {
                 obj.activated = false;
-                ((ExLevel)level).getTriggerManager().removeArea(x, y, z);
+                ((ExLevel) level).getTriggerManager().removeArea(x, y, z);
             }
         } else if (hasNeighbor) {
             obj.activated = true;
             if (!obj.resetOnTrigger) {
-                ((ExLevel)level).getTriggerManager().addArea(x, y, z, new TriggerArea(obj.minX, obj.minY, obj.minZ, obj.maxX, obj.maxY, obj.maxZ));
+                ((ExLevel) level).getTriggerManager().addArea(x, y, z, new TriggerArea(obj.minX, obj.minY, obj.minZ, obj.maxX, obj.maxY, obj.maxZ));
             } else {
-                ((ExLevel)level).getTriggerManager().resetArea(obj.minX, obj.minY, obj.minZ, obj.maxX, obj.maxY, obj.maxZ);
+                ((ExLevel) level).getTriggerManager().resetArea(obj.minX, obj.minY, obj.minZ, obj.maxX, obj.maxY, obj.maxZ);
             }
         }
     }

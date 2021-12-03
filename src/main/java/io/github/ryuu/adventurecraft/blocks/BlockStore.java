@@ -9,6 +9,7 @@ import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
+import net.minecraft.tile.Tile;
 import net.minecraft.tile.TileWithEntity;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
@@ -17,6 +18,8 @@ public class BlockStore extends TileWithEntity {
 
     protected BlockStore(int i, int j) {
         super(i, j, Material.GLASS);
+        this.hardness(5.0f);
+        this.sounds(Tile.GLASS_SOUNDS);
     }
 
     @Override
@@ -42,14 +45,14 @@ public class BlockStore extends TileWithEntity {
             return true;
         }
         if (store.buySupplyLeft != 0) {
-            if (store.sellItemID == 0 || ((ExPlayerInventory)player.inventory).consumeItemAmount(store.sellItemID, store.sellItemDamage, store.sellItemAmount)) {
+            if (store.sellItemID == 0 || ((ExPlayerInventory) player.inventory).consumeItemAmount(store.sellItemID, store.sellItemDamage, store.sellItemAmount)) {
                 if (store.buyItemID != 0) {
                     player.inventory.pickupItem(new ItemInstance(store.buyItemID, store.buyItemAmount, store.buyItemDamage));
                 }
                 --store.buySupplyLeft;
                 if (store.tradeTrigger != null) {
-                    ((ExLevel)level).getTriggerManager().addArea(x, y, z, store.tradeTrigger);
-                    ((ExLevel)level).getTriggerManager().removeArea(x, y, z);
+                    ((ExLevel) level).getTriggerManager().addArea(x, y, z, store.tradeTrigger);
+                    ((ExLevel) level).getTriggerManager().removeArea(x, y, z);
                 }
             } else {
                 AccessMinecraft.getInstance().overlay.addChatMessage("Don't have enough to trade.");
