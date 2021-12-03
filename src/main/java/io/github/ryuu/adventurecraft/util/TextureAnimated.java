@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.util;
 
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 
 import java.awt.image.BufferedImage;
@@ -40,7 +41,7 @@ public class TextureAnimated {
         this.hasImages = false;
         BufferedImage bufferedimage = null;
         if (AccessMinecraft.getInstance().level != null) {
-            bufferedimage = AccessMinecraft.getInstance().level.loadMapTexture(animatedTex);
+            bufferedimage = ((ExLevel)AccessMinecraft.getInstance().level).loadMapTexture(animatedTex);
         }
         this.curFrame = 0;
         if (bufferedimage == null) {
@@ -68,7 +69,7 @@ public class TextureAnimated {
             for (int i = 0; i < this.height; ++i) {
                 for (int j = 0; j < this.width; ++j) {
                     int curPixel = this.frameImages[j + i * this.width + frameOffset];
-                    this.imageData[k + 0] = (byte) (curPixel >> 16 & 0xFF);
+                    this.imageData[k] = (byte) (curPixel >> 16 & 0xFF);
                     this.imageData[k + 1] = (byte) (curPixel >> 8 & 0xFF);
                     this.imageData[k + 2] = (byte) (curPixel & 0xFF);
                     this.imageData[k + 3] = (byte) (curPixel >> 24 & 0xFF);

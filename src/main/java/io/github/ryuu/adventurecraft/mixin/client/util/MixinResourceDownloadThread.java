@@ -1,6 +1,5 @@
 package io.github.ryuu.adventurecraft.mixin.client.util;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ResourceDownloadThread;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -16,10 +15,7 @@ import java.io.*;
 import java.net.URL;
 
 @Mixin(ResourceDownloadThread.class)
-public class MixinResourceDownloadThread extends Thread {
-
-    @Shadow
-    private Minecraft field_138;
+public abstract class MixinResourceDownloadThread extends Thread {
 
     @Shadow
     private boolean field_139;
@@ -27,15 +23,11 @@ public class MixinResourceDownloadThread extends Thread {
     @Shadow
     public File workingDirectory;
 
-    public MixinResourceDownloadThread(File file, Minecraft minecraft) {
-        this.field_138 = minecraft;
-        this.setName("Resource download thread");
-        this.setDaemon(true);
-        this.workingDirectory = new File(file, "resources/");
-        if (!this.workingDirectory.exists() && !this.workingDirectory.mkdirs()) {
-            throw new RuntimeException("The working directory could not be created: " + this.workingDirectory);
-        }
-    }
+    @Shadow
+    protected abstract void method_108(File file, String string);
+
+    @Shadow
+    protected abstract void method_110(URL uRL, String string, long l, int i);
 
     /**
      * @author Ryuu, TechPizza, Phil
@@ -46,10 +38,6 @@ public class MixinResourceDownloadThread extends Thread {
         this.downloadResource("http://adventurecraft.org/resources/");
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
     public void downloadResource(String urlString) {
         try {
             URL url = new URL(urlString);
@@ -64,79 +52,16 @@ public class MixinResourceDownloadThread extends Thread {
                     Element element = (Element) node;
                     String s = element.getElementsByTagName("Key").item(0).getChildNodes().item(0).getNodeValue();
                     long l = Long.parseLong(element.getElementsByTagName("Size").item(0).getChildNodes().item(0).getNodeValue());
-                    if (l <= 0L) continue;
-                    this.method_110(url, s, l, i);
-                    if (!this.field_139) continue;
-                    return;
+                    if (l > 0L) {
+                        this.method_110(url, s, l, i);
+                        if (!this.field_139) continue;
+                        return;
+                    }
                 }
             }
         } catch (Exception exception) {
             this.method_108(this.workingDirectory, "");
             exception.printStackTrace();
         }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    void method_108(File file, String s) {
-        File[] afile = file.listFiles();
-        for (File value : afile) {
-            if (value.isDirectory()) {
-                this.method_108(value, s + value.getName() + "/");
-                continue;
-            }
-            try {
-                this.field_138.loadSoundFromDir(s + value.getName(), value);
-                continue;
-            } catch (Exception exception) {
-                System.out.println("Failed to add " + s + value.getName());
-            }
-        }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    private void method_110(URL url, String s, long l, int i) {
-        try {
-            int j = s.indexOf("/");
-            String s1 = s.substring(0, j);
-            if (s1.equals("sound") || s1.equals("newsound") ? i != 0 : i != 1) {
-                return;
-            }
-            File file = new File(this.workingDirectory, s);
-            if (!file.exists() || file.length() != l) {
-                file.getParentFile().mkdirs();
-                String s2 = s.replaceAll(" ", "%20");
-                this.method_109(new URL(url, s2), file, l);
-                if (this.field_139) {
-                    return;
-                }
-            }
-            this.field_138.loadSoundFromDir(s, file);
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    private void method_109(URL url, File file, long l) throws IOException {
-        byte[] abyte0 = new byte[4096];
-        DataInputStream datainputstream = new DataInputStream(url.openStream());
-        DataOutputStream dataoutputstream = new DataOutputStream(new FileOutputStream(file));
-        int i = 0;
-        while ((i = datainputstream.read(abyte0)) >= 0) {
-            dataoutputstream.write(abyte0, 0, i);
-            if (!this.field_139) continue;
-            return;
-        }
-        datainputstream.close();
-        dataoutputstream.close();
     }
 }

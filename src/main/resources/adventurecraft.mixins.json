@@ -27,8 +27,8 @@
     "applet.MixinGameStartupErrorPanel",
     "client.MixinClientInteractionManager",
     "client.MixinMinecraft",
-    "client.colour.MixinFoliageColour",
-    "client.colour.MixinGrassColour",
+    "client.colour.AccessFoliageColour",
+    "client.colour.AccessGrassColour",
     "client.gui.MixinOverlay",
     "client.gui.MixinScreen",
     "client.gui.screen.MixinChatScreen",
@@ -128,7 +128,7 @@
     "tile.entity.MixinDispenser",
     "tile.entity.MixinSign",
     "tile.entity.MixinTileEntity",
-    "util.io.MixinCompoundTag",
+    "util.io.MixinCompoundTag"
   ],
   "injectors": {
     "defaultRequire": 1

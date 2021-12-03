@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.items;
 
+import io.github.ryuu.adventurecraft.extensions.tile.entity.ExSign;
 import io.github.ryuu.adventurecraft.gui.GuiMusicSheet;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
@@ -21,7 +22,7 @@ public class ItemInstrument extends ItemType {
     public boolean useOnTile(ItemInstance item, Player player, Level level, int x, int y, int z, int facing) {
         if (level.getTileId(x, y, z) == Tile.STANDING_SIGN.id) {
             Sign sign = (Sign) level.getTileEntity(x, y, z);
-            sign.playSong(this.instrument);
+            ((ExSign)sign).playSong(this.instrument);
         }
         return false;
     }

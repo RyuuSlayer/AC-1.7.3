@@ -52,6 +52,8 @@ public interface ExLevel {
 
     JScriptHandler getScriptHandler();
 
+    MusicScripts getMusicScripts();
+
     Scriptable getScope();
 
     UndoStack getUndoStack();

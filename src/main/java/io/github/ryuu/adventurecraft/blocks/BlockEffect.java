@@ -1,6 +1,10 @@
 package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityEffect;
+import io.github.ryuu.adventurecraft.extensions.client.colour.ExFoliageColour;
+import io.github.ryuu.adventurecraft.extensions.client.colour.ExGrassColour;
+import io.github.ryuu.adventurecraft.extensions.client.render.*;
+import io.github.ryuu.adventurecraft.extensions.client.texture.ExTextureManager;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevelProperties;
 import io.github.ryuu.adventurecraft.gui.GuiEffect;
@@ -8,9 +12,6 @@ import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.TerrainImage;
-import net.minecraft.client.colour.FoliageColour;
-import net.minecraft.client.colour.GrassColour;
-import net.minecraft.client.render.*;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
@@ -30,68 +31,68 @@ public class BlockEffect extends TileWithEntity {
     }
 
     public static void revertTextures(Level world) {
-        AccessMinecraft.getInstance().textureManager.revertTextures();
+        ((ExTextureManager) AccessMinecraft.getInstance().textureManager).revertTextures();
         if (needsReloadForRevert) {
-            GrassColour.loadGrass("/misc/grasscolor.png");
-            FoliageColour.loadFoliage("/misc/foliagecolor.png");
-            TerrainImage.loadWaterMap(new File(((ExLevel)world).getLevelDir(), "watermap.png"));
-            TerrainImage.loadBiomeMap(new File(((ExLevel)world).getLevelDir(), "biomemap.png"));
+            ExGrassColour.loadGrass("/misc/grasscolor.png");
+            ExFoliageColour.loadFoliage("/misc/foliagecolor.png");
+            TerrainImage.loadWaterMap(new File(((ExLevel) world).getLevelDir(), "watermap.png"));
+            TerrainImage.loadBiomeMap(new File(((ExLevel) world).getLevelDir(), "biomemap.png"));
             AccessMinecraft.getInstance().worldRenderer.method_1148();
             needsReloadForRevert = false;
         }
-        ((ExLevelProperties)world.getProperties()).revertTextures();
+        ((ExLevelProperties) world.getProperties()).revertTextures();
     }
 
     public static boolean replaceTexture(Level world, String textureToReplace, String replacementTexture) {
         String lTextureToReplace = textureToReplace.toLowerCase();
-        if (!((ExLevelProperties)world.getProperties()).addReplacementTexture(textureToReplace, replacementTexture)) {
+        if (!((ExLevelProperties) world.getProperties()).addReplacementTexture(textureToReplace, replacementTexture)) {
             return false;
         }
         if (lTextureToReplace.equals("/watermap.png")) {
-            TerrainImage.loadWaterMap(new File(((ExLevel)world).getLevelDir(), replacementTexture));
+            TerrainImage.loadWaterMap(new File(((ExLevel) world).getLevelDir(), replacementTexture));
             needsReloadForRevert = true;
             return true;
         }
         if (lTextureToReplace.equals("/biomemap.png")) {
-            TerrainImage.loadBiomeMap(new File(((ExLevel)world).getLevelDir(), replacementTexture));
+            TerrainImage.loadBiomeMap(new File(((ExLevel) world).getLevelDir(), replacementTexture));
             needsReloadForRevert = true;
             return true;
         }
         if (lTextureToReplace.equals("/misc/grasscolor.png")) {
-            GrassColour.loadGrass(replacementTexture);
+            ExGrassColour.loadGrass(replacementTexture);
             needsReloadForRevert = true;
             return true;
         }
         if (lTextureToReplace.equals("/misc/foliagecolor.png")) {
-            FoliageColour.loadFoliage(replacementTexture);
+            ExFoliageColour.loadFoliage(replacementTexture);
             needsReloadForRevert = true;
             return true;
         }
         if (lTextureToReplace.equals("/custom_fire.png")) {
-            FireTextureBinder.loadImage(replacementTexture);
+            ExFireTextureBinder.loadImage(replacementTexture);
             return true;
         }
         if (lTextureToReplace.equals("/custom_lava_flowing.png")) {
-            FlowingLavaTextureBinder2.loadImage(replacementTexture);
+            ExFlowingLavaTextureBinder2.loadImage(replacementTexture);
             return true;
         }
         if (lTextureToReplace.equals("/custom_lava_still.png")) {
-            FlowingLavaTextureBinder.loadImage(replacementTexture);
+            ExFlowingLavaTextureBinder.loadImage(replacementTexture);
             return true;
         }
         if (lTextureToReplace.equals("/custom_portal.png")) {
-            PortalTextureBinder.loadImage(replacementTexture);
+            ExPortalTextureBinder.loadImage(replacementTexture);
             return true;
         }
         if (lTextureToReplace.equals("/custom_water_flowing.png")) {
-            FlowingWaterTextureBinder.loadImage(replacementTexture);
+            ExFlowingWaterTextureBinder.loadImage(replacementTexture);
             return true;
         }
         if (lTextureToReplace.equals("/custom_water_still.png")) {
-            FlowingWaterTextureBinder2.loadImage(replacementTexture);
+            ExFlowingWaterTextureBinder2.loadImage(replacementTexture);
             return true;
         }
-        AccessMinecraft.getInstance().textureManager.replaceTexture(textureToReplace, replacementTexture);
+        ((ExTextureManager)AccessMinecraft.getInstance().textureManager).replaceTexture(textureToReplace, replacementTexture);
         return false;
     }
 
@@ -158,7 +159,7 @@ public class BlockEffect extends TileWithEntity {
 
     public void replaceTextures(Level world, String replacement) {
         boolean needsReload = false;
-        File replacementFile = new File(((ExLevel)world).getLevelDir(), "textureReplacement/" + replacement);
+        File replacementFile = new File(((ExLevel) world).getLevelDir(), "textureReplacement/" + replacement);
         if (replacementFile.exists()) {
             try {
                 BufferedReader reader = new BufferedReader(new FileReader(replacementFile));

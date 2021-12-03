@@ -1,81 +1,42 @@
 package io.github.ryuu.adventurecraft.mixin.client.render;
 
-import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
+import io.github.ryuu.adventurecraft.extensions.client.render.ExFlowingWaterTextureBinder2;
 import io.github.ryuu.adventurecraft.util.TerrainImage;
 import io.github.ryuu.adventurecraft.util.Vec2;
 import net.minecraft.client.render.FlowingWaterTextureBinder2;
 import net.minecraft.client.render.TextureBinder;
-import net.minecraft.tile.Tile;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
-import java.awt.image.BufferedImage;
-
 @Mixin(FlowingWaterTextureBinder2.class)
-public class MixinFlowingWaterTextureBinder2 extends TextureBinder {
+public abstract class MixinFlowingWaterTextureBinder2 extends TextureBinder {
 
-    static boolean hasImages;
-    static int numFrames;
-    static int curFrame;
-    private static int[] frameImages;
-    private static int width;
+    @Shadow
+    protected float[] field_2566;
 
-    static {
-        curFrame = 0;
+    @Shadow
+    protected float[] field_2567;
+
+    @Shadow
+    protected float[] field_2568;
+
+    @Shadow
+    protected float[] field_2569;
+
+    @Shadow
+    private int field_2570;
+
+    public MixinFlowingWaterTextureBinder2(int i) {
+        super(i);
     }
 
-    @Shadow()
-    protected float[] field_2566 = new float[256];
-    protected float[] field_2567 = new float[256];
-    protected float[] field_2568 = new float[256];
-    protected float[] field_2569 = new float[256];
-    private int field_2570 = 0;
-
-    public MixinFlowingWaterTextureBinder2() {
-        super(Tile.FLOWING_WATER.tex);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public static void loadImage() {
-        FlowingWaterTextureBinder2.loadImage("/custom_water_still.png");
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Overwrite()
-    public static void loadImage(String texName) {
-        BufferedImage bufferedimage = null;
-        if (AccessMinecraft.getInstance().level != null) {
-            bufferedimage = AccessMinecraft.getInstance().level.loadMapTexture(texName);
-        }
-        curFrame = 0;
-        if (bufferedimage == null) {
-            hasImages = false;
-            return;
-        }
-        width = bufferedimage.getWidth();
-        numFrames = bufferedimage.getHeight() / bufferedimage.getWidth();
-        frameImages = new int[bufferedimage.getWidth() * bufferedimage.getHeight()];
-        bufferedimage.getRGB(0, 0, bufferedimage.getWidth(), bufferedimage.getHeight(), frameImages, 0, bufferedimage.getWidth());
-        hasImages = true;
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
     public void onTick(Vec2 texRes) {
         int w = texRes.x / 16;
         int h = texRes.y / 16;
-        if (hasImages) {
+        int width = ExFlowingWaterTextureBinder2.width;
+        if (ExFlowingWaterTextureBinder2.hasImages) {
             int ratio = w / width;
-            int frameOffset = curFrame * width * width;
+            int frameOffset = ExFlowingWaterTextureBinder2.curFrame * width * width;
             int k = 0;
             boolean shrink = false;
             if (ratio == 0) {
@@ -85,11 +46,11 @@ public class MixinFlowingWaterTextureBinder2 extends TextureBinder {
             if (!shrink) {
                 for (int i = 0; i < width; ++i) {
                     for (int j = 0; j < width; ++j) {
-                        int curPixel = frameImages[j + i * width + frameOffset];
+                        int curPixel = ExFlowingWaterTextureBinder2.frameImages[j + i * width + frameOffset];
                         for (int x = 0; x < ratio; ++x) {
                             for (int y = 0; y < ratio; ++y) {
                                 k = j * ratio + x + (i * ratio + y) * w;
-                                this.grid[k * 4 + 0] = (byte) (curPixel >> 16 & 0xFF);
+                                this.grid[k * 4] = (byte) (curPixel >> 16 & 0xFF);
                                 this.grid[k * 4 + 1] = (byte) (curPixel >> 8 & 0xFF);
                                 this.grid[k * 4 + 2] = (byte) (curPixel & 0xFF);
                                 this.grid[k * 4 + 3] = (byte) (curPixel >> 24 & 0xFF);
@@ -106,14 +67,14 @@ public class MixinFlowingWaterTextureBinder2 extends TextureBinder {
                         int a = 0;
                         for (int x = 0; x < ratio; ++x) {
                             for (int y = 0; y < ratio; ++y) {
-                                int curPixel = frameImages[j * ratio + x + (i * ratio + y) * width + frameOffset];
+                                int curPixel = ExFlowingWaterTextureBinder2.frameImages[j * ratio + x + (i * ratio + y) * width + frameOffset];
                                 r += curPixel >> 16 & 0xFF;
                                 g += curPixel >> 8 & 0xFF;
                                 b += curPixel & 0xFF;
                                 a += curPixel >> 24 & 0xFF;
                             }
                         }
-                        this.grid[k * 4 + 0] = (byte) (r / ratio / ratio);
+                        this.grid[k * 4] = (byte) (r / ratio / ratio);
                         this.grid[k * 4 + 1] = (byte) (g / ratio / ratio);
                         this.grid[k * 4 + 2] = (byte) (b / ratio / ratio);
                         this.grid[k * 4 + 3] = (byte) (a / ratio / ratio);
@@ -121,7 +82,7 @@ public class MixinFlowingWaterTextureBinder2 extends TextureBinder {
                     }
                 }
             }
-            curFrame = (curFrame + 1) % numFrames;
+            ExFlowingWaterTextureBinder2.curFrame = (ExFlowingWaterTextureBinder2.curFrame + 1) % ExFlowingWaterTextureBinder2.numFrames;
             return;
         }
         int s = w * h;
@@ -191,7 +152,7 @@ public class MixinFlowingWaterTextureBinder2 extends TextureBinder {
                 j2 = j3;
                 k2 = k3;
             }
-            this.grid[i1 * 4 + 0] = (byte) l1;
+            this.grid[i1 * 4] = (byte) l1;
             this.grid[i1 * 4 + 1] = (byte) j2;
             this.grid[i1 * 4 + 2] = (byte) k2;
             this.grid[i1 * 4 + 3] = (byte) l2;

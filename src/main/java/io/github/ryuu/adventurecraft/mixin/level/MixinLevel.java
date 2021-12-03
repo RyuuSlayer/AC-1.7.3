@@ -3,6 +3,9 @@ package io.github.ryuu.adventurecraft.mixin.level;
 import io.github.ryuu.adventurecraft.blocks.BlockStairMulti;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.extensions.client.ExMinecraft;
+import io.github.ryuu.adventurecraft.extensions.client.colour.ExFoliageColour;
+import io.github.ryuu.adventurecraft.extensions.client.colour.ExGrassColour;
+import io.github.ryuu.adventurecraft.extensions.client.render.*;
 import io.github.ryuu.adventurecraft.extensions.client.sound.ExSoundHelper;
 import io.github.ryuu.adventurecraft.extensions.client.texture.ExTextureManager;
 import io.github.ryuu.adventurecraft.extensions.entity.ExEntity;
@@ -24,8 +27,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.class_366;
 import net.minecraft.client.colour.FoliageColour;
-import net.minecraft.client.colour.GrassColour;
-import net.minecraft.client.render.*;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.client.util.ResourceDownloadThread;
 import net.minecraft.entity.Entity;
@@ -278,14 +279,14 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
         }
         this.loadTextureAnimations();
         TextureFanFX.loadImage();
-        FireTextureBinder.loadImage();
-        FlowingLavaTextureBinder.loadImage();
-        FlowingLavaTextureBinder2.loadImage();
-        PortalTextureBinder.loadImage();
-        FlowingWaterTextureBinder2.loadImage();
-        FlowingWaterTextureBinder.loadImage();
-        GrassColour.loadGrass("/misc/grasscolor.png");
-        FoliageColour.loadFoliage("/misc/foliagecolor.png");
+        ExFireTextureBinder.loadImage();
+        ExFlowingLavaTextureBinder.loadImage();
+        ExFlowingLavaTextureBinder2.loadImage();
+        ExPortalTextureBinder.loadImage();
+        ExFlowingWaterTextureBinder2.loadImage();
+        ExFlowingWaterTextureBinder.loadImage();
+        ExGrassColour.loadGrass("/misc/grasscolor.png");
+        ExFoliageColour.loadFoliage("/misc/foliagecolor.png");
         ((ExLevelProperties) this.properties).loadTextureReplacements((Level) (Object) this);
     }
 
@@ -1353,6 +1354,11 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
     @Override
     public JScriptHandler getScriptHandler() {
         return this.scriptHandler;
+    }
+
+    @Override
+    public MusicScripts getMusicScripts() {
+        return this.musicScripts;
     }
 
     @Override

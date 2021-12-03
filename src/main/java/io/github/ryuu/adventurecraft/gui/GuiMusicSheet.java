@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.gui;
 
-import io.github.ryuu.adventurecraft.accessors.client.gui.ScreenInputGrab;
+import io.github.ryuu.adventurecraft.extensions.client.gui.ExScreen;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.util.MusicPlayer;
 import net.minecraft.client.gui.Screen;
@@ -46,8 +47,7 @@ public class GuiMusicSheet extends Screen {
     protected void keyPressed(char character, int key) {
         super.keyPressed(character, key);
         if (this.songPlayed == null && key >= 2 && key <= 11) {
-            boolean isSharp;
-            boolean bl = isSharp = Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54);
+            boolean isSharp = Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54);
             if (isSharp && (key == 2 || key == 4 || key == 5 || key == 6 || key == 8 || key == 9 || key == 11)) {
                 if (this.spaceTaken + 25 >= 168) {
                     this.notesPlayed.clear();
@@ -95,12 +95,12 @@ public class GuiMusicSheet extends Screen {
                 MusicPlayer.playNoteFromEntity(this.minecraft.level, this.minecraft.player, this.instrument, 'F', isSharp, 1.0f, 1.0f);
                 this.notesPlayedString = this.notesPlayedString + character;
             }
-            String songName = this.minecraft.level.musicScripts.executeMusic(this.notesPlayedString);
+            String songName = ((ExLevel) this.minecraft.level).getMusicScripts().executeMusic(this.notesPlayedString);
             if (songName != null) {
                 this.songPlayed = songName;
                 this.timeToFade = 2500L + System.currentTimeMillis();
                 this.minecraft.field_2778 = true;
-                ((ScreenInputGrab)this).setDisableInputGrabbing(true);
+                ((ExScreen)this).setDisableInputGrabbing(true);
                 this.minecraft.field_2767.method_1970();
             }
         }
