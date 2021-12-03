@@ -1,12 +1,8 @@
 package io.github.ryuu.adventurecraft.mixin.client.render;
 
 import io.github.ryuu.adventurecraft.extensions.client.render.ExTextureBinder;
-import io.github.ryuu.adventurecraft.util.Vec2;
 import net.minecraft.client.render.TextureBinder;
-import net.minecraft.client.texture.TextureManager;
-import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(TextureBinder.class)

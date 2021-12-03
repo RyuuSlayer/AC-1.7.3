@@ -1,7 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.client.sound;
 
 import io.github.ryuu.adventurecraft.extensions.client.sound.ExSoundHelper;
-import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevelProperties;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.class_266;
