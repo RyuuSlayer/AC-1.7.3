@@ -22,7 +22,7 @@ used throughout the codebase (which follow pretty closely after the standard Jav
 have also been packaged as EditorConfig and IDEA inspection profiles which can be found in the repository root and `idea`
 directory respectively.
 
-- Use tabs for indentations, not spaces. Avoid lines which exceed 120 characters.
+- Use 4 spaces for indentations, not tabs. Avoid lines which exceed 120 characters.
 - Use `this` to qualify member and field access.
 - Always use braces when writing if-statements and loops.
 - Annotate overriding methods with `@Override` so that breaking changes when updating will create hard compile errors.
