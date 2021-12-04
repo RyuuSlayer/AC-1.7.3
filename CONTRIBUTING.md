@@ -18,9 +18,7 @@ through opening an issue.
 ### Code Style
 
 When contributing source code changes to the project, ensure that you make consistent use of the code style guidelines
-used throughout the codebase (which follow pretty closely after the standard Java code style guidelines). These guidelines
-have also been packaged as EditorConfig and IDEA inspection profiles which can be found in the repository root and `idea`
-directory respectively.
+used throughout the codebase (which follow pretty closely after the standard Java code style guidelines).
 
 - Use 4 spaces for indentations, not tabs. Avoid lines which exceed 120 characters.
 - Use `this` to qualify member and field access.
