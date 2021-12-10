@@ -35,8 +35,8 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
     protected Scriptable scope;
     String initDescTo;
     String descriptionName;
-    float prevWidth = 0.6f;
-    float prevHeight = 1.8f;
+    public float prevWidth = 0.6f;
+    public float prevHeight = 1.8f;
     public TileEntityNpcPath triggerOnPath = null;
     private class_61 path;
     private Entity pathToEntity;

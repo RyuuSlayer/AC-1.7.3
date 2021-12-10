@@ -32,10 +32,10 @@ public abstract class MixinResourceDownloadThread extends Thread {
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void run() {
-        this.downloadResource("http://s3.amazonaws.com/MinecraftResources/");
-        this.downloadResource("http://adventurecraft.org/resources/");
+        //this.downloadResource("http://s3.amazonaws.com/MinecraftResources/");
+        //this.downloadResource("http://adventurecraft.org/resources/");
     }
 
     public void downloadResource(String urlString) {

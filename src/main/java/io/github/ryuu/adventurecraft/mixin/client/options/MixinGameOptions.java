@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.mixin.client.options;
 
 import com.chocohead.mm.api.ClassTinkerers;
+import io.github.ryuu.adventurecraft.extensions.client.options.ExGameOptions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.options.KeyBinding;
@@ -132,8 +133,10 @@ public abstract class MixinGameOptions implements ExGameOptions {
     public boolean autoFarClip;
     public boolean grass3d;
 
-    @Inject(method = "<init>(Lnet/minecraft/client/Minecraft;Ljava/io/File;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/options/GameOptions;load()V"))
-    private void GameOptions(Minecraft file, File par2, CallbackInfo ci) {
+    @Redirect(method = "<init>(Lnet/minecraft/client/Minecraft;Ljava/io/File;)V", at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/options/GameOptions;load()V"))
+    private void GameOptions(GameOptions instance) {
         this.viewDistance = 1;
         this.bobView = true;
         this.anaglyph3d = false;
@@ -161,6 +164,7 @@ public abstract class MixinGameOptions implements ExGameOptions {
         this.guiScale = 0;
         this.autoFarClip = true;
         this.grass3d = true;
+        instance.load();
     }
 
     @Inject(method = "<init>()V", at = @At("TAIL"))
@@ -277,5 +281,10 @@ public abstract class MixinGameOptions implements ExGameOptions {
     @Override
     public boolean isAutoFarClip() {
         return this.autoFarClip;
+    }
+
+    @Override
+    public boolean isGrass3d() {
+        return this.grass3d;
     }
 }

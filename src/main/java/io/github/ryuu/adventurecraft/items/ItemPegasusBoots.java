@@ -1,10 +1,11 @@
 package io.github.ryuu.adventurecraft.items;
 
-import io.github.ryuu.adventurecraft.accessors.items.ItemTypeSlotChangeNotifier;
+import io.github.ryuu.adventurecraft.extensions.entity.player.ExPlayer;
+import io.github.ryuu.adventurecraft.extensions.items.ExItemType;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.armour.ArmourItem;
 
-public class ItemPegasusBoots extends ArmourItem implements ItemTypeSlotChangeNotifier {
+public class ItemPegasusBoots extends ArmourItem implements ExItemType {
 
     public ItemPegasusBoots(int id) {
         super(id, 0, 0, 3);
@@ -14,16 +15,16 @@ public class ItemPegasusBoots extends ArmourItem implements ItemTypeSlotChangeNo
     @Override
     public void onAddToSlot(Player entityPlayer, int slot, int damage) {
         if (slot == 36) {
-            entityPlayer.canWallJump = true;
-            entityPlayer.timesCanJumpInAir = 1;
+            ((ExPlayer) entityPlayer).setCanWallJump(true);
+            ((ExPlayer) entityPlayer).setTimesCanJumpInAir(1);
         }
     }
 
     @Override
     public void onRemovedFromSlot(Player entityPlayer, int slot, int damage) {
         if (slot == 36) {
-            entityPlayer.canWallJump = false;
-            entityPlayer.timesCanJumpInAir = 0;
+            ((ExPlayer) entityPlayer).setCanWallJump(false);
+            ((ExPlayer) entityPlayer).setTimesCanJumpInAir(0);
         }
     }
 }

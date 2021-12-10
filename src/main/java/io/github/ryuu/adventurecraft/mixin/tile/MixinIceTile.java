@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.tile;
 
+import io.github.ryuu.adventurecraft.extensions.level.ExLevelProperties;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
 import net.minecraft.tile.IceTile;
@@ -30,7 +31,7 @@ public abstract class MixinIceTile extends TranslucentTile {
 
     @Inject(method = "onScheduledTick", at = @At("HEAD"), cancellable = true)
     public void onScheduledTick(Level level, int x, int y, int z, Random rand, CallbackInfo ci) {
-        if (!level.getProperties().iceMelts) {
+        if (!((ExLevelProperties)level.getProperties()).getIceMelts()) {
             ci.cancel();
         }
     }

@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.client.particle;
 
+import io.github.ryuu.adventurecraft.extensions.client.particle.ExParticleManager;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.render.Tessellator;
@@ -52,17 +53,17 @@ public abstract class MixinParticleManager implements ExParticleManager {
 
     @ModifyArg(method = "method_324", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/texture/TextureManager;getTextureId(Ljava/lang/String;)I", ordinal = 0))
     private String changeTexturesPath(String path) {
-        return "/assets/adventurecraft/particles.png";
+        return "/particles.png";
     }
 
     @ModifyArg(method = "method_324", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/texture/TextureManager;getTextureId(Ljava/lang/String;)I", ordinal = 1))
     private String changeTexturesPath1(String path) {
-        return "/assets/adventurecraft/terrain.png";
+        return "/terrain.png";
     }
 
     @ModifyArg(method = "method_324", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/texture/TextureManager;getTextureId(Ljava/lang/String;)I", ordinal = 2))
     private String changeTexturesPath2(String path) {
-        return "/assets/adventurecraft/gui/items.png";
+        return "/gui/items.png";
     }
 
     @Inject(method = "method_324", at = @At("TAIL"))
@@ -76,10 +77,10 @@ public abstract class MixinParticleManager implements ExParticleManager {
             if (this.particles[i].size() == 0) continue;
             int j = 0;
             if (i == 3) {
-                j = this.textureManager.getTextureId("/assets/adventurecraft/terrain2.png");
+                j = this.textureManager.getTextureId("/terrain2.png");
             }
             if (i == 4) {
-                j = this.textureManager.getTextureId("/assets/adventurecraft/terrain3.png");
+                j = this.textureManager.getTextureId("/terrain3.png");
             }
             GL11.glBindTexture(3553, j);
             Tessellator tessellator = Tessellator.INSTANCE;

@@ -13,7 +13,7 @@ import net.minecraft.util.maths.Box;
 
 import java.util.Random;
 
-public class BlockSpawn extends Tile {
+public class BlockSpawn extends Tile implements AcTriggerTile, AcRenderConditionTile {
 
     protected BlockSpawn(int i, int j) {
         super(i, j, Material.AIR);
@@ -68,5 +68,9 @@ public class BlockSpawn extends Tile {
     @Override
     public void onTriggerActivated(Level world, int i, int j, int k) {
         world.getProperties().setSpawnPosition(i, j, k);
+    }
+
+    @Override
+    public void onTriggerDeactivated(Level world, int i, int j, int k) {
     }
 }

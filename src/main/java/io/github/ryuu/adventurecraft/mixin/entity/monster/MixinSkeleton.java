@@ -44,10 +44,10 @@ public abstract class MixinSkeleton extends Monster {
     }
 
     @Inject(method = "method_637", locals = LocalCapture.CAPTURE_FAILHARD, at = @At(
-            value = "INVOKE_ASSIGN",
-            target = "Lnet/minecraft/entity/projectile/Arrow;<init>(Lnet/minecraft/level/Level;Lnet/minecraft/entity/LivingEntity;)V",
-            shift = At.Shift.AFTER))
-    private void setArrowDamage(Entity entity, float f, CallbackInfo ci, Arrow var7) {
+            value = "INVOKE",
+            target = "Lnet/minecraft/level/Level;spawnEntity(Lnet/minecraft/entity/Entity;)Z",
+            shift = At.Shift.BEFORE))
+    private void setArrowDamage(Entity entity, float f, CallbackInfo ci, double var3, double var5, Arrow var7, double var8, float var10) {
         ((ExArrow) var7).setAttackDamage(this.attackDamage);
         var7.y += 0.4f;
     }
@@ -57,7 +57,7 @@ public abstract class MixinSkeleton extends Monster {
      */
     @Override
     @Overwrite
-    protected void dropLoot() {
+    public void dropLoot() {
         if (this.getMobDrops() != 0) {
             int i = this.rand.nextInt(3) + 1;
             for (int j = 0; j < i; ++j) {

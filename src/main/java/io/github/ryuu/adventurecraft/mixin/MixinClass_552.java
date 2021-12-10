@@ -12,13 +12,7 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 public class MixinClass_552 implements ExClass_552 {
 
     @Shadow
-    private boolean field_2520;
-
-    @Shadow
     public class_290[] field_2518;
-
-    @Shadow
-    public int field_2519;
 
     @ModifyArgs(method = "<init>([Lnet/minecraft/class_290;IIII)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/class_290;method_983(FF)Lnet/minecraft/class_290;", ordinal = 0))
     private void Class_552(Args args, class_290[] args1, int i, int j, int k, int l) {
@@ -77,7 +71,7 @@ public class MixinClass_552 implements ExClass_552 {
     }
 
     @Override
-    public void adventurecraft$setVertexes(int i, int j, int k, int l, int tw, int th) {
+    public void setVertexes(int i, int j, int k, int l, int tw, int th) {
         float f = 0.0015625f;
         float f1 = 0.003125f;
         if (k < i) {

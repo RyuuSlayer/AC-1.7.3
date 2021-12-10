@@ -91,7 +91,7 @@ public class MixinTitleScreen extends Screen {
 
     @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/texture/TextureManager;getTextureId(Ljava/lang/String;)I"), index = 0)
     private String render3(String s) {
-        return "/assets/adventurecraft/acLogo.png";
+        return "/acLogo.png";
     }
 }
 

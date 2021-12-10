@@ -28,18 +28,8 @@ public abstract class MixinCompassTextureBinder extends TextureBinder {
     @Shadow
     private double field_1329;
 
-    public MixinCompassTextureBinder(Minecraft minecraft) {
-        super(ItemType.compass.getTexturePosition(0));
-        this.field_1326 = minecraft;
-        this.renderMode = 1;
-        try {
-            BufferedImage bufferedimage = ImageIO.read(Minecraft.class.getResource("/gui/items.png"));
-            int i = this.field_1412 % 16 * 16;
-            int j = this.field_1412 / 16 * 16;
-            bufferedimage.getRGB(i, j, 16, 16, this.field_1327, 0, 16);
-        } catch (IOException ioexception) {
-            ioexception.printStackTrace();
-        }
+    public MixinCompassTextureBinder(int i) {
+        super(i);
     }
 
     public void onTick(Vec2 texRes) {

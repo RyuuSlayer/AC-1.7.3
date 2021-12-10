@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LadderTile.class)
@@ -23,14 +24,18 @@ public class MixinLadderTile extends Tile implements ExLadderTile {
         return tileMeta % 4 + 2;
     }
 
-    @ModifyVariable(method = "getCollisionShape", at = @At(value = "STORE"))
-    private int fixGetCollisionShapeTileMeta(int tileMeta) {
-        return repeatGetTileMeta(tileMeta);
+    @Redirect(method = "getCollisionShape", at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/level/Level;getTileMeta(III)I"))
+    private int fixGetCollisionShapeTileMeta(Level instance, int i, int j, int k) {
+        return repeatGetTileMeta(instance.getTileMeta(i, j, k));
     }
 
-    @ModifyVariable(method = "getOutlineShape", at = @At(value = "STORE"))
-    private int fixGetOutlineShapeTileMeta(int tileMeta) {
-        return repeatGetTileMeta(tileMeta);
+    @Redirect(method = "getOutlineShape", at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/level/Level;getTileMeta(III)I"))
+    private int fixGetOutlineShapeTileMeta(Level instance, int i, int j, int k) {
+        return repeatGetTileMeta(instance.getTileMeta(i, j, k));
     }
 
     @Inject(method = "canPlaceAt", at = @At(

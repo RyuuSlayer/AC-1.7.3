@@ -15,7 +15,7 @@ import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
-public class BlockCamera extends TileWithEntity {
+public class BlockCamera extends TileWithEntity implements AcTriggerTile, AcRenderConditionTile {
 
     protected BlockCamera(int i, int j) {
         super(i, j, Material.AIR);

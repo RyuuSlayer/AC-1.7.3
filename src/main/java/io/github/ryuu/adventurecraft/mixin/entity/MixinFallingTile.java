@@ -95,7 +95,7 @@ public abstract class MixinFallingTile extends Entity implements ExFallingTile {
      */
     @Override
     @Overwrite
-    protected void writeCustomDataToTag(CompoundTag tag) {
+    public void writeCustomDataToTag(CompoundTag tag) {
         tag.put("Tile", (byte) this.tile);
         tag.put("EntityID", this.id);
     }
@@ -105,7 +105,7 @@ public abstract class MixinFallingTile extends Entity implements ExFallingTile {
      */
     @Override
     @Overwrite
-    protected void readCustomDataFromTag(CompoundTag tag) {
+    public void readCustomDataFromTag(CompoundTag tag) {
         this.tile = tag.getByte("Tile") & 0xFF;
         if (tag.containsKey("EntityID")) {
             this.id = tag.getInt("EntityID");

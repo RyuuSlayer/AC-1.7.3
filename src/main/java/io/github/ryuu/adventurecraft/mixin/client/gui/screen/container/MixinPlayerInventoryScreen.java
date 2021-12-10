@@ -28,13 +28,13 @@ public abstract class MixinPlayerInventoryScreen extends ContainerScreen {
     private void renderContainerBackground(float par1, CallbackInfo ci) {
         int width = (this.width - this.containerWidth) / 2;
         int height = (this.height - this.containerHeight) / 2;
-        int heartPiece = this.minecraft.textureManager.getTextureId("/assets/adventurecraft/gui/heartPiece.png");
+        int heartPiece = this.minecraft.textureManager.getTextureId("/gui/heartPiece.png");
         this.minecraft.textureManager.bindTexture(heartPiece);
         this.blit(width + 89, height + 6, ((ExPlayer) this.minecraft.player).getHeartPieces() * 32, 0, 32, 32);
     }
 
     @ModifyArg(method = "renderContainerBackground", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/texture/TextureManager;getTextureId(Ljava/lang/String;)I"))
     private String renderContainerBackground(String url) {
-        return "/assets/adventurecraft/gui/inventory.png";
+        return "/gui/inventory.png";
     }
 }

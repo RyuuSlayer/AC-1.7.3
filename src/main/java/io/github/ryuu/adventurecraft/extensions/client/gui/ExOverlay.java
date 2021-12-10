@@ -9,4 +9,6 @@ public interface ExOverlay {
     boolean isHudEnabled();
 
     void setHudEnabled(boolean hudEnabled);
+
+    void logJavascriptException(Exception exception);
 }

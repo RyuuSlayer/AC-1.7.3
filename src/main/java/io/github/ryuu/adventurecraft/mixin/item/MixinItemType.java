@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(ItemType.class)
-public abstract class MixinItemType implements ExItemType {
+public abstract class MixinItemType implements AccessItemType, ExItemType {
 
     @Shadow
     public abstract int getTexturePosition(int i);

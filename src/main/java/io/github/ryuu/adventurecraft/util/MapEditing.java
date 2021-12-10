@@ -1,9 +1,11 @@
 package io.github.ryuu.adventurecraft.util;
 
+import io.github.ryuu.adventurecraft.extensions.client.render.ExTileRenderer;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import io.github.ryuu.adventurecraft.items.ItemCursor;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
+import io.github.ryuu.adventurecraft.mixin.client.render.AccessTileRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.TileRenderer;
@@ -27,20 +29,20 @@ public class MapEditing {
 
     private final TileRenderer renderBlocks;
     Minecraft mc;
-    Level world;
+    Level level;
     HitResult cursor;
     int selectedBlockID;
     int selectedMetadata;
 
-    public MapEditing(Minecraft mcInstance, Level w) {
+    public MapEditing(Minecraft mcInstance, Level level) {
         this.mc = mcInstance;
-        this.world = w;
-        this.renderBlocks = new TileRenderer(w);
+        this.level = level;
+        this.renderBlocks = new TileRenderer(level);
     }
 
-    public void updateWorld(Level w) {
-        this.world = w;
-        this.renderBlocks.field_82 = w;
+    public void updateWorld(Level level) {
+        this.level = level;
+        ((AccessTileRenderer) this.renderBlocks).setField_82(level);
     }
 
     public void updateCursor(LivingEntity camera, float fov, float time) {
@@ -57,12 +59,10 @@ public class MapEditing {
         GL11.glGetFloat(2982, modelview);
         GL11.glGetFloat(2983, projection);
         GL11.glGetInteger(2978, viewport);
-        float winX = x;
-        float winY = y;
-        GLU.gluUnProject(winX, winY, 1.0f, modelview, projection, viewport, position);
+        GLU.gluUnProject(x, y, 1.0f, modelview, projection, viewport, position);
         Vec3f pos = camera.method_931(time);
         Vec3f mouseLoc = pos.method_1301(position.get(0) * 1024.0f, position.get(1) * 1024.0f, position.get(2) * 1024.0f);
-        this.cursor = this.world.raycast(pos, mouseLoc);
+        this.cursor = this.level.raycast(pos, mouseLoc);
     }
 
     public void paint() {
@@ -106,7 +106,7 @@ public class MapEditing {
 
     private void setBlock(int x, int y, int z, int blockID, int metadata) {
         if (y >= 0 && y < 128) {
-            this.world.method_201(x, y, z, blockID, metadata);
+            this.level.method_201(x, y, z, blockID, metadata);
         }
     }
 
@@ -124,9 +124,9 @@ public class MapEditing {
                 GL11.glEnable(3042);
                 GL11.glBlendFunc(32771, 32772);
                 this.mc.textureManager.bindTexture(this.mc.textureManager.getTextureId("/terrain.png"));
-                this.renderBlocks.startRenderingBlocks(this.world);
+                ((ExTileRenderer) this.renderBlocks).startRenderingBlocks(this.level);
                 this.drawBlock(this.cursor.x + this.getCursorXOffset(), this.cursor.y + this.getCursorYOffset(), this.cursor.z + this.getCursorZOffset(), this.selectedBlockID, this.selectedMetadata);
-                this.renderBlocks.stopRenderingBlocks();
+                ((ExTileRenderer) this.renderBlocks).stopRenderingBlocks();
                 GL11.glDisable(3042);
                 GL11.glPopMatrix();
             }
@@ -145,27 +145,28 @@ public class MapEditing {
             GL11.glEnable(3042);
             GL11.glBlendFunc(32771, 32772);
             Vec3f lookDir = camera.method_1320();
-            int xOffset = (int) (camera.x + (double) DebugMode.reachDistance * lookDir.x) - ItemCursor.minX;
-            int yOffset = (int) (camera.y + (double) DebugMode.reachDistance * lookDir.y) - ItemCursor.minY;
-            int zOffset = (int) (camera.z + (double) DebugMode.reachDistance * lookDir.z) - ItemCursor.minZ;
+            int xOffset = (int) (camera.x + DebugMode.reachDistance * lookDir.x) - ItemCursor.minX;
+            int yOffset = (int) (camera.y + DebugMode.reachDistance * lookDir.y) - ItemCursor.minY;
+            int zOffset = (int) (camera.z + DebugMode.reachDistance * lookDir.z) - ItemCursor.minZ;
             for (int texNum = 0; texNum <= 3; ++texNum) {
                 if (texNum == 0) {
                     this.mc.textureManager.bindTexture(this.mc.textureManager.getTextureId("/terrain.png"));
                 } else {
                     this.mc.textureManager.bindTexture(this.mc.textureManager.getTextureId(String.format("/terrain%d.png", texNum)));
                 }
-                this.renderBlocks.startRenderingBlocks(this.world);
+                ((ExTileRenderer) this.renderBlocks).startRenderingBlocks(this.level);
                 for (int i = ItemCursor.minX; i <= ItemCursor.maxX; ++i) {
                     for (int j = ItemCursor.minY; j <= ItemCursor.maxY; ++j) {
                         for (int k = ItemCursor.minZ; k <= ItemCursor.maxZ; ++k) {
                             int blockID = this.mc.level.getTileId(i, j, k);
-                            if (Tile.BY_ID[blockID] == null || ((ExTile)Tile.BY_ID[blockID]).getTextureNum() != texNum) continue;
+                            if (Tile.BY_ID[blockID] == null || ((ExTile) Tile.BY_ID[blockID]).getTextureNum() != texNum)
+                                continue;
                             int metadata = this.mc.level.getTileMeta(i, j, k);
                             this.drawBlock(i + xOffset, j + yOffset, k + zOffset, blockID, metadata);
                         }
                     }
                 }
-                this.renderBlocks.stopRenderingBlocks();
+                ((ExTileRenderer) this.renderBlocks).stopRenderingBlocks();
             }
             GL11.glDisable(3042);
             GL11.glPopMatrix();
@@ -175,11 +176,11 @@ public class MapEditing {
     private void drawBlock(int x, int y, int z, int blockID, int metadata) {
         Tile block = Tile.BY_ID[blockID];
         if (block != null) {
-            int prevBlockID = this.world.getTileId(x, y, z);
-            int prevMetadata = this.world.getTileMeta(x, y, z);
-            ((ExLevel)this.world).setBlockAndMetadataTemp(x, y, z, blockID, metadata);
+            int prevBlockID = this.level.getTileId(x, y, z);
+            int prevMetadata = this.level.getTileMeta(x, y, z);
+            ((ExLevel) this.level).setBlockAndMetadataTemp(x, y, z, blockID, metadata);
             this.renderBlocks.method_57(block, x, y, z);
-            ((ExLevel)this.world).setBlockAndMetadataTemp(x, y, z, prevBlockID, prevMetadata);
+            ((ExLevel) this.level).setBlockAndMetadataTemp(x, y, z, prevBlockID, prevMetadata);
         }
     }
 
@@ -220,13 +221,13 @@ public class MapEditing {
             GL11.glDisable(3553);
             GL11.glDepthMask(false);
             float f1 = 0.002f;
-            int j = this.world.getTileId(this.cursor.x, this.cursor.y, this.cursor.z);
+            int j = this.level.getTileId(this.cursor.x, this.cursor.y, this.cursor.z);
             if (j > 0) {
-                Tile.BY_ID[j].method_1616(this.world, this.cursor.x, this.cursor.y, this.cursor.z);
+                Tile.BY_ID[j].method_1616(this.level, this.cursor.x, this.cursor.y, this.cursor.z);
                 double d = camera.prevRenderX + (camera.x - camera.prevRenderX) * (double) time;
                 double d1 = camera.prevRenderY + (camera.y - camera.prevRenderY) * (double) time;
                 double d2 = camera.prevRenderZ + (camera.z - camera.prevRenderZ) * (double) time;
-                Box box = Tile.BY_ID[j].getOutlineShape(this.world, this.cursor.x, this.cursor.y, this.cursor.z).expand(f1, f1, f1).move(-d, -d1, -d2);
+                Box box = Tile.BY_ID[j].getOutlineShape(this.level, this.cursor.x, this.cursor.y, this.cursor.z).expand(f1, f1, f1).move(-d, -d1, -d2);
                 this.drawBox(box);
                 GL11.glColor4f(1.0f, 0.0f, 0.0f, 0.4f);
                 GL11.glLineWidth(4.0f);

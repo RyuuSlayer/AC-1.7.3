@@ -5,7 +5,7 @@ import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevelProperties;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.mixin.entity.AccessEntity;
-import io.github.ryuu.adventurecraft.mixin.util.io.ExCompoundTag;
+import io.github.ryuu.adventurecraft.extensions.util.io.ExCompoundTag;
 import net.minecraft.level.Level;
 import net.minecraft.level.LevelProperties;
 import net.minecraft.util.io.AbstractTag;
@@ -538,7 +538,7 @@ public abstract class MixinLevelProperties implements ExLevelProperties {
 
     @Override
     public float getFogStart() {
-        return fogStart;
+        return this.fogStart;
     }
 
     @Override
@@ -548,7 +548,7 @@ public abstract class MixinLevelProperties implements ExLevelProperties {
 
     @Override
     public float getFogEnd() {
-        return fogEnd;
+        return this.fogEnd;
     }
 
     @Override
@@ -558,17 +558,17 @@ public abstract class MixinLevelProperties implements ExLevelProperties {
 
     @Override
     public String getPlayingMusic() {
-        return playingMusic;
+        return this.playingMusic;
     }
 
     @Override
     public void setPlayingMusic(String music) {
-        playingMusic = music;
+        this.playingMusic = music;
     }
 
     @Override
     public String getOnNewSaveScript() {
-        return onNewSaveScript;
+        return this.onNewSaveScript;
     }
 
     @Override
@@ -578,7 +578,7 @@ public abstract class MixinLevelProperties implements ExLevelProperties {
 
     @Override
     public String getOnLoadScript() {
-        return onLoadScript;
+        return this.onLoadScript;
     }
 
     @Override
@@ -588,7 +588,7 @@ public abstract class MixinLevelProperties implements ExLevelProperties {
 
     @Override
     public String getOnUpdateScript() {
-        return onUpdateScript;
+        return this.onUpdateScript;
     }
 
     @Override
@@ -598,7 +598,7 @@ public abstract class MixinLevelProperties implements ExLevelProperties {
 
     @Override
     public CompoundTag getGlobalScope() {
-        return globalScope;
+        return this.globalScope;
     }
 
     @Override
@@ -608,7 +608,7 @@ public abstract class MixinLevelProperties implements ExLevelProperties {
 
     @Override
     public CompoundTag getWorldScope() {
-        return worldScope;
+        return this.worldScope;
     }
 
     @Override
@@ -618,7 +618,7 @@ public abstract class MixinLevelProperties implements ExLevelProperties {
 
     @Override
     public CompoundTag getMusicScope() {
-        return musicScope;
+        return this.musicScope;
     }
 
     @Override
@@ -628,6 +628,6 @@ public abstract class MixinLevelProperties implements ExLevelProperties {
 
     @Override
     public CompoundTag getTriggerData() {
-        return triggerData;
+        return this.triggerData;
     }
 }

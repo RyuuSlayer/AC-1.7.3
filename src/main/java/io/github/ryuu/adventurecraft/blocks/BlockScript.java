@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityScript;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import io.github.ryuu.adventurecraft.gui.GuiScript;
 import io.github.ryuu.adventurecraft.util.DebugMode;
@@ -13,7 +14,7 @@ import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
-public class BlockScript extends TileWithEntity {
+public class BlockScript extends TileWithEntity implements AcTriggerTile, AcRenderConditionTile {
 
     protected BlockScript(int i, int j) {
         super(i, j, Material.AIR);
@@ -58,19 +59,19 @@ public class BlockScript extends TileWithEntity {
     }
 
     @Override
-    public void onTriggerActivated(Level world, int i, int j, int k) {
-        TileEntityScript obj = (TileEntityScript) world.getTileEntity(i, j, k);
+    public void onTriggerActivated(Level level, int i, int j, int k) {
+        TileEntityScript obj = (TileEntityScript) level.getTileEntity(i, j, k);
         if (!obj.onTriggerScriptFile.equals("")) {
-            world.scriptHandler.runScript(obj.onTriggerScriptFile, obj.scope);
+            ((ExLevel) level).getScriptHandler().runScript(obj.onTriggerScriptFile, obj.scope);
         }
         obj.isActivated = true;
     }
 
     @Override
-    public void onTriggerDeactivated(Level world, int i, int j, int k) {
-        TileEntityScript obj = (TileEntityScript) world.getTileEntity(i, j, k);
+    public void onTriggerDeactivated(Level level, int i, int j, int k) {
+        TileEntityScript obj = (TileEntityScript) level.getTileEntity(i, j, k);
         if (!obj.onDetriggerScriptFile.equals("")) {
-            world.scriptHandler.runScript(obj.onDetriggerScriptFile, obj.scope);
+            ((ExLevel) level).getScriptHandler().runScript(obj.onDetriggerScriptFile, obj.scope);
         }
         obj.isActivated = false;
     }

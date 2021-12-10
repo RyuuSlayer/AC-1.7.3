@@ -3,14 +3,15 @@ package io.github.ryuu.adventurecraft.mixin.client.render;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityStore;
 import io.github.ryuu.adventurecraft.extensions.client.ExMinecraft;
+import io.github.ryuu.adventurecraft.extensions.client.options.ExGameOptions;
 import io.github.ryuu.adventurecraft.extensions.client.render.ExGameRenderer;
+import io.github.ryuu.adventurecraft.extensions.client.render.ExHandItemRenderer;
 import io.github.ryuu.adventurecraft.extensions.client.render.ExWorldRenderer;
-import io.github.ryuu.adventurecraft.extensions.entity.ExLivingEntity;
+import io.github.ryuu.adventurecraft.extensions.entity.ExEntity;
 import io.github.ryuu.adventurecraft.extensions.entity.player.ExPlayer;
 import io.github.ryuu.adventurecraft.extensions.entity.player.ExPlayerInventory;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.items.Items;
-import io.github.ryuu.adventurecraft.mixin.client.options.ExGameOptions;
 import io.github.ryuu.adventurecraft.util.CutsceneCameraPoint;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.MapEditing;
@@ -204,7 +205,7 @@ public abstract class MixinGameRenderer implements AccessGameRenderer, ExGameRen
     @Inject(method = "method_1850", at = @At("HEAD"), cancellable = true)
     private void cancelMethod_1850(float f, CallbackInfo ci) {
         if (((ExMinecraft) this.minecraft).isCameraActive() ||
-                ((ExLivingEntity) this.minecraft.field_2807).getStunned() != 0) {
+                ((ExEntity) this.minecraft.field_2807).getStunned() != 0) {
             ci.cancel();
         }
     }
@@ -213,7 +214,8 @@ public abstract class MixinGameRenderer implements AccessGameRenderer, ExGameRen
             value = "INVOKE",
             target = "Lorg/lwjgl/opengl/GL11;glTranslatef(FFF)V",
             ordinal = 3,
-            shift = At.Shift.BEFORE),
+            shift = At.Shift.BEFORE,
+            remap = false),
             cancellable = true)
     private void translateCameraWhenCutscene(float f, CallbackInfo ci) {
         if (((ExMinecraft) this.minecraft).isCameraActive()) {
@@ -404,7 +406,7 @@ public abstract class MixinGameRenderer implements AccessGameRenderer, ExGameRen
             this.minecraft.field_2807.pitch = this.minecraft.field_2807.prevPitch = p.rotPitch;
         } else {
             this.minecraft.field_2807 = this.minecraft.player;
-            if (((ExLivingEntity) this.minecraft.player).getStunned() != 0) {
+            if (((ExEntity) this.minecraft.player).getStunned() != 0) {
                 this.minecraft.player.prevRenderX = this.minecraft.player.prevX = this.minecraft.player.x;
                 this.minecraft.player.prevRenderY = this.minecraft.player.prevY = this.minecraft.player.y;
                 this.minecraft.player.prevRenderZ = this.minecraft.player.prevZ = this.minecraft.player.z;
@@ -628,7 +630,7 @@ public abstract class MixinGameRenderer implements AccessGameRenderer, ExGameRen
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite
-    protected void renderWeather(float tickDelta) {
+    public void renderWeather(float tickDelta) {
         float f1 = this.minecraft.level.getRainGradient(tickDelta);
         if (f1 <= 0.0f) {
             return;
@@ -745,7 +747,8 @@ public abstract class MixinGameRenderer implements AccessGameRenderer, ExGameRen
 
     @Redirect(method = "method_1843", at = @At(
             value = "INVOKE",
-            target = "Lorg/lwjgl/opengl/GL11;glClear(I)V"))
+            target = "Lorg/lwjgl/opengl/GL11;glClear(I)V",
+            remap = false))
     private void doNotClear(int mask) {
     }
 

@@ -71,7 +71,7 @@ public abstract class MixinSelectWorldScreen extends Screen {
         }
 
         @ModifyConstant(method = "<init>", constant = @Constant(intValue = 64))
-        private int initHeightOffset(int value) {
+        private static int initHeightOffset(int value) {
             return 32;
         }
 

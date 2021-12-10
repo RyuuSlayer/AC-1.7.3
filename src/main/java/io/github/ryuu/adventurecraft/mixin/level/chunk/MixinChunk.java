@@ -4,6 +4,7 @@ import io.github.ryuu.adventurecraft.Main;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.extensions.level.chunk.ExChunk;
 import io.github.ryuu.adventurecraft.extensions.tile.entity.ExTileEntity;
+import io.github.ryuu.adventurecraft.util.AcChunkCache;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.Entity;
@@ -254,7 +255,7 @@ public abstract class MixinChunk implements ExChunk {
         if (tileId != 0) {
             Tile.BY_ID[tileId].method_1611(this.level, l1, y, i2);
         }
-        if (Main.chunkIsNotPopulating) {
+        if (AcChunkCache.chunkIsNotPopulating) {
             this.shouldSave = true;
         }
         return true;
@@ -310,7 +311,7 @@ public abstract class MixinChunk implements ExChunk {
         if (tileId != 0 && !this.level.isClient) {
             Tile.BY_ID[tileId].method_1611(this.level, k1, y, l1);
         }
-        if (Main.chunkIsNotPopulating) {
+        if (AcChunkCache.chunkIsNotPopulating) {
             this.shouldSave = true;
         }
         return true;
@@ -332,7 +333,7 @@ public abstract class MixinChunk implements ExChunk {
             }
             ((ExLevel)this.level).getUndoStack().recordChange(x + (this.x << 4), y, z + (this.z << 4), prevBlockID, prevMetadata, prevTag, prevBlockID, metadata, null);
         }
-        if (Main.chunkIsNotPopulating) {
+        if (AcChunkCache.chunkIsNotPopulating) {
             this.shouldSave = true;
         }
         this.meta.set(x, y, z, metadata);
@@ -341,13 +342,13 @@ public abstract class MixinChunk implements ExChunk {
     @Redirect(method = "setLightLevel", at = @At(
             value = "FIELD",
             target = "Lnet/minecraft/level/chunk/Chunk;shouldSave:Z"))
-    private static void disableShouldSaveOnSetLightLevel(Chunk instance, boolean value) {
+    private void disableShouldSaveOnSetLightLevel(Chunk instance, boolean value) {
     }
 
     @Redirect(method = "addEntity", at = @At(
             value = "FIELD",
             target = "Lnet/minecraft/level/chunk/Chunk;field_969:Z"))
-    private static void disableSetField969OnAddEntity(Chunk instance, boolean value) {
+    private void disableSetField969OnAddEntity(Chunk instance, boolean value) {
     }
 
     @Inject(method = "addEntity", at = @At("HEAD"))

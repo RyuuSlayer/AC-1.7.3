@@ -14,7 +14,7 @@ import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
-public class BlockUrl extends TileWithEntity {
+public class BlockUrl extends TileWithEntity implements AcTriggerTile, AcRenderConditionTile {
 
     protected BlockUrl(int i, int j) {
         super(i, j, Material.AIR);
@@ -54,6 +54,10 @@ public class BlockUrl extends TileWithEntity {
         if (obj.url != null && !obj.url.equals("")) {
             GuiUrlRequest.showUI(obj.url);
         }
+    }
+
+    @Override
+    public void onTriggerDeactivated(Level world, int i, int j, int k) {
     }
 
     @Override

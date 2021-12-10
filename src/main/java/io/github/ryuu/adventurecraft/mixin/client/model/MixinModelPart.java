@@ -81,12 +81,12 @@ public abstract class MixinModelPart implements ExModel {
 
     @Inject(method = "addCuboid(FFFIIIF)V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/model/ModelPart;mirror:Z", ordinal = 1))
     private void addVertexChanger(float f, float f1, float f2, int i, int j, int k, float f3, CallbackInfo ci) {
-        ((ExClass_552) this.field_2302[0]).adventurecraft$setVertexes(this.xTexOffset + k + i, this.yTexOffset + k, this.xTexOffset + k + i + k, this.yTexOffset + k + j, this.tWidth, this.tHeight);
-        ((ExClass_552) this.field_2302[1]).adventurecraft$setVertexes(this.xTexOffset, this.yTexOffset + k, this.xTexOffset + k, this.yTexOffset + k + j, this.tWidth, this.tHeight);
-        ((ExClass_552) this.field_2302[2]).adventurecraft$setVertexes(this.xTexOffset + k, this.yTexOffset, this.xTexOffset + k + i, this.yTexOffset + k, this.tWidth, this.tHeight);
-        ((ExClass_552) this.field_2302[3]).adventurecraft$setVertexes(this.xTexOffset + k + i, this.yTexOffset, this.xTexOffset + k + i + i, this.yTexOffset + k, this.tWidth, this.tHeight);
-        ((ExClass_552) this.field_2302[4]).adventurecraft$setVertexes(this.xTexOffset + k, this.yTexOffset + k, this.xTexOffset + k + i, this.yTexOffset + k + j, this.tWidth, this.tHeight);
-        ((ExClass_552) this.field_2302[5]).adventurecraft$setVertexes(this.xTexOffset + k + i + k, this.yTexOffset + k, this.xTexOffset + k + i + k + i, this.yTexOffset + k + j, this.tWidth, this.tHeight);
+        ((ExClass_552) this.field_2302[0]).setVertexes(this.xTexOffset + k + i, this.yTexOffset + k, this.xTexOffset + k + i + k, this.yTexOffset + k + j, this.tWidth, this.tHeight);
+        ((ExClass_552) this.field_2302[1]).setVertexes(this.xTexOffset, this.yTexOffset + k, this.xTexOffset + k, this.yTexOffset + k + j, this.tWidth, this.tHeight);
+        ((ExClass_552) this.field_2302[2]).setVertexes(this.xTexOffset + k, this.yTexOffset, this.xTexOffset + k + i, this.yTexOffset + k, this.tWidth, this.tHeight);
+        ((ExClass_552) this.field_2302[3]).setVertexes(this.xTexOffset + k + i, this.yTexOffset, this.xTexOffset + k + i + i, this.yTexOffset + k, this.tWidth, this.tHeight);
+        ((ExClass_552) this.field_2302[4]).setVertexes(this.xTexOffset + k, this.yTexOffset + k, this.xTexOffset + k + i, this.yTexOffset + k + j, this.tWidth, this.tHeight);
+        ((ExClass_552) this.field_2302[5]).setVertexes(this.xTexOffset + k + i + k, this.yTexOffset + k, this.xTexOffset + k + i + k + i, this.yTexOffset + k + j, this.tWidth, this.tHeight);
     }
 
     @ModifyArgs(method = "addCuboid(FFFIIIF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/class_552;<init>([Lnet/minecraft/class_290;IIII)V", ordinal = 1))
@@ -166,17 +166,17 @@ public abstract class MixinModelPart implements ExModel {
         this.vertices[6] = positiontexturevertex6;
         this.vertices[7] = positiontexturevertex7;
         this.field_2302[0] = new class_552(new class_290[]{positiontexturevertex5, positiontexturevertex1, positiontexturevertex2, positiontexturevertex6}, this.xTexOffset + k + i + k, this.yTexOffset + k + j, this.xTexOffset + k + i, this.yTexOffset + k);
-        ((ExClass_552) this.field_2302[0]).adventurecraft$setVertexes(this.xTexOffset + k + i + k, this.yTexOffset + k + j, this.xTexOffset + k + i, this.yTexOffset + k, this.tWidth, this.tHeight);
+        ((ExClass_552) this.field_2302[0]).setVertexes(this.xTexOffset + k + i + k, this.yTexOffset + k + j, this.xTexOffset + k + i, this.yTexOffset + k, this.tWidth, this.tHeight);
         this.field_2302[1] = new class_552(new class_290[]{positiontexturevertex, positiontexturevertex4, positiontexturevertex7, positiontexturevertex3}, this.xTexOffset + k, this.yTexOffset + k + j, this.xTexOffset, this.yTexOffset + k);
-        ((ExClass_552) this.field_2302[1]).adventurecraft$setVertexes(this.xTexOffset + k, this.yTexOffset + k + j, this.xTexOffset, this.yTexOffset + k, this.tWidth, this.tHeight);
+        ((ExClass_552) this.field_2302[1]).setVertexes(this.xTexOffset + k, this.yTexOffset + k + j, this.xTexOffset, this.yTexOffset + k, this.tWidth, this.tHeight);
         this.field_2302[2] = new class_552(new class_290[]{positiontexturevertex5, positiontexturevertex4, positiontexturevertex, positiontexturevertex1}, this.xTexOffset + k + i + i, this.yTexOffset, this.xTexOffset + k + i, this.yTexOffset + k);
-        ((ExClass_552) this.field_2302[2]).adventurecraft$setVertexes(this.xTexOffset + k + i + i, this.yTexOffset, this.xTexOffset + k + i, this.yTexOffset + k, this.tWidth, this.tHeight);
+        ((ExClass_552) this.field_2302[2]).setVertexes(this.xTexOffset + k + i + i, this.yTexOffset, this.xTexOffset + k + i, this.yTexOffset + k, this.tWidth, this.tHeight);
         this.field_2302[3] = new class_552(new class_290[]{positiontexturevertex2, positiontexturevertex3, positiontexturevertex7, positiontexturevertex6}, this.xTexOffset + k + i, this.yTexOffset, this.xTexOffset + k, this.yTexOffset + k);
-        ((ExClass_552) this.field_2302[3]).adventurecraft$setVertexes(this.xTexOffset + k + i, this.yTexOffset, this.xTexOffset + k, this.yTexOffset + k, this.tWidth, this.tHeight);
+        ((ExClass_552) this.field_2302[3]).setVertexes(this.xTexOffset + k + i, this.yTexOffset, this.xTexOffset + k, this.yTexOffset + k, this.tWidth, this.tHeight);
         this.field_2302[4] = new class_552(new class_290[]{positiontexturevertex1, positiontexturevertex, positiontexturevertex3, positiontexturevertex2}, this.xTexOffset + k + i + k + i, this.yTexOffset + k + j, this.xTexOffset + k + i + k, this.yTexOffset + k);
-        ((ExClass_552) this.field_2302[4]).adventurecraft$setVertexes(this.xTexOffset + k + i + k + i, this.yTexOffset + k + j, this.xTexOffset + k + i + k, this.yTexOffset + k, this.tWidth, this.tHeight);
+        ((ExClass_552) this.field_2302[4]).setVertexes(this.xTexOffset + k + i + k + i, this.yTexOffset + k + j, this.xTexOffset + k + i + k, this.yTexOffset + k, this.tWidth, this.tHeight);
         this.field_2302[5] = new class_552(new class_290[]{positiontexturevertex4, positiontexturevertex5, positiontexturevertex6, positiontexturevertex7}, this.xTexOffset + k + i, this.yTexOffset + k + j, this.xTexOffset + k, this.yTexOffset + k);
-        ((ExClass_552) this.field_2302[5]).adventurecraft$setVertexes(this.xTexOffset + k + i, this.yTexOffset + k + j, this.xTexOffset + k, this.yTexOffset + k, this.tWidth, this.tHeight);
+        ((ExClass_552) this.field_2302[5]).setVertexes(this.xTexOffset + k + i, this.yTexOffset + k + j, this.xTexOffset + k, this.yTexOffset + k, this.tWidth, this.tHeight);
         if (this.mirror) {
             for (net.minecraft.class_552 class_552 : this.field_2302) {
                 class_552.method_1925();

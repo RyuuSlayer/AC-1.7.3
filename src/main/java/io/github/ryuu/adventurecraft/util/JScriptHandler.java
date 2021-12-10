@@ -41,7 +41,7 @@ public class JScriptHandler {
     public Object runScript(String fileName, Scriptable scope, boolean verbose) {
         JScriptInfo scriptInfo = this.scripts.get(fileName.toLowerCase());
         if (scriptInfo != null) {
-            fileName = fileName.toLowerCase();
+            //fileName = fileName.toLowerCase();
             long startTime = System.nanoTime();
             try {
                 Object object = ((ExLevel)this.level).getScript().runScript(scriptInfo.compiledScript, scope);

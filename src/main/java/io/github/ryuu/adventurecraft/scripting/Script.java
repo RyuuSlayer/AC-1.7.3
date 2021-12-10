@@ -11,6 +11,8 @@ import java.util.LinkedList;
 @SuppressWarnings("unused")
 public class Script {
 
+    static final String scriptPackage = "io.github.ryuu.adventurecraft.scripting";
+
     static boolean shutterSet = false;
     public Scriptable globalScope;
     public ScriptKeyboard keyboard;
@@ -29,25 +31,25 @@ public class Script {
     LinkedList<ScriptContinuation> sleepingScripts = new LinkedList<>();
     LinkedList<ScriptContinuation> removeMe = new LinkedList<>();
 
-    public Script(Level w) {
-        this.cx = ContextFactory.getGlobal().enterContext();
+    public Script(Level level) {
+        this.cx = Context.enter();
         this.cx.setOptimizationLevel(-1);
         if (!shutterSet) {
-            this.cx.setClassShutter(className -> className.startsWith("net.minecraft.script") || className.equals("java.lang.Object") || className.equals("java.lang.String") || className.equals("java.lang.Double") || className.equals("java.lang.Boolean"));
+            this.cx.setClassShutter(className -> className.startsWith(scriptPackage) || className.equals("java.lang.Object") || className.equals("java.lang.String") || className.equals("java.lang.Double") || className.equals("java.lang.Boolean"));
             shutterSet = true;
         }
         this.globalScope = this.cx.initStandardObjects();
         this.runScope = this.cx.newObject(this.globalScope);
         this.runScope.setParentScope(this.globalScope);
-        this.time = new ScriptTime(w);
-        this.world = new ScriptWorld(w);
+        this.time = new ScriptTime(level);
+        this.world = new ScriptWorld(level);
         this.chat = new ScriptChat();
-        this.weather = new ScriptWeather(w);
-        this.effect = new ScriptEffect(w, AccessMinecraft.getInstance().worldRenderer);
+        this.weather = new ScriptWeather(level);
+        this.effect = new ScriptEffect(level, AccessMinecraft.getInstance().worldRenderer);
         this.sound = new ScriptSound(AccessMinecraft.getInstance().soundHelper);
         this.ui = new ScriptUI();
-        this.script = new ScriptScript(w);
-        this.keyboard = new ScriptKeyboard(w, AccessMinecraft.getInstance().options, this.getNewScope());
+        this.script = new ScriptScript(level);
+        this.keyboard = new ScriptKeyboard(level, AccessMinecraft.getInstance().options, this.getNewScope());
         Object wrappedOut = Context.javaToJS(this.time, this.globalScope);
         ScriptableObject.putProperty(this.globalScope, "time", wrappedOut);
         wrappedOut = Context.javaToJS(this.world, this.globalScope);
@@ -71,14 +73,15 @@ public class Script {
         wrappedOut = Context.javaToJS(null, this.globalScope);
         ScriptableObject.putProperty(this.globalScope, "hitEntity", wrappedOut);
         ScriptableObject.putProperty(this.globalScope, "hitBlock", wrappedOut);
-        this.runString("Item = net.minecraft.script.ScriptItem");
-        this.runString("UILabel = net.minecraft.script.ScriptUILabel");
-        this.runString("UISprite = net.minecraft.script.ScriptUISprite");
-        this.runString("UIRect = net.minecraft.script.ScriptUIRect");
-        this.runString("UIContainer = net.minecraft.script.ScriptUIContainer");
-        this.runString("UIContainer = net.minecraft.script.ScriptUIContainer");
-        this.runString("Model = net.minecraft.script.ScriptModel");
-        this.runString("Vec3 = net.minecraft.script.ScriptVec3");
+
+        this.runString(String.format("Item = Packages.%s.ScriptItem", scriptPackage));
+        this.runString(String.format("UILabel = Packages.%s.ScriptUILabel", scriptPackage));
+        this.runString(String.format("UISprite = Packages.%s.ScriptUISprite", scriptPackage));
+        this.runString(String.format("UIRect = Packages.%s.ScriptUIRect", scriptPackage));
+        this.runString(String.format("UIContainer = Packages.%s.ScriptUIContainer", scriptPackage));
+        this.runString(String.format("UIContainer = Packages.%s.ScriptUIContainer", scriptPackage));
+        this.runString(String.format("Model = Packages.%s.ScriptModel", scriptPackage));
+        this.runString(String.format("Vec3 = Packages.%s.ScriptVec3", scriptPackage));
     }
 
     public void addObject(String name, Object o) {
@@ -110,7 +113,7 @@ public class Script {
         try {
             return this.cx.compileString(script, sourceName, 1, null);
         } catch (Exception e) {
-            AccessMinecraft.getInstance().overlay.addChatMessage("Javascript Error: " + e.getMessage());
+            ((ExOverlay) AccessMinecraft.getInstance().overlay).logJavascriptException(e);
             return null;
         }
     }
@@ -129,7 +132,7 @@ public class Script {
                 return object;
             } catch (ContinuationPending e) {
             } catch (Exception e) {
-                AccessMinecraft.getInstance().overlay.addChatMessage("Javascript Error: " + e.getMessage());
+                ((ExOverlay) AccessMinecraft.getInstance().overlay).logJavascriptException(e);
             } finally {
                 this.curScope = null;
             }
@@ -155,17 +158,12 @@ public class Script {
             try {
                 this.curScope = c.scope;
                 this.cx.resumeContinuation(c.contituation, c.scope, null);
-                continue;
             } catch (ContinuationPending e) {
-                continue;
             } catch (Exception e) {
-                AccessMinecraft.getInstance().overlay.addChatMessage("Javascript Error: " + e.getMessage());
-                continue;
+                ((ExOverlay) AccessMinecraft.getInstance().overlay).logJavascriptException(e);
             } finally {
                 this.curScope = null;
-                continue;
             }
-            break;
         }
     }
 

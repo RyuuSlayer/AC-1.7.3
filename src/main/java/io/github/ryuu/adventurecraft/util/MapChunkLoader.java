@@ -18,7 +18,7 @@ public class MapChunkLoader implements ChunkIO {
     }
 
     @Override
-    public Chunk getChunk(Level level, int xPos, int zPos) throws IOException {
+    public Chunk getChunk(Level level, int xPos, int zPos) {
         Chunk returnChunk = this.saveRegion.getChunk(level, xPos, zPos);
         if (returnChunk == null) {
             returnChunk = this.mapRegion.getChunk(level, xPos, zPos);
@@ -33,7 +33,7 @@ public class MapChunkLoader implements ChunkIO {
             if (DebugMode.levelEditing) {
                 this.mapRegion.saveChunk(level, chunk);
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

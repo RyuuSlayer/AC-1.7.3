@@ -8,8 +8,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(DeathScreen.class)
-public class MixinDeathScreen extends Screen {
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/DeathScreen;drawTextWithShadowCentred(Lnet/minecraft/client/render/TextRenderer;Ljava/lang/String;III)V", ordinal = 1, remap = false))
+public abstract class MixinDeathScreen extends Screen {
+
+    @Redirect(method = "render", at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/gui/screen/DeathScreen;drawTextWithShadowCentred(Lnet/minecraft/client/render/TextRenderer;Ljava/lang/String;III)V",
+            ordinal = 1))
     public void render(DeathScreen instance, TextRenderer textRenderer, String s, int i, int j, int k) {
     }
 }

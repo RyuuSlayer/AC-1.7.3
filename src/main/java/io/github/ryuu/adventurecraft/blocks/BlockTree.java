@@ -6,6 +6,7 @@ import io.github.ryuu.adventurecraft.gui.GuiTree;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
+import net.minecraft.level.TileView;
 import net.minecraft.tile.Tile;
 import net.minecraft.tile.TileWithEntity;
 import net.minecraft.tile.entity.TileEntity;
@@ -70,5 +71,14 @@ public class BlockTree extends TileWithEntity implements IBlockColor {
     public void incrementColor(Level world, int i, int j, int k) {
         int metadata = world.getTileMeta(i, j, k);
         world.setTileMeta(i, j, k, (metadata + 1) % ExTile.subTypes[this.id]);
+    }
+
+    @Override
+    public int getColorMetaData(TileView iblockaccess, int i, int j, int k) {
+        return 0;
+    }
+
+    @Override
+    public void setColorMetaData(Level world, int i, int j, int k, int color) {
     }
 }

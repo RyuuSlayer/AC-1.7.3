@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.util.io;
 
+import io.github.ryuu.adventurecraft.extensions.util.io.ExCompoundTag;
 import net.minecraft.util.io.*;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -16,6 +17,9 @@ public abstract class MixinCompoundTag extends AbstractTag implements ExCompound
 
     @Shadow
     public abstract byte getByte(String string);
+
+    @Shadow
+    public abstract void put(String string, byte b);
 
     // TODO: remove because it's cursed?
     /**

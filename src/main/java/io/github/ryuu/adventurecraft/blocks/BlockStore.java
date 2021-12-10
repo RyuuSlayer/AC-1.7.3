@@ -14,7 +14,7 @@ import net.minecraft.tile.TileWithEntity;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
 
-public class BlockStore extends TileWithEntity {
+public class BlockStore extends TileWithEntity implements AcResetTile {
 
     protected BlockStore(int i, int j) {
         super(i, j, Material.GLASS);

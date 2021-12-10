@@ -16,7 +16,7 @@ import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
-public class BlockWeather extends TileWithEntity {
+public class BlockWeather extends TileWithEntity implements AcTriggerTile, AcRenderConditionTile {
 
     protected BlockWeather(int i, int j) {
         super(i, j, Material.AIR);

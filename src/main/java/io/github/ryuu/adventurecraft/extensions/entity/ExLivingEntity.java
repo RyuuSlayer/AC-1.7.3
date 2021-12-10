@@ -4,8 +4,6 @@ import net.minecraft.item.ItemInstance;
 
 public interface ExLivingEntity extends ExEntity {
 
-    void applyDamage(int damage);
-
     boolean protectedByShield();
 
     boolean protectedByShield(double x, double y, double z);

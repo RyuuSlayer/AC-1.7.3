@@ -25,7 +25,7 @@ public abstract class MixinSandTile extends Tile implements IBlockColor {
             value = "INVOKE",
             target = "Lnet/minecraft/level/Level;spawnEntity(Lnet/minecraft/entity/Entity;)Z",
             shift = At.Shift.BEFORE))
-    private void setMetadataBeforeSpawn(Level world, int i, int j, int k, CallbackInfo ci, FallingTile var9) {
+    private void setMetadataBeforeSpawn(Level world, int i, int j, int k, CallbackInfo ci, int var5, int var6, int var7, int var8, FallingTile var9) {
         int metadata = world.getTileMeta(i, j, k);
         ((ExFallingTile) var9).setMetadata(metadata);
     }

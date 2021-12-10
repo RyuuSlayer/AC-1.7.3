@@ -24,7 +24,7 @@ import net.minecraft.util.maths.Box;
 
 import java.io.*;
 
-public class BlockEffect extends TileWithEntity {
+public class BlockEffect extends TileWithEntity implements AcTriggerTile, AcRenderConditionTile {
 
     static boolean needsReloadForRevert = true;
 

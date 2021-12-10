@@ -12,7 +12,7 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.Vec3f;
 
-public class BlockLockedDoor extends Tile {
+public class BlockLockedDoor extends Tile implements AcRenderConditionTile, AcResetTile, AcClickTile {
 
     int doorKeyToUse;
 

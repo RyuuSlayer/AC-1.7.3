@@ -54,7 +54,7 @@ public abstract class MixinWalkingEntity extends MixinLivingEntity implements IE
      */
     @Override
     @Overwrite
-    protected void tickHandSwing() {
+    public void tickHandSwing() {
         this.field_663 = this.method_640();
         float f = 16.0f;
         if (this.entity == null) {

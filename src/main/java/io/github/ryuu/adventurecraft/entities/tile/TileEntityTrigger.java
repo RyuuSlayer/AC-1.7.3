@@ -1,7 +1,7 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
 import io.github.ryuu.adventurecraft.blocks.Blocks;
-import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
+import io.github.ryuu.adventurecraft.extensions.client.ExMinecraft;
 import net.minecraft.util.io.CompoundTag;
 
 public class TileEntityTrigger extends TileEntityMinMax {
@@ -14,7 +14,7 @@ public class TileEntityTrigger extends TileEntityMinMax {
 
     @Override
     public void tick() {
-        if (this.activated > 0 && !AccessMinecraft.getInstance().cameraActive) {
+        if (this.activated > 0 && !ExMinecraft.getInstance().isCameraActive()) {
             --this.activated;
             if (this.activated == 0 && this.level.getTileId(this.x, this.y, this.z) == Blocks.triggerBlock.id) {
                 Blocks.triggerBlock.deactivateTrigger(this.level, this.x, this.y, this.z);

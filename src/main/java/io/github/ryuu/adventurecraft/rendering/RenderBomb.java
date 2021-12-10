@@ -13,7 +13,7 @@ public class RenderBomb extends ItemRenderer {
     }
 
     @Override
-    public void method_1484(ItemEntity entityitem, double d, double d1, double d2, float f, float f1) {
+    public void render(ItemEntity entityitem, double d, double d1, double d2, float f, float f1) {
         ItemInstance itemstack = entityitem.item;
         GL11.glPushMatrix();
         GL11.glTranslatef((float) d, (float) d1 + 0.1f, (float) d2);

@@ -1,10 +1,10 @@
 package io.github.ryuu.adventurecraft;
 
-import io.github.minecraftcursedlegacy.api.config.Configs;
-import io.github.minecraftcursedlegacy.api.registry.Id;
+//import io.github.minecraftcursedlegacy.api.config.Configs;
+//import io.github.minecraftcursedlegacy.api.registry.Id;
 import net.fabricmc.api.ModInitializer;
-import tk.valoeghese.zoesteriaconfig.api.container.WritableConfig;
-import tk.valoeghese.zoesteriaconfig.api.template.ConfigTemplate;
+//import tk.valoeghese.zoesteriaconfig.api.container.WritableConfig;
+//import tk.valoeghese.zoesteriaconfig.api.template.ConfigTemplate;
 
 import java.io.IOException;
 
@@ -13,14 +13,11 @@ public class Main implements ModInitializer {
     public static long[] updateTimes;
     public static long updateRendererTime;
 
-    public static boolean chunkIsNotPopulating;
-
     static {
         updateTimes = new long[512];
-        chunkIsNotPopulating = true;
     }
 
-    private static WritableConfig config;
+    //private static WritableConfig config;
 
     @Override
     public void onInitialize() {
@@ -31,13 +28,13 @@ public class Main implements ModInitializer {
         System.out.println("Hello Fabric world!");
 
         // example config
-        try {
-            config = Configs.loadOrCreate(new Id("modid", "example"), ConfigTemplate.builder().addContainer("exampleContainer", container -> container.addDataEntry("someData", "0.5")).build());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        //try {
+        //    config = Configs.loadOrCreate(new Id("modid", "example"), ConfigTemplate.builder().addContainer("exampleContainer", container -> container.addDataEntry("someData", "0.5")).build());
+        //} catch (IOException e) {
+        //    throw new RuntimeException(e);
+        //}
 
-        System.out.println(config.getDoubleValue("exampleContainer.someData"));
+        //System.out.println(config.getDoubleValue("exampleContainer.someData"));
 
     }
 }

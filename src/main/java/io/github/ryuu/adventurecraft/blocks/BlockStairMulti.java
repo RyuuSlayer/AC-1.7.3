@@ -258,7 +258,7 @@ public class BlockStairMulti extends BlockColor {
 
     @Override
     public void drop(Level level, int x, int y, int z, int meta) {
-        this.modelBlock.drop(level, x, y, z, meta);
+        ((AccessTile)this.modelBlock).invokeDrop(level, x, y, z, meta);
     }
 
     @Override

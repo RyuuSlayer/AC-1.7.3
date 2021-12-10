@@ -27,13 +27,13 @@ public class MixinTextureBinder implements ExTextureBinder {
     public int renderMode = 0;
 
     @Override
-    public String adventurecraft$getTexture() {
+    public String getTexture() {
         if (this.renderMode == 0) {
-            return "/assets/adventurecraft/terrain.png";
+            return "/terrain.png";
         }
         if (this.renderMode == 1) {
-            return "/assets/adventurecraft/gui/items.png";
+            return "/gui/items.png";
         }
-        return "/assets/adventurecraft/gui/items.png";
+        return "/gui/items.png";
     }
 }

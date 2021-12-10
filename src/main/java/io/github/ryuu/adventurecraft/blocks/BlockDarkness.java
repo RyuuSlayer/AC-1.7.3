@@ -8,7 +8,7 @@ import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
-public class BlockDarkness extends Tile {
+public class BlockDarkness extends Tile implements AcRenderConditionTile {
 
     protected BlockDarkness(int i, int j) {
         super(i, j, Material.AIR);

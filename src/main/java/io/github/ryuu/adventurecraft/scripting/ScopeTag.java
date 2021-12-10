@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.scripting;
 
-import io.github.ryuu.adventurecraft.mixin.util.io.ExCompoundTag;
+import io.github.ryuu.adventurecraft.extensions.util.io.ExCompoundTag;
 import net.minecraft.util.io.CompoundTag;
 import org.mozilla.javascript.Scriptable;
 

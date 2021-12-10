@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.tile;
 
-import io.github.ryuu.adventurecraft.blocks.BlockColor;
+import io.github.ryuu.adventurecraft.blocks.*;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import io.github.ryuu.adventurecraft.items.ItemSubtypes;
@@ -159,7 +159,6 @@ public abstract class MixinTile implements AccessTile, ExTile {
         ((ExLevel) level).getTriggerManager().removeArea(x, y, z);
     }
 
-
     @Redirect(method = "beforeDestroyedByExplosion", at = @At(value = "FIELD", target = "Lnet/minecraft/level/Level;isClient:Z"))
     private boolean beforeDestroyedByExplosion(Level level) {
         return false;
@@ -168,11 +167,6 @@ public abstract class MixinTile implements AccessTile, ExTile {
     @Redirect(method = "dropItem", at = @At(value = "FIELD", target = "Lnet/minecraft/level/Level;isClient:Z"))
     private boolean dropItem(Level level) {
         return false;
-    }
-
-    @Override
-    public int alwaysUseClick(Level world, int i, int j, int k) {
-        return -1;
     }
 
     @Override
@@ -187,13 +181,48 @@ public abstract class MixinTile implements AccessTile, ExTile {
     }
 
     @Override
+    public Tile setSubTypes(int i) {
+        subTypes[this.id] = i;
+        return ((Tile) (Object) this);
+    }
+
+    @Override
+    public int alwaysUseClick(Level world, int i, int j, int k) {
+        return -1;
+    }
+
+    @Override
+    public int getBlockLightValue(TileView iblockaccess, int i, int j, int k) {
+        return 0;
+    }
+
+    @Override
     public boolean shouldRender(TileView blockAccess, int i, int j, int k) {
         return true;
     }
 
     @Override
-    public Tile setSubTypes(int i) {
-        subTypes[this.id] = i;
-        return ((Tile) (Object) this);
+    public void reset(Level world, int i, int j, int k, boolean death) {
+    }
+
+    @Override
+    public void addTriggerActivation(Level world, int i, int j, int k) {
+    }
+
+    @Override
+    public void removeTriggerActivation(Level world, int i, int j, int k) {
+    }
+
+    @Override
+    public boolean canBeTriggered() {
+        return false;
+    }
+
+    @Override
+    public void onTriggerActivated(Level world, int i, int j, int k) {
+    }
+
+    @Override
+    public void onTriggerDeactivated(Level world, int i, int j, int k) {
     }
 }

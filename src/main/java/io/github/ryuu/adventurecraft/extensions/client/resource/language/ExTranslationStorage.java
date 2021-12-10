@@ -1,4 +1,4 @@
-package io.github.ryuu.adventurecraft.mixin.client.resource.language;
+package io.github.ryuu.adventurecraft.extensions.client.resource.language;
 
 import java.io.File;
 

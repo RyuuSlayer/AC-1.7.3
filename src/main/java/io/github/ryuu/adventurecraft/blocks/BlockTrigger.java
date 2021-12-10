@@ -21,7 +21,7 @@ import net.minecraft.util.maths.Box;
 
 import java.util.Random;
 
-public class BlockTrigger extends TileWithEntity {
+public class BlockTrigger extends TileWithEntity implements AcRenderConditionTile, AcResetTile {
 
     protected BlockTrigger(int i, int j) {
         super(i, j, Material.AIR);

@@ -35,4 +35,7 @@ public interface AccessLivingEntity {
 
     @Invoker
     void invokeOnKilledBy(Entity entity);
+
+    @Invoker
+    void invokeApplyDamage(int damage);
 }

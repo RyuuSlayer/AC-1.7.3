@@ -134,7 +134,7 @@ public class EntityBoomerang extends Entity {
                 continue;
             }
             if (!(e instanceof LivingEntity) || e == this.returnsTo) continue;
-            ((ExLivingEntity) e).setStunned(20);
+            ((ExEntity) e).setStunned(20);
             e.prevX = e.x;
             e.prevY = e.y;
             e.prevZ = e.z;

@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.entities;
 
+import io.github.ryuu.adventurecraft.mixin.entity.projectile.AccessArrow;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
@@ -36,14 +37,13 @@ public class EntityArrowBomb extends Arrow {
         }
     }
 
-    @Override
     public void handleHitEntity(HitResult movingobjectposition) {
         this.velocityX *= -0.1f;
         this.velocityY *= -0.1f;
         this.velocityZ *= -0.1f;
         this.yaw += 180.0f;
         this.prevYaw += 180.0f;
-        this.field_1584 = 0;
+        ((AccessArrow)this).setField_1584(0);
     }
 
     @Override

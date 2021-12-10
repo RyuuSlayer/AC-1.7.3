@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.items;
 
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
+import io.github.ryuu.adventurecraft.mixin.level.AccessLevel;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
@@ -65,7 +66,7 @@ public class ItemPaste extends ItemType {
                 for (j = 0; j < height; ++j) {
                     for (k = 0; k < depth; ++k) {
                         blockID = blocks[depth * (height * i + j) + k];
-                        level.method_235(xOffset + i, yOffset + j, zOffset + k, blockID);
+                        ((AccessLevel)level).invokeMethod_235(xOffset + i, yOffset + j, zOffset + k, blockID);
                     }
                 }
             }

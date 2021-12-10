@@ -6,6 +6,7 @@ import io.github.ryuu.adventurecraft.extensions.client.options.ExGameOptions;
 import io.github.ryuu.adventurecraft.extensions.tile.ExGrassTile;
 import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
+import io.github.ryuu.adventurecraft.util.AcChunkCache;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
 import net.minecraft.tile.GrassTile;
@@ -53,7 +54,7 @@ public abstract class MixinGrassTile extends Tile implements IBlockColor, ExGras
             target = "Lnet/minecraft/level/Level;setTile(IIII)Z",
             shift = At.Shift.BEFORE))
     private void beforeSetTile(Level level, int x, int y, int z, Random rand, CallbackInfo ci) {
-        Main.chunkIsNotPopulating = false;
+        AcChunkCache.chunkIsNotPopulating = false;
     }
 
     @Inject(method = "onScheduledTick", at = @At(
@@ -61,7 +62,7 @@ public abstract class MixinGrassTile extends Tile implements IBlockColor, ExGras
             target = "Lnet/minecraft/level/Level;setTile(IIII)Z",
             shift = At.Shift.AFTER))
     private void afterSetTile(Level level, int x, int y, int z, Random rand, CallbackInfo ci) {
-        Main.chunkIsNotPopulating = true;
+        AcChunkCache.chunkIsNotPopulating = true;
     }
 
     @Override

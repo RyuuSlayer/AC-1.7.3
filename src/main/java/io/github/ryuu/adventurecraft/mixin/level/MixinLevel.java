@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.level;
 
+import io.github.ryuu.adventurecraft.util.AcChunkCache;
 import io.github.ryuu.adventurecraft.blocks.BlockStairMulti;
 import io.github.ryuu.adventurecraft.blocks.Blocks;
 import io.github.ryuu.adventurecraft.extensions.client.ExMinecraft;
@@ -9,7 +10,6 @@ import io.github.ryuu.adventurecraft.extensions.client.render.*;
 import io.github.ryuu.adventurecraft.extensions.client.sound.ExSoundHelper;
 import io.github.ryuu.adventurecraft.extensions.client.texture.ExTextureManager;
 import io.github.ryuu.adventurecraft.extensions.entity.ExEntity;
-import io.github.ryuu.adventurecraft.extensions.entity.ExLivingEntity;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevelProperties;
 import io.github.ryuu.adventurecraft.extensions.level.chunk.ExChunk;
@@ -26,7 +26,6 @@ import io.github.ryuu.adventurecraft.util.*;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.class_366;
-import net.minecraft.client.colour.FoliageColour;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.client.util.ResourceDownloadThread;
 import net.minecraft.entity.Entity;
@@ -35,7 +34,6 @@ import net.minecraft.entity.player.Player;
 import net.minecraft.level.*;
 import net.minecraft.level.chunk.Chunk;
 import net.minecraft.level.chunk.ChunkIO;
-import net.minecraft.level.chunk.ClientChunkCache;
 import net.minecraft.level.dimension.Dimension;
 import net.minecraft.level.dimension.DimensionData;
 import net.minecraft.level.source.LevelSource;
@@ -60,7 +58,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.*;
 
-@Mixin(Level.class)
+@Mixin(value = Level.class, priority = 999)
 public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
 
     protected DimensionData mapHandler;
@@ -268,7 +266,7 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
     public void loadMapTextures() {
         TextureManager textureManager = AccessMinecraft.getInstance().textureManager;
         textureManager.reload();
-        for (Object obj : AccessTextureManager.getTextureIdMap().entrySet()) {
+        for (Object obj : ((AccessTextureManager) textureManager).getTextureIdMap().entrySet()) {
             Map.Entry<String, Integer> entry = (Map.Entry<String, Integer>) obj;
             String texName = entry.getKey();
             int texID = entry.getValue();
@@ -342,7 +340,7 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite
-    protected LevelSource createChunkCache() {
+    public LevelSource createChunkCache() {
         ChunkIO ichunkloader;
         if (this.dimensionData == null) {
             ichunkloader = this.mapHandler.getChunkIO(this.dimension);
@@ -352,7 +350,9 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
                 ichunkloader = new MapChunkLoader(this.mapHandler.getChunkIO(this.dimension), ichunkloader);
             }
         }
-        return new ClientChunkCache((Level) (Object) this, ichunkloader, this.dimension.createLevelSource());
+
+        AcChunkCache chunkCache = new AcChunkCache((Level) (Object) this, ichunkloader, this.dimension.createLevelSource());
+        return chunkCache;
     }
 
     @Inject(method = "revalidateSpawnPos", locals = LocalCapture.CAPTURE_FAILHARD, at = @At("TAIL"))
@@ -373,6 +373,14 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
             --k;
         }
         return k;
+    }
+
+    @Redirect(method = "removeTileEntity", at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/level/Level;getTileEntity(III)Lnet/minecraft/tile/entity/TileEntity;"
+    ))
+    private TileEntity removeTileEntityDontCreate(Level instance, int i, int j, int k) {
+        return ((ExLevel) instance).getBlockTileEntityDontCreate(i, j, k);
     }
 
     /**
@@ -461,8 +469,8 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
                     }
                 } else if (tpe == LightType.BLOCK) {
                     int i1 = this.getTileId(i, j, k);
-                    if (Tile.BY_ID[i1] != null && ((ExTile)Tile.BY_ID[i1]).getBlockLightValue(this, i, j, k) < l) {
-                        l = ((ExTile)Tile.BY_ID[i1]).getBlockLightValue(this, i, j, k);
+                    if (Tile.BY_ID[i1] != null && ((ExTile) Tile.BY_ID[i1]).getBlockLightValue(this, i, j, k) < l) {
+                        l = ((ExTile) Tile.BY_ID[i1]).getBlockLightValue(this, i, j, k);
                     }
                 }
                 if (this.getLightLevel(tpe, i, j, k) != l) {
@@ -646,7 +654,7 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
             if (flag1 && block1 != null && block1.getCollisionShape((Level) (Object) this, l, i1, j1) == null) {
                 continue;
             }
-            if (j2 <= 0 || block1 == null || !block1.method_1571(k2, flag) || !block1.shouldRender((Level) (Object) this, l, i1, j1)) {
+            if (j2 <= 0 || block1 == null || !block1.method_1571(k2, flag) || !((ExTile) block1).shouldRender((Level) (Object) this, l, i1, j1)) {
                 continue;
             }
             HitResult movingobjectposition1 = block1.raycast((Level) (Object) this, l, i1, j1, vec3d, vec3d1);
@@ -661,7 +669,7 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
             value = "INVOKE",
             target = "Ljava/util/List;add(Ljava/lang/Object;)Z",
             ordinal = 1))
-    private static <E> boolean redirectSpawnEntityStore(List<E> instance, E e) {
+    private <E> boolean redirectSpawnEntityStore(List<E> instance, E e) {
         if (!instance.contains(e)) {
             instance.add(e);
         }
@@ -844,9 +852,9 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
         entity.prevYaw = entity.yaw;
         entity.prevPitch = entity.pitch;
         if (flag && entity.shouldTick) {
-            int stunned = ((ExLivingEntity) entity).getStunned();
+            int stunned = ((ExEntity) entity).getStunned();
             if (stunned > 0) {
-                ((ExLivingEntity) entity).setStunned(stunned - 1);
+                ((ExEntity) entity).setStunned(stunned - 1);
             } else if (entity.vehicle != null) {
                 entity.tickRiding();
             } else {
@@ -892,6 +900,7 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
         }
     }
 
+    @Override
     public TileEntity getBlockTileEntityDontCreate(int i, int j, int k) {
         Chunk chunk = this.getChunkFromCache(i >> 4, k >> 4);
         if (chunk != null) {
@@ -998,7 +1007,7 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite
-    protected void method_245() {
+    public void method_245() {
         if (!this.dimension.fixedSpawnPos) {
             if (this.field_209 > 0) {
                 --this.field_209;
@@ -1026,7 +1035,7 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite
-    protected void method_248() {
+    public void method_248() {
         for (Player player : this.players) {
             int j = MathsHelper.floor(player.x / 16.0);
             int l = MathsHelper.floor(player.z / 16.0);
@@ -1222,6 +1231,7 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
         return false;
     }
 
+    @Override
     public void loadMapMusic() {
         File musicDir = new File(this.levelDir, "music");
         if (musicDir.exists() && musicDir.isDirectory()) {
@@ -1249,6 +1259,7 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
         }
     }
 
+    @Override
     public void loadMapSounds() {
         File soundDir = new File(this.levelDir, "sound");
         if (soundDir.exists() && soundDir.isDirectory()) {
@@ -1273,6 +1284,7 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
         }
     }
 
+    @Override
     public void loadSoundOverrides() {
         AccessMinecraft mc = ((AccessMinecraft) AccessMinecraft.getInstance());
         ResourceDownloadThread thread = mc.getResourceDownloadThread();
@@ -1355,8 +1367,18 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
     }
 
     @Override
+    public void setScriptHandler(JScriptHandler scriptHandler) {
+        this.scriptHandler = scriptHandler;
+    }
+
+    @Override
     public MusicScripts getMusicScripts() {
         return this.musicScripts;
+    }
+
+    @Override
+    public void setMusicScripts(MusicScripts musicScripts) {
+        this.musicScripts = musicScripts;
     }
 
     @Override
@@ -1365,8 +1387,18 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
     }
 
     @Override
+    public void setScope(Scriptable scope) {
+        this.scope = scope;
+    }
+
+    @Override
     public UndoStack getUndoStack() {
         return this.undoStack;
+    }
+
+    @Override
+    public void setUndoStack(UndoStack undoStack) {
+        this.undoStack = undoStack;
     }
 
     @Override

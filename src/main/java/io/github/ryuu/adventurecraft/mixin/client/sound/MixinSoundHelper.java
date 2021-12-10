@@ -43,7 +43,8 @@ public abstract class MixinSoundHelper implements ExSoundHelper {
     @Inject(method = "setSoundPosition", at = @At(
             value = "INVOKE",
             target = "Lpaulscode/sound/SoundSystem;setListenerOrientation(FFFFFF)V",
-            shift = At.Shift.AFTER))
+            shift = At.Shift.AFTER,
+            remap = false))
     public void setSoundPosition(LivingEntity entity, float f, CallbackInfo ci) {
         double d = entity.prevX + (entity.x - entity.prevX) * (double) f;
         double d1 = entity.prevY + (entity.y - entity.prevY) * (double) f;

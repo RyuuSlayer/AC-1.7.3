@@ -27,6 +27,9 @@ import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.MathsHelper;
 import org.lwjgl.opengl.GL11;
+import org.mozilla.javascript.EcmaError;
+import org.mozilla.javascript.RhinoException;
+import org.mozilla.javascript.Script;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -84,6 +87,9 @@ public abstract class MixinOverlay extends DrawableHelper implements ExOverlay {
     @Shadow
     protected abstract void method_1951(float f, int i, int j);
 
+    @Shadow
+    public abstract void addChatMessage(String string);
+
     /**
      * @author Ryuu, TechPizza, Phil
      */
@@ -112,13 +118,13 @@ public abstract class MixinOverlay extends DrawableHelper implements ExOverlay {
         if (this.hudEnabled) {
             boolean flag1;
             GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-            GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId("/assets/adventurecraft/gui/gui.png"));
+            GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId("/gui/gui.png"));
             PlayerInventory inventoryplayer = this.minecraft.player.inventory;
             this.zOffset = -90.0f;
             this.blit(scaledWidth / 2 - 91, scaledHeight - 22, 0, 0, 182, 22);
             this.blit(scaledWidth / 2 - 91 - 1 + ((ExPlayerInventory) inventoryplayer).getOffhandSlot() * 20, scaledHeight - 22 - 1, 24, 22, 48, 22);
             this.blit(scaledWidth / 2 - 91 - 1 + inventoryplayer.selectedHotbarSlot * 20, scaledHeight - 22 - 1, 0, 22, 24, 22);
-            GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId("/assets/adventurecraft/gui/icons.png"));
+            GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId("/gui/icons.png"));
             GL11.glEnable(3042);
             GL11.glBlendFunc(775, 769);
             this.blit(scaledWidth / 2 - 7, scaledHeight / 2 - 7, 0, 0, 16, 16);
@@ -358,6 +364,24 @@ public abstract class MixinOverlay extends DrawableHelper implements ExOverlay {
     @Inject(method = "method_1944", at = @At("TAIL"))
     public void method_1944(CallbackInfo ci) {
         this.scriptUI.onUpdate();
+    }
+
+    @Override
+    public void logJavascriptException(Exception exception) {
+        if (exception instanceof RhinoException) {
+            RhinoException rhinoEx = (RhinoException) exception;
+            String baseMessage = String.format("[%s@%d:%d]", rhinoEx.sourceName(), rhinoEx.lineNumber(), rhinoEx.columnNumber());
+
+            //String trace = rhinoEx.getScriptStackTrace();
+            //System.out.println(trace);
+
+            if (rhinoEx.details().contains("pixel"))
+                return;
+            
+            this.addChatMessage(baseMessage + ": " + rhinoEx.details());
+        } else {
+            this.addChatMessage("Javascript Error: " + exception);
+        }
     }
 
     @Override

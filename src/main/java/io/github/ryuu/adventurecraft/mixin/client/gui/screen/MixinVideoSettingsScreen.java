@@ -17,7 +17,7 @@ public abstract class MixinVideoSettingsScreen extends Screen {
 
     static {
         OPTIONS = Arrays.copyOf(OPTIONS, OPTIONS.length + 2);
-        OPTIONS[OPTIONS.length - 2] = ClassTinkerers.getEnum(Option.class, "AUTO_FAR_CLIP");
-        OPTIONS[OPTIONS.length - 1] = ClassTinkerers.getEnum(Option.class, "GRASS_3D");
+        OPTIONS[OPTIONS.length - 2] = ClassTinkerers.<Option>getEnum(Option.class, "AUTO_FAR_CLIP");
+        OPTIONS[OPTIONS.length - 1] = ClassTinkerers.<Option>getEnum(Option.class, "GRASS_3D");
     }
 }

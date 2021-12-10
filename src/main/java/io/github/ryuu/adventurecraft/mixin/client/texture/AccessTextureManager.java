@@ -10,7 +10,5 @@ import java.util.HashMap;
 public interface AccessTextureManager {
 
     @Accessor("TEXTURE_ID_MAP")
-    static HashMap<String, Integer> getTextureIdMap() {
-        throw new AssertionError();
-    }
+    HashMap<String, Integer> getTextureIdMap();
 }

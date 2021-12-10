@@ -316,33 +316,8 @@ public abstract class MixinPlayer extends MixinLivingEntity implements ExPlayer 
     }
 
     @Override
-    public String getCloakTexture() {
-        return this.cloakTexture;
-    }
-
-    @Override
-    public void setHeartPieces(int heartPieces) {
-        this.numHeartPieces = heartPieces;
-    }
-
-    @Override
-    public void setSwappedItems(boolean swappedItems) {
-        this.swappedItems = swappedItems;
-    }
-
-    @Override
-    public String getCloakTexture() {
-        return cloakTexture;
-    }
-
-    @Override
-    public void setCloakTexture(String cloakTexture) {
-        this.cloakTexture = cloakTexture;
-    }
-
-    @Override
-    public void setHeartPieces(int heartPieces) {
-        this.numHeartPieces = heartPieces;
+    public boolean getSwappedItems() {
+        return this.swappedItems;
     }
 
     @Override

@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.mixin.level.chunk;
 import io.github.ryuu.adventurecraft.Main;
 import io.github.ryuu.adventurecraft.extensions.level.chunk.ExClientChunkCache;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
+import io.github.ryuu.adventurecraft.util.AcChunkCache;
 import net.minecraft.level.Level;
 import net.minecraft.level.chunk.Chunk;
 import net.minecraft.level.chunk.ChunkIO;
@@ -119,10 +120,10 @@ public abstract class MixinClientChunkCache implements LevelSource, ExClientChun
         if (!chunk.decorated) {
             chunk.decorated = true;
             if (this.chunkGenerator != null) {
-                Main.chunkIsNotPopulating = false;
+                AcChunkCache.chunkIsNotPopulating = false;
                 this.chunkGenerator.decorate(levelSource, chunkX, chunkZ);
                 chunk.shouldSave = false;
-                Main.chunkIsNotPopulating = true;
+                AcChunkCache.chunkIsNotPopulating = true;
             }
         }
     }

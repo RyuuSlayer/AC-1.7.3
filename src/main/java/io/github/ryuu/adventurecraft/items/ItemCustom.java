@@ -1,7 +1,9 @@
 package io.github.ryuu.adventurecraft.items;
 
 import io.github.ryuu.adventurecraft.extensions.items.ExItemType;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
+import io.github.ryuu.adventurecraft.mixin.item.AccessItemType;
 import io.github.ryuu.adventurecraft.scripting.ScriptItem;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
@@ -36,7 +38,7 @@ public class ItemCustom extends ACItemType implements ExItemType {
             this.setTexturePosition(iconIndexI);
         }
         if ((maxItemDamageS = p.getProperty("maxItemDamage")) != null && (maxItemDamageI = this.loadPropertyInt("maxItemDamage", maxItemDamageS)) != null) {
-            this.field_402 = maxItemDamageI;
+            ((AccessItemType) this).setField_402(maxItemDamageI);
         }
         if ((maxStackSizeS = p.getProperty("maxStackSize")) != null && (maxStackSizeI = this.loadPropertyInt("maxStackSize", maxStackSizeS)) != null) {
             this.maxStackSize = maxStackSizeI;
@@ -108,9 +110,10 @@ public class ItemCustom extends ACItemType implements ExItemType {
     public ItemInstance use(ItemInstance item, Level level, Player player) {
         if (!this.onItemUsedScript.equals("")) {
             ScriptItem item2 = new ScriptItem(item);
-            Object wrappedOut = Context.javaToJS(item2, (Scriptable) level.scope);
-            ScriptableObject.putProperty((Scriptable) level.scope, "itemUsed", wrappedOut);
-            level.scriptHandler.runScript(this.onItemUsedScript, level.scope);
+            ExLevel exLevel = (ExLevel) level;
+            Object wrappedOut = Context.javaToJS(item2, exLevel.getScope());
+            ScriptableObject.putProperty(exLevel.getScope(), "itemUsed", wrappedOut);
+            exLevel.getScriptHandler().runScript(this.onItemUsedScript, exLevel.getScope());
         }
         return item;
     }

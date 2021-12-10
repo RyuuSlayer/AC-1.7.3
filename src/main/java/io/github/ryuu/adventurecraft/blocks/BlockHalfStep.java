@@ -9,9 +9,8 @@ import net.minecraft.util.maths.Box;
 public class BlockHalfStep extends BlockSolid {
 
     protected BlockHalfStep(int i, int j, TileSounds sounds, int textureNum) {
-        super(i, j);
+        super(i, j, sounds);
         this.hardness(5.0f);
-        this.sounds(sounds);
         ((ExTile) this).setSubTypes(16);
         ((ExTile) this).setTextureNum(textureNum);
     }

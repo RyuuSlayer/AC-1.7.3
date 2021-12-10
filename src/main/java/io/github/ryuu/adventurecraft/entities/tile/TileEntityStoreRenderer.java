@@ -1,5 +1,7 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
+import io.github.ryuu.adventurecraft.extensions.client.render.entity.ExItemRenderer;
+import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.render.entity.ItemRenderer;
@@ -19,7 +21,7 @@ public class TileEntityStoreRenderer extends TileEntityRenderer {
     static ItemRenderer renderItem = new ItemRenderer();
 
     static {
-        TileEntityStoreRenderer.renderItem.scale = 1.5f;
+        ((ExItemRenderer) TileEntityStoreRenderer.renderItem).setScale(1.5f);
     }
 
     public TileEntityStoreRenderer() {
@@ -33,7 +35,7 @@ public class TileEntityStoreRenderer extends TileEntityRenderer {
             item.setDamage(store.buyItemDamage);
             TileEntityStoreRenderer.eItem.level = store.level;
             eItem.setPosition(store.x, store.y, store.z);
-            renderItem.method_1484(eItem, d + 0.5, d1 + 0.125, d2 + 0.5, 0.0f, 0.0f);
+            renderItem.render(eItem, d + 0.5, d1 + 0.125, d2 + 0.5, 0.0f, 0.0f);
         }
         if (DebugMode.active && store.tradeTrigger != null) {
             GL11.glPushMatrix();
@@ -49,7 +51,7 @@ public class TileEntityStoreRenderer extends TileEntityRenderer {
                 for (int j = store.tradeTrigger.minY; j <= store.tradeTrigger.maxY; ++j) {
                     for (int k = store.tradeTrigger.minZ; k <= store.tradeTrigger.maxZ; ++k) {
                         Tile block = Tile.BY_ID[store.level.getTileId(i, j, k)];
-                        if (block == null || !block.canBeTriggered()) continue;
+                        if (block == null || !((ExTile)block).canBeTriggered()) continue;
                         GL11.glColor3f(0.0f, 0.0f, 0.0f);
                         GL11.glVertex3f(0.0f, 0.0f, 0.0f);
                         GL11.glColor3f(1.0f, 1.0f, 1.0f);

@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(FurnaceTile.class)
 public abstract class MixinFurnaceTile extends TileWithEntity {
@@ -17,8 +18,8 @@ public abstract class MixinFurnaceTile extends TileWithEntity {
         super(i, arg);
     }
 
-    @Inject(method = "method_1403", at = @At("TAIL"))
-    private static void extraValidate(boolean flag, Level world, int i, int j, int k, CallbackInfo ci, TileEntity var6)  {
+    @Inject(method = "method_1403", locals = LocalCapture.CAPTURE_FAILHARD, at = @At("TAIL"))
+    private static void extraValidate(boolean flag, Level world, int i, int j, int k, CallbackInfo ci, int var5, TileEntity var6) {
         var6.validate();
     }
 }

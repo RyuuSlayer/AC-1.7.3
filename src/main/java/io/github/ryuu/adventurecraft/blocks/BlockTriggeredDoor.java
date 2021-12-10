@@ -10,7 +10,7 @@ import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
-public class BlockTriggeredDoor extends Tile {
+public class BlockTriggeredDoor extends Tile implements AcTriggerTile, AcRenderConditionTile {
 
     protected BlockTriggeredDoor(int i) {
         super(i, Material.WOOD);

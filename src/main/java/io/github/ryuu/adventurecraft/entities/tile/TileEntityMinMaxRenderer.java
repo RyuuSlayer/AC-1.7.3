@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.entities.tile;
 
+import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.client.render.entity.tile.TileEntityRenderer;
 import net.minecraft.tile.Tile;
@@ -35,7 +36,7 @@ public class TileEntityMinMaxRenderer extends TileEntityRenderer {
                 for (int j = minMax.minY; j <= minMax.maxY; ++j) {
                     for (int k = minMax.minZ; k <= minMax.maxZ; ++k) {
                         Tile block = Tile.BY_ID[minMax.level.getTileId(i, j, k)];
-                        if (block == null || !block.canBeTriggered()) continue;
+                        if (block == null || !((ExTile)block).canBeTriggered()) continue;
                         GL11.glColor3f(0.0f, 0.0f, 0.0f);
                         GL11.glVertex3f(0.0f, 0.0f, 0.0f);
                         GL11.glColor3f(this.r, this.g, this.b);

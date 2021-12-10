@@ -267,9 +267,9 @@ public abstract class MixinPlayerInventory implements Inventory, AccessPlayerInv
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemInstance;method_700(Lnet/minecraft/entity/player/Player;)V",
             shift = At.Shift.AFTER))
-    public void doSlotRemoveCallbacksOnDamageArmour(CallbackInfo ci, int var2) {
-        ItemInstance item = this.armour[var2];
-        onRemovedFromSlot(ItemType.byId[item.itemId], this.player, var2 + this.main.length, item.getDamage());
+    public void doSlotRemoveCallbacksOnDamageArmour(int i, CallbackInfo ci, int var1) {
+        ItemInstance item = this.armour[var1];
+        onRemovedFromSlot(ItemType.byId[item.itemId], this.player, var1 + this.main.length, item.getDamage());
     }
 
     @Inject(method = "dropInventory", locals = LocalCapture.CAPTURE_FAILHARD, at = @At(

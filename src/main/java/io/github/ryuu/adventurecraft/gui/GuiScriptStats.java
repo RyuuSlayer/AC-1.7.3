@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.gui;
 
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.util.JScriptInfo;
 import net.minecraft.client.gui.Screen;
@@ -14,7 +15,7 @@ public class GuiScriptStats extends Screen {
     JScriptInfo[] scriptInfo;
 
     public GuiScriptStats() {
-        Object[] info = AccessMinecraft.getInstance().level.scriptHandler.scripts.values().toArray();
+        Object[] info = ((ExLevel)AccessMinecraft.getInstance().level).getScriptHandler().scripts.values().toArray();
         int numGood = 0;
         for (Object o : info) {
             JScriptInfo JScriptInfo = (JScriptInfo) o;

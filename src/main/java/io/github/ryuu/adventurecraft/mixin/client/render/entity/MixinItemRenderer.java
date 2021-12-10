@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.mixin.client.render.entity;
 
+import io.github.ryuu.adventurecraft.extensions.client.render.entity.ExItemRenderer;
 import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import io.github.ryuu.adventurecraft.items.IItemReload;
 import net.minecraft.client.render.Tessellator;
@@ -22,8 +23,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.Random;
 
-@Mixin(ItemRenderer.class)
-public abstract class MixinItemRenderer extends EntityRenderer {
+@Mixin(value = ItemRenderer.class, priority = 999)
+public abstract class MixinItemRenderer extends EntityRenderer implements ExItemRenderer {
 
     @Shadow
     private final TileRenderer field_1708 = new TileRenderer();
@@ -199,5 +200,10 @@ public abstract class MixinItemRenderer extends EntityRenderer {
             target = "Lnet/minecraft/item/ItemInstance;method_720()Z"))
     private boolean drawExtraIfItemReload(ItemInstance instance) {
         return instance.method_720() || ItemType.byId[instance.itemId] instanceof IItemReload;
+    }
+
+    @Override
+    public void setScale(float scale) {
+        this.scale = scale;
     }
 }

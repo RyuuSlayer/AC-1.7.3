@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Snowball.class)
 public abstract class MixinSnowball extends Entity implements ExSnowball {
@@ -21,7 +22,7 @@ public abstract class MixinSnowball extends Entity implements ExSnowball {
     }
 
     @Inject(method = "<init>*", at = @At("TAIL"))
-    private void init() {
+    private void init(CallbackInfo ci) {
         this.radius = 1.0f;
         ((ExEntity) this).setCollidesWithClipBlocks(false);
     }

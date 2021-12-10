@@ -15,12 +15,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 import java.util.Map;
 
 @Mixin(EntityRegistry.class)
-public abstract class MixinEntityRegistry {
-
-    @Accessor("CLASS_TO_STRING_ID")
-    public static Map getClassToStringId() {
-        throw new AssertionError();
-    }
+public abstract class MixinEntityRegistry implements AccessEntityRegistry {
 
     static {
         register(Arrow.class, "Arrow", 10);

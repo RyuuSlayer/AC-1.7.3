@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.blocks;
 
+import io.github.ryuu.adventurecraft.extensions.entity.ExFallingTile;
 import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import net.minecraft.entity.FallingTile;
 import net.minecraft.level.Level;
@@ -51,7 +52,7 @@ public class BlockPushable extends BlockColor {
     private void tryToFall(Level world, int i, int j, int k) {
         if (BlockPushable.canFallBelow(world, i, j - 1, k) && j >= 0) {
             FallingTile entityfallingsand = new FallingTile(world, (float) i + 0.5f, (float) j + 0.5f, (float) k + 0.5f, this.id);
-            entityfallingsand.metadata = world.getTileMeta(i, j, k);
+            ((ExFallingTile) entityfallingsand).setMetadata(world.getTileMeta(i, j, k));
             world.spawnEntity(entityfallingsand);
         }
     }

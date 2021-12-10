@@ -18,4 +18,7 @@ public interface AccessArrow {
 
     @Accessor
     int getInTile();
+
+    @Accessor
+    void setField_1584(int value);
 }

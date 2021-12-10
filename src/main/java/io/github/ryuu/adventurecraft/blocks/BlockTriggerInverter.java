@@ -19,7 +19,7 @@ import net.minecraft.util.maths.Box;
 
 import java.util.Random;
 
-public class BlockTriggerInverter extends TileWithEntity {
+public class BlockTriggerInverter extends TileWithEntity implements AcTriggerTile, AcRenderConditionTile, AcResetTile {
 
     protected BlockTriggerInverter(int i, int j) {
         super(i, j, Material.AIR);

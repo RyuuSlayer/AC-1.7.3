@@ -111,7 +111,7 @@ public abstract class MixinLivingEntity extends MixinEntity implements AccessLiv
     public int maxHealth = 10;
 
     @Shadow
-    protected abstract void shadow$applyDamage(int i);
+    protected abstract void applyDamage(int i);
 
     @Shadow
     public abstract void addHealth(int i);
@@ -316,7 +316,7 @@ public abstract class MixinLivingEntity extends MixinEntity implements AccessLiv
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite
-    protected void handleFallDamage(float f) {
+    public void handleFallDamage(float f) {
         float pre = Math.max(f - 0.8f, 0.0f) / 0.08f;
         int i = (int) Math.ceil(Math.pow(pre, 1.5));
         if (!this.isFlying() && i > 0) {
@@ -461,9 +461,11 @@ public abstract class MixinLivingEntity extends MixinEntity implements AccessLiv
         return ExLadderTile.isLadderID(blockID) || ExLadderTile.isLadderID(blockIDAbove) || blockID == Blocks.ropes1.id && v || blockIDAbove == Blocks.ropes1.id && vAbove || blockID == Blocks.ropes2.id && v || blockIDAbove == Blocks.ropes2.id && vAbove || blockID == Blocks.chains.id && v || blockIDAbove == Blocks.chains.id && vAbove;
     }
 
-    protected abstract void writeACDataToTag(CompoundTag tag);
+    protected void writeACDataToTag(CompoundTag tag) {
+    }
 
-    protected abstract void readACDataFromTag(CompoundTag tag);
+    protected void readACDataFromTag(CompoundTag tag) {
+    }
 
     @Inject(method = "writeCustomDataToTag", at = @At("TAIL"))
     private void writeACDataToTag(CompoundTag tag, CallbackInfo ci) {
@@ -530,8 +532,7 @@ public abstract class MixinLivingEntity extends MixinEntity implements AccessLiv
     @Redirect(method = "updateDespawnCounter", at = @At(
             value = "FIELD",
             target = "Lnet/minecraft/entity/LivingEntity;jumping:Z",
-            opcode = Opcodes.GETFIELD
-    ))
+            opcode = Opcodes.GETFIELD))
     private boolean changeJumpBehavior(LivingEntity instance) {
         if (((AccessLivingEntity) instance).isJumping()) {
             if (this.method_1334()) {
@@ -573,7 +574,7 @@ public abstract class MixinLivingEntity extends MixinEntity implements AccessLiv
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite
-    protected void jump() {
+    public void jump() {
         this.tickBeforeNextJump = this.level.getLevelTime() + 5L;
         this.velocityY = this.jumpVelocity;
     }
@@ -582,7 +583,7 @@ public abstract class MixinLivingEntity extends MixinEntity implements AccessLiv
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite
-    protected void tickHandSwing() {
+    public void tickHandSwing() {
         ++this.despawnCounter;
         this.level.getClosestPlayerTo((Entity) (Object) this, -1.0);
         this.method_920();
@@ -648,11 +649,6 @@ public abstract class MixinLivingEntity extends MixinEntity implements AccessLiv
     }
 
     @Override
-    public void applyDamage(int damage) {
-        shadow$applyDamage(damage);
-    }
-
-    @Override
     public float getFov() {
         return this.fov;
     }
@@ -665,16 +661,6 @@ public abstract class MixinLivingEntity extends MixinEntity implements AccessLiv
     @Override
     public float getExtraFov() {
         return this.extraFov;
-    }
-
-    @Override
-    public int getStunned() {
-        return this.stunned;
-    }
-
-    @Override
-    public void setStunned(int stunned) {
-        this.stunned = stunned;
     }
 
     @Override

@@ -1,6 +1,8 @@
 package io.github.ryuu.adventurecraft.items;
 
+import io.github.ryuu.adventurecraft.extensions.items.ExItemType;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
+import io.github.ryuu.adventurecraft.mixin.level.AccessLevel;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
@@ -8,7 +10,7 @@ import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 import net.minecraft.util.maths.Vec3f;
 
-public class ItemNudge extends ItemType {
+public class ItemNudge extends ItemType implements ExItemType {
 
     public ItemNudge(int id) {
         super(id);
@@ -109,7 +111,7 @@ public class ItemNudge extends ItemType {
                 for (j = 0; j < height; ++j) {
                     for (k = 0; k < depth; ++k) {
                         blockID = blocks[depth * (height * i + j) + k];
-                        level.method_235(xOffset + i, yOffset + j, zOffset + k, blockID);
+                        ((AccessLevel)level).invokeMethod_235(xOffset + i, yOffset + j, zOffset + k, blockID);
                     }
                 }
             }
@@ -118,7 +120,7 @@ public class ItemNudge extends ItemType {
     }
 
     @Override
-    public void onItemLeftClick(ItemInstance itemstack, Level world, Player entityplayer) {
+    public void onItemLeftClick(ItemInstance itemstack, Level level, Player entityplayer) {
         if (ItemCursor.bothSet) {
             int blockID;
             int k;
@@ -134,11 +136,11 @@ public class ItemNudge extends ItemType {
             for (int i2 = 0; i2 < width; ++i2) {
                 for (int j2 = 0; j2 < height; ++j2) {
                     for (int k2 = 0; k2 < depth; ++k2) {
-                        int blockID2 = world.getTileId(i2 + ItemCursor.minX, j2 + ItemCursor.minY, k2 + ItemCursor.minZ);
-                        int metadata = world.getTileMeta(i2 + ItemCursor.minX, j2 + ItemCursor.minY, k2 + ItemCursor.minZ);
+                        int blockID2 = level.getTileId(i2 + ItemCursor.minX, j2 + ItemCursor.minY, k2 + ItemCursor.minZ);
+                        int metadata = level.getTileMeta(i2 + ItemCursor.minX, j2 + ItemCursor.minY, k2 + ItemCursor.minZ);
                         blocks[depth * (height * i2 + j2) + k2] = blockID2;
                         meta[depth * (height * i2 + j2) + k2] = metadata;
-                        world.setTileInChunk(i2 + ItemCursor.minX, j2 + ItemCursor.minY, k2 + ItemCursor.minZ, 0);
+                        level.setTileInChunk(i2 + ItemCursor.minX, j2 + ItemCursor.minY, k2 + ItemCursor.minZ, 0);
                     }
                 }
             }
@@ -194,7 +196,7 @@ public class ItemNudge extends ItemType {
                     for (k = 0; k < depth; ++k) {
                         blockID = blocks[depth * (height * i + j) + k];
                         int metadata = meta[depth * (height * i + j) + k];
-                        world.setTileWithMetadata(xOffset + i, yOffset + j, zOffset + k, blockID, metadata);
+                        level.setTileWithMetadata(xOffset + i, yOffset + j, zOffset + k, blockID, metadata);
                     }
                 }
             }
@@ -202,7 +204,7 @@ public class ItemNudge extends ItemType {
                 for (j = 0; j < height; ++j) {
                     for (k = 0; k < depth; ++k) {
                         blockID = blocks[depth * (height * i + j) + k];
-                        world.method_235(xOffset + i, yOffset + j, zOffset + k, blockID);
+                        ((AccessLevel)level).invokeMethod_235(xOffset + i, yOffset + j, zOffset + k, blockID);
                     }
                 }
             }

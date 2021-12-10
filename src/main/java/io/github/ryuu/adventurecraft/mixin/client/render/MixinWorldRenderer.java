@@ -3,6 +3,7 @@ package io.github.ryuu.adventurecraft.mixin.client.render;
 import io.github.ryuu.adventurecraft.extensions.client.ExMinecraft;
 import io.github.ryuu.adventurecraft.extensions.client.render.ExGameRenderer;
 import io.github.ryuu.adventurecraft.extensions.client.render.ExWorldRenderer;
+import io.github.ryuu.adventurecraft.extensions.entity.ExEntity;
 import io.github.ryuu.adventurecraft.extensions.entity.ExLivingEntity;
 import io.github.ryuu.adventurecraft.extensions.entity.player.ExPlayer;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
@@ -37,6 +38,7 @@ import net.minecraft.util.maths.MathsHelper;
 import net.minecraft.util.maths.Vec3f;
 import net.minecraft.util.maths.Vec3i;
 import org.lwjgl.opengl.GL11;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -103,7 +105,7 @@ public abstract class MixinWorldRenderer implements LevelListener, ExWorldRender
     private void redirectEntityDispatch(EntityRenderDispatcher instance, Entity entity, float v) {
         ExMinecraft client = (ExMinecraft) this.client;
         if (client.isCameraActive() && client.isCameraPause() ||
-                DebugMode.active && !(entity instanceof Player) || ((ExPlayer) entity).getStunned() > 0) {
+                DebugMode.active && !(entity instanceof Player) || ((ExEntity) entity).getStunned() > 0) {
             instance.method_1921(entity, 1.0f);
             return;
         }
@@ -130,16 +132,19 @@ public abstract class MixinWorldRenderer implements LevelListener, ExWorldRender
         ((ExClientChunkCache) ((AccessLevel) this.level).getCache()).updateVeryFar();
     }
 
-    @Inject(method = "method_1548", locals = LocalCapture.CAPTURE_FAILHARD, at = @At(
+    @Redirect(method = "method_1548", at = @At(
             value = "FIELD",
             target = "Lnet/minecraft/client/render/WorldRenderer;field_1808:[Lnet/minecraft/class_66;",
-            shift = At.Shift.BEFORE,
-            ordinal = 8))
-    private void updateField1808BasedOnFarplane(LivingEntity entityliving, int i, double d, CallbackInfoReturnable<Integer> cir, int var23) {
-        if (this.field_1808[var23].field_252) {
+            opcode = Opcodes.GETFIELD,
+            args = "array=get",
+            ordinal = 5))
+    private class_66 updateField1808BasedOnFarplane(class_66[] array, int index, LivingEntity arg, int i, double d) {
+        class_66 instance = array[index];
+        if (instance.field_252) {
             float farPlane = ((ExGameRenderer) this.client.gameRenderer).getFarPlane() * 1.25f;
-            this.field_1808[var23].field_252 = this.field_1808[var23].method_299(entityliving) > farPlane;
+            instance.field_252 = instance.method_299(arg) > farPlane;
         }
+        return instance;
     }
 
     /**

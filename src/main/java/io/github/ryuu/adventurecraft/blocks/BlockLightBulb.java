@@ -12,7 +12,7 @@ import net.minecraft.tile.Tile;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
-public class BlockLightBulb extends Tile {
+public class BlockLightBulb extends Tile implements AcTriggerTile, AcRenderConditionTile, AcLightTile {
 
     protected BlockLightBulb(int i, int j) {
         super(i, j, Material.AIR);

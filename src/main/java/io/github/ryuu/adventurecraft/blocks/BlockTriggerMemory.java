@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityTriggerMemory;
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import io.github.ryuu.adventurecraft.gui.GuiTriggerMemory;
 import io.github.ryuu.adventurecraft.items.ItemCursor;
@@ -18,7 +19,7 @@ import net.minecraft.util.maths.Box;
 
 import java.util.Random;
 
-public class BlockTriggerMemory extends TileWithEntity {
+public class BlockTriggerMemory extends TileWithEntity implements AcTriggerTile, AcRenderConditionTile, AcResetTile {
 
     protected BlockTriggerMemory(int i, int j) {
         super(i, j, Material.AIR);
@@ -85,13 +86,13 @@ public class BlockTriggerMemory extends TileWithEntity {
         }
     }
 
-    public void triggerActivate(Level world, int i, int j, int k) {
-        TileEntityTriggerMemory obj = (TileEntityTriggerMemory) world.getTileEntity(i, j, k);
-        world.triggerManager.addArea(i, j, k, new TriggerArea(obj.minX, obj.minY, obj.minZ, obj.maxX, obj.maxY, obj.maxZ));
+    public void triggerActivate(Level level, int i, int j, int k) {
+        TileEntityTriggerMemory obj = (TileEntityTriggerMemory) level.getTileEntity(i, j, k);
+        ((ExLevel)level).getTriggerManager().addArea(i, j, k, new TriggerArea(obj.minX, obj.minY, obj.minZ, obj.maxX, obj.maxY, obj.maxZ));
     }
 
-    public void triggerDeactivate(Level world, int i, int j, int k) {
-        world.triggerManager.removeArea(i, j, k);
+    public void triggerDeactivate(Level level, int i, int j, int k) {
+        ((ExLevel)level).getTriggerManager().removeArea(i, j, k);
     }
 
     @Override

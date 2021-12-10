@@ -1,6 +1,7 @@
 package io.github.ryuu.adventurecraft.items;
 
 import io.github.ryuu.adventurecraft.entities.EntityHookshot;
+import io.github.ryuu.adventurecraft.extensions.entity.player.ExPlayer;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
@@ -41,7 +42,7 @@ public class ItemHookshot extends ACItemType {
         EntityHookshot other;
         EntityHookshot hookshot;
         boolean main = true;
-        if (!player.swappedItems) {
+        if (!((ExPlayer)player).getSwappedItems()) {
             hookshot = this.mainHookshot;
             other = this.offHookshot;
         } else {

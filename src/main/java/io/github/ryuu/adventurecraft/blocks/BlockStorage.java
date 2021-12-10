@@ -13,7 +13,7 @@ import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
-public class BlockStorage extends TileWithEntity {
+public class BlockStorage extends TileWithEntity implements AcTriggerTile, AcRenderConditionTile {
 
     protected BlockStorage(int i, int j) {
         super(i, j, Material.AIR);

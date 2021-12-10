@@ -2,7 +2,7 @@ package io.github.ryuu.adventurecraft.extensions.level;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityNpcPath;
 import io.github.ryuu.adventurecraft.items.ItemCustom;
-import io.github.ryuu.adventurecraft.mixin.client.resource.language.ExTranslationStorage;
+import io.github.ryuu.adventurecraft.extensions.client.resource.language.ExTranslationStorage;
 import io.github.ryuu.adventurecraft.mixin.level.AccessLevel;
 import io.github.ryuu.adventurecraft.scripting.EntityDescriptions;
 import io.github.ryuu.adventurecraft.scripting.ScopeTag;
@@ -17,11 +17,11 @@ import net.minecraft.level.LevelProperties;
 import net.minecraft.level.dimension.Dimension;
 import net.minecraft.level.dimension.DimensionData;
 import net.minecraft.level.dimension.McRegionDimensionFile;
+import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.Vec3f;
 import org.mozilla.javascript.Scriptable;
-import sun.misc.Unsafe;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -52,11 +52,19 @@ public interface ExLevel {
 
     JScriptHandler getScriptHandler();
 
+    void setScriptHandler(JScriptHandler scriptHandler);
+
     MusicScripts getMusicScripts();
+
+    void setMusicScripts(MusicScripts musicScripts);
 
     Scriptable getScope();
 
+    void setScope(Scriptable scope);
+
     UndoStack getUndoStack();
+
+    void setUndoStack(UndoStack undoStack);
 
     float getSpawnYaw();
 
@@ -92,6 +100,8 @@ public interface ExLevel {
 
     boolean setBlockAndMetadataTemp(int i, int j, int k, int l, int i1);
 
+    TileEntity getBlockTileEntityDontCreate(int i, int j, int k);
+
     HitResult rayTraceBlocks2(Vec3f vec3d, Vec3f vec3d1, boolean flag, boolean flag1, boolean collideWithClip);
 
     BufferedImage loadMapTexture(String texName);
@@ -102,53 +112,66 @@ public interface ExLevel {
 
     void updateChunkProvider();
 
+    void loadSoundOverrides();
+
+    void loadMapMusic();
+
+    void loadMapSounds();
+
+    static String getAcMapDirectory() {
+        //return "../maps";
+        return "maps";
+    }
+
     static Level createLevel(
             String acLevelName, DimensionData isavehandler, String levelName, long randomSeed, Dimension dimension)
             throws InstantiationException {
 
-        Level level = (Level) Unsafe.getUnsafe().allocateInstance(Level.class);
+        Level level = new Level(isavehandler, levelName, randomSeed, dimension);
         ExLevel exLevel = (ExLevel) level;
         AccessLevel aLevel = (AccessLevel) level;
 
         exLevel.sharedInit();
 
         File mcDir = Minecraft.getGameDirectory();
-        File mapDir = new File(mcDir, "../maps");
+        File mapDir = new File(mcDir, getAcMapDirectory());
         File levelFile = new File(mapDir, acLevelName);
-        ((ExTranslationStorage)TranslationStorage.getInstance()).loadMapTranslation(levelFile);
+        ((ExTranslationStorage) TranslationStorage.getInstance()).loadMapTranslation(levelFile);
         exLevel.setMapHandler(new McRegionDimensionFile(mapDir, acLevelName, false));
         exLevel.setLevelDir(levelFile);
 
-        aLevel.field_197 = false;
-        aLevel.field_181 = new ArrayList<>();
-        aLevel.entities = new ArrayList<>();
-        aLevel.field_182 = new ArrayList<>();
-        aLevel.field_183 = new TreeSet<>();
-        aLevel.field_184 = new HashSet<>();
-        aLevel.tileEntities = new ArrayList<>();
-        aLevel.field_185 = new ArrayList<>();
-        aLevel.players = new ArrayList<>();
-        aLevel.field_201 = new ArrayList<>();
-        aLevel.field_186 = 0xFFFFFFL;
-        aLevel.field_202 = 0;
-        aLevel.field_203 = new Random().nextInt();
-        aLevel.unusedIncrement = 1013904223;
-        aLevel.field_209 = 0;
-        aLevel.field_210 = 0;
-        aLevel.field_211 = false;
-        aLevel.time = System.currentTimeMillis();
-        aLevel.field_212 = 40;
-        aLevel.rand = new Random();
-        aLevel.generating = false;
-        aLevel.listeners = new ArrayList<>();
-        aLevel.field_189 = new ArrayList<>();
-        aLevel.field_191 = 0;
-        aLevel.field_192 = true;
-        aLevel.field_193 = true;
-        aLevel.field_195 = level.rand.nextInt(12000);
-        aLevel.field_196 = new ArrayList<>();
-        aLevel.isClient = false;
+        //aLevel.field_197 = false;
+        aLevel.setField_181(new ArrayList<>());
+        aLevel.setEntities(new ArrayList<>());
+        aLevel.setField_182(new ArrayList<>());
+        aLevel.setField_183(new TreeSet<>());
+        aLevel.setField_184(new HashSet<>());
+        aLevel.setTileEntities(new ArrayList<>());
+        aLevel.setField_185(new ArrayList<>());
+        aLevel.setPlayers(new ArrayList<>());
+        aLevel.setField_201(new ArrayList<>());
+        aLevel.setField_186(0xFFFFFFL);
+        //aLevel.field_202 = 0;
+        aLevel.setField_203(new Random().nextInt());
+        aLevel.setUnusedIncrement(1013904223);
+        //aLevel.field_209 = 0;
+        //aLevel.field_210 = 0;
+        //aLevel.field_211 = false;
+        aLevel.setTime(System.currentTimeMillis());
+        aLevel.setField_212(40);
+        aLevel.setRand(new Random());
+        //aLevel.generating = false;
+        aLevel.setListeners(new ArrayList<>());
+        aLevel.setField_189(new ArrayList<>());
+        //aLevel.field_191 = 0;
+        aLevel.setField_192(true);
+        aLevel.setField_193(true);
+        aLevel.setField_195(level.rand.nextInt(12000));
+        aLevel.setField_196(new ArrayList<>());
+        //aLevel.isClient = false;
         aLevel.setDimensionData(isavehandler);
+        aLevel.setProperties(null);
+
         if (isavehandler != null) {
             level.data = new LevelData(isavehandler);
             aLevel.setProperties(isavehandler.getLevelProperties());
@@ -212,7 +235,7 @@ public interface ExLevel {
         }
         exLevel.setScriptHandler(new JScriptHandler(level, levelFile));
         exLevel.setMusicScripts(new MusicScripts(exLevel.getScript(), levelFile, exLevel.getScriptHandler()));
-        if (level.properties.musicScope != null) {
+        if (exProps.getMusicScope() != null) {
             ScopeTag.loadScopeFromTag(exLevel.getMusicScripts().scope, exProps.getMusicScope());
         }
         exLevel.setScope(exLevel.getScript().getNewScope());

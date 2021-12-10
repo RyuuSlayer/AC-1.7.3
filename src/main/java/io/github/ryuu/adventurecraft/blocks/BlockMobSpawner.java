@@ -15,7 +15,7 @@ import net.minecraft.util.maths.Box;
 
 import java.util.Random;
 
-public class BlockMobSpawner extends TileWithEntity {
+public class BlockMobSpawner extends TileWithEntity implements AcTriggerTile, AcRenderConditionTile, AcResetTile {
 
     protected BlockMobSpawner(int i, int j) {
         super(i, j, Material.AIR);
@@ -71,7 +71,7 @@ public class BlockMobSpawner extends TileWithEntity {
     @Override
     public void onTriggerActivated(Level level, int i, int j, int k) {
         TileEntityMobSpawner obj = (TileEntityMobSpawner) level.getTileEntity(i, j, k);
-        if (obj.spawnOnTrigger && !((ExLevel)level).getTriggerManager().resetActive) {
+        if (obj.spawnOnTrigger && !((ExLevel) level).getTriggerManager().resetActive) {
             obj.spawnMobs();
         }
     }
@@ -79,7 +79,7 @@ public class BlockMobSpawner extends TileWithEntity {
     @Override
     public void onTriggerDeactivated(Level level, int i, int j, int k) {
         TileEntityMobSpawner obj = (TileEntityMobSpawner) level.getTileEntity(i, j, k);
-        if (obj.spawnOnDetrigger && !((ExLevel)level).getTriggerManager().resetActive) {
+        if (obj.spawnOnDetrigger && !((ExLevel) level).getTriggerManager().resetActive) {
             obj.spawnMobs();
         }
     }

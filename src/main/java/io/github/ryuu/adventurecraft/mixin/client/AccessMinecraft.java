@@ -5,7 +5,7 @@ import net.minecraft.client.util.ResourceDownloadThread;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(Minecraft.class)
+@Mixin(value = Minecraft.class)
 public interface AccessMinecraft {
 
     @Accessor

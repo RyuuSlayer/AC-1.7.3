@@ -14,7 +14,7 @@ import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
-public class BlockMessage extends TileWithEntity {
+public class BlockMessage extends TileWithEntity implements AcTriggerTile, AcRenderConditionTile {
 
     protected BlockMessage(int i, int j) {
         super(i, j, Material.AIR);
@@ -57,6 +57,10 @@ public class BlockMessage extends TileWithEntity {
         if (!obj.sound.equals("")) {
             world.playSound((double) i + 0.5, (double) j + 0.5, (double) k + 0.5, obj.sound, 1.0f, 1.0f);
         }
+    }
+
+    @Override
+    public void onTriggerDeactivated(Level world, int i, int j, int k) {
     }
 
     @Override

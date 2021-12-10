@@ -1,10 +1,10 @@
 package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityHealDamage;
-import io.github.ryuu.adventurecraft.extensions.entity.ExLivingEntity;
 import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import io.github.ryuu.adventurecraft.gui.GuiHealDamage;
 import io.github.ryuu.adventurecraft.items.Items;
+import io.github.ryuu.adventurecraft.mixin.entity.AccessLivingEntity;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.entity.player.Player;
 import net.minecraft.level.Level;
@@ -15,7 +15,7 @@ import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
-public class BlockHealDamage extends TileWithEntity {
+public class BlockHealDamage extends TileWithEntity implements AcTriggerTile, AcRenderConditionTile {
 
     protected BlockHealDamage(int i, int j) {
         super(i, j, Material.AIR);
@@ -58,7 +58,7 @@ public class BlockHealDamage extends TileWithEntity {
                 p.addHealth(tileEnt.healDamage);
                 continue;
             }
-            ((ExLivingEntity) p).applyDamage(-tileEnt.healDamage);
+            ((AccessLivingEntity) p).invokeApplyDamage(-tileEnt.healDamage);
         }
     }
 

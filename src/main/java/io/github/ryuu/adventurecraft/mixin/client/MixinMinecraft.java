@@ -12,6 +12,7 @@ import io.github.ryuu.adventurecraft.extensions.entity.player.ExPlayerInventory;
 import io.github.ryuu.adventurecraft.extensions.items.ExItemInstance;
 import io.github.ryuu.adventurecraft.extensions.items.ExItemType;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
+import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import io.github.ryuu.adventurecraft.gui.GuiMapSelect;
 import io.github.ryuu.adventurecraft.gui.GuiStore;
 import io.github.ryuu.adventurecraft.mixin.entity.AccessEntity;
@@ -77,7 +78,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import java.awt.*;
 import java.io.*;
 
-@Mixin(Minecraft.class)
+@Mixin(value = Minecraft.class, priority = 999)
 public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMinecraft {
 
     @Shadow
@@ -205,18 +206,20 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
         this.storeGUI = new GuiStore();
     }
 
-    @Redirect(method = "start(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V",
-            at = @At(value = "NEW", target = "Lnet/minecraft/client/util/Session;<init>(Ljava/lang/String;Ljava/lang/String;)V"))
-    private static Session redirectSessionPlayerName(String username, String s) {
-        if (s == null)
-            return new Session("ACPlayer", "");
-        return new Session(username, s);
-    }
+    //@Redirect(method = "start(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V", at = @At(
+    //        value = "NEW",
+    //        target = "Lnet/minecraft/client/util/Session;<init>(Ljava/lang/String;Ljava/lang/String;)V",
+    //        remap = false))
+    //private static Session redirectSessionPlayerName(String username, String s) {
+    //    if (s == null)
+    //        return new Session("ACPlayer", "");
+    //    return new Session(username, s);
+    //}
 
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite
+    @Overwrite(remap = false)
     public static void main(String[] args) {
         String s = "ACPlayer";
         if (args.length > 0) {
@@ -230,9 +233,10 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
     }
 
     @Inject(method = "init", at = @At(
-            value = "NEW",
-            target = "Lnet/minecraft/client/render/WorldRenderer;<init>(Lnet/minecraft/client/Minecraft;Lnet/minecraft/client/texture/TextureManager;)V",
-            shift = At.Shift.BEFORE))
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/texture/TextureManager;add(Lnet/minecraft/client/render/TextureBinder;)V",
+            shift = At.Shift.AFTER,
+            ordinal = 0))
     private void initFanTextureBinder(CallbackInfo ci) {
         this.textureManager.add(new TextureFanFX());
     }
@@ -257,7 +261,8 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
             value = "INVOKE_ASSIGN",
             target = "Ljava/lang/System;currentTimeMillis()J",
             shift = At.Shift.BEFORE,
-            ordinal = 0))
+            ordinal = 0),
+            remap = false)
     private void initTerrainTextureAndJsContext(CallbackInfo ci) {
         this.textureManager.getTextureId("/terrain.png");
         this.textureManager.getTextureId("/terrain2.png");
@@ -300,17 +305,17 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
         Context.exit();
     }
 
-    @Inject(method = "run", locals = LocalCapture.CAPTURE_FAILHARD, at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/client/Minecraft;method_2131()V",
-            ordinal = 0,
-            shift = At.Shift.BEFORE))
-    private void printOoMStackTrace(CallbackInfo ci, OutOfMemoryError var19) {
-        var19.printStackTrace();
-    }
+    //@Inject(method = "run", locals = LocalCapture.CAPTURE_FAILHARD, at = @At(
+    //        value = "INVOKE",
+    //        target = "Lnet/minecraft/client/Minecraft;method_2131()V",
+    //        ordinal = 0,
+    //        shift = At.Shift.BEFORE))
+    //private void printOoMStackTrace(CallbackInfo ci, OutOfMemoryError var19) {
+    //    var19.printStackTrace();
+    //}
 
     @Inject(method = "method_2111", at = @At(
-            value = "INVOKE",
+            value = "INVOKE_ASSIGN",
             target = "Ljava/lang/System;nanoTime()J",
             ordinal = 1))
     private void updateLastRendererTime(long par1, CallbackInfo ci) {
@@ -322,7 +327,7 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
             target = "Lnet/minecraft/client/render/Tessellator;colour(I)V",
             ordinal = 5,
             shift = At.Shift.BEFORE))
-    private void drawUpdateTime(long par1, CallbackInfo ci, Tessellator var7, int var12, int var14, long var16, long var18) {
+    private void drawUpdateTime(long par1, CallbackInfo ci, long var3, long var5, Tessellator var7, int var8, long var9, int var11, int var12, int var13, int var14, int var15, long var16, long var18) {
         long uTime = Main.updateTimes[var12] / 200000L;
 
         var7.colour(var14);
@@ -414,7 +419,7 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
             }
             if (block != null) {
                 int alwaysClick;
-                if (!DebugMode.active && (alwaysClick = block.alwaysUseClick(this.level, j, k, l)) != -1) {
+                if (!DebugMode.active && (alwaysClick = ((ExTile) block).alwaysUseClick(this.level, j, k, l)) != -1) {
                     i = alwaysClick;
                 }
                 if (i == 0) {
@@ -519,9 +524,9 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
         }
     }
 
-    @Inject(method = "updateScreenResolution", locals = LocalCapture.CAPTURE_FAILHARD, at = @At(value = "TAIL"))
-    private void reinitStoreGui(int w, int h, CallbackInfo ci, int actualWidth, int actualHeight) {
-        ScreenScaler scaledresolution = new ScreenScaler(this.options, actualWidth, actualHeight);
+    @Inject(method = "updateScreenResolution", at = @At(value = "TAIL"))
+    private void reinitStoreGui(int w, int h, CallbackInfo ci) {
+        ScreenScaler scaledresolution = new ScreenScaler(this.options, this.actualWidth, this.actualHeight);
         int k = scaledresolution.getScaledWidth();
         int l = scaledresolution.getScaledHeight();
         this.storeGUI.init((Minecraft) (Object) this, k, l);
@@ -828,7 +833,12 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
             if (s1 == null) {
                 s1 = "Map Editing";
             }
-            Level world = new Level(mapName, isavehandler, s1, l);
+            Level world = null;
+            try {
+                world = ExLevel.createLevel(mapName, isavehandler, s1, l, null);
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            }
             if (world.generating) {
                 this.statManager.incrementStat(Stats.createWorld, 1);
                 this.statManager.incrementStat(Stats.startGame, 1);
@@ -847,7 +857,12 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
         this.setLevel(null);
         System.gc();
         DimensionData isavehandler = this.levelStorage.createDimensionFile(saveName, false);
-        Level world = new Level(mapName, isavehandler, saveName, l);
+        Level world = null;
+        try {
+            world = ExLevel.createLevel(mapName, isavehandler, saveName, l, null);
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        }
         return world;
     }
 

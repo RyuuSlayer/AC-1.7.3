@@ -16,7 +16,7 @@ import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
-public class BlockTimer extends TileWithEntity {
+public class BlockTimer extends TileWithEntity implements AcTriggerTile, AcRenderConditionTile, AcResetTile {
 
     protected BlockTimer(int i, int j) {
         super(i, j, Material.AIR);
@@ -69,6 +69,10 @@ public class BlockTimer extends TileWithEntity {
         if (obj.canActivate && !obj.active) {
             obj.startActive();
         }
+    }
+
+    @Override
+    public void onTriggerDeactivated(Level world, int i, int j, int k) {
     }
 
     @Override

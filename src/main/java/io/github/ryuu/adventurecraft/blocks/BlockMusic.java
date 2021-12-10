@@ -16,7 +16,7 @@ import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
-public class BlockMusic extends TileWithEntity {
+public class BlockMusic extends TileWithEntity implements AcTriggerTile, AcRenderConditionTile {
 
     protected BlockMusic(int i, int j) {
         super(i, j, Material.AIR);

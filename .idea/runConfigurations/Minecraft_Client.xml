@@ -2,8 +2,7 @@
   <configuration default="false" name="Minecraft Client" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="net.fabricmc.devlaunchinjector.Main" />
     <module name="AC-1.7.3.main" />
-    <option name="PROGRAM_PARAMETERS" value="" />
-    <option name="VM_PARAMETERS" value="-Dfabric.dli.config=C:\Users\MarkusMaurer\Documents\GitHub\AC-1.7.3\.gradle\loom-cache\launch.cfg -Dfabric.dli.env=client -Dfabric.dli.main=net.fabricmc.loader.launch.knot.KnotClient" />
+    <option name="VM_PARAMETERS" value="-Dfabric.dli.config=C:\Users\MarkusMaurer\Documents\GitHub\AC-1.7.3\.gradle\loom-cache\launch.cfg -Dfabric.dli.env=client -Dfabric.dli.main=net.fabricmc.loader.launch.knot.KnotClient -Dmixin.debug=true -javaagent:&quot;C:\Users\Michal Piatkowski\.gradle\caches\modules-2\files-2.1\net.fabricmc\sponge-mixin\0.9.2+mixin.0.8.2\12c437eebf031967eaa7daad861e115932772cc7\sponge-mixin-0.9.2+mixin.0.8.2.jar&quot;" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/run/" />
     <method v="2">
       <option name="Make" enabled="true" />

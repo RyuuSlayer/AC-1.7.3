@@ -9,7 +9,7 @@ import net.minecraft.tile.material.Material;
 
 import java.util.Random;
 
-public class BlockRedstonePower extends Tile {
+public class BlockRedstonePower extends Tile implements AcTriggerTile, AcLightTile {
 
     protected BlockRedstonePower(int i, int j) {
         super(i, j, Material.STONE);

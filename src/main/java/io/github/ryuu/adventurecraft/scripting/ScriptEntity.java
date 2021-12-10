@@ -225,11 +225,11 @@ public class ScriptEntity {
     }
 
     public int getStunned() {
-        return ((ExLivingEntity) this.entity).getStunned();
+        return ((ExEntity) this.entity).getStunned();
     }
 
     public void setStunned(int i) {
-        ((ExLivingEntity) this.entity).setStunned(i);
+        ((ExEntity) this.entity).setStunned(i);
     }
 
     public boolean attackEntityFrom(ScriptEntity e, int i) {

@@ -22,7 +22,7 @@ public class RenderCamera extends LivingEntityRenderer {
     @Override
     public void render(Entity entity, double x, double y, double z, float f, float f1) {
         if (DebugMode.active) {
-            super.render(entity, x, y, z, f, f1);
+            super.render((LivingEntity) entity, x, y, z, f, f1);
         }
     }
 }

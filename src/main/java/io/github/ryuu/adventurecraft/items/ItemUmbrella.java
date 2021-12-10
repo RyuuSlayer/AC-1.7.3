@@ -3,7 +3,7 @@ package io.github.ryuu.adventurecraft.items;
 import io.github.ryuu.adventurecraft.entities.EntityAirFX;
 import io.github.ryuu.adventurecraft.extensions.items.ExItemType;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
-import io.github.ryuu.adventurecraft.mixin.client.particle.ExParticleManager;
+import io.github.ryuu.adventurecraft.extensions.client.particle.ExParticleManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.FallingTile;
 import net.minecraft.entity.player.Player;

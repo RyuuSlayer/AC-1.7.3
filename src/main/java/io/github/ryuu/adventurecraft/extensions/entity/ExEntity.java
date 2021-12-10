@@ -16,5 +16,9 @@ public interface ExEntity {
 
     boolean getCollidesWithClipBlocks();
 
+    int getStunned();
+
+    void setStunned(int stunned);
+
     boolean attackEntityFromMulti(Entity entity, int i);
 }

@@ -15,7 +15,7 @@ import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
-public class BlockTeleport extends TileWithEntity {
+public class BlockTeleport extends TileWithEntity implements AcTriggerTile, AcRenderConditionTile {
 
     protected BlockTeleport(int i, int j) {
         super(i, j, Material.AIR);
@@ -51,9 +51,10 @@ public class BlockTeleport extends TileWithEntity {
 
     @Override
     public void onTriggerActivated(Level world, int i, int j, int k) {
-        int y;
         TileEntityTeleport tileEnt = (TileEntityTeleport) world.getTileEntity(i, j, k);
-        for (y = tileEnt.y; y < 128 && world.getMaterial(tileEnt.x, y, tileEnt.z) != Material.AIR; ++y) {
+        int y = tileEnt.y;
+        while (y < 128 && world.getMaterial(tileEnt.x, y, tileEnt.z) != Material.AIR) {
+            ++y;
         }
         for (Object obj : world.players) {
             Player p = (Player) obj;

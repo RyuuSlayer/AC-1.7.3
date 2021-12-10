@@ -1,5 +1,7 @@
 package io.github.ryuu.adventurecraft.util;
 
+import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -15,7 +17,7 @@ public class MapList {
     private List<MapInfo> availableMaps = new ArrayList<>();
 
     public MapList(File file) {
-        this.mapDir = new File(file, "../maps");
+        this.mapDir = new File(file, ExLevel.getAcMapDirectory());
         if (!this.mapDir.exists()) {
             this.mapDir.mkdirs();
         }

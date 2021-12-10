@@ -23,16 +23,16 @@ public class Profiler {
             ProfileContext c = profileStack.pop();
             long t = c.getTime();
             if (times.containsKey(c.contextName)) {
-                times.put((Object) c.contextName, (Object) (times.get(c.contextName) + t));
+                times.put(c.contextName, (times.get(c.contextName) + t));
             } else {
-                times.put((Object) c.contextName, (Object) t);
+                times.put(c.contextName, t);
             }
         }
     }
 
     public static void startFrame() {
-        profileStack = new Stack();
-        times = new HashMap();
+        profileStack = new Stack<>();
+        times = new HashMap<>();
         startTime = System.nanoTime();
     }
 
@@ -40,7 +40,7 @@ public class Profiler {
         if (profileStack != null) {
             long time = System.nanoTime() - startTime;
             if (time > 100000000L) {
-                for (Map.Entry e : times.entrySet()) {
+                for (Map.Entry<String, Long> e : times.entrySet()) {
                     System.out.printf("%s\t\t%d\n", e.getKey(), e.getValue());
                 }
             }

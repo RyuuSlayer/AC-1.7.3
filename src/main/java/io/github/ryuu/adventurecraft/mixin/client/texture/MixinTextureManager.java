@@ -13,6 +13,7 @@ import net.minecraft.client.resource.TexturePack;
 import net.minecraft.client.texture.TextureManager;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -50,6 +51,15 @@ public abstract class MixinTextureManager implements AccessTextureManager, ExTex
     private HashMap<String, Integer> TEXTURE_ID_MAP;
 
     @Shadow
+    private HashMap<String, int[]> IMAGE_GRID_CACHE;
+
+    @Shadow
+    private HashMap<Integer, BufferedImage> INT_TO_IMAGE;
+
+    @Shadow
+    private Map<String, ImageDownloader> ID_TO_DOWNLOADER;
+
+    @Shadow
     private ByteBuffer textureGridBuffer = GLAllocator.createByteBuffer(0x100000);
 
     @Shadow
@@ -70,6 +80,9 @@ public abstract class MixinTextureManager implements AccessTextureManager, ExTex
     @Shadow
     protected abstract BufferedImage method_1101(BufferedImage bufferedImage);
 
+    @Shadow
+    protected abstract int[] getRGBPixels(BufferedImage bufferedImage, int[] is);
+
     private HashMap<Integer, Vec2> textureResolutions;
     private HashMap<String, TextureAnimated> textureAnimations;
     public File mapDir;
@@ -82,12 +95,56 @@ public abstract class MixinTextureManager implements AccessTextureManager, ExTex
         this.textureAnimations = new HashMap<>();
     }
 
-    @Inject(method = "getTextureId(Ljava/lang/String;)I", at = @At(value = "INVOKE", target = "Ljava/nio/IntBuffer;get(I)I", ordinal = 0), cancellable = true)
+    @Inject(method = "getTextureId(Ljava/lang/String;)I", at = @At(
+            value = "INVOKE",
+            target = "Ljava/nio/IntBuffer;get(I)I",
+            ordinal = 0),
+            cancellable = true)
     public void getTextureId(String stringId, CallbackInfoReturnable<Integer> cir) {
         int i = this.atlasBuffer.get(0);
         this.loadTexture(i, stringId);
         this.TEXTURE_ID_MAP.put(stringId, i);
         cir.setReturnValue(i);
+    }
+
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite
+    public void reload() {
+        TexturePack texturepackbase = this.texturePackManager.texturePack;
+        for (int i : this.INT_TO_IMAGE.keySet()) {
+            BufferedImage bufferedimage = this.INT_TO_IMAGE.get(i);
+            this.glLoadImageWithId(bufferedimage, i);
+        }
+        for (ImageDownloader threaddownloadimagedata : this.ID_TO_DOWNLOADER.values()) {
+            threaddownloadimagedata.loaded = false;
+        }
+        for (String s : this.TEXTURE_ID_MAP.keySet()) {
+            int j = this.TEXTURE_ID_MAP.get(s);
+            this.loadTexture(j, s);
+        }
+        for (String s1 : this.IMAGE_GRID_CACHE.keySet()) {
+            try {
+                BufferedImage bufferedimage2;
+                if (s1.startsWith("##")) {
+                    bufferedimage2 = this.method_1101(this.readStream(texturepackbase.getResource(s1.substring(2))));
+                } else if (s1.startsWith("%clamp%")) {
+                    this.clamped = true;
+                    bufferedimage2 = this.readStream(texturepackbase.getResource(s1.substring(7)));
+                } else if (s1.startsWith("%blur%")) {
+                    this.blurred = true;
+                    bufferedimage2 = this.readStream(texturepackbase.getResource(s1.substring(6)));
+                } else {
+                    bufferedimage2 = this.readStream(texturepackbase.getResource(s1));
+                }
+                this.getRGBPixels(bufferedimage2, this.IMAGE_GRID_CACHE.get(s1));
+                this.blurred = false;
+                this.clamped = false;
+            } catch (Exception ioexception1) {
+                ioexception1.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -176,14 +233,22 @@ public abstract class MixinTextureManager implements AccessTextureManager, ExTex
     private void removeArgSetupCall(TextureBinder instance) {
     }
 
-    @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL11;glTexSubImage2D(IIIIIIIILjava/nio/ByteBuffer;)V", ordinal = 0))
+    @Redirect(method = "tick", at = @At(
+            value = "INVOKE",
+            target = "Lorg/lwjgl/opengl/GL11;glTexSubImage2D(IIIIIIIILjava/nio/ByteBuffer;)V",
+            ordinal = 0,
+            remap = false))
     private void glTexSubImage2DRedirectNothing(int target, int level, int xoffset, int yoffset, int width, int height, int format, int type, ByteBuffer pixels) {
     }
 
-    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL11;glTexSubImage2D(IIIIIIIILjava/nio/ByteBuffer;)V", ordinal = 0), locals = LocalCapture.CAPTURE_FAILSOFT)
-    private void fixSize(CallbackInfo ci, int var1, int var3, int var4) {
-        TextureBinder texturefx = (TextureBinder) textureBinders.get(var1);
-        Vec2 texRes = this.getTextureResolution(((ExTextureBinder) texturefx).adventurecraft$getTexture());
+    @Inject(method = "tick", locals = LocalCapture.CAPTURE_FAILHARD, at = @At(
+            value = "INVOKE",
+            target = "Lorg/lwjgl/opengl/GL11;glTexSubImage2D(IIIIIIIILjava/nio/ByteBuffer;)V",
+            ordinal = 0,
+            remap = false))
+    private void fixSize(CallbackInfo ci, int var1, TextureBinder var2, int var3, int var4, int var15, int var16, int var17, int var18, int var19, int var20, int var21, int var22, ByteBuffer var23) {
+        TextureBinder texturefx = textureBinders.get(var1);
+        Vec2 texRes = this.getTextureResolution(((ExTextureBinder) texturefx).getTexture());
         int w = texRes.x / 16;
         int h = texRes.y / 16;
         GL11.glTexSubImage2D(3553, 0, texturefx.field_1412 % 16 * w + var3 * w, texturefx.field_1412 / 16 * h + var4 * h, w, h, 6408, 5121, this.textureGridBuffer);

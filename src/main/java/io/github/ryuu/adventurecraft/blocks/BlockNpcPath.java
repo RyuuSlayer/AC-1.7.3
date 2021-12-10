@@ -14,7 +14,7 @@ import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.maths.Box;
 
-public class BlockNpcPath extends TileWithEntity {
+public class BlockNpcPath extends TileWithEntity implements AcTriggerTile, AcRenderConditionTile {
 
     public BlockNpcPath(int i, int j) {
         super(i, j, Material.STONE);
@@ -59,6 +59,10 @@ public class BlockNpcPath extends TileWithEntity {
         if (obj != null) {
             obj.pathEntity();
         }
+    }
+
+    @Override
+    public void onTriggerDeactivated(Level world, int i, int j, int k) {
     }
 
     @Override
