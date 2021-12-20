@@ -7,11 +7,18 @@ import io.github.ryuu.adventurecraft.models.ModelRat;
 import io.github.ryuu.adventurecraft.rendering.*;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.render.entity.EntityRenderer;
+import net.minecraft.client.render.entity.ItemRenderer;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.model.BipedModel;
 import net.minecraft.client.render.entity.model.SkeletonModel;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,12 +27,10 @@ import java.util.Map;
 public abstract class MixinEntityRenderDispatcher {
 
     @Shadow
-    public static EntityRenderDispatcher INSTANCE;
-
-    @Shadow
     private Map<Class<?>, EntityRenderer> renderers;
 
-    private MixinEntityRenderDispatcher() {
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void init(CallbackInfo ci) {
         Map<Class<?>, EntityRenderer> renderers = new HashMap<>();
 
         renderers.put(EntitySkeletonBoss.class, new RenderBipedScaled(new SkeletonModel(), 0.5f, 2.5f));
@@ -39,7 +44,7 @@ public abstract class MixinEntityRenderDispatcher {
         renderers.put(EntityLivingScript.class, new RenderBipedScaledScripted(new BipedModel()));
 
         for (EntityRenderer render : renderers.values()) {
-            render.setDispatcher(INSTANCE);
+            render.setDispatcher((EntityRenderDispatcher) (Object) this);
         }
         this.renderers.putAll(renderers);
     }

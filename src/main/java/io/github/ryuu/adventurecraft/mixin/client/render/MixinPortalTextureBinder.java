@@ -3,7 +3,6 @@ package io.github.ryuu.adventurecraft.mixin.client.render;
 import io.github.ryuu.adventurecraft.extensions.client.render.ExPortalTextureBinder;
 import io.github.ryuu.adventurecraft.util.Vec2;
 import net.minecraft.client.render.PortalTextureBinder;
-import net.minecraft.client.render.TextureBinder;
 import net.minecraft.util.maths.MathsHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -11,17 +10,13 @@ import org.spongepowered.asm.mixin.Shadow;
 import java.util.Random;
 
 @Mixin(PortalTextureBinder.class)
-public abstract class MixinPortalTextureBinder extends TextureBinder {
+public abstract class MixinPortalTextureBinder extends MixinTextureBinder {
 
     @Shadow
     private int field_1091;
 
     @Shadow
     private byte[][] field_1092;
-
-    public MixinPortalTextureBinder(int i) {
-        super(i);
-    }
 
     private void generatePortalData(int w, int h) {
         this.field_1092 = new byte[32][w * h * 4];
@@ -31,8 +26,8 @@ public abstract class MixinPortalTextureBinder extends TextureBinder {
                 for (int k = 0; k < h; ++k) {
                     float f = 0.0f;
                     for (int l = 0; l < 2; ++l) {
-                        float f1 = l * w / 2;
-                        float f2 = l * h / 2;
+                        float f1 = (float)(l * w / 2);
+                        float f2 = (float)(l * h / 2);
                         float f3 = ((float) j - f1) / (float) w * 2.0f;
                         float f4 = ((float) k - f2) / (float) h * 2.0f;
                         if (f3 < -1.0f) {
@@ -66,6 +61,7 @@ public abstract class MixinPortalTextureBinder extends TextureBinder {
         }
     }
 
+    @Override
     public void onTick(Vec2 texRes) {
         int w = texRes.x / 16;
         int width = ExPortalTextureBinder.width;

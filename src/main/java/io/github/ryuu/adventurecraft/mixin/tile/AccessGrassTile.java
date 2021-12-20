@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(GrassTile.class)
 public interface AccessGrassTile {
+
     @Invoker("<init>")
     static GrassTile newGrassTile(int i) {
         throw new AssertionError();

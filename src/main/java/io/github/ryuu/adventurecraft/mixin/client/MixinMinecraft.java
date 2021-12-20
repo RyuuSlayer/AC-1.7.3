@@ -337,14 +337,6 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
 
     @Redirect(method = "method_2110", at = @At(
             value = "FIELD",
-            target = "Lnet/minecraft/client/ClientInteractionManager;field_2105:Z",
-            opcode = Opcodes.GETFIELD))
-    public boolean invertInteractionManagerField_2105(ClientInteractionManager instance) {
-        return !instance.field_2105;
-    }
-
-    @Redirect(method = "method_2110", at = @At(
-            value = "FIELD",
             target = "Lnet/minecraft/client/Minecraft;attackCooldown:I",
             opcode = Opcodes.PUTFIELD))
     public void removeAttackCooldownOnMethod_2110(Minecraft instance, int value) {

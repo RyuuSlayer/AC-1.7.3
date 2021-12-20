@@ -32,8 +32,8 @@ public abstract class MixinClass_520 extends ClientInteractionManager {
     public boolean method_1716(int i, int j, int k, int side) {
         ((ExLevel) this.minecraft.level).getUndoStack().startRecording();
         boolean flag = false;
-        int destroyExtraWidth = ((ExClientInteractionManager)this).getDestroyExtraWidth();
-        int destroyExtraDepth = ((ExClientInteractionManager)this).getDestroyExtraDepth();
+        int destroyExtraWidth = ((ExClientInteractionManager) this).getDestroyExtraWidth();
+        int destroyExtraDepth = ((ExClientInteractionManager) this).getDestroyExtraDepth();
         for (int x = -destroyExtraWidth; x <= destroyExtraWidth; ++x) {
             for (int y = -destroyExtraWidth; y <= destroyExtraWidth; ++y) {
                 for (int z = 0; z <= destroyExtraDepth; ++z) {
@@ -91,15 +91,15 @@ public abstract class MixinClass_520 extends ClientInteractionManager {
     @Redirect(method = "method_1707", at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/class_520;method_1716(IIII)Z"))
-    private boolean stopMethod_1716WhenDebug(class_520 instance, int i, int j, int k, int l) {
+    private boolean method_1716OnlyWhenDebug(class_520 instance, int i, int j, int k, int l) {
         if (DebugMode.active) {
             instance.method_1716(i, j, k, l);
         }
         return false;
     }
 
-    @Inject(method = "method_1721", at = @At("TAIL"), cancellable = true)
-    private void cancelMethod_1721InDebug(int i, int j, int k, int l, CallbackInfo ci) {
+    @Inject(method = "method_1721", at = @At("HEAD"), cancellable = true)
+    private void method_1721OnlyWhenDebug(int i, int j, int k, int l, CallbackInfo ci) {
         if (!DebugMode.active) {
             ci.cancel();
         }
@@ -109,11 +109,9 @@ public abstract class MixinClass_520 extends ClientInteractionManager {
     private void method_1715(CallbackInfoReturnable<Float> cir) {
         if (this.minecraft.player.getHeldItem() != null && this.minecraft.player.getHeldItem().itemId == Items.quill.id) {
             cir.setReturnValue(500.0f);
-            cir.cancel();
         }
         if (DebugMode.active) {
             cir.setReturnValue((float) DebugMode.reachDistance);
-            cir.cancel();
         }
     }
 }

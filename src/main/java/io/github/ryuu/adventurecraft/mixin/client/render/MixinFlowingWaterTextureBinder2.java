@@ -4,12 +4,11 @@ import io.github.ryuu.adventurecraft.extensions.client.render.ExFlowingWaterText
 import io.github.ryuu.adventurecraft.util.TerrainImage;
 import io.github.ryuu.adventurecraft.util.Vec2;
 import net.minecraft.client.render.FlowingWaterTextureBinder2;
-import net.minecraft.client.render.TextureBinder;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(FlowingWaterTextureBinder2.class)
-public abstract class MixinFlowingWaterTextureBinder2 extends TextureBinder {
+public abstract class MixinFlowingWaterTextureBinder2 extends MixinTextureBinder {
 
     @Shadow
     protected float[] field_2566;
@@ -26,10 +25,7 @@ public abstract class MixinFlowingWaterTextureBinder2 extends TextureBinder {
     @Shadow
     private int field_2570;
 
-    public MixinFlowingWaterTextureBinder2(int i) {
-        super(i);
-    }
-
+    @Override
     public void onTick(Vec2 texRes) {
         int w = texRes.x / 16;
         int h = texRes.y / 16;

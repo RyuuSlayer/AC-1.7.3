@@ -3,13 +3,12 @@ package io.github.ryuu.adventurecraft.mixin.client.render;
 import io.github.ryuu.adventurecraft.extensions.client.render.ExFlowingLavaTextureBinder2;
 import io.github.ryuu.adventurecraft.util.Vec2;
 import net.minecraft.client.render.FlowingLavaTextureBinder2;
-import net.minecraft.client.render.TextureBinder;
 import net.minecraft.util.maths.MathsHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(FlowingLavaTextureBinder2.class)
-public abstract class MixinFlowingLavaTextureBinder2 extends TextureBinder {
+public abstract class MixinFlowingLavaTextureBinder2 extends MixinTextureBinder {
 
     @Shadow
     protected float[] field_1166;
@@ -26,10 +25,7 @@ public abstract class MixinFlowingLavaTextureBinder2 extends TextureBinder {
     @Shadow
     int field_1170;
 
-    public MixinFlowingLavaTextureBinder2(int i) {
-        super(i);
-    }
-
+    @Override
     public void onTick(Vec2 texRes) {
         int w = texRes.x / 16;
         int h = texRes.y / 16;

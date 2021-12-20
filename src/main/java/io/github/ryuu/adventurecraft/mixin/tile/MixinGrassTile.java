@@ -1,6 +1,5 @@
 package io.github.ryuu.adventurecraft.mixin.tile;
 
-import io.github.ryuu.adventurecraft.Main;
 import io.github.ryuu.adventurecraft.blocks.IBlockColor;
 import io.github.ryuu.adventurecraft.extensions.client.options.ExGameOptions;
 import io.github.ryuu.adventurecraft.extensions.tile.ExGrassTile;
@@ -23,15 +22,15 @@ import java.util.Random;
 @Mixin(GrassTile.class)
 public abstract class MixinGrassTile extends Tile implements IBlockColor, ExGrassTile {
 
-    protected MixinGrassTile(int id) {
-        super(id, Material.ORGANIC);
-        this.tex = 3;
-        this.setTicksRandomly(true);
+    protected MixinGrassTile(int i, Material arg) {
+        super(i, arg);
     }
 
     @Inject(method = "method_1626", at = @At(
             value = "RETURN",
-            ordinal = 0))
+            ordinal = 0,
+            shift = At.Shift.BEFORE),
+            cancellable = true)
     private void returnMetadataInstead(TileView iblockaccess, int i, int j, int k, int l, CallbackInfoReturnable<Integer> cir) {
         int metadata = iblockaccess.getTileMeta(i, j, k);
         if (metadata == 0) {
@@ -67,7 +66,7 @@ public abstract class MixinGrassTile extends Tile implements IBlockColor, ExGras
 
     @Override
     public int method_1621() {
-        if (((ExGameOptions)AccessMinecraft.getInstance().options).isGrass3d()) {
+        if (((ExGameOptions) AccessMinecraft.getInstance().options).isGrass3d()) {
             return 30;
         }
         return super.method_1621();

@@ -3,18 +3,12 @@ package io.github.ryuu.adventurecraft.mixin.client.render;
 import io.github.ryuu.adventurecraft.util.Vec2;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.CompassTextureBinder;
-import net.minecraft.client.render.TextureBinder;
-import net.minecraft.item.ItemType;
 import net.minecraft.util.Vec3i;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-
 @Mixin(CompassTextureBinder.class)
-public abstract class MixinCompassTextureBinder extends TextureBinder {
+public abstract class MixinCompassTextureBinder extends MixinTextureBinder {
 
     @Shadow
     private Minecraft field_1326;
@@ -28,10 +22,7 @@ public abstract class MixinCompassTextureBinder extends TextureBinder {
     @Shadow
     private double field_1329;
 
-    public MixinCompassTextureBinder(int i) {
-        super(i);
-    }
-
+    @Override
     public void onTick(Vec2 texRes) {
         for (int i = 0; i < 256; ++i) {
             int j = this.field_1327[i] >> 24 & 0xFF;

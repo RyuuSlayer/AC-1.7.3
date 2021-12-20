@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(TileParticle.class)
-public class MixinTileParticle extends Particle {
+public abstract class MixinTileParticle extends Particle {
 
     @Shadow
     private Tile field_2383;

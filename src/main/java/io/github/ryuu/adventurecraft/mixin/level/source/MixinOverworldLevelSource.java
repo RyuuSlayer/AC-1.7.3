@@ -15,6 +15,10 @@ import net.minecraft.util.noise.PerlinOctaveNoise;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.Random;
 
@@ -41,9 +45,6 @@ public abstract class MixinOverworldLevelSource implements LevelSource, ExOverwo
 
     @Shadow
     private Level level;
-
-    @Shadow
-    private Cave cave;
 
     @Shadow
     public PerlinOctaveNoise biomeNoise;
@@ -79,10 +80,6 @@ public abstract class MixinOverworldLevelSource implements LevelSource, ExOverwo
 
     @Shadow
     double[] depthNoises;
-
-    @Shadow
-    int[][] unusedVals;
-
     @Shadow
     private double[] noises;
 
@@ -94,9 +91,6 @@ public abstract class MixinOverworldLevelSource implements LevelSource, ExOverwo
 
     @Shadow
     private double[] surfaceDepthNoises;
-
-    @Shadow
-    private Biome[] biomes;
 
     @Shadow
     private double[] temperatureNoises;
@@ -117,7 +111,7 @@ public abstract class MixinOverworldLevelSource implements LevelSource, ExOverwo
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void shapeChunk(int chunkX, int chunkZ, byte[] tiles, Biome[] biomes, double[] temperatures) {
         int byte0 = 4;
         int k = byte0 + 1;
@@ -128,14 +122,17 @@ public abstract class MixinOverworldLevelSource implements LevelSource, ExOverwo
             for (int zOuter = 0; zOuter < byte0; ++zOuter) {
                 for (int yOuter = 0; yOuter < 16; ++yOuter) {
                     double d = 0.125;
-                    double d1 = this.noises[((xOuter + 0) * l + (zOuter + 0)) * byte2 + (yOuter + 0)];
-                    double d2 = this.noises[((xOuter + 0) * l + (zOuter + 1)) * byte2 + (yOuter + 0)];
-                    double d3 = this.noises[((xOuter + 1) * l + (zOuter + 0)) * byte2 + (yOuter + 0)];
-                    double d4 = this.noises[((xOuter + 1) * l + (zOuter + 1)) * byte2 + (yOuter + 0)];
-                    double d5 = (this.noises[((xOuter + 0) * l + (zOuter + 0)) * byte2 + (yOuter + 1)] - d1) * d;
-                    double d6 = (this.noises[((xOuter + 0) * l + (zOuter + 1)) * byte2 + (yOuter + 1)] - d2) * d;
-                    double d7 = (this.noises[((xOuter + 1) * l + (zOuter + 0)) * byte2 + (yOuter + 1)] - d3) * d;
-                    double d8 = (this.noises[((xOuter + 1) * l + (zOuter + 1)) * byte2 + (yOuter + 1)] - d4) * d;
+                    int i = ((xOuter) * l + (zOuter + 1)) * byte2;
+                    int i1 = ((xOuter + 1) * l + (zOuter)) * byte2;
+                    int i2 = ((xOuter + 1) * l + (zOuter + 1)) * byte2;
+                    double d1 = this.noises[((xOuter) * l + (zOuter)) * byte2 + (yOuter)];
+                    double d2 = this.noises[i + (yOuter)];
+                    double d3 = this.noises[i1 + (yOuter)];
+                    double d4 = this.noises[i2 + (yOuter)];
+                    double d5 = (this.noises[((xOuter) * l + (zOuter)) * byte2 + (yOuter + 1)] - d1) * d;
+                    double d6 = (this.noises[i + (yOuter + 1)] - d2) * d;
+                    double d7 = (this.noises[i1 + (yOuter + 1)] - d3) * d;
+                    double d8 = (this.noises[i2 + (yOuter + 1)] - d4) * d;
                     for (int yInner = 0; yInner < 8; ++yInner) {
                         double d9 = 0.25;
                         double d10 = d1;
@@ -143,7 +140,7 @@ public abstract class MixinOverworldLevelSource implements LevelSource, ExOverwo
                         double d12 = (d3 - d1) * d9;
                         double d13 = (d4 - d2) * d9;
                         for (int xInner = 0; xInner < 4; ++xInner) {
-                            int j2 = xInner + xOuter * 4 << 11 | 0 + zOuter * 4 << 7 | yOuter * 8 + yInner;
+                            int j2 = xInner + xOuter * 4 << 11 | zOuter * 4 << 7 | yOuter * 8 + yInner;
                             int c = 128;
                             double d14 = 0.25;
                             double d15 = d10;
@@ -180,7 +177,7 @@ public abstract class MixinOverworldLevelSource implements LevelSource, ExOverwo
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite()
+    @Overwrite
     public void buildSurface(int chunkX, int chunkZ, byte[] tiles, Biome[] biomes) {
         double d = 0.03125;
         this.sandNoises = this.beachNoise.sample(this.sandNoises, chunkX * 16, chunkZ * 16, 0.0, 16, 16, 1, d, d, 1.0);
@@ -244,32 +241,12 @@ public abstract class MixinOverworldLevelSource implements LevelSource, ExOverwo
         }
     }
 
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public Chunk loadChunk(int x, int z) {
-        return this.getChunk(x, z);
-    }
-
-    /**
-     * @author Ryuu, TechPizza, Phil
-     */
-    @Override
-    @Overwrite()
-    public Chunk getChunk(int x, int z) {
-        this.rand.setSeed((long) x * 341873128712L + (long) z * 132897987541L);
-        byte[] abyte0 = new byte[32768];
-        Chunk chunk = new Chunk(this.level, abyte0, x, z);
-        this.biomes = this.level.getBiomeSource().getBiomes(this.biomes, x * 16, z * 16, 16, 16);
-        double[] ad = this.level.getBiomeSource().temperatureNoises;
-        this.shapeChunk(x, z, abyte0, this.biomes, ad);
-        this.buildSurface(x, z, abyte0, this.biomes);
-        this.cave.generate(this, this.level, x, z, abyte0);
-        chunk.generateHeightmap();
-        chunk.shouldSave = false;
-        return chunk;
+    @Inject(method = "getChunk", locals = LocalCapture.CAPTURE_FAILHARD, at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/level/chunk/Chunk;generateHeightmap()V",
+            shift = At.Shift.AFTER))
+    public void getChunkShouldNotSave(int x, int z, CallbackInfoReturnable<Chunk> cir, byte[] var3, Chunk var4, double[] var5) {
+        var4.shouldSave = false;
     }
 
     /**
@@ -359,7 +336,7 @@ public abstract class MixinOverworldLevelSource implements LevelSource, ExOverwo
      * @author Ryuu, TechPizza, Phil
      */
     @Override
-    @Overwrite()
+    @Overwrite
     public void decorate(LevelSource levelSource, int chunkX, int chunkZ) {
         SandTile.fallInstantly = true;
         int k = chunkX * 16;
