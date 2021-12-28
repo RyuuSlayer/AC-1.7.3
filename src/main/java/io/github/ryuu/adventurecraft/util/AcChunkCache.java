@@ -1,5 +1,6 @@
 package io.github.ryuu.adventurecraft.util;
 
+import io.github.ryuu.adventurecraft.extensions.level.chunk.ExClientChunkCache;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.level.Level;
 import net.minecraft.level.chunk.Chunk;
@@ -8,7 +9,7 @@ import net.minecraft.level.chunk.DummyChunk;
 import net.minecraft.level.source.LevelSource;
 import net.minecraft.util.ProgressListener;
 
-public class AcChunkCache implements LevelSource {
+public class AcChunkCache implements LevelSource, ExClientChunkCache {
 
     public static boolean chunkIsNotPopulating = true;
 
@@ -27,7 +28,7 @@ public class AcChunkCache implements LevelSource {
     int mask;
     int chunksWide;
 
-    public AcChunkCache(Level world, ChunkIO ichunkloader, LevelSource ichunkprovider) {
+    public void init(Level world, ChunkIO ichunkloader, LevelSource ichunkprovider) {
         this.isVeryFar = AccessMinecraft.getInstance().options.viewDistance != 0;
         this.updateVeryFar();
         this.cachedX = -999999999;

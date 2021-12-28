@@ -8,6 +8,7 @@
     "client.gui.AccessScreen",
     "client.gui.screen.MixinSelectWorldScreen$class_569",
     "client.gui.screen.MixinVideoSettingsScreen",
+    "client.particle.MixinEntityCollisionParticle",
     "client.render.AccessGameRenderer",
     "client.render.AccessTileRenderer",
     "client.texture.AccessTextureManager",
@@ -21,10 +22,7 @@
     "item.AccessItemType",
     "item.AccessorItemType",
     "level.AccessLevel",
-    "tile.AccessFlowingFluidTile",
     "tile.AccessGrassTile",
-    "tile.AccessSandTile",
-    "tile.AccessStillFluidTile",
     "tile.AccessTile",
     "util.AccessResourceDownloadThread"
   ],

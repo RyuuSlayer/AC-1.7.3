@@ -351,7 +351,8 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
             }
         }
 
-        AcChunkCache chunkCache = new AcChunkCache((Level) (Object) this, ichunkloader, this.dimension.createLevelSource());
+        AcChunkCache chunkCache = new AcChunkCache();
+        chunkCache.init((Level) (Object) this, ichunkloader, this.dimension.createLevelSource());
         return chunkCache;
     }
 
@@ -452,7 +453,6 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
                 i1 = i2;
             }
             cir.setReturnValue(i1);
-            cir.cancel();
         }
     }
 
@@ -676,27 +676,68 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
         return true;
     }
 
-    @Inject(method = "method_190", locals = LocalCapture.CAPTURE_FAILHARD, at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/level/Level;isTileLoaded(III)Z",
-            shift = At.Shift.BEFORE))
-    private void replaceIntersectionBody(
-            Entity entity, Box axisalignedbb, CallbackInfoReturnable<List<Box>> cir, int var5, int var6, int var9, int var10) {
+    @Shadow
+    public abstract List<Entity> getEntities(Entity arg, Box arg1);
 
-        for (int i2 = var5 - 1; i2 < var6; ++i2) {
-            Tile block = Tile.BY_ID[this.getTileId(var9, i2, var10)];
-            if (block == null || !((ExEntity) entity).getCollidesWithClipBlocks() && (block.id == Blocks.clipBlock.id || ExLadderTile.isLadderID(block.id)))
-                continue;
-            block.intersectsInLevel((Level) (Object) this, var9, i2, var10, axisalignedbb, this.field_189);
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite
+    public List<Box> method_190(net.minecraft.entity.Entity entity, Box axisalignedbb) {
+        this.field_189.clear();
+        int i = MathsHelper.floor(axisalignedbb.minX);
+        int j = MathsHelper.floor(axisalignedbb.maxX + 1.0);
+        int k = MathsHelper.floor(axisalignedbb.minY);
+        int l = MathsHelper.floor(axisalignedbb.maxY + 1.0);
+        int i1 = MathsHelper.floor(axisalignedbb.minZ);
+        int j1 = MathsHelper.floor(axisalignedbb.maxZ + 1.0);
+        for (int k1 = i; k1 < j; ++k1) {
+            for (int l1 = i1; l1 < j1; ++l1) {
+                if (!this.isTileLoaded(k1, 64, l1)) continue;
+                for (int i2 = k - 1; i2 < l; ++i2) {
+                    Tile block = Tile.BY_ID[this.getTileId(k1, i2, l1)];
+                    if (block == null || !((ExEntity) entity).getCollidesWithClipBlocks() && (block.id == Blocks.clipBlock.id || ExLadderTile.isLadderID(block.id)))
+                        continue;
+                    block.intersectsInLevel((Level) (Object) this, k1, i2, l1, axisalignedbb, this.field_189);
+                }
+            }
         }
+        double d = 0.25;
+        List list = this.getEntities(entity, axisalignedbb.expand(d, d, d));
+        for (int j2 = 0; j2 < list.size(); ++j2) {
+            Box axisalignedbb1 = ((net.minecraft.entity.Entity) list.get(j2)).method_1381();
+            if (axisalignedbb1 != null && axisalignedbb1.intersects(axisalignedbb)) {
+                this.field_189.add(axisalignedbb1);
+            }
+            if ((axisalignedbb1 = entity.method_1379((net.minecraft.entity.Entity) list.get(j2))) == null || !axisalignedbb1.intersects(axisalignedbb))
+                continue;
+            this.field_189.add(axisalignedbb1);
+        }
+        return this.field_189;
     }
 
-    @Redirect(method = "method_190", at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/level/Level;isTileLoaded(III)Z"))
-    private boolean disableTileLoadedCheck(Level instance, int j, int k, int i) {
-        return false;
-    }
+
+    //@Inject(method = "method_190", locals = LocalCapture.CAPTURE_FAILHARD, at = @At(
+    //        value = "INVOKE",
+    //        target = "Lnet/minecraft/level/Level;isTileLoaded(III)Z",
+    //        shift = At.Shift.BEFORE))
+    //private void replaceIntersectionBody(
+    //        Entity entity, Box axisalignedbb, CallbackInfoReturnable<List<Box>> cir, int var5, int var6, int var9, int var10) {
+//
+    //    for (int i2 = var5 - 1; i2 < var6; ++i2) {
+    //        Tile block = Tile.BY_ID[this.getTileId(var9, i2, var10)];
+    //        if (block == null || !((ExEntity) entity).getCollidesWithClipBlocks() && (block.id == Blocks.clipBlock.id || ExLadderTile.isLadderID(block.id)))
+    //            continue;
+    //        block.intersectsInLevel((Level) (Object) this, var9, i2, var10, axisalignedbb, this.field_189);
+    //    }
+    //}
+//
+    //@Redirect(method = "method_190", at = @At(
+    //        value = "INVOKE",
+    //        target = "Lnet/minecraft/level/Level;isTileLoaded(III)Z"))
+    //private boolean disableTileLoadedCheck(Level instance, int j, int k, int i) {
+    //    return false;
+    //}
 
     /**
      * @author Ryuu, TechPizza, Phil

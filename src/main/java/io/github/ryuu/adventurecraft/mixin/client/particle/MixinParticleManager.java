@@ -11,6 +11,7 @@ import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.MathsHelper;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -51,31 +52,31 @@ public abstract class MixinParticleManager implements ExParticleManager {
         return arraylist;
     }
 
-    @ModifyArg(method = "method_324", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/texture/TextureManager;getTextureId(Ljava/lang/String;)I", ordinal = 0))
-    private String changeTexturesPath(String path) {
-        return "/particles.png";
-    }
-
-    @ModifyArg(method = "method_324", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/texture/TextureManager;getTextureId(Ljava/lang/String;)I", ordinal = 1))
-    private String changeTexturesPath1(String path) {
-        return "/terrain.png";
-    }
-
-    @ModifyArg(method = "method_324", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/texture/TextureManager;getTextureId(Ljava/lang/String;)I", ordinal = 2))
-    private String changeTexturesPath2(String path) {
-        return "/gui/items.png";
-    }
-
-    @Inject(method = "method_324", at = @At("TAIL"))
-    private void addACTerrains(Entity entity, float f, CallbackInfo ci) {
+    /**
+     * @author Ryuu, TechPizza, Phil
+     */
+    @Overwrite
+    public void method_324(Entity entity, float f) {
         float f1 = MathsHelper.cos(entity.yaw * 3.141593f / 180.0f);
         float f2 = MathsHelper.sin(entity.yaw * 3.141593f / 180.0f);
         float f3 = -f2 * MathsHelper.sin(entity.pitch * 3.141593f / 180.0f);
         float f4 = f1 * MathsHelper.sin(entity.pitch * 3.141593f / 180.0f);
         float f5 = MathsHelper.cos(entity.pitch * 3.141593f / 180.0f);
-        for (int i = 3; i < 5; ++i) {
+        Particle.field_2645 = entity.prevRenderX + (entity.x - entity.prevRenderX) * (double) f;
+        Particle.field_2646 = entity.prevRenderY + (entity.y - entity.prevRenderY) * (double) f;
+        Particle.field_2647 = entity.prevRenderZ + (entity.z - entity.prevRenderZ) * (double) f;
+        for (int i = 0; i < 5; ++i) {
             if (this.particles[i].size() == 0) continue;
             int j = 0;
+            if (i == 0) {
+                j = this.textureManager.getTextureId("/particles.png");
+            }
+            if (i == 1) {
+                j = this.textureManager.getTextureId("/terrain.png");
+            }
+            if (i == 2) {
+                j = this.textureManager.getTextureId("/gui/items.png");
+            }
             if (i == 3) {
                 j = this.textureManager.getTextureId("/terrain2.png");
             }

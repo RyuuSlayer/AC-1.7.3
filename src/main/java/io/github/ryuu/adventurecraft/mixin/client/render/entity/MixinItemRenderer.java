@@ -27,15 +27,15 @@ import java.util.Random;
 public abstract class MixinItemRenderer extends EntityRenderer implements ExItemRenderer {
 
     @Shadow
-    private final TileRenderer field_1708 = new TileRenderer();
+    private TileRenderer field_1708;
 
     @Shadow
-    private final Random rand = new Random();
+    private Random rand;
 
     @Shadow
-    public boolean field_1707 = true;
+    public boolean field_1707;
 
-    public float scale = 1.0f;
+    public float scale;
 
     @Shadow
     public abstract void method_1483(int i, int j, int k, int i1, int i2, int i3);
@@ -43,7 +43,7 @@ public abstract class MixinItemRenderer extends EntityRenderer implements ExItem
     /**
      * @author Ryuu, TechPizza, Phil
      */
-    @Overwrite // missing target method???
+    @Overwrite
     public void render(ItemEntity entityitem, double d, double d1, double d2, float f, float f1) {
         this.rand.setSeed(187L);
         ItemInstance itemstack = entityitem.item;
@@ -115,6 +115,7 @@ public abstract class MixinItemRenderer extends EntityRenderer implements ExItem
                 float f21 = entityitem.getBrightnessAtEyes(f1);
                 GL11.glColor4f(f15 * f21, f17 * f21, f19 * f21, 1.0f);
             }
+
             for (int l = 0; l < byte0; ++l) {
                 GL11.glPushMatrix();
                 if (l > 0) {
@@ -123,6 +124,7 @@ public abstract class MixinItemRenderer extends EntityRenderer implements ExItem
                     float f20 = (this.rand.nextFloat() * 2.0f - 1.0f) * 0.3f;
                     GL11.glTranslatef(f16, f18, f20);
                 }
+
                 GL11.glRotatef(180.0f - this.dispatcher.field_2497, 0.0f, 1.0f, 0.0f);
                 tessellator.start();
                 tessellator.method_1697(0.0f, 1.0f, 0.0f);

@@ -3,12 +3,11 @@ package io.github.ryuu.adventurecraft.mixin.client.render;
 import io.github.ryuu.adventurecraft.extensions.client.render.ExFireTextureBinder;
 import io.github.ryuu.adventurecraft.util.Vec2;
 import net.minecraft.client.render.FireTextureBinder;
-import net.minecraft.client.render.TextureBinder;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(FireTextureBinder.class)
-public abstract class MixinFireTextureBinder extends TextureBinder {
+public abstract class MixinFireTextureBinder extends MixinTextureBinder {
 
     @Shadow
     protected float[] field_2459;
@@ -16,10 +15,7 @@ public abstract class MixinFireTextureBinder extends TextureBinder {
     @Shadow
     protected float[] field_2460;
 
-    public MixinFireTextureBinder(int i) {
-        super(i);
-    }
-
+    @Override
     public void onTick(Vec2 texRes) {
         int w = texRes.x / 16;
         int width = ExFireTextureBinder.width;

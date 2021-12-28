@@ -238,7 +238,6 @@ public abstract class MixinTileRenderer implements AccessTileRenderer, ExTileRen
     private void shouldRenderMethod_57(Tile block, int i, int j, int k, CallbackInfoReturnable<Boolean> cir) {
         if (!((ExTile) block).shouldRender(this.field_82, i, j, k)) {
             cir.setReturnValue(false);
-            cir.cancel();
         }
     }
 
@@ -254,7 +253,6 @@ public abstract class MixinTileRenderer implements AccessTileRenderer, ExTileRen
                 this.renderGrass(block, i, j, k);
             }
             cir.setReturnValue(this.method_76(block, i, j, k));
-            cir.cancel();
         } else if (var5 == 31) {
             boolean rendered = this.method_76(block, i, j, k);
             if (((ExLevel) AccessMinecraft.getInstance().level).getTriggerManager().isActivated(i, j, k)) {
@@ -266,25 +264,18 @@ public abstract class MixinTileRenderer implements AccessTileRenderer, ExTileRen
             this.method_45(block, i, (double) j + 0.25, k, 0.0, 0.0);
             this.field_83 = -1;
             cir.setReturnValue(rendered);
-            cir.cancel();
         } else if (var5 == 32) {
             cir.setReturnValue(this.renderSpikes(block, i, j, k));
-            cir.cancel();
         } else if (var5 == 33) {
             cir.setReturnValue(this.renderTable(block, i, j, k));
-            cir.cancel();
         } else if (var5 == 34) {
             cir.setReturnValue(this.renderChair(block, i, j, k));
-            cir.cancel();
         } else if (var5 == 35) {
             cir.setReturnValue(this.renderRope(block, i, j, k));
-            cir.cancel();
         } else if (var5 == 36) {
             cir.setReturnValue(this.renderBlockTree(block, i, j, k));
-            cir.cancel();
         } else if (var5 == 37) {
             cir.setReturnValue(this.renderBlockOverlay(block, i, j, k));
-            cir.cancel();
         } else if (var5 == 38) {
             cir.setReturnValue(this.renderBlockSlope(block, i, j, k));
             cir.cancel();

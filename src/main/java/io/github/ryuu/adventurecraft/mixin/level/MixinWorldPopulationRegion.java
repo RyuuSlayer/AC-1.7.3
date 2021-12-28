@@ -110,7 +110,6 @@ public abstract class MixinWorldPopulationRegion implements TileView {
                 k1 = l2;
             }
             cir.setReturnValue(k1);
-            cir.cancel();
         }
     }
 }

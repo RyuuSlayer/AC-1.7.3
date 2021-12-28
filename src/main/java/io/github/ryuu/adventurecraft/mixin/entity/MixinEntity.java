@@ -139,9 +139,6 @@ public abstract class MixinEntity implements ExEntity {
     //public abstract void move(double d, double d1, double d2);
 
     @Shadow
-    public abstract void remove();
-
-    @Shadow
     public abstract void method_1322(double d, double d1, double d2);
 
     @Shadow

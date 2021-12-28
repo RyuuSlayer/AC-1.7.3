@@ -71,9 +71,9 @@ public class CutsceneCamera {
     }
 
     public void drawLines(LivingEntity entityplayer, float f) {
-        double offX = entityplayer.prevRenderX + (entityplayer.x - entityplayer.prevRenderX) * (double) f;
-        double offY = entityplayer.prevRenderY + (entityplayer.y - entityplayer.prevRenderY) * (double) f;
-        double offZ = entityplayer.prevRenderZ + (entityplayer.z - entityplayer.prevRenderZ) * (double) f;
+        double offX = entityplayer.prevRenderX + (entityplayer.x - entityplayer.prevRenderX) * f;
+        double offY = entityplayer.prevRenderY + (entityplayer.y - entityplayer.prevRenderY) * f;
+        double offZ = entityplayer.prevRenderZ + (entityplayer.z - entityplayer.prevRenderZ) * f;
         GL11.glEnable(3042);
         GL11.glBlendFunc(770, 771);
         GL11.glColor4f(1.0f, 0.2f, 0.0f, 1.0f);

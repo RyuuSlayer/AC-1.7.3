@@ -7,10 +7,7 @@ import io.github.ryuu.adventurecraft.items.ItemSubtypes;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 import net.minecraft.level.TileView;
-import net.minecraft.tile.GrassTile;
-import net.minecraft.tile.StoneTile;
-import net.minecraft.tile.Tile;
-import net.minecraft.tile.TileSounds;
+import net.minecraft.tile.*;
 import net.minecraft.tile.material.Material;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -29,24 +26,10 @@ public abstract class MixinTile implements AccessTile, ExTile {
     @Final
     public static Tile STONE;
 
-    @Shadow
-    protected abstract Tile hardness(float f);
-
-    @Shadow
-    protected abstract Tile blastResistance(float f);
-
-    @Shadow
-    @Final
-    public static TileSounds PISTON_SOUNDS;
-
     @Mutable
     @Shadow
     @Final
     public static GrassTile GRASS;
-
-    @Shadow
-    @Final
-    public static TileSounds GRASS_SOUNDS;
 
     @Final
     @Shadow
@@ -81,22 +64,10 @@ public abstract class MixinTile implements AccessTile, ExTile {
     @Final
     public static Tile[] BY_ID;
 
-    @Shadow
-    protected abstract Tile sounds(TileSounds arg);
-
     @Mutable
     @Shadow
     @Final
     public static Tile COBBLESTONE;
-
-    @Shadow
-    protected abstract Tile method_1590(int i);
-
-    @Shadow
-    protected abstract Tile nonOpaque();
-
-    @Shadow
-    protected abstract Tile multipleStates();
 
     @Mutable
     @Shadow
@@ -113,9 +84,6 @@ public abstract class MixinTile implements AccessTile, ExTile {
     @Final
     public static Tile FLOWING_LAVA;
 
-    @Shadow
-    protected abstract Tile luminance(float f);
-
     @Mutable
     @Shadow
     @Final
@@ -126,29 +94,49 @@ public abstract class MixinTile implements AccessTile, ExTile {
     @Final
     public static Tile SAND;
 
-    @Shadow
-    @Final
-    public static TileSounds SAND_SOUNDS;
-
     public int textureNum = 0;
 
-    static {
+    @Shadow
+    protected abstract Tile blastResistance(float f);
+
+    @Shadow
+    protected abstract Tile hardness(float f);
+
+    @Shadow
+    protected abstract Tile sounds(TileSounds s);
+
+    @Inject(method = "<clinit>", at = @At(
+            value = "INVOKE_ASSIGN",
+            target = "Lnet/minecraft/item/WoolItem;setName(Ljava/lang/String;)Lnet/minecraft/item/ItemType;",
+            shift = At.Shift.BEFORE))
+    private static void initTiles(CallbackInfo ci) {
         BY_ID[1] = null;
-        STONE = ((MixinTile) (Object) ((MixinTile) (Object) ((MixinTile) (Object) new StoneTile(1, 1)).hardness(1.5f)).blastResistance(10.0f)).sounds(PISTON_SOUNDS).name("stone");
-        BY_ID[2] = null;
-        GRASS = (GrassTile) ((ExTile) ((MixinTile) (Object) ((MixinTile) (Object) AccessGrassTile.newGrassTile(2)).hardness(0.6f)).sounds(GRASS_SOUNDS).name("grass")).setSubTypes(5);
+        STONE = new StoneTile(1, 215).name("stone");
+        ((MixinTile) (Object) STONE).hardness(1.5f);
+        ((MixinTile) (Object) STONE).blastResistance(10.0f);
+        ((MixinTile) (Object) STONE).sounds(Tile.PISTON_SOUNDS);
+
+        ((ExTile) GRASS).setSubTypes(5);
+
         BY_ID[4] = null;
-        COBBLESTONE = ((MixinTile) (Object) ((MixinTile) (Object) ((MixinTile) (Object) new BlockColor(4, 214, Material.STONE)).hardness(2.0f)).blastResistance(10.0f)).sounds(PISTON_SOUNDS).name("stonebrick");
-        BY_ID[8] = null;
-        FLOWING_WATER = ((MixinTile) (Object) ((MixinTile) (Object) ((MixinTile) (Object) ((MixinTile) (Object) AccessFlowingFluidTile.newFlowingFluidTile(8, Material.WATER)).hardness(0.5f)).method_1590(3).name("water")).nonOpaque()).multipleStates();
-        BY_ID[9] = null;
-        STILL_WATER = ((MixinTile) (Object) ((MixinTile) (Object) ((MixinTile) (Object) ((MixinTile) (Object) AccessStillFluidTile.newStillFluidTile(9, Material.WATER)).hardness(0.5f)).method_1590(3).name("water")).nonOpaque()).multipleStates();
-        BY_ID[10] = null;
-        FLOWING_LAVA = ((MixinTile) (Object) ((MixinTile) (Object) ((MixinTile) (Object) ((MixinTile) (Object) ((MixinTile) (Object) AccessFlowingFluidTile.newFlowingFluidTile(10, Material.LAVA)).hardness(0.5f)).luminance(1.0f)).method_1590(255).name("lava")).nonOpaque()).multipleStates();
-        BY_ID[11] = null;
-        STILL_LAVA = ((MixinTile) (Object) ((MixinTile) (Object) ((MixinTile) (Object) ((MixinTile) (Object) ((MixinTile) (Object) AccessStillFluidTile.newStillFluidTile(11, Material.LAVA)).hardness(0.5f)).luminance(1.0f)).method_1590(255).name("lava")).nonOpaque()).multipleStates();
-        BY_ID[12] = null;
-        SAND = ((MixinTile) (Object) ((MixinTile) (Object) ((MixinTile) (Object) AccessSandTile.newSandTile(12, 18)).hardness(0.5f)).sounds(SAND_SOUNDS).name("sand")).setSubTypes(4);
+        COBBLESTONE = new BlockColor(4, 214, Material.STONE).name("stonebrick");
+        ((MixinTile) (Object) COBBLESTONE).hardness(2.0f);
+        ((MixinTile) (Object) COBBLESTONE).blastResistance(10.0f);
+        ((MixinTile) (Object) COBBLESTONE).sounds(Tile.PISTON_SOUNDS);
+
+        ((MixinTile) (Object) FLOWING_WATER).hardness(0.5f);
+        ((MixinTile) (Object) STILL_WATER).hardness(0.5f);
+        ((MixinTile) (Object) FLOWING_LAVA).hardness(0.5f);
+        ((MixinTile) (Object) STILL_LAVA).hardness(0.5f);
+
+        ((ExTile) SAND).setSubTypes(4);
+    }
+
+    @Inject(method = "<clinit>", at = @At(
+            value = "INVOKE_ASSIGN",
+            target = "Lnet/minecraft/item/WoolItem;setName(Ljava/lang/String;)Lnet/minecraft/item/ItemType;",
+            shift = At.Shift.AFTER))
+    private static void initItemTypes(CallbackInfo ci) {
         ItemType.byId[Tile.GRASS.id] = new ItemSubtypes(Tile.GRASS.id - 256).setName("grass");
         ItemType.byId[Tile.SAND.id] = new ItemSubtypes(Tile.SAND.id - 256).setName("sand");
         ItemType.byId[Tile.TALLGRASS.id] = new ItemSubtypes(Tile.TALLGRASS.id - 256).setName("tallgrass");

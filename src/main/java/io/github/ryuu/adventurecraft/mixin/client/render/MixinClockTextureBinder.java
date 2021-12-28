@@ -3,12 +3,11 @@ package io.github.ryuu.adventurecraft.mixin.client.render;
 import io.github.ryuu.adventurecraft.util.Vec2;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.ClockTextureBinder;
-import net.minecraft.client.render.TextureBinder;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(ClockTextureBinder.class)
-public abstract class MixinClockTextureBinder extends TextureBinder {
+public abstract class MixinClockTextureBinder extends MixinTextureBinder {
 
     @Shadow
     private Minecraft field_1437;
@@ -25,10 +24,7 @@ public abstract class MixinClockTextureBinder extends TextureBinder {
     @Shadow
     private double field_1441;
 
-    public MixinClockTextureBinder(int i) {
-        super(i);
-    }
-
+    @Override
     public void onTick(Vec2 texRes) {
         double d1;
         double d = 0.0;

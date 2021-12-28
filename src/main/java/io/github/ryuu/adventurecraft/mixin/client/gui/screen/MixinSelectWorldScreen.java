@@ -60,7 +60,6 @@ public abstract class MixinSelectWorldScreen extends Screen {
             target = "Lnet/minecraft/client/Minecraft;openScreen(Lnet/minecraft/client/gui/Screen;)V",
             ordinal = 1))
     private void dontOpenScreenNull(Minecraft instance, Screen screen) {
-
     }
 
     @Mixin(SelectWorldScreen.class_569.class)
