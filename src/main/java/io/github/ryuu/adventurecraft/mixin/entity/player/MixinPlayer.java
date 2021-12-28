@@ -23,30 +23,17 @@ import net.minecraft.stat.Stat;
 import net.minecraft.stat.Stats;
 import net.minecraft.tile.Tile;
 import net.minecraft.util.io.CompoundTag;
-import net.minecraft.util.maths.MathsHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.List;
 
 @Mixin(Player.class)
 public abstract class MixinPlayer extends MixinLivingEntity implements ExPlayer {
 
     @Shadow
     public PlayerInventory inventory;
-    @Shadow
-    public Container container;
-
-    @Shadow
-    public float field_524;
-
-    @Shadow
-    public float field_525;
 
     @Shadow
     public boolean handSwinging;
@@ -81,9 +68,6 @@ public abstract class MixinPlayer extends MixinLivingEntity implements ExPlayer 
     public abstract void wakeUp(boolean flag, boolean flag1, boolean flag2);
 
     @Shadow
-    protected abstract void method_520(Entity arg);
-
-    @Shadow
     protected abstract void method_510(LivingEntity arg, boolean flag);
 
     @Inject(method = "afterSpawn", at = @At("TAIL"))
@@ -112,39 +96,13 @@ public abstract class MixinPlayer extends MixinLivingEntity implements ExPlayer 
         super.afterBaseTick();
     }
 
-    @Inject(method = "updateDespawnCounter", at = @At("HEAD"))
-    private void beforeUpdateDespawnCounter(CallbackInfo ci) {
-        if (this.level.difficulty == 0 && this.health < this.maxHealth && this.field_1645 % 20 * 12 == 0) {
-            this.addHealth(1);
-        }
-        this.inventory.inventoryTick();
-        this.field_524 = this.field_525;
+    @ModifyConstant(method = "updateDespawnCounter", constant = @Constant(intValue = 20, ordinal = 0))
+    private int fixedMaxHealthForRegen(int originalVale) {
+        return this.maxHealth;
     }
 
     @Inject(method = "updateDespawnCounter", at = @At("TAIL"))
     private void afterUpdateDespawnCounter(CallbackInfo ci) {
-        float f = MathsHelper.sqrt(this.velocityX * this.velocityX + this.velocityZ * this.velocityZ);
-        float f1 = (float) Math.atan(-this.velocityY * (double) 0.2f) * 15.0f;
-        if (f > 0.1f) {
-            f = 0.1f;
-        }
-        if (!this.onGround || this.health <= 0) {
-            f = 0.0f;
-        }
-        if (this.onGround || this.health <= 0) {
-            f1 = 0.0f;
-        }
-        this.field_525 += (f - this.field_525) * 0.4f;
-        this.field_1044 += (f1 - this.field_1044) * 0.8f;
-        List list = this.level.getEntities((Entity) (Object) this, this.boundingBox.expand(1.0, 0.0, 1.0));
-        if (this.health > 0 && list != null) {
-            for (Object o : list) {
-                Entity entity = (Entity) o;
-                if (!entity.removed) {
-                    this.method_520(entity);
-                }
-            }
-        }
         ItemInstance mainItem = this.inventory.main[this.inventory.selectedHotbarSlot];
         ItemInstance offItem = this.inventory.main[((ExPlayerInventory) this.inventory).getOffhandSlot()];
         boolean litFromItem = mainItem != null && ((ExItemType) ItemType.byId[mainItem.itemId]).isLighting(mainItem);
