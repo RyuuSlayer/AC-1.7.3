@@ -1,6 +1,6 @@
 package io.github.ryuu.adventurecraft.items;
 
-import io.github.ryuu.adventurecraft.extensions.items.ExItemType;
+import io.github.ryuu.adventurecraft.extensions.items.LeftClickUseItemType;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.util.TriggerArea;
@@ -9,7 +9,7 @@ import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 
-public class ItemTriggerStick extends ItemType implements ExItemType {
+public class ItemTriggerStick extends ItemType implements LeftClickUseItemType {
 
     protected ItemTriggerStick(int id) {
         super(id);

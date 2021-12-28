@@ -24,9 +24,14 @@ public abstract class MixinItemInstance implements ExItemInstance {
     @Shadow
     private int damage;
 
+    private int timeLeft;
+    private boolean reloading;
+    private boolean justReloaded;
+
     @Shadow
     public abstract ItemType getType();
 
+    @Override
     public boolean useItemLeftClick(Player entityplayer, Level world, int i, int j, int k, int l) {
         return ((ExItemType)this.getType()).onItemUseLeftClick((ItemInstance) (Object) this, entityplayer, world, i, j, k, l);
     }
@@ -37,5 +42,35 @@ public abstract class MixinItemInstance implements ExItemInstance {
         if (this.itemId == Items.boomerang.id) {
             this.damage = 0;
         }
+    }
+
+    @Override
+    public int getTimeLeft() {
+        return this.timeLeft;
+    }
+
+    @Override
+    public void setTimeLeft(int timeLeft) {
+        this.timeLeft = timeLeft;
+    }
+
+    @Override
+    public boolean isReloading() {
+        return this.reloading;
+    }
+
+    @Override
+    public void setReloading(boolean reloading) {
+        this.reloading = reloading;
+    }
+
+    @Override
+    public boolean isJustReloaded() {
+        return this.justReloaded;
+    }
+
+    @Override
+    public void setJustReloaded(boolean justReloaded) {
+        this.justReloaded = justReloaded;
     }
 }

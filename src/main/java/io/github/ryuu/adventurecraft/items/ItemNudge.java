@@ -1,6 +1,5 @@
 package io.github.ryuu.adventurecraft.items;
 
-import io.github.ryuu.adventurecraft.extensions.items.ExItemType;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.mixin.level.AccessLevel;
 import net.minecraft.entity.LivingEntity;
@@ -10,7 +9,7 @@ import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 import net.minecraft.util.maths.Vec3f;
 
-public class ItemNudge extends ItemType implements ExItemType {
+public class ItemNudge extends ItemType implements LeftClickItemType {
 
     public ItemNudge(int id) {
         super(id);
@@ -36,8 +35,9 @@ public class ItemNudge extends ItemType implements ExItemType {
                     for (int k2 = 0; k2 < depth; ++k2) {
                         int blockID2 = level.getTileId(i2 + ItemCursor.minX, j2 + ItemCursor.minY, k2 + ItemCursor.minZ);
                         int metadata2 = level.getTileMeta(i2 + ItemCursor.minX, j2 + ItemCursor.minY, k2 + ItemCursor.minZ);
-                        blocks[depth * (height * i2 + j2) + k2] = blockID2;
-                        meta[depth * (height * i2 + j2) + k2] = metadata2;
+                        int i1 = depth * (height * i2 + j2) + k2;
+                        blocks[i1] = blockID2;
+                        meta[i1] = metadata2;
                         level.setTileInChunk(i2 + ItemCursor.minX, j2 + ItemCursor.minY, k2 + ItemCursor.minZ, 0);
                     }
                 }
@@ -138,8 +138,9 @@ public class ItemNudge extends ItemType implements ExItemType {
                     for (int k2 = 0; k2 < depth; ++k2) {
                         int blockID2 = level.getTileId(i2 + ItemCursor.minX, j2 + ItemCursor.minY, k2 + ItemCursor.minZ);
                         int metadata = level.getTileMeta(i2 + ItemCursor.minX, j2 + ItemCursor.minY, k2 + ItemCursor.minZ);
-                        blocks[depth * (height * i2 + j2) + k2] = blockID2;
-                        meta[depth * (height * i2 + j2) + k2] = metadata;
+                        int i1 = depth * (height * i2 + j2) + k2;
+                        blocks[i1] = blockID2;
+                        meta[i1] = metadata;
                         level.setTileInChunk(i2 + ItemCursor.minX, j2 + ItemCursor.minY, k2 + ItemCursor.minZ, 0);
                     }
                 }

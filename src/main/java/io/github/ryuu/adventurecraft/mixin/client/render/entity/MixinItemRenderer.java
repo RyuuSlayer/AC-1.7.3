@@ -2,7 +2,7 @@ package io.github.ryuu.adventurecraft.mixin.client.render.entity;
 
 import io.github.ryuu.adventurecraft.extensions.client.render.entity.ExItemRenderer;
 import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
-import io.github.ryuu.adventurecraft.items.IItemReload;
+import io.github.ryuu.adventurecraft.items.ReloadableItemType;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.TextRenderer;
 import net.minecraft.client.render.TileRenderer;
@@ -201,7 +201,7 @@ public abstract class MixinItemRenderer extends EntityRenderer implements ExItem
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemInstance;method_720()Z"))
     private boolean drawExtraIfItemReload(ItemInstance instance) {
-        return instance.method_720() || ItemType.byId[instance.itemId] instanceof IItemReload;
+        return instance.method_720() || ItemType.byId[instance.itemId] instanceof ReloadableItemType;
     }
 
     @Override
