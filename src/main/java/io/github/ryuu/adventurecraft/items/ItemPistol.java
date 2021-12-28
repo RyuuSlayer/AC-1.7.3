@@ -1,14 +1,14 @@
 package io.github.ryuu.adventurecraft.items;
 
 import io.github.ryuu.adventurecraft.extensions.items.ExItemInstance;
-import io.github.ryuu.adventurecraft.extensions.items.ExItemType;
+import io.github.ryuu.adventurecraft.extensions.items.LightingItemType;
+import io.github.ryuu.adventurecraft.extensions.items.MuzzleFlashItemType;
 import io.github.ryuu.adventurecraft.util.UtilBullet;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
-import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 
-public class ItemPistol extends ItemType implements IItemReload, ExItemType {
+public class ItemPistol extends ReloadItemType implements DelayableUseItemType, LightingItemType, MuzzleFlashItemType {
 
     public ItemPistol(int id) {
         super(id);

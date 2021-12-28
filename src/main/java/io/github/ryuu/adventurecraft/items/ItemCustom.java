@@ -1,6 +1,5 @@
 package io.github.ryuu.adventurecraft.items;
 
-import io.github.ryuu.adventurecraft.extensions.items.ExItemType;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.mixin.item.AccessItemType;
@@ -10,7 +9,6 @@ import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 import org.mozilla.javascript.Context;
-import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
 import java.io.File;
@@ -19,7 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
 
-public class ItemCustom extends ACItemType implements ExItemType {
+public class ItemCustom extends ACItemType implements DelayableUseItemType {
 
     static ArrayList<Integer> loadedItemIDs = new ArrayList<>();
     String fileName;

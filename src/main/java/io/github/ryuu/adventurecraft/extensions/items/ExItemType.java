@@ -1,41 +1,14 @@
 package io.github.ryuu.adventurecraft.extensions.items;
 
+import io.github.ryuu.adventurecraft.items.DamageableItemType;
+import io.github.ryuu.adventurecraft.items.DelayableUseItemType;
+import io.github.ryuu.adventurecraft.items.LeftClickItemType;
+import io.github.ryuu.adventurecraft.items.SlotChangeCallbackItemType;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
 
-public interface ExItemType {
+public interface ExItemType extends DelayableUseItemType, LightingItemType, MuzzleFlashItemType, SlotChangeCallbackItemType, DamageableItemType, LeftClickUseItemType, LeftClickItemType {
 
-    default boolean canDecrementDamage() {
-        return false;
-    }
-
-    default int getItemUseDelay() {
-        return 5;
-    }
-
-    default boolean isLighting(ItemInstance itemStack) {
-        return false;
-    }
-
-    default boolean isMuzzleFlash(ItemInstance itemStack) {
-        return false;
-    }
-
-    default boolean onItemUseLeftClick(ItemInstance instance, Player player, Level world, int i, int j, int k, int l) {
-        return false;
-    }
-
-    default void onItemLeftClick(ItemInstance itemstack, Level world, Player entityplayer) {
-    }
-
-    default boolean mainActionLeftClick() {
-        return false;
-    }
-
-    default void onAddToSlot(Player entityPlayer, int slot, int damage) {
-    }
-
-    default void onRemovedFromSlot(Player entityPlayer, int slot, int damage) {
-    }
+    boolean mainActionLeftClick();
 }

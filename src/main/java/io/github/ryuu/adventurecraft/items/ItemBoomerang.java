@@ -5,7 +5,7 @@ import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
 
-class ItemBoomerang extends ACItemType {
+public class ItemBoomerang extends ACItemType {
 
     public ItemBoomerang(int id) {
         super(id);

@@ -5,7 +5,7 @@ import io.github.ryuu.adventurecraft.extensions.entity.player.ExPlayerInventory;
 import io.github.ryuu.adventurecraft.extensions.items.ExItemInstance;
 import io.github.ryuu.adventurecraft.extensions.items.ExItemType;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
-import io.github.ryuu.adventurecraft.items.IItemReload;
+import io.github.ryuu.adventurecraft.items.ReloadableItemType;
 import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.fabricmc.api.EnvType;
@@ -135,16 +135,17 @@ public abstract class MixinPlayerInventory implements Inventory, AccessPlayerInv
         for (int i = 0; i < this.main.length; ++i) {
             if (this.main[i] != null) {
                 ItemInstance itemStack = this.main[i];
-                ExItemInstance exStack = (ExItemInstance)itemStack;
+                ExItemInstance exStack = (ExItemInstance) itemStack;
                 itemStack.inventoryTick(this.player.level, this.player, i, this.selectedHotbarSlot == i);
+
                 if (exStack.getTimeLeft() > 0) {
                     exStack.setTimeLeft(exStack.getTimeLeft() - 1);
                 }
                 if ((i == this.selectedHotbarSlot || i == this.offhandItem) && exStack.getTimeLeft() == 0 && exStack.isReloading()) {
-                    IItemReload item = (IItemReload) ItemType.byId[itemStack.itemId];
+                    ReloadableItemType item = (ReloadableItemType) ItemType.byId[itemStack.itemId];
                     item.reload(itemStack, this.player.level, this.player);
                 }
-                if (itemStack.getDamage() > 0 && ((ExItemType)ItemType.byId[itemStack.itemId]).canDecrementDamage()) {
+                if (itemStack.getDamage() > 0 && ((ExItemType) ItemType.byId[itemStack.itemId]).canDecrementDamage()) {
                     itemStack.setDamage(itemStack.getDamage() - 1);
                 }
             }
@@ -321,7 +322,7 @@ public abstract class MixinPlayerInventory implements Inventory, AccessPlayerInv
     }
 
     private static void onAddToSlot(ItemType itemType, Player entityPlayer, int slot, int damage) {
-        ExLevel exLevel = (ExLevel)AccessMinecraft.getInstance().level;
+        ExLevel exLevel = (ExLevel) AccessMinecraft.getInstance().level;
         Scriptable scope = exLevel.getScope();
         scope.put("slotID", scope, slot);
         if (itemType.method_462()) {
@@ -334,7 +335,7 @@ public abstract class MixinPlayerInventory implements Inventory, AccessPlayerInv
     }
 
     private static void onRemovedFromSlot(ItemType itemType, Player entityPlayer, int slot, int damage) {
-        ExLevel exLevel = (ExLevel)AccessMinecraft.getInstance().level;
+        ExLevel exLevel = (ExLevel) AccessMinecraft.getInstance().level;
         Scriptable scope = exLevel.getScope();
         scope.put("slotID", scope, slot);
         if (itemType.method_462()) {

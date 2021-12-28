@@ -7,24 +7,15 @@ public interface ExItemInstance {
 
     boolean useItemLeftClick(Player player, Level world, int i, int j, int k, int l);
 
-    default int getTimeLeft() {
-        return 0;
-    }
+    int getTimeLeft();
 
-    default void setTimeLeft(int timeLeft) {
-    }
+    void setTimeLeft(int timeLeft);
 
-    default boolean isReloading() {
-        return false;
-    }
+    boolean isReloading();
 
-    default void setReloading(boolean reloading) {
-    }
+    void setReloading(boolean reloading);
 
-    default boolean isJustReloaded() {
-        return false;
-    }
+    boolean isJustReloaded();
 
-    default void setJustReloaded(boolean justReloaded) {
-    }
+    void setJustReloaded(boolean justReloaded);
 }

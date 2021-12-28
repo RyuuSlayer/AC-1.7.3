@@ -1,11 +1,10 @@
 package io.github.ryuu.adventurecraft.items;
 
 import io.github.ryuu.adventurecraft.extensions.entity.player.ExPlayer;
-import io.github.ryuu.adventurecraft.extensions.items.ExItemType;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.armour.ArmourItem;
 
-public class ItemPegasusBoots extends ArmourItem implements ExItemType {
+public class ItemPegasusBoots extends ArmourItem implements SlotChangeCallbackItemType {
 
     public ItemPegasusBoots(int id) {
         super(id, 0, 0, 3);

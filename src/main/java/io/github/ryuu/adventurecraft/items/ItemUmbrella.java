@@ -1,7 +1,6 @@
 package io.github.ryuu.adventurecraft.items;
 
 import io.github.ryuu.adventurecraft.entities.EntityAirFX;
-import io.github.ryuu.adventurecraft.extensions.items.ExItemType;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.extensions.client.particle.ExParticleManager;
 import net.minecraft.entity.Entity;
@@ -15,7 +14,7 @@ import net.minecraft.util.maths.Vec3f;
 
 import java.util.List;
 
-public class ItemUmbrella extends ItemType implements ExItemType {
+public class ItemUmbrella extends ItemType implements DamageableItemType {
 
     public ItemUmbrella(int id) {
         super(id);
