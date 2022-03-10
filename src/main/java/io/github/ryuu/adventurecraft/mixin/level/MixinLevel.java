@@ -218,7 +218,7 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
     public abstract boolean method_184(Entity arg);
 
     @Shadow
-    public abstract int placeTile(int i, int j, int k, boolean flag);
+    public abstract int getLightLevel(int i, int j, int k, boolean flag);
 
     @Shadow
     public abstract boolean setTile(int i, int j, int k, int i1);
@@ -429,17 +429,17 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
         return ((ExChunk) chunk).setBlockIDWithMetadataTemp(i & 0xF, j, k & 0xF, l, i1);
     }
 
-    @Inject(method = "placeTile", locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true, at = @At(
+    @Inject(method = "getLightLevel(IIIZ)I", locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true, at = @At(
             value = "INVOKE_ASSIGN",
             target = "Lnet/minecraft/level/Level;getTileId(III)I",
             shift = At.Shift.AFTER))
-    private void afterGetTileInPlaceTile(int x, int y, int z, boolean flag, CallbackInfoReturnable<Integer> cir, int var5) {
+    private void extendGetLightLevel(int x, int y, int z, boolean flag, CallbackInfoReturnable<Integer> cir, int var5) {
         if (Tile.BY_ID[var5] instanceof BlockStairMulti) {
-            int i1 = this.placeTile(x, y + 1, z, false);
-            int j1 = this.placeTile(x + 1, y, z, false);
-            int k1 = this.placeTile(x - 1, y, z, false);
-            int l1 = this.placeTile(x, y, z + 1, false);
-            int i2 = this.placeTile(x, y, z - 1, false);
+            int i1 = this.getLightLevel(x, y + 1, z, false);
+            int j1 = this.getLightLevel(x + 1, y, z, false);
+            int k1 = this.getLightLevel(x - 1, y, z, false);
+            int l1 = this.getLightLevel(x, y, z + 1, false);
+            int i2 = this.getLightLevel(x, y, z - 1, false);
             if (j1 > i1) {
                 i1 = j1;
             }
