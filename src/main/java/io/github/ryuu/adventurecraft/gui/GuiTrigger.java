@@ -60,7 +60,7 @@ public class GuiTrigger extends Screen {
             }
             button.text = this.trigger.resetOnTrigger ? "Reset Target" : "Trigger Target";
         }
-        this.world.getChunk(this.blockX, this.blockZ).method_885();
+        this.world.getChunk(this.blockX, this.blockZ).markDirty();
     }
 
     @Override

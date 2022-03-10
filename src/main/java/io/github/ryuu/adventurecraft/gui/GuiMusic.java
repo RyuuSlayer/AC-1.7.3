@@ -86,7 +86,7 @@ public class GuiMusic extends Screen {
         this.music.fadeIn = (int) (this.fadeIn.sliderValue * 5000.0f + 0.5f);
         this.fadeIn.text = String.format("Fade In: %d", this.music.fadeIn);
         super.render(mouseX, mouseY, delta);
-        this.level.getChunk(this.music.x, this.music.z).method_885();
+        this.level.getChunk(this.music.x, this.music.z).markDirty();
     }
 
     @Override

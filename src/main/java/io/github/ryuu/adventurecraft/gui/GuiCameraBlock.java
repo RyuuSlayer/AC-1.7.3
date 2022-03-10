@@ -45,7 +45,7 @@ public class GuiCameraBlock extends Screen {
                 button.text = "Game Runs";
             }
         }
-        this.cam.level.getChunk(this.cam.x, this.cam.z).method_885();
+        this.cam.level.getChunk(this.cam.x, this.cam.z).markDirty();
     }
 
     @Override

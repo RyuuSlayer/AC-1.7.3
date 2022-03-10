@@ -435,10 +435,10 @@ public abstract class MixinHandItemRenderer implements ExHandItemRenderer {
             GL11.glBindTexture(3553, i);
             this.method_1867(f);
         }
-        if (this.minecraft.field_2807.isInsideWall()) {
-            int j = MathsHelper.floor(this.minecraft.field_2807.x);
-            int l = MathsHelper.floor(this.minecraft.field_2807.y);
-            int i1 = MathsHelper.floor(this.minecraft.field_2807.z);
+        if (this.minecraft.cameraEntity.isInsideWall()) {
+            int j = MathsHelper.floor(this.minecraft.cameraEntity.x);
+            int l = MathsHelper.floor(this.minecraft.cameraEntity.y);
+            int i1 = MathsHelper.floor(this.minecraft.cameraEntity.z);
             int j1 = this.minecraft.textureManager.getTextureId("/terrain.png");
             GL11.glBindTexture(3553, j1);
             int k1 = this.minecraft.level.getTileId(j, l, i1);
@@ -461,7 +461,7 @@ public abstract class MixinHandItemRenderer implements ExHandItemRenderer {
                 this.method_1861(f, Tile.BY_ID[k1].getTextureForSide(2));
             }
         }
-        if (this.minecraft.field_2807.isInFluid(Material.WATER)) {
+        if (this.minecraft.cameraEntity.isInFluid(Material.WATER)) {
             int k = this.minecraft.textureManager.getTextureId("/misc/water.png");
             GL11.glBindTexture(3553, k);
             this.method_1866(f);

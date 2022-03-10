@@ -107,10 +107,10 @@ public class EntityBat extends FlyingEntity implements MonsterEntityType {
         double d4 = (this.waypointX - this.x) / d3;
         double d5 = (this.waypointY - this.y) / d3;
         double d6 = (this.waypointZ - this.z) / d3;
-        Box axisalignedbb = this.boundingBox.method_92();
+        Box axisalignedbb = this.boundingBox.copy();
         int i = 1;
         while ((double) i < d3) {
-            axisalignedbb.method_102(d4, d5, d6);
+            axisalignedbb.shift(d4, d5, d6);
             if (this.level.method_190(this, axisalignedbb).size() > 0) {
                 return false;
             }

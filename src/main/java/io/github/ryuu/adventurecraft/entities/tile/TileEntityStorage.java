@@ -59,7 +59,7 @@ public class TileEntityStorage extends TileEntityMinMax {
                 }
             }
         }
-        this.level.getChunk(this.x, this.z).method_885();
+        this.level.getChunk(this.x, this.z).markDirty();
     }
 
     public void loadCurrentArea() {

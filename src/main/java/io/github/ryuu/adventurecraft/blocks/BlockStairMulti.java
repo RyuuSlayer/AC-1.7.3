@@ -10,8 +10,7 @@ import net.minecraft.level.TileView;
 import net.minecraft.tile.Tile;
 import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.MathsHelper;
-import net.minecraft.util.maths.Vec3f;
-
+import net.minecraft.util.maths.Vec3d;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -221,7 +220,7 @@ public class BlockStairMulti extends BlockColor {
     }
 
     @Override
-    public void method_1572(Level world, int i, int j, int k, Entity entity, Vec3f vec3d) {
+    public void method_1572(Level world, int i, int j, int k, Entity entity, Vec3d vec3d) {
         this.modelBlock.method_1572(world, i, j, k, entity, vec3d);
     }
 

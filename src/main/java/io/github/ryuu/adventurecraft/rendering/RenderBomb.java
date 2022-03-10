@@ -28,7 +28,7 @@ public class RenderBomb extends ItemRenderer {
         float f12 = 1.0f;
         float f13 = 0.5f;
         float f14 = 0.25f;
-        GL11.glRotatef(180.0f - this.dispatcher.field_2497, 0.0f, 1.0f, 0.0f);
+        GL11.glRotatef(180.0f - this.dispatcher.renderYaw, 0.0f, 1.0f, 0.0f);
         tessellator.start();
         tessellator.method_1697(0.0f, 1.0f, 0.0f);
         tessellator.vertex(0.0f - f13, 0.0f - f14, 0.0, f6, f11);

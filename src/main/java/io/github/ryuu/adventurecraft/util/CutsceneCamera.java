@@ -5,7 +5,7 @@ import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ClientPlayer;
-import net.minecraft.util.maths.Vec3f;
+import net.minecraft.util.maths.Vec3d;
 import org.lwjgl.opengl.GL11;
 
 import java.util.LinkedList;
@@ -23,7 +23,7 @@ public class CutsceneCamera {
 
     public List<CutsceneCameraPoint> cameraPoints = new LinkedList<>();
 
-    List<Vec3f> lineVecs = new LinkedList<>();
+    List<Vec3d> lineVecs = new LinkedList<>();
 
     public int startType = 2;
 
@@ -60,11 +60,11 @@ public class CutsceneCamera {
                     float lerpValue = (float) (i + 1) / 25.0f;
                     float time = this.lerp(lerpValue, prev.time, p.time);
                     CutsceneCameraPoint point = c.getPoint(time);
-                    Vec3f v = Vec3f.method_1293(point.posX, point.posY, point.posZ);
+                    Vec3d v = Vec3d.create(point.posX, point.posY, point.posZ);
                     this.lineVecs.add(v);
                 }
             } else {
-                this.lineVecs.add(Vec3f.method_1293(p.posX, p.posY, p.posZ));
+                this.lineVecs.add(Vec3d.create(p.posX, p.posY, p.posZ));
             }
             prev = p;
         }
@@ -81,7 +81,7 @@ public class CutsceneCamera {
         GL11.glDisable(3553);
         Tessellator tessellator = Tessellator.INSTANCE;
         tessellator.start(3);
-        for (Vec3f v : this.lineVecs) {
+        for (Vec3d v : this.lineVecs) {
             tessellator.pos(v.x - offX, v.y - offY, v.z - offZ);
         }
         tessellator.draw();

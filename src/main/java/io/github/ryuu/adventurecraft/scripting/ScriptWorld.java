@@ -8,7 +8,7 @@ import net.minecraft.entity.EntityRegistry;
 import net.minecraft.level.Level;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.hit.HitType;
-import net.minecraft.util.maths.Vec3f;
+import net.minecraft.util.maths.Vec3d;
 
 @SuppressWarnings("unused")
 public class ScriptWorld {
@@ -87,9 +87,9 @@ public class ScriptWorld {
 
     public Object[] rayTraceBlocks(double startX, double startY, double startZ, double endX, double endY, double endZ) {
         Object[] results = new Object[2];
-        HitResult hit = UtilBullet.rayTraceBlocks(this.level, Vec3f.from(startX, startY, startZ), Vec3f.from(endX, endY, endZ));
+        HitResult hit = UtilBullet.rayTraceBlocks(this.level, Vec3d.getOrCreate(startX, startY, startZ), Vec3d.getOrCreate(endX, endY, endZ));
         if (hit != null) {
-            results[0] = new ScriptVec3(hit.field_1988.x, hit.field_1988.y, hit.field_1988.z);
+            results[0] = new ScriptVec3(hit.pos.x, hit.pos.y, hit.pos.z);
             results[1] = new ScriptVec3(hit.x, hit.y, hit.z);
         }
         return results;
@@ -101,13 +101,13 @@ public class ScriptWorld {
 
     public Object[] rayTrace(double startX, double startY, double startZ, double endX, double endY, double endZ) {
         Object[] results = new Object[3];
-        HitResult hit = UtilBullet.rayTrace(this.level, null, Vec3f.from(startX, startY, startZ), Vec3f.from(endX, endY, endZ));
+        HitResult hit = UtilBullet.rayTrace(this.level, null, Vec3d.getOrCreate(startX, startY, startZ), Vec3d.getOrCreate(endX, endY, endZ));
         if (hit != null) {
-            results[0] = new ScriptVec3(hit.field_1988.x, hit.field_1988.y, hit.field_1988.z);
+            results[0] = new ScriptVec3(hit.pos.x, hit.pos.y, hit.pos.z);
             if (hit.type == HitType.TILE) {
                 results[1] = new ScriptVec3(hit.x, hit.y, hit.z);
             } else {
-                results[2] = ScriptEntity.getEntityClass(hit.field_1989);
+                results[2] = ScriptEntity.getEntityClass(hit.entity);
             }
         }
         return results;

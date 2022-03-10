@@ -33,7 +33,7 @@ public class GuiHealDamage extends Screen {
         this.tileEnt.healDamage = (int) ((double) this.healDamage.sliderValue * 80.0 - 40.0);
         this.healDamage.text = this.tileEnt.healDamage < 0 ? String.format("Damage: %d", -this.tileEnt.healDamage) : String.format("Heal: %d", this.tileEnt.healDamage);
         super.render(mouseX, mouseY, delta);
-        this.tileEnt.level.getChunk(this.tileEnt.x, this.tileEnt.z).method_885();
+        this.tileEnt.level.getChunk(this.tileEnt.x, this.tileEnt.z).markDirty();
     }
 
     @Override

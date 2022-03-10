@@ -15,7 +15,7 @@ import net.minecraft.tile.Tile;
 import net.minecraft.tile.TileSounds;
 import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.MathsHelper;
-import net.minecraft.util.maths.Vec3f;
+import net.minecraft.util.maths.Vec3d;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -162,7 +162,7 @@ public abstract class MixinLivingEntity extends MixinEntity implements AccessLiv
         if (Math.abs(diffAngle) > (double) (this.fov / 2.0f + this.extraFov)) {
             return false;
         }
-        return this.level.raycast(Vec3f.from(this.x, this.y + (double) this.getStandingEyeHeight(), this.z), Vec3f.from(entity.x, entity.y + (double) entity.getStandingEyeHeight(), entity.z)) == null;
+        return this.level.raycast(Vec3d.getOrCreate(this.x, this.y + (double) this.getStandingEyeHeight(), this.z), Vec3d.getOrCreate(entity.x, entity.y + (double) entity.getStandingEyeHeight(), entity.z)) == null;
     }
 
     @Inject(method = "baseTick", at = @At("TAIL"))
@@ -627,7 +627,7 @@ public abstract class MixinLivingEntity extends MixinEntity implements AccessLiv
      */
     @Environment(EnvType.CLIENT)
     @Overwrite
-    public ItemInstance method_909() {
+    public ItemInstance getHandRenderItem() {
         return this.heldItem;
     }
 

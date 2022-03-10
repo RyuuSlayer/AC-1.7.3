@@ -5,7 +5,7 @@ import io.github.ryuu.adventurecraft.mixin.entity.AccessLivingEntity;
 import io.github.ryuu.adventurecraft.util.UtilBullet;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.maths.Vec3f;
+import net.minecraft.util.maths.Vec3d;
 
 @SuppressWarnings("unused")
 public class ScriptEntityLiving extends ScriptEntity {
@@ -43,7 +43,7 @@ public class ScriptEntityLiving extends ScriptEntity {
     }
 
     public ScriptVec3 getLookVec() {
-        Vec3f v = this.entityLiving.method_1320();
+        Vec3d v = this.entityLiving.getRotation();
         return new ScriptVec3(v.x, v.y, v.z);
     }
 

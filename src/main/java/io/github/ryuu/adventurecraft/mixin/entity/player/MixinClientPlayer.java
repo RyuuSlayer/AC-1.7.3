@@ -175,7 +175,7 @@ public abstract class MixinClientPlayer extends Player implements ExClientPlayer
             this.minecraft.overlay.addChatMessage(String.format("Render FOV: %b", DebugMode.renderFov));
         } else if (s.equals("/fullbright")) {
             for (int i = 0; i < 16; ++i) {
-                this.level.dimension.field_2178[i] = 1.0f;
+                this.level.dimension.brightnesses[i] = 1.0f;
             }
             ((ExWorldRenderer) this.minecraft.worldRenderer).updateAllTheRenderers();
         } else if (s.equals("/undo")) {

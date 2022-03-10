@@ -246,7 +246,7 @@ public class GuiMobSpawner extends Screen {
         this.mobSpawner.respawnDelay = (int) (this.respawnSlider.sliderValue * 12000.0f + 0.5f);
         this.respawnSlider.text = String.format("Respawn Delay: %.1fs", (float) this.mobSpawner.respawnDelay / 20.0f);
         super.render(mouseX, mouseY, delta);
-        this.mobSpawner.level.getChunk(this.mobSpawner.x, this.mobSpawner.z).method_885();
+        this.mobSpawner.level.getChunk(this.mobSpawner.x, this.mobSpawner.z).markDirty();
     }
 
     @Override

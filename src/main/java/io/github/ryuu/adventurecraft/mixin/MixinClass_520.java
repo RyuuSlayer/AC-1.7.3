@@ -105,7 +105,7 @@ public abstract class MixinClass_520 extends ClientInteractionManager {
         }
     }
 
-    @Inject(method = "method_1715", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getReachDistance", at = @At("HEAD"), cancellable = true)
     private void method_1715(CallbackInfoReturnable<Float> cir) {
         if (this.minecraft.player.getHeldItem() != null && this.minecraft.player.getHeldItem().itemId == Items.quill.id) {
             cir.setReturnValue(500.0f);

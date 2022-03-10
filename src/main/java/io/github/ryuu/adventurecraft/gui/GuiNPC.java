@@ -187,7 +187,7 @@ public class GuiNPC extends Screen {
             }
             this.resetScriptNames();
         }
-        this.npc.level.getChunk((int) this.npc.x, (int) this.npc.z).method_885();
+        this.npc.level.getChunk((int) this.npc.x, (int) this.npc.z).markDirty();
     }
 
     private void updateScriptFile(String file) {

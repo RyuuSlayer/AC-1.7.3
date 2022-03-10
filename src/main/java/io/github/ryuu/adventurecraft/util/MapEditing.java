@@ -15,7 +15,7 @@ import net.minecraft.tile.Tile;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.hit.HitType;
 import net.minecraft.util.maths.Box;
-import net.minecraft.util.maths.Vec3f;
+import net.minecraft.util.maths.Vec3d;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -60,8 +60,8 @@ public class MapEditing {
         GL11.glGetFloat(2983, projection);
         GL11.glGetInteger(2978, viewport);
         GLU.gluUnProject(x, y, 1.0f, modelview, projection, viewport, position);
-        Vec3f pos = camera.method_931(time);
-        Vec3f mouseLoc = pos.method_1301(position.get(0) * 1024.0f, position.get(1) * 1024.0f, position.get(2) * 1024.0f);
+        Vec3d pos = camera.getPos(time);
+        Vec3d mouseLoc = pos.add(position.get(0) * 1024.0f, position.get(1) * 1024.0f, position.get(2) * 1024.0f);
         this.cursor = this.level.raycast(pos, mouseLoc);
     }
 
@@ -75,30 +75,30 @@ public class MapEditing {
     }
 
     int getCursorXOffset() {
-        if (this.cursor.field_1987 == 4) {
+        if (this.cursor.tileId == 4) {
             return -1;
         }
-        if (this.cursor.field_1987 == 5) {
+        if (this.cursor.tileId == 5) {
             return 1;
         }
         return 0;
     }
 
     int getCursorYOffset() {
-        if (this.cursor.field_1987 == 0) {
+        if (this.cursor.tileId == 0) {
             return -1;
         }
-        if (this.cursor.field_1987 == 1) {
+        if (this.cursor.tileId == 1) {
             return 1;
         }
         return 0;
     }
 
     int getCursorZOffset() {
-        if (this.cursor.field_1987 == 2) {
+        if (this.cursor.tileId == 2) {
             return -1;
         }
-        if (this.cursor.field_1987 == 3) {
+        if (this.cursor.tileId == 3) {
             return 1;
         }
         return 0;
@@ -111,7 +111,7 @@ public class MapEditing {
     }
 
     public void render(float time) {
-        LivingEntity camera = AccessMinecraft.getInstance().field_2807;
+        LivingEntity camera = AccessMinecraft.getInstance().cameraEntity;
         if (!this.mc.field_2778) {
             this.drawCursor(camera, time);
             if (this.cursor != null) {
@@ -135,7 +135,7 @@ public class MapEditing {
 
     public void renderSelection(float time) {
         if (ItemCursor.bothSet) {
-            LivingEntity camera = AccessMinecraft.getInstance().field_2807;
+            LivingEntity camera = AccessMinecraft.getInstance().cameraEntity;
             float x = (float) (camera.prevRenderX + (camera.x - camera.prevRenderX) * (double) time);
             float y = (float) (camera.prevRenderY + (camera.y - camera.prevRenderY) * (double) time);
             float z = (float) (camera.prevRenderZ + (camera.z - camera.prevRenderZ) * (double) time);
@@ -144,7 +144,7 @@ public class MapEditing {
             GL14.glBlendColor(1.0f, 1.0f, 1.0f, 0.4f);
             GL11.glEnable(3042);
             GL11.glBlendFunc(32771, 32772);
-            Vec3f lookDir = camera.method_1320();
+            Vec3d lookDir = camera.getRotation();
             int xOffset = (int) (camera.x + DebugMode.reachDistance * lookDir.x) - ItemCursor.minX;
             int yOffset = (int) (camera.y + DebugMode.reachDistance * lookDir.y) - ItemCursor.minY;
             int zOffset = (int) (camera.z + DebugMode.reachDistance * lookDir.z) - ItemCursor.minZ;
@@ -233,37 +233,37 @@ public class MapEditing {
                 GL11.glLineWidth(4.0f);
                 Tessellator tessellator = Tessellator.INSTANCE;
                 tessellator.start(3);
-                if (this.cursor.field_1987 == 0) {
+                if (this.cursor.tileId == 0) {
                     tessellator.pos(box.minX, box.minY, box.minZ);
                     tessellator.pos(box.maxX, box.minY, box.minZ);
                     tessellator.pos(box.maxX, box.minY, box.maxZ);
                     tessellator.pos(box.minX, box.minY, box.maxZ);
                     tessellator.pos(box.minX, box.minY, box.minZ);
-                } else if (this.cursor.field_1987 == 1) {
+                } else if (this.cursor.tileId == 1) {
                     tessellator.pos(box.minX, box.maxY, box.minZ);
                     tessellator.pos(box.maxX, box.maxY, box.minZ);
                     tessellator.pos(box.maxX, box.maxY, box.maxZ);
                     tessellator.pos(box.minX, box.maxY, box.maxZ);
                     tessellator.pos(box.minX, box.maxY, box.minZ);
-                } else if (this.cursor.field_1987 == 2) {
+                } else if (this.cursor.tileId == 2) {
                     tessellator.pos(box.minX, box.minY, box.minZ);
                     tessellator.pos(box.maxX, box.minY, box.minZ);
                     tessellator.pos(box.maxX, box.maxY, box.minZ);
                     tessellator.pos(box.minX, box.maxY, box.minZ);
                     tessellator.pos(box.minX, box.minY, box.minZ);
-                } else if (this.cursor.field_1987 == 3) {
+                } else if (this.cursor.tileId == 3) {
                     tessellator.pos(box.minX, box.minY, box.maxZ);
                     tessellator.pos(box.maxX, box.minY, box.maxZ);
                     tessellator.pos(box.maxX, box.maxY, box.maxZ);
                     tessellator.pos(box.minX, box.maxY, box.maxZ);
                     tessellator.pos(box.minX, box.minY, box.maxZ);
-                } else if (this.cursor.field_1987 == 4) {
+                } else if (this.cursor.tileId == 4) {
                     tessellator.pos(box.minX, box.minY, box.minZ);
                     tessellator.pos(box.minX, box.maxY, box.minZ);
                     tessellator.pos(box.minX, box.maxY, box.maxZ);
                     tessellator.pos(box.minX, box.minY, box.maxZ);
                     tessellator.pos(box.minX, box.minY, box.minZ);
-                } else if (this.cursor.field_1987 == 5) {
+                } else if (this.cursor.tileId == 5) {
                     tessellator.pos(box.maxX, box.minY, box.minZ);
                     tessellator.pos(box.maxX, box.maxY, box.minZ);
                     tessellator.pos(box.maxX, box.maxY, box.maxZ);

@@ -56,7 +56,7 @@ public class GuiMessage extends Screen {
             this.buttons.clear();
             this.init();
         }
-        this.level.getChunk(this.msg.x, this.msg.z).method_885();
+        this.level.getChunk(this.msg.x, this.msg.z).markDirty();
     }
 
     @Override

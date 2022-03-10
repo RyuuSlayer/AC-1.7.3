@@ -7,7 +7,7 @@ import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
-import net.minecraft.util.maths.Vec3f;
+import net.minecraft.util.maths.Vec3d;
 
 public class ItemNudge extends ItemType implements LeftClickItemType {
 
@@ -23,8 +23,8 @@ public class ItemNudge extends ItemType implements LeftClickItemType {
             int k;
             int j;
             int i;
-            LivingEntity camera = AccessMinecraft.getInstance().field_2807;
-            Vec3f lookDir = camera.method_1320();
+            LivingEntity camera = AccessMinecraft.getInstance().cameraEntity;
+            Vec3d lookDir = camera.getRotation();
             int width = ItemCursor.maxX - ItemCursor.minX + 1;
             int height = ItemCursor.maxY - ItemCursor.minY + 1;
             int depth = ItemCursor.maxZ - ItemCursor.minZ + 1;
@@ -126,8 +126,8 @@ public class ItemNudge extends ItemType implements LeftClickItemType {
             int k;
             int j;
             int i;
-            LivingEntity camera = AccessMinecraft.getInstance().field_2807;
-            Vec3f lookDir = camera.method_1320();
+            LivingEntity camera = AccessMinecraft.getInstance().cameraEntity;
+            Vec3d lookDir = camera.getRotation();
             int width = ItemCursor.maxX - ItemCursor.minX + 1;
             int height = ItemCursor.maxY - ItemCursor.minY + 1;
             int depth = ItemCursor.maxZ - ItemCursor.minZ + 1;

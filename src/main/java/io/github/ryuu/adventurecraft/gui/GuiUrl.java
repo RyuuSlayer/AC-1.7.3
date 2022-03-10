@@ -37,7 +37,7 @@ public class GuiUrl extends Screen {
         super.keyPressed(character, key);
         if (key == 47 && (Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157) || Keyboard.isKeyDown(219) || Keyboard.isKeyDown(220))) {
             this.msg.url = ClipboardHandler.getClipboard();
-            this.world.getChunk(this.msg.x, this.msg.z).method_885();
+            this.world.getChunk(this.msg.x, this.msg.z).markDirty();
             return;
         }
         if (key == 14 && this.msg.url.length() > 0) {
@@ -46,7 +46,7 @@ public class GuiUrl extends Screen {
         if (CharacterUtils.SUPPORTED_CHARS.indexOf(character) >= 0 && this.msg.url.length() < 30) {
             this.msg.url = this.msg.url + character;
         }
-        this.world.getChunk(this.msg.x, this.msg.z).method_885();
+        this.world.getChunk(this.msg.x, this.msg.z).markDirty();
     }
 
     @Override

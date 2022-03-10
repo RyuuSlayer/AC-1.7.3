@@ -5,7 +5,6 @@ import io.github.ryuu.adventurecraft.extensions.client.render.ExGameRenderer;
 import io.github.ryuu.adventurecraft.extensions.client.render.ExWorldRenderer;
 import io.github.ryuu.adventurecraft.extensions.entity.ExEntity;
 import io.github.ryuu.adventurecraft.extensions.entity.ExLivingEntity;
-import io.github.ryuu.adventurecraft.extensions.entity.player.ExPlayer;
 import io.github.ryuu.adventurecraft.extensions.level.ExLevel;
 import io.github.ryuu.adventurecraft.extensions.level.chunk.ExClientChunkCache;
 import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
@@ -18,9 +17,12 @@ import io.github.ryuu.adventurecraft.util.CutsceneCameraPoint;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.IEntityPather;
 import io.github.ryuu.adventurecraft.util.PlayerTorch;
-import net.minecraft.*;
+import net.minecraft.class_430;
+import net.minecraft.class_61;
+import net.minecraft.class_66;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.*;
+import net.minecraft.client.render.BaseOffsetFrustum;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
@@ -35,7 +37,7 @@ import net.minecraft.level.Level;
 import net.minecraft.level.LevelListener;
 import net.minecraft.tile.Tile;
 import net.minecraft.util.maths.MathsHelper;
-import net.minecraft.util.maths.Vec3f;
+import net.minecraft.util.maths.Vec3d;
 import net.minecraft.util.maths.Vec3i;
 import org.lwjgl.opengl.GL11;
 import org.objectweb.asm.Opcodes;
@@ -48,7 +50,6 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -100,16 +101,16 @@ public abstract class MixinWorldRenderer implements LevelListener, ExWorldRender
 
     @Redirect(method = "method_1544", at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/client/render/entity/EntityRenderDispatcher;method_1921(Lnet/minecraft/entity/Entity;F)V",
+            target = "Lnet/minecraft/client/render/entity/EntityRenderDispatcher;render(Lnet/minecraft/entity/Entity;F)V",
             ordinal = 1))
     private void redirectEntityDispatch(EntityRenderDispatcher instance, Entity entity, float v) {
         ExMinecraft client = (ExMinecraft) this.client;
         if (client.isCameraActive() && client.isCameraPause() ||
                 DebugMode.active && !(entity instanceof Player) || ((ExEntity) entity).getStunned() > 0) {
-            instance.method_1921(entity, 1.0f);
+            instance.render(entity, 1.0f);
             return;
         }
-        instance.method_1921(entity, v);
+        instance.render(entity, v);
     }
 
     @Inject(method = "method_1544", at = @At(
@@ -117,7 +118,7 @@ public abstract class MixinWorldRenderer implements LevelListener, ExWorldRender
             target = "Lnet/minecraft/client/render/WorldRenderer;field_1795:Ljava/util/List;",
             shift = At.Shift.BEFORE,
             ordinal = 0))
-    private void renderScriptModels(Vec3f vec3d, class_68 icamera, float f, CallbackInfo ci) {
+    private void renderScriptModels(Vec3d vec3d, BaseOffsetFrustum icamera, float f, CallbackInfo ci) {
         GL11.glPushMatrix();
         GL11.glTranslated(-EntityRenderDispatcher.field_2490, -EntityRenderDispatcher.field_2491, -EntityRenderDispatcher.field_2492);
         ScriptModel.renderAll(f);
@@ -157,14 +158,14 @@ public abstract class MixinWorldRenderer implements LevelListener, ExWorldRender
                 this.renderClouds(f);
             } else {
                 GL11.glDisable(2884);
-                float f1 = (float) (this.client.field_2807.prevRenderY + (this.client.field_2807.y - this.client.field_2807.prevRenderY) * f);
+                float f1 = (float) (this.client.cameraEntity.prevRenderY + (this.client.cameraEntity.y - this.client.cameraEntity.prevRenderY) * f);
                 int byte0 = 32;
                 int i = 256 / byte0;
                 Tessellator tessellator = Tessellator.INSTANCE;
                 GL11.glBindTexture(3553, this.textureManager.getTextureId("/environment/clouds.png"));
                 GL11.glEnable(3042);
                 GL11.glBlendFunc(770, 771);
-                Vec3f vec3d = this.level.method_282(f);
+                Vec3d vec3d = this.level.method_282(f);
                 float f2 = (float) vec3d.x;
                 float f3 = (float) vec3d.y;
                 float f4 = (float) vec3d.z;
@@ -178,8 +179,8 @@ public abstract class MixinWorldRenderer implements LevelListener, ExWorldRender
                 }
 
                 float f6 = 4.882813E-4f;
-                double d = this.client.field_2807.prevX + (this.client.field_2807.x - this.client.field_2807.prevX) * f + (this.field_1818 + f * 0.03f);
-                double d1 = this.client.field_2807.prevZ + (this.client.field_2807.z - this.client.field_2807.prevZ) * f;
+                double d = this.client.cameraEntity.prevX + (this.client.cameraEntity.x - this.client.cameraEntity.prevX) * f + (this.field_1818 + f * 0.03f);
+                double d1 = this.client.cameraEntity.prevZ + (this.client.cameraEntity.z - this.client.cameraEntity.prevZ) * f;
 
                 if (((ExMinecraft) this.client).isCameraActive()) {
                     CutsceneCameraPoint p = ((ExMinecraft) this.client).getCutsceneCamera().getCurrentPoint(f);
@@ -450,12 +451,12 @@ public abstract class MixinWorldRenderer implements LevelListener, ExWorldRender
 
     @Override
     public Particle spawnParticleR(String s, double d, double d1, double d2, double d3, double d4, double d5) {
-        if (this.client == null || this.client.field_2807 == null || this.client.particleManager == null) {
+        if (this.client == null || this.client.cameraEntity == null || this.client.particleManager == null) {
             return null;
         }
-        double d6 = this.client.field_2807.x - d;
-        double d7 = this.client.field_2807.y - d1;
-        double d8 = this.client.field_2807.z - d2;
+        double d6 = this.client.cameraEntity.x - d;
+        double d7 = this.client.cameraEntity.y - d1;
+        double d8 = this.client.cameraEntity.z - d2;
         double d9 = 16384.0;
         if (d6 * d6 + d7 * d7 + d8 * d8 > d9 * d9) {
             return null;

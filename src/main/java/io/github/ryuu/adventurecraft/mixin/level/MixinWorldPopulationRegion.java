@@ -48,13 +48,13 @@ public abstract class MixinWorldPopulationRegion implements TileView {
         if (lightValue < torchLight) {
             int floorValue = (int) Math.floor(torchLight);
             if (floorValue == 15) {
-                return this.level.dimension.field_2178[15];
+                return this.level.dimension.brightnesses[15];
             }
             int ceilValue = (int) Math.ceil(torchLight);
             float lerpValue = torchLight - floorValue;
-            return (1.0f - lerpValue) * this.level.dimension.field_2178[floorValue] + lerpValue * this.level.dimension.field_2178[ceilValue];
+            return (1.0f - lerpValue) * this.level.dimension.brightnesses[floorValue] + lerpValue * this.level.dimension.brightnesses[ceilValue];
         }
-        light = this.level.dimension.field_2178[lightValue];
+        light = this.level.dimension.brightnesses[lightValue];
         LightCache.cache.setLightValue(i, j, k, light);
         return light;
     }
@@ -75,13 +75,13 @@ public abstract class MixinWorldPopulationRegion implements TileView {
         if ((float) lightValue < (torchLight = PlayerTorch.getTorchLight(this.level, i, j, k))) {
             int floorValue = (int) Math.floor(torchLight);
             if (floorValue == 15) {
-                return this.level.dimension.field_2178[15];
+                return this.level.dimension.brightnesses[15];
             }
             int ceilValue = (int) Math.ceil(torchLight);
             float lerpValue = torchLight - (float) floorValue;
-            return (1.0f - lerpValue) * this.level.dimension.field_2178[floorValue] + lerpValue * this.level.dimension.field_2178[ceilValue];
+            return (1.0f - lerpValue) * this.level.dimension.brightnesses[floorValue] + lerpValue * this.level.dimension.brightnesses[ceilValue];
         }
-        l = this.level.dimension.field_2178[lightValue];
+        l = this.level.dimension.brightnesses[lightValue];
         LightCache.cache.setLightValue(i, j, k, l);
         return l;
     }
@@ -90,7 +90,7 @@ public abstract class MixinWorldPopulationRegion implements TileView {
             value = "INVOKE_ASSIGN",
             target = "Lnet/minecraft/level/WorldPopulationRegion;getTileId(III)I",
             shift = At.Shift.AFTER))
-    private void afterGetTileInMethod_142(int i, int j, int k, boolean flag, CallbackInfoReturnable<Integer> cir, int var5) {
+    public void afterGetTileInMethod_142(int i, int j, int k, boolean flag, CallbackInfoReturnable<Integer> cir, int var5) {
         if (Tile.BY_ID[var5] instanceof BlockStairMulti) {
             int k1 = this.method_142(i, j + 1, k, false);
             int i2 = this.method_142(i + 1, j, k, false);

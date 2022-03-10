@@ -15,8 +15,6 @@ import io.github.ryuu.adventurecraft.items.Items;
 import io.github.ryuu.adventurecraft.util.CutsceneCameraPoint;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import io.github.ryuu.adventurecraft.util.MapEditing;
-import net.minecraft.class_573;
-import net.minecraft.class_598;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.particle.SmokeParticle;
@@ -187,10 +185,10 @@ public abstract class MixinGameRenderer implements AccessGameRenderer, ExGameRen
         this.field_2364 = this.field_2363;
         this.field_2327 = this.field_2365;
         this.field_2329 = this.field_2328;
-        if (this.minecraft.field_2807 == null) {
-            this.minecraft.field_2807 = this.minecraft.player;
+        if (this.minecraft.cameraEntity == null) {
+            this.minecraft.cameraEntity = this.minecraft.player;
         }
-        float f = this.minecraft.level.getBrightness(MathsHelper.floor(this.minecraft.field_2807.x), MathsHelper.floor(this.minecraft.field_2807.y), MathsHelper.floor(this.minecraft.field_2807.z));
+        float f = this.minecraft.level.getBrightness(MathsHelper.floor(this.minecraft.cameraEntity.x), MathsHelper.floor(this.minecraft.cameraEntity.y), MathsHelper.floor(this.minecraft.cameraEntity.z));
         float f1 = (float) (4 - this.minecraft.options.viewDistance) / 4.0f;
         float f2 = f * (1.0f - f1) + f1;
         this.field_2339 += (f2 - this.field_2339) * 0.1f;
@@ -205,7 +203,7 @@ public abstract class MixinGameRenderer implements AccessGameRenderer, ExGameRen
     @Inject(method = "method_1850", at = @At("HEAD"), cancellable = true)
     private void cancelMethod_1850(float f, CallbackInfo ci) {
         if (((ExMinecraft) this.minecraft).isCameraActive() ||
-                ((ExEntity) this.minecraft.field_2807).getStunned() != 0) {
+                ((ExEntity) this.minecraft.cameraEntity).getStunned() != 0) {
             ci.cancel();
         }
     }
@@ -260,7 +258,7 @@ public abstract class MixinGameRenderer implements AccessGameRenderer, ExGameRen
         if (this.minecraft.options.bobView && !cameraActive) {
             this.method_1850(f);
         }
-        if (!(this.minecraft.options.thirdPerson || cameraActive || this.minecraft.field_2807.isSleeping() || this.minecraft.options.hideHud)) {
+        if (!(this.minecraft.options.thirdPerson || cameraActive || this.minecraft.cameraEntity.isSleeping() || this.minecraft.options.hideHud)) {
             float swingOffhand = ((ExPlayer) this.minecraft.player).getSwingOffhandProgress(f);
             ((ExHandItemRenderer) this.handItemRenderer).renderItemInFirstPerson(f, this.minecraft.player.method_930(f), swingOffhand);
             if (((ExHandItemRenderer) this.offHandItemRenderer).hasItem()) {
@@ -271,7 +269,7 @@ public abstract class MixinGameRenderer implements AccessGameRenderer, ExGameRen
             }
         }
         GL11.glPopMatrix();
-        if (!this.minecraft.options.thirdPerson && !this.minecraft.field_2807.isSleeping()) {
+        if (!this.minecraft.options.thirdPerson && !this.minecraft.cameraEntity.isSleeping()) {
             this.handItemRenderer.method_1864(f);
             this.method_1849(f);
         }
@@ -395,17 +393,17 @@ public abstract class MixinGameRenderer implements AccessGameRenderer, ExGameRen
         }
         if (((ExMinecraft) this.minecraft).isCameraActive()) {
             CutsceneCameraPoint p = ((ExMinecraft) this.minecraft).getCutsceneCamera().getCurrentPoint(f);
-            this.minecraft.field_2807 = ((ExMinecraft) this.minecraft).getCutsceneCameraEntity();
-            this.minecraft.field_2807.prevRenderX = this.minecraft.field_2807.prevX = p.posX;
-            this.minecraft.field_2807.x = this.minecraft.field_2807.prevX;
-            this.minecraft.field_2807.prevRenderY = this.minecraft.field_2807.prevY = p.posY;
-            this.minecraft.field_2807.y = this.minecraft.field_2807.prevY;
-            this.minecraft.field_2807.prevRenderZ = this.minecraft.field_2807.prevZ = p.posZ;
-            this.minecraft.field_2807.z = this.minecraft.field_2807.prevZ;
-            this.minecraft.field_2807.yaw = this.minecraft.field_2807.prevYaw = p.rotYaw;
-            this.minecraft.field_2807.pitch = this.minecraft.field_2807.prevPitch = p.rotPitch;
+            this.minecraft.cameraEntity = ((ExMinecraft) this.minecraft).getCutsceneCameraEntity();
+            this.minecraft.cameraEntity.prevRenderX = this.minecraft.cameraEntity.prevX = p.posX;
+            this.minecraft.cameraEntity.x = this.minecraft.cameraEntity.prevX;
+            this.minecraft.cameraEntity.prevRenderY = this.minecraft.cameraEntity.prevY = p.posY;
+            this.minecraft.cameraEntity.y = this.minecraft.cameraEntity.prevY;
+            this.minecraft.cameraEntity.prevRenderZ = this.minecraft.cameraEntity.prevZ = p.posZ;
+            this.minecraft.cameraEntity.z = this.minecraft.cameraEntity.prevZ;
+            this.minecraft.cameraEntity.yaw = this.minecraft.cameraEntity.prevYaw = p.rotYaw;
+            this.minecraft.cameraEntity.pitch = this.minecraft.cameraEntity.prevPitch = p.rotPitch;
         } else {
-            this.minecraft.field_2807 = this.minecraft.player;
+            this.minecraft.cameraEntity = this.minecraft.player;
             if (((ExEntity) this.minecraft.player).getStunned() != 0) {
                 this.minecraft.player.prevRenderX = this.minecraft.player.prevX = this.minecraft.player.x;
                 this.minecraft.player.prevRenderY = this.minecraft.player.prevY = this.minecraft.player.y;
@@ -414,7 +412,7 @@ public abstract class MixinGameRenderer implements AccessGameRenderer, ExGameRen
             }
         }
         this.method_1838(f);
-        LivingEntity entityliving = this.minecraft.field_2807;
+        LivingEntity entityliving = this.minecraft.cameraEntity;
         WorldRenderer renderglobal = this.minecraft.worldRenderer;
         ParticleManager effectrenderer = this.minecraft.particleManager;
         double d = entityliving.prevRenderX + (entityliving.x - entityliving.prevRenderX) * (double) f;
@@ -442,7 +440,7 @@ public abstract class MixinGameRenderer implements AccessGameRenderer, ExGameRen
             GL11.glClear(16640);
             GL11.glEnable(2884);
             this.method_1840(f, i);
-            class_598.method_1973();
+            Frustum.getInstance();
             if (this.minecraft.options.viewDistance < 3) {
                 this.method_1842(-1, f);
                 renderglobal.renderSky(f);
@@ -452,8 +450,8 @@ public abstract class MixinGameRenderer implements AccessGameRenderer, ExGameRen
             if (this.minecraft.options.ao) {
                 GL11.glShadeModel(7425);
             }
-            class_573 frustrum = new class_573();
-            frustrum.method_2006(d, d1, d2);
+            OffsetFrustum frustrum = new OffsetFrustum();
+            frustrum.setOffset(d, d1, d2);
             this.minecraft.worldRenderer.method_1550(frustrum, f);
             if (i == 0) {
                 long l1;
@@ -471,7 +469,7 @@ public abstract class MixinGameRenderer implements AccessGameRenderer, ExGameRen
             renderglobal.method_1548(entityliving, 0, f);
             GL11.glShadeModel(7424);
             RenderHelper.enableLighting();
-            renderglobal.method_1544(entityliving.method_931(f), frustrum, f);
+            renderglobal.method_1544(entityliving.getPos(f), frustrum, f);
             effectrenderer.method_327(entityliving, f);
             RenderHelper.disableLighting();
             this.method_1842(0, f);
@@ -582,7 +580,7 @@ public abstract class MixinGameRenderer implements AccessGameRenderer, ExGameRen
 
         if (f != 0.0f) {
             this.random.setSeed((long) this.field_2351 * 312987231L);
-            LivingEntity entityliving = this.minecraft.field_2807;
+            LivingEntity entityliving = this.minecraft.cameraEntity;
             Level world = this.minecraft.level;
             int i = MathsHelper.floor(entityliving.x);
             int j = MathsHelper.floor(entityliving.y);
@@ -635,7 +633,7 @@ public abstract class MixinGameRenderer implements AccessGameRenderer, ExGameRen
         if (f1 <= 0.0f) {
             return;
         }
-        LivingEntity entityliving = this.minecraft.field_2807;
+        LivingEntity entityliving = this.minecraft.cameraEntity;
         Level world = this.minecraft.level;
         int i = MathsHelper.floor(entityliving.x);
         int j = MathsHelper.floor(entityliving.y);
@@ -757,7 +755,7 @@ public abstract class MixinGameRenderer implements AccessGameRenderer, ExGameRen
      */
     @Overwrite
     private void method_1842(int i, float f) {
-        LivingEntity entityliving = this.minecraft.field_2807;
+        LivingEntity entityliving = this.minecraft.cameraEntity;
         GL11.glFog(2918, this.method_1839(this.r, this.g, this.b, 1.0f));
         GL11.glNormal3f(0.0f, -1.0f, 0.0f);
         GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);

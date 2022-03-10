@@ -50,7 +50,7 @@ public class GuiTree extends Screen {
             this.tree.size = this.treeSize.sliderValue * 3.5f + 0.5f;
             this.treeSize.text = String.format("Tree Size: %.2f", this.tree.size);
             this.world.method_246(this.blockX, this.blockY, this.blockZ);
-            this.world.getChunk(this.blockX, this.blockZ).method_885();
+            this.world.getChunk(this.blockX, this.blockZ).markDirty();
         }
         super.render(mouseX, mouseY, delta);
     }

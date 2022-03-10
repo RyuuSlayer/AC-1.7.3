@@ -93,7 +93,7 @@ public class GuiStoreDebug extends Screen {
         storeGUI.setSupplyLeft(this.store.buySupply);
         ((ExMinecraft)this.minecraft).updateStoreGUI();
         storeGUI.render(mouseX, mouseY, delta);
-        this.store.level.getChunk(this.store.x, this.store.z).method_885();
+        this.store.level.getChunk(this.store.x, this.store.z).markDirty();
     }
 
     @Override

@@ -16,7 +16,7 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.hit.HitType;
 import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.MathsHelper;
-import net.minecraft.util.maths.Vec3f;
+import net.minecraft.util.maths.Vec3d;
 
 import java.util.List;
 
@@ -95,13 +95,13 @@ public class EntityHookshot extends Entity {
             double prevVelZ = this.velocityZ;
             this.move(this.velocityX, this.velocityY, this.velocityZ);
             if (this.velocityX != prevVelX || this.velocityY != prevVelY || this.velocityZ != prevVelZ) {
-                Vec3f pos1 = Vec3f.method_1293(this.prevX, this.prevY, this.prevZ);
-                HitResult hit = this.level.raycast(pos1, Vec3f.method_1293(this.prevX + 10.0 * prevVelX, this.prevY + 10.0 * prevVelY, this.prevZ + 10.0 * prevVelZ));
+                Vec3d pos1 = Vec3d.create(this.prevX, this.prevY, this.prevZ);
+                HitResult hit = this.level.raycast(pos1, Vec3d.create(this.prevX + 10.0 * prevVelX, this.prevY + 10.0 * prevVelY, this.prevZ + 10.0 * prevVelZ));
                 if (hit != null && hit.type == HitType.TILE) {
                     int blockID = this.level.getTileId(hit.x, hit.y, hit.z);
                     if (blockID == Tile.LOG.id || blockID == Tile.WOOD.id || blockID == Blocks.woodBlocks.id || blockID == Blocks.halfSteps3.id) {
                         this.attachedToSurface = true;
-                        this.setPosition(hit.field_1988.x, hit.field_1988.y, hit.field_1988.z);
+                        this.setPosition(hit.pos.x, hit.pos.y, hit.pos.z);
                         this.level.playSound(this, "random.drr", 1.0f, 1.2f / (this.rand.nextFloat() * 0.2f + 0.9f));
                     } else if (blockID != 0) {
                         this.level.playSound(this, Tile.BY_ID[blockID].sounds.getWalkSound(), 1.0f, 1.2f / (this.rand.nextFloat() * 0.2f + 0.9f));

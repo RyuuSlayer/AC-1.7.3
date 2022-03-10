@@ -20,7 +20,7 @@ import net.minecraft.level.dimension.McRegionDimensionFile;
 import net.minecraft.tile.entity.TileEntity;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.io.CompoundTag;
-import net.minecraft.util.maths.Vec3f;
+import net.minecraft.util.maths.Vec3d;
 import org.mozilla.javascript.Scriptable;
 
 import java.awt.image.BufferedImage;
@@ -102,7 +102,7 @@ public interface ExLevel {
 
     TileEntity getBlockTileEntityDontCreate(int i, int j, int k);
 
-    HitResult rayTraceBlocks2(Vec3f vec3d, Vec3f vec3d1, boolean flag, boolean flag1, boolean collideWithClip);
+    HitResult rayTraceBlocks2(Vec3d vec3d, Vec3d vec3d1, boolean flag, boolean flag1, boolean collideWithClip);
 
     BufferedImage loadMapTexture(String texName);
 

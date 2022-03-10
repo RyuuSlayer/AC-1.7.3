@@ -10,7 +10,7 @@ import net.minecraft.item.ItemInstance;
 import net.minecraft.item.ItemType;
 import net.minecraft.level.Level;
 import net.minecraft.util.maths.Box;
-import net.minecraft.util.maths.Vec3f;
+import net.minecraft.util.maths.Vec3d;
 
 import java.util.List;
 
@@ -39,8 +39,8 @@ public class ItemUmbrella extends ItemType implements DamageableItemType {
         if (!player.onGround || item.getDamage() > 0) {
             return item;
         }
-        Vec3f lookVec = player.method_1320();
-        lookVec.method_1296();
+        Vec3d lookVec = player.getRotation();
+        lookVec.normalise();
         Box aabb = Box.getOrCreate(player.x, player.y, player.z, player.x, player.y, player.z).expand(6.0, 6.0, 6.0);
         List<Entity> entities = (List<Entity>)level.getEntities(player, aabb);
         for (Entity e : entities) {

@@ -210,7 +210,7 @@ public abstract class MixinEntity implements ExEntity {
         int i;
         boolean flag;
         if (this.field_1642) {
-            this.boundingBox.method_102(d, d1, d2);
+            this.boundingBox.shift(d, d1, d2);
             this.x = (this.boundingBox.minX + this.boundingBox.maxX) / 2.0;
             this.y = this.boundingBox.minY + (double) this.standingEyeHeight - (double) this.field_1640;
             this.z = (this.boundingBox.minZ + this.boundingBox.maxZ) / 2.0;
@@ -231,7 +231,7 @@ public abstract class MixinEntity implements ExEntity {
         double d5 = d;
         double d6 = d1;
         double d7 = d2;
-        Box axisalignedbb = this.boundingBox.method_92();
+        Box axisalignedbb = this.boundingBox.copy();
         boolean bl = flag = this.onGround && this.method_1373();
         if (flag) {
             double d8 = 0.05;
@@ -246,9 +246,9 @@ public abstract class MixinEntity implements ExEntity {
         }
         List list = this.level.method_190((Entity) (Object) this, this.boundingBox.add(d, d1, d2));
         for (Object o : list) {
-            d1 = ((Box) o).method_97(this.boundingBox, d1);
+            d1 = ((Box) o).getYOffset(this.boundingBox, d1);
         }
-        this.boundingBox.method_102(0.0, d1, 0.0);
+        this.boundingBox.shift(0.0, d1, 0.0);
         if (!this.field_1629 && d6 != d1) {
             d2 = 0.0;
             d1 = 0.0;
@@ -256,18 +256,18 @@ public abstract class MixinEntity implements ExEntity {
         }
         boolean flag1 = this.onGround || d6 != d1 && d6 < 0.0;
         for (Object o : list) {
-            d = ((Box) o).method_91(this.boundingBox, d);
+            d = ((Box) o).getXOffset(this.boundingBox, d);
         }
-        this.boundingBox.method_102(d, 0.0, 0.0);
+        this.boundingBox.shift(d, 0.0, 0.0);
         if (!this.field_1629 && d5 != d) {
             d2 = 0.0;
             d1 = 0.0;
             d = 0.0;
         }
         for (Object o : list) {
-            d2 = ((Box) o).method_101(this.boundingBox, d2);
+            d2 = ((Box) o).getZOffset(this.boundingBox, d2);
         }
-        this.boundingBox.method_102(0.0, 0.0, d2);
+        this.boundingBox.shift(0.0, 0.0, d2);
         if (!this.field_1629 && d7 != d2) {
             d2 = 0.0;
             d1 = 0.0;
@@ -280,31 +280,31 @@ public abstract class MixinEntity implements ExEntity {
             d = d5;
             d1 = this.field_1641;
             d2 = d7;
-            Box axisalignedbb1 = this.boundingBox.method_92();
-            this.boundingBox.method_96(axisalignedbb);
+            Box axisalignedbb1 = this.boundingBox.copy();
+            this.boundingBox.copy(axisalignedbb);
             List list1 = this.level.method_190((Entity) (Object) this, this.boundingBox.add(d, d1, d2));
             for (Object o : list1) {
-                d1 = ((Box) o).method_97(this.boundingBox, d1);
+                d1 = ((Box) o).getYOffset(this.boundingBox, d1);
             }
-            this.boundingBox.method_102(0.0, d1, 0.0);
+            this.boundingBox.shift(0.0, d1, 0.0);
             if (!this.field_1629 && d6 != d1) {
                 d2 = 0.0;
                 d1 = 0.0;
                 d = 0.0;
             }
             for (Object o : list1) {
-                d = ((Box) o).method_91(this.boundingBox, d);
+                d = ((Box) o).getXOffset(this.boundingBox, d);
             }
-            this.boundingBox.method_102(d, 0.0, 0.0);
+            this.boundingBox.shift(d, 0.0, 0.0);
             if (!this.field_1629 && d5 != d) {
                 d2 = 0.0;
                 d1 = 0.0;
                 d = 0.0;
             }
             for (Object o : list1) {
-                d2 = ((Box) o).method_101(this.boundingBox, d2);
+                d2 = ((Box) o).getZOffset(this.boundingBox, d2);
             }
-            this.boundingBox.method_102(0.0, 0.0, d2);
+            this.boundingBox.shift(0.0, 0.0, d2);
             if (!this.field_1629 && d7 != d2) {
                 d2 = 0.0;
                 d1 = 0.0;
@@ -317,15 +317,15 @@ public abstract class MixinEntity implements ExEntity {
             } else {
                 d1 = -this.field_1641;
                 for (Object o : list1) {
-                    d1 = ((Box) o).method_97(this.boundingBox, d1);
+                    d1 = ((Box) o).getYOffset(this.boundingBox, d1);
                 }
-                this.boundingBox.method_102(0.0, d1, 0.0);
+                this.boundingBox.shift(0.0, d1, 0.0);
             }
             if (d9 * d9 + d13 * d13 >= d * d + d2 * d2) {
                 d = d9;
                 d1 = d11;
                 d2 = d13;
-                this.boundingBox.method_96(axisalignedbb1);
+                this.boundingBox.copy(axisalignedbb1);
             } else {
                 double d14 = this.boundingBox.minY - (double) ((int) this.boundingBox.minY);
                 if (d14 > 0.0) {
@@ -415,7 +415,7 @@ public abstract class MixinEntity implements ExEntity {
             }
         }
         boolean flag2 = this.isTouchingWater();
-        if (this.level.method_225(this.boundingBox.method_104(0.001, 0.001, 0.001))) {
+        if (this.level.method_225(this.boundingBox.grow(0.001, 0.001, 0.001))) {
             this.method_1392(1);
             if (!flag2) {
                 ++this.fire;

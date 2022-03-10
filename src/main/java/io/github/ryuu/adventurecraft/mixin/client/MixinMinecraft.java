@@ -99,7 +99,7 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
     @Shadow
     public ClientPlayer player;
     @Shadow
-    public LivingEntity field_2807;
+    public LivingEntity cameraEntity;
     @Shadow
     public ParticleManager particleManager;
     @Shadow
@@ -395,16 +395,16 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
             }
         } else if (this.hitResult.type == HitType.ENTITY) {
             if (i == 0) {
-                this.interactionManager.attack(this.player, this.hitResult.field_1989);
+                this.interactionManager.attack(this.player, this.hitResult.entity);
             }
             if (i == 1) {
-                this.interactionManager.interactWith(this.player, this.hitResult.field_1989);
+                this.interactionManager.interactWith(this.player, this.hitResult.entity);
             }
         } else if (this.hitResult.type == HitType.TILE) {
             int j = this.hitResult.x;
             int k = this.hitResult.y;
             int l = this.hitResult.z;
-            int i1 = this.hitResult.field_1987;
+            int i1 = this.hitResult.tileId;
             Tile block = Tile.BY_ID[this.level.getTileId(j, k, l)];
             if (!(DebugMode.active || block.id != Tile.CHEST.id && block.id != Blocks.store.id)) {
                 i = 1;
@@ -415,7 +415,7 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
                     i = alwaysClick;
                 }
                 if (i == 0) {
-                    this.interactionManager.method_1707(j, k, l, this.hitResult.field_1987);
+                    this.interactionManager.method_1707(j, k, l, this.hitResult.tileId);
                     if (itemUsing != null) {
                         ((ExItemInstance) itemUsing).useItemLeftClick(this.player, this.level, j, k, l, i1);
                     }
@@ -468,9 +468,9 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
                     ScriptableObject.putProperty(script.globalScope, "hitBlock", wrappedOut);
                 }
             } else if (this.hitResult.type == HitType.ENTITY) {
-                if (this.lastEntityHit != this.hitResult.field_1989) {
-                    this.lastEntityHit = this.hitResult.field_1989;
-                    Object wrappedOut = Context.javaToJS(ScriptEntity.getEntityClass(this.hitResult.field_1989), script.globalScope);
+                if (this.lastEntityHit != this.hitResult.entity) {
+                    this.lastEntityHit = this.hitResult.entity;
+                    Object wrappedOut = Context.javaToJS(ScriptEntity.getEntityClass(this.hitResult.entity), script.globalScope);
                     ScriptableObject.putProperty(script.globalScope, "hitEntity", wrappedOut);
                 }
                 if (this.lastBlockHit != null) {
@@ -904,7 +904,7 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
         Vec3i spawnCoords = this.level.getSpawnPosition();
         this.player.afterSpawn();
         this.player.setPositionAndAngles((double) spawnCoords.x + 0.5, spawnCoords.y, (double) spawnCoords.z + 0.5, 0.0f, 0.0f);
-        this.field_2807 = this.player;
+        this.cameraEntity = this.player;
         this.player.afterSpawn();
 
         this.interactionManager.method_1711(this.player);

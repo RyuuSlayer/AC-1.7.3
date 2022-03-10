@@ -43,7 +43,7 @@ import net.minecraft.util.ProgressListener;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.MathsHelper;
-import net.minecraft.util.maths.Vec3f;
+import net.minecraft.util.maths.Vec3d;
 import org.mozilla.javascript.Scriptable;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
@@ -495,9 +495,9 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
         if (floorValue != lightValue) {
             int ceilValue = (int) Math.ceil(lightValue);
             float lerpValue = lightValue - floorValue;
-            return (1.0f - lerpValue) * this.dimension.field_2178[floorValue] + lerpValue * this.dimension.field_2178[ceilValue];
+            return (1.0f - lerpValue) * this.dimension.brightnesses[floorValue] + lerpValue * this.dimension.brightnesses[ceilValue];
         }
-        return this.dimension.field_2178[floorValue];
+        return this.dimension.brightnesses[floorValue];
     }
 
     /**
@@ -526,19 +526,19 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
 
     public float getDayLight() {
         int lightValue = 15 - this.field_202;
-        return this.dimension.field_2178[lightValue];
+        return this.dimension.brightnesses[lightValue];
     }
 
     /**
      * @author Ryuu, TechPizza, Phil
      */
     @Overwrite
-    public HitResult raycast(Vec3f vec3d, Vec3f vec3d1, boolean flag, boolean flag1) {
+    public HitResult raycast(Vec3d vec3d, Vec3d vec3d1, boolean flag, boolean flag1) {
         return this.rayTraceBlocks2(vec3d, vec3d1, flag, flag1, true);
     }
 
     @Override
-    public HitResult rayTraceBlocks2(Vec3f vec3d, Vec3f vec3d1, boolean flag, boolean flag1, boolean collideWithClip) {
+    public HitResult rayTraceBlocks2(Vec3d vec3d, Vec3d vec3d1, boolean flag, boolean flag1, boolean collideWithClip) {
         if (Double.isNaN(vec3d.x) || Double.isNaN(vec3d.y) || Double.isNaN(vec3d.z)) {
             return null;
         }
@@ -629,7 +629,7 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
                 vec3d.y += d7 * d5;
                 vec3d.z = d2;
             }
-            Vec3f vec3d2 = Vec3f.from(vec3d.x, vec3d.y, vec3d.z);
+            Vec3d vec3d2 = Vec3d.getOrCreate(vec3d.x, vec3d.y, vec3d.z);
             vec3d2.x = MathsHelper.floor(vec3d.x);
             l = (int) vec3d2.x;
             if (byte0 == 5) {
@@ -754,9 +754,9 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
      */
     @Environment(EnvType.CLIENT)
     @Overwrite
-    public Vec3f getSkyColour(float f) {
+    public Vec3d getSkyColour(float f) {
         float f1 = this.method_198(f);
-        Vec3f returnColor = this.dimension.getSkyColour(f1, f);
+        Vec3d returnColor = this.dimension.getSkyColour(f1, f);
         ExLevelProperties exProps = (ExLevelProperties) this.properties;
         if (exProps.getOverrideFogColor()) {
             if (this.fogColorOverridden) {
@@ -834,7 +834,7 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
             }
             if (!(entity2.removed || ExMinecraft.getInstance().isCameraActive() && ExMinecraft.getInstance().isCameraPause() || DebugMode.active && !(entity2 instanceof Player))) {
                 this.forceUpdatePosition(entity2);
-                Box.method_85();
+                Box.resetCount();
             }
             if (!entity2.removed) continue;
             int j1 = entity2.chunkX;
@@ -1149,7 +1149,7 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
                 int k = this.getTileId(entry.field_1400, entry.field_1401, entry.field_1402);
                 if (k == entry.field_1403 && k > 0) {
                     Tile.BY_ID[k].onScheduledTick((Level) (Object) this, entry.field_1400, entry.field_1401, entry.field_1402, this.rand);
-                    Box.method_85();
+                    Box.resetCount();
                 }
             }
         }
@@ -1339,7 +1339,7 @@ public abstract class MixinLevel implements TileView, ExLevel, AccessLevel {
     @Override
     public void loadBrightness() {
         for (int i = 0; i < 16; ++i) {
-            this.dimension.field_2178[i] = ((ExLevelProperties) this.properties).getBrightness()[i];
+            this.dimension.brightnesses[i] = ((ExLevelProperties) this.properties).getBrightness()[i];
         }
     }
 

@@ -10,7 +10,7 @@ import net.minecraft.tile.TileSounds;
 import net.minecraft.tile.material.Material;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.maths.Box;
-import net.minecraft.util.maths.Vec3f;
+import net.minecraft.util.maths.Vec3d;
 
 public class BlockLockedDoor extends Tile implements AcRenderConditionTile, AcResetTile, AcClickTile {
 
@@ -31,7 +31,7 @@ public class BlockLockedDoor extends Tile implements AcRenderConditionTile, AcRe
     }
 
     @Override
-    public HitResult raycast(Level world, int x, int y, int z, Vec3f vec3d, Vec3f vec3d1) {
+    public HitResult raycast(Level world, int x, int y, int z, Vec3d vec3d, Vec3d vec3d1) {
         int metadata = world.getTileMeta(x, y, z);
         if (!DebugMode.active && metadata == 1) {
             return null;

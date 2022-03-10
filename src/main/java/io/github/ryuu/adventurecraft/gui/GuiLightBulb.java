@@ -42,7 +42,7 @@ public class GuiLightBulb extends Screen {
             this.world.method_201(this.blockX, this.blockY, this.blockZ, Blocks.lightBulb.id, this.lightValue);
         }
         super.render(mouseX, mouseY, delta);
-        this.world.getChunk(this.blockX, this.blockZ).method_885();
+        this.world.getChunk(this.blockX, this.blockZ).markDirty();
     }
 
     @Override

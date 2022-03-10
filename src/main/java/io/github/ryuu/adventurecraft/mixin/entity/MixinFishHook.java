@@ -11,7 +11,7 @@ import net.minecraft.tile.material.Material;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.MathsHelper;
-import net.minecraft.util.maths.Vec3f;
+import net.minecraft.util.maths.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -132,13 +132,13 @@ public abstract class MixinFishHook extends Entity {
             }
             ++this.field_1075;
         }
-        Vec3f vec3d = Vec3f.from(this.x, this.y, this.z);
-        Vec3f vec3d1 = Vec3f.from(this.x + this.velocityX, this.y + this.velocityY, this.z + this.velocityZ);
+        Vec3d vec3d = Vec3d.getOrCreate(this.x, this.y, this.z);
+        Vec3d vec3d1 = Vec3d.getOrCreate(this.x + this.velocityX, this.y + this.velocityY, this.z + this.velocityZ);
         HitResult movingobjectposition = this.level.raycast(vec3d, vec3d1);
-        vec3d = Vec3f.from(this.x, this.y, this.z);
-        vec3d1 = Vec3f.from(this.x + this.velocityX, this.y + this.velocityY, this.z + this.velocityZ);
+        vec3d = Vec3d.getOrCreate(this.x, this.y, this.z);
+        vec3d1 = Vec3d.getOrCreate(this.x + this.velocityX, this.y + this.velocityY, this.z + this.velocityZ);
         if (movingobjectposition != null) {
-            vec3d1 = Vec3f.from(movingobjectposition.field_1988.x, movingobjectposition.field_1988.y, movingobjectposition.field_1988.z);
+            vec3d1 = Vec3d.getOrCreate(movingobjectposition.pos.x, movingobjectposition.pos.y, movingobjectposition.pos.z);
         }
         Entity entity = null;
         List list = this.level.getEntities(this, this.boundingBox.add(this.velocityX, this.velocityY, this.velocityZ).expand(1.0, 1.0, 1.0));
@@ -149,7 +149,7 @@ public abstract class MixinFishHook extends Entity {
             Box axisalignedbb;
             HitResult movingobjectposition1;
             Entity entity1 = (Entity) o;
-            if (!entity1.method_1356() || entity1 == this.field_1067 && this.field_1075 < 5 || (movingobjectposition1 = (axisalignedbb = entity1.boundingBox.expand(f2 = 0.3f, f2, f2)).method_89(vec3d, vec3d1)) == null || !((d6 = vec3d.method_1294(movingobjectposition1.field_1988)) < d3) && d3 != 0.0)
+            if (!entity1.method_1356() || entity1 == this.field_1067 && this.field_1075 < 5 || (movingobjectposition1 = (axisalignedbb = entity1.boundingBox.expand(f2 = 0.3f, f2, f2)).method_89(vec3d, vec3d1)) == null || !((d6 = vec3d.getDistance(movingobjectposition1.pos)) < d3) && d3 != 0.0)
                 continue;
             entity = entity1;
             d3 = d6;
@@ -158,9 +158,9 @@ public abstract class MixinFishHook extends Entity {
             movingobjectposition = new HitResult(entity);
         }
         if (movingobjectposition != null) {
-            if (movingobjectposition.field_1989 != null) {
-                if (movingobjectposition.field_1989.damage(this.field_1067, 0)) {
-                    this.field_1068 = movingobjectposition.field_1989;
+            if (movingobjectposition.entity != null) {
+                if (movingobjectposition.entity.damage(this.field_1067, 0)) {
+                    this.field_1068 = movingobjectposition.entity;
                 }
             } else {
                 this.inGround = true;

@@ -18,7 +18,7 @@ import net.minecraft.level.Level;
 import net.minecraft.util.io.AbstractTag;
 import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.MathsHelper;
-import net.minecraft.util.maths.Vec3f;
+import net.minecraft.util.maths.Vec3d;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
@@ -261,16 +261,16 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
             if (this.path == null) {
                 return;
             }
-            Vec3f vec3d = this.path.method_2041(this);
+            Vec3d vec3d = this.path.method_2041(this);
             this.parallelMovement = 0.0f;
             this.jumping = false;
-            double dist = vec3d.method_1303(this.x, vec3d.y, this.z);
+            double dist = vec3d.getDistanceSquared(this.x, vec3d.y, this.z);
             if (dist >= this.prevDistToPoint && this.nextPathIn > 5) {
                 this.nextPathIn = this.level.rand.nextInt(5) + 1;
             }
             this.prevDistToPoint = dist;
             double d = (double) this.width * 1.1;
-            while (vec3d != null && vec3d.method_1303(this.x, vec3d.y, this.z) < d * d) {
+            while (vec3d != null && vec3d.getDistanceSquared(this.x, vec3d.y, this.z) < d * d) {
                 this.path.method_2040();
                 if (this.path.method_2042()) {
                     vec3d = null;

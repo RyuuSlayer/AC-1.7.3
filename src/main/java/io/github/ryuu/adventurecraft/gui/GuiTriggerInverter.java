@@ -47,7 +47,7 @@ public class GuiTriggerInverter extends Screen {
         if (blockID == Blocks.triggerInverter.id) {
             Blocks.triggerInverter.setTriggerToSelection(this.world, this.blockX, this.blockY, this.blockZ);
         }
-        this.world.getChunk(this.blockX, this.blockZ).method_885();
+        this.world.getChunk(this.blockX, this.blockZ).markDirty();
     }
 
     @Override

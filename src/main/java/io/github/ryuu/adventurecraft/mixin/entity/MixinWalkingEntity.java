@@ -8,7 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.WalkingEntity;
 import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.MathsHelper;
-import net.minecraft.util.maths.Vec3f;
+import net.minecraft.util.maths.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -98,9 +98,9 @@ public abstract class MixinWalkingEntity extends MixinLivingEntity implements IE
             this.field_661 = null;
             return;
         }
-        Vec3f vec3d = this.field_661.method_2041((Entity) (Object) this);
+        Vec3d vec3d = this.field_661.method_2041((Entity) (Object) this);
         double d = this.width * 2.0f;
-        while (vec3d != null && vec3d.method_1303(this.x, vec3d.y, this.z) < d * d) {
+        while (vec3d != null && vec3d.getDistanceSquared(this.x, vec3d.y, this.z) < d * d) {
             this.field_661.method_2040();
             if (this.field_661.method_2042()) {
                 vec3d = null;

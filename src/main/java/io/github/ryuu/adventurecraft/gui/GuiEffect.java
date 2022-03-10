@@ -282,7 +282,7 @@ public class GuiEffect extends Screen {
             this.textManager.drawTextWithShadow("Replacement: " + this.effect.textureReplacement, this.width / 3, 25, -1);
         }
         super.render(mouseX, mouseY, delta);
-        this.effect.level.getChunk(this.effect.x, this.effect.z).method_885();
+        this.effect.level.getChunk(this.effect.x, this.effect.z).markDirty();
     }
 
     @Override

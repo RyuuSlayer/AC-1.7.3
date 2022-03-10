@@ -46,7 +46,7 @@ public class GuiTriggerPushable extends Screen {
             this.trigger.resetOnTrigger = !this.trigger.resetOnTrigger;
             button.text = this.trigger.resetOnTrigger ? "Reset Target" : "Trigger Target";
         }
-        this.trigger.level.getChunk(this.trigger.x, this.trigger.z).method_885();
+        this.trigger.level.getChunk(this.trigger.x, this.trigger.z).markDirty();
     }
 
     @Override

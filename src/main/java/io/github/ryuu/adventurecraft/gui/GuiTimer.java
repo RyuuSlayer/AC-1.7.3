@@ -149,7 +149,7 @@ public class GuiTimer extends Screen {
             } catch (NumberFormatException e) {
             }
         }
-        this.world.getChunk(this.blockX, this.blockZ).method_885();
+        this.world.getChunk(this.blockX, this.blockZ).markDirty();
         super.render(mouseX, mouseY, delta);
     }
 

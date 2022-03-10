@@ -68,7 +68,7 @@ public class GuiTriggerMemory extends Screen {
             this.trigger.resetOnDeath = !this.trigger.resetOnDeath;
             button.text = this.trigger.resetOnDeath ? "Reset on Death" : "Don't Reset on Death";
         }
-        this.world.getChunk(this.blockX, this.blockZ).method_885();
+        this.world.getChunk(this.blockX, this.blockZ).markDirty();
     }
 
     @Override

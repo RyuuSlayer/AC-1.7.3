@@ -58,7 +58,7 @@ public class GuiNpcPath extends Screen {
             this.path.maxY = 0;
             this.path.maxZ = 0;
         }
-        this.minecraft.level.getChunk(this.path.x, this.path.y).method_885();
+        this.minecraft.level.getChunk(this.path.x, this.path.y).markDirty();
     }
 
     @Override
