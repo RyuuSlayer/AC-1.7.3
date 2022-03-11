@@ -11,6 +11,7 @@ import net.minecraft.tile.Tile;
 import net.minecraft.util.maths.Box;
 import net.minecraft.util.maths.MathsHelper;
 import net.minecraft.util.maths.Vec3d;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -257,7 +258,7 @@ public class BlockStairMulti extends BlockColor {
 
     @Override
     public void drop(Level level, int x, int y, int z, int meta) {
-        ((AccessTile)this.modelBlock).invokeDrop(level, x, y, z, meta);
+        ((AccessTile) this.modelBlock).invokeDrop(level, x, y, z, meta);
     }
 
     @Override

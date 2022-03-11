@@ -29,7 +29,7 @@ public class JScriptHandler {
                 if (!fileName.endsWith(".js")) continue;
                 System.out.printf("Compiling %s\n", fileName);
                 String script = this.readFile(f);
-                this.scripts.put(fileName, new JScriptInfo(f.getName(), ((ExLevel)this.level).getScript().compileString(script, f.getName())));
+                this.scripts.put(fileName, new JScriptInfo(f.getName(), ((ExLevel) this.level).getScript().compileString(script, f.getName())));
             }
         }
     }
@@ -44,7 +44,7 @@ public class JScriptHandler {
             //fileName = fileName.toLowerCase();
             long startTime = System.nanoTime();
             try {
-                Object object = ((ExLevel)this.level).getScript().runScript(scriptInfo.compiledScript, scope);
+                Object object = ((ExLevel) this.level).getScript().runScript(scriptInfo.compiledScript, scope);
                 return object;
             } finally {
                 scriptInfo.addStat(System.nanoTime() - startTime);

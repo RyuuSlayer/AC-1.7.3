@@ -34,9 +34,9 @@ public class TileEntityTimer extends TileEntityMinMax {
             --this.ticksDelay;
             if (this.ticksDelay == 0) {
                 if (!this.resetOnTrigger) {
-                    ((ExLevel)this.level).getTriggerManager().addArea(this.x, this.y, this.z, new TriggerArea(this.minX, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ));
+                    ((ExLevel) this.level).getTriggerManager().addArea(this.x, this.y, this.z, new TriggerArea(this.minX, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ));
                 } else {
-                    ((ExLevel)this.level).getTriggerManager().resetArea(this.minX, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ);
+                    ((ExLevel) this.level).getTriggerManager().resetArea(this.minX, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ);
                 }
             } else {
                 return;
@@ -48,7 +48,7 @@ public class TileEntityTimer extends TileEntityMinMax {
                 this.canActivate = false;
                 this.ticks = this.timeDeactive;
                 if (!this.resetOnTrigger) {
-                    ((ExLevel)this.level).getTriggerManager().removeArea(this.x, this.y, this.z);
+                    ((ExLevel) this.level).getTriggerManager().removeArea(this.x, this.y, this.z);
                 }
             } else {
                 this.canActivate = true;

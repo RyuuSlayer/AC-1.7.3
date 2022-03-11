@@ -309,7 +309,7 @@ public class ChunkProviderHeightMapGenerate implements LevelSource {
                 int j23 = l20 - (l + 8);
                 int k23 = this.world.getOceanFloorHeight(i18, l20);
                 double d1 = this.generatedTemperatures[j22 * 16 + j23];
-                ((ExLevel)this.world).setTemperatureValue(i18, l20, d1);
+                ((ExLevel) this.world).setTemperatureValue(i18, l20, d1);
                 if (!(d1 < 0.5) || k23 <= 0 || k23 >= 128 || !this.world.isAir(i18, k23, l20) || !this.world.getMaterial(i18, k23 - 1, l20).blocksMovement() || this.world.getMaterial(i18, k23 - 1, l20) == Material.ICE)
                     continue;
                 this.world.setTile(i18, k23, l20, Tile.SNOW.id);

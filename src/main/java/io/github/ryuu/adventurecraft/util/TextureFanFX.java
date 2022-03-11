@@ -7,7 +7,6 @@ import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.client.render.TextureBinder;
 
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 public class TextureFanFX extends TextureBinder {
 

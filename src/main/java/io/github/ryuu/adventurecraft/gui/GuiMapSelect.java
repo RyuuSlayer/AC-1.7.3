@@ -44,7 +44,7 @@ public class GuiMapSelect extends Screen {
 
     @Override
     public void init() {
-        ((ExMinecraft)this.minecraft).getMapList().findMaps();
+        ((ExMinecraft) this.minecraft).getMapList().findMaps();
         TranslationStorage stringtranslate = TranslationStorage.getInstance();
         if (this.saveName == null) {
             this.buttons.add(new OptionButton(6, this.width / 2 + 5, this.height - 48, stringtranslate.translate("gui.done")));
@@ -81,10 +81,10 @@ public class GuiMapSelect extends Screen {
                             ++i;
                         } while (worldDir.exists());
                     }
-                    ((ExMinecraft)this.minecraft).saveMapUsed(this.saveName, this.selectedMap.name);
+                    ((ExMinecraft) this.minecraft).saveMapUsed(this.saveName, this.selectedMap.name);
                 }
                 this.minecraft.interactionManager = new class_520(this.minecraft);
-                ((ExMinecraft)this.minecraft).startWorld(this.saveName, this.saveName, 0L, this.selectedMap.name);
+                ((ExMinecraft) this.minecraft).startWorld(this.saveName, this.saveName, 0L, this.selectedMap.name);
             }
         } else if (button.id == 7) {
             this.minecraft.openScreen(new GuiCreateNewMap(this));
@@ -108,7 +108,7 @@ public class GuiMapSelect extends Screen {
             this.minecraft.texturePackManager.findTexturePacks();
             this.field_6454_o += 20;
         }
-        List<MapInfo> list = ((ExMinecraft)this.minecraft).getMapList().getAvailableMaps();
+        List<MapInfo> list = ((ExMinecraft) this.minecraft).getMapList().getAvailableMaps();
         if (Mouse.isButtonDown(0)) {
             if (this.field_6455_n == -1) {
                 if (mouseY >= this.field_6459_i && mouseY <= this.field_6458_j) {

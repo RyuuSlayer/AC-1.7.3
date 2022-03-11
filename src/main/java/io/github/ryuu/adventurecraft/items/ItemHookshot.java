@@ -42,7 +42,7 @@ public class ItemHookshot extends ACItemType {
         EntityHookshot other;
         EntityHookshot hookshot;
         boolean main = true;
-        if (!((ExPlayer)player).getSwappedItems()) {
+        if (!((ExPlayer) player).getSwappedItems()) {
             hookshot = this.mainHookshot;
             other = this.offHookshot;
         } else {

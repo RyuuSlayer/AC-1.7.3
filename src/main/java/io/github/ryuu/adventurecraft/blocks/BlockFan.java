@@ -1,9 +1,9 @@
 package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.entities.EntityAirFX;
+import io.github.ryuu.adventurecraft.extensions.client.particle.ExParticleManager;
 import io.github.ryuu.adventurecraft.extensions.entity.player.ExPlayer;
 import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
-import io.github.ryuu.adventurecraft.extensions.client.particle.ExParticleManager;
 import io.github.ryuu.adventurecraft.util.DebugMode;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.FallingTile;

@@ -170,16 +170,16 @@ public class GuiNPC extends Screen {
                 boolean bl = this.npc.isAttackable = !this.npc.isAttackable;
                 button.text = this.npc.isAttackable ? "Can be attacked" : "Can't be attacked";
             } else if (button.id == 0) {
-                ((AccessLivingEntity)this.npc).setTexture("/mob/char.png");
+                ((AccessLivingEntity) this.npc).setTexture("/mob/char.png");
                 // TODO: use this.minecraft.level?
             } else if (button.id > 0 && button.id - 1 < (skins = new File(((ExLevel) AccessMinecraft.getInstance().level).getLevelDir(), "npc").listFiles()).length) {
-                ((AccessLivingEntity)this.npc).setTexture("/npc/" + skins[button.id - 1].getName());
+                ((AccessLivingEntity) this.npc).setTexture("/npc/" + skins[button.id - 1].getName());
             }
         } else if (this.page == 1) {
             if (button.id < 6) {
                 this.selectedID = button.id;
             } else if (button.id == 6) {
-                ((ExLevel)this.minecraft.level).getScriptHandler().loadScripts();
+                ((ExLevel) this.minecraft.level).getScriptHandler().loadScripts();
             } else if (button.id == 7) {
                 this.updateScriptFile("");
             } else {

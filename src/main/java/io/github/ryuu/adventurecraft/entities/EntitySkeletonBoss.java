@@ -32,7 +32,7 @@ public class EntitySkeletonBoss extends Skeleton {
             if (this.attackTime == 0) {
                 for (int i = 0; i < 5; ++i) {
                     Arrow entityarrow = new Arrow(this.level, this);
-                    ((ExArrow)entityarrow).setAttackDamage(this.attackDamage);
+                    ((ExArrow) entityarrow).setAttackDamage(this.attackDamage);
                     entityarrow.y += 1.4f;
                     double d2 = entity.y - (double) 0.2f - entityarrow.y;
                     float f1 = MathsHelper.sqrt(d * d + d1 * d1) * 0.2f;

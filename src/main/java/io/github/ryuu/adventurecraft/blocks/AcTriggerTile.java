@@ -1,7 +1,6 @@
 package io.github.ryuu.adventurecraft.blocks;
 
 import net.minecraft.level.Level;
-import net.minecraft.level.TileView;
 
 public interface AcTriggerTile {
 

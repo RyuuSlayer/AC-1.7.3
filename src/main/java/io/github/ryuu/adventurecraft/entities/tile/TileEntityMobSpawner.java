@@ -69,7 +69,7 @@ public class TileEntityMobSpawner extends TileEntityScript {
         this.minSpawnVec = new Coord();
         this.maxSpawnVec = new Coord();
         this.delayLoadData = null;
-        this.scope = ((ExLevel)AccessMinecraft.getInstance().level).getScript().getNewScope();
+        this.scope = ((ExLevel) AccessMinecraft.getInstance().level).getScript().getNewScope();
     }
 
     public int getNumAlive() {

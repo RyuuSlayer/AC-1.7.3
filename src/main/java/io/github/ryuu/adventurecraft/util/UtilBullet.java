@@ -25,13 +25,13 @@ public class UtilBullet {
             AccessMinecraft.getInstance().worldRenderer.addParticle("smoke", hitLoc.x, hitLoc.y, hitLoc.z, 0.0, 0.0, 0.0);
             if (hit.type == HitType.ENTITY) {
                 Entity attacking = hit.entity;
-                ((ExEntity)attacking).attackEntityFromMulti(e, damage);
+                ((ExEntity) attacking).attackEntityFromMulti(e, damage);
             }
         }
     }
 
     public static HitResult rayTraceBlocks(Level world, Vec3d start, Vec3d end) {
-        return ((ExLevel)world).rayTraceBlocks2(start, end, false, false, false);
+        return ((ExLevel) world).rayTraceBlocks2(start, end, false, false, false);
     }
 
     static HitResult findHit(Level worldObj, LivingEntity e, float spread) {

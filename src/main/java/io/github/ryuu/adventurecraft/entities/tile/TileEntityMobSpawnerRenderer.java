@@ -28,7 +28,7 @@ public class TileEntityMobSpawnerRenderer extends TileEntityRenderer {
                     for (int j = min.y; j <= max.y; ++j) {
                         for (int k = min.z; k <= max.z; ++k) {
                             Tile b = Tile.BY_ID[mobSpawner.level.getTileId(i, j, k)];
-                            if (b == null || !((ExTile)b).canBeTriggered()) continue;
+                            if (b == null || !((ExTile) b).canBeTriggered()) continue;
                             GL11.glColor3f(0.0f, 0.0f, 0.0f);
                             GL11.glVertex3f(0.0f, 0.0f, 0.0f);
                             GL11.glColor3f(0.105f, 0.329f, 0.486f);

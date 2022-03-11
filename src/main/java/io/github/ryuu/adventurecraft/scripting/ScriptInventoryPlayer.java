@@ -16,7 +16,7 @@ public class ScriptInventoryPlayer extends ScriptInventory {
     }
 
     public int getSlotContainingItem(int itemID) {
-        int i = ((AccessPlayerInventory)this.invPlayer).invokeGetSlotWithItem(itemID);
+        int i = ((AccessPlayerInventory) this.invPlayer).invokeGetSlotWithItem(itemID);
         if (i == -1) {
             for (int j = 36; j < 40; ++j) {
                 ItemInstance k = this.invPlayer.getInvItem(j);
@@ -45,7 +45,7 @@ public class ScriptInventoryPlayer extends ScriptInventory {
     }
 
     public boolean consumeItemAmount(int itemID, int damage, int amount) {
-        return ((ExPlayerInventory)this.invPlayer).consumeItemAmount(itemID, damage, amount);
+        return ((ExPlayerInventory) this.invPlayer).consumeItemAmount(itemID, damage, amount);
     }
 
     public int getArmorValue() {
@@ -69,7 +69,7 @@ public class ScriptInventoryPlayer extends ScriptInventory {
     }
 
     public ScriptItem getOffhandItem() {
-        ItemInstance i = ((ExPlayerInventory)this.invPlayer).getOffhandItem();
+        ItemInstance i = ((ExPlayerInventory) this.invPlayer).getOffhandItem();
         if (i == null || i.itemId == 0) {
             return null;
         }
@@ -77,7 +77,7 @@ public class ScriptInventoryPlayer extends ScriptInventory {
     }
 
     public void swapOffhandWithMain() {
-        ((ExPlayerInventory)this.invPlayer).swapOffhandWithMain();
+        ((ExPlayerInventory) this.invPlayer).swapOffhandWithMain();
     }
 
     public boolean addItem(ScriptItem item) {

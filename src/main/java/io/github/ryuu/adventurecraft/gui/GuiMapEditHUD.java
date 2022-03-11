@@ -73,9 +73,9 @@ public class GuiMapEditHUD extends Screen {
 
     @Override
     protected void mouseReleased(int mouseX, int mouseY, int button) {
-        if (((AccessScreen)this).getLastClickedButton() != null && button == 0) {
-            ((AccessScreen)this).getLastClickedButton().mouseReleased(mouseX, mouseY);
-            ((AccessScreen)this).setLastClickedButton(null);
+        if (((AccessScreen) this).getLastClickedButton() != null && button == 0) {
+            ((AccessScreen) this).getLastClickedButton().mouseReleased(mouseX, mouseY);
+            ((AccessScreen) this).setLastClickedButton(null);
         } else if (button == 1) {
             this.minecraft.field_2778 = false;
             this.minecraft.field_2767.method_1971();

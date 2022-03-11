@@ -1,7 +1,5 @@
 package io.github.ryuu.adventurecraft.extensions.level.chunk;
 
-import net.minecraft.level.Level;
-import net.minecraft.level.chunk.Chunk;
 import net.minecraft.tile.entity.TileEntity;
 
 public interface ExChunk {

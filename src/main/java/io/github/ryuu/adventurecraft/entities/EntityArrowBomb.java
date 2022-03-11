@@ -43,7 +43,7 @@ public class EntityArrowBomb extends Arrow {
         this.velocityZ *= -0.1f;
         this.yaw += 180.0f;
         this.prevYaw += 180.0f;
-        ((AccessArrow)this).setField_1584(0);
+        ((AccessArrow) this).setField_1584(0);
     }
 
     @Override

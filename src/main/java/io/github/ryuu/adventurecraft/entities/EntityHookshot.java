@@ -24,12 +24,10 @@ public class EntityHookshot extends Entity {
 
     public boolean attachedToSurface;
     public boolean mainHand;
-    int timeBeforeTurnAround;
     public boolean turningAround;
     public LivingEntity returnsTo;
-
     public Entity entityGrabbed;
-
+    int timeBeforeTurnAround;
     ItemInstance item;
 
     public EntityHookshot(Level world) {

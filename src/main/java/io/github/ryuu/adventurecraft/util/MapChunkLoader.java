@@ -4,8 +4,6 @@ import net.minecraft.level.Level;
 import net.minecraft.level.chunk.Chunk;
 import net.minecraft.level.chunk.ChunkIO;
 
-import java.io.IOException;
-
 public class MapChunkLoader implements ChunkIO {
 
     private final ChunkIO mapRegion;

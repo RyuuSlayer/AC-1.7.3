@@ -71,7 +71,7 @@ public class TileEntityStorage extends TileEntityMinMax {
             for (int z = this.minZ; z <= this.maxZ; ++z) {
                 for (int y = this.minY; y <= this.maxY; ++y) {
                     int prevBlockID = this.level.getTileId(x, y, z);
-                    ((ExLevel)this.level).cancelBlockUpdate(x, y, z, prevBlockID);
+                    ((ExLevel) this.level).cancelBlockUpdate(x, y, z, prevBlockID);
                     int blockID = ExChunk.translate256(this.blockIDs[offset]);
                     byte metadata = this.metadatas[offset];
                     this.level.method_201(x, y, z, blockID, metadata);
@@ -102,7 +102,7 @@ public class TileEntityStorage extends TileEntityMinMax {
                 this.tileEntities.add(tag.getCompoundTag(String.format("tile%d", i)));
             }
         }
-        if (!tag.containsKey("acVersion") && ((ExLevelProperties)AccessMinecraft.getInstance().level.getProperties()).isOriginallyFromAC()) {
+        if (!tag.containsKey("acVersion") && ((ExLevelProperties) AccessMinecraft.getInstance().level.getProperties()).isOriginallyFromAC()) {
             Blocks.convertACVersion(this.blockIDs);
         }
     }

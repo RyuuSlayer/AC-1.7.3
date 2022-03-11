@@ -31,7 +31,7 @@ public class GuiScript extends Screen {
 
     @Override
     public void init() {
-        List<Button> buttons = (List<Button>)this.buttons;
+        List<Button> buttons = (List<Button>) this.buttons;
         this.selectedID = 0;
         this.setOnTrigger = new Button(0, 4, 4, "OnTrigger (selected): " + this.script.onTriggerScriptFile);
         this.setOnDetrigger = new Button(1, 4, 26, "OnDetrigger: " + this.script.onDetriggerScriptFile);
@@ -55,7 +55,7 @@ public class GuiScript extends Screen {
     }
 
     private String[] getScriptFiles() {
-        File scriptDir = new File(((ExLevel)this.minecraft.level).getLevelDir(), "scripts");
+        File scriptDir = new File(((ExLevel) this.minecraft.level).getLevelDir(), "scripts");
         if (scriptDir.exists() && scriptDir.isDirectory()) {
             File[] scriptFiles = scriptDir.listFiles();
             String[] fileNames = new String[scriptFiles.length];
@@ -86,7 +86,7 @@ public class GuiScript extends Screen {
         if (button.id < 3) {
             this.selectedID = button.id;
         } else if (button.id == 3) {
-            ((ExLevel)this.script.level).getScriptHandler().loadScripts();
+            ((ExLevel) this.script.level).getScriptHandler().loadScripts();
         } else if (button.id == 4) {
             this.updateScriptFile("");
         } else {

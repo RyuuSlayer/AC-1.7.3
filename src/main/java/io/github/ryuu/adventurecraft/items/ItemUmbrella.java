@@ -1,8 +1,8 @@
 package io.github.ryuu.adventurecraft.items;
 
 import io.github.ryuu.adventurecraft.entities.EntityAirFX;
-import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import io.github.ryuu.adventurecraft.extensions.client.particle.ExParticleManager;
+import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.FallingTile;
 import net.minecraft.entity.player.Player;
@@ -42,7 +42,7 @@ public class ItemUmbrella extends ItemType implements DamageableItemType {
         Vec3d lookVec = player.getRotation();
         lookVec.normalise();
         Box aabb = Box.getOrCreate(player.x, player.y, player.z, player.x, player.y, player.z).expand(6.0, 6.0, 6.0);
-        List<Entity> entities = (List<Entity>)level.getEntities(player, aabb);
+        List<Entity> entities = (List<Entity>) level.getEntities(player, aabb);
         for (Entity e : entities) {
             double dist = e.method_1352(player);
             if (dist < 36.0 && !(e instanceof FallingTile)) {
@@ -56,7 +56,7 @@ public class ItemUmbrella extends ItemType implements DamageableItemType {
                 }
             }
         }
-        entities = ((ExParticleManager)AccessMinecraft.getInstance().particleManager).getEffectsWithinAABB(aabb);
+        entities = ((ExParticleManager) AccessMinecraft.getInstance().particleManager).getEffectsWithinAABB(aabb);
         for (Entity e : entities) {
             double dist = e.method_1352(player);
             if (dist < 36.0) {

@@ -12,21 +12,19 @@ import net.minecraft.util.ProgressListener;
 public class AcChunkCache implements LevelSource, ExClientChunkCache {
 
     public static boolean chunkIsNotPopulating = true;
-
+    int cachedX;
+    int cachedZ;
+    boolean isVeryFar;
+    int mask;
+    int chunksWide;
     private Chunk nullChunk;
     private LevelSource chunkGenerator;
     private ChunkIO io;
     private Chunk[] cache;
     private Level level;
-    int cachedX;
-    int cachedZ;
     private Chunk cachedChunk;
     private int spawnX;
     private int spawnZ;
-
-    boolean isVeryFar;
-    int mask;
-    int chunksWide;
 
     public void init(Level world, ChunkIO ichunkloader, LevelSource ichunkprovider) {
         this.isVeryFar = AccessMinecraft.getInstance().options.viewDistance != 0;

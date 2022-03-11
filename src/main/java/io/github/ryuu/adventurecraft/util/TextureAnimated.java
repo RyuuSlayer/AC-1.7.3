@@ -41,7 +41,7 @@ public class TextureAnimated {
         this.hasImages = false;
         BufferedImage bufferedimage = null;
         if (AccessMinecraft.getInstance().level != null) {
-            bufferedimage = ((ExLevel)AccessMinecraft.getInstance().level).loadMapTexture(animatedTex);
+            bufferedimage = ((ExLevel) AccessMinecraft.getInstance().level).loadMapTexture(animatedTex);
         }
         this.curFrame = 0;
         if (bufferedimage == null) {

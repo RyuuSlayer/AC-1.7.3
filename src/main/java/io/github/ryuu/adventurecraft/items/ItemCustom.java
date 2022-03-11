@@ -45,11 +45,6 @@ public class ItemCustom extends ACItemType implements DelayableUseItemType {
         this.onItemUsedScript = p.getProperty("onItemUsedScript", "");
     }
 
-    @Override
-    public int getItemUseDelay() {
-        return 1;
-    }
-
     private static ItemCustom loadScript(File descFile) {
         block7:
         {
@@ -92,6 +87,11 @@ public class ItemCustom extends ACItemType implements DelayableUseItemType {
             if (!itemFile.isFile() || (item = ItemCustom.loadScript(itemFile)) == null) continue;
             loadedItemIDs.add(item.id);
         }
+    }
+
+    @Override
+    public int getItemUseDelay() {
+        return 1;
     }
 
     private Integer loadPropertyInt(String pName, String intString) {

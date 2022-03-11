@@ -15,7 +15,7 @@ public class GuiScriptStats extends Screen {
     JScriptInfo[] scriptInfo;
 
     public GuiScriptStats() {
-        Object[] info = ((ExLevel)AccessMinecraft.getInstance().level).getScriptHandler().scripts.values().toArray();
+        Object[] info = ((ExLevel) AccessMinecraft.getInstance().level).getScriptHandler().scripts.values().toArray();
         int numGood = 0;
         for (Object o : info) {
             JScriptInfo JScriptInfo = (JScriptInfo) o;

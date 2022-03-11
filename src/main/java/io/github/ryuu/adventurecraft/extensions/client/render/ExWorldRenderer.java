@@ -19,5 +19,5 @@ public interface ExWorldRenderer {
 
     void resetAll();
 
-     void resetForDeath();
+    void resetForDeath();
 }

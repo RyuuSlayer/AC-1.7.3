@@ -14,7 +14,7 @@ public class ScriptEntityArrow extends ScriptEntity {
     }
 
     public int getInBlockID() {
-        return ((AccessArrow)this.entityArrow).getInTile();
+        return ((AccessArrow) this.entityArrow).getInTile();
     }
 
     public ScriptVec3 getInBlockCoords() {

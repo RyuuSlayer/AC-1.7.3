@@ -25,7 +25,7 @@ public class RenderBoomerang extends EntityRenderer {
         GL11.glRotatef(pitchToUse, 1.0f, 0.0f, 0.0f);
         GL11.glRotatef(entityBoomerang.boomerangRotation, 0.0f, 1.0f, 0.0f);
         this.bindTexture("/gui/items.png");
-        Vec2 texResolution = ((ExTextureManager)this.dispatcher.textureManager).getTextureResolution("/gui/items.png");
+        Vec2 texResolution = ((ExTextureManager) this.dispatcher.textureManager).getTextureResolution("/gui/items.png");
         int width = texResolution.x / 16;
         int height = texResolution.y / 16;
         float halfPixelW = 0.5f / (float) texResolution.x;

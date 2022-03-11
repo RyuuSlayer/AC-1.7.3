@@ -61,7 +61,7 @@ public class GuiCamera extends Screen {
             AccessMinecraft.getInstance().openScreen(null);
         } else if (button.id == 1) {
             this.cam.type = (this.cam.type + 1) % 3;
-            ((ExMinecraft)this.minecraft).getActiveCutsceneCamera().setPointType(this.cam.cameraID, this.cam.type);
+            ((ExMinecraft) this.minecraft).getActiveCutsceneCamera().setPointType(this.cam.cameraID, this.cam.type);
             for (Object obj : this.minecraft.level.entities) {
                 if (obj instanceof EntityCamera) {
                     EntityCamera c = (EntityCamera) obj;
@@ -81,7 +81,7 @@ public class GuiCamera extends Screen {
         try {
             float value = Float.parseFloat(this.timerText.method_1876());
             this.cam.time = value;
-            ((ExMinecraft)this.minecraft).getActiveCutsceneCamera().setTime(this.cam.cameraID, (float) value);
+            ((ExMinecraft) this.minecraft).getActiveCutsceneCamera().setTime(this.cam.cameraID, value);
         } catch (NumberFormatException e) {
         }
         this.drawTextWithShadow(this.textManager, "Active At:", 4, 49, 0xE0E0E0);

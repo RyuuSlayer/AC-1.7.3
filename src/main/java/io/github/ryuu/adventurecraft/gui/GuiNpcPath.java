@@ -28,7 +28,7 @@ public class GuiNpcPath extends Screen {
 
     @Override
     public void init() {
-        List<Button> buttons = (List<Button>)this.buttons;
+        List<Button> buttons = (List<Button>) this.buttons;
         String entityName = "<Unselected>";
         EntityNPC e = TileEntityNpcPath.lastEntity;
         if (e != null) {

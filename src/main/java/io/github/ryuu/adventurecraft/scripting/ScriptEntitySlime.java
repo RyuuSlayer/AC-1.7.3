@@ -14,11 +14,11 @@ public class ScriptEntitySlime extends ScriptEntityLiving {
     }
 
     public int getAttackStrength() {
-        return ((ExSlime)this.entitySlime).getAttackStrength();
+        return ((ExSlime) this.entitySlime).getAttackStrength();
     }
 
     public void setAttackStrength(int i) {
-        ((ExSlime)this.entitySlime).setAttackStrength(i);
+        ((ExSlime) this.entitySlime).setAttackStrength(i);
     }
 
     public int getSlimeSize() {

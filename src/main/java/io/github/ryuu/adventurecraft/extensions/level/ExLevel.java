@@ -1,8 +1,8 @@
 package io.github.ryuu.adventurecraft.extensions.level;
 
 import io.github.ryuu.adventurecraft.entities.tile.TileEntityNpcPath;
-import io.github.ryuu.adventurecraft.items.ItemCustom;
 import io.github.ryuu.adventurecraft.extensions.client.resource.language.ExTranslationStorage;
+import io.github.ryuu.adventurecraft.items.ItemCustom;
 import io.github.ryuu.adventurecraft.mixin.level.AccessLevel;
 import io.github.ryuu.adventurecraft.scripting.EntityDescriptions;
 import io.github.ryuu.adventurecraft.scripting.ScopeTag;
@@ -31,92 +31,6 @@ import java.util.Random;
 import java.util.TreeSet;
 
 public interface ExLevel {
-
-    void sharedInit();
-
-    File getLevelDir();
-
-    void setLevelDir(File levelDir);
-
-    String[] getMusicList();
-
-    String[] getSoundList();
-
-    DimensionData getMapHandler();
-
-    void setMapHandler(DimensionData mapHandler);
-
-    TriggerManager getTriggerManager();
-
-    Script getScript();
-
-    JScriptHandler getScriptHandler();
-
-    void setScriptHandler(JScriptHandler scriptHandler);
-
-    MusicScripts getMusicScripts();
-
-    void setMusicScripts(MusicScripts musicScripts);
-
-    Scriptable getScope();
-
-    void setScope(Scriptable scope);
-
-    UndoStack getUndoStack();
-
-    void setUndoStack(UndoStack undoStack);
-
-    float getSpawnYaw();
-
-    void setSpawnYaw(float spawnYaw);
-
-    float getTimeOfDay();
-
-    void setTimeOfDay(long l);
-
-    void loadMapTextures();
-
-    void loadBrightness();
-
-    void undo();
-
-    void redo();
-
-    void resetCoordOrder();
-
-    float getLightValue(int i, int j, int k);
-
-    float getFogStart(float start, float f);
-
-    float getFogEnd(float end, float f);
-
-    Entity getEntityByID(int entityID);
-
-    double getTemperatureValue(int x, int z);
-
-    void setTemperatureValue(int x, int z, double temp);
-
-    void cancelBlockUpdate(int i, int j, int k, int l);
-
-    boolean setBlockAndMetadataTemp(int i, int j, int k, int l, int i1);
-
-    TileEntity getBlockTileEntityDontCreate(int i, int j, int k);
-
-    HitResult rayTraceBlocks2(Vec3d vec3d, Vec3d vec3d1, boolean flag, boolean flag1, boolean collideWithClip);
-
-    BufferedImage loadMapTexture(String texName);
-
-    boolean isNewSave();
-
-    void setNewSave(boolean newSave);
-
-    void updateChunkProvider();
-
-    void loadSoundOverrides();
-
-    void loadMapMusic();
-
-    void loadMapSounds();
 
     static String getAcMapDirectory() {
         //return "../maps";
@@ -250,5 +164,91 @@ public interface ExLevel {
 
         return level;
     }
+
+    void sharedInit();
+
+    File getLevelDir();
+
+    void setLevelDir(File levelDir);
+
+    String[] getMusicList();
+
+    String[] getSoundList();
+
+    DimensionData getMapHandler();
+
+    void setMapHandler(DimensionData mapHandler);
+
+    TriggerManager getTriggerManager();
+
+    Script getScript();
+
+    JScriptHandler getScriptHandler();
+
+    void setScriptHandler(JScriptHandler scriptHandler);
+
+    MusicScripts getMusicScripts();
+
+    void setMusicScripts(MusicScripts musicScripts);
+
+    Scriptable getScope();
+
+    void setScope(Scriptable scope);
+
+    UndoStack getUndoStack();
+
+    void setUndoStack(UndoStack undoStack);
+
+    float getSpawnYaw();
+
+    void setSpawnYaw(float spawnYaw);
+
+    float getTimeOfDay();
+
+    void setTimeOfDay(long l);
+
+    void loadMapTextures();
+
+    void loadBrightness();
+
+    void undo();
+
+    void redo();
+
+    void resetCoordOrder();
+
+    float getLightValue(int i, int j, int k);
+
+    float getFogStart(float start, float f);
+
+    float getFogEnd(float end, float f);
+
+    Entity getEntityByID(int entityID);
+
+    double getTemperatureValue(int x, int z);
+
+    void setTemperatureValue(int x, int z, double temp);
+
+    void cancelBlockUpdate(int i, int j, int k, int l);
+
+    boolean setBlockAndMetadataTemp(int i, int j, int k, int l, int i1);
+
+    TileEntity getBlockTileEntityDontCreate(int i, int j, int k);
+
+    HitResult rayTraceBlocks2(Vec3d vec3d, Vec3d vec3d1, boolean flag, boolean flag1, boolean collideWithClip);
+
+    BufferedImage loadMapTexture(String texName);
+
+    boolean isNewSave();
+
+    void setNewSave(boolean newSave);
+
+    void updateChunkProvider();
+
+    void loadSoundOverrides();
+
+    void loadMapMusic();
+
+    void loadMapSounds();
 
 }

@@ -29,7 +29,7 @@ public class GuiStoreDebug extends Screen {
 
     @Override
     public void init() {
-        List<Button> buttons = (List<Button>)this.buttons;
+        List<Button> buttons = (List<Button>) this.buttons;
         OptionButton b = new OptionButton(0, 4, 0, "Set Items");
         buttons.add(b);
         this.supply = new GuiSlider2(6, 4, 26, 10, String.format("Supply: %d", this.store.buySupply), (float) this.store.buySupply / 9.0f);
@@ -56,7 +56,7 @@ public class GuiStoreDebug extends Screen {
             } else {
                 this.store.buyItemID = 0;
             }
-            item = ((ExPlayerInventory)this.minecraft.player.inventory).getOffhandItem();
+            item = ((ExPlayerInventory) this.minecraft.player.inventory).getOffhandItem();
             if (item != null) {
                 this.store.sellItemID = item.itemId;
                 this.store.sellItemDamage = item.getDamage();
@@ -87,11 +87,11 @@ public class GuiStoreDebug extends Screen {
         }
         this.store.buySupplyLeft = this.store.buySupply;
         super.render(mouseX, mouseY, delta);
-        GuiStore storeGUI = ((ExMinecraft)this.minecraft).getStoreGUI();
+        GuiStore storeGUI = ((ExMinecraft) this.minecraft).getStoreGUI();
         storeGUI.setBuyItem(this.store.buyItemID, this.store.buyItemAmount, this.store.buyItemDamage);
         storeGUI.setSellItem(this.store.sellItemID, this.store.sellItemAmount, this.store.sellItemDamage);
         storeGUI.setSupplyLeft(this.store.buySupply);
-        ((ExMinecraft)this.minecraft).updateStoreGUI();
+        ((ExMinecraft) this.minecraft).updateStoreGUI();
         storeGUI.render(mouseX, mouseY, delta);
         this.store.level.getChunk(this.store.x, this.store.z).markDirty();
     }

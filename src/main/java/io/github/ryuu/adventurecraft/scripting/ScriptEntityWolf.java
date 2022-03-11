@@ -14,11 +14,11 @@ public class ScriptEntityWolf extends ScriptEntityCreature {
     }
 
     public int getAttackStrength() {
-        return ((ExWolf)this.entityWolf).getAttackStrength();
+        return ((ExWolf) this.entityWolf).getAttackStrength();
     }
 
     public void setAttackStrength(int i) {
-        ((ExWolf)this.entityWolf).setAttackStrength(i);
+        ((ExWolf) this.entityWolf).setAttackStrength(i);
     }
 
     public boolean isWolfSitting() {

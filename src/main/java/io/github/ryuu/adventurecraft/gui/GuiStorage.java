@@ -26,7 +26,7 @@ public class GuiStorage extends Screen {
 
     @Override
     public void init() {
-        List<Button> buttons = (List<Button>)this.buttons;
+        List<Button> buttons = (List<Button>) this.buttons;
         buttons.add(new OptionButton(0, 4, 40, "Use Current Selection"));
         buttons.add(new OptionButton(1, 4, 60, "Resave Set Selection"));
         buttons.add(new OptionButton(2, 4, 80, "Load Saved Data"));

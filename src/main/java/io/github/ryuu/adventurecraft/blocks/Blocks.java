@@ -121,7 +121,7 @@ public class Blocks {
         plant1 = new BlockPlant(207, 112, Tile.GRASS_SOUNDS, 0.0f, 16, 2).name("flower");
         trees = new BlockTree(208, 128, 2).name("sapling");
         glassBlocks = new BlockTransparent(209, 144, 16).name("glass");
-        cageBlocks = new BlockTransparent(210, 160, 10) .name("cage") ;
+        cageBlocks = new BlockTransparent(210, 160, 10).name("cage");
         stoneBlocks1 = new BlockSolid(211, 176, Tile.PISTON_SOUNDS).name("stone");
         stoneBlocks2 = new BlockSolid(212, 192, Tile.PISTON_SOUNDS).name("stone");
         stoneBlocks3 = new BlockSolid(213, 208, Tile.PISTON_SOUNDS).name("stone");

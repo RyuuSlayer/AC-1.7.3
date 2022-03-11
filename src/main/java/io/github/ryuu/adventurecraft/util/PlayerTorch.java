@@ -1,7 +1,6 @@
 package io.github.ryuu.adventurecraft.util;
 
 import io.github.ryuu.adventurecraft.extensions.client.ExMinecraft;
-import io.github.ryuu.adventurecraft.mixin.client.AccessMinecraft;
 import net.minecraft.level.Level;
 import net.minecraft.tile.Tile;
 

@@ -111,7 +111,7 @@ public class TileEntityEffect extends TileEntity {
     @Override
     public void tick() {
         if (this.checkTrigger) {
-            this.isActivated = ((ExLevel)this.level).getTriggerManager().isActivated(this.x, this.y, this.z);
+            this.isActivated = ((ExLevel) this.level).getTriggerManager().isActivated(this.x, this.y, this.z);
             this.checkTrigger = false;
         }
         if (this.isActivated) {

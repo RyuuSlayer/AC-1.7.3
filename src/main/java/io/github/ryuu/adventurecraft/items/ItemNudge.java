@@ -111,7 +111,7 @@ public class ItemNudge extends ItemType implements LeftClickItemType {
                 for (j = 0; j < height; ++j) {
                     for (k = 0; k < depth; ++k) {
                         blockID = blocks[depth * (height * i + j) + k];
-                        ((AccessLevel)level).invokeMethod_235(xOffset + i, yOffset + j, zOffset + k, blockID);
+                        ((AccessLevel) level).invokeMethod_235(xOffset + i, yOffset + j, zOffset + k, blockID);
                     }
                 }
             }
@@ -205,7 +205,7 @@ public class ItemNudge extends ItemType implements LeftClickItemType {
                 for (j = 0; j < height; ++j) {
                     for (k = 0; k < depth; ++k) {
                         blockID = blocks[depth * (height * i + j) + k];
-                        ((AccessLevel)level).invokeMethod_235(xOffset + i, yOffset + j, zOffset + k, blockID);
+                        ((AccessLevel) level).invokeMethod_235(xOffset + i, yOffset + j, zOffset + k, blockID);
                     }
                 }
             }

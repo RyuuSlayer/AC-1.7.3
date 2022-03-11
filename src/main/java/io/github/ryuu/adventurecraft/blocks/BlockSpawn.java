@@ -19,7 +19,7 @@ public class BlockSpawn extends Tile implements AcTriggerTile, AcRenderCondition
         super(i, j, Material.AIR);
         this.hardness(5.0f);
         this.sounds(Tile.METAL_SOUNDS);
-        ((ExTile)this).setTextureNum(2);
+        ((ExTile) this).setTextureNum(2);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class BlockSpawn extends Tile implements AcTriggerTile, AcRenderCondition
     public void onEntityCollision(Level world, int i, int j, int k, Entity entity) {
         if (entity instanceof Player) {
             world.getProperties().setSpawnPosition(i, j, k);
-            ((ExLevel)world).setSpawnYaw(entity.yaw);
+            ((ExLevel) world).setSpawnYaw(entity.yaw);
         }
     }
 

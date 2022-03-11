@@ -3,9 +3,9 @@ package io.github.ryuu.adventurecraft.extensions.client;
 public interface ExModel {
     int getTWidth();
 
-    int getTHeight();
-
     void setTWidth(int w);
+
+    int getTHeight();
 
     void setTHeight(int h);
 

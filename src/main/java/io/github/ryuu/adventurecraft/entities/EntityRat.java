@@ -15,7 +15,7 @@ public class EntityRat extends Monster {
         this.attackDamage = 1;
         this.setSize(0.6f, 0.6f);
         this.health = 6;
-        ((ExLivingEntity)this).setMaxHealth(6);
+        ((ExLivingEntity) this).setMaxHealth(6);
     }
 
     @Override

@@ -10,22 +10,22 @@ import net.minecraft.level.Level;
 public interface ExMinecraft {
 
     static ExMinecraft getInstance() {
-        return (ExMinecraft)AccessMinecraft.getInstance();
+        return (ExMinecraft) AccessMinecraft.getInstance();
     }
 
     GuiStore getStoreGUI();
 
     boolean isCameraActive();
 
+    void setCameraActive(boolean cameraActive);
+
     CutsceneCamera getCutsceneCamera();
 
     CutsceneCamera getActiveCutsceneCamera();
 
-    LivingEntity getCutsceneCameraEntity();
-
     void setActiveCutsceneCamera(CutsceneCamera cutsceneCamera);
 
-    void setCameraActive(boolean cameraActive);
+    LivingEntity getCutsceneCameraEntity();
 
     boolean isCameraPause();
 

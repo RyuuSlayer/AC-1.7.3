@@ -13,19 +13,13 @@ import java.util.List;
 
 public class CutsceneCamera {
 
-    long startTime;
-
-    CutsceneCameraPoint curPoint = new CutsceneCameraPoint(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0);
-
-    CutsceneCameraPoint prevPrevPoint;
-
-    CutsceneCameraPoint prevPoint;
-
     public List<CutsceneCameraPoint> cameraPoints = new LinkedList<>();
-
-    List<Vec3d> lineVecs = new LinkedList<>();
-
     public int startType = 2;
+    long startTime;
+    CutsceneCameraPoint curPoint = new CutsceneCameraPoint(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0);
+    CutsceneCameraPoint prevPrevPoint;
+    CutsceneCameraPoint prevPoint;
+    List<Vec3d> lineVecs = new LinkedList<>();
 
     public void addCameraPoint(float time, float posX, float posY, float posZ, float yaw, float pitch, int type) {
         int index = 0;
@@ -40,7 +34,7 @@ public class CutsceneCamera {
     public void loadCameraEntities() {
         for (Object obj : AccessMinecraft.getInstance().level.entities) {
             if (obj instanceof EntityCamera) {
-                ((EntityCamera)obj).remove();
+                ((EntityCamera) obj).remove();
             }
         }
         for (CutsceneCameraPoint p : this.cameraPoints) {

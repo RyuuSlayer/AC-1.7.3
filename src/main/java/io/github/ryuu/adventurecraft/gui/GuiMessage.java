@@ -27,7 +27,7 @@ public class GuiMessage extends Screen {
     @Override
     public void init() {
         int maxEntries = 3 * ((this.height - 60) / 20);
-        String[] soundList = ((ExLevel)this.level).getSoundList();
+        String[] soundList = ((ExLevel) this.level).getSoundList();
         for (int i = 0; i + maxEntries * this.page - 1 < soundList.length && i < maxEntries; ++i) {
             String soundName = "None";
             if (i != 0 || this.page != 0) {
@@ -49,7 +49,7 @@ public class GuiMessage extends Screen {
             this.msg.sound = "";
         } else if (button.id < 100) {
             int maxEntries = 3 * ((this.height - 60) / 20);
-            String[] soundList = ((ExLevel)this.level).getSoundList();
+            String[] soundList = ((ExLevel) this.level).getSoundList();
             this.msg.sound = soundList[button.id - 1 + maxEntries * this.page];
         } else {
             this.page = button.id - 100;

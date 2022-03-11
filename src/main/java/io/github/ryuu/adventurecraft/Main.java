@@ -2,11 +2,8 @@ package io.github.ryuu.adventurecraft;
 
 //import io.github.minecraftcursedlegacy.api.config.Configs;
 //import io.github.minecraftcursedlegacy.api.registry.Id;
-import net.fabricmc.api.ModInitializer;
-//import tk.valoeghese.zoesteriaconfig.api.container.WritableConfig;
-//import tk.valoeghese.zoesteriaconfig.api.template.ConfigTemplate;
 
-import java.io.IOException;
+import net.fabricmc.api.ModInitializer;
 
 public class Main implements ModInitializer {
 

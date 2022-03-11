@@ -27,8 +27,8 @@ public class TileEntityNpcPath extends TileEntityMinMax {
 
     public EntityNPC getNPC() {
         if (this.npc == null || this.npc.id != this.entityID) {
-            if(this.level != null) {
-                Entity e = ((ExLevel)this.level).getEntityByID(this.entityID);
+            if (this.level != null) {
+                Entity e = ((ExLevel) this.level).getEntityByID(this.entityID);
                 if (e instanceof EntityNPC) {
                     this.npc = (EntityNPC) e;
                     return this.npc;
@@ -59,7 +59,7 @@ public class TileEntityNpcPath extends TileEntityMinMax {
 
     public void pathFinished() {
         if (this.isSet()) {
-            TriggerManager triggerManager = ((ExLevel)this.level).getTriggerManager();
+            TriggerManager triggerManager = ((ExLevel) this.level).getTriggerManager();
             triggerManager.addArea(this.x, this.y, this.z, new TriggerArea(this.minX, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ));
             triggerManager.removeArea(this.x, this.y, this.z);
         }

@@ -100,7 +100,7 @@ public class GuiMusicSheet extends Screen {
                 this.songPlayed = songName;
                 this.timeToFade = 2500L + System.currentTimeMillis();
                 this.minecraft.field_2778 = true;
-                ((ExScreen)this).setDisableInputGrabbing(true);
+                ((ExScreen) this).setDisableInputGrabbing(true);
                 this.minecraft.field_2767.method_1970();
             }
         }

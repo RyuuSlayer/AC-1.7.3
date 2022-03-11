@@ -22,7 +22,7 @@ public final class CoordBlock {
         if (numBlockCoordsInUse >= blockCoords.size()) {
             blockCoords.add(new CoordBlock(i, j, k));
         }
-        return ((CoordBlock) blockCoords.get(numBlockCoordsInUse++)).set(i, j, k);
+        return blockCoords.get(numBlockCoordsInUse++).set(i, j, k);
     }
 
     public static void resetPool() {

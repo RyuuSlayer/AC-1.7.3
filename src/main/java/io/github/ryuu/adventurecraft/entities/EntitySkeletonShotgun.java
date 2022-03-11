@@ -18,7 +18,7 @@ public class EntitySkeletonShotgun extends Skeleton {
     public EntitySkeletonShotgun(Level world) {
         super(world);
         this.attackDamage = 2;
-        ((ExLivingEntity)this).setHeldItem(new ItemInstance(Items.shotgun, 1));
+        ((ExLivingEntity) this).setHeldItem(new ItemInstance(Items.shotgun, 1));
     }
 
     @Override
@@ -45,8 +45,8 @@ public class EntitySkeletonShotgun extends Skeleton {
     @Override
     public void tick() {
         super.tick();
-        ItemInstance item = ((ExLivingEntity)this).getHeldItem();
-        ((ExItemInstance)item).setTimeLeft(this.health <= 0 ? 0 : this.attackTime);
+        ItemInstance item = ((ExLivingEntity) this).getHeldItem();
+        ((ExItemInstance) item).setTimeLeft(this.health <= 0 ? 0 : this.attackTime);
     }
 
     @Override

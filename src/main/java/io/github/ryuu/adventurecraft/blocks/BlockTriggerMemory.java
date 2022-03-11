@@ -88,11 +88,11 @@ public class BlockTriggerMemory extends TileWithEntity implements AcTriggerTile,
 
     public void triggerActivate(Level level, int i, int j, int k) {
         TileEntityTriggerMemory obj = (TileEntityTriggerMemory) level.getTileEntity(i, j, k);
-        ((ExLevel)level).getTriggerManager().addArea(i, j, k, new TriggerArea(obj.minX, obj.minY, obj.minZ, obj.maxX, obj.maxY, obj.maxZ));
+        ((ExLevel) level).getTriggerManager().addArea(i, j, k, new TriggerArea(obj.minX, obj.minY, obj.minZ, obj.maxX, obj.maxY, obj.maxZ));
     }
 
     public void triggerDeactivate(Level level, int i, int j, int k) {
-        ((ExLevel)level).getTriggerManager().removeArea(i, j, k);
+        ((ExLevel) level).getTriggerManager().removeArea(i, j, k);
     }
 
     @Override

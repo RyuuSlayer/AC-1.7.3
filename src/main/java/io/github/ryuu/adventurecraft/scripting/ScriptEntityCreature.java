@@ -34,18 +34,18 @@ public class ScriptEntityCreature extends ScriptEntityLiving {
     }
 
     public boolean getCanForgetTargetRandomly() {
-        return ((ExWalkingEntity)this.entityCreature).canForgetTargetRandomly();
+        return ((ExWalkingEntity) this.entityCreature).canForgetTargetRandomly();
     }
 
     public void setCanForgetTargetRandomly(boolean b) {
-        ((ExWalkingEntity)this.entityCreature).setForgetTargetRandomly(b);
+        ((ExWalkingEntity) this.entityCreature).setForgetTargetRandomly(b);
     }
 
     public boolean getCanPathRandomly() {
-        return ((ExWalkingEntity)this.entityCreature).canPathRandomly();
+        return ((ExWalkingEntity) this.entityCreature).canPathRandomly();
     }
 
     public void setCanPathRandomly(boolean b) {
-        ((ExWalkingEntity)this.entityCreature).setPathRandomly(b);
+        ((ExWalkingEntity) this.entityCreature).setPathRandomly(b);
     }
 }

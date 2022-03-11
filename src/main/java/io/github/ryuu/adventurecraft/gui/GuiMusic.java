@@ -36,7 +36,7 @@ public class GuiMusic extends Screen {
 
     @Override
     public void init() {
-        List<Button> buttons = (List<Button>)this.buttons;
+        List<Button> buttons = (List<Button>) this.buttons;
         String[] musicList = ((ExLevel) this.level).getMusicList();
         int maxEntries = 3 * ((this.height - 60) / 20);
         for (int i = 0; i + maxEntries * this.page <= musicList.length && i < maxEntries; ++i) {

@@ -14,10 +14,10 @@ public class ScriptEntityFlying extends ScriptEntityLiving {
     }
 
     public int getAttackStrength() {
-        return ((ExFlyingEntity)this).getAttackStrength();
+        return ((ExFlyingEntity) this).getAttackStrength();
     }
 
     public void setAttackStrength(int i) {
-        ((ExFlyingEntity)this).setAttackStrength(i);
+        ((ExFlyingEntity) this).setAttackStrength(i);
     }
 }

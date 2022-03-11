@@ -51,7 +51,7 @@ public class TileEntityStoreRenderer extends TileEntityRenderer {
                 for (int j = store.tradeTrigger.minY; j <= store.tradeTrigger.maxY; ++j) {
                     for (int k = store.tradeTrigger.minZ; k <= store.tradeTrigger.maxZ; ++k) {
                         Tile block = Tile.BY_ID[store.level.getTileId(i, j, k)];
-                        if (block == null || !((ExTile)block).canBeTriggered()) continue;
+                        if (block == null || !((ExTile) block).canBeTriggered()) continue;
                         GL11.glColor3f(0.0f, 0.0f, 0.0f);
                         GL11.glVertex3f(0.0f, 0.0f, 0.0f);
                         GL11.glColor3f(1.0f, 1.0f, 1.0f);

@@ -14,10 +14,10 @@ public class ScriptEntityMob extends ScriptEntityCreature {
     }
 
     public int getAttackStrength() {
-        return ((AccessMonster)this.entityMob).getAttackDamage();
+        return ((AccessMonster) this.entityMob).getAttackDamage();
     }
 
     public void setAttackStrength(int i) {
-        ((AccessMonster)this.entityMob).setAttackDamage(i);
+        ((AccessMonster) this.entityMob).setAttackDamage(i);
     }
 }

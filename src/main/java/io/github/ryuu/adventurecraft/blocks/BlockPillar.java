@@ -2,7 +2,6 @@ package io.github.ryuu.adventurecraft.blocks;
 
 import io.github.ryuu.adventurecraft.extensions.tile.ExTile;
 import net.minecraft.level.Level;
-import net.minecraft.tile.Tile;
 import net.minecraft.tile.TileSounds;
 import net.minecraft.tile.material.Material;
 

@@ -32,12 +32,12 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
     public String onDeath = "";
     public String onInteraction = "";
     public Float maxPathDistance = 64.0f;
-    protected Scriptable scope;
-    String initDescTo;
-    String descriptionName;
     public float prevWidth = 0.6f;
     public float prevHeight = 1.8f;
     public TileEntityNpcPath triggerOnPath = null;
+    protected Scriptable scope;
+    String initDescTo;
+    String descriptionName;
     private class_61 path;
     private Entity pathToEntity;
     private CoordBlock pathToVec;
@@ -46,7 +46,7 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
 
     public EntityLivingScript(Level w) {
         super(w);
-        this.scope = ((ExLevel)w).getScript().getNewScope();
+        this.scope = ((ExLevel) w).getScript().getNewScope();
         Object wrappedOut = Context.javaToJS(ScriptEntity.getEntityClass(this), this.scope);
         ScriptableObject.putProperty(this.scope, "entity", wrappedOut);
     }
@@ -61,7 +61,7 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
         if (description != null) {
             if (setHealth) {
                 this.health = description.health;
-                ((ExLivingEntity)this).setMaxHealth(description.health);
+                ((ExLivingEntity) this).setMaxHealth(description.health);
                 this.onCreated = description.onCreated;
                 this.onUpdate = description.onUpdate;
                 this.onPathReached = description.onPathReached;
@@ -114,7 +114,7 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
         wrappedOut = Context.javaToJS(i, this.scope);
         ScriptableObject.putProperty(this.scope, "attackingDamage", wrappedOut);
         if (this.runOnAttackedScript()) {
-            return ((ExLivingEntity)this).attackEntityFromMulti(entity, i);
+            return ((ExLivingEntity) this).attackEntityFromMulti(entity, i);
         }
         return false;
     }
@@ -174,25 +174,25 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
 
     public void runCreatedScript() {
         if (!this.onCreated.equals("")) {
-            ((ExLevel)this.level).getScriptHandler().runScript(this.onCreated, this.scope);
+            ((ExLevel) this.level).getScriptHandler().runScript(this.onCreated, this.scope);
         }
     }
 
     private void runUpdateScript() {
         if (!this.onUpdate.equals("")) {
-            ((ExLevel)this.level).getScriptHandler().runScript(this.onUpdate, this.scope);
+            ((ExLevel) this.level).getScriptHandler().runScript(this.onUpdate, this.scope);
         }
     }
 
     private void runPathCompletedScript() {
         if (!this.onPathReached.equals("")) {
-            ((ExLevel)this.level).getScriptHandler().runScript(this.onPathReached, this.scope);
+            ((ExLevel) this.level).getScriptHandler().runScript(this.onPathReached, this.scope);
         }
     }
 
     private boolean runOnAttackedScript() {
         if (!this.onAttacked.equals("")) {
-            Object obj = ((ExLevel)this.level).getScriptHandler().runScript(this.onAttacked, this.scope);
+            Object obj = ((ExLevel) this.level).getScriptHandler().runScript(this.onAttacked, this.scope);
             if (!(obj instanceof Boolean)) {
                 return true;
             }
@@ -203,13 +203,13 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
 
     private void runDeathScript() {
         if (!this.onDeath.equals("")) {
-            ((ExLevel)this.level).getScriptHandler().runScript(this.onDeath, this.scope);
+            ((ExLevel) this.level).getScriptHandler().runScript(this.onDeath, this.scope);
         }
     }
 
     private boolean runOnInteractionScript() {
         if (!this.onInteraction.equals("")) {
-            Object obj = ((ExLevel)this.level).getScriptHandler().runScript(this.onInteraction, this.scope);
+            Object obj = ((ExLevel) this.level).getScriptHandler().runScript(this.onInteraction, this.scope);
             if (!(obj instanceof Boolean)) {
                 return true;
             }
@@ -249,7 +249,7 @@ public class EntityLivingScript extends LivingEntity implements IEntityPather {
 
     private void continuePathing() {
         if (this.isPathing()) {
-            if (this.path == null || --this.nextPathIn <= 0 && this.pathToEntity != null && ((ExClass_61)this.path).needNewPath(this.pathToEntity)) {
+            if (this.path == null || --this.nextPathIn <= 0 && this.pathToEntity != null && ((ExClass_61) this.path).needNewPath(this.pathToEntity)) {
                 if (this.pathToEntity != null) {
                     this.path = this.level.method_192(this, this.pathToEntity, this.maxPathDistance);
                 } else if (this.pathToVec != null) {

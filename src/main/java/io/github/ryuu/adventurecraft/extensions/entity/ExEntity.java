@@ -12,9 +12,9 @@ public interface ExEntity {
 
     int getCollisionZ();
 
-    void setCollidesWithClipBlocks(boolean collidesWithClipBlocks);
-
     boolean getCollidesWithClipBlocks();
+
+    void setCollidesWithClipBlocks(boolean collidesWithClipBlocks);
 
     int getStunned();
 

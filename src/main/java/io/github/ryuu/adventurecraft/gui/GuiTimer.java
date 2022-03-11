@@ -52,7 +52,7 @@ public class GuiTimer extends Screen {
 
     @Override
     public void init() {
-        List<Button> buttons = (List<Button>)this.buttons;
+        List<Button> buttons = (List<Button>) this.buttons;
         buttons.clear();
         buttons.add(new OptionButton(0, 4, 40, "Use Current Selection"));
         OptionButton b = new OptionButton(1, 4, 60, "Trigger Target");

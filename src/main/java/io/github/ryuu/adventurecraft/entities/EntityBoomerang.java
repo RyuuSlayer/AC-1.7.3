@@ -1,7 +1,6 @@
 package io.github.ryuu.adventurecraft.entities;
 
 import io.github.ryuu.adventurecraft.extensions.entity.ExEntity;
-import io.github.ryuu.adventurecraft.extensions.entity.ExLivingEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
@@ -17,12 +16,9 @@ import java.util.List;
 
 public class EntityBoomerang extends Entity {
 
-    double bounceFactor;
-
     public float prevBoomerangRotation;
-
     public float boomerangRotation;
-
+    double bounceFactor;
     int timeBeforeTurnAround;
 
     boolean turningAround;

@@ -4,7 +4,6 @@ import io.github.ryuu.adventurecraft.util.TextureAnimated;
 import io.github.ryuu.adventurecraft.util.Vec2;
 
 import java.awt.image.BufferedImage;
-import java.nio.ByteBuffer;
 
 public interface ExTextureManager {
 

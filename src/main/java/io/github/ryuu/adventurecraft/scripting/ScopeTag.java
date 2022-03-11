@@ -46,7 +46,7 @@ public class ScopeTag {
     }
 
     public static void loadScopeFromTag(Scriptable scope, CompoundTag tag) {
-        for (String varKey : ((ExCompoundTag)tag).getKeys()) {
+        for (String varKey : ((ExCompoundTag) tag).getKeys()) {
             String[] parts = varKey.split("_", 2);
             if (parts.length != 2) {
                 System.out.printf("Unknown key in tag: %s %d\n", varKey, parts.length);
