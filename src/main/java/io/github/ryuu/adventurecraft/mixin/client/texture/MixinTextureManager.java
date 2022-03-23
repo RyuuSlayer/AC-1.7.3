@@ -20,6 +20,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -83,6 +84,14 @@ public abstract class MixinTextureManager implements AccessTextureManager, ExTex
         this.replacedTextures = new ArrayList<>();
         this.textureResolutions = new HashMap<>();
         this.textureAnimations = new HashMap<>();
+
+        this.defaultImage = new BufferedImage(256, 256, 2);
+        Graphics g = this.defaultImage.getGraphics();
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, 256, 256);
+        g.setColor(Color.BLACK);
+        g.drawString("missingtex", 1, 10);
+        g.dispose();
     }
 
     @Shadow
@@ -219,6 +228,7 @@ public abstract class MixinTextureManager implements AccessTextureManager, ExTex
         } catch (IOException ioexception) {
             ioexception.printStackTrace();
             this.glLoadImageWithId(this.defaultImage, texID);
+            this.textureResolutions.put(texID, new Vec2(this.defaultImage.getWidth(), this.defaultImage.getHeight()));
         }
     }
 

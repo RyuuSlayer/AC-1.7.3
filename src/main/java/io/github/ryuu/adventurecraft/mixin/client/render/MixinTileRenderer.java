@@ -278,7 +278,6 @@ public abstract class MixinTileRenderer implements AccessTileRenderer, ExTileRen
             cir.setReturnValue(this.renderBlockOverlay(block, i, j, k));
         } else if (var5 == 38) {
             cir.setReturnValue(this.renderBlockSlope(block, i, j, k));
-            cir.cancel();
         }
     }
 

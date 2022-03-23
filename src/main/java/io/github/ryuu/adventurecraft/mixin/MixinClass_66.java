@@ -103,49 +103,56 @@ public abstract class MixinClass_66 {
             boolean flag = false;
             boolean flag1 = false;
             boolean flag2 = false;
-            for (int texNum = 1; texNum <= 3; ++texNum) {
+            for (int texNum = 0; texNum <= 3; ++texNum) {
+                if (texNum == 1) continue;
                 boolean startedDrawing = false;
                 for (int j2 = j; j2 < i1; ++j2) {
                     for (int k2 = k; k2 < j1; ++k2) {
                         for (int l2 = i; l2 < l; ++l2) {
                             int i3 = chunkcache.getTileId(l2, j2, k2);
-                            if (i3 > 0 && texNum == ((ExTile) Tile.BY_ID[i3]).getTextureNum()) {
-                                if (!flag2) {
-                                    flag2 = true;
-                                    GL11.glNewList(this.field_225 + i2, 4864);
-                                    GL11.glPushMatrix();
-                                    this.method_306();
-                                    float f = 1.000001f;
-                                    GL11.glTranslatef((float) (-this.field_236) / 2.0f, (float) (-this.field_235) / 2.0f, (float) (-this.field_236) / 2.0f);
-                                    GL11.glScalef(f, f, f);
-                                    GL11.glTranslatef((float) this.field_236 / 2.0f, (float) this.field_235 / 2.0f, (float) this.field_236 / 2.0f);
-                                }
-                                if (!startedDrawing) {
-                                    startedDrawing = true;
-                                    if (texNum == 0) {
-                                        GL11.glBindTexture(3553, AccessMinecraft.getInstance().textureManager.getTextureId("/terrain.png"));
-                                    } else {
-                                        GL11.glBindTexture(3553, AccessMinecraft.getInstance().textureManager.getTextureId(String.format("/terrain%d.png", texNum)));
-                                    }
-                                    tesselator.start();
-                                    tesselator.prevPos(-this.field_231, -this.field_232, -this.field_233);
-                                }
-
-                                if (i2 == 0 && Tile.HAS_TILE_ENTITY[i3]) {
-                                    TileEntity tileentity = chunkcache.getTileEntity(l2, j2, k2);
-                                    if (TileEntityRenderDispatcher.INSTANCE.hasRenderer(tileentity)) {
-                                        this.field_224.add(tileentity);
-                                    }
-                                }
-
-                                Tile block = Tile.BY_ID[i3];
-                                int j3 = block.method_1619();
-                                if (j3 != i2) {
-                                    flag = true;
-                                    continue;
-                                }
-                                flag1 |= renderblocks.method_57(block, l2, j2, k2);
+                            if (i3 <= 0) {
+                                continue;
                             }
+                            int tileTexNum = ((ExTile) Tile.BY_ID[i3]).getTextureNum();
+                            if (tileTexNum != texNum) {
+                                continue;
+                            }
+
+                            if (!flag2) {
+                                flag2 = true;
+                                GL11.glNewList(this.field_225 + i2, 4864);
+                                GL11.glPushMatrix();
+                                this.method_306();
+                                float f = 1.000001f;
+                                GL11.glTranslatef((float) (-this.field_236) / 2.0f, (float) (-this.field_235) / 2.0f, (float) (-this.field_236) / 2.0f);
+                                GL11.glScalef(f, f, f);
+                                GL11.glTranslatef((float) this.field_236 / 2.0f, (float) this.field_235 / 2.0f, (float) this.field_236 / 2.0f);
+                            }
+                            if (!startedDrawing) {
+                                startedDrawing = true;
+                                if (texNum == 0) {
+                                    GL11.glBindTexture(3553, AccessMinecraft.getInstance().textureManager.getTextureId("/terrain.png"));
+                                } else {
+                                    GL11.glBindTexture(3553, AccessMinecraft.getInstance().textureManager.getTextureId(String.format("/terrain%d.png", texNum)));
+                                }
+                                tesselator.start();
+                                tesselator.prevPos(-this.field_231, -this.field_232, -this.field_233);
+                            }
+
+                            if (i2 == 0 && Tile.HAS_TILE_ENTITY[i3]) {
+                                TileEntity tileentity = chunkcache.getTileEntity(l2, j2, k2);
+                                if (TileEntityRenderDispatcher.INSTANCE.hasRenderer(tileentity)) {
+                                    this.field_224.add(tileentity);
+                                }
+                            }
+
+                            Tile block = Tile.BY_ID[i3];
+                            int j3 = block.method_1619();
+                            if (j3 != i2) {
+                                flag = true;
+                                continue;
+                            }
+                            flag1 |= renderblocks.method_57(block, l2, j2, k2);
                         }
                     }
                     if (startedDrawing) {
