@@ -33,9 +33,9 @@ public class MixinFallingTileRenderer extends EntityRenderer {
         GL11.glTranslatef((float) d, (float) d1, (float) d2);
         Tile block = Tile.BY_ID[entityfallingsand.tile];
         if (((ExTile)block).getTextureNum() == 0) {
-            this.bindTexture("/terrain.png");
+            this.bindTexture("/assets/terrain.png");
         } else {
-            this.bindTexture(String.format("/terrain%d.png", ((ExTile)block).getTextureNum()));
+            this.bindTexture(String.format("/assets/terrain%d.png", ((ExTile)block).getTextureNum()));
         }
         Level world = entityfallingsand.getFallingLevel();
         GL11.glDisable(2896);

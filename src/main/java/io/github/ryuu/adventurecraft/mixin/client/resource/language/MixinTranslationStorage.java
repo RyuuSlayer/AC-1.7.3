@@ -20,22 +20,22 @@ public abstract class MixinTranslationStorage implements ExTranslationStorage {
 
     @Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Ljava/lang/Class;getResourceAsStream(Ljava/lang/String;)Ljava/io/InputStream;", ordinal = 0))
     private InputStream TranslationStorage(Class instance, String e) {
-        return instance.getResourceAsStream("/lang/en_US.lang");
+        return instance.getResourceAsStream("/assets/lang/en_US.lang");
     }
 
     @Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Ljava/lang/Class;getResourceAsStream(Ljava/lang/String;)Ljava/io/InputStream;", ordinal = 1))
     private InputStream TranslationStorage1(Class instance, String e) {
-        return instance.getResourceAsStream("/lang/stats_US.lang");
+        return instance.getResourceAsStream("/assets/lang/stats_US.lang");
     }
 
     @Override
     public void loadMapTranslation(File levelDir) {
         try {
-            this.translations.load(TranslationStorage.class.getResourceAsStream("/lang/en_US.lang"));
+            this.translations.load(TranslationStorage.class.getResourceAsStream("/assets/lang/en_US.lang"));
         } catch (IOException ignored) {
         }
         try {
-            File langFile = new File(levelDir, "/lang/en_US.lang");
+            File langFile = new File(levelDir, "/assets/lang/en_US.lang");
             if (langFile.exists()) {
                 FileInputStream is = new FileInputStream(langFile);
                 this.translations.load(is);

@@ -86,16 +86,16 @@ public abstract class MixinHandItemRenderer implements ExHandItemRenderer {
         if (itemstack.itemId < 256 && TileRenderer.method_42(Tile.BY_ID[itemstack.itemId].method_1621())) {
             int textureNum = ((ExTile) Tile.BY_ID[itemstack.itemId]).getTextureNum();
             if (textureNum == 0) {
-                GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId("/terrain.png"));
+                GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId("/assets/terrain.png"));
             } else {
-                GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId(String.format("/terrain%d.png", textureNum)));
+                GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId(String.format("/assets/terrain%d.png", textureNum)));
             }
             this.tileRenderer.method_48(Tile.BY_ID[itemstack.itemId], itemstack.getDamage(), entityliving.getBrightnessAtEyes(1.0f));
         } else {
-            String textureName = "/gui/items.png";
+            String textureName = "/assets/items.png";
             if (itemstack.itemId < 256) {
                 int textureNum = ((ExTile) Tile.BY_ID[itemstack.itemId]).getTextureNum();
-                textureName = textureNum == 0 ? "/terrain.png" : String.format("/terrain%d.png", textureNum);
+                textureName = textureNum == 0 ? "/assets/terrain.png" : String.format("/assets/terrain%d.png", textureNum);
             }
             GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId(textureName));
             Vec2 texResolution = ((ExTextureManager) this.minecraft.textureManager).getTextureResolution(textureName);
@@ -431,7 +431,7 @@ public abstract class MixinHandItemRenderer implements ExHandItemRenderer {
     public void method_1864(float f) {
         GL11.glDisable(3008);
         if (!((ExMinecraft) this.minecraft).isCameraActive() && this.minecraft.player.method_1359()) {
-            int i = this.minecraft.textureManager.getTextureId("/terrain.png");
+            int i = this.minecraft.textureManager.getTextureId("/assets/terrain.png");
             GL11.glBindTexture(3553, i);
             this.method_1867(f);
         }
@@ -439,7 +439,7 @@ public abstract class MixinHandItemRenderer implements ExHandItemRenderer {
             int j = MathsHelper.floor(this.minecraft.cameraEntity.x);
             int l = MathsHelper.floor(this.minecraft.cameraEntity.y);
             int i1 = MathsHelper.floor(this.minecraft.cameraEntity.z);
-            int j1 = this.minecraft.textureManager.getTextureId("/terrain.png");
+            int j1 = this.minecraft.textureManager.getTextureId("/assets/terrain.png");
             GL11.glBindTexture(3553, j1);
             int k1 = this.minecraft.level.getTileId(j, l, i1);
             if (this.minecraft.level.canSuffocate(j, l, i1) && this.minecraft.level.isFullOpaque(j, l, i1)) {
