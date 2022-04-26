@@ -131,9 +131,9 @@ public abstract class MixinClass_66 {
                             if (!startedDrawing) {
                                 startedDrawing = true;
                                 if (texNum == 0) {
-                                    GL11.glBindTexture(3553, AccessMinecraft.getInstance().textureManager.getTextureId("/terrain.png"));
+                                    GL11.glBindTexture(3553, AccessMinecraft.getInstance().textureManager.getTextureId("/assets/terrain.png"));
                                 } else {
-                                    GL11.glBindTexture(3553, AccessMinecraft.getInstance().textureManager.getTextureId(String.format("/terrain%d.png", texNum)));
+                                    GL11.glBindTexture(3553, AccessMinecraft.getInstance().textureManager.getTextureId(String.format("/assets/terrain%d.png", texNum)));
                                 }
                                 tesselator.start();
                                 tesselator.prevPos(-this.field_231, -this.field_232, -this.field_233);

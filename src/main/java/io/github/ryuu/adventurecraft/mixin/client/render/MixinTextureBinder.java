@@ -32,9 +32,9 @@ public abstract class MixinTextureBinder implements ExTextureBinder {
     @Override
     public String getTexture() {
         if (this.renderMode == 0) {
-            return "/terrain.png";
+            return "/assets/terrain.png";
         }
-        return "/gui/items.png";
+        return "/assets/items.png";
     }
 
     /**

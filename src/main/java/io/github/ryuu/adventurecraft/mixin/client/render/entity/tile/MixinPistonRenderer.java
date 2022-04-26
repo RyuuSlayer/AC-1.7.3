@@ -33,7 +33,7 @@ public abstract class MixinPistonRenderer extends TileEntityRenderer {
             shift = At.Shift.AFTER))
     private void bindCustomTexture(Piston tileentitypiston, double d, double d1, double d2, float f, CallbackInfo ci, Tile var9) {
         int textureNum = ((ExTile) var9).getTextureNum();
-        String textureName = textureNum == 0 ? "/terrain.png" : String.format("/terrain%d.png", textureNum);
+        String textureName = textureNum == 0 ? "/assets/terrain.png" : String.format("/assets/terrain%d.png", textureNum);
         this.bindTexture(textureName);
     }
 

@@ -264,9 +264,9 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
             ordinal = 0),
             remap = false)
     private void initTerrainTextureAndJsContext(CallbackInfo ci) {
-        this.textureManager.getTextureId("/terrain.png");
-        this.textureManager.getTextureId("/terrain2.png");
-        this.textureManager.getTextureId("/terrain3.png");
+        this.textureManager.getTextureId("/assets/terrain.png");
+        this.textureManager.getTextureId("/assets/terrain2.png");
+        this.textureManager.getTextureId("/assets/terrain3.png");
         ContextFactory.initGlobal(new ContextFactory());
     }
 
@@ -548,7 +548,7 @@ public abstract class MixinMinecraft implements Runnable, AccessMinecraft, ExMin
         if (!this.paused && this.level != null) {
             this.interactionManager.tick();
         }
-        GL11.glBindTexture(3553, this.textureManager.getTextureId("/terrain.png"));
+        GL11.glBindTexture(3553, this.textureManager.getTextureId("/assets/terrain.png"));
         if (!this.paused) {
             this.textureManager.tick();
         }

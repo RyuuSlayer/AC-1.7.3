@@ -66,9 +66,9 @@ public abstract class MixinItemRenderer extends EntityRenderer implements ExItem
             GL11.glRotatef(f3, 0.0f, 1.0f, 0.0f);
             int textureNum = ((ExTile) Tile.BY_ID[itemstack.itemId]).getTextureNum();
             if (textureNum == 0) {
-                this.bindTexture("/terrain.png");
+                this.bindTexture("/assets/terrain.png");
             } else {
-                this.bindTexture(String.format("/terrain%d.png", textureNum));
+                this.bindTexture(String.format("/assets/terrain%d.png", textureNum));
             }
             float f4 = 0.25f;
             if (!Tile.BY_ID[itemstack.itemId].isFullCube() && itemstack.itemId != Tile.STONE_SLAB.id && Tile.BY_ID[itemstack.itemId].method_1621() != 16) {
@@ -92,12 +92,12 @@ public abstract class MixinItemRenderer extends EntityRenderer implements ExItem
             if (itemstack.itemId < 256) {
                 int textureNum = ((ExTile) Tile.BY_ID[itemstack.itemId]).getTextureNum();
                 if (textureNum == 0) {
-                    this.bindTexture("/terrain.png");
+                    this.bindTexture("/assets/terrain.png");
                 } else {
-                    this.bindTexture(String.format("/terrain%d.png", textureNum));
+                    this.bindTexture(String.format("/assets/terrain%d.png", textureNum));
                 }
             } else {
-                this.bindTexture("/gui/items.png");
+                this.bindTexture("/assets/items.png");
             }
             Tessellator tessellator = Tessellator.INSTANCE;
             float f6 = (float) (i % 16 * 16) / 256.0f;
@@ -148,9 +148,9 @@ public abstract class MixinItemRenderer extends EntityRenderer implements ExItem
         if (itemId < 256 && TileRenderer.method_42(Tile.BY_ID[itemId].method_1621())) {
             int textureNum = ((ExTile) Tile.BY_ID[itemId]).getTextureNum();
             if (textureNum == 0) {
-                textureManager.bindTexture(textureManager.getTextureId("/terrain.png"));
+                textureManager.bindTexture(textureManager.getTextureId("/assets/terrain.png"));
             } else {
-                textureManager.bindTexture(textureManager.getTextureId(String.format("/terrain%d.png", textureNum)));
+                textureManager.bindTexture(textureManager.getTextureId(String.format("/assets/terrain%d.png", textureNum)));
             }
             Tile block = Tile.BY_ID[itemId];
             GL11.glPushMatrix();
@@ -177,12 +177,12 @@ public abstract class MixinItemRenderer extends EntityRenderer implements ExItem
             if (itemId < 256) {
                 int textureNum = ((ExTile) Tile.BY_ID[itemId]).getTextureNum();
                 if (textureNum == 0) {
-                    textureManager.bindTexture(textureManager.getTextureId("/terrain.png"));
+                    textureManager.bindTexture(textureManager.getTextureId("/assets/terrain.png"));
                 } else {
-                    textureManager.bindTexture(textureManager.getTextureId(String.format("/terrain%d.png", textureNum)));
+                    textureManager.bindTexture(textureManager.getTextureId(String.format("/assets/terrain%d.png", textureNum)));
                 }
             } else {
-                textureManager.bindTexture(textureManager.getTextureId("/gui/items.png"));
+                textureManager.bindTexture(textureManager.getTextureId("/assets/items.png"));
             }
             int k1 = ItemType.byId[itemId].getNameColour(damage);
             float f = (float) (k1 >> 16 & 0xFF) / 255.0f;

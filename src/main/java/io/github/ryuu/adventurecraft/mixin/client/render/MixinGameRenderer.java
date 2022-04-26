@@ -464,7 +464,7 @@ public abstract class MixinGameRenderer implements AccessGameRenderer, ExGameRen
             }
             this.method_1842(0, f);
             GL11.glEnable(2912);
-            GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId("/terrain.png"));
+            GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId("/assets/terrain.png"));
             RenderHelper.disableLighting();
             renderglobal.method_1548(entityliving, 0, f);
             GL11.glShadeModel(7424);
@@ -485,7 +485,7 @@ public abstract class MixinGameRenderer implements AccessGameRenderer, ExGameRen
             this.method_1842(0, f);
             GL11.glEnable(3042);
             GL11.glDisable(2884);
-            GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId("/terrain.png"));
+            GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId("/assets/terrain.png"));
             if (this.minecraft.options.fancyGraphics) {
                 if (this.minecraft.options.ao) {
                     GL11.glShadeModel(7425);

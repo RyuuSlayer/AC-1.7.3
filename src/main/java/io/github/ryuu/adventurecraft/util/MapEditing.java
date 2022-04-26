@@ -123,7 +123,7 @@ public class MapEditing {
                 GL14.glBlendColor(1.0f, 1.0f, 1.0f, 0.4f);
                 GL11.glEnable(3042);
                 GL11.glBlendFunc(32771, 32772);
-                this.mc.textureManager.bindTexture(this.mc.textureManager.getTextureId("/terrain.png"));
+                this.mc.textureManager.bindTexture(this.mc.textureManager.getTextureId("/assets/terrain.png"));
                 ((ExTileRenderer) this.renderBlocks).startRenderingBlocks(this.level);
                 this.drawBlock(this.cursor.x + this.getCursorXOffset(), this.cursor.y + this.getCursorYOffset(), this.cursor.z + this.getCursorZOffset(), this.selectedBlockID, this.selectedMetadata);
                 ((ExTileRenderer) this.renderBlocks).stopRenderingBlocks();
@@ -150,9 +150,9 @@ public class MapEditing {
             int zOffset = (int) (camera.z + DebugMode.reachDistance * lookDir.z) - ItemCursor.minZ;
             for (int texNum = 0; texNum <= 3; ++texNum) {
                 if (texNum == 0) {
-                    this.mc.textureManager.bindTexture(this.mc.textureManager.getTextureId("/terrain.png"));
+                    this.mc.textureManager.bindTexture(this.mc.textureManager.getTextureId("/assets/terrain.png"));
                 } else {
-                    this.mc.textureManager.bindTexture(this.mc.textureManager.getTextureId(String.format("/terrain%d.png", texNum)));
+                    this.mc.textureManager.bindTexture(this.mc.textureManager.getTextureId(String.format("/assets/terrain%d.png", texNum)));
                 }
                 ((ExTileRenderer) this.renderBlocks).startRenderingBlocks(this.level);
                 for (int i = ItemCursor.minX; i <= ItemCursor.maxX; ++i) {
