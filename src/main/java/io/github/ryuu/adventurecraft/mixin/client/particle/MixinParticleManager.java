@@ -78,10 +78,10 @@ public abstract class MixinParticleManager implements ExParticleManager {
                 j = this.textureManager.getTextureId("/assets/items.png");
             }
             if (i == 3) {
-                j = this.textureManager.getTextureId("/terrain2.png");
+                j = this.textureManager.getTextureId("/assets/terrain2.png");
             }
             if (i == 4) {
-                j = this.textureManager.getTextureId("/terrain3.png");
+                j = this.textureManager.getTextureId("/assets/terrain3.png");
             }
             GL11.glBindTexture(3553, j);
             Tessellator tessellator = Tessellator.INSTANCE;
